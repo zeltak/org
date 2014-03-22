@@ -1,0 +1,2783 @@
+#+TITLE: KSG
+
+* Statistics
+** What statistical analysis should I use?
+*** usc table
+
+What statistical analysis should I use?
+
+[[file:KSG_files/img/SS-2011-03-14_17.06.02.png]]
+
+[[file:KSG_files/img/SS-2011-03-14_17.06.55.png]]
+
+
+*** all examples
+
+[[file:KSG_files/attach/stat_choose1.pdf][Statistical test chooser guide]]
+
+** Fundamental Statistical Concepts
+*** population offset term
+
+used mainly in glm models (mainly logistic and poison). you put an
+offset to take into account the differences in population
+ instead of using a variable for pop you can use a log of pop to take
+into account the heterogeneity of population across cities/tracts/etc
+ -one could use a random effect for grid cell/tract instead
+
+*** Alpha levels (Sig./Type I Error)
+
+*Significance and Type I Errors.*
+ Significance is the percent chance that a relationship found in the
+data is just
+ due to an unlucky sample, such that if we took another sample we might
+find nothing. That is, significance is the
+ chance of a Type I error: the chance of concluding we have a
+relationship when we do not (false positives). Social
+ scientists often use the .05 level as a cutoff: if there is 5% or less
+chance that a relationship is just due to chance,
+ we conclude the relationship is real (technically, we fail to accept
+the null hypothesis that the strength of the
+ relationship is not different from zero). Significance testing is not
+appropriate for enumerations or non-random
+ samples because it only deals with the the chance of Type I error based
+on a random sample. Any relationship, not
+ matter how small, is a true relationship (barring measurement error)
+for an enumeration. We would like to make
+ inferences for non-random samples, but that is impossible.
+
+*** Additive and Multiplicative Models
+
+in a linear models all the parameters you put in as covariates has to be
+independent (no multi colleniarity)
+ in additive models as opposed to linear it estimates each term
+separately (in lienar model all term needs to be estimated)
+ *additive vs multiplicative*
+
+A model in which the combined effect of several independent factors is
+the sum of the isolated effects of each factor.
+
+
+
+Note: For example, if a factor X increases a risk by a in the absence of
+Y, and if a second factor Y increases the risk by b in the absence of X,
+the combined effect of the two factors is a + b.
+
+Pasted from
+
+[[http://htaglossary.net/tiki-index.php?page=additive+model][http://htaglossary.net/tiki-index.php?page=additive+model]]
+
+A model in which the combined effect of two or more factors is the
+product of the isolated effects of each factor.
+
+
+
+Note: For example, if a factor X multiplies a risk by a in the absence
+of Y, and if a second factor Y multiplies the risk by b in the absence
+of X, the combined effect of the two factors will be a x b.
+
+ Pasted from
+<[[http://htaglossary.net/tiki-index.php?page=Multiplicative+model][http://htaglossary.net/tiki-index.php?page=Multiplicative+model]]>
+
+*** center data
+
+Grand mean centering
+
+Instead of centering a variable around a value that you select, you may
+want to center it around its mean. This is known as grand mean
+centering.
+ There are at least three ways that you can do this. Perhaps the most
+straight-forward way is to get the mean of each variable that you wan to
+center and subtract that value from the variable in a data step.
+
+ Proc means data = test mean;var score1 score2;run;
+ Variable Mean
+ ------------------------
+ score1 43.9333333
+ score2 34.5333333
+ ------------------------
+ *
+ Pasted from
+<[[http://www.ats.ucla.edu/stat/sas/faq/centering_variables.htm][http://www.ats.ucla.edu/stat/sas/faq/centering\_variables.htm]]>*
+
+*** collinearity
+
+Inregression analysis, collinearity of two variables means that strong
+correlation exists between them, making it difficult or impossible to
+estimate their individual regression coefficients reliably.The extreme
+case of collinearity, where the variables are perfectly correlated, is
+called singularity
+
+*** Confidence Interval
+
+*Confidence Interval (CI) :*
+ 1) *CI are like a p value,*it tells you if the parameters you are
+testing is *sig or not*. that is in a reg model is the Beta is sig
+different from Zero, therefore the *CI should not include the zero!!*
+ *
+*A confidence interval is an interval that brackets a sample estimate
+that quantifies uncertainty around this estimate. Since there are a
+variety of samples that might be drawn from a population, there are
+likewise a variety of confidence intervals that might be imagined for a
+given population parameter (though with the observed data you can see
+only one of them).
+ A 95% confidence interval, for example, is one interval in a set of
+intervals. The property of this set of intervals is that 95% of the
+intervals in this set contain the population parameter. Likewise, a 90%
+confidence interval for the population mean is an interval which belongs
+to a set of intervals, 90% of which contain the population mean.
+ 3) in the table above the a[[KSG_files/img/Image.png]]luminium is n.s
+(p=0.36) and therefor the CI crosses (includes the zero) CI=-0.02 to
+0.04
+ a significant p would have a CI = 0.07-2.4
+ 4) if the *CI is wide it means that there is alot of variabilty around
+the paramter
+*
+ if your doing predcitions you want a very narrow CI
+ in epeidimology you don't care about CI length (narrow/wide) because
+you are checking signals/direction of effect
+
+
+*** Confidence Interval in logistic
+
+in logistic regression since the DV is a ratio (P/1-P) a value of '1'
+means no difference so:
+ Beta is sig different from one, therefore the CI *should not include
+the one*
+ [[KSG_files/img/Image_DYI2ADIPN69Yxe3xxmJ1Eg_0001.png]]
+ above the example is sig. since the CI don't cross the '1' (CI =
+1.12-1.13)
+
+*** Confounding
+
+*Confounding
+
+ Two variables are confounded if they vary together in such a way that
+it is impossible to determine which variable is responsible for an
+observed effect. Such a relation between two observed variables is
+termed a  [[http://en.wikipedia.org/wiki/Spurious_relationship][spurious relationship]] For example, consider an experiment in which two treatments for
+depression were compared. Treatment one was given to teenaged girls and
+treatment two was given to middle age women. If a difference between
+treatments were found, it would be impossible to tell if one treatment
+were more effective than the other or if treatments for depression are
+more effective for one age group than the other. Age and treatment are
+confounded. Naturally, no competent experimenter would design an
+experiment like that. However, some confounding is much more subtle. An
+experimenter may accidentally manipulate a variable in addition to the
+variable of interest.
+
+*** Covariate
+
+*A covariate* is a variable that is not of direct interest in a research
+study but which needs to be accounted for as part of the research
+because it has the potential to influence the outcome variable.
+ *IE:* In many studies of cancer, the smoking status of the subject
+needs to be measured, not because we are trying to establish a link
+between smoking and cancer (that link was already well known for many
+types of cancer) but rather because smoking habits may differ in the
+patients exposed or not exposed to a toxic substance. This has the
+potential to mask a true relationship between exposure and cancer or to
+produce an artefactual relationship between exposure and cancer.
+ Pasted from
+<[[http://www.pmean.com/10/ResidualConfounding.html][http://www.pmean.com/10/ResidualConfounding.html]]>
+ In design of experiments, *a covariate*is an independent variable not
+manipulated by the experiment but still affecting the response(DV).
+
+*** Covariance
+
+Covariance is a measure of the extent to which corresponding elements
+from two sets of ordered data move in the same direction.
+ It that tells you how the variables move toghther (direction and
+intensity)
+ Pasted from
+<[[http://stattrek.com/matrix-algebra/covariance-matrix.aspx][http://stattrek.com/matrix-algebra/covariance-matrix.aspx]]>
+
+*** covariance matrix
+
+also known as variance-covariance matirx
+ a simple matrix that involves all the variables you want to use in the
+model and tells you how they are correlated which each other
+ you can tun before the model to explore variable correlations
+ when running a model it tries the estimate the covariance matrix.
+ in mixed models you can play around with different covariance matrices
+based on your model
+ most of the time its unstructured covariance matrix used. you can test
+based on AIC/R2 to see which one fits best
+
+*** Degrees of Freedom (df)
+
+For a set of data points in a given situation (e.g. with mean or other
+parameter specified, or not), degrees of freedom is the minimal number
+of values which should be specified to determine all the data points.
+ For example, if you have a sample of N random values, there are N
+degrees of freedom (you cannot determine the Nth random value even if
+you know N-1 other values). If your data have been obtained by
+subtracting the sample mean from each data point (thus making the new
+sample mean equal to zero), there are only N-1 degrees of freedom. This
+is because if you know N-1 data points, you may find the remaining (Nth)
+point - it is just the sum of the N-1 values with the negative sign.
+This is another way of saying that if you have N data points and you
+know the sample mean, you have N-1 degrees of freedom.
+ Another example is a 2x2 table; it generally has 4 degrees of freedom -
+each of the 4 cells can contain any number. If row and column marginal
+totals are specified, there is only 1 degree of freedom: if you know the
+number in a cell, you may calculate the remaining 3 numbers from the
+known number and the marginal totals.
+
+*** Errors and residuals in statistics
+
+In statistics and optimization, s*tatistical errors and residuals* are
+two closely related and e*asily confused* measures of the deviation of a
+sample from its "theoretical value". The *error of a sample is the
+deviation of the sample from the (unobservable) true function value*,
+while the *residual of a sample is the difference between the sample and
+the estimated function value.*
+
+*** Heteroscedasticity
+
+Heteroscedasticity generally means unequal variation of data, e.g.
+unequal variance .
+ In regression analysis , heteroscedasticity means a situation in which
+the variance of the dependent variable varies across the data.
+Heteroscedasticity complicates analysis because many methods in
+regression analysis are based on an assumption of equal variance.
+
+*** interactions
+
+In statistics, an interaction may arise when considering the
+relationship among three or more variables, and describes a situation in
+which the simultaneous influence of two variables on a third is not
+additive. Most commonly, interactions are considered in the context of
+regression analyses.
+ The presence of interactions can have important implications for the
+interpretation of statistical models. If two variables of interest
+interact, the relationship between each of the interacting variables and
+a third "dependent variable" depends on the value of the other
+interacting variable. In practice, this makes it more difficult to
+predict the consequences of changing the value of a variable,
+particularly if the variables it interacts with are hard to measure or
+difficult to control.
+ Although starified models could be used instead of interactions we
+preffer to use interactions since you gain much more power when not
+subsetting the data
+
+*** Interval Scale
+
+**
+
+Interval Scale:
+ An interval scale is a measurement scale in which a certain distance
+along the scale means the same thing no matter where on the scale you
+are, but *where "0" on the scale does not represent the absence of the
+thing being measured.* Fahrenheit and Celsius temperature scales are
+examples.
+
+*** Multicollinearity
+
+In regression analysis , multicollinearity refers to a situation of
+collinearity of independent variables, often involving more than two
+independent variables, or more than one pair of collinear variables.
+ Multicollinearity means redundancy in the set of variables. This can
+render ineffective the numerical methods used to solve regression
+equations, typically resulting in a "multicollinearity" error when
+regression software is used. A practical solution to this problem is to
+remove some variables from the model.
+ The extreme case of multicollinearity, where the variables are
+perfectly correlated, is called singularity.
+
+*** Multivariate
+
+Multivariate analysis involves more than one variable of interest.
+
+*** Nominal Scale
+
+Nominal Scale:
+ A nominal scale is really a list of categories to which objects can be
+classified. For example, people who receive a mail order offer might be
+classified as "no response," "purchase and pay," "purchase but return
+the product," and "purchase and neither pay nor return." The data so
+classified are termed categorical data.
+
+*** Normal Distribution
+
+**
+
+Normal Distribution (also known as Gaussian distribution):
+ The normal distribution is a probability density which is bell-shaped,
+symmetrical, and single peaked. The mean, median and mode coincide and
+lie at the center of the distribution. The two tails extend indefinitely
+and never touch the x-axis (asymptotic to the x-axis). A normal
+distribution is fully specified by two parameters - mean and the
+standard deviation.
+ [[KSG_files/img/Pasted.jpg]]
+
+*** One-tailed vs. two-tailed tests
+
+*One-tailed vs. two-tailed tests.* A two-tailed test tests the
+probability of getting a result as strong as or stronger
+ than the observed result, where "strong or stronger" refers to
+different in either direction (ex., that far above or
+ below the mean, or that different from zero in either a positive or
+negative direction). In a one-tailed test, the
+ researcher has ruled out interest in one of the directions (ex.,
+negative values are impossible, or below-mean
+ values are not of interest), and the test is the probability of getting
+a result as strong or stronger only in one
+ direction. In t-tests of significance or normal curve z-tests, a .05
+one-tailed test finding will correspond to a .10
+ two-tailed test finding; likewise a .05 two-tailed test finding will
+correspond to a .025 one-tailed test finding. That
+ is, a one-tailed test is more "liberal" in the sense that it is easier
+to find a relationship to be significant.
+
+*** Ordinal Scale
+
+Ordinal Scale:
+ An ordinal scale is a measurement scale that assigns values to objects
+based on their ranking with respect to one another. For example, a
+doctor might use a scale of 0-10 to indicate degree of improvement in
+some condition, from 0 (no improvement) to 10 (disappearance of the
+condition). While you know that a 4 is better than a 2, there is no
+implication that a 4 is twice as good as a 2. Nor is the improvement
+from 2 to 4 necessarily the same "amount" of improvement as the
+improvement from 6 to 8. All we know is that there are 11 categories,
+with 1 being better than 0, 2 being better than 1, etc.
+
+*** Outlier
+
+**
+
+Outlier:
+ Sometimes a set of data will have one or more items with unusually
+large or unusually small values. Such extreme values are called
+outliers.
+ Outliers often arise from some mistakes in data-gathering or
+data-recording procedures. It is good practice to inspect a data set for
+outliers first, before other statistical methods are applied to the
+data. While there are statistical techniques that can single out
+outliers for special attention, no statistical technique can decide,
+simply on the basis of the numbers, that a data point is spurious. By
+the same token, the term outlier means merely that a point is extreme,
+it does not mean it is spurious.
+
+*** Poisson regression
+
+In statistics, Poisson regression is a form of regression analysis used
+to model count data and contingency tables. Poisson regression assumes
+the response variable Y has a Poisson distribution, and assumes the
+logarithm of its expected value can be modeled by a linear combination
+of unknown parameters. A Poisson regression model is sometimes known as
+a log-linear model, especially when used to model contingency tables.
+ Poisson regression models are generalized linear models with the
+logarithm as the (canonical) link function, and the Poisson distribution
+function.
+
+*** power
+
+*POWER:* related to the number of obs in the dataset (in gen the more
+obs the greater power)
+ power is measures from 0 to 1 (or 1 to 100%).
+ you need the power when you design a study and not during the study
+ *the power will tell you weather you have enough obs to make a
+conclusion*
+ *Elaborate intro:
+*
+ The power of a statistical test is the probability that the test will
+reject the null hypothesis when the null hypothesis is actually false
+(i.e. the probability of not committing a Type II error, or making a
+false negative decision). The power is in general a function of the
+possible distributions, often determined by a parameter, under the
+alternative hypothesis. As the power increases, the chances of a Type II
+error occurring decrease. The probability of a Type II error occurring
+is referred to as the false negative rate (β). Therefore power is equal
+to 1 − β, which is also known as the sensitivity.
+ *Power analysis can be used to calculate the minimum sample size
+required so that one can be reasonably likely to detect an effect of a
+given size*. Power analysis can also be used to calculate the minimum
+effect size that is likely to be detected in a study using a given
+sample size. In addition, the concept of power is used to make
+comparisons between different statistical testing procedures: for
+example, between a parametric and a nonparametric test of the same
+hypothesis.
+
+*** p-value
+
+The p-value is the probability that the null model could, by random
+chance variation, produce a sample as extreme as the observed sample (as
+measured by some sample statistic of interest.)
+
+*** Ratio Scale
+
+**
+
+Ratio Scale:
+ A ratio scale is a measurement scale in which a certain distance along
+the scale means the same thing no matter where on the scale you are, and
+where*"0" on the scale represents the absence of the thing being
+measured*. Thus a "4" on such a scale implies twice as much of the thing
+being measured as a "2."
+
+*** Residual confounding
+
+*Residual confounding*occurs when a confounding variable is measured
+imperfectly or with some error and the adjustment using this imperfect
+measure does not completely remove the effect of the confounding
+variable.
+ An example appears in Chen et al (1999). It turns out that women who
+smoke during pregnancy have a decreased risk of having a Down syndrome
+birth. This is puzzling, as smoking is not often thought of as a good
+thing to do. Should we ask women to start smoking during pregnancy? It
+turns out that there is a relationship between age and smoking during
+pregnancy, with younger women being more likely to indulge in this bad
+habit. Younger women are also less likely to give birth to a child with
+Down syndrome. When you adjust the model relating smoking and Down
+syndrome for the important covariate of age, then the effect of smoking
+disappears. But when you make the adjustment using a binary variable
+(age<35 years, age >=35 years), the protective effect of smoking appears
+to remain. This is an example of residual confounding.
+ Pasted from
+<[[http://www.pmean.com/10/ResidualConfounding.html][http://www.pmean.com/10/ResidualConfounding.html]]>
+
+*** RMSE (root-mean-square error )
+
+RMSE (root-mean-square error)
+The root-mean-square deviation (RMSD) or root-mean-square error (RMSE)
+is a frequently used measure of the differences between *values
+predicted by a model* or an estimator and the *values actually
+observed*. RMSE is a good measure of accuracy.These individual
+differences are *also called residuals*, and the RMSE serves to
+aggregate them into a single measure of predictive power.
+ **
+
+Mean absolute error (MAE)
+ The MAE measures the average magnitude of the errors in a set of
+forecasts, without considering their direction. It
+measures/accuracy/for continuous variables. The equation is given in
+the library references. Expressed in words, the MAE is the average over
+the verification sample of the absolute values of the differences
+between forecast and the corresponding observation. The MAE is a linear
+score which means that all the individual differences are weighted
+equally in the average.
+ *Root mean squared error (RMSE)
+*The RMSE is a quadratic scoring rule which measures the average
+magnitude of the error. The equation for the RMSE is given in both of
+the references.Expressing the formula in words, the difference between
+forecast and correspondingobserved values are each squared and then
+averaged over the sample. Finally, the square root of the average is
+taken. Since the errors are squared before they are averaged, the RMSE
+gives a relatively high weight to large errors. This means the RMSE is
+most useful when large errors are particularly undesirable.
+ Pasted from
+<[[http://www.eumetcal.org/resources/ukmeteocal/verification/www/english/msg/ver_cont_var/uos3/uos3_ko1.htm][http://www.eumetcal.org/resources/ukmeteocal/verification/www/english/msg/ver\_cont\_var/uos3/uos3\_ko1.htm]]>
+
+*** Robustness
+
+**
+
+Robustness:
+ Many statistical methods (particularly classical inference methods)
+rely upon assumptions about the distribution of the population the
+sample is drawn from. The robustness of a statistical method is its
+insensitivity to departures from these assumptions. The less sensitive a
+method is to departures from assumptions, the more robust the method.
+
+*** Sample
+
+**
+
+Sample:A sample is a portion of the elements of a population. A sample
+is chosen to make inferences about the population by examining or
+measuring the elements in the sample.
+
+*** sensitivity analysis
+
+*Sensitivity analysis is neceseray to check the robustness of results.*
+ Sensitivity analysis is the study of how the variation (uncertainty) in
+the output of a statistical model can be attributed to different
+variations in the inputs of the model
+ Put another way, *it is a technique for systematically changing
+variables in a model to determine the effects of such changes.*
+
+*** spatial variability
+
+*Spatial variability* occurs when a quantity that is measured at
+different spatial locations exhibits values that differ across the
+locations. Spatial variability can be assessed using spatial descriptive
+statistics such as the range.
+
+*** standart deviation
+
+Standard deviation is a widely used measure of variability or diversity
+used in statistics and probability theory. It shows how much variation
+or "dispersion" there is from the average (mean, or expected value). A
+low standard deviation indicates that the data points tend to be very
+close to the mean, whereas high standard deviation indicates that the
+data points are spread out over a large range of values.
+ The standard deviation of a statistical population, data set, or
+probability distribution is the square root of its variance.
+ [[KSG_files/img/Image_BfBKeEAOmcykUbwWATF1Sg_0001.png]]
+ A plot of a normal distribution (or bell curve). Each colored band has
+a width of one standard deviation.
+
+*** temporal variation
+
+Temporal Variation:
+ is defined as the variation with time. It is a Variation that occurs
+for a defined period of time.
+
+*** glm
+
+*generalized linear model* (*GLM*) is a flexible generalization of
+ordinary [[http://en.wikipedia.org/wiki/Linear_regression][linear
+regression]] that allows for response variables that have other than a
+[[http://en.wikipedia.org/wiki/Normal_distribution][normal
+distribution]]. The GLM generalizes linear regression by allowing the
+linear model to be related to the response variable via a *link
+function* and by allowing the magnitude of the variance of each
+measurement to be a function of its predicted value.
+ Pasted from
+<[[http://en.wikipedia.org/wiki/Generalized_linear_model][http://en.wikipedia.org/wiki/Generalized\_linear\_model]]>
+
+*** gam
+
+Generalized additive models
+
+[[http://en.wikipedia.org/wiki/Generalized_additive_model][Generalized
+additive models]] (GAMs) are another extension to GLMs in which the
+linear predictor /η/ is not restricted to be linear in the covariates
+*X* but is the sum of
+[[http://en.wikipedia.org/wiki/Smoothing][smoothing functions]] applied
+to the /x_{i}/s:
+
+ Pasted from
+<[[http://en.wikipedia.org/wiki/Generalized_linear_model][http://en.wikipedia.org/wiki/Generalized\_linear\_model]]>
+ gam is Used when the variables (*not outcome-DV*) are *non linear*
+ *gam* stands for generlized additve models
+ -always means you run some spline in a model
+ -the most commonly used spline is penlized splines ( 's' in R ) . this
+auto chooses the best shape based on the data. this is also used when
+you have a time series with a data you can control for date by using a
+spline.
+ - penelized spline auto selects the df. when you check the graph and
+the results of the model isnt sufficant you may want to choose another
+spline.
+ when you model a surface you add 2 variables and can defien the df with
+k= (in R)
+
+*** glm vs gam
+
+glm is used when the *DV* is not linerar
+ gmm is used when the *IV* is not linerar
+
+*** Transformation
+
+Transformation:
+ Transformation is the conversion of a data set into a transformed data
+set by the application of a function. The statistical purpose of
+transformation is to produce a transformed data set that better conforms
+to the requirements of a statistical procedure. A typical use of
+transformation is to take the log of each value; this reduces the long
+right tail in a skewed distribution and produces a more normally-shaped
+distribution.
+ Note that the properties of the distribution can change during
+transformation in ways that might invalidate the analysis. For example,
+consider these data where the relative magnitude of the sample mean
+switches after transformation:
+ A: 15.5, 25.4, 10.5, 13.8 Mean: 16.3
+ B: 15.5, 13.2, 15.3, 18.4 Mean: 15.6
+ Sample A has a larger mean than sample B.
+ After transforming using the natural log:
+ A: 2.741, 3.235, 2.351, 2.625 Mean: 2.738
+ B: 2.741, 2.580, 2.728, 2.912 Mean: 2.740
+ Sample B has a larger mean than sample A.
+ An alternative to transformation is to use non-parametric techniques
+that do not depend on the data being distributed in a certain fashion.
+See permutation tests and bootstrap.
+
+*** Type II error (power)
+
+*Type II Errors.* Where significance deals with Type I errors, power
+deals with Type II errors. A Type
+ II error is accepting a false null hypothesis (false negatives:
+thinking you do not have a relationship when in fact
+ you do). Power is 1 - q, where q is the chance of making a Type II
+error. Social scientists often use the .80 level as
+ a cutoff: there should be at least an 80% chance of not making a Type
+II error. This is more lenient than the .05
+ level used in signficance testing. Leniency is justified on the ground
+that greater care should be taken in asserting a
+ relationship exists (as shown by significance < .05) than in failing to
+conclude that a relationship exists.
+ Obviously, the .80 level of power is arbitrary and the researcher must
+set the level appropriate for his or her
+ research needs. In general, there is a trade-off between significance
+and power. Selecting a stringent significance
+ level such as .001 will increase the chance of Type II errors and thus
+will reduce the power of the test. However, if
+ two types of significance tests show the same level of significance for
+given data, the test with the greater power is
+ used. It should be noted that in practice many social scientists do not
+consider or report the power of the
+ significance tests they use, though they should.
+
+*** Univariate
+
+**
+
+Univariate: Univariate analysis involves a single variable of interest.
+
+*** Variation/Variance
+
+The *variance* is a measure of how far a set of numbers is spread out.
+ *Variance* is a measure of the variability or spread in a set of data.
+Mathematically, it is the average squared deviation from the mean score.
+ Pasted from
+<[[http://stattrek.com/matrix-algebra/covariance-matrix.aspx][http://stattrek.com/matrix-algebra/covariance-matrix.aspx]]>
+ IE:
+ the attitude of a phonemenon to vary in general
+
+*** Z score
+
+Z score:
+ An observation's z-score tells you the number of standard deviations it
+lies away from the population mean (and in which direction). The
+calculation is as follows:
+ [[KSG_files/img/zscore_g_eq1.gif]]
+ where x is the observation itself, is the mean of the distribution, is
+the standard deviation of the distribution
+
+** Basics
+
+*** Data, Experiments, Studies
+
+**** Cohort study
+
+Cohort study:
+ A cohort study is a longitudinal study that identifies a population or
+large group (a "cohort") then draws a sample from the population at
+various points in time and records data for the sample.
+ Cohort studies uses RR (risk ratios) as opposed to OR (odds ratio) used
+in case-control studies
+
+**** Cross sectional study
+
+Cross sectional studies are those that record data from a sample of
+subjects at a given point in time.
+ **
+
+Cross-sectional Data:C
+
+ross-sectional data refer to observations of many individuals (subjects,
+objects) at a given time.A simple example of cross-sectional data is the
+gross annual income for each of 1000 randomly chosen households in New
+York City for the year 2000.
+ Consider, for example, a set of 1000 households randomly chosen from
+all households of New York City. The observed variable is the gross
+annual income.
+ A set of 1000 annual income values for year 1995 for each household is
+an example
+of[[http://www.statistics.com/resources/glossary/c/crossdat.php][]]oss-sectional
+data. From such data one could derive information on how income was
+distributed among households in New York City in 1995.
+
+**** Longitudinal study
+
+Longitudinal analysis is concerned with statistical inference
+fromlongitudinal data.
+ Longitudinal studies are those that record data for subjects or
+variables over time.
+ If a longitudinal study uses the same subjects at each point where data
+are recorded, it is a [[javascript:;][panel study]] .
+ If a longitudinal study samples from the same group at each point where
+data are recorded, it is a [[javascript:;][cohort study]].
+ Longitudinal Data:
+ Longitudinal data refer to observations of a given unit made over time.
+Such data can usually be represented as a time-series and, therefore,
+they are often referred to as time series data.
+ A simple example of longitudinal data is the average gross annual
+income of, say, 1000 households randomly chosen from New York City for
+years 1991-2000. Such data could be represented as a time series of 10
+values (each value being the average gross income of all 1000 households
+for one year).
+
+**** Panel study
+
+Panel study:
+ Panel data (also known as longitudinal or cross-sectional time-series
+data) is a dataset in which the behavior of entities are observed across
+time. These entities could be states, companies, individuals, countries,
+etc. Panel data looks like this:
+ [[KSG_files/img/Image_NGjQOWTiVPDBTpMTPM6I0Q_0001.png]]
+ Panel data allows you to control for variables you cannot observe or
+measure like cultural factors or difference in business practices across
+companies; or variables that change over time but not across entities
+(i.e. national policies, federal regulations, international agreements,
+etc.). This is, it accounts for individual heterogeneity. With panel
+data you can include variables at different levels of analysis (i.e.
+students, schools, districts, states) suitable for multilevel or
+hierarchical modeling. Some drawbacks are data collection issues (i.e.
+sampling design, coverage), non-response in the case of micro panels or
+cross-country dependency in the case of macro panels (i.e. correlation
+between countries)
+
+*** Distributions
+
+**** intro
+
+Once the distribution has been displayed graphically, we can describe
+the overall pattern of the distribution and mention any striking
+deviations from that pattern. More specifically, we should consider the
+following features of the distribution:
+ [[KSG_files/img/Image_AZHvtXIGx0SGWn1z4oRcTg_0001.jpg]]
+ We will get a sense of the overall pattern of the data from the
+histogram's center, spread and shape, while outliers will highlight
+deviations from that pattern.
+
+**** Outliers
+
+*Outliers :
+*
+ are observations that fall outside the overall pattern. For example,
+the following histogram represents a distribution that has a high
+outlier:
+ [[KSG_files/img/Image_Un3yTY5DRHHModKv8ldOSA_0001.jpg]]
+ The two main numerical measures for the center of a distribution are
+the *mean (X) and the median (M)*.
+ The mean is the average value, while the median is the middle value.
+ The mean is very sensitive to outliers (as it factors in their
+magnitude), while the median is resistant to outliers.
+ The mean is an appropriate measure of center only for symmetric
+distributions with no outliers. In all other cases, the median should be
+used to describe the center of the distribution.
+ The middle 50% of the data falls between Q1 and Q3, and therefore:
+ IQR = Q3 - Q1
+ [[KSG_files/img/Image_Un3yTY5DRHHModKv8ldOSA_0002.jpg]]
+ An observation is considered a suspected outlier if it is:
+ below Q1 - 1.5(IQR) or
+ above Q3 + 1.5(IQR)
+ The following picture illustrates this rule:
+ [[KSG_files/img/Image_Un3yTY5DRHHModKv8ldOSA_0003.jpg]]
+ Use mean and the standard deviation as measures of center and spread
+only for reasonably symmetric distributions with no outliers.
+ Use the five-number summary (which gives the median, IQR and range) for
+all other cases.
+ For distributions having this shape (also known as the normal shape),
+the following rule applies:
+ The Standard Deviation Rule:
+ Approximately 68% of the observations fall within 1 standard deviation
+of the mean
+ Approximately 95% of the observations fall within 2 standard deviations
+of the mean
+ Approximately 99.7% (or virtually all) of the observations fall within
+3 standard deviations of the mean
+ The following picture illustrates this rule:
+ [[KSG_files/img/Image_Un3yTY5DRHHModKv8ldOSA_0004.jpg]]
+
+**** Shape of the Distribution, Normality
+
+*Shape of the Distribution, Normality.*
+ An important aspect of the "description" of a variable is the shape of
+its distribution, which tells you the frequency of values from different
+ranges of the variable. Typically, a researcher is interested in how
+well the distribution can be approximated by the normal distribution
+(see the animation below for an example of this distribution) (see also
+Elementary Concepts). Simple descriptive statistics can provide some
+information relevant to this issue. For example, if the skewness (which
+measures the deviation of the distribution from symmetry) is clearly
+different from 0, then that distribution is asymmetrical, while normal
+distributions are perfectly symmetrical. If the kurtosis (which measures
+"peakedness" of the distribution) is clearly different from 0, then the
+distribution is either flatter or more peaked than normal; the kurtosis
+of the normal distribution is 0.
+ More precise information can be obtained by performing one of the tests
+of normality to determine the probability that the sample came from a
+normally distributed population of observations (e.g., the so-called
+Kolmogorov-Smirnov test, or the Shapiro-Wilks' W test. However, none of
+these tests can entirely substitute for a visual examination of the data
+using a histogram (i.e., a graph that shows the frequency distribution
+of a variable).
+ The graph allows you to evaluate the normality of the empirical
+distribution because it also shows the normal curve superimposed over
+the histogram. It also allows you to examine various aspects of the
+distribution qualitatively. For example, the distribution could be
+bimodal (have 2 peaks). This might suggest that the sample is not
+homogeneous but possibly its elements came from two different
+populations, each more or less normally distributed. In such cases, in
+order to understand the nature of the variable in question, you should
+look for a way to quantitatively identify the two sub-samples.
+ [[KSG_files/img/Image_vJOyeNxOkCCeozmxOOnW3w_0001.jpg]]
+
+**** skewness (shape)
+
+*Shape
+*
+ When describing the shape of a distribution, we should consider:
+ 1.Symmetry/skewness of the distribution
+ 2.Peakedness (modality) - the number of peaks (modes) the distribution
+has.
+ *Skewed Right Distributions*
+ A distribution is called skewed right if, as in the histogram above,
+*the right tail* (larger values) is much longer than the left tail
+(small values). Note that in a skewed right distribution, the bulk of
+the observations are small/medium, with a few observations that are much
+larger than the rest. An example of a real life variable that has a
+skewed right distribution is salary. Most people earn in the low/medium
+range of salaries, with a few exceptions (CEOs, professional athletes
+etc.).
+ [[KSG_files/img/Image_ikxaKA5WpNubshgDtyYa6Q_0001.jpg]]
+ *Skewed Left Distributions*
+ A distribution is called skewed left if, as in the histogram above,
+*the left tail* (smaller values) is much longer than the right tail
+(larger values). Note that in a skewed left distribution, the bulk of
+the observations are medium/large, with a few observations that are much
+smaller than the rest. An example of a real life variable that has a
+skewed left distribution is age of death from natural causes (heart
+disease, cancer etc.). Most such deaths happen at an older age with a
+fewer cases happening at a younger age.
+ [[KSG_files/img/Image_ikxaKA5WpNubshgDtyYa6Q_0002.jpg]]
+ *Symmetric Distributions
+ [[KSG_files/img/Image_ikxaKA5WpNubshgDtyYa6Q_0003.jpg]]*
+
+*** Graphic presentation
+
+**** intro
+
+**
+
+2.Graphic presentation:
+
+ A)There are two simple graphical displays for visualizing the
+distribution of categorical data:
+
+ *Pie Chart* for nominal and ordinal variables
+
+
+[[KSG_files/img/Image_PZJ2RkyjlxKi4f8xYI6Ysw_0001.jpg]][[KSG_files/img/Image_PZJ2RkyjlxKi4f8xYI6Ysw_0002.jpg]]
+ *
+ bar chart*for can also be used with quantitative discrete variables
+
+ B) For simple graphical displays for visualizing the distribution of
+quantitative data:
+
+ Histograms
+
+ [[KSG_files/img/Image_PZJ2RkyjlxKi4f8xYI6Ysw_0003.jpg]]
+
+*** Inference
+
+**** H0 (null) hypothesis
+
+*null hypothesis (denoted "Ho")-* the null hypothesis suggests nothing
+special is going on, no change from the status quo, no difference from
+the traditional state of affairs, no relationship
+ *alternative hypothesis (denoted "Ha" or "H1")*- the alternative
+hypothesis disagrees with this, stating that something is going on, or
+there is a change from the status quo, or there is a difference from the
+traditional state of affairs. The alternative hypothesis, Ha, usually
+represents what we want to check or what we suspect is really going on.
+
+**** intro
+
+B. Inference (הסקה)
+ When the variable of interest is categorical, the population parameter
+that we will infer about is the population proportion (p) associated
+with that variable
+ When the variable of interest is quantitative, the population parameter
+that we infer about is the population mean (μ) associated with that
+variable
+ Point estimation is the form of statistical inference in which, based
+on the sample data, we estimate the unknown parameter of interest by a
+single value (hence the name point estimation).
+ [[KSG_files/img/Image_PsL70JuCaYhxMBc4MFsIDQ_0001.jpg]]
+ The idea behind interval estimation is, therefore to enhance the simple
+point estimates by supplying information about the size of the error
+attached.
+
+*** Significance
+
+**** Assumptions
+
+Random sampling is assumed for inferential statistics (significance
+testing). "Inferential" refers to the fact that
+ conclusions are drawn about relationships in the data based on
+inference from knowledge of the sampling
+ distribution characteristics of known common forms of data
+distribution, notably the bell-shaped normal curve.
+ Sample size is assumed not to be small. Since significance tests
+reflect both strength of association and sample
+ size, making inference based on small samples may lead to excessive
+Tyoe I errors even for moderate or strong
+ relationships.
+ Substantive significance should not be assumed merely because
+statistical significance is demonstrated. For large
+ samples, even very weak relationships may be statistically significant.
+ A priori testing is assumed. That is, the significance tests undertaken
+should be ones selected a priori based on
+ theory. If a posteriori tests are done, say on all possible
+crosstabulations in a dataset, in order to determine which
+ are significant, then for the .05 significance level one would expect
+one such test in 20 to be a Type I error. Put
+ another way, a posteriori testing a a nominal alpha significance level
+of .05 really is testing at an effective level
+ which is much more lenient than that.
+ Correspondence of significance levels with research purpose is assumed.
+Specifically, it is inappropriate to set
+ a stringent significance level in exploratory research (a .10 level is
+acceptable in exploratory research). Likewise,
+ it is inappropriate to set a lenient significance level in confirmatory
+research (a .10 level is not acceptable in most
+ confirmatory research settings).
+ Intervening and common anteceding variables are absent for purposes of
+causal inference. The observed
+ significant relationship between A and B may be spurious if they share
+a common anteceding cause(ex., ice cream
+ sales and fires appear related, but that is only because they share a
+mutual anteceding cause -- heat of the day). If
+ there is an intervening variable (A causes C, which causes B), the
+relationship of A to B is indirect.
+
+**** Key Concepts and Terms
+
+*Key Concepts and Terms*
+ *Significance and Type I Errors.*
+ Significance is the percent chance that a relationship found in the
+data is just
+ due to an unlucky sample, such that if we took another sample we might
+find nothing. That is, significance is the
+
+[[http://faculty.chass.ncsu.edu/garson/PA765/signif.htm][http://faculty.chass.ncsu.edu/garson/PA765/signif.htm]]
+ chance of a Type I error: the chance of concluding we have a
+relationship when we do not (false positives). Social
+ scientists often use the .05 level as a cutoff: if there is 5% or less
+chance that a relationship is just due to chance,
+ we conclude the relationship is real (technically, we fail to accept
+the null hypothesis that the strength of the
+ relationship is not different from zero). Significance testing is not
+appropriate for enumerations or non-random
+ samples because it only deals with the the chance of Type I error based
+on a random sample. Any relationship, not
+ matter how small, is a true relationship (barring measurement error)
+for an enumeration. We would like to make
+ inferences for non-random samples, but that is impossible.
+ *Conservative tests*
+ The more conservative the test, the less likely the researcher is to
+make a Type I error but the
+ more likely to make a Type II error (see below). If a test is called
+"conservative," this means that Type I error
+ (false positive findings) is actually less than the computed alpha
+significance level. Put another way, the p
+ probability levels for a conservative test are computed higher than
+they might otherwise be. If a finding is
+ significant for a conservative test, the finding is valid. However,
+with conservative tests, there is an increased
+ likelihood of Type II errors (false negative findings). By contrast, an
+anti-conservative test (sometimes called a
+ liberal test) would have greater actual chance of Type I error than
+indicated by the computed p value and the test
+ would not be valid (which is why one hears about conservative tests
+fairly often, but not anti-conservative tests).\
+ *Confidence limits* set upper and lower bounds on the true population
+parameter for a given estimate for a given
+ level of significance (ex., the .05 level). The confidence interval is
+the range within these bounds. For instance, for
+ normally distributed data, the confidence limits for a true population
+mean are the sample mean plus or minus 1.96
+ times the standard error, as discussed in the section on normal curve
+z-tests. As another example, confidence limits
+ are often reported in the media in relation to opinion polls, as when
+the percentage of Americans who support the
+ president's policies is said to be, say, 60%, plus or minus 3
+percentage points. Some researchers recommend
+ reporting confidence limits wherever point (ex., mean) estimates and
+their significance are reported. This is
+ because confidence limits provide additional information on the
+relative meaningfulness of the estimates. Thus
+ significance has a different meaning when, for example, the confidence
+interval is the entire range of the data, as
+ compared to the situation where the confidence interval is only ten
+percent of the range.
+ *
+ Power and Type II Errors.* Where significance deals with Type I errors,
+power deals with Type II errors. A Type
+ II error is accepting a false null hypothesis (false negatives:
+thinking you do not have a relationship when in fact
+ you do). Power is 1 - q, where q is the chance of making a Type II
+error. Social scientists often use the .80 level as
+ a cutoff: there should be at least an 80% chance of not making a Type
+II error. This is more lenient than the .05
+ level used in signficance testing. Leniency is justified on the ground
+that greater care should be taken in asserting a
+ relationship exists (as shown by significance < .05) than in failing to
+conclude that a relationship exists.
+ Obviously, the .80 level of power is arbitrary and the researcher must
+set the level appropriate for his or her
+ research needs. In general, there is a trade-off between significance
+and power. Selecting a stringent significance
+ level such as .001 will increase the chance of Type II errors and thus
+will reduce the power of the test. However, if
+ two types of significance tests show the same level of significance for
+given data, the test with the greater power is
+ used. It should be noted that in practice many social scientists do not
+consider or report the power of the
+ significance tests they use, though they should.
+ *
+ One-tailed vs. two-tailed tests.* A two-tailed test tests the
+probability of getting a result as strong as or stronger
+ than the observed result, where "strong or stronger" refers to
+different in either direction (ex., that far above or
+ below the mean, or that different from zero in either a positive or
+negative direction). In a one-tailed test, the
+ researcher has ruled out interest in one of the directions (ex.,
+negative values are impossible, or below-mean
+ values are not of interest), and the test is the probability of getting
+a result as strong or stronger only in one
+ direction. In t-tests of significance or normal curve z-tests, a .05
+one-tailed test finding will correspond to a .10
+ two-tailed test finding; likewise a .05 two-tailed test finding will
+correspond to a .025 one-tailed test finding. That
+ is, a one-tailed test is more "liberal" in the sense that it is easier
+to find a relationship to be significant.
+ *
+ Asymptotic vs. exact vs. Monte Carlo significance.* Most significance
+tests are asymptotic, meaning that they
+ assume adequate sample size. When significance is computed for small
+datasets, sparse datasets, or unbalanced
+ datasets can lead to erroneous conclusions. While cutoffs for these
+criteria vary according the data context, as
+ rules of thumb, sample size should be 50 or more, count in cells formed
+by the factors should be 5 or more for
+ 80% of cells and no cell should have zero count, and balance between
+groups should never exceed 90:10. Exact
+ tests are available in the SPSS Exact Tests add-on module. Exact tests
+do not face these limitations and can handle
+ small sample size, sparse tables, and unbalanced designs, but may not
+be computed for large samples. For
+ http://faculty.chass.ncsu.edu/garson/PA765/signif.htm
+ problematic large samples, Monte Carlo significance estimates are
+available, also in the Exact Tests module.
+ Monte Carlo estimates are derived from repeated sampling of the current
+dataset to form empirical data
+ distribution parameters (as opposed, for instance, to assuming a normal
+distribution). Monte Carlo estimates are
+ data-driven and may overfit the data (may reflect noise in the current
+dataset).
+
+*** simple math
+
+**** how to find percent (%) in equations
+
+*How to find percent (%) in equations
+*
+ 1) Take the old value and subtract it from the new value, then divide
+by the old value.
+ 2) Multiply by 100. That number represents the percent change.
+ Example:
+ (83.26-60.88)/60.88X100=36.75 % change in going from min to avg in the
+breast cancer example
+
+*** Variables
+
+**** Classification levels
+
+Classification levels:
+ 1) *nominal* (נומינלי) (also categorical or discrete): A variable can
+be treated as nominal when its values represent categories with no
+intrinsic ranking
+ Example: name, hair color, zip code, passport number etc...
+ 2) *ordinal* (אורדינלי): A variable can be treated as ordinal when its
+values represent categories with some intrinsic ranking
+ Example: religion, levels of service satisfaction, army rank etc...
+ 3) *interval*** A variable can be treated as scale when its values
+represent ordered categories with a meaningful metric, so that distance
+comparisons between values are appropriate.
+ Example: Temperature, cancer rates, age in years, income in thousands
+of dollars.etc...
+ **Interval and scale (ratio) variables are grouped together as
+continuous variable
+ 4)*Ratio*variables are very similar to interval variables; in addition
+to all the properties of interval variables, they feature an
+identifiable absolute zero point, thus, they allow for statements such
+as x is two times more than y.
+
+**** Types
+
+*Variables type:*
+ can be classified into one of two types: quantitative or categorical.
+ *Categorical variables* (איכותי) (or qualitative) : take category or
+label values, and place an individual into one of several groups
+ *Quantitative variables* (כמותי): take numerical values, and represent
+some kind of measurement.
+ Quantitative variables are divided into 2 types:
+ *Discrete Variable* (משתנה כמותי בדיד) - Variables that can only take
+on a finite number of values are called "discrete variables." All
+catagorical variables are discrete. Some quantitative variables are
+discrete, such as performance rated as 1,2,3,4, or 5, or temperature
+rounded to the nearest degree. Sometimes, a variable that takes on
+enough discrete values can be considered to be
+ continuous for practical purposes. One example is time to the nearest
+millisecond.
+ *Continuous Variables* (משתנה כמותי רציף)- Variables that can take on
+any value in a certain range. Time and distance are continuous; gender,
+SAT score and "time rounded to the nearest second" are not.
+
+**** Variable Coding
+
+***** 0,1 variables in health studies
+
+always code as:
+ 0-no
+ 1-yes
+
+**** Variable relationships
+
+***** Categorical IV and categorical DV
+
+The relationship between two categorical variables is summarized using:
+ *Data display*: two-way table
+ *Numerical summaries*: conditional percentages.
+ Conditional percentages are calculated for each value of the
+explanatory variable separately. They can be row percents if the
+explanatory variable "sits" in the rows, or column percents if the
+explanatory variable "sits" in the columns.
+ When we try to understand the relationship between two categorical
+variables, we compare the distributions of the response variable for
+values of the explanatory variable. In particular, we look at how the
+pattern of conditional percentages differs between the values of the
+explanatory variable.
+ [[KSG_files/img/Image_u1MXwkwqTvvhjoBgieSk1A_0001.jpg]]
+ [[KSG_files/img/Image_u1MXwkwqTvvhjoBgieSk1A_0002.jpg]]
+ [[KSG_files/img/Image_u1MXwkwqTvvhjoBgieSk1A_0003.jpg]]
+
+***** Categorical IV and quantitative DV
+
+The relationship between a categorical explanatory and a quantitative
+response variable is summarized using:
+ *Data display:* side-by-side boxplots
+ *Numerical summaries:*descriptive statistics
+ Exploring the relationship between a categorical explanatory variable
+and a quantitative response variable amounts to comparing the
+distributions of the quantitative response for each category of the
+explanatory variable. In particular, we look at how the distribution of
+the response variable differs between the values of the explanatory
+variable.
+ [[KSG_files/img/Image_uSuJE4IcVN7J28At8yPAhw_0001.jpg]]
+ [[KSG_files/img/Image_uSuJE4IcVN7J28At8yPAhw_0002.jpg]]
+
+***** Quantitative IV and categorical DV.
+
+This is usually covered by logistic regression (see later sections in my
+guide)
+
+***** Quantitative IV and quantitative DV
+
+*
+ Data display:*The relationship between two quantitative variables is
+visually displayed using the scatterplot, where each point represents an
+individual. We always plot the explanatory variable on the horizontal,
+X-axis, and the response variable on the vertical, Y-axis.
+ When we explore a relationship using the scatterplot we should describe
+the overall pattern of the relationship and any deviations from that
+pattern. To describe the overall pattern consider the direction, form
+and strength of the relationship. Assessing the strength could be
+problematic.
+ Adding labels to the scatterplot, indicating different groups or
+categories within the data, might help us get more insight about the
+relationship we are exploring.
+ [[KSG_files/img/Image_IvLSWd0YykzVwNHscwuohg_0001.jpg]]
+ The direction of the relationship can be positive, negative, or neither
+
+[[KSG_files/img/Image_IvLSWd0YykzVwNHscwuohg_0002.jpg]][[KSG_files/img/Image_IvLSWd0YykzVwNHscwuohg_0003.jpg]][[KSG_files/img/Image_IvLSWd0YykzVwNHscwuohg_0004.jpg]]
+ A positive (or increasing) relationship means that an increase in one
+of the variables is associated with an increase in the other.
+ A negative (or decreasing) relationship means that an increase in one
+of the variables is associated with a decrease in the other.
+ Not all relationships can be classified as either positive or negative.
+ The form of the relationship is its general shape. When identifying the
+form, we try to find the simplest way to describe the shape of the
+scatterplot. There are many possible forms. Here are a couple that are
+quite common:
+ Relationships with a linear form are most simply described as points
+scattered about a line:
+
+[[KSG_files/img/Image_IvLSWd0YykzVwNHscwuohg_0005.jpg]][[KSG_files/img/Image_IvLSWd0YykzVwNHscwuohg_0006.jpg]][[KSG_files/img/Image_IvLSWd0YykzVwNHscwuohg_0007.jpg]]
+ Relationships with a curvilinear form are most simply described as
+points dispersed around the same curved line:
+ There asible forms for the relationship between two quantitative
+variables, but linear and curvilinear forms are quite common and easy to
+identify. Another form-related pattern that we should be aware of is
+clusters in the data:
+ The strength of the relationship is determined by how closely the data
+follow the form of the relationship. Let's look, for example, at the
+following two scatterplots displaying a positive, linear relationship:
+ The strength of the relationship is determined by how closely the data
+points follow the form.
+ We can see that in the top scatterplot the the data points follow the
+linear patter quite closely. This is an examationship. In the bottom
+scatterplot the points also follow the linear pattern but much less
+closely, and therefore we can say that the relationship is weaker. In
+general, though, assessing the strength of a relationship just by
+looking at the scatterplot is quite problematic, and we need a numerical
+measure to help us with that.
+ Data points tha pattern of the relationship are called outliers. Two
+outliers are illustrated in the scatterplot below:
+
+***** Types of relationships between Variables
+
+In most studies involving two variables, each of the variables has a
+role. We distinguish between:
+ *the outcome/response/dependent/תלוי variable (DV):*
+ The outcome of the study
+ *
+ the explanatory/Independent/בלתי תלוי variable (IV) :*
+ The variable that claims to explain, predict or affect the response.
+ If we further classify each of the two relevant variables according to
+their type (categorical or quantitative), we get the following 4
+possibilities for "role-type classification" :
+ case 1.Categorical explanatory and quantitative response
+ case 2.Categorical explanatory and categorical response
+ case 3.Quantitative explanatory and quantitative response
+ case 4.Quantitative explanatory and categorical response
+ OR:
+ 1.Categorical IV and quantitative DV
+ 2.Categorical IV and categorical DV
+ 3.Quantitative IV and quantitative DV
+ 4.Quantitative IV and categorical DV.
+ This role-type classification can be summarized and easily visualized
+in the following table:
+ [[KSG_files/img/Image_R6BpmxJ1byvAaTz8huuH6A_0001.jpg]]
+
+** discriptives
+
+*** IQR
+
+The interquartile range (IQR) is the difference between the third and
+the first quartiles. It is a measure of dispersion.
+ *Interquartile calculation formula*
+ This simple formula is used for calculating the interquartile range:
+ $IQR=xU-xL
+ Where xU is the Upper quartile and xL is the Lower quartile
+ *NOTE:
+*
+ if one is a minus value you should calculate as follows:
+ [[KSG_files/img/SS-2011-05-25_09.43.36.png]]
+ Q3+Q1 (absolute value)
+
+** 1.EDA
+*** 1.clean data and arrange
+1)run proc contents
+ see wheather everything is as should be (character is character,
+numeric is numeric etc..)
+ 2)run proc univarite
+ proc univariate data=DATA;
+ var VAR1 VAR2;
+ histogram VAR1 VAR2;
+ run;
+
+ this is done for continuous variables only and check the histogram
+ clean the DB from -9999 or extreme values
+ clean from extreme values
+ 3)run proc freq for non continuous variables
+
+*** 2.start EDA
+**** eda for continuous variables
+
+identify the DV or a few if available (2 or more DV)
+ if continuous:
+ run proc univqariate to check the histogram
+ *proc* *univariate* data=bw normal ;
+ var BIRTHWT ;
+ histogram BIRTHWT / normal kernel;
+ qqplot BIRTHWT / normal(mu=est sigma=est);
+ *run*;
+ you get this:
+ the red line (normal) is the distribuation the model should have
+thoraticly
+ t[[KSG_files/img/Image_yFDdUmOXw2LIKDV1xHzXdg_0001.png]]he blue line
+(kernel) is the distribuation coming from the real data
+ 2) then you should also check normality using test for normality (the
+shapiro testis the best):
+ In the Shapiro-Wilk W test for normality, the p-value is based on the
+ assumption that the distribution is normal. In our example, the p-value
+is very
+ large (0.51), indicating that we cannot reject that *r* is normally
+ distributed. (See the output of the *proc univariate* above.)
+ Tests for Normality
+ Test --Statistic--- -----p Value------
+ Kolmogorov-Smirnov D 0.047752 Pr > D <0.0100
+ Cramer-von Mises W-Sq 102.988 Pr > W-Sq <0.0050
+ Anderson-Darling A-Sq 719.4689 Pr > A-Sq <0.0050
+ here is an example using the Kolmogorov-Smirnov test. *since the p
+value is sig. there is no normality
+*
+ 3)another important test is the Q-Q plot which compares the real dist.
+values vs the theoretical values
+
+ if the points are not on the line there is no normality
+ so in this example even though the histogram showed that it seems
+normal the tests and qq plot suggest otherwise
+ BUT
+ in real life and expecially in large data set (>1000) if its close to
+normal on the histogram and the QQ plot then you consider this normal
+ its important to also check the normality of the residuals in a
+regression model as well see (XXXX)
+
+**** eda for non continuous variables
+
+For non continuous DV variables (IE logistic regresiion) which usually
+has 0,1
+ you don't test for normality
+ 1)run proc freq:
+ **
+
+proc *freq* data=bw;
+ table DIABETESGE / list;
+ *run*; ;
+ to see see the proportion of things you want to model.
+
+ if you have an extremmly low proportion either something is wrong or
+it's a rare disease and you do a *poison regresion*
+
+**** check normality in regerssion model
+
+*** 3.transformations
+**** 1.intro
+transformations are usually done only to the DV if the DV is extremely un-normal
+
+$NOTE-the only reason to go to non parametric test is that after transformations its stil non normal basiclly after trans. we should get a normal sidtribution You usually use trans. in the EDA part but this can also be done after the regression to force linarity$
+
+**** 2.log transform
+
+1) the first trans. to try is log trans.
+ this can only be done for variables which are greater then 0
+ variables smaller then 0 we can try other such as quadtratic trans.
+ 2)you take the DV and issue a log command and then check for normality
+ A)if its normal you stick with that
+ B) if its not normall (IE below) you either consider a different trans.
+or go to non parametric or usually just *stick with the normal variable*
+ [[KSG_files/img/Image_gUL7aoyr5LX1rCLy6JpxJQ_0001.png]]
+
+**** 3.quadratic transformation
+
+when you can use log transform or log transf. dosen help you try a
+quadratic trans.
+ to get quadratic you multiply by itself
+ **
+
+data bw;
+ set bw;
+ bwq=BIRTHWT*BIRTHWT;
+ *run*;
+ *proc* *univariate* data=bw normal ;
+ var bwq ;
+ histogram bwq/ normal kernel;
+ qqplot bwq / normal(mu=est sigma=est);
+ *run*;;
+
+ if its not normall (IE below) you either consider a different trans. or
+go to non parametric or usually just *stick with the normal variable
+ if its normal now you use it
+*
+
+**** 4.sqaure transform
+
+when you cant use log transform or lquadratic trans you can try square
+trans
+
+ *data* bw;
+ set bw;
+ bw3=sqrt(BIRTHWT);
+ *run*;
+ *proc* *univariate* data=bw normal ;
+ var bw3 ;
+ histogram bw3/ normal kernel;
+ qqplot bw3 / normal(mu=est sigma=est);
+ *run*;;
+
+**** 5.Independent Variable transformations
+the only place you transform the IV's ia after you run the model and you run the normality test for residuals you usually start with the main explanotory variable and then if that transformation dosent help you go one by one to the rest.
+
+** t-tests
+
+*** intro
+
+t-test:
+ A t-test is a statistical hypothesis test based on a test statistic
+whose sampling distribution is a t-distribution. Various t-tests,
+strictly speaking, are aimed at testing hypotheses about populations
+with normal probability distribution. However, statistical research has
+shown that t-tests often provide quite adequate results for non-normally
+distributed populations too.
+ The term "t-test" is often used in a narrower sense - it refers to a
+popular test aimed at testing the hypothesis that the population mean is
+equal to some value m (see also t-statistic).
+ The most popular t-tests are aimed at testing the following hypotheses:
+ 1) The population mean is as hypothesized (the population variance is
+not known).
+ 2) The means of two populations are equal (the population variances are
+not known but equal).
+ 3) The means of two populations are equal (the population variances are
+not known and not equal).
+ 4) The correlation coefficient for two random variables is zero.
+ 5) The slope of the population regression line is zero.
+
+*** t-test table
+
+[[KSG_files/img/SS-2011-05-11_13.49.27.png]]
+
+** ANOVA/MANOVA
+
+*** ANOVA
+
+**** intro
+
+*Anova* is run when we want to compare the means of 3 or more groups in
+a Dependent Variable.
+ To run an Anova test you must have *only 1* Inependent Variable and
+Dependent Variable must be continous (interval & normal)
+ the assumption is that:
+ H0= Mue (mean)1 =Mue (mean)2
+ H1= other [Mue (mean)1 dose not equel Mue (mean)2)
+ when the anova is run you first look at the table with the F value (see
+below) . If F is significant you must reject the null hypothesus (H0),
+and thus there will be sig. diffrences betweem the means of the groups
+ [[KSG_files/img/Image_xc9k6LNnAqOjaJj8JW4KcA_0001.png]]
+
+** Regression
+The relationship between a categorical explanatory and a quantitative
+response variable is summarized using:
+ Data display: side-by-side boxplots
+ Numerical summaries: descriptive statistics
+ Exploring the relationship between a categorical explanatory variable
+and a quantitative response variable amounts to comparing the
+distributions of the quantitative response for each category of the
+explanatory variable.
+ In particular, we look at how the distribution of the response variable
+differs between the values of the explanatory variable.
+
+*** General
+
+**** Regression Analysis Intro
+
+Regression Analysis:
+ *
+*Regression analysis provides a "best-fit" mathematical equation for the
+relationship between the dependent variable (outcome/response) and
+independent variable(s) (covariates).**The*line of regression* is the
+line that best fits the data in simple linear regression, i.e. the line
+that corresponds to the "best-fit" parameters (slope and intercept) of
+the regression equation
+ Types of regression:
+ *
+ Linear Regression:*Linear regression is aimed at finding the "best-fit"
+linear relationship between the dependent variable and independent
+variable(s).
+ *Loglinear regression* is a kind of regression aimed at finding the
+best fit between the data and a loglinear model .
+ The major assumption of loglinear regression is that a linear
+relationship exists between the log of the dependent variable and the
+inependent variables.
+ *Logistic Regression:*Logistic regression is used with binary data when
+you want to model the probability that a specified outcome will occur.
+Specifically, it is aimed at estimating parameters a and b in the
+following model:
+ [[KSG_files/img/logistregr_g_eq1.gif]]
+ where p_{i}is the probability of a success for given value x_{i}of
+the explanatory variable X.Use of the log of the odds p/(1-p) (the
+logit) guarantees that the predicted value of p will always be between 0
+and 1.
+ *Ordinary Least Squares Regression:*
+ Ordinary least squares regression is a special (and the most common)
+kind of ordinary linear regression . It is based on the least squares
+method of finding regression parameters.
+ Technically, the aim of ordinary least squares regression is to find
+out those values [\^a] and [\^b] of parameters a ("intercept") and b
+("slope") in the simple linear regression model
+ *Step-wise Regression:*
+ Step-wise regression is one of several computer-based iterative
+variable-selection procedures. At each step we first determine whether
+any of the variables (already included in the model) can be removed. If
+none of the variables can be removed, we determine whether a
+non-yet-included variable can be added. A variable can be added to the
+model at a step, removed at a following step, etc.
+
+**** Basic linear Regresin types
+
+types of regression:
+
+ 1)continuous data: (lung function (FEV), blood pressure etc..)
+
+ use *linear regression*
+
+ 2) Count data (how many events occurs in a time interval)
+
+ use *Poison regression*
+ Poison regression has to be for rare cases and an integer
+ for example few people in boston that sufferd from pneumonia and were
+hospitalized in boston> whole number in people count
+
+ 3)event count data (yes/no data such as death, stroke)
+
+ use *Logistic regression (Binary)*
+
+**** Interpretation of beta coefficients
+
+The regression coefficient for the *i-th predictor* is the expected
+difference in response *per unit difference in the i-th predictor*, all
+other things being equal. That is,*if the i-th predictor is changed 1
+unit while all of the other predictors are held constant, the response
+is expected to change b_{i} units*.
+ example:
+ HDL cholesterol in women is predicted from their age, body mass index,
+blood vitamin C, systolic and diastolic blood pressures, skinfold
+thickness, and the log of total cholesterol.
+ [[KSG_files/img/Image_OJ2G2qjgWkD4A4FmtGO5Fw_0001.png]]
+ You can see that for a 1 unit increase in Age there is a -0.00092863
+decrease in HDL.
+ *for prediction:*To predict someone's logged HDL cholesterol, just take
+the values of the predictors, multiply them by their coefficients, and
+add them up. Some coefficients are statistically significant; some are
+not. What we make of this or do about it depends on the particular
+research question.
+ *
+ Pasted from
+<[[http://www.jerrydallal.com/LHSP/multireg.htm][http://www.jerrydallal.com/LHSP/multireg.htm]]>*
+ Pasted from
+<[[http://www.jerrydallal.com/LHSP/regcoef.htm][http://www.jerrydallal.com/LHSP/regcoef.htm]]>
+
+**** R2 (Square)
+
+The R-squared of the regression*is the fraction of the variation in your
+dependent variable that is accounted for (or predicted by) your
+independent variables.* (In regression with a single independent
+variable, it is the same as the square of the correlation between your
+dependent and independent variable.)
+ **
+
+ Coefficient of Determination: Inregression analysis, the coefficient
+of determination is a measure of goodness-of-fit (i.e. how well or
+tightly the data fit the estimated model). The coefficient is defined as
+the ratio of two sums of squares:
+ [[KSG_files/img/Image_Cn1jaTrtofOWWNeivF0jJA_0001.jpg]]
+
+where SSR is the sum of squares due to regression, SST is the total sum
+of squares. By "sum of squares" we mean the sum of squared deviations
+between actual values and the mean (SST), or between predicted values
+and the mean (SSR). The coefficient of determination takes on values
+between 0 and 1, with values closer to 1 implying a better fit.
+
+**** coefficients
+
+In simple or multiple linear regression, the *size of the coefficient
+for each independent variable gives you the size of the effect that
+variable is having on your dependent variable*, and the sign on the
+coefficient (positive or negative) gives you the *direction of the
+effect*.
+ In regression with a single independent variable, the coefficient tells
+you how much the dependent variable is expected to increase (if the
+coefficient is positive) or decrease (if the coefficient is negative)
+when that independent variable increases by one.
+ In regression with *multiple independent variables*, the coefficient
+tells you how much the *dependent variable is expected to increase when
+that independent variable increases by one, holding all the other
+independent variables constant.*Remember to keep in mind the units which
+your variables are measured in.
+
+**** error/standard error
+
+*error:* The*deviation of the points from the regression line is called
+an "error."*
+ *Standard error:* The standard error is an estimate of the standard
+deviation of the coefficient, the amount it varies across cases. It can
+be thought of as a measure of the precision with which the regression
+coefficient is measured. If a coefficient is large compared to its
+standard error, then it is probably different from 0.
+
+**** Residuals
+
+Residuals are *differences between the observed values and the values
+predicted by some model*. Analysis of residuals allows you to estimate
+the adequacy of a model for particular data; it is widely used in
+regression analysis .
+
+**** t statistic
+
+The *t statistic* is the coefficient divided by its standard error.
+ Your regression software compares the t statistic on your variable with
+values in the Student's t distribution to determine the P value, which
+is the number that you really need to be looking at.
+ *t values and Significant levels:
+*
+ *% significance Z Value*
+ 0.11.65/1.74
+ 0.051.96/1.94
+ 0.012.58/2.74
+ Traditionally, experimenters have used either the 0.05 level (sometimes
+called the 5% level) or the 0.01 level (1% level)
+
+**** dummy variables
+
+***** intro
+
+*Why use dummies?*
+ Regression analysis is usually used with IV having numerical variables.
+what happens when you have *IV with categorical variables* or nominal
+variables? The solution is to *use dummy variables - variables with only
+two values, zero and one.*
+ If you have a nominal variable that *has more than two levels, you need
+to create multiple dummy variables to "take the place of" the original
+nominal variable*.
+ *example:*
+ imagine that you wanted to predict depression from year in school:
+freshman, sophomore, junior, or senior. Obviously, "year in school" has
+more than two levels.
+ What you need to do is to recode "year in school" into a set of dummy
+variables, each of which has two levels. The first step in this process
+is to decide the number of dummy variables.
+ it's simply k-1, where k is the number of levels of the original
+variable.
+ You could also create dummy variables for all levels in the original
+variable, and simply drop one from each analysis.
+ In this instance, we would need to create 4-1=3 dummy variables.
+ In order to create these variables, we are going to take 3 of the
+levels of "year of school", and create a variable corresponding to each
+level, which will have the value of yes or no (i.e., 1 or 0).
+ In this instance, we can create a variable called "sophomore,"
+"junior," and "senior." Each instance of "year of school" would then be
+recoded into a value for "sophomore," "junior," and "senior." If a
+person were a junior, then "sophomore" would be equal to 0, "junior"
+would be equal to 1, and "senior" would be equal to 0.
+ *Interpreting results*
+ The decision as to which level is not coded is often arbitrary. The
+level which is not coded is the category to which all other categories
+will be compared.
+ As such, often the biggest group will be the not- coded category. For
+example, often "Caucasian" will be the not-coded group if that is the
+race of the majority of participants in the sample. In that case, if you
+have a variable called "Asian", the coefficient on the "Asian" variable
+in your regression will show the effect being Asian rather than
+Caucasian has on your dependant variable.
+ In our example, "freshman" was not coded so that we could determine if
+being a sophomore, junior, or senior predicts a different depressive
+level than being a freshman. Consequently, if the variable, "junior" was
+significant in our regression, with a positive beta coefficient, this
+would mean that juniors are significantly more depressed than freshman.
+Alternatively, we could have decided to not code "senior," if we thought
+that being a senior is qualitatively different from being of another
+year.
+
+***** Regression example
+
+This is our dataset ('Panel')
+ [[KSG_files/img/Image_1nWhDyPSL6PS8vJjXi24yA_0001.png]]
+ consider an analysis as a normal OLS regression where X1 predicts Y:
+ [[KSG_files/img/Image_1nWhDyPSL6PS8vJjXi24yA_0002.png]]
+
+The coefficient of /x1/indicates how much /Y/changes when /x1/ increases
+by one unit.*Notice* /x1/is not significant in the OLS model
+ Now consider controlling for the country type where "*country"* is a
+variable with 3-5 different country names:
+ lm(formula = y ~ x1 + as.factor(country), data = Panel)
+ the results will assign each country ID as a dummy variable:
+ [[KSG_files/img/Image_1nWhDyPSL6PS8vJjXi24yA_0003.png]]
+ Each *component of the factor variable* (country) *is absorbing the
+effects particular to each country*. Predictor */x1/*was not significant
+in a regular OLS model, once controlling for differences across
+countries, /x1/became significant in the OLS\_DUM
+ The coefficient of /x1/indicates how much /Y/changes overtime,
+controlling by differences in countries, when /x1/increases by one unit.
+Notice /x1/is now significant.
+
+**** transformations
+
+***** intro
+
+*Transformations*
+ The goal of transformations is to normalize your data, so you want
+to*re-check for normality after you have performed your
+transformations.*
+ *Deciding which transformation is best is often an exercise in
+trial-and-error* where you use several transformations and see which one
+has the best results. "*Best results" means the transformation whose
+distribution is most normal.* The specific transformation used depends
+on the extent of the deviation from normality. If the distribution
+differs moderately from normality, a square root transformation is often
+the best. A log transformation is usually best if the data are more
+substantially non-normal. An inverse transformation should be tried for
+severely non-normal data. If nothing can be done to "normalize" the
+variable, then you might want to dichotomize the variable (as was
+explained in the linearity section). Direction of the deviation is also
+important. If the data is negatively skewed, you should "reflect" the
+data and then apply the transformation. To reflect a variable, create a
+new variable where the original value of the variable is subtracted from
+a constant. The constant is calculated by adding 1 to the largest value
+of the original variable.
+ *
+ If you have transformed your data, you need to keep that in mind when
+interpreting your findings.* For example, imagine that your original
+variable was measured in days, but to make the data more normally
+distributed, you needed to do an inverse transformation. Now you need to
+keep in mind that the higher the value for this transformed variable,
+the lower the value the original variable, days. A similar thing will
+come up when you "reflect" a variable. A greater value for the original
+variable will translate into a smaller value for the reflected variable.
+
+***** log transform
+
+you need to log transform data as with other transformation when the
+outcome (The DV) is not normal
+ usually you will see a disticnt right tail
+ even if you log transform a outcome (DV), you still run a guassian
+model since the original outcome is normal!!
+
+**** calculate the CI (confidence interval)
+
+*use this formula:*
+ for logistic regression you need to EXP the beta to get the Odds-Ratio
+(OR):
+ Lower CI:
+ =EXP(BETA-1.96*SD)
+ Upper CI:
+ =EXP(BETA+1.96*SD)
+
+*** Linear regression
+
+**** EDA
+
+***** main assumptions of a linear model
+
+*assumptions of a linear model:*
+ *a*. Linearity: constant slope
+ *b.* Normality-the data distribution must be normal (gaussian)
+ *c.*Independence-the residuals must not be correlated
+ *d.*Constant variance
+ *To check a):*
+ plot the data. you can fit more complex models such as using smoothing
+functions if needed.
+ *To check b):
+*look at the residuals. Use other plots such as the Q-Q plot (normal
+probability plots): the scatterplot should lie on the diagonal straight
+line.
+
+[[KSG_files/img/2011-02-25-@13-07-54-scrot.jpg]][[KSG_files/img/2011-02-25-@13-08-06-scrot.jpg]]
+ *To check c) and d):*
+ plot of residuals vs fitted data.
+ If the data are independent there should be no pattern in the data; f
+the variance is not constant you will see an increasing or decreasing
+cloud.
+ [[KSG_files/img/2011-02-25-@13-08-52-scrot.jpg]]
+
+***** normality
+
+*only the outcome (DV) needs to be normaly distributed, not all the
+covariets (IV) have to*
+ to check for normality its best to plot the residuals and see if these
+are normaly distributed
+ if they are not then you need to*transform them*
+
+**** compare models using ANOVA
+
+The ANOVA analysis performs an F test, very similar to the F test for a
+linear regression. The difference is that this test is between two
+models, whereas the regression F test is between using the regression
+model and using no model.
+ Suppose we build three models of y , adding terms as we go
+ m1 <- lm(y ~ u)
+ m2 <- lm(y ~ u + v)
+ m3 <- lm(y ~ u + v + w)
+ Is m2 really different from m1 ?
+ We can use ANOVA to compare them,
+ The p-value for the anova test for m1~ m2 is 0.003587. *The small
+p-value indicates the models are significantly different*
+ Comparing m2 and m3 , however, gives a p-value of 0.05744. This is
+right on the edge. Strictly speaking, it does not pass our requirement
+to be smaller than 0.05, but it's so small that you might judge the
+models "different enough".
+
+**** interperting regression coefficients
+
+In addition to telling you the *predictive value of the overall model*,
+standard multiple regression tells you how well each independent
+variable predicts the dependent variable:
+ There are two kinds of regression coefficients:
+ B (unstandardized) and beta (standardized).
+ B weight associated with each variable is given in terms of the units
+of this variable
+ The beta uses a standard unit that is the same for all variables in the
+equationif the regression coefficient is positive, then there is a
+positive relationship between DV and IV.
+ If this value is negative, then there is a negative relationship
+between DV and IV.*example:
+**(remember*it tells you how much the DV is expected to increase when IV
+increases by *one*, holding all the other independent variables
+constant*.)*
+ DV: Height IV: Weight,gender
+ for weight:
+ If the beta = .35, for example, then that would mean that for one unit
+increase in weight, height would *increase* by .35 units.
+ If the beta=-.25, then for one unit increase in weight, height would
+*decrease* by .25 units. Of course, this relationship is valid only when
+holding gender constant.
+
+**** interperting dichotomus cooeficents
+
+in dichotomous variables, the interpretation of the printouts is
+slightly different from continous IV's.
+ example:
+ DV: height IV: weight,gender
+ Gender had been coded as either 0 or 1:
+ 0 = female and 1=male
+ If the beta coefficient of gender were positive, this would mean that
+males are taller than females. If the beta coefficient of gender were
+negative, this would mean that males are shorter than females.
+ Looking at the magnitude of the beta, you can more closely determine
+the relationship between height and gender.
+ Imagine that the beta of gender were .25. That means that males would
+be .25 units *taller* than females. Conversely, if the beta coefficient
+were -.25, this would mean that males were .25 units *shorter*than
+females. Of course, this relationship would be true only when
+controlling for weight.
+
+**** regression diagnostics
+
+***** how to find multicollinearity
+
+Tolerance is is 1 - R2 for the regression of that independent variable
+on all the other independents, ignoring the dependent
+ VIF- is the variance inflation factor, which is simply the reciprocal
+of tolerance. Therefore, when VIF is high there is high
+multicollinearity and instability of the b and beta coefficients
+ A tolerance of less than 0.20 or 0.10 and/or a VIF of 5 or 10 and above
+indicates a multicollinearity problem
+ [[KSG_files/img/Image_Sh1dbM8R6L9mDuIE8RDJPA_0001.png]]
+
+***** check for bias
+
+To check for bias you need to regress the measured variable (DV) values
+against the predicted values (in each site on each day)
+ DV~PREDICTED
+ IE:
+ #check for Bias
+ x <- lm(MFVALUE ~ OApred,data=T2001\_merged)
+ > summary(x)
+ Call:
+ lm(formula = MFVALUE ~ OApred, data = T2001\_merged)
+ Residuals:
+ Min 1Q Median 3Q Max
+ -25.493 -1.672 -0.294 1.511 19.474
+ Coefficients:
+ Estimate Std. Error t value Pr(>|t|)
+ (Intercept) 0.418788 0.132649 3.157 0.00162 **
+ OApred *0.965296* 0.009382 102.889 < 2e-16 ***
+ ---
+ Signif. codes: 0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 '' 1
+ Residual standard error: 3.118 on 2033 degrees of freedom
+ Multiple R-squared: 0.8389,Adjusted R-squared: 0.8388
+ F-statistic: 1.059e+04 on 1 and 2033 DF, p-value: < 2.2e-16
+
+***** 2.check normailty of residuals
+
+run the resgression and save the residuals
+
+ *proc* *reg* data=bw;
+ model BIRTHWT = GESTAGE ;
+ output out=residuals (keep= BIRTHWT GESTAGE UNIQUEID r fv) rstudent=r
+predicted=fv;
+ *run*;
+ *quit*;
+ and then run univariate again to check normality
+ *proc* *univariate* data=residuals normal;
+ var r;
+ histogram r;
+ qqplot r / normal(mu=est sigma=est);
+ *run*;
+ if the results are nomral then you present he model
+ if the results are not normall:
+ 1)try transformations first on the DV and now you can try on the main
+explanatory variable and then if that transformation dosent help you go
+one by one to the rest
+ 1)if trans dosent work then you check the extrene residuals and see if
+there is a systematic error
+ We should pay attention to studentized residuals that exceed +2 or -2,
+and get even more concerned about residuals that exceed +2.5 or -2.5 and
+even yet more concerned about residuals that exceed +3 or -3.
+ then run this:
+ *proc* *print* data=residuals;
+ var r BIRTHWT GESTAGE;
+ where abs(r)>*3*;
+ *run*;
+ ;
+ this will show all the outliers, and then you should analyze and check
+the patters and see whats causing them.
+ then you may decide weather to delete or keep
+
+*** Logistic regression
+
+**** Intro
+
+/Logistic/
+
+**
+
+ Logistic regression is used with binary data when you want to model the
+probability that a specified outcome will occur.
+ Specifically, it is aimed at estimating parameters a and b in the
+following model:
+ [[KSG_files/img/Image_pPsxTBYn5H34bloRuWEQ0Q_0001.jpg]]
+ where p_{i}is the probability of a success for given value x_{i}of
+the explanatory variable X.Use of the log of the odds p/(1-p) (the
+logit) guarantees that the predicted value of p will always be between 0
+and 1.
+ Logistic regression can be used to predict a dependent variable on the
+basis of continuous and/or categorical independents and to determine the
+effect size of the independent variables on the dependent; to rank the
+relative importance of independents; to assess interaction effects; and
+to understand the impact of covariate control variables. The impact of
+predictor variables is usually explained in terms of odds ratios.
+ Logistic regression applies maximum likelihood estimation after
+transforming the dependent into a logit variable (the natural log of the
+odds of the dependent occurring or not). In this way, logistic
+regression estimates the odds of a certain event occurring. Note that
+logistic regression calculates changes in the log odds of the dependent,
+not changes in the dependent itself as OLS regression does.
+ Logistic regression has many analogies to OLS regression: logit
+coefficients correspond to b coefficients in the logistic regression
+equation, the standardized logit coefficients correspond to beta
+weights, and a pseudo R^{2}statistic is available to summarize the
+strength of the relationship. Unlike OLS regression, however, logistic
+regression does not assume linearity of relationship between the
+independent variables and the dependent, does not require normally
+distributed variables, does not assume homoscedasticity, and in general
+has less stringent requirements. It does, however, require that
+observations be independent and that the independent variables be
+linearly related to the logit of the dependent. The predictive success
+of the logistic regression can be assessed by looking at the
+classification table, showing correct and incorrect classifications of
+the dichotomous, ordinal, or polytomous dependent. Goodness-of-fit tests
+such as the likelihood ratio test are available as indicators of model
+appropriateness, as is the Wald statistic to test the significance of
+individual independent variables. .
+
+**** The logistic model
+
+*The logistic model*.
+ The logistic curve, illustrated below, is better for modeling binary
+dependent variables coded 0 or 1 because it comes closer to hugging the
+y=0 and y=1 points on the y axis. Even more, the logistic function is
+bounded by 0 and 1, whereas the OLS regression function may predict
+values above 1 and below 0. Logistic analysis can be extended to
+multinomial dependents by modeling a series of binary comparisons: the
+lowest value of the dependent compared to a reference category (by
+default the highest category), the next-lowest value compared to the
+reference category, and so on, creating k - 1 binary model equations for
+the k values of the multinomial dependent variable.
+ [[KSG_files/img/logistic32.jpg]]
+
+**** Interpreting the Beta (B)
+
+[[KSG_files/attach/logistic.sas][Attachment #02 (logistic.sas)]]
+ the Beta is t
+
+he values for the logistic regression (B) for predicting the dependent
+variable from the independent variable.
+ They are in log-odds units. Similar to OLS regression, the prediction
+equation is log(p/1-p) = b0 + b1*x1 + b2*x2 + b3*x3 + b3*x3+b4*x4where p
+is the probability.
+ the estimates tell you about the relationship between the independent
+variables and the dependent variable, where the dependent variable is on
+the logit scale. These estimates tell the amount of increase (or
+decrease, if the sign of the coefficient is negative) in the predicted
+log odds of the DV would be predicted by a 1 unit increase (or decrease)
+in the predictor (IV), holding all other
+ predictors constant.
+ *Note:* For the independent variables which are not significant, the
+coefficients are not significantly different from 0, which should be
+taken into account when interpreting the coefficients.
+ Because these coefficients are in log-odds units, they are often
+difficult to interpret, so they are often*converted into odds ratios*.
+ You can do this by hand by exponentiating the coefficients
+ In Short:
+
+ the output you will get will tell the probability for "1". that is to
+get the DV of '1'. so in the result will mean you have a X chance higher
+to get '1' for a 1 unit increase of the IV.
+ *For a good example look at the attached sas code (also attached)*
+ in the example that looks at CHD and age:
+ in the output you will get the probability for "1" that is in this case
+get CHD (heart attack). so in the result the 0.11 means there is a 0.11
+higher chance to get CHD as one year if age increases
+
+**** Confidence intervals
+
+See [[#DYI2ADIPN69Yxe3xxmJ1Eg][HERE]] for more details
+ in generall: when you get an odds/ratio result in logistic regression
+the confidence intervals (CI) can tell you if the results are
+significant or not the *null hypothesos is 1*so:
+ when in the CI the upper or lower boundaries are both above or below
+the 1 that means its significant (IE 1.10-1.20)
+ if in the CI the upper or lower boundaries are in opposite direction of
+the 1 (IE 0.97-1.20) then the results are non significant
+
+**** manuall convert coef to odd-ratios
+
+for the Value use:
+ =(EXP(*D30*)-1)*100
+ where *D30* is the value of the coeficent
+ for the CI's use:
+ =(EXP(*D30*-1.96**E30*)-1)*100
+ =(EXP(*D30*+1.96**E30*)-1)*100
+ where *D30* is the value of the coefficient and *E30*is the value of
+the Standard error (SE)
+
+*** poison regression
+
+**** intro
+
+if you have count data you use poisson data.
+ in poison regression: mean=variance
+ if this is not the case and the mean is signifcantly different from the
+variance you can try quassi-poison
+ if you have 0,1 data you use a binomial (logisitc model) not poisson!
+
+*** sensitivity test
+
+**** how to run a sensitivty test
+
+Start by understanding a sample regression:
+ Y= constant + B1*(var1)+ B2(var2).......+ (random error term)
+ An example:
+ Cancer incidence rate = constant + B1* (Ethnic makeup) + B2*(per capita
+ income) + B3*(LAN) + B4*( population size) + B5*( birth rate) + (random
+ error term)
+ Now in order to find out how an increase in the *key IV* (*LAN* in this
+example)
+ corresponds in % to the *DV* (*breast cancer*in this example) these
+steps are run:
+ Run a discriptive analysis in spss and get the mean for each IV (other
+then the main IV)
+ *NOTE: if a variable has been transformed you MUST use the (ln) or the
+used variable for the mean not orig. values*
+ [[KSG_files/img/Image_muB8KlTfm9enKJ2tr31QVA_0001.png]]
+ A new euqtion is written where the*Mean**s* of each IV (other then the
+main IV) are multiplied with the Regression**B
+ For example, looking at the following regresion output we collect
+the**B for each variable
+ [[KSG_files/img/image%202.png]]
+ then we use the discriptive chart to collect all means (other then th*e
+main*IV) and but them in the regression equation:
+ Y= -28.486+(0.143*???????)+(0.003*75.66)+(0.083*55.16)+(4.879*8.786)+(
+2.109*9.511)= 40.474653
+ In this example to estimate the relative contribution of th*e main IV
+(LAN*) to th*e*DV*(breast cancer AS*Rs), we split all the countries in
+the sample into three groups -- countries with minimal LAN exposure
+(less than 15 nanowatts/cm2/sr); countries with average LAN exposure
+(15-57 nanowatts/cm2/sr), and countries with the highest LAN exposure
+(greater than 57 nanowatts/cm2/sr).
+ The*Jenks "natural break*s" method is used to classify countries into
+the groups. This method determines the best arrangement of values into
+classes by comparing the sum of squared differences of values from the
+means of their classes and thus identifies "break points" in the data
+values by picking the class breaks that best group similar values and
+maximize the differences between classes
+ [[KSG_files/img/image%203.png]]
+ then take each group value and calculate mean:
+ for the medium group use (57+15)/2= *36 **NOTE- in example below the
+numbers are slightly diffre*net
+ Then start the calculatio*ns sepera*tly for the low, avergae and hi*gh
+main* IV grou*ps (L*AN) each time substituting LAN for min, avg, and
+ max val*u*es
+ LOW:
+ Y= -28.486+(0.1*43*8*.60)+(0.003*75.66)+(0.083*55.16)+(4.879*8.786)+(
+2.109*9.511)= 40.474653
+ AVG:
+ Y= -28.486+(0.1*43*28*.95)+(0.003*75.66)+(0.083*55.16)+(4.879*8.786)+(
+2.109*9.511)= 43.384703
+ High:
+ Y= -28.486+(0.1*43*99*.21)+(0.003*75.66)+(0.083*55.16)+(4.879*8.786)+(
+2.109*9.511)= 53.431883
+ when finished you need to calculate the % change when moving from low
+to average and from average to high LAN intensity using the following
+formula:
+ (((high value-low value)/low value)*100)
+ From low to med:
+ (((43.384-40.474)/ 40.474)*100)= 7.18%
+ From med to high:
+ (((53.431-43.384)/ 43.384)*100)=23.15%
+ in a paper it is reported as:
+ "with the values of all other variables fixed, the increase of LAN from
+8.60 nanowatts/cm2/sr (the average LAN value in the group of countries
+with minimal LAN exposure) to 28.95 nanowatts/cm2/sr (countries with
+average LAN exposure) corresponds to an increase of 7.2% in breast
+cancer ASR. A further increase in LAN value to 99.21 (the maximum LAN
+exposure) corresponds to an increase of 23.15% in breast cancer ASR."
+
+*** Cross validation
+
+**** intro
+
+Cross-​​validation is primarily away ofmea­sur­ing the pre­dic­tive
+performance of asta­tis­ti­cal model. Every sta­tis­ti­cian knows that
+the model fit sta­tis­tics are not agood guide to how well amodel will
+pre­dict: high
+[[KSG_files/img/quicklatex.com-a0c3f699dc420dd6a96c7b0b78e6cf68_l3.png]]
+does not nec­es­sar­ily mean agood model. It is easy to over-​​fit the
+data by includ­ing too many degrees of free­dom and so inflate
+[[KSG_files/img/Image_vkvIvAUjflIxKk8bhLlzoA_0001.png]] and other fit
+sta­tis­tics. For exam­ple, in asim­ple poly­no­mial regres­sion Ican
+just keep adding higher order terms and so get bet­ter and bet­ter fits
+to the data. But the pre­dic­tions from the model on new data will
+usu­ally get worse as higher order terms areadded.One way to mea­sure
+the pre­dic­tive abil­ity of amodel is to test it on aset of data not
+used in esti­ma­tion. Data min­ers call this a "test set" and the data
+used for esti­ma­tion is the "train­ing set". For exam­ple, the
+predictive accu­racy of amodel can be mea­sured by the mean squared
+error on the test set. This will gen­er­ally be larger than the MSE on
+the train­ing set because the test data were not used for
+estimation.How­ever, there is often not enough data to allow some of it
+to be kept back for testing.A more sophis­ti­cated ver­sion of
+training/​​test sets is leave-​​one-​​out cross-​​​​validation (LOOCV)
+in which the accu­racy mea­sures are obtained as fol­lows. Suppose there
+are
+[[KSG_files/img/quicklatex.com-a63eb5ff0272d3119fa684be6e7acce8_l3.png]]
+inde­pen­dent obser­va­tions,
+[[KSG_files/img/quicklatex.com-74db7458518419b479643aa3cb9029e8_l3.png]].
+
+Let obser­va­tion
+[[KSG_files/img/quicklatex.com-8511b1f6cf9db17d46ddabb67bac99f5_l3.png]]
+form the test set, and fit the model using the remain­ing data. Then
+com­pute the error
+[[KSG_files/img/quicklatex.com-3f7822a850ed2ce2b68473743671bd20_l3.png]]
+for the omit­ted obser­va­tion. This is some­times called a "pre­dicted
+resid­ual" to dis­tin­guish it from an ordi­nary residual.
+
+Repeat step 1for
+[[KSG_files/img/quicklatex.com-481f2f9008f7ef14bcdc437a1efb07c4_l3.png]].
+
+Com­pute the MSE from
+[[KSG_files/img/quicklatex.com-4e0fcd91630408658889bc2f6144bf22_l3.png]].
+We shall call this theCV.
+
+This is amuch more effi­cient use of the avail­able data, as you only
+omit one obser­va­tion at each step. How­ever, it can be very time
+con­sum­ing to imple­ment (except for lin­ear mod­els ---
+seebelow).Other sta­tis­tics (e.g., the MAE) can be com­puted
+sim­i­larly. Arelated mea­sure is the PRESS sta­tis­tic (pre­dicted
+resid­ual sum of squares) equal to
+[[KSG_files/img/quicklatex.com-5130032e8b35fa41fd4a4d89ba501bc7_l3.png]]MSE.Vari­a­tions
+on cross-​​validation include leave-​​k-​​out cross-​​validation (in
+which kobser­va­tions are left out at each step) and k-​​fold
+cross-​​validation (where the orig­i­nal sam­ple is ran­domly
+par­ti­tioned intok sub­sam­ples and one is left out in each
+iter­a­tion). Another pop­u­lar vari­ant is the .632+bootstrap of
+[[http://www.jstor.org/stable/2965703][Efron & Tib­shi­rani (1997)]]
+which has bet­ter prop­er­ties but is more com­pli­cated to
+implement.Min­i­miz­ing aCV sta­tis­tic is ause­ful way to do model
+selec­tion such as choos­ing vari­ables in aregres­sion or choos­ing
+the degrees of free­dom of anon­para­met­ric smoother. It is cer­tainly
+far bet­ter than pro­ce­dures based on sta­tis­ti­cal tests and
+pro­vides anearly unbi­ased mea­sure of the true MSE on new
+observations.However,as with any vari­able selec­tion pro­ce­dure, it
+can be mis­used. Beware of look­ing at sta­tis­ti­cal tests after
+select­ing vari­ables using cross-​​validation --- the tests do not take
+account of the vari­able selec­tion that has taken place and so the
+p-​​values can mislead.It is also impor­tant to realise that it doesn't
+always work. For exam­ple, if there are exact dupli­cate obser­va­tions
+(i.e., two or more obser­va­tions with equal val­ues for all covari­ates
+and for the
+[[KSG_files/img/quicklatex.com-0e13c52c4764efa3f5b1e98e3c2cf98a_l3.png]]
+vari­able) then leav­ing one obser­va­tion out will not be
+effective.Another prob­lem is that asmall change in the data can cause
+alarge change in the model selected. Many authors have found that
+k-​​fold cross-​​validation works bet­ter in this respect.
+ Pasted from
+<[[http://robjhyndman.com/researchtips/crossvalidation/][http://robjhyndman.com/researchtips/crossvalidation/]]>
+
+**** cross validation r squared (r2)
+
+***** intro
+
+1) in cross-validation, a researcher will either gather two large
+samples, or one very large sample which will be split randomly:
+ either into two samples via random selection procedures
+ or a % of sample for example a 90% and 10% sample.
+ 2) then you run the current model on the 1st half or larger 90%
+ 3)use the prediction function that will use your fitted model from 1st
+half/larger % to predict the DV for the other half/smaller %
+ 4) get predictions for other half/smaller % and compare the observed of
+the other half/smaller %
+
+*** Quantile regression
+
+**** Intro
+
+Linear regression is a statistical tool used to model the relation
+between a set of predictor variables and a response variable. It
+estimates the mean value of the response variable for given levels of
+the predictor variables. Suppose we are interested in investigating the
+relationship between infants' birth weight (in grams) and a set of
+predictors, such as: the gender of the infant, marital status of the
+mother, prenatal care, and smoking status of the mother during
+pregnancy. The data set used for this example is a subset of 50,000
+observations from a study on birth weight that was carried out by
+Koenker and Hallock in 2001. The linear regression model for this
+example is:
+ Y= 3224 + 115. 9*Boy + 161.1 * Married - 227*Prenatal\_Care -
+200.9*Smoke.
+ This model estimates how, on average, these mothers' characteristics
+affect the birth weights of infants. The prenatal care predictor
+variable compares the effect of prenatal care for babies born to mothers
+who received no prenatal with babies born to mothers who had a prenatal
+visit in the first trimester.
+ While this model can address the question "is prenatal care important?"
+it cannot answer an important question: “does prenatal care influence
+birth weight differently for infants with low birth weight than for
+those with average birth weights? “.
+ A more comprehensive picture of the effect of the predictors on the
+response variable can be obtained by using Quantile regression.
+ Quantile regression models the relation between a set of predictor
+variables and specific percentiles (or quantiles) of the response
+variable. It specifies changes in the quantiles of the response. For
+example, a median regression (median is the 50th percentile) of infant
+birth weight on mothers' characteristics specifies the changes in the
+median birth weight as a function of the predictors. The effect of
+prenatal care on median infant birth weight can be compared to its
+effect on other quantiles of infant birth weight.
+ In linear regression, the regression coefficient represents the change
+in the response variable produced by a one unit change in the predictor
+variable associated with that coefficient. The quantile regression
+parameter estimates the change in a specified quantile of the response
+variable produced by a one unit change in the predictor variable. This
+allows comparing how some percentiles of the birth weight may be more
+affected by certain mother characteristics than other percentiles. This
+is reflected in the change in the size of the regression coefficient.
+
+Coefficient estimates for the 5th, 10th, 50th, 90th, 95th quantile
+regression and the linear regression coefficient estimates for the birth
+weight example are presented in the following table (all predictors are
+dummy variables):
+ [[KSG_files/img/Image_brlu3pkxqUXAIjL7yAcBxQ_0001.png]]
+ According to the linear regression model, the mean weight of babies
+born to mothers with no prenatal care is -227 grams lower than that of
+babies born to mothers who had a prenatal visit in the first trimester.
+The quantile regression results indicate that the effect of no prenatal
+care has a larger negative impact on the lower quantiles of birth
+weight. The 5th quantile of birth weight for infants born to mothers who
+had no prenatal care is 536 grams lower than for infants born to mothers
+had a prenatal visit in the first trimester. The linear regression model
+underestimates this effect at the 5th quantile.
+
+*** 'Interactions'
+**** simple interaction with a 0,1 variable
+most of the time its much much easier to interact the main effect with a
+variable that's dichotomous (0,1) other wise interpreting the results could be very difficult.
+
+%Tip you can always recode a continuous variable to 0,1 if needed!%
+
+when you run a model with an interaction the model has the `main effect` , the `ineracting effect`  and the `ineraction itself`
+in the module:
+
+#+DOWNLOADED: file:///home/zeltak/org/attach/images/Image_R9yw7IpQMZUjr70wLXTFwg_0001.png @ 2013-11-01 16:19:04
+#+attr_html: :width 300px
+ [[~/org/attach/images_2013//Image_R9yw7IpQMZUjr70wLXTFwg_0001_2013-11-01_16:19:04.png]]
+to calculate the Betas and standard errors:
+
+#+DOWNLOADED: file:///home/zeltak/org/attach/images/Image_R9yw7IpQMZUjr70wLXTFwg_0002.png @ 2013-11-01 16:19:12
+#+attr_html: :width 700px
+ [[~/org/attach/images_2013//Image_R9yw7IpQMZUjr70wLXTFwg_0002_2013-11-01_16:19:12.png]]
+
+For the SE of group=1 its more complicated and therefore a good trick
+is to create a mirror dummy variable with flipped 0,1 and run the model
+again with the mirror variable to get the proper effect.
+
+`A example case:`
+
+the below model looks at increase of icam (log transformed) with pm (lag2month) as the main predictor and a bunch of other covariates. we are looking if pm interacts with diabetes.
+
+#+BEGIN_SRC r
+mlag003<-glmmPQL(logicam ~ lag2month3+bmi+as.factor(smk2)+ah_gm3_Fma3 +diabete+ diabete*lag2month*+statin
++ cos+ sin,random=~1|id,family=gaussian, data=mb1,na=na.omit)
+#+END_SRC
+
+
+interpreting the interaction part of the model goes as follows (using
+the above example results):
+
+#+DOWNLOADED: file:///home/zeltak/org/attach/images/Image_R9yw7IpQMZUjr70wLXTFwg_0003.png @ 2013-11-01 16:19:33
+#+attr_html: :width 500px
+ [[~/org/attach/images_2013//Image_R9yw7IpQMZUjr70wLXTFwg_0003_2013-11-01_16:19:33.png]]
+
+
+#+DOWNLOADED: file:///home/zeltak/org/attach/images/Image_R9yw7IpQMZUjr70wLXTFwg_0004.png @ 2013-11-01 16:19:44
+#+attr_html: :width 700px
+
+ [[~/org/attach/images_2013//Image_R9yw7IpQMZUjr70wLXTFwg_0004_2013-11-01_16:19:44.png]]
+
+for `no diabites` (diab=0) since the diabetes part is zero you use:
+Beta 1 (0.026) as the beta and the se (0.004).
+for diabites (diab=1) you use: Beta 1 (0.026)+ Beta 3 (-0.008).
+
+%Tip: For the SE its more complicated and therefore a good trick is to create a mirror dummy variable with flipped 0,1 and run the model%
+%again with the mirror variable to get the proper effect%
+
+so in this case the model would be run with `diabets_fliped` and the diab=0 results would be used.
+
+**** trying a stratefied analysis to check the interaction
+
+if you are unsure of the interactions result's and want to check them
+you can just run the model stratefied (IE seperatly for each of the
+interacting factors: 0,1). you do not put the interaction and
+interactiing effect of interest in the model (diabetes in the below
+example)
+ Example:
+ #split data set with diabetics into with or without diabetic
+ mb\_nond <- subset(mb1,mb1$diabete== "0")
+ mb\_d <- subset(mb1,mb1$diabete== "1")
+ #first model for non diabetics
+ lagmonthnd<-glmmPQL(logicam ~ lagmonth +age + temp\_fma1 +
+bmi+as.factor(smk2)+ah\_gm3\_Fma1 + statin + cos+ sin,
+ random=~1|id,family=gaussian, data=mb\_nond,na=na.omit)
+ summary(lagmonthnd)$tTable
+ #second model for diabetics
+ lagmonth\_flipd<-glmmPQL(logicam ~ lagmonth +age + temp\_fma1 +
+bmi+as.factor(smk2)+ah\_gm3\_Fma1 +statin + cos+ sin,
+ random=~1|id,family=gaussian, data=mb\_d,na=na.omit)
+ summary(lagmonth\_flipd)$tTable
+ the results should be similar (but not exactly the same) to the
+interactions model, that is similar beta,se and sig.
+
+*** Survival analysis
+**** Background
+Survival analysis is a branch of statistics which deals with analysis of time to events, such as death in biological organisms and failure in mechanical systems. This topic is called reliability theory or reliability analysis in engineering, and duration analysis or duration modeling in economics or event history analysis in sociology. Survival analysis attempts to answer questions such as: what is the proportion of a population which will survive past a certain time? Of those that survive, at what rate will they die or fail? Can multiple causes of death or failure be taken into account? How do particular circumstances or characteristics increase or decrease the probability of survival?
+
+To answer such questions, it is necessary to define "lifetime". In the case of biological survival, death is unambiguous, but for mechanical reliability, failure may not be well-defined, for there may well be mechanical systems in which failure is partial, a matter of degree, or not otherwise localized in time. Even in biological problems, some events (for example, heart attack or other organ failure) may have the same ambiguity. The theory outlined below assumes well-defined events at specific times; other cases may be better treated by models which explicitly account for ambiguous events.
+
+More generally, survival analysis involves the modeling of time to event data; in this context, death or failure is considered an "event" in the survival analysis literature – traditionally only a single event occurs for each subject, after which the organism or mechanism is dead or broken. Recurring event or repeated event models relax that assumption. The study of recurring events is relevant in systems reliability, and in many areas of social sciences and medical research.
+
+Examples
+• Time until tumor recurrence
+• Time until cardiovascular death after some treatment
+intervention
+• Time until AIDS for HIV patients
+• Time until a machine part fails
+
+**** Assumptions
+The survival time response:
+• Usually continuous
+• May be incompletely determined for some subjects
+– i.e.- For some subjects we may know that their survival
+time was at least equal to some time t. Whereas, for other
+subjects, we will know their exact time of event.
+• Incompletely observed responses are censored
+• Is always >= 0.
+
+
+Analysis issues
+• If there is no censoring, standard regression procedures could
+be used.
+• However, these may be inadequate because
+– Time to event is restricted to be positive and has a skewed
+distribution.
+– The probability of surviving past a certain point in time
+may be of more interest than the expected time of event.
+– The hazard function, used for regression in survival
+analysis, can lend more insight into the failure mechanism
+than linear regression.
+
+**** Kaplan-Meier
+The Kaplan-Meier curve is what is known as a survival curve. It is a
+graph that shows the results of analyses of survival rates
+
+[[file:1.images/kaplan-chart.jpg]]
+ 
+** Generalized Linear Models
+*** Intro
+
+General Linear Model:
+ General (or generalized) linear models (GLM), in contrast to linear
+models, allow you to describe both additive and non-additive
+relationship between a dependent variable and N independent variables.
+The independent variables in GLM may be continuous as well as discrete.
+(The dependent variable is often named "response", independent variables
+- "factors" and "covariates", depending on whether they are controlled
+or not).
+ Consider a clinical trial investigating the effect of two drugs on
+survival time. Each drug is tested at three levels - "not used", "low
+dose", "high dose", and all the 9 (=3x3) combinations of the three
+levels of the two drugs are tested. The following general linear model
+might have been used:
+
+** mixed models
+*** intro
+
+Mixed-effects models, like many other types of statistical models,
+describe a relationship between a response variable (DV) and some of the
+covariates (IV's) that have been measured or observed along with the
+response.
+ In mixed-effects models *at least one of the covariates is a
+categorical covariate* representing experimental or observational
+"units" in the data set.
+ In the example In medical and social sciences *the observational units
+are often the human or animal subjects in the study*. In agriculture the
+experimental units *may be the plots of land or the speciﬁc plants being
+studied.
+*
+ In all of these cases the categorical covariate or covariates are
+observed at a set of *discrete levels*.
+ We may use numbers, such as subject identiﬁers, to designate the
+particular levels that we observed but these numbers are simply
+ labels. The important characteristic of a categorical covariate is
+that, *at each observed value of the response, the covariate takes on
+the value of one of a set of distinct levels*.
+ Parameters associated with the particular levels of a covariate are
+some times called the *"effects" of the levels*.
+
+*** Theory
+
+In normal regression, the error has a normal distribution and is
+*independent
+*Epi studies such as repeated measurements, survey data and time series
+analysis *often lack independence
+ such repeated mesuaremnts (for subjects,locations etc) there is
+commonly no Independence in the residuals (error)*
+ To *account for the lack of Independence we use a random intercept* to
+take care of the Independence issue*between the subject errors*
+ Each subject/location etc will have its own intercept (Ui)
+ the random intercept is the '*between subject error*'
+ the only error we are left with the '*within subject error*'
+ *Fixed Effects:*
+ The term "fixed effects" (as contrasted with "random effects") is
+related to how particular coefficients in a model are treated - as fixed
+or random values.
+ In mixed effects models (or mixed random and fixed effects models) some
+coefficients are treated as fixed effects and some as random effects.
+ See fixed effects for detailed explanations of the concepts "random
+effects" and "fixed effects".
+ consider a normal regression equation:
+ [[file:KSG_files/img/Image.jpg]]
+ Now a equation with a random intercept and random slope
+
+ [[file:KSG_files/img/SS-2011-05-12_11.48.06.png]]
+ Conceptualize the model
+ 1. After accounting for covariates, are the observations from the same
+cluster (e.g. family, subject) still similar to each other?
+ If so, *need Random Effects Model*
+ 2. Are they similar in the baseline?
+ If so, *random intercept*
+ Are they similar in the effect of covariate Z? (IE The effect of serum
+cholesterol on blood pressure may not be the same within all locations)
+ If so, *random slope for Z*
+
+*** Graphical examples
+
+[[KSG_files/attach/mixed.svg][Attachment #03 (mixed.svg)]]
+Normal linear regression
+in normal linear regression you have a slope which represents the mean
+of all observations and one intercept.
+ [[file:/home/zeltak/org/attach/images/Image_6tAq8uVjnRyvfHVypQUZfQ_0001.png]]
+ random intercept
+ When using a*random intercept* each subject gets a *separate
+intercept.* Each subject**has a specific deviation from *overall
+intrecept.
+ [[file:/home/zeltak/org/attach/images/Image_6tAq8uVjnRyvfHVypQUZfQ_0002.png]]
+*
+ all these intercepts are independent and *parallel (have a fixed
+slope).
+ [[file:/home/zeltak/org/attach/images/Image_6tAq8uVjnRyvfHVypQUZfQ_0003.png]]*
+ You use it to tell the model that each subject is differnt from other
+subject, IE to take into account the subject specfic characterstic
+ *In example:* measuring DNA methalation and air pollution: each subject
+is different : one is smoker, one is fat etc. So the random intercpet
+captures all these diffrencaces and gives you a more robust association
+between DNA methalation and air pollution.
+ random slope:
+ its the same idea of random intercept.
+ you can fit a model with only intercept and then one with only random
+slope and see by AIC which gives you the best AIC values.
+ [[file:/home/zeltak/org/attach/images/Image_6tAq8uVjnRyvfHVypQUZfQ_0004.png]]
+ Using both a random intercept and slope*
+each subject/location gets*a separate intercept and different
+
+
+[[file:/home/zeltak/org/attach/images/Image_6tAq8uVjnRyvfHVypQUZfQ_0005.png]]
+
+*** Types of Random data
+
+random data can for various data structures:aaasas
+ *1) Hierarchical structure*
+ Example: if collecting data from different medical centers, center
+might be thought of as random.
+ Example: if surveying students, they can be clustered into classes,
+which in turn can be clustered into schools.
+ *2) Longitudinal studies*
+ Example: Repeated measurements are taken over time for each subject.
+Subject is random.
+ In all these cases, it is not generally reasonable to assume that
+observations within the same group are independent
+ [[file:/home/zeltak/org/attach/images/mixed_f1.jpg]]
+ in the above example the blue line represents a visit by same subject
+(cluster) z at times 1,2,3 and the purple line visits by subject x at
+times 1,2,3.
+ [[file:/home/zeltak/org/attach/images/mixed_f2.jpg]]
+ each observation is correlated with the other since each patients
+measurement's is correlated with his previous one or in locations each
+temperature etc measurement's in each day at a specific site is
+correlated with the previous and next day.
+
+*** check normailty of residuals for mixed models
+
+*INCOMPLETE*
+ Use this code:
+
+ods html;
+ ods graphics off;
+ *proc* *mixed* data=bw6\_fges;
+ class APNCU MRN EDU\_GROUP TRACT;
+ model BIRTHW = pmnewmamonth age\_centered age\_centered\_sq GES\_AGE
+CIG\_PREG CIG\_PRE mean\_income per\_open\_rec
+ GENDER PREV\_400 DIAB HYPER LUNGD DIABETESPR PREVPRE EDU\_GROUP APNCU
+MRN adtmean/
+ influence(iter=*5* effect=TRACT est);
+ repeated / type=ar(*1*) subject=TRACT;
+ *run*;
+ ods graphics off;
+ ods html close;
+ [[file:/home/zeltak/org/attach/images/Image_8rBbs9Tf08HFXtRx8ruCuw_0001.png]]
+
+*** Mixed Effects Logistic Regression
+**** Background of mixed logistic
+Mixed effects logistic regression is used to model binary outcome variables, in which the log odds of the outcomes are modeled as a linear combination of the predictor variables when data are clustered or there are both fixed and random effects.
+
+Examples of mixed effects logistic regression
+
+Example 1: A researcher sampled applications to 40 different colleges to study factor that predict admittance into college. Predictors include student's high school GPA, extracurricular activities, and SAT scores. Some schools are more or less selective, so the baseline probability of admittance into each of the schools is different. School level predictors include whether the school is public or private, the current student-to-teacher ratio, and the school's rank.
+
+Example 2: A large HMO wants to know what patient and physician factors are most related to whether a patient's lung cancer goes into remission after treatment as part of a larger study of treatment outcomes and quality of life in patients with lunger cancer.
+
+Example 3: A television station wants to know how time and advertising campaigns affect whether people view a television show. They sample people from four cities for six months. Each month, they ask whether the people had watched a particular show or not in the past week. After three months, they introduced a new advertising campaign in two of the four cities and continued monitoring whether or not people had watched the show.
+
+other analysis methods you might consider:
+
+Below is a list of analysis methods you may have considered.
+
+Mixed effects logistic regression, the focus of this page.
+Mixed effects probit regression is very similar to mixed effects logistic regression, but it uses the normal CDF instead of the logistic CDF. Both model binary outcomes and can include fixed and random effects.
+Fixed effects logistic regression is limited in this case because it may ignore necessary random effects and/or non independence in the data.
+Fixed effects probit regression is limited in this case because it may ignore necessary random effects and/or non independence in the data.
+Logistic regression with clustered standard errors. These can adjust for non independence but does not allow for random effects.
+Probit regression with clustered standard errors. These can adjust for non independence but does not allow for random effects.
+
+** Regression splines
+*** intro
+Regression splines are simple parametric smoothing function, which fit separate polynomial in each interval of the range of the predictor; these can be linear, quadratic, and cubic. In the regression spline functions, the number of knots is specified by the degrees of freedom, with a df argument. The knots are placed at suitably chosen quantiles of the independent variable. Alternatively, the user may directly specify the location of the knots using a knots=list argument
+
+<<<<<<< HEAD
+Regression splines are simple parametric smoothing function, which fit
+separate polynomial in each interval of the range of the predictor;
+these can be linear, quadratic, and cubic.
+ In the regression spline functions, the number of knots is specified by
+the degrees of freedom, with a df argument. The knots are placed at
+suitably chosen quantiles of the independent variable. Alternatively,
+the user may directly specify the location of the knots using a
+knots=list argument
+ [[file:/home/zeltak/org/attach/images/2011-02-25-@10-45-52-scrot.jpg]]
+ Two commonly used forms are *b-splines* or bs(), and *natural splines*
+or ns(). The difference between b-splines and natural splines is that
+natural splines are restricted to be linear at the extremes of the data,
+where otherwise the lack of data could produce wild results.
+ **
+
+Penalized splines are regression spline with a constraint on the
+parameter corresponding to the knots to restrict their influence on the
+fit. It is possible to use many knots, and then constrain the fit at
+each knot creating a less wiggling curve. Smoothness of fit is governed
+by the smoothing parameter:
+ [[file:/home/zeltak/org/attach/images/2011-02-25-@12-13-15-scrot.jpg]]
+ Advantages: not sensitive to knot location and number.
+=======
+[[file:KSG_files/img/2011-02-25-@10-45-52-scrot.jpg]]
+
+Two commonly used forms are 'b-splines' or bs(), and 'natural splines' or ns(). The difference between b-splines and natural splines is that natural splines are restricted to be linear at the extremes of the data, where otherwise the lack of data could produce wild results. 
+
+Penalized splines are regression spline with a constraint on the parameter corresponding to the knots to restrict their influence on the fit. It is possible to use many knots, and then constrain the fit at each knot creating a less wiggling curve. Smoothness of fit is governed by the smoothing parameter:
+[[
+file:KSG_files/img/2011-02-25-@12-13-15-scrot.jpg]]
+
+Advantages: not sensitive to knot location and number.
+>>>>>>> f80d4c21eb27136a106459afdedc33b83c07bb52
+
+[[file:/home/zeltak/org/attach/images/2011-02-25-@10-49-43-scrot.jpg]]
+
+** LAND use Regression (LUR)
+*** intro
+LUR is based on the principle that pollutant concentrations at any location depend on the environmental characteristics of the surrounding area - particularly those that influence or reflect emission intensity and dispersion efficiency.  Modelling is done by constructing multiple regression equations describing the relationship between measured concentrations at a sample of monitoring locations, and relevant environmental variables computed, using GIS, for zones of influence around each site.  The  resulting equation is then used to predict concentrations at unmeasured locations on the basis of these predictor variables.   Prediction can be done either for specific point locations (e.g. residential addresses) or for a  fine grid; in the latter case, a raster map of the study area can thereby be generated, and intersected with area-level population data to estimate the exposure distribution.
+Land use regression (LUR) was originally developed as a means to assess exposures from traffic-related air pollution, and has since then become a widely used methodology in air pollution epidemiology.  Previous studies have shown that, for relatively long-term averaging periods (seasons to years), model performance is comparable with that of formal dispersion models.   Although examples are so far rare, it can also be applied to model other forms of pollution, including noise, radioactivity and soil pollution.   In the context of integrated environmental health impact assessment it thus offers a useful approach for rapid exposure modelling (e.g. as part of screening studies), and as a substitute for dispersion modelling where the relevant input data or dispersion models are not available.
+
+*** Theory
+**** intro LUR requires the following data:
+
+1. monitoring site locations (x,y coordinates) and concentration data.  Ideally, the monitoring newtwork should be regular, or random-stratified on the basis of population distribution.  Often, however, data are limited by the extent and configuration of the available national, regional or municipal monitoring network.  For most applications a minimum of ca. 30-40 sites is required to develop the LUR model.
+2.GIS data covering the extent of the monitoring sites and target locations.  Data should relate to the primary factors and processes affecting pollutant concentrations including: emission source distribution and intensity (e.g. road length, traffic flows, area of industrial land);dispersion efficiency (e.g. altitude, windspeed, surface roughness).
+
+To assess exposures, data are also required either on the geocoded location of individuals/households (address locations), or on population density (e.g. by postcode centroid, census area).
+
+All data should all be in the same projected coordinate system (e.g. National grid, LAEA 5210 ETRS89, UTM).
+
+**** Output:
+
+Output from LUR comprises:
+
+a regression model describing the association between the predictor variables and measured concentrations;
+predicted concentrations at the monitoring sites, and associated measures of goodness of fit (e.g. R2, standard error of the estimate);
+predicted concentrations at other target locations (obtained by applying the regression model) and/or a map of modelled concentrations.
+
+
+Estimates of exposure (for individuals) can be obtained by applying the model to point locations representing residential addresses or other locations where people spend their time; if appropriate overall exposures can be estimated by time-weighting the estimated concentrations at each location.  Exposure distributions (for population groups) can be estimated by intersecting mapped pollutant concentrations with geocoded data on population density.
+
+
+In addition, so long as the model includes relevant variables and has been built according to strict logical criteria, the regression equation may be applied to give indicative estimates of potential changes in concentrations or exposure under different policy scenarios (e.g. changes in emission intensity or population distribution).
+
+**** Rationale:
+
+The form of a land use regression model can be written as follows:
+[[file:/home/zeltak/Dropbox/Org/Uni/Guides/images/img1427GmC.jpg]]
+
+where:
+
+Ci is the modelled concentration at location i;
+a is a constant (approximating to the regional background concentration);
+b jkis the weight attached to variablej for zone k;
+Xijkis the value of variable j, computed for zone k around location i;
+e is the error term, representing the unexplained variation in concentrations.
+Note that the zones (k) can be unique for each variable (j) - thus different variables can use different buffers or neighbourhoods.
+
+Estimates of the constants (a, b, e) are derived using least squares multiple regression analysis at a sample of locations for which measured concentrations are available.
+
+In the original applications of the methodology, models were deliberately constructed to simulate (in a highly simplified way) the physical factors and processes determining air pollutant concentrations.  For this reason strict rules were applied in building the models:
+
+-Predictor variables were sought which explicitly represented either source activity (e.g. traffic density, area of industrial land) or dispersion conditions (e.g. altitude).
+-Each variable was computed for zones of influence centred on each of the monitoring sites; the shape and size of these zones was selected to reflect the spatial scale of the processes involved;
+-Variables were only allowed to enter the equations if they conformed to the predefined direction of effect;
+-Variables for any single indicator were allowed to enter the equation only if the zones of influence to which they related provided were contiguous and non-overlapping - e.g. variables for traffic flow for zones of 0-100 and 100-300 metres radius could be included, but not for 0-100 and 200-300 metres (non-contiguous)  or for 0-100 and 0-300 metres (overlapping);
+-Variables had to be statistically significant at a predefined significance level (5%) .
+
+
+Several variations on these rules have since been applied.  For example, an inclusion criterion of a 1% (absolute) change in R2 has sometimes been used instead of a threshold for significance, and concentrations are often log transformed, both to normalise the data and to guard against prediction of negative concentrations.  Some later applications have also tended to relax some of the requirements for model logicality (1 to 3, above).  While this has sometimes improved model performance (in terms of R2) in the specific area being studied, it has been at the cost of generating models which are less firmly founded on the physical realities of the pollution system, and consequently which are likely to be less transferable to different contexts or data sets.  A rigorous process-based approach to modelling is therefore still to be preferred.
+Method:
+
+In principle, LUR models could be constructed and used without recourse to GIS.  To do so, however, would greatly complicate data extraction and processing.  GIS provide a very efficient means both of computing the predictor variables and of mapping the results.
+
+
+Modelling may be done in a GIS using either vector data (points, lines and polygons) or raster data (uniform grids), as illustrated below.  With vector data, the areas are defined using buffering (Figure 1); for LUR models based on raster data, focal functions are used to define and sum the predictor data for a neighbourhood of grid cells (Figure 2).
+
+
+One of the great advantages of LUR compared to dispersion modelling is that it is computationally relatively simple and efficient.  The computational burden increases substantially, however, when vector, rather than raster, data are used.  For this reason, raster-based analysis is often preferable when the number of points for which predictions have to be made is large (or when a complete pollution map is required), and/or when data for a large number of variables have to be extracted.  Because of the generalisation involved in converting the input data to grids, however, raster-based modelling may be somewhat less accurate.
+
+
+
+[[file:/home/zeltak/Dropbox/Org/Uni/Guides/images/img1427g6O.jpg]]
+
+Figure 1: LUR modelling using vector data
+
+
+[[file:/home/zeltak/Dropbox/Org/Uni/Guides/images/img1427tEV.jpg]]
+
+Figure 2: LUR modelling using raster data
+
+Details of modelling procedures are thus as follows:
+
+Collect and pre-process data for a selection of monitoring sites.  Ensure that monitoring sites and predictor data sets are in the same projected coordinate system.
+
+For raster LUR, convert the GIS predictor data sets into rasters with a common specification (e.g. uniform cell size and extent).
+Define the list of predictor variables, including zones of influence (buffer/neighbourhood size) and direction of effect.
+
+Specify the zones of influence to reflect the scale of environmental processes appropriate for each variable.  For example, effects of emissions from road traffic are typically highly localised, so the zones of influence should be narrow - e.g. within a radius of 20m to 500m.  Effects of land use are often more extensive and more complex, for land use characteristics affect dispersion patterns as well as emissions; larger zones of influence (up to several km) might therefore be specified.  Note that for any variable the minimum buffer size also depends on the resolution of that GIS data set.
+    Prior to creating the regression model, carefully review the explanatory variables and note their anticipated direction of effect on pollutant concentrations.  Variables that represent emision sources (e.g traffic density) should be positively associated with pollution; variables representing distance from, or absence of, emission sources (e.g. areas of semi-natural vegetation) or the effectiveness of dispersion/mixing processes (e.g. altitude, windspeed) can be expected to have negative associations.
+
+
+Use GIS to extract predictor variables for the zones of influence around each monitoring site.
+
+
+For vector LUR, use buffer and intersect commands.  Note: depending on your GIS software you may have the option to create discrete or dissolved buffers.  Do not dissolve!
+For raster LUR, use focal functions to sum each predictor variable for the appropriate neighbourhood of cells (e.g. ArcINFO: focalsum with circle option, ArcGIS: focal statistics with sum and circle option). This will create a new raster for each predictor variable you listed in step 2. Next, as for vector data, extract the values from each raster to the monitoring sites (e.g. ArcGIS: Extract Value to Points).
+
+
+Export the monitoring data and extracted predictor variables from GIS and import into the statistical package.
+ Develop the LUR model using linear regression.  In general apply logical criteria to ensure that the resulting model is interpretable and robust.  This is done, firstly, by choosing appropriate explanatory variables and zones of influence to reflect the processes involved.  It requires, secondly, the rigorous application of constraints on the regression model (i.e. variable entry and retention needs to be closely supervised).  The following guidelines are recommended:
+
+
+    Try to enter explanatory variables in a ‘supervised-stepwise manner’, so that you include your most important predictors first.
+    The sign for each coefficient in the model must conform to the expected direction of effect.
+    Each variable in the model should be significant (e.g. p < 0.05) and/or should increase the R2 for the model by a predefined amount (e.g. 1%).
+    Variables entered later in the process should not be retained if they cause variables already in the model to become invalid according to guidelines 2 or 3.
+    Avoid double counting by excluding overlapping buffers. For example, including roads in 0-20m and 20-40m is valid, but including roads in 0-20m and 0-40m is not.
+    Gaps in the buffers should also be avoided.  For example, roads in the 20-40m buffer should not be included unless roads in the 0-20m buffer are already in your model.
+
+
+    The LUR model should be validated, and performance statistics reported, either by using a reserved set of monitoring data or through cross-validation techniques (e.g. leave-one-out analysis).
+    Apply the LUR model.
+
+
+    For vector LUR, first compute relevant buffered variables for the target locations (e.g residential addresses); then apply the regression equation. If a full pollution map is required use an appropriate method of spatial interpolation (e.g. kriging).
+    For raster LUR, apply the regression to the relevant rasters generated in step 3 to derive a final exposure raster (e.g. ArcINFO local grid operators to perform a cell-by-cell calculation; ArcGIS: Raster Calculator).
+
+
+    Inspect the map to ensure that the mapped dustribution is sensible.  If it is not, reconsider:
+
+
+    the choice of monitoring sites used to develop the model (e.g. identify and exclude outliers; fillin gaps in the geographic coverage or in specific subzones);
+    the range of predictor variables offered into the model;
+    the choice of buffer zones;
+    the rules for model-development;
+    the spatial resolution and scale.
+** case crossover
+
+*** intro
+
+[[KSG_files/attach/crossover.sas][Attachment #04 (crossover.sas)]]
+ [[KSG_files/attach/crossover_by_temp_interactions.sas][Attachment #05
+(crossover\_by\_temp\_interactions.sas)]]
+ [[KSG_files/attach/crossover_by_tempc.sas][Attachment #06
+(crossover\_by\_tempc.sas)]]
+ case crossover is used when there are no controls, it saves time effort
+and money
+ it can only be used for acute effects (short term effects) for the days
+before after exposure
+ we control for time of the day, day of the week ,season etc.. by
+*matching
+*for example you can control for season by choosing controls in the same
+month of same year of death
+ *the control days are choosen before and after (the actuall death)
+*this is done to control for time trends (long term) such as air
+pollution or ciggarte smoking that tend to go down so IE exposre in the
+control prior to death is greater then the day od death. (see joel's
+gprah form lecture)
+ *(see attachment)* for and example SAS codes.
+
+* 2 learn
+** Survival Analysis
+
+** Effect modification
+
+Effect modification (interactions):
+
+[[http://www.ncbi.nlm.nih.gov.ezp-prod1.hul.harvard.edu/pubmed/19806059][http://www.ncbi.nlm.nih.gov.ezp-prod1.hul.harvard.edu/pubmed/19806059]]
+
+** logisitc reg
+
+Exp results?
+
+** glm bible
+
+[[http://www.maths.bath.ac.uk/~sw283/][http://www.maths.bath.ac.uk/~sw283/]]
+
+[[http://www.crcpress.com/ecommerce_product/product_detail.jsf?catno=C4746&isbn=0000000000000][http://www.crcpress.com/ecommerce\_product/product\_detail.jsf?catno=C4746&isbn=0000000000000]]
+
+** noise
+
+Noise is part of the error terms each statistical model has that we can
+take out or control for.
+ you dont know how to control for noise at onset so you try differnt
+methods in the model (random intecept/slope) ,adding explantory
+variables etc.
+ *In example:* AOD and PM before and after the noise.
+ part of the noise is explained by a random intercept (for guid) and
+random slope (AOD). then after controling for these factors in models
+there is less noise.

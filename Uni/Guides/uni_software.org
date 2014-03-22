@@ -1,0 +1,2614 @@
+#+TITLE: Uni software
+
+* software
+** envi
+
+*** using envi to transfer modis data to gis 2
+
+**** layer stacking
+
+first of all it is better to use the MODIS web interface to order data
+(see [[javascript:;][here]]) and use the build in post processing
+function to get the data georefrenced. the output should be either
+geo-tiff or hdf. i choose geotiff.
+ then open Envi and load a bunch of images at once (load for example an
+entire month)
+ [[~/Dropbox/Org/Uni/Guides/uni_software_files/img/image.png]]
+ then go to basic tools image stacking to add the images onto one file
+ [[~/Dropbox/Org/Uni/Guides/uni_software_files/img/image%202.png]]
+ choose import file
+ [[~/Dropbox/Org/Uni/Guides/uni_software_files/img/image%203.png]]
+ and add all the files (with shift) and press ok
+ make sure you import *to mem*ory and press ok
+ [[~/Dropbox/Org/Uni/Guides/uni_software_files/img/image%204.png]]
+ then go to the main open layers window and export the stacked layer to
+file
+ [[~/Dropbox/Org/Uni/Guides/uni_software_files/img/image%205.png]]
+ this should result in two files and .img file and .hdr (header) file
+
+**** process the ignore values
+
+After the stack is created edit the header
+ [[~/Dropbox/Org/Uni/Guides/uni_software_files/img/Image_4Y0sPp3CmNIWFMqdBtg68g_0001.png]]
+ then choose the data ignore value
+ [[~/Dropbox/Org/Uni/Guides/uni_software_files/img/Image_4Y0sPp3CmNIWFMqdBtg68g_0002.png]]
+ enter what data values you want to be ignores (-9999) in my case
+ [[~/Dropbox/Org/Uni/Guides/uni_software_files/img/Image_4Y0sPp3CmNIWFMqdBtg68g_0003.png]]
+
+**** scaling
+
+after the first few steps you need to scale the data according to the
+products (MODIS in our case) discription
+ this is done with band math.
+ [[~/Dropbox/Org/Uni/Guides/uni_software_files/img/Image_JEX-2xP.7Vqi49GNEQX-Og_0001.png]]
+ then enter the correct forumla and scale facor. In the modis data the
+scale is 0.001 so we enter the following formula:
+  float(b1*0.001)
+ [[~/Dropbox/Org/Uni/Guides/uni_software_files/img/Image_JEX-2xP.7Vqi49GNEQX-Og_0002.png]]
+ then the b1 needs to be mapped to the actuall data (memory1 in this
+example) and the band math can be run
+ [[~/Dropbox/Org/Uni/Guides/uni_software_files/img/Image_JEX-2xP.7Vqi49GNEQX-Og_0003.png]]
+ make sure you save to memory and press ok, then save file as before
+ 
+** Cluster
+*** login
+
+To login to the Harvard cluster
+ in the terminal :
+
+------------------------------------------------------------------------------------------------------------------------------------------
+ ssh -X ekloog@hpcc.sph.harvard.edu
+
+------------------------------------------------------------------------------------------------------------------------------------------
+ ekloog-user name
+ hpcc.sph.harvard.edu-harvard adress
+ you will be prompted for a password: enter hu + first 6 numbers of yourHarvard ID
+
+*** operation
+
+When you are submitting a job to the cluster use the bsub command and
+then your usual UNIX batch commands.
+
+ [gmazzu@hpcc /]$bsub R CMD BATCH --no-save job1.R job1.out
+
+ In this case user gmazzu is submitting an R job called job1.R
+ What jobs of mine are running?
+ Once you have submitted jobs you can see what is running by using the
+bjobs command.
+
+ [gmazzu@hpcc /]$ bjobs
+
+ JOBID USER STAT QUEUE FROM\_HOST EXEC\_HOST JOB\_NAME SUBMIT\_TIME
+ 1014 gmazzu RUN preemptabl hpcc compute-0-2 *.2 1 1000 Aug 31 10:22
+ 1011 gmazzu RUN preemptabl hpcc compute-0-1 *.2 1 1000 Aug 31 10:22
+ 1015 gmazzu RUN preemptabl hpcc compute-0-0 *.2 1 1000 Aug 31 10:22
+ 1018 gmazzu RUN preemptabl hpcc compute-0-2 *.2 1 1000 Aug 31 10:22
+ Stopping jobs
+ If you would like to stop a job, use the bkill command. You would use
+bkill and then the JOBID which you can see in the example above.
+
+ [gmazzu@hpcc /]$ bkill 1018
+
+
+*** Queing
+
+send your job to the IT queue:
+
+ bsub -q it "Your R job"
+
+ example:
+
+ bsub -q it " R CMD BATCH --save /usr1/home/ekloog/code/GAM\_v3.r
+job.out"
+
+
+*** submit R script
+
+1) copy all files and script through ssh/scp to your home directory on
+the cluster
+ 2)once you have that setup adjust your r script accordingly (change
+location to the new home directory in the cluster). for example:
+ GAM\_T2005 = read.csv("/usr1/home/ekloog/files/final\_T2005.csv",
+header=T)
+ 3)after you have your script ready proceed to run the R job. this is
+done with the bath command:
+
+-----------------------------------------------------------------------------------------------------------------------
+ bsub R CMD BATCH --save /usr1/home/ekloog/code/GAM\_v3.r job.out
+
+-----------------------------------------------------------------------------------------------------------------------
+ bsub -cluster job que (needed for every command preformed on the
+cluster)
+ R- The command you run (could be SAS etc...but R in this example)
+ CMD BATCH --save - The R option which are CMD BATH for batching the
+script and --save to save the workspace
+ job.out- The Job log output that show the R console output
+
+*** To run SAS in batch mode
+
+To run SAS in batch mode:
+ 
+ [gmazzu@hpcc /]$ bsub sas -noterminal code.sas -log file.log
+ 
+** FAS cluster
+*** 'Odyssey 2.0'
+**** Start a highy memory R session with gui 
+You can list your currently loaded modules:
+[hptc@iliadaccess03 hptc]$ module list
+
+And unload a specific module:
+[hptc@iliadaccess03 hptc]$ module unload hpc/gv
+
+Now we'll switch to a different version of the module
+% module switch gcc gcc/3.2.0
+1) log in normaly to new FAS
+2) load R 3.0 and rstudio with this command
+
+#+BEGIN_SRC sh
+module load centos6/rstudio-0.97_R-3.0.2
+#+END_SRC
+
+3)request extra memory and run rstudio GUI
+
+#+BEGIN_EXAMPLE
+srun -p interact -n 1 --pty --x11=first --mem=35000 rstudio
+#+END_EXAMPLE
+
+**** LEGACY Start a high memory R session with gui 		       :@fav:
+
+login with the `legacy` URL using putty OR if nix use:
+
+#+BEGIN_SRC sh
+ssh -X ekloog@legacy.rc.fas.harvard.edu
+#or for better preformance
+ssh -c arcfour,blowfish-cbc -YC -l ekloog legacy.rc.fas.harvard.edu
+#+END_SRC
+
+then request max memory
+
+#+BEGIN_SRC sh
+bsub -Is -q hsph -R "rusage[mem=35000]" bash
+#+END_SRC
+
+load the R module
+
+#+BEGIN_SRC sh
+math/R-3.0.1
+#+END_SRC
+see available modules here:
+https://rc.fas.harvard.edu/module_list/
+to add rstudio and run under gui (@on windows make sure Xming is running@)
+load the module:
+
+#+BEGIN_SRC sh
+module load math/rstudio-0.96
+#launch app
+rstudio
+#+END_SRC
+
+$note make sure its the above version and not the one with 2.15 in it$
+**** modules
+*** start session
+launch the Jauth token generator:
+C:\Users\ekloog\Documents\ekloog-openauth
+
+and launch it through the command line:
+
+c:\Users\ekloog\Documents\ekloog-openauth\ekloog-openauth.sh
+
+this should popup the authentication wiindow:
+ [[~/Dropbox/Org/Uni/Guides/uni_software_files/img
+/Image_luDOuwinGmWL6mAiIQKLsA_0001.png]]
+ [[~/Dropbox/Org/Uni/Guides/uni_software_files/img
+/Image_luDOuwinGmWL6mAiIQKLsA_0002.png]]
+*** R
+**** Interactive
+
+*interactive use*
+ (1) Request an interactive bash shell
+
+bsub -Is -q interact -n 1 bash
+
+ Job <27797212> is submitted to queue <interact>.
+ <<Waiting for dispatch ...>>
+ <<Starting on heroint5>>
+
+ (2) Load one of the available R software modules, e.g.,
+
+module load math/R-2.15.0
+ Loading module hpc/intel-mkl-10.2.5.035.
+ Loading module devel/rpy2-2.1.7.
+ Loading module math/R-2.15.0.
+
+ NOTE: All software installed on the cluster is managed by and organized
+in
+ software modules. For a complete list of currently available software,
+please
+ go to
+[[http://rc.fas.harvard.edu/module_list/][http://rc.fas.harvard.edu/module\_list/]]
+ (3) Run R:
+
+R
+
+ you can now use the CLI R and source scripts IE:
+
+ source ("/PATH/FILE.r")
+
+**** RSTUDIO Server
+
+*rstudio server*
+ We have the RStudio Server installed on the cluster which provides an
+ integrated GUI through a web browser ( Firefox recommended ). To access
+the
+ Rstudio Server point your web-browser to
+
+[[http://rstudio.rc.fas.harvard.edu/][http://rstudio.rc.fas.harvard.edu/]]
+ and log on with your RC username and password. (You need to be on the
+VPN for
+ this to work. )
+
+**** submitting lsf batch jobs
+
+*submitting lsf batch jobs
+*
+ You can submit your R jobs to one of the available queues ( type "
+
+bqueues -u ekloog
+
+" to display the queues available to you ).
+ (1) Prepare a job submission script
+ You can use a batch job submission script as the one below
+ #!/bin/sh
+ #BSUB -J rtest
+ #BSUB -q short\_serial
+ #BSUB -n 1
+ #BSUB -o rtest.out
+ #BSUB -e rtest.err
+ module load math/R-2.15.0
+ R CMD BATCH --vanilla --no-save test.R test.out
+ NOTE: You can look at
+
+[[http://rc.fas.harvard.edu/kb/high-performance-computing/lsf-submit-an-lsf-job-2/][http://rc.fas.harvard.edu/kb/high-performance-computing/lsf-submit-an-lsf-job-2/]]
+ for the meaning of the #BSUB directives
+ (2) Submit the job to the queue
+ If you name the above batch-job submission script "test.run" it is
+submitted to
+ the queue by typing in
+
+[pkrastev@heroint5 R]$ bsub < test.run
+ Job <27797710> is submitted to queue <short\_serial>.
+
+ Alternatively, instead of using a batch-job submission script, you can
+do
+ everything on the command line
+
+[pkrastev@heroint5 R]$ bsub -J rtest -q short\_serial -n 1 -o rtest.out
+-e
+ rtest.err R CMD BATCH --vanilla --no-save test.R test.out
+ Job <27797834> is submitted to queue <short\_serial>.
+
+**** run rstudio gui
+
+start Xming on windows
+make sure that 'Enable X11 forwarding' is enabled in Putty before you
+began your session (under SSH section> X11)
+then after putty ssh login to server issue on the server :
+
+bsub -Is -q interact bash
+module load math/rstudio-0.96
+rstudio
+
+*** SAS
+
+Use of SAS on server
+ to load sas issue:
+
+ module load hpc/sas-9.3
+ to run a sas script:
+ bsub sas -noterminal nlmixfas.sas -log outmix.log
+
+**** run sas on odeyssey
+
+install the xming software in order to transfer an X gui to the windows
+pc:
+
+[[http://sourceforge.net/projects/xming/][http://sourceforge.net/projects/xming/]]
+ then log in thourgh ssh (putty) to you oddesy session
+ load the sas model:
+
+module load hpc/sas-9.3
+
+ then issue the following command to Request an interactive shell on
+Odyssey cluster:
+
+ bsub -Is -q interact -n 1 bash
+
+ then just run sas
+
+sas
+
+*** Submit an LSF Job
+
+The[[http://www.platform.com/Products/platform-lsf][LSF]] queueing
+software manages the hundreds of computers in the Odyssey cluster. To
+run software on the cluster, you login to odyssey.fas.harvard.edu (the
+"head node", which is really a nickname for three identical computers,
+iliadaccess01, 02, and 03). Then you use the bsub command to "submit" a
+job to an
+appropriate[[http://rc.fas.harvard.edu/kb/high-performance-computing/general-use-odyssey-queues/][queue]],
+where it waits for a computer to become free. At that point, LSF sends
+your job to that other computer, where it runs. When it finishes, LSF
+will email you.
+ Note that the iliadaccess machines are only for submitting jobs. If you
+try to run a program there without bsub, it will be stopped after a
+couple minutes.
+ Here is
+an[[http://www.sysbio.harvard.edu/csb/resources/computational/lsf.html][LSF
+cheat sheet]] describing the basic LSF commands.
+ To run a job, first create a submission script. Make a file somewhere
+on Odyssey (in your home directory or a sub-directory of that) called
+hello.bsub that looks like this:
+
+#!/bin/sh
+ #BSUB -u
+[[http://rc.fas.harvard.edumailto:someguy@fas.harvard.edu][someguy@fas.harvard.edu]]
+ #BSUB -J my\_blast
+ #BSUB -o blast.out
+ #BSUB -e blast.err
+ #BSUB -W 2:00
+ #BSUB -q normal\_serial
+ blastall -p blastp -e 1e-5 -d nr myseqs.fasta
+
+(Of course you'll want to change the email address, program name,
+filenames, etc.) The lines beginning with#BSUB are instructions to LSF.
+
+-  -u email says where to send the LSF reports
+-  -J name names the job, which is useful if you're running multiple
+   jobs and run a bjobs command
+-  -q queue names
+   the[[http://rc.fas.harvard.edu/kb/high-performance-computing/general-use-odyssey-queues/][queue]]
+   you're submitting the job to
+-  -e filename and-o filename instruct LSF where to print output from
+   the job. Without these definitions, the output will get emailed to
+   you, or disappear if the output is many megabytes. (-o is stdout, the
+   usual output of a program, while -e, stderr, is where errors usually
+   go)
+-  -W hh:mm defines how long the job will run for. When the job reaches
+   this limit it will automatically be killed if it has not finished
+   running. This is useful for telling the scheduler how long you think
+   you job will run for so that it can fit you in to the queue easier.
+
+After the instructions to LSF, you just type one or more commands that
+you would run on the command line. The above scripts runs a biology
+program called BLAST. Commands often have options, input filenames, etc.
+If you want to run a program you installed in your own directory, make
+sure to write./programname
+ To submit the job, at the command line, type bsub, a less-than sign,
+and the name of the submission script
+
+[hptc@iliadaccess01 ~]$ bsub < hello.bsub.
+ Job <797679> is submitted to queue <short\_serial>.
+
+As shown above, LSF will return a job id, which you'll see when you use
+the bjobs command. Also,if you want to stop the job, use "bkill jobid".
+ Pasted from
+<[[http://rc.fas.harvard.edu/kb/high-performance-computing/lsf-submit-an-lsf-job-2/][http://rc.fas.harvard.edu/kb/high-performance-computing/lsf-submit-an-lsf-job-2/]]>
+
+*** FAS VPN
+
+FAS VPN
+
+Remote access to your data and some services in the Sciences requires a
+VPN (Virtual Private Network) connection to access from outside Sciences
+networks and off campus.
+ If you wish to connect to your lab or personal lab data stores but are
+connected via wireless or have an address outside of those associated
+with the Sciences, you will need a VPN Connection to access them.
+ Data storage available via VPN:
+ RCFS1, RCFS2, RCFS3, (direct lab storage systems)
+ The VPN is accessible via a web browser
+at[[https://vpn.fas.harvard.edu/][https://vpn.fas.harvard.edu]].
+ you can login with your HUID for the USERNAME (don't put the @FAS realm
+part) and PIN for the PASSWORD
+ OR:
+ The USERNAME field in the form requires two parts:username andrealm
+name. Yourusername should be your FAS username, and in this case
+therealm name is FAS.
+ USERNAME:username@FAS
+ PASSWORD: (supply your usual FAS password)
+ these two ways of logging in are equivalent
+ Please contact the RC Team
+at[[http://rc.fas.harvard.edumailto:rchelp@fas.harvard.edu][rchelp@fas.harvard.edu]]
+for any questions, concerns or direct assistance.
+
+
+ Pasted from
+<[[http://rc.fas.harvard.edu/faq/fas-vpn/][http://rc.fas.harvard.edu/faq/fas-vpn/]]>
+
+*** start screen
+
+Start a New Screen Session
+
+To start a new screen named mywork, use the following shell command:
+ screen -S mywork
+
+ *Detaching from a Screen Session
+*
+ Note: DO NOT CLOSE THE CONNECTION WITHOUT DETACHING WITH ctrl-D
+
+In order to disconnect your client and be able to attach to the screen
+session later, you must leave the screen session running.
+ You do this by detaching from it.
+ Use the following screen command:
+ ctrl-a d
+
+You can do this either when while it's idle at a shell prompt or while
+some program is running in the foreground.
+ You will be returned to your original shell session, and anything
+running in your screen session will continue to run in the background.
+ You can now exit the shell session and shutdown your computer.
+ Do not run exit or logout while inside the screen session, if you plan
+on reattaching to it later.
+ These commands will terminate the screen session.
+
+ *Attach to an Existing Screen Session
+*
+
+You can list your running screen sessions with the following shell
+command:
+
+screen -ls
+
+For example, following the above example, you should see something like:
+ [hptc@iliadaccess01 workshop]$ screen -ls
+ There is a screen on:
+ 12954.mywork (Detached)
+ 1 Socket in /var/run/screen/S-hptc.
+
+You can reattach to it with the following shell command:
+ screen -x myworkY
+ our ssh client display will fill with what's currently running the in
+the screen.
+ Pasted from
+<[[http://rc.fas.harvard.edu/kb/high-performance-computing/gnu-screen/][http://rc.fas.harvard.edu/kb/high-performance-computing/gnu-screen/]]>
+
+** excel
+
+*** cell functions (merge etc)
+
+**** intro
+
+ Merge cells from all or some worksheets into one Master sheet
+ The examples will add a worksheet with the name RDBMergeSheet to your
+workbook and will copy cells
+ from every worksheet in the ActiveWorkbook to this worksheet. Each time
+you run one of the examples it
+ will first delete the summary worksheet named RDBMergeSheet if it
+exists and then adds a new one to
+ the workbook. This ensures that the data is always up to date after you
+run the code.
+ In the examples I use a values/formats copy but below the first example
+there is example code to copy
+ only the values or everything to the RDBMergeSheet.
+ Important:
+ The macro examples use the LastRow or LastCol function that you can
+find in the last section of this page.
+ Copy the macro(s) and function(s) in a standard module of your
+workbook.
+ If you have no idea where to paste the code then check out this page.
+
+[[http://www.rondebruin.nl/code.htm][http://www.rondebruin.nl/code.htm]]
+ Example workbook
+ Download a zip file with a workbook with the code from this page to
+test the examples.
+ Download MergeWorksheetsCode.zip
+ Copy a range of each sheet
+ Note: This example use the function LastRow
+ This example copy the range A1:G1 from each worksheet.
+ Change the range here
+ 'Fill in the range that you want to copy
+ Set CopyRng = sh.Range("A1:G1")
+ Sub CopyRangeFromMultiWorksheets()
+ Dim sh As Worksheet
+ Dim DestSh As Worksheet
+ Dim Last As Long
+ Dim CopyRng As Range
+ With Application
+ .ScreenUpdating = False
+ .EnableEvents = False
+ End With
+ 'Delete the sheet "RDBMergeSheet" if it exist
+ Application.DisplayAlerts = False
+ On Error Resume Next
+ ActiveWorkbook.Worksheets("RDBMergeSheet").Delete
+ On Error GoTo 0
+ Application.DisplayAlerts = True
+ 'Add a worksheet with the name "RDBMergeSheet"
+ Set DestSh = ActiveWorkbook.Worksheets.Add
+ DestSh.Name = "RDBMergeSheet"
+ 'loop through all worksheets and copy the data to the DestSh
+ For Each sh In ActiveWorkbook.Worksheets
+ If sh.Name <> DestSh.Name Then
+ 'Find the last row with data on the DestSh
+ Last = LastRow(DestSh)
+ 'Fill in the range that you want to copy
+ Set CopyRng = sh.Range("A1:G1")
+ 'Test if there enough rows in the DestSh to copy all the
+data
+ If Last + CopyRng.Rows.Count > DestSh.Rows.Count Then
+ MsgBox "There are not enough rows in the Destsh"
+ GoTo ExitTheSub
+ End If
+ 'This example copies values/formats, if you only want to
+copy the
+ 'values or want to copy everything look at the example
+below this macro
+ CopyRng.Copy
+ With DestSh.Cells(Last + 1, "A")
+ .PasteSpecial xlPasteValues
+ .PasteSpecial xlPasteFormats
+ Application.CutCopyMode = False
+ End With
+ 'Optional: This will copy the sheet name in the H column
+ DestSh.Cells(Last + 1,
+"H").Resize(CopyRng.Rows.Count).Value = sh.Name
+ End If
+ Next
+ ExitTheSub:
+ Application.Goto DestSh.Cells(1)
+ 'AutoFit the column width in the DestSh sheet
+ DestSh.Columns.AutoFit
+ With Application
+ .ScreenUpdating = True
+ .EnableEvents = True
+ End With
+ End Sub
+ Tips to change the examples
+ In the example above I copy the range A1:G1 but you can also use
+ Set CopyRng = sh.UsedRange
+ To copy all cells with data on the sheet
+ Set CopyRng = sh.Range("A1").CurrentRegion
+ To copy the current region of cell A1
+ The current region is a range bounded by any combination of blank rows
+and blank column
+ Set CopyRng = sh.Rows("1")
+ To copy a whole row or rows( use "1:8" then)
+ Copy only values or everything
+ Replace this :
+ CopyRng.Copy
+ With DestSh.Cells(Last + 1, "A")
+ .PasteSpecial xlPasteValues
+ .PasteSpecial xlPasteFormats
+ Application.CutCopyMode = False
+ End With
+ With:
+ With CopyRng
+ DestSh.Cells(Last + 1, "A").Resize(.Rows.Count, \_
+ .Columns.Count).Value = .Value
+ End With
+ If you only want to copy the values.
+ Or Replace this :
+ CopyRng.Copy
+ With DestSh.Cells(Last + 1, "A")
+ .PasteSpecial xlPasteValues
+ .PasteSpecial xlPasteFormats
+ Application.CutCopyMode = False
+ End With
+ With:
+ CopyRng.Copy DestSh.Cells(Last + 1, "A")
+ If you want to copy everything.
+ Do not loop through all sheets in the workbook
+ 
+ Tip 1:
+ Replace this line:
+ If sh.Name <> DestSh.Name Then
+ With:
+ If LCase(Left(sh.Name, 4)) = "week" Then
+ If you want to copy only from sheets with a name that start with week.
+ Tip 2:
+ Replace this line:
+ If sh.Name <> DestSh.Name Then
+ with:
+ If sh.Name <> DestSh.Name And sh.Visible = True Then
+ If you want to copy only from the visible sheets in your workbook.
+ Tip 3:
+ Replace this line:
+ For Each sh In ActiveWorkbook.Worksheets
+ With:
+ For Each sh In ActiveWorkbook.Sheets(Array("Sheet1", "Sheet3"))
+ And remove this two lines:
+ If sh.Name <> DestSh.Name Then and End If before Next
+ If you want to copy only from sheets that are in the Array.
+ Tip 4:
+ Replace this line:
+ If sh.Name <> DestSh.Name Then
+ With:
+ If IsError(Application.Match(sh.Name, \_
+ Array(DestSh.Name, "Total Sheet", "Menu Sheet"), 0)) Then
+ If you want to exclude more sheets then the DestSh.
+ Copy from row 2 till the last row with data
+ Note: This example use the function LastRow
+ Note: You can use the tips above also in this example
+ In example 1 you can see that you can copy all cells on a worksheet
+with this line:
+ Set CopyRng = sh.UsedRange
+ But what if we do not want to copy the same header row each time.
+ The example below will copy from row 2 till the last row with data on
+each sheet
+ Change the start row in the macro if you want to start in a different
+row.
+ 'Fill in the start row
+ StartRow = 2
+ If you want to copy the header row in the first row of the
+RDBMergeSheet
+ then copy the code below if each worksheet have the same headers after
+ this line : If sh.Name <> DestSh.Name Then
+ 'Copy header row, change the range if you use more columns
+ If WorksheetFunction.CountA(DestSh.UsedRange) = 0 Then
+ sh.Range("A1:Z1").Copy DestSh.Range("A1")
+ End If
+ Sub CopyDataWithoutHeaders()
+ Dim sh As Worksheet
+ Dim DestSh As Worksheet
+ Dim Last As Long
+ Dim shLast As Long
+ Dim CopyRng As Range
+ Dim StartRow As Long
+ With Application
+ .ScreenUpdating = False
+ .EnableEvents = False
+ End With
+ 'Delete the sheet "RDBMergeSheet" if it exist
+ Application.DisplayAlerts = False
+ On Error Resume Next
+ ActiveWorkbook.Worksheets("RDBMergeSheet").Delete
+ On Error GoTo 0
+ Application.DisplayAlerts = True
+ 'Add a worksheet with the name "RDBMergeSheet"
+ Set DestSh = ActiveWorkbook.Worksheets.Add
+ DestSh.Name = "RDBMergeSheet"
+ 'Fill in the start row
+ StartRow = 2
+ 'loop through all worksheets and copy the data to the DestSh
+ For Each sh In ActiveWorkbook.Worksheets
+ If sh.Name <> DestSh.Name Then
+ 'Find the last row with data on the DestSh and sh
+ Last = LastRow(DestSh)
+ shLast = LastRow(sh)
+ 'If sh is not empty and if the last row >= StartRow copy
+the CopyRng
+ If shLast > 0 And shLast >= StartRow Then
+ 'Set the range that you want to copy
+ Set CopyRng = sh.Range(sh.Rows(StartRow),
+sh.Rows(shLast))
+ 'Test if there enough rows in the DestSh to copy all
+the data
+ If Last + CopyRng.Rows.Count > DestSh.Rows.Count Then
+ MsgBox "There are not enough rows in the Destsh"
+ GoTo ExitTheSub
+ End If
+ 'This example copies values/formats, if you only want
+to copy the
+ 'values or want to copy everything look below example 1
+on this page
+ CopyRng.Copy
+ With DestSh.Cells(Last + 1, "A")
+ .PasteSpecial xlPasteValues
+ .PasteSpecial xlPasteFormats
+ Application.CutCopyMode = False
+ End With
+ End If
+ End If
+ Next
+ ExitTheSub:
+ Application.Goto DestSh.Cells(1)
+ 'AutoFit the column width in the DestSh sheet
+ DestSh.Columns.AutoFit
+ With Application
+ .ScreenUpdating = True
+ .EnableEvents = True
+ End With
+ End Sub
+ Copy a range/column after the last column with data
+ Note: This example use the function LastCol
+ This example copy column A from each sheet after the last column with
+data on the DestSh.
+ I use A:A to copy the whole column but you can also use a range like
+A1:A10
+ Use A:C if you want to copy more columns.
+ Change it here
+ 'Fill in the column(s) that you want to copy
+ Set CopyRng = sh.Range("A:A")
+ Remember that Excel 97-2003 have only 256 columns.
+ Excel 2007 has 16384 columns.
+ Sub AppendDataAfterLastColumn()
+ Dim sh As Worksheet
+ Dim DestSh As Worksheet
+ Dim Last As Long
+ Dim CopyRng As Range
+ With Application
+ .ScreenUpdating = False
+ .EnableEvents = False
+ End With
+ 'Delete the sheet "RDBMergeSheet" if it exist
+ Application.DisplayAlerts = False
+ On Error Resume Next
+ ActiveWorkbook.Worksheets("RDBMergeSheet").Delete
+ On Error GoTo 0
+ Application.DisplayAlerts = True
+ 'Add a worksheet with the name "RDBMergeSheet"
+ Set DestSh = ActiveWorkbook.Worksheets.Add
+ DestSh.Name = "RDBMergeSheet"
+ 'loop through all worksheets and copy the data to the DestSh
+ For Each sh In ActiveWorkbook.Worksheets
+ If sh.Name <> DestSh.Name Then
+ 'Find the last Column with data on the DestSh
+ Last = LastCol(DestSh)
+ 'Fill in the column(s) that you want to copy
+ Set CopyRng = sh.Range("A:A")
+ 'Test if there enough rows in the DestSh to copy all the
+data
+ If Last + CopyRng.Columns.Count > DestSh.Columns.Count Then
+ MsgBox "There are not enough columns in the Destsh"
+ GoTo ExitTheSub
+ End If
+ 'This example copies values/formats and Column width
+ CopyRng.Copy
+ With DestSh.Cells(1, Last + 1)
+ .PasteSpecial 8 ' Column width
+ .PasteSpecial xlPasteValues
+ .PasteSpecial xlPasteFormats
+ Application.CutCopyMode = False
+ End With
+ End If
+ Next
+ ExitTheSub:
+ Application.Goto DestSh.Cells(1)
+ With Application
+ .ScreenUpdating = True
+ .EnableEvents = True
+ End With
+ End Sub
+ Where do I copy the macros and functions from this page?
+ 1. Alt-F11
+ 2. Insert>Module from the Menu bar
+ 3. Paste the Code there
+ 4. Alt-Q to go back to Excel
+ 5. Alt-F8 to run the subs
+ Common Functions required for all routines:
+ Function LastRow(sh As Worksheet)
+ On Error Resume Next
+ LastRow = sh.Cells.Find(What:="*", \_
+ After:=sh.Range("A1"), \_
+ Lookat:=xlPart, \_
+ LookIn:=xlFormulas, \_
+ SearchOrder:=xlByRows, \_
+ SearchDirection:=xlPrevious, \_
+ MatchCase:=False).Row
+ On Error GoTo 0
+ End Function
+ Function LastCol(sh As Worksheet)
+ On Error Resume Next
+ LastCol = sh.Cells.Find(What:="*", \_
+ After:=sh.Range("A1"), \_
+ Lookat:=xlPart, \_
+ LookIn:=xlFormulas, \_
+ SearchOrder:=xlByColumns, \_
+ SearchDirection:=xlPrevious, \_
+ MatchCase:=False).Column
+ On Error GoTo 0
+ End Function
+ More Information
+ Consolidating Data from Multiple Worksheets into a Summary Worksheet in
+Excel
+
+[[http://msdn.microsoft.com/en-us/library/cc793964.aspx][http://msdn.microsoft.com/en-us/library/cc793964.aspx]]
+ Create a summary worksheet from all worksheets (with formulas)
+
+[[http://www.rondebruin.nl/summary.htm][http://www.rondebruin.nl/summary.htm]]
+ You can find more about finding the last row or column on this page
+
+[[http://www.rondebruin.nl/last.htm][http://www.rondebruin.nl/last.htm]]
+ Merge data from all workbooks in a folder
+
+[[http://www.rondebruin.nl/copy3.htm][http://www.rondebruin.nl/copy3.htm]]
+
+**** append last column
+
+Sub AppendDataAfterLastColumn()
+ Dim sh As Worksheet
+ Dim DestSh As Worksheet
+ Dim Last As Long
+ Dim CopyRng As Range
+ With Application
+ .ScreenUpdating = False
+ .EnableEvents = False
+ End With
+ 'Delete the sheet "RDBMergeSheet" if it exist
+ Application.DisplayAlerts = False
+ On Error Resume Next
+ ActiveWorkbook.Worksheets("RDBMergeSheet").Delete
+ On Error GoTo 0
+ Application.DisplayAlerts = True
+ 'Add a worksheet with the name "RDBMergeSheet"
+ Set DestSh = ActiveWorkbook.Worksheets.Add
+ DestSh.Name = "RDBMergeSheet"
+ 'loop through all worksheets and copy the data to the DestSh
+ For Each sh In ActiveWorkbook.Worksheets
+ If sh.Name <> DestSh.Name Then
+ 'Find the last Column with data on the DestSh
+ Last = LastCol(DestSh)
+ 'Fill in the column(s) that you want to copy
+ Set CopyRng = sh.Range("C:C")
+ 'Test if there enough rows in the DestSh to copy all the
+data
+ If Last + CopyRng.Columns.Count > DestSh.Columns.Count Then
+ MsgBox "There are not enough columns in the Destsh"
+ GoTo ExitTheSub
+ End If
+ 'This example copies values/formats and Column width
+ CopyRng.Copy
+ With DestSh.Cells(1, Last + 1)
+ .PasteSpecial 8 ' Column width
+ .PasteSpecial xlPasteValues
+ .PasteSpecial xlPasteFormats
+ Application.CutCopyMode = False
+ End With
+ End If
+ Next
+ ExitTheSub:
+ Application.Goto DestSh.Cells(1)
+ With Application
+ .ScreenUpdating = True
+ .EnableEvents = True
+ End With
+ End Sub
+
+**** last row function
+
+Function LastRow(sh As Worksheet)
+ On Error Resume Next
+ LastRow = sh.Cells.Find(What:="*", \_
+ After:=sh.Range("A1"), \_
+ Lookat:=xlPart, \_
+ LookIn:=xlFormulas, \_
+ SearchOrder:=xlByRows, \_
+ SearchDirection:=xlPrevious, \_
+ MatchCase:=False).Row
+ On Error GoTo 0
+ End Function
+
+**** last colum function
+
+Function LastCol(sh As Worksheet)
+ On Error Resume Next
+ LastCol = sh.Cells.Find(What:="*", \_
+ After:=sh.Range("A1"), \_
+ Lookat:=xlPart, \_
+ LookIn:=xlFormulas, \_
+ SearchOrder:=xlByColumns, \_
+ SearchDirection:=xlPrevious, \_
+ MatchCase:=False).Column
+ On Error GoTo 0
+ End Function
+
+*** import batch txt files
+
+ Copy every TXT or CSV file that you select in a new worksheet of a
+newly created workbook
+ Ron de Bruin (last update 30-Aug-2007)
+ Go back to the Excel tips page
+ Example for TXT files
+ The macro below will copy every txt file that you select with
+GetOpenFilename to your workbook.
+ If you select ten txt files in the folder then you end up with 10 new
+worksheets in
+ your workbook. Each worksheet will have the name of the txt file.
+ Note: you can hold the CTRL key if you want to select more files or use
+the Shift key to select
+ a block of files in GetOpenFilename. Tip: With Ctrl a you select all
+files in the folder.
+ I did not use all the properties for QueryTables in my macro because a
+lot of them are already
+ what I want by default. If you don't get the results you want then
+record a macro when you
+ perform the action manually.
+ Then look at the recorded code and add the code lines to the macro
+Get\_TXT\_Files.
+ Copy all code in a normal module of your workbook
+ Alt F11
+ Insert Module
+ Paste the code
+ Alt q to go back to Excel
+ Alt F8 to open the macro dialog
+ Select the macro and press Run
+ This example is for Delimited txt files, see the example below this
+macro for FixedWidth
+ Read the information in the macro Get\_TXT\_Files before you try the
+macro.
+ Maybe you want to use a different delimiter or change the format of a
+column.
+ Private Declare Function SetCurrentDirectoryA Lib \_
+ "kernel32" (ByVal lpPathName As String) As Long
+ Public Function ChDirNet(szPath As String) As Boolean
+ 'based on Rob Bovey's code
+ Dim lReturn As Long
+ lReturn = SetCurrentDirectoryA(szPath)
+ ChDirNet = CBool(lReturn <> 0)
+ End Function
+ Sub Get\_TXT\_Files()
+ 'For Excel 2000 and higher
+ Dim Fnum As Long
+ Dim mysheet As Worksheet
+ Dim basebook As Workbook
+ Dim TxtFileNames As Variant
+ Dim QTable As QueryTable
+ Dim SaveDriveDir As String
+ Dim ExistFolder As Boolean
+ 'Save the current dir
+ SaveDriveDir = CurDir
+ 'You can change the start folder if you want for
+ 'GetOpenFilename,you can use a network or local folder.
+ 'For example ChDirNet("C:\Users\Ron\test")
+ 'It now use Excel's Default File Path
+ ExistFolder = ChDirNet(Application.DefaultFilePath)
+ If ExistFolder = False Then
+ MsgBox "Error changing folder"
+ Exit Sub
+ End If
+ TxtFileNames = Application.GetOpenFilename \_
+ (filefilter:="TXT Files (*.txt), *.txt", MultiSelect:=True)
+ If IsArray(TxtFileNames) Then
+ On Error GoTo CleanUp
+ With Application
+ .ScreenUpdating = False
+ .EnableEvents = False
+ End With
+ 'Add workbook with one sheet
+ Set basebook = Workbooks.Add(xlWBATWorksheet)
+ 'Loop through the array with txt files
+ For Fnum = LBound(TxtFileNames) To UBound(TxtFileNames)
+ 'Add a new worksheet for the name of the txt file
+ Set mysheet = Worksheets.Add(After:=basebook. \_
+ Sheets(basebook.Sheets.Count))
+ On Error Resume Next
+ mysheet.Name = Right(TxtFileNames(Fnum),
+Len(TxtFileNames(Fnum)) - \_
+ InStrRev(TxtFileNames(Fnum), "\", ,
+1))
+ On Error GoTo 0
+ With ActiveSheet.QueryTables.Add(Connection:= \_
+ "TEXT;" & TxtFileNames(Fnum),
+Destination:=Range("A1"))
+ .TextFilePlatform = xlWindows
+ .TextFileStartRow = 1
+ 'This example use xlDelimited
+ 'See a example for xlFixedWidth below the macro
+ .TextFileParseType = xlDelimited
+ 'Set your Delimiter to true
+ .TextFileTabDelimiter = True
+ .TextFileSemicolonDelimiter = False
+ .TextFileCommaDelimiter = False
+ .TextFileSpaceDelimiter = False
+ 'Set the format for each column if you want (Default =
+General)
+ 'For example Array(1, 9, 1) to skip the second column
+ .TextFileColumnDataTypes = Array(1, 9, 1)
+ 'xlGeneralFormat General 1
+ 'xlTextFormat Text 2
+ 'xlMDYFormat Month-Day-Year 3
+ 'xlDMYFormat Day-Month-Year 4
+ 'xlYMDFormat Year-Month-Day 5
+ 'xlMYDFormat Month-Year-Day 6
+ 'xlDYMFormat Day-Year-Month 7
+ 'xlYDMFormat Year-Day-Month 8
+ 'xlSkipColumn Skip 9
+ ' Get the data from the txt file
+ .Refresh BackgroundQuery:=False
+ End With
+ ActiveSheet.QueryTables(1).Delete
+ Next Fnum
+ 'Delete the first sheet of basebook
+ On Error Resume Next
+ Application.DisplayAlerts = False
+ basebook.Worksheets(1).Delete
+ Application.DisplayAlerts = True
+ On Error GoTo 0
+ CleanUp:
+ ChDirNet SaveDriveDir
+ With Application
+ .ScreenUpdating = True
+ .EnableEvents = True
+ End With
+ End If
+ End Sub
+ Example for txt files with a Fixed Width
+ Replace :
+ 'This example use xlDelimited
+ 'See a example for xlFixedWidth below the macro
+ .TextFileParseType = xlDelimited
+ 'Set your Delimiter to true
+ .TextFileTabDelimiter = True
+ .TextFileSemicolonDelimiter = False
+ .TextFileCommaDelimiter = False
+ .TextFileSpaceDelimiter = False
+ With:
+ .TextFileParseType = xlFixedWidth
+ 'Set the width for each column
+ .TextFileFixedColumnWidths = Array(5, 4, 8)
+ Example for CSV files
+ The macro below will copy every csv file that you select with
+GetOpenFilename to your workbook.
+ If you select ten csv files in the folder then you end up with 10 new
+worksheets in
+ your workbook. Each worksheet will have the name of the csv file.
+ Note: you can hold the CTRL key if you want to select more files or use
+the Shift key to select
+ a block of files in GetOpenFilename. Tip: With Ctrl a you select all
+files in the folder.
+ Copy all code in a normal module of your workbook
+ Alt F11
+ Insert Module
+ Paste the code
+ Alt q to go back to Excel
+ Alt F8 to open the macro dialog
+ Select the macro and press Run
+ Note: if the result is not what you expect, it is because you have no
+control over how Excel imports the
+ csv files. if you change the extension from csv to txt you can use the
+macro above for txt files and
+ have more control (format of the columns)
+ Private Declare Function SetCurrentDirectoryA Lib \_
+ "kernel32" (ByVal lpPathName As String) As Long
+ Public Function ChDirNet(szPath As String) As Boolean
+ 'based on Rob Bovey's code
+ Dim lReturn As Long
+ lReturn = SetCurrentDirectoryA(szPath)
+ ChDirNet = CBool(lReturn <> 0)
+ End Function
+ Sub Get\_CSV\_Files()
+ 'For Excel 2000 and higher
+ Dim Fnum As Long
+ Dim mybook As Workbook
+ Dim basebook As Workbook
+ Dim CSVFileNames As Variant
+ Dim SaveDriveDir As String
+ Dim ExistFolder As Boolean
+ 'Save the current dir
+ SaveDriveDir = CurDir
+ 'You can change the start folder if you want for
+ 'GetOpenFilename,you can use a network or local folder.
+ 'For example ChDirNet("C:\Users\Ron\test")
+ 'It now use Excel's Default File Path
+ ExistFolder = ChDirNet(Application.DefaultFilePath)
+ If ExistFolder = False Then
+ MsgBox "Error changing folder"
+ Exit Sub
+ End If
+ CSVFileNames = Application.GetOpenFilename \_
+ (filefilter:="CSV Files (*.csv), *.csv", MultiSelect:=True)
+ If IsArray(CSVFileNames) Then
+ On Error GoTo CleanUp
+ With Application
+ .ScreenUpdating = False
+ .EnableEvents = False
+ End With
+ 'Add workbook with one sheet
+ Set basebook = Workbooks.Add(xlWBATWorksheet)
+ 'Loop through the array with csv files
+ For Fnum = LBound(CSVFileNames) To UBound(CSVFileNames)
+ Set mybook = Workbooks.Open(CSVFileNames(Fnum))
+ 'Copy the sheet of the csv file after the last sheet in
+ 'basebook (this is the new workbook)
+ mybook.Worksheets(1).Copy After:= \_
+
+basebook.Sheets(basebook.Sheets.Count)
+ On Error Resume Next
+ ActiveSheet.Name = Right(CSVFileNames(Fnum),
+Len(CSVFileNames(Fnum)) - \_
+
+InStrRev(CSVFileNames(Fnum),
+"\", , 1))
+ On Error GoTo 0
+ mybook.Close savechanges:=False
+ Next Fnum
+ 'Delete the first sheet of basebook
+ On Error Resume Next
+ Application.DisplayAlerts = False
+ basebook.Worksheets(1).Delete
+ Application.DisplayAlerts = True
+ On Error GoTo 0
+ CleanUp:
+ ChDirNet SaveDriveDir
+ With Application
+ .ScreenUpdating = True
+ .EnableEvents = True
+ End With
+ End If
+ End Sub
+ More information
+ If you want to merge csv or txt files in one worksheet then see this
+page.
+ http://www.rondebruin.nl/csv.htm
+ For more information about importing txt files visit Chip Pearson's
+site.
+ http://www.cpearson.com/excel/imptext.htm
+ Saving XL files as Text/CSV (J.E McGimpsey)
+ http://www.mcgimpsey.com/excel/textfiles.html
+
+**** example
+
+Private Declare Function SetCurrentDirectoryA Lib \_
+ "kernel32" (ByVal lpPathName As String) As Long
+ Public Function ChDirNet(szPath As String) As Boolean
+ 'based on Rob Bovey's code
+ Dim lReturn As Long
+ lReturn = SetCurrentDirectoryA(szPath)
+ ChDirNet = CBool(lReturn <> 0)
+ End Function
+ Sub Get\_TXT\_Files()
+ 'For Excel 2000 and higher
+ Dim Fnum As Long
+ Dim mysheet As Worksheet
+ Dim basebook As Workbook
+ Dim TxtFileNames As Variant
+ Dim QTable As QueryTable
+ Dim SaveDriveDir As String
+ Dim ExistFolder As Boolean
+ 'Save the current dir
+ SaveDriveDir = CurDir
+ 'You can change the start folder if you want for
+ 'GetOpenFilename,you can use a network or local folder.
+ 'For example ChDirNet("C:\Users\Ron\test")
+ 'It now use Excel's Default File Path
+ ExistFolder = ChDirNet(Application.DefaultFilePath)
+ If ExistFolder = False Then
+ MsgBox "Error changing folder"
+ Exit Sub
+ End If
+ TxtFileNames = Application.GetOpenFilename \_
+ (filefilter:="TXT Files (*.txt), *.txt", MultiSelect:=True)
+ If IsArray(TxtFileNames) Then
+ On Error GoTo CleanUp
+ With Application
+ .ScreenUpdating = False
+ .EnableEvents = False
+ End With
+ 'Add workbook with one sheet
+ Set basebook = Workbooks.Add(xlWBATWorksheet)
+ 'Loop through the array with txt files
+ For Fnum = LBound(TxtFileNames) To UBound(TxtFileNames)
+ 'Add a new worksheet for the name of the txt file
+ Set mysheet = Worksheets.Add(After:=basebook. \_
+ Sheets(basebook.Sheets.Count))
+ On Error Resume Next
+ mysheet.Name = Right(TxtFileNames(Fnum),
+Len(TxtFileNames(Fnum)) - \_
+ InStrRev(TxtFileNames(Fnum), "\", ,
+1))
+ On Error GoTo 0
+ With ActiveSheet.QueryTables.Add(Connection:= \_
+ "TEXT;" & TxtFileNames(Fnum),
+Destination:=Range("A1"))
+ .TextFilePlatform = xlWindows
+ .TextFileStartRow = 1
+ .TextFileParseType = xlFixedWidth
+ 'Set the width for each column
+ .TextFileFixedColumnWidths = Array(7, 7, 7)
+ 'Set the format for each column if you want (Default =
+General)
+ 'For example Array(1, 9, 1) to skip the second column
+ .TextFileColumnDataTypes = Array(1, 1, 1)
+ 'xlGeneralFormat General 1
+ 'xlTextFormat Text 2
+ 'xlMDYFormat Month-Day-Year 3
+ 'xlDMYFormat Day-Month-Year 4
+ 'xlYMDFormat Year-Month-Day 5
+ 'xlMYDFormat Month-Year-Day 6
+ 'xlDYMFormat Day-Year-Month 7
+ 'xlYDMFormat Year-Day-Month 8
+ 'xlSkipColumn Skip 9
+ ' Get the data from the txt file
+ .Refresh BackgroundQuery:=False
+ End With
+ ActiveSheet.QueryTables(1).Delete
+ Next Fnum
+ 'Delete the first sheet of basebook
+ On Error Resume Next
+ Application.DisplayAlerts = False
+ basebook.Worksheets(1).Delete
+ Application.DisplayAlerts = True
+ On Error GoTo 0
+ CleanUp:
+ ChDirNet SaveDriveDir
+ With Application
+ .ScreenUpdating = True
+ .EnableEvents = True
+ End With
+ End If
+ End Sub
+
+*** get macros available in all your workbooks
+
+ How do I create a PERSONAL.XLS(B) or Add-in
+ Ron de Bruin (last update 8-april-2008)
+ Go back to the Excel tips page
+ PERSONAL.XLS(B)
+ If you want that certain code is available in all your workbooks, then
+use your
+ PERSONAL.XLS or in Excel 2007 your PERSONAL.XLSB file.
+ What is it:
+ This is a hidden workbook that opens when you start Excel.
+ The code you copy in this workbook is available in all workbooks you
+have opened in Excel.
+ Where is it:
+ If it exists, you can find the file in the Excel startup folder.
+ C:\Documents and Settings\Ron\Application Data\Microsoft\Excel\XLSTART
+ In Vista look here
+ C:\Users\Ron\AppData\Roaming\Microsoft\Excel\XLSTART
+ Note: Ron is the username in the path above
+ With code you find the correct path on your machine with this line
+ 1) Open excel
+ 2) Hit alt-F11 to get to the VBE
+ 3) Hit ctrl-g to see the immediate window and type this:
+ 4) ?Application.StartupPath
+ You'll see the startup path returned
+ How do you create the file if it does not exist:
+ If it does not exist then record a dummy macro and change the "Store
+macro in:"
+ drop down to Personal Macro Workbook. Excel creates the file for you
+then in the correct folder.
+ Excel 97-2003: Tools>Macro...Record New Macro.
+ Excel 2007: On the "Developer" tab click on Record macro.
+ To display the "Developer" tab go to Office Button >Excel
+Options...Popular.
+ Or faster click the button on the bottom left corner of the Excel 2007
+window to start the recording.
+ Press OK in the dialog that you see now
+ Because we only want Excel to create the file for us we can stop the
+recording directly.
+ Press the Stop Recording button or use Tools>Macros...Stop recording in
+Excel 97-2003
+ In Excel 2007 you can press the Stop Recording Button on the Developers
+tab or click the
+ button on the bottom left corner of the Excel window to stop the
+recording
+ Now we use Alt F11 to go to the VBE editor(working in all Excel
+versions)
+ Or:
+ Excel 97-2003: Tools>Macro>Visual Basic Editor.
+ Excel 2007: Click on the button named "Visual Basic" on the "Developer"
+tab
+ Make the file ready
+ Note: I use the name PERSONAL.XLS in the text below but in Excel 2007
+the name is PERSONAL.XLSB
+ To be sure that we see the Project Window, Code window and the
+Properties window we use one time.
+ Ctrl-r (to see the project explorer)
+ F7 (to view the code window)
+ F4 (to view the properties window)
+ Now we give the PERSONAL.XLS a unique project name (Default is
+VBAProject)
+ Select the PERSONAL.XLS in the project window and change the name in
+the properties window.
+ 
+ Now use Ctrl-s or File>Save in the VBA editor to save the PERSONAL.XLS.
+ We are now ready to add code (macros or/and functions) to this file so
+we can use it in all the workbooks.
+ With Insert>Module in the VBA editor you can also add more modules to
+the PERSONAL.XLS.
+ This way you can organize your code in this file.
+ Use only code here that you use yourself and not code that you use in
+files that you distribute to other users.
+ In this case add the code in the modules of the workbook itself. Or see
+the ”Add-in” part on this page.
+ Example 1: Macro
+ Public Sub Test()
+ MsgBox "Insert your favorite code here"
+ End Sub
+ 1) Select the PERSONAL.XLS in the project window and click on the +
+before it
+ 2) Then click on the + before Modules
+ 3) Double click on Module1 to open the code window on the right
+ 4) We copy/paste the example macro in this module.
+ 5) Now use Ctrl-s or File>Save in the VBA editor to save the
+PERSONAL.XLS.
+ 6) We use Alt--q to go back to Excel or use "File >Close and Return to
+Microsoft Excel".
+ 7) You can run the macro then with Alt-F8 or Tools>Macro...Macros /
+Developer tab>Macros
+ Note: You can delete the dummy macro that we used to create the
+PERSONAL.XLS.
+ Example 2: Function
+ This function gives you the ISO week number that is used in Europe and
+a lot of other countries.
+ Note: This function is not available in Excel.
+ Public Function IsoWeekNum(d1 As Date) As Integer
+ ' Daniel Maher
+ Dim d2 As Long
+ d2 = DateSerial(Year(d1 - Weekday(d1 - 1) + 4), 1, 3)
+ IsoWeekNum = Int((d1 - d2 + Weekday(d2) + 5) / 7)
+ End Function
+ 1) Select the PERSONAL.XLS in the project window and click on the +
+before it
+ 2) Then click on the + before Modules
+ 3) Double click on Module1 to open the code window on the right
+ 4) We copy/paste the example function in this module.
+ 5) Now use Ctrl-s or File>Save in the VBA editor to save the
+PERSONAL.XLS.
+ 6) We use Alt--q to go back to Excel or use "File >Close and Return to
+Microsoft Excel".
+ Now we can use this in a worksheet cell with the date in A1
+ =PERSONAL.XLS!IsoWeekNum(A1)
+ If you create a reference in the workbook where you want to use it to
+your
+ PERSONAL.XLS then you can use
+ =IsoWeekNum(A1)
+ Go to Tools>References in the VBA editor with the workbook selected in
+the project window and
+ add a check mark before RonPersonal. (Save the workbook then)
+ Problems with the PERSONAL.XLS(B) workbook
+ What to do if your PERSONAL.XLS(B) is visible
+ When you open Excel and you see PERSONAL.XLS(B) in the title bar you
+can use this to hide it.
+ Excel 97-2003: Window>Hide
+ Excel 2007 : On the View tab in the window group choose Hide
+ Then close Excel and say Yes to save the changes to your PERSONAL file.
+ PERSONAL.XLS(B) will not open but is in the correct location
+ When Excel think the file is corrupt it can disable the file.
+ You can re-enable it here but if it is really corrupted replace it with
+a backup.
+ Excel 2002-2003: Help>About MS Excel>Disabled items
+ Excel 2007 : Office button>Excel Options..Add-ins
+ In the "Manage:" dropdown (bottom of the
+dialog)
+ Choose "Disabled Items
+ Go
+ Use a Add-in
+ You can also create an add-in to store code that you want to use in all
+workbooks.
+ (A add-in is also a hidden workbook like PERSONAL.XLS)
+ This is a good way if you want to distribute code to other users. Open
+a new workbook and copy
+ the code in this workbook and then use File>Save As or Office
+Button>Save As to save it as
+ Excel Add-in, use a name like MyUtility.xla for example(xlam in Excel
+2007).
+ Before you save it give MyUtility.xla a unique project name (Default is
+VBAProject)
+ see how I do it above with the PERSONAL.XLS(B).
+ You can install the add-in like this:
+ 1) Tools>Add-ins in Excel 97-2003
+ Office Button>Excel Options..Add-ins and then Manage Excel
+add-ins...Go in Excel 2007
+ Or use the shortcut (Alt ti example for the English version)
+ 2) Browse to the XLA(M) file
+ 3) OK
+ 4) Add a check mark before it in the list
+ 5) OK
+ Now every time you open Excel it opens the add-in and you can use the
+code in all workbooks.
+ Note: Add-in macros not show up in Alt-F8 or in Tools>Macro...Macros in
+97-2003 or in
+ Developer tab>Macros in 2007. You must make a menu for the macros in
+the add-in.
+ Create your own menu/toolbar to run the code
+ Excel 97-2003
+ Debra Dalgleish's (Toolbar example from Dave Peterson)
+ http://www.contextures.com/xlToolbar02.html
+ Creating Custom Menus (John Walkenbach)
+ http://www.j-walk.com/ss/excel/tips/tip53.htm
+ Ole P. Erlandsen's Web Site (Example workbooks)
+ http://www.erlandsendata.no/english/index.php?d=endownloadcommandbars
+ How to customize menus and menu bars in Excel
+
+http://support.microsoft.com/default.aspx?scid=kb;en-us;830502&Product=xlw
+ Excel 2007
+ In Excel 2007 check out this example for your PERSONAL.XLSB
+ http://www.rondebruin.nl/qat.htm
+ If you want to change the ribbon check out this page
+ http://www.rondebruin.nl/ribbon.htm
+ Note: It is not possible to use XML to create a menu for your
+PERSONAL.XLSB.
+ Use the QAT example then
+ 
+
+*** combine multiple columns to one
+
+to do that:
+ make sure your columns are formatted as general
+ in a new column (again general) go to the first cell and choose the
+formula concentrate (under the text catagory)
+ choose the colums to join
+
+*** how to apply a formula to the entire column in excel other than
+draging it down
+
+As long as there are no blank rows, go to the first cell, then hover
+your mouse to the lower right hand corner of that cell until the cursor
+becomes a black plus, then double click. It will copy the formula down
+until it finds a break (blank cell) in what you're trying to copy.
+
+*** Julian Dates
+
+*Julian Dates*
+ 
+ Many applications (especially mainframe systems) store dates in the
+Julian format, which is a 5 digit number, consisting of a 2 digit year
+and a 3 digit day-of-year number. For example, 24-August-1999 is stored
+as 99236, since 24-August is the 236th day of the year. Excel doesn't
+support Julian dates directly, but you can use them with only a few
+fairly simple formulas.
+ The first section of this page describes the Excel worksheet formulas
+for working with Julian dates. The second section describes the VBA
+procedures.
+ Converting A Standard Date To A Julian Date
+ The formula below will convert a standard Excel date in A1 to a Julian
+Date.
+ =RIGHT(YEAR(A1),2)&TEXT(A1-DATE(YEAR(A1),1,0),"000")
+ This formula takes the 2 right-most characters of the YEAR of the date
+in A1, and then appends the number of days between the date in A1 and
+the 0th day of that year. The TEXT function formats the day-of-year
+number as three digits, with leading zeros if necessary.
+ Converting A Julian Date To A Standard Date
+ The formula below will convert a Julian date to a standard Excel date.
+ =DATE(IF(0+(LEFT(A1,2))<30,2000,1900)+LEFT(A1,2),1,RIGHT(A1,3))
+ If the year digits of the Julian date are less than 30 (i.e., 00 to
+29), the date is assumed to be a 2000 century year. If the year digits
+of the Julian date are greater than or equal to 30 (i.e., 30 to 99), the
+date is assumed to be a 1900 century year. This formula works by taking
+advantage of the fact that the DATE function can handle days beyond the
+"normal" days in a month. For example, DATE correctly computes
+100-Jan-1999 to be 10-April-1999.
+ These Julian dates must have the leading zero or zeros for years
+between 2000 and 2009. For example the 123rd day of 2000 must be entered
+as 00123. Format the cell as TEXT before entering the data, or enter an
+apostrophe before the Julian date -- e.g., '00123. This will prevent
+Excel from treating the Julian date as a number and suppressing the
+leading zeros.
+ Differences Between Two Julian Dates
+ Now that we know how to convert a Julian date to a standard date, it is
+simple to compute the number of days between two Julian dates. For
+example, suppose we have two Julian dates, in A1 and A2. The formula
+below will subtract the two dates.
+ =DATE(IF(0+(LEFT(A1,2))<30,2000,1900)+LEFT(A1,2),1,RIGHT(A1,3)) -
+ DATE(IF(0+(LEFT(A2,2))<30,2000,1900)+LEFT(A2,2),1,RIGHT(A2,3))
+ Be sure to format the cell containing this formula as General.
+ Add A Number Of Days To A Julian Date
+ You can add some number of days to a Julian date. Suppose we have a
+Julian date in A1, and a number of days in A2. The formula below will
+add the number of days in A2 to the Julian date in A1, and return the
+date as a standard Excel date.
+ =DATE(IF(0+(LEFT(A1,2))<30,2000,1900)+LEFT(A1,2),1,RIGHT(A1,3)+A2)
+ This formula works just like the formula we used to convert a Julian
+date to a standard date, but adds A2 to the days. This works because the
+DATE function will correctly compute a date like 400-Jan-1999 to be
+4-Feb-2000. For example, if A1 contains 99001 (1-Jan-1999), and A2
+contains 400, the formula will return 5-Feb-2000.
+ If you want your result to be a Julian date, then use the following
+formula, which is just our first formula to convert standard dates to
+Julian dates, with the formula above inserted into it wherever we need
+the date.
+ =RIGHT(YEAR(DATE(IF(0+(LEFT(A1,2))<30,2000,1900)+
+ LEFT(A1,2),1,RIGHT(A1,3)+A2)),2)&
+TEXT(DATE(IF(0+(LEFT(A1,2))<30,2000,1900)+LEFT(A1,2),1,RIGHT(A1,3)+A2)-
+ DATE(YEAR(DATE(IF(0+(LEFT(A1,2))<30,2000,1900)+
+ LEFT(A1,2),1,RIGHT(A1,3)+A2)),1,0),"000")
+ For example, if A1 contains 99001 (1-Jan-1999), and A2 contains 400,
+the formula will return 00036, the 36th day of the year 2000.
+ 
+ VBA Procedures For Working With Julian Dates
+ The functions below will convert a Julian date to a standard Excel
+date, and convert a standard Excel date to a Julian date.
+ The JDateToDate function will accept a five-character Julian date and
+return the standard Excel date.
+ Function JDateToDate(JDate As String) As Long
+ Dim TheYear As Integer
+ Dim TheDay As Integer
+ Dim TheDate As Long
+ TheYear = CInt(Left(JDate, 2))
+ If TheYear < 30 Then
+ TheYear = TheYear + 2000
+ Else
+ TheYear = TheYear + 1900
+ End If
+ TheDay = CInt(Right(JDate, 3))
+ TheDate = DateSerial(TheYear, 1, TheDay)
+ JDateToDate = TheDate
+ End Function
+ The DateToJDate function will accept a standard Excel date and return a
+five-character string representing the Julian date.
+ Function DateToJDate(TheDate As Long) As String
+ Dim TheYear As Integer
+ Dim TheDays As Integer
+ Dim JDate As String
+ TheYear = Year(TheDate)
+ TheDays = DateDiff("d", DateSerial(TheYear, 1, 0), TheDate)
+ JDate = Right(Format(TheYear, "0000"), 2) & Format(TheDays, "000")
+ DateToJDate = JDate
+ End Function
+ 
+
+*** excel macros
+
+**** intro
+
+ Merge cells from all or some worksheets into one Master sheet
+ Ron de Bruin (last update 22-Nov-2008)
+ Go back to the Excel tips page
+ The examples will add a worksheet with the name RDBMergeSheet to your
+workbook and will copy cells
+ from every worksheet in the ActiveWorkbook to this worksheet. Each time
+you run one of the examples it
+ will first delete the summary worksheet named RDBMergeSheet if it
+exists and then adds a new one to
+ the workbook. This ensures that the data is always up to date after you
+run the code.
+ In the examples I use a values/formats copy but below the first example
+there is example code to copy
+ only the values or everything to the RDBMergeSheet.
+ Important:
+ The macro examples use the LastRow or LastCol function that you can
+find in the last section of this page.
+ Copy the macro(s) and function(s) in a standard module of your
+workbook.
+ If you have no idea where to paste the code then check out this page.
+ http://www.rondebruin.nl/code.htm
+ Example workbook
+ Download a zip file with a workbook with the code from this page to
+test the examples.
+ Download MergeWorksheetsCode.zip
+ Copy a range of each sheet
+ Note: This example use the function LastRow
+ This example copy the range A1:G1 from each worksheet.
+ Change the range here
+ 'Fill in the range that you want to copy
+ Set CopyRng = sh.Range("A1:G1")
+ Sub CopyRangeFromMultiWorksheets()
+ Dim sh As Worksheet
+ Dim DestSh As Worksheet
+ Dim Last As Long
+ Dim CopyRng As Range
+ With Application
+ .ScreenUpdating = False
+ .EnableEvents = False
+ End With
+ 'Delete the sheet "RDBMergeSheet" if it exist
+ Application.DisplayAlerts = False
+ On Error Resume Next
+ ActiveWorkbook.Worksheets("RDBMergeSheet").Delete
+ On Error GoTo 0
+ Application.DisplayAlerts = True
+ 'Add a worksheet with the name "RDBMergeSheet"
+ Set DestSh = ActiveWorkbook.Worksheets.Add
+ DestSh.Name = "RDBMergeSheet"
+ 'loop through all worksheets and copy the data to the DestSh
+ For Each sh In ActiveWorkbook.Worksheets
+ If sh.Name <> DestSh.Name Then
+ 'Find the last row with data on the DestSh
+ Last = LastRow(DestSh)
+ 'Fill in the range that you want to copy
+ Set CopyRng = sh.Range("A1:G1")
+ 'Test if there enough rows in the DestSh to copy all the
+data
+ If Last + CopyRng.Rows.Count > DestSh.Rows.Count Then
+ MsgBox "There are not enough rows in the Destsh"
+ GoTo ExitTheSub
+ End If
+ 'This example copies values/formats, if you only want to
+copy the
+ 'values or want to copy everything look at the example
+below this macro
+ CopyRng.Copy
+ With DestSh.Cells(Last + 1, "A")
+ .PasteSpecial xlPasteValues
+ .PasteSpecial xlPasteFormats
+ Application.CutCopyMode = False
+ End With
+ 'Optional: This will copy the sheet name in the H column
+ DestSh.Cells(Last + 1,
+"H").Resize(CopyRng.Rows.Count).Value = sh.Name
+ End If
+ Next
+ ExitTheSub:
+ Application.Goto DestSh.Cells(1)
+ 'AutoFit the column width in the DestSh sheet
+ DestSh.Columns.AutoFit
+ With Application
+ .ScreenUpdating = True
+ .EnableEvents = True
+ End With
+ End Sub
+ Tips to change the examples
+ In the example above I copy the range A1:G1 but you can also use
+ Set CopyRng = sh.UsedRange
+ To copy all cells with data on the sheet
+ Set CopyRng = sh.Range("A1").CurrentRegion
+ To copy the current region of cell A1
+ The current region is a range bounded by any combination of blank rows
+and blank column
+ Set CopyRng = sh.Rows("1")
+ To copy a whole row or rows( use "1:8" then)
+ Copy only values or everything
+ Replace this :
+ CopyRng.Copy
+ With DestSh.Cells(Last + 1, "A")
+ .PasteSpecial xlPasteValues
+ .PasteSpecial xlPasteFormats
+ Application.CutCopyMode = False
+ End With
+ With:
+ With CopyRng
+ DestSh.Cells(Last + 1, "A").Resize(.Rows.Count, \_
+ .Columns.Count).Value = .Value
+ End With
+ If you only want to copy the values.
+ Or Replace this :
+ CopyRng.Copy
+ With DestSh.Cells(Last + 1, "A")
+ .PasteSpecial xlPasteValues
+ .PasteSpecial xlPasteFormats
+ Application.CutCopyMode = False
+ End With
+ With:
+ CopyRng.Copy DestSh.Cells(Last + 1, "A")
+ If you want to copy everything.
+ Do not loop through all sheets in the workbook
+ 
+ Tip 1:
+ Replace this line:
+ If sh.Name <> DestSh.Name Then
+ With:
+ If LCase(Left(sh.Name, 4)) = "week" Then
+ If you want to copy only from sheets with a name that start with week.
+ Tip 2:
+ Replace this line:
+ If sh.Name <> DestSh.Name Then
+ with:
+ If sh.Name <> DestSh.Name And sh.Visible = True Then
+ If you want to copy only from the visible sheets in your workbook.
+ Tip 3:
+ Replace this line:
+ For Each sh In ActiveWorkbook.Worksheets
+ With:
+ For Each sh In ActiveWorkbook.Sheets(Array("Sheet1", "Sheet3"))
+ And remove this two lines:
+ If sh.Name <> DestSh.Name Then and End If before Next
+ If you want to copy only from sheets that are in the Array.
+ Tip 4:
+ Replace this line:
+ If sh.Name <> DestSh.Name Then
+ With:
+ If IsError(Application.Match(sh.Name, \_
+ Array(DestSh.Name, "Total Sheet", "Menu Sheet"), 0)) Then
+ If you want to exclude more sheets then the DestSh.
+ Copy from row 2 till the last row with data
+ Note: This example use the function LastRow
+ Note: You can use the tips above also in this example
+ In example 1 you can see that you can copy all cells on a worksheet
+with this line:
+ Set CopyRng = sh.UsedRange
+ But what if we do not want to copy the same header row each time.
+ The example below will copy from row 2 till the last row with data on
+each sheet
+ Change the start row in the macro if you want to start in a different
+row.
+ 'Fill in the start row
+ StartRow = 2
+ If you want to copy the header row in the first row of the
+RDBMergeSheet
+ then copy the code below if each worksheet have the same headers after
+ this line : If sh.Name <> DestSh.Name Then
+ 'Copy header row, change the range if you use more columns
+ If WorksheetFunction.CountA(DestSh.UsedRange) = 0 Then
+ sh.Range("A1:Z1").Copy DestSh.Range("A1")
+ End If
+ Sub CopyDataWithoutHeaders()
+ Dim sh As Worksheet
+ Dim DestSh As Worksheet
+ Dim Last As Long
+ Dim shLast As Long
+ Dim CopyRng As Range
+ Dim StartRow As Long
+ With Application
+ .ScreenUpdating = False
+ .EnableEvents = False
+ End With
+ 'Delete the sheet "RDBMergeSheet" if it exist
+ Application.DisplayAlerts = False
+ On Error Resume Next
+ ActiveWorkbook.Worksheets("RDBMergeSheet").Delete
+ On Error GoTo 0
+ Application.DisplayAlerts = True
+ 'Add a worksheet with the name "RDBMergeSheet"
+ Set DestSh = ActiveWorkbook.Worksheets.Add
+ DestSh.Name = "RDBMergeSheet"
+ 'Fill in the start row
+ StartRow = 2
+ 'loop through all worksheets and copy the data to the DestSh
+ For Each sh In ActiveWorkbook.Worksheets
+ If sh.Name <> DestSh.Name Then
+ 'Find the last row with data on the DestSh and sh
+ Last = LastRow(DestSh)
+ shLast = LastRow(sh)
+ 'If sh is not empty and if the last row >= StartRow copy
+the CopyRng
+ If shLast > 0 And shLast >= StartRow Then
+ 'Set the range that you want to copy
+ Set CopyRng = sh.Range(sh.Rows(StartRow),
+sh.Rows(shLast))
+ 'Test if there enough rows in the DestSh to copy all
+the data
+ If Last + CopyRng.Rows.Count > DestSh.Rows.Count Then
+ MsgBox "There are not enough rows in the Destsh"
+ GoTo ExitTheSub
+ End If
+ 'This example copies values/formats, if you only want
+to copy the
+ 'values or want to copy everything look below example 1
+on this page
+ CopyRng.Copy
+ With DestSh.Cells(Last + 1, "A")
+ .PasteSpecial xlPasteValues
+ .PasteSpecial xlPasteFormats
+ Application.CutCopyMode = False
+ End With
+ End If
+ End If
+ Next
+ ExitTheSub:
+ Application.Goto DestSh.Cells(1)
+ 'AutoFit the column width in the DestSh sheet
+ DestSh.Columns.AutoFit
+ With Application
+ .ScreenUpdating = True
+ .EnableEvents = True
+ End With
+ End Sub
+ Copy a range/column after the last column with data
+ Note: This example use the function LastCol
+ This example copy column A from each sheet after the last column with
+data on the DestSh.
+ I use A:A to copy the whole column but you can also use a range like
+A1:A10
+ Use A:C if you want to copy more columns.
+ Change it here
+ 'Fill in the column(s) that you want to copy
+ Set CopyRng = sh.Range("A:A")
+ Remember that Excel 97-2003 have only 256 columns.
+ Excel 2007 has 16384 columns.
+ Sub AppendDataAfterLastColumn()
+ Dim sh As Worksheet
+ Dim DestSh As Worksheet
+ Dim Last As Long
+ Dim CopyRng As Range
+ With Application
+ .ScreenUpdating = False
+ .EnableEvents = False
+ End With
+ 'Delete the sheet "RDBMergeSheet" if it exist
+ Application.DisplayAlerts = False
+ On Error Resume Next
+ ActiveWorkbook.Worksheets("RDBMergeSheet").Delete
+ On Error GoTo 0
+ Application.DisplayAlerts = True
+ 'Add a worksheet with the name "RDBMergeSheet"
+ Set DestSh = ActiveWorkbook.Worksheets.Add
+ DestSh.Name = "RDBMergeSheet"
+ 'loop through all worksheets and copy the data to the DestSh
+ For Each sh In ActiveWorkbook.Worksheets
+ If sh.Name <> DestSh.Name Then
+ 'Find the last Column with data on the DestSh
+ Last = LastCol(DestSh)
+ 'Fill in the column(s) that you want to copy
+ Set CopyRng = sh.Range("A:A")
+ 'Test if there enough rows in the DestSh to copy all the
+data
+ If Last + CopyRng.Columns.Count > DestSh.Columns.Count Then
+ MsgBox "There are not enough columns in the Destsh"
+ GoTo ExitTheSub
+ End If
+ 'This example copies values/formats and Column width
+ CopyRng.Copy
+ With DestSh.Cells(1, Last + 1)
+ .PasteSpecial 8 ' Column width
+ .PasteSpecial xlPasteValues
+ .PasteSpecial xlPasteFormats
+ Application.CutCopyMode = False
+ End With
+ End If
+ Next
+ ExitTheSub:
+ Application.Goto DestSh.Cells(1)
+ With Application
+ .ScreenUpdating = True
+ .EnableEvents = True
+ End With
+ End Sub
+ Where do I copy the macros and functions from this page?
+ 1. Alt-F11
+ 2. Insert>Module from the Menu bar
+ 3. Paste the Code there
+ 4. Alt-Q to go back to Excel
+ 5. Alt-F8 to run the subs
+ Common Functions required for all routines:
+ Function LastRow(sh As Worksheet)
+ On Error Resume Next
+ LastRow = sh.Cells.Find(What:="*", \_
+ After:=sh.Range("A1"), \_
+ Lookat:=xlPart, \_
+ LookIn:=xlFormulas, \_
+ SearchOrder:=xlByRows, \_
+ SearchDirection:=xlPrevious, \_
+ MatchCase:=False).Row
+ On Error GoTo 0
+ End Function
+ Function LastCol(sh As Worksheet)
+ On Error Resume Next
+ LastCol = sh.Cells.Find(What:="*", \_
+ After:=sh.Range("A1"), \_
+ Lookat:=xlPart, \_
+ LookIn:=xlFormulas, \_
+ SearchOrder:=xlByColumns, \_
+ SearchDirection:=xlPrevious, \_
+ MatchCase:=False).Column
+ On Error GoTo 0
+ End Function
+ More Information
+ Consolidating Data from Multiple Worksheets into a Summary Worksheet in
+Excel
+ http://msdn.microsoft.com/en-us/library/cc793964.aspx
+ Create a summary worksheet from all worksheets (with formulas)
+ http://www.rondebruin.nl/summary.htm
+ You can find more about finding the last row or column on this page
+ http://www.rondebruin.nl/last.htm
+ Merge data from all workbooks in a folder
+ http://www.rondebruin.nl/copy3.htm
+
+**** append last column
+
+Sub AppendDataAfterLastColumn()
+ Dim sh As Worksheet
+ Dim DestSh As Worksheet
+ Dim Last As Long
+ Dim CopyRng As Range
+ With Application
+ .ScreenUpdating = False
+ .EnableEvents = False
+ End With
+ 'Delete the sheet "RDBMergeSheet" if it exist
+ Application.DisplayAlerts = False
+ On Error Resume Next
+ ActiveWorkbook.Worksheets("RDBMergeSheet").Delete
+ On Error GoTo 0
+ Application.DisplayAlerts = True
+ 'Add a worksheet with the name "RDBMergeSheet"
+ Set DestSh = ActiveWorkbook.Worksheets.Add
+ DestSh.Name = "RDBMergeSheet"
+ 'loop through all worksheets and copy the data to the DestSh
+ For Each sh In ActiveWorkbook.Worksheets
+ If sh.Name <> DestSh.Name Then
+ 'Find the last Column with data on the DestSh
+ Last = LastCol(DestSh)
+ 'Fill in the column(s) that you want to copy
+ Set CopyRng = sh.Range("C:C")
+ 'Test if there enough rows in the DestSh to copy all the
+data
+ If Last + CopyRng.Columns.Count > DestSh.Columns.Count Then
+ MsgBox "There are not enough columns in the Destsh"
+ GoTo ExitTheSub
+ End If
+ 'This example copies values/formats and Column width
+ CopyRng.Copy
+ With DestSh.Cells(1, Last + 1)
+ .PasteSpecial 8 ' Column width
+ .PasteSpecial xlPasteValues
+ .PasteSpecial xlPasteFormats
+ Application.CutCopyMode = False
+ End With
+ End If
+ Next
+ ExitTheSub:
+ Application.Goto DestSh.Cells(1)
+ With Application
+ .ScreenUpdating = True
+ .EnableEvents = True
+ End With
+ End Sub
+
+**** last row function
+
+Function LastRow(sh As Worksheet)
+ On Error Resume Next
+ LastRow = sh.Cells.Find(What:="*", \_
+ After:=sh.Range("A1"), \_
+ Lookat:=xlPart, \_
+ LookIn:=xlFormulas, \_
+ SearchOrder:=xlByRows, \_
+ SearchDirection:=xlPrevious, \_
+ MatchCase:=False).Row
+ On Error GoTo 0
+ End Function
+
+**** last colum function
+
+Function LastCol(sh As Worksheet)
+ On Error Resume Next
+ LastCol = sh.Cells.Find(What:="*", \_
+ After:=sh.Range("A1"), \_
+ Lookat:=xlPart, \_
+ LookIn:=xlFormulas, \_
+ SearchOrder:=xlByColumns, \_
+ SearchDirection:=xlPrevious, \_
+ MatchCase:=False).Column
+ On Error GoTo 0
+ End Function
+
+**** import batch txt files
+
+ Copy every TXT or CSV file that you select in a new worksheet of a
+newly created workbook
+ Ron de Bruin (last update 30-Aug-2007)
+ Go back to the Excel tips page
+ Example for TXT files
+ The macro below will copy every txt file that you select with
+GetOpenFilename to your workbook.
+ If you select ten txt files in the folder then you end up with 10 new
+worksheets in
+ your workbook. Each worksheet will have the name of the txt file.
+ Note: you can hold the CTRL key if you want to select more files or use
+the Shift key to select
+ a block of files in GetOpenFilename. Tip: With Ctrl a you select all
+files in the folder.
+ I did not use all the properties for QueryTables in my macro because a
+lot of them are already
+ what I want by default. If you don't get the results you want then
+record a macro when you
+ perform the action manually.
+ Then look at the recorded code and add the code lines to the macro
+Get\_TXT\_Files.
+ Copy all code in a normal module of your workbook
+ Alt F11
+ Insert Module
+ Paste the code
+ Alt q to go back to Excel
+ Alt F8 to open the macro dialog
+ Select the macro and press Run
+ This example is for Delimited txt files, see the example below this
+macro for FixedWidth
+ Read the information in the macro Get\_TXT\_Files before you try the
+macro.
+ Maybe you want to use a different delimiter or change the format of a
+column.
+ Private Declare Function SetCurrentDirectoryA Lib \_
+ "kernel32" (ByVal lpPathName As String) As Long
+ Public Function ChDirNet(szPath As String) As Boolean
+ 'based on Rob Bovey's code
+ Dim lReturn As Long
+ lReturn = SetCurrentDirectoryA(szPath)
+ ChDirNet = CBool(lReturn <> 0)
+ End Function
+ Sub Get\_TXT\_Files()
+ 'For Excel 2000 and higher
+ Dim Fnum As Long
+ Dim mysheet As Worksheet
+ Dim basebook As Workbook
+ Dim TxtFileNames As Variant
+ Dim QTable As QueryTable
+ Dim SaveDriveDir As String
+ Dim ExistFolder As Boolean
+ 'Save the current dir
+ SaveDriveDir = CurDir
+ 'You can change the start folder if you want for
+ 'GetOpenFilename,you can use a network or local folder.
+ 'For example ChDirNet("C:\Users\Ron\test")
+ 'It now use Excel's Default File Path
+ ExistFolder = ChDirNet(Application.DefaultFilePath)
+ If ExistFolder = False Then
+ MsgBox "Error changing folder"
+ Exit Sub
+ End If
+ TxtFileNames = Application.GetOpenFilename \_
+ (filefilter:="TXT Files (*.txt), *.txt", MultiSelect:=True)
+ If IsArray(TxtFileNames) Then
+ On Error GoTo CleanUp
+ With Application
+ .ScreenUpdating = False
+ .EnableEvents = False
+ End With
+ 'Add workbook with one sheet
+ Set basebook = Workbooks.Add(xlWBATWorksheet)
+ 'Loop through the array with txt files
+ For Fnum = LBound(TxtFileNames) To UBound(TxtFileNames)
+ 'Add a new worksheet for the name of the txt file
+ Set mysheet = Worksheets.Add(After:=basebook. \_
+ Sheets(basebook.Sheets.Count))
+ On Error Resume Next
+ mysheet.Name = Right(TxtFileNames(Fnum),
+Len(TxtFileNames(Fnum)) - \_
+ InStrRev(TxtFileNames(Fnum), "\", ,
+1))
+ On Error GoTo 0
+ With ActiveSheet.QueryTables.Add(Connection:= \_
+ "TEXT;" & TxtFileNames(Fnum),
+Destination:=Range("A1"))
+ .TextFilePlatform = xlWindows
+ .TextFileStartRow = 1
+ 'This example use xlDelimited
+ 'See a example for xlFixedWidth below the macro
+ .TextFileParseType = xlDelimited
+ 'Set your Delimiter to true
+ .TextFileTabDelimiter = True
+ .TextFileSemicolonDelimiter = False
+ .TextFileCommaDelimiter = False
+ .TextFileSpaceDelimiter = False
+ 'Set the format for each column if you want (Default =
+General)
+ 'For example Array(1, 9, 1) to skip the second column
+ .TextFileColumnDataTypes = Array(1, 9, 1)
+ 'xlGeneralFormat General 1
+ 'xlTextFormat Text 2
+ 'xlMDYFormat Month-Day-Year 3
+ 'xlDMYFormat Day-Month-Year 4
+ 'xlYMDFormat Year-Month-Day 5
+ 'xlMYDFormat Month-Year-Day 6
+ 'xlDYMFormat Day-Year-Month 7
+ 'xlYDMFormat Year-Day-Month 8
+ 'xlSkipColumn Skip 9
+ ' Get the data from the txt file
+ .Refresh BackgroundQuery:=False
+ End With
+ ActiveSheet.QueryTables(1).Delete
+ Next Fnum
+ 'Delete the first sheet of basebook
+ On Error Resume Next
+ Application.DisplayAlerts = False
+ basebook.Worksheets(1).Delete
+ Application.DisplayAlerts = True
+ On Error GoTo 0
+ CleanUp:
+ ChDirNet SaveDriveDir
+ With Application
+ .ScreenUpdating = True
+ .EnableEvents = True
+ End With
+ End If
+ End Sub
+ Example for txt files with a Fixed Width
+ Replace :
+ 'This example use xlDelimited
+ 'See a example for xlFixedWidth below the macro
+ .TextFileParseType = xlDelimited
+ 'Set your Delimiter to true
+ .TextFileTabDelimiter = True
+ .TextFileSemicolonDelimiter = False
+ .TextFileCommaDelimiter = False
+ .TextFileSpaceDelimiter = False
+ With:
+ .TextFileParseType = xlFixedWidth
+ 'Set the width for each column
+ .TextFileFixedColumnWidths = Array(5, 4, 8)
+ Example for CSV files
+ The macro below will copy every csv file that you select with
+GetOpenFilename to your workbook.
+ If you select ten csv files in the folder then you end up with 10 new
+worksheets in
+ your workbook. Each worksheet will have the name of the csv file.
+ Note: you can hold the CTRL key if you want to select more files or use
+the Shift key to select
+ a block of files in GetOpenFilename. Tip: With Ctrl a you select all
+files in the folder.
+ Copy all code in a normal module of your workbook
+ Alt F11
+ Insert Module
+ Paste the code
+ Alt q to go back to Excel
+ Alt F8 to open the macro dialog
+ Select the macro and press Run
+ Note: if the result is not what you expect, it is because you have no
+control over how Excel imports the
+ csv files. if you change the extension from csv to txt you can use the
+macro above for txt files and
+ have more control (format of the columns)
+ Private Declare Function SetCurrentDirectoryA Lib \_
+ "kernel32" (ByVal lpPathName As String) As Long
+ Public Function ChDirNet(szPath As String) As Boolean
+ 'based on Rob Bovey's code
+ Dim lReturn As Long
+ lReturn = SetCurrentDirectoryA(szPath)
+ ChDirNet = CBool(lReturn <> 0)
+ End Function
+ Sub Get\_CSV\_Files()
+ 'For Excel 2000 and higher
+ Dim Fnum As Long
+ Dim mybook As Workbook
+ Dim basebook As Workbook
+ Dim CSVFileNames As Variant
+ Dim SaveDriveDir As String
+ Dim ExistFolder As Boolean
+ 'Save the current dir
+ SaveDriveDir = CurDir
+ 'You can change the start folder if you want for
+ 'GetOpenFilename,you can use a network or local folder.
+ 'For example ChDirNet("C:\Users\Ron\test")
+ 'It now use Excel's Default File Path
+ ExistFolder = ChDirNet(Application.DefaultFilePath)
+ If ExistFolder = False Then
+ MsgBox "Error changing folder"
+ Exit Sub
+ End If
+ CSVFileNames = Application.GetOpenFilename \_
+ (filefilter:="CSV Files (*.csv), *.csv", MultiSelect:=True)
+ If IsArray(CSVFileNames) Then
+ On Error GoTo CleanUp
+ With Application
+ .ScreenUpdating = False
+ .EnableEvents = False
+ End With
+ 'Add workbook with one sheet
+ Set basebook = Workbooks.Add(xlWBATWorksheet)
+ 'Loop through the array with csv files
+ For Fnum = LBound(CSVFileNames) To UBound(CSVFileNames)
+ Set mybook = Workbooks.Open(CSVFileNames(Fnum))
+ 'Copy the sheet of the csv file after the last sheet in
+ 'basebook (this is the new workbook)
+ mybook.Worksheets(1).Copy After:= \_
+
+basebook.Sheets(basebook.Sheets.Count)
+ On Error Resume Next
+ ActiveSheet.Name = Right(CSVFileNames(Fnum),
+Len(CSVFileNames(Fnum)) - \_
+
+InStrRev(CSVFileNames(Fnum),
+"\", , 1))
+ On Error GoTo 0
+ mybook.Close savechanges:=False
+ Next Fnum
+ 'Delete the first sheet of basebook
+ On Error Resume Next
+ Application.DisplayAlerts = False
+ basebook.Worksheets(1).Delete
+ Application.DisplayAlerts = True
+ On Error GoTo 0
+ CleanUp:
+ ChDirNet SaveDriveDir
+ With Application
+ .ScreenUpdating = True
+ .EnableEvents = True
+ End With
+ End If
+ End Sub
+ More information
+ If you want to merge csv or txt files in one worksheet then see this
+page.
+ http://www.rondebruin.nl/csv.htm
+ For more information about importing txt files visit Chip Pearson's
+site.
+ http://www.cpearson.com/excel/imptext.htm
+ Saving XL files as Text/CSV (J.E McGimpsey)
+ http://www.mcgimpsey.com/excel/textfiles.html
+
+***** example
+
+Private Declare Function SetCurrentDirectoryA Lib \_
+ "kernel32" (ByVal lpPathName As String) As Long
+ Public Function ChDirNet(szPath As String) As Boolean
+ 'based on Rob Bovey's code
+ Dim lReturn As Long
+ lReturn = SetCurrentDirectoryA(szPath)
+ ChDirNet = CBool(lReturn <> 0)
+ End Function
+ Sub Get\_TXT\_Files()
+ 'For Excel 2000 and higher
+ Dim Fnum As Long
+ Dim mysheet As Worksheet
+ Dim basebook As Workbook
+ Dim TxtFileNames As Variant
+ Dim QTable As QueryTable
+ Dim SaveDriveDir As String
+ Dim ExistFolder As Boolean
+ 'Save the current dir
+ SaveDriveDir = CurDir
+ 'You can change the start folder if you want for
+ 'GetOpenFilename,you can use a network or local folder.
+ 'For example ChDirNet("C:\Users\Ron\test")
+ 'It now use Excel's Default File Path
+ ExistFolder = ChDirNet(Application.DefaultFilePath)
+ If ExistFolder = False Then
+ MsgBox "Error changing folder"
+ Exit Sub
+ End If
+ TxtFileNames = Application.GetOpenFilename \_
+ (filefilter:="TXT Files (*.txt), *.txt", MultiSelect:=True)
+ If IsArray(TxtFileNames) Then
+ On Error GoTo CleanUp
+ With Application
+ .ScreenUpdating = False
+ .EnableEvents = False
+ End With
+ 'Add workbook with one sheet
+ Set basebook = Workbooks.Add(xlWBATWorksheet)
+ 'Loop through the array with txt files
+ For Fnum = LBound(TxtFileNames) To UBound(TxtFileNames)
+ 'Add a new worksheet for the name of the txt file
+ Set mysheet = Worksheets.Add(After:=basebook. \_
+ Sheets(basebook.Sheets.Count))
+ On Error Resume Next
+ mysheet.Name = Right(TxtFileNames(Fnum),
+Len(TxtFileNames(Fnum)) - \_
+ InStrRev(TxtFileNames(Fnum), "\", ,
+1))
+ On Error GoTo 0
+ With ActiveSheet.QueryTables.Add(Connection:= \_
+ "TEXT;" & TxtFileNames(Fnum),
+Destination:=Range("A1"))
+ .TextFilePlatform = xlWindows
+ .TextFileStartRow = 1
+ .TextFileParseType = xlFixedWidth
+ 'Set the width for each column
+ .TextFileFixedColumnWidths = Array(7, 7, 7)
+ 'Set the format for each column if you want (Default =
+General)
+ 'For example Array(1, 9, 1) to skip the second column
+ .TextFileColumnDataTypes = Array(1, 1, 1)
+ 'xlGeneralFormat General 1
+ 'xlTextFormat Text 2
+ 'xlMDYFormat Month-Day-Year 3
+ 'xlDMYFormat Day-Month-Year 4
+ 'xlYMDFormat Year-Month-Day 5
+ 'xlMYDFormat Month-Year-Day 6
+ 'xlDYMFormat Day-Year-Month 7
+ 'xlYDMFormat Year-Day-Month 8
+ 'xlSkipColumn Skip 9
+ ' Get the data from the txt file
+ .Refresh BackgroundQuery:=False
+ End With
+ ActiveSheet.QueryTables(1).Delete
+ Next Fnum
+ 'Delete the first sheet of basebook
+ On Error Resume Next
+ Application.DisplayAlerts = False
+ basebook.Worksheets(1).Delete
+ Application.DisplayAlerts = True
+ On Error GoTo 0
+ CleanUp:
+ ChDirNet SaveDriveDir
+ With Application
+ .ScreenUpdating = True
+ .EnableEvents = True
+ End With
+ End If
+ End Sub
+
+**** get macros available in all your workbooks
+
+ How do I create a PERSONAL.XLS(B) or Add-in
+ Ron de Bruin (last update 8-april-2008)
+ Go back to the Excel tips page
+ PERSONAL.XLS(B)
+ If you want that certain code is available in all your workbooks, then
+use your
+ PERSONAL.XLS or in Excel 2007 your PERSONAL.XLSB file.
+ What is it:
+ This is a hidden workbook that opens when you start Excel.
+ The code you copy in this workbook is available in all workbooks you
+have opened in Excel.
+ Where is it:
+ If it exists, you can find the file in the Excel startup folder.
+ C:\Documents and Settings\Ron\Application Data\Microsoft\Excel\XLSTART
+ In Vista look here
+ C:\Users\Ron\AppData\Roaming\Microsoft\Excel\XLSTART
+ Note: Ron is the username in the path above
+ With code you find the correct path on your machine with this line
+ 1) Open excel
+ 2) Hit alt-F11 to get to the VBE
+ 3) Hit ctrl-g to see the immediate window and type this:
+ 4) ?Application.StartupPath
+ You'll see the startup path returned
+ How do you create the file if it does not exist:
+ If it does not exist then record a dummy macro and change the "Store
+macro in:"
+ drop down to Personal Macro Workbook. Excel creates the file for you
+then in the correct folder.
+ Excel 97-2003: Tools>Macro...Record New Macro.
+ Excel 2007: On the "Developer" tab click on Record macro.
+ To display the "Developer" tab go to Office Button >Excel
+Options...Popular.
+ Or faster click the button on the bottom left corner of the Excel 2007
+window to start the recording.
+ Press OK in the dialog that you see now
+ Because we only want Excel to create the file for us we can stop the
+recording directly.
+ Press the Stop Recording button or use Tools>Macros...Stop recording in
+Excel 97-2003
+ In Excel 2007 you can press the Stop Recording Button on the Developers
+tab or click the
+ button on the bottom left corner of the Excel window to stop the
+recording
+ Now we use Alt F11 to go to the VBE editor(working in all Excel
+versions)
+ Or:
+ Excel 97-2003: Tools>Macro>Visual Basic Editor.
+ Excel 2007: Click on the button named "Visual Basic" on the "Developer"
+tab
+ Make the file ready
+ Note: I use the name PERSONAL.XLS in the text below but in Excel 2007
+the name is PERSONAL.XLSB
+ To be sure that we see the Project Window, Code window and the
+Properties window we use one time.
+ Ctrl-r (to see the project explorer)
+ F7 (to view the code window)
+ F4 (to view the properties window)
+ Now we give the PERSONAL.XLS a unique project name (Default is
+VBAProject)
+ Select the PERSONAL.XLS in the project window and change the name in
+the properties window.
+ 
+ Now use Ctrl-s or File>Save in the VBA editor to save the PERSONAL.XLS.
+ We are now ready to add code (macros or/and functions) to this file so
+we can use it in all the workbooks.
+ With Insert>Module in the VBA editor you can also add more modules to
+the PERSONAL.XLS.
+ This way you can organize your code in this file.
+ Use only code here that you use yourself and not code that you use in
+files that you distribute to other users.
+ In this case add the code in the modules of the workbook itself. Or see
+the ”Add-in” part on this page.
+ Example 1: Macro
+ Public Sub Test()
+ MsgBox "Insert your favorite code here"
+ End Sub
+ 1) Select the PERSONAL.XLS in the project window and click on the +
+before it
+ 2) Then click on the + before Modules
+ 3) Double click on Module1 to open the code window on the right
+ 4) We copy/paste the example macro in this module.
+ 5) Now use Ctrl-s or File>Save in the VBA editor to save the
+PERSONAL.XLS.
+ 6) We use Alt--q to go back to Excel or use "File >Close and Return to
+Microsoft Excel".
+ 7) You can run the macro then with Alt-F8 or Tools>Macro...Macros /
+Developer tab>Macros
+ Note: You can delete the dummy macro that we used to create the
+PERSONAL.XLS.
+ Example 2: Function
+ This function gives you the ISO week number that is used in Europe and
+a lot of other countries.
+ Note: This function is not available in Excel.
+ Public Function IsoWeekNum(d1 As Date) As Integer
+ ' Daniel Maher
+ Dim d2 As Long
+ d2 = DateSerial(Year(d1 - Weekday(d1 - 1) + 4), 1, 3)
+ IsoWeekNum = Int((d1 - d2 + Weekday(d2) + 5) / 7)
+ End Function
+ 1) Select the PERSONAL.XLS in the project window and click on the +
+before it
+ 2) Then click on the + before Modules
+ 3) Double click on Module1 to open the code window on the right
+ 4) We copy/paste the example function in this module.
+ 5) Now use Ctrl-s or File>Save in the VBA editor to save the
+PERSONAL.XLS.
+ 6) We use Alt--q to go back to Excel or use "File >Close and Return to
+Microsoft Excel".
+ Now we can use this in a worksheet cell with the date in A1
+ =PERSONAL.XLS!IsoWeekNum(A1)
+ If you create a reference in the workbook where you want to use it to
+your
+ PERSONAL.XLS then you can use
+ =IsoWeekNum(A1)
+ Go to Tools>References in the VBA editor with the workbook selected in
+the project window and
+ add a check mark before RonPersonal. (Save the workbook then)
+ Problems with the PERSONAL.XLS(B) workbook
+ What to do if your PERSONAL.XLS(B) is visible
+ When you open Excel and you see PERSONAL.XLS(B) in the title bar you
+can use this to hide it.
+ Excel 97-2003: Window>Hide
+ Excel 2007 : On the View tab in the window group choose Hide
+ Then close Excel and say Yes to save the changes to your PERSONAL file.
+ PERSONAL.XLS(B) will not open but is in the correct location
+ When Excel think the file is corrupt it can disable the file.
+ You can re-enable it here but if it is really corrupted replace it with
+a backup.
+ Excel 2002-2003: Help>About MS Excel>Disabled items
+ Excel 2007 : Office button>Excel Options..Add-ins
+ In the "Manage:" dropdown (bottom of the
+dialog)
+ Choose "Disabled Items
+ Go
+ Use a Add-in
+ You can also create an add-in to store code that you want to use in all
+workbooks.
+ (A add-in is also a hidden workbook like PERSONAL.XLS)
+ This is a good way if you want to distribute code to other users. Open
+a new workbook and copy
+ the code in this workbook and then use File>Save As or Office
+Button>Save As to save it as
+ Excel Add-in, use a name like MyUtility.xla for example(xlam in Excel
+2007).
+ Before you save it give MyUtility.xla a unique project name (Default is
+VBAProject)
+ see how I do it above with the PERSONAL.XLS(B).
+ You can install the add-in like this:
+ 1) Tools>Add-ins in Excel 97-2003
+ Office Button>Excel Options..Add-ins and then Manage Excel
+add-ins...Go in Excel 2007
+ Or use the shortcut (Alt ti example for the English version)
+ 2) Browse to the XLA(M) file
+ 3) OK
+ 4) Add a check mark before it in the list
+ 5) OK
+ Now every time you open Excel it opens the add-in and you can use the
+code in all workbooks.
+ Note: Add-in macros not show up in Alt-F8 or in Tools>Macro...Macros in
+97-2003 or in
+ Developer tab>Macros in 2007. You must make a menu for the macros in
+the add-in.
+ Create your own menu/toolbar to run the code
+ Excel 97-2003
+ Debra Dalgleish's (Toolbar example from Dave Peterson)
+ http://www.contextures.com/xlToolbar02.html
+ Creating Custom Menus (John Walkenbach)
+ http://www.j-walk.com/ss/excel/tips/tip53.htm
+ Ole P. Erlandsen's Web Site (Example workbooks)
+ http://www.erlandsendata.no/english/index.php?d=endownloadcommandbars
+ How to customize menus and menu bars in Excel
+
+http://support.microsoft.com/default.aspx?scid=kb;en-us;830502&Product=xlw
+ Excel 2007
+ In Excel 2007 check out this example for your PERSONAL.XLSB
+ http://www.rondebruin.nl/qat.htm
+ If you want to change the ribbon check out this page
+ http://www.rondebruin.nl/ribbon.htm
+ Note: It is not possible to use XML to create a menu for your
+PERSONAL.XLSB.
+ Use the QAT example then
+ 
+
+**** combine multiple columns to one
+
+to do that:
+ make sure your columns are formatted as general
+ in a new column (again general) go to the first cell and choose the
+formula concentrate (under the text catagory)
+ choose the colums to join
+
+**** how to apply a formula to the entire column in excel other than
+draging it down
+
+As long as there are no blank rows, go to the first cell, then hover
+your mouse to the lower right hand corner of that cell until the cursor
+becomes a black plus, then double click. It will copy the formula down
+until it finds a break (blank cell) in what you're trying to copy.
+
+*** prepare word tables from excel
+
+**** CONCATENATE example
+
+= CONCATENATE(ROUND(I21,2), " ± ", ROUND(J21,2))
+ where:
+ I21-is the first cell used
+ ,2-is the number of digits to round to
+ J21-is the second cell used
+ " ± "- is the text symbol between the 2 numbers
+
+**** nice CI example
+
+use this command to create nice CI's
+ =CONCATENATE("(",ROUND(K3,2),";",ROUND(L3,2),")")
+
+*** Confidence intervals/OR/Precent
+
+**** calculate OR
+
+for the Odds ratio use the coefficient value (B3)
+ Note: the example here is per a 10 unit increase and thus the values
+are multiplied by 10
+ *=(EXP(B3*10))*
+ for the CI OR use the coefficient value (B3) and Std.Error (C3)
+ *Low*
+ *=EXP((B3-1.96*C3)*10)*
+ *High*
+ *=EXP((B3+1.96*C3)*10)*
+*** change sheet sides (language heb/eng)
+ 
+** Powerpoint
+*** make a global change to all the fonts in the presentation
+PowerPoint has a convenient feature that allows you to make a global change to all the fonts in the presentation at one time.
+
+    PowerPoint 2010 and 2007 - In the Editing section, at the right side of the Home tab of the ribbon, click the Replace > Replace Fonts...
+    PowerPoint 2003 - Choose Format > Replace Fonts... from the menu.
+
+    In the Replace Font dialog box, under the heading Replace, select the font you wish to change from the drop down list of fonts in this presentation.
+
+    Under the heading With, select the new font for the presentation.
+
+    Click the Replace button. All the text in the entire presentation that used the original font is now replaced with your new choice.
+
+    Repeat the process if your presentation contains a second font that you wish to change.
+** Endnote
+
+*** export endnote library
+
+Export references from Endnote in ``Endnote Export'' format
+ Endnote has no built-in mechanism to generate Labels, so we'll use an
+easily parsed plain text version of the library.
+ Open the Endnote library containing your references.
+ Select all refs.
+ Select Edit [IMAGE png] Output Styles [IMAGE png] Open Style
+Manager and set style to ``EndNote Export''.
+ Export refs to a text file by selecting File [IMAGE png] Export...
+(make sure ``Text Only''is chosen under ``Save file as type'')
+ Close the Endnote library.
+
+*** import a journal style
+
+go to the end note site and download the specific journal style
+ save it in the end note folder under the style folder
+ edit and enable it under the style manager
+** Word
+
+*** create line numbering
+
+** Windows
+*** create symlink
+
+download the software Link Shell Extension
+
+[[http://schinagl.priv.at/nt/hardlinkshellext/hardlinkshellext.html][http://schinagl.priv.at/nt/hardlinkshellext/hardlinkshellext.html]]
+ install it and then through the windows explorer (the default windows
+File manager) do this
+ pick a file/folder you want to use as the base, right click and issue
+ 'pick source'
+ then go to where you want the symlink to be and right click
+ "Drops As.."
+ and then in the submenu choose your need , usually its:
+ Symbolic link
+ if you want to cancell in the middle and start again issue:
+ Cancel link creation
+ Note: you can rename the symlink to anything you want after creating it
+
+** mendely
+
+*** online
+
+**** delete all files from library
+
+i
+
+f you want to delete all your documents and references, you can always
+do this by selecting 'All' documents on your web library. The first 20
+documents will be selected; however, you have the option of selecting
+all the documents existing in your library by clicking on 'Select all xx
+documents' (the link next to the text 'All 20 documents on this page are
+selected').
+
+Once this is done you need to click on 'Delete Documents' at the top, to
+send these documents to the Trash. To delete them definitely from your
+web library, you must then click on 'All Deleted Documents' and then on
+'Empty Trash'.
+
+Finally, you need to sync with Mendeley Desktop to empty your local
+library.
+
+ Pasted from
+<[[http://support.mendeley.com/customer/portal/questions/171566-how-do-i-delete-all-documents-from-mendeley-web-][http://support.mendeley.com/customer/portal/questions/171566-how-do-i-delete-all-documents-from-mendeley-web-]]>
+ [[~/Dropbox/Org/Uni/Guides/uni_software_files/img
+/Image_3yIWm3QdxEWAZyOedgydsA_0001.png]]
+** Dropbox
+*** recover deleted files
+
+there is another way to restore files from your computer in case the above method fails. Dropbox also keeps a hidden cache of files in a backup storage within the Dropbox settings. In Windows Vista and Windows 7 open a new Windows Explorer window or folder. Copy and paste the following line to the location bar at the top of the folder and press Enter:
+
+%HOMEPATH%\Dropbox\.dropbox.cache
+
+This will open your Dropbox cache within the Application Data folder. To restore a file, drag it out of this cache folder into another folder or onto your desktop.
+** Teamviewer
+*** Make Teamviewer remember position, scaling, full screen
+Make Teamviewer remember position, scaling, full screen
+** Zotero
+*** add zotero keyboard shortcut in MS word 
+
+#+DOWNLOADED: /home/zeltak/ZH_tmp/zotero_keybaord.png @ 2014-03-13 14:34:38
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/zotero_keybaord_2014-03-13_14:34:38.png]]

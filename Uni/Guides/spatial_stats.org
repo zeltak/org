@@ -1,0 +1,217 @@
+#+TITLE: spatial\_stats
+
+* spatial statstics
+
+** intro
+
+[[spatial_stats_files/attach/spatial_analysis.pdf][Attachment #01
+(spatial\_analysis.pdf)]]
+
+** spatial regression
+
+*Spatial regression decision process
+*
+  Begin the process at the top of the graph and consider the standard
+(i.e.,
+ not the robust forms) LM-Error and LM-Lag test statistics. If neither
+rejects
+ the null hypothesis, stick with the OLS results. It is likely that in
+this case,
+ the Moran's I test statistic will not reject the null hypothesis either
+ If oneof the LM test statistics rejects the null hypothesis, and the
+other does not,
+ then the decision is straightforward as well: estimate the alternative
+spatial
+ regression model that matches the test statistic that rejects the null.
+So,
+ if LM-Error rejects the null, but LM-lag does not, estimate a spatial
+error
+ model, and vice versa.
+ When both LM test statistics reject the null hypothesis, proceed to the
+ bottom part of the graph and consider the Robust forms of the test
+statistics.
+ Typically, only one of them will be signiﬁcant (as in the below
+Figure), or on
+ will be orders of magnitude more signiﬁcant than the other (e.g., p <
+0.00000
+ compared to p < 0.03). In that case, the decision is simple: estimate
+the
+ spatial regression model matching the (most) signiﬁcant statistic. In
+the
+ rare instance that both would be highly signiﬁcant, go with the model
+with
+ the largest value for the test statistic. However, in this situation,
+some
+ caution is needed, since there may be other sources of misspeciﬁcation.
+One
+ obvious action to take is to consider the results for diﬀerent spatial
+weights
+ and/or to change the basic (i.e., not the spatial part) speciﬁcation of
+the
+ model. As shown in the Figure, there are also rare instances where
+neither
+ of the Robust LM test statistics are signiﬁcant. In those cases, more
+serious
+ misspeciﬁcation problems are likely present and those should be
+addressed
+ ﬁrst.
+
+** morans i
+
+*Intro
+*
+ In statistics, Moran's I is a measure of spatial autocorrelation
+developed by Patrick A.P. Moran.
+ Like autocorrelation, spatial autocorrelation means that adjacent
+observations of the same phenomenon are correlated. However,
+autocorrelation is about proximity in time. Spatial autocorrelation is
+about proximity in (two-dimensional) space. Spatial autocorrelation is
+more complex than autocorrelation because the correlation is
+two-dimensional and bi-directional.
+ Negative (positive) values indicate negative (positive) spatial
+autocorrelation. Values range from −1 (indicating perfect dispersion) to
++1 (perfect correlation). A zero values indicates a random spatial
+pattern.
+ For statistical hypothesis testing, Moran's I values can be transformed
+to Z-scores in which values greater than 1.96 or smaller than −1.96
+indicate spatial autocorrelation that is significant at the 5% level.
+ [[spatial_stats_files/img/image.png]]
+ The Value field is whats reported in the tabels for manuscripts
+ Moran's I is inversely related to Geary's C, but it is not identical.
+Moran's I is a measure of global spatial autocorrelation, while Geary's
+C is more sensitive to local spatial autocorrelation*.moran I index*
+ if the MI value is below 0.03 its not significant
+
+** maup-aggregation
+
+*Modifiable areal unit problem              *
+ The *modifiable areal unit problem (MAUP)* is a source of statistical
+bias that can radically affect the results of statistical hypothesis
+tests. MAUP can cause the correlation, or association, between two
+variables to range from -0.99 to +0.99. MAUP occurs when point-based
+measures of spatial phenomena (e.g., population density) are aggregated
+into districts, the resulting summary values (e.g., totals, rates,
+proportions) are influenced by the choice of district boundaries. For
+example, census data may be aggregated into census enumeration
+districts, or postcode areas, or police precincts, or any other spatial
+partition (thus, the 'areal units' are 'modifiable'). Variation in the
+spatial units used for aggregation causes variation in statistical
+results.
+  
+ The issue was discovered in 1934. The term MAUP was first coined and
+described in detail by Openshaw (1984), who lamented that "the areal
+units (zonal objects) used in many geographical studies are arbitrary,
+modifiable, and subject to the whims and fancies of whoever is doing, or
+did, the aggregating." (Openshaw, 1984, p.3). The problem is especially
+crucial when the aggregate data are used for
+[[http://en.wikipedia.org/wiki/Cluster][cluster]] analysis for spatial
+[[http://en.wikipedia.org/wiki/Epidemiology][epidemiology]],
+[[http://en.wikipedia.org/wiki/Spatial_statistics][spatial statistics]]
+or [[http://en.wikipedia.org/wiki/Choropleth_map][choropleth mapping]],
+in which misinterpretations can easily be made without realizing it.
+Many fields of science, especially
+[[http://en.wikipedia.org/wiki/Human_geography][human geography]] are
+prone to disregard the MAUP when drawing inferences from statistics
+based on aggregated data. MAUP is closely related to the topic of
+[[http://en.wikipedia.org/wiki/Ecological_fallacy][ecological fallacy]]
+and ecological bias.
+  
+ Ecological bias caused by MAUP has been documented as two separate
+effects that usually occur simultaneously during the analysis of
+aggregated data. The scale effect causes variation in statistical
+results between different levels of aggregation. Therefore, association
+between variables depends on the size of areal units for which data are
+reported. Generally, correlation increases as areal unit size increases.
+The zone effect describes variation in correlation statistics caused by
+the regrouping of data into different configurations at the same scale.
+  
+ Research since the 1930's has found extra variation in statistical
+results because of MAUP. The standard methods of calculating
+within-group and between-group variance do not account for the extra
+variance seen in MAUP studies as the groupings change. MAUP can be used
+as a methodology to calculate upper and lower limits as well as average
+regression parameters for multiple sets of spatial groupings.
+  
+ Several suggestions have been made in the literature to reduce
+aggregation bias during
+[[http://en.wikipedia.org/wiki/Regression_analysis][regression
+analysis]]. A researcher might correct the variance-covariance matrix
+using samples from individual-level data (Holt et al., 1996).
+Alternatively, one might focus on local spatial regression rather than
+global regression. Alternatively, a researcher might attempt to design
+areal units to maximize a particular statistical result (Openshaw,
+1984). Others have argued that it may be difficult to construct a single
+set of optimal aggregation units for multiple variables, each of which
+may exhibit non-stationarity and spatial autocorrelation across space in
+different ways. Others have suggested developing statistics that change
+across scales in a predictable way, perhaps using the fractal dimension
+as a scale independent measure of spatial relationships. Others have
+suggested Bayesian hierarchical models as a general methodology for
+combining aggregated and individual-level data for ecological inference.
+  
+ Studies of the MAUP based on empirical data can only provide limited
+insight due to an inability to control relationships between multiple
+spatial variables. Data simulation is necessary to have control over
+various properties of individual level data. Simulation studies such as
+those by Swift et al. (2008) have demonstrated that the spatial support
+of variables can effect the magnitude of ecological bias caused by
+spatial data aggregation.
+  
+ MAUP sensitivity analysis
+ Using simulations for univariate data, Larsen (2000) advocated the use
+of a Variance Ratio to investigate the effect of spatial configuration,
+spatial association and data aggregation. A detailed description of
+variation of statistics due to MAUP is presented by Reynolds, H. (1998).
+Reynold's research demonstrates the importance of the spatial
+arrangement and spatial autocorrelation of data values. Reynold's
+simulation experiments were expanded by Swift, A. (2009). A series of
+nine exercises begins with simulated regression analysis and a spatial
+trend, then focuses on the topic of MAUP in the context of
+[[http://en.wikipedia.org/wiki/Spatial_epidemiology][spatial
+epidemiology]]. A method of MAUP sensitivity analysis is presented that
+demonstrates MAUP is not entirely a problem. MAUP can be used as an
+analytical tool to help understand spatial heterogeneity and
+[[http://en.wikipedia.org/wiki/Spatial_autocorrelation][spatial
+autocorrelation]].
+  
+ This topic is of particular importance because (in some cases) data
+aggregation can obscure strong a
+[[http://en.wikipedia.org/wiki/Correlation][correlation]] between
+variables, making the relationship appear weak or even negative.
+Conversely, MAUP can cause random variables to appear as if there is a
+significant association, when there is not. Multivariate regression
+parameters are more sensitive to MAUP than correlation coefficients.
+Until a more analytical solution to MAUP is available, spatial
+sensitivity analysis using a variety of areal units is recommended as a
+methodology to estimate uncertainty of correlation and regression
+coefficients due to ecological bias.
+  
+ References
+
+-  Openshaw, S. (1984). /The Modifiable Areal Unit Problem./ Norwich:
+   Geo Books.
+   [[http://en.wikipedia.org/wiki/Special:BookSources/0860941345][ISBN
+   0-86094-134-5]].
+-  Holt D, Steel D, Tranmer M, Wrigley N. (1996). "Aggregation and
+   ecological effects in geographically based data." "Geographical
+   Analysis" 28:244{261.
+-  Unwin, D. J. (1996). "GIS, spatial analysis and spatial statistics."
+   /Progress in Human Geography./ *20*: 540-551.
+-  Cressie, N. (1996). "Change of Support and the Modifiable Areal Unit
+   Problem." “Geographical Systems“, 3:159-180.
+-  Reynolds, H. (1998). "The Modifiable Area Unit Problem: Empirical
+   Analysis By Statistical Simulation." PhD thesis, Department of
+   Geography University of Toronto,
+   [[http://www.badpets.net/Thesis][http://www.badpets.net/Thesis]]
+-  Larsen, J. (2000). "The Modifiable Areal Unit Problem: A problem or a
+   source of spatial information?" PhD thesis, Ohio State University.
+-  Swift, A., Liu, L., and Uber, J. (2008) "Reducing MAUP bias of
+   correlation statistics between water quality and GI illness."
+   Computers, Environment and Urban Systems 32, 134--148
+-  Swift, A. (2009). "MAUP Exercises for GIS and Medical Geography."
+   [[http://www.current.net/andresswift/][http://www.current.net/andresswift/]]
+
+** ecological fallacy
+
+[[spatial_stats_files/attach/ecological_fallacy.pdf][Attachment #02
+(ecological\_fallacy.pdf)]]

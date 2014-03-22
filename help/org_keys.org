@@ -1,0 +1,197 @@
+#+TITLE: emacs_org_shortcuts
+
+
+* Shortcuts
+
+| 'keycombo'                                     | 'key function'                                              |   |
+|------------------------------------------------+-------------------------------------------------------------+---|
+| @Structure@                                    |                                                             |   |
+| ?C-c C-x M?                                    | (org-cut-subtree)                                           |   |
+| ?C-c C-x M-w?                                  | (org-copy-subtree)                                          |   |
+| ?C-c C-x C-y?                                  | (org-paste-subtree)                                         |   |
+| ?M-S-<left>/<right>?                           | (org-promote/demote-subtre> demote all tree and subheading) |   |
+| ?M-S-Enter?                                    | Insert todo header                                          |   |
+| M-S-<up>/<down>                                | (org-move-tree up down)                                     |   |
+| C-c C-w                                        | (org-refile)                                                |   |
+| C-space                                        | to narrow refile (with ido enabled)                         |   |
+| C-c ^                                          | (org-sort) Sort same-level entries.                         |   |
+| ?F9-r? / ?C-x n s?                             | Narrow buffer to current subtree.                           |   |
+| ?F9-w? / ?C-x n w?                             | Widen buffer to remove narrowing.                           |   |
+| C-c *                                          | (org-toggle-heading)                                        |   |
+| Shift-TAB                                      | Return to full view                                         |   |
+| C-q TAB                                        | Normal TAB                                                  |   |
+| C-c C-q (or C-c C-c when on orgfile on header) | insert tag                                                  |   |
+| C-u C-u M-RET                                  | inserts a heading at the end of the parent subtree          |   |
+| C-c -                                          | in a region makes a list item for each line                 |   |
+| C-u C-c -                                      | creates a single item for the whole region                  |   |
+| C-c *                                          | turn item/line into headline                                |   |
+| C-c ^                                          | sort subtree/region/plain-list                              |   |
+| C-'                                            | cycle agenda files                                          |   |
+| A-ESC                                          | ido select buffer                                           |   |
+|------------------------------------------------+-------------------------------------------------------------+---|
+| @spares tree@                                  |                                                             |   |
+| C-c /                                          | start sparse tree                                           |   |
+| C-c C-c                                        | remove higlights in sparse                                  |   |
+| C-c / t                                        | show sparse by todo                                         |   |
+| C-c / m                                        | show sparse by tags                                         |   |
+| C-c a m                                        | (org-tags-view)                                             |   |
+| C-c a < s *SEARCHTERM                          | Search in headlines                                         |   |
+| ?M-p M-s?                                      | Search org using lgrep                                      |   |
+|------------------------------------------------+-------------------------------------------------------------+---|
+| @movment@                                      |                                                             |   |
+| ?C-x C-space?                                  | move to previous spot                                       |   |
+| ?F-10?                                         | 'Alt-tab' between buffer                                    |   |
+| ?M-p M-;?                                      | open org buffers                                            |   |
+| F1                                             | switch buffer left                                          |   |
+| F2                                             | switch buffer right                                         |   |
+| S-F1                                           | switch emacs buffer left                                    |   |
+| S-F2                                           | switch emacs buffer right                                   |   |
+| F-10                                           | Jump between 2 buffers                                      |   |
+|                                                |                                                             |   |
+|                                                |                                                             |   |
+|------------------------------------------------+-------------------------------------------------------------+---|
+| @Table@                                        |                                                             |   |
+| M-S-<down>                                     | insert row                                                  |   |
+| M-S-<up>                                       | KILL row                                                    |   |
+| C-c -                                          | insert horizontal line                                      |   |
+| C-c Pipe                                       | Convert the active region to table                          |   |
+| M-S-<left>                                     | (org-table-delete-column)  *UP/RIGHT for rows*              |   |
+| M-S-<right>                                    | (org-table-insert-column) *UP/RIGHT for rows*               |   |
+| C-c C-x C-w/M-w/C-y                            | cut/copy/paste rectangular region                           |   |
+| C-c ^                                          | (org-table-sort-lines)                                      |   |
+| C-u C-c =                                      | insert formula here/Edit formula                            |   |
+| $1                                             | colum 1                                                     |   |
+| @1                                             | row 1                                                       |   |
+| @9$2=vsum(@2..@7)                              | sum or vmean for mean                                       |   |
+| C-c }                                          | Toggle the display of row and column numbers for a table    |   |
+|                                                |                                                             |   |
+| @dired@                                        |                                                             |   |
+| ?M-1?                                          | dired-jump                                                  |   |
+|------------------------------------------------+-------------------------------------------------------------+---|
+| @Search@                                       |                                                             |   |
+| ?C-c C-j?                                      | Search headlines                                            |   |
+|------------------------------------------------+-------------------------------------------------------------+---|
+| @hyperlink@                                    |                                                             |   |
+| C-u C-c C-l                                    | insert relative link                                        |   |
+| C-c C-l                                        | insert link                                                 |   |
+| C-c C-l (while on link)                        | Edit the link and description parts of the link             |   |
+| C-c C-x C-v (alias='oi')                       | (org-toggle-inline-images)                                  |   |
+|------------------------------------------------+-------------------------------------------------------------+---|
+| @code blocks@                                  |                                                             |   |
+| C-c C-v d                                      | choose block                                                |   |
+| C-c '                                          | edit source code of block                                   |   |
+|------------------------------------------------+-------------------------------------------------------------+---|
+| @TODO/AGENDA@                                  |                                                             |   |
+| C-c .                                          | (org-time-stamp)                                            |   |
+| C-c !                                          | (org-time-stamp-inactive)-DONT create an agenda entry       |   |
+| C-u C-c . OR !                                 | Same as above but with TIME added                           |   |
+| C-c C-o (on Date link)                         | access the agenda for that day                              |   |
+| S- <right> OR <left>                           | org-timestamp-up/down for days                              |   |
+| S- <up> OR <down>                              | change cursor time (based on where cursor is                |   |
+| M-S-RET                                        | insert TODO                                                 |   |
+| @Drawers/Properties@                           |                                                             |   |
+| C-c C-x d                                      | `org-insert-drawer'                                         |   |
+| C-u C-c C-x d                                  | org-insert-property-drawer' !only when on headline!         |   |
+| C-c C-x C-a                                    | Archive                                                     |   |
+|                                                |                                                             |   |
+|------------------------------------------------+-------------------------------------------------------------+---|
+| @spelling/review@                              |                                                             |   |
+| F6 OR M-$                                      | Check word                                                  |   |
+| S-F6 OR :iss                                   | Check buffer or highlighted region                          |   |
+| F5                                             | Fly spell next                                              |   |
+|------------------------------------------------+-------------------------------------------------------------+---|
+| @Frequent commands@                            |                                                             |   |
+| z-edit-file-as-root                            | Edit files as root                                          |   |
+| rotate-windows                                 | switch between windows                                      |   |
+| toggle-window-split                            | switch split position                                       |   |
+| kill-other-buffers                             | Kill all other buffers                                      |   |
+| @plugins@                                      |                                                             |   |
+| comment line(s) NERD                           | ,ci                                                         |   |
+| duplicate and comment NERD                     | ,cc                                                         |   |
+| @editing@                                      |                                                             |   |
+| ?C-x C-q?                                      | make read only                                              |   |
+|                                                |                                                             |   |
+|------------------------------------------------+-------------------------------------------------------------+---|
+| @editing@                                      |                                                             |   |
+| C-S-Pgup                                       | move line up                                                |   |
+| C-S-Pgdown                                     | move line down                                              |   |
+|                                                |                                                             |   |
+|------------------------------------------------+-------------------------------------------------------------+---|
+
+
+
+* Colors                                  
+ 
+-AAA- Headlines H1
++AAA+  Headlines H2                                     
+
+~AAA~                                     
+^AAA^ Path                                 
+%AAA% Tip                                     
+$AAA$ Note                                   
+`AAA` Highlight                                    
+'AAA' Emphasize                                     
+*AAA* BOLD                                      
+!AAA! Warn1                               
+@AAA@ Warn2                                  
+_AAA_ underline                                    
+?AAA?-keybind
+
+
+
+
+¶AAA¶                                                                             
+
+¤AAA¤                                      
+₁₁ | Ar-S-(-)-1
+
+₂₂ |Ar-S-(-)-2
+
+₃₃ |Ar-S-(-)-3
+
+₄Server₄ |Ar-S-(-)-4
+
+₅Client₅ |Ar-S-(-)-5
+
+₆IE₆ |Ar-S-(-)-6
+
+
+* Methods of working
+** images in org mode and naming scheme
+
+download the images manually and save them in the attach folders (new ones open every year), ₆In example₆ 
+file:/home/zeltak/org/attach/images_2013
+give it a name that would be unique:
+
+'filename' 'Nodename' 'number' 'date of download'
+
+₆In example₆ 
+
+#+BEGIN_SRC sh
+food_shak_1_14092013.jpg
+#+END_SRC
+
+then in org mode use ?C-c l? to insert a file link and choose the first one in the series (the ons starting with '1')
+then simply copy paste the links to desired locations changing the number to desired one
+finally toggle image display
+
+to assign a specific size, use the [[file:~/org/files/Tech/linux.org::*scale%20inline%20images%20in%20orgmode][attribute]] options:
+
+#+BEGIN_SRC sh
+#+attr_html: :width 200px
+[[file:~/org/attach/images/gno_4_8722104799_04354338b1_z.jpg]]
+#+END_SRC
+** link to other org notes
+*** Links to org files (Internal) 
+**** link to org mode Headline
+stand on the section you want to link to and press ?C-c l? to store its location
+then use ?C-c C-l? to insert that save link (location when needed) 
+
+$Note-you can also specify it by filename::header name like this:$
+[[file:/home/zeltak/Dropbox/Org/Tech/linux.org::Term color theme (.colors)]]
+**** link to org mode Line Number
+one can use line numbers in file using ::n where 'n' is the line number but thats not recommend
+insert a link that looks like this:
+[[file:/PATH/TO/ORGFILE::25]]
+where the ::25 means line 25 in that file
+[[*black%20ice][black ice]]

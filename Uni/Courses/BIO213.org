@@ -1,0 +1,602 @@
+#+TITLE: BIO213
+
+* Bio 213
+
+** Course Full Pdf
+
+[[BIO213_files/attach/Epi213.pdf][Attachment #01 (Epi213.pdf)]]
+ Attached is the full course PDF
+
+** Intro
+
+*** statistical power
+
+The minimum [[http://en.wikipedia.org/wiki/Sample_size][sample
+size]] *(n)*required to accept the outcome of a statistical test with a
+particular level of confidence
+
+*** t value
+
+as the t-value gets bigger the significance gets smaller
+
+*** variable names
+
+dependent=outcome
+ Independent variables= predictors/covariets/exposures
+ sometimes the *main explanatory*variable/the one that is the one the
+paper is focused on is called the*predictor* while *all other IV
+variables* in the regression are called *covarites
+*Its usually common to include confounders of only the predictor but not
+the all covariets: for example in the birth weight study the predictor
+is "smoking" so anything confounded with smoking should go into the
+model but for "age" you dont need to add confounders for age since its a
+covarrite
+ multivariate: refers to many outcomes per patient
+ multivariable: regression with multiple predictors with one outcome
+
+*** regression notations
+
+The i in the Y (dependent/outcome) variable represent a single case so
+for example a single mother in the birth weight study
+ Y_{i
+}so Y1, Y2......Yx
+ The (Independent variables/predictors) variables have double subscripts
+ [[BIO213_files/img/Pasted.jpg]]
+ X_{11}: Age of the first mother
+ X_{21}: Smoke statuts of the first mother
+ *X's*are the colums in the DB
+ The *i's* refers to the rows (individual mothers)
+
+*** choosing regression type
+
+[[BIO213_files/img/Image_8v.FRyFU71J7rwIfS659uQ_0001.jpg]]
+
+*** cases of regression
+
+ [[BIO213_files/img/Image_XrQxz.d1F2h2p8C6Wt4AQA_0001.jpg]]
+
+*** simple linear reegression
+
+[[BIO213_files/img/Image_J3Lot28OQxufnKLe9kpWBQ_0001.jpg]]
+
+*** correlation coefficent
+
+[[BIO213_files/img/Image_KZrgvDx3a9Kp3KR4N5HaEQ_0001.jpg]]
+
+[[BIO213_files/img/Image_KZrgvDx3a9Kp3KR4N5HaEQ_0003.jpg]][[BIO213_files/img/Image_KZrgvDx3a9Kp3KR4N5HaEQ_0002.jpg]]
+
+*** pearson Vs spearman
+
+Most of the time Pearson correlation are use. This can be used when the
+data (both the DV and IV) is normally distributed.
+ when data is not normally distributed we use the spearman correlation.
+
+*** inspecting the data
+
+when you get a fresh new dataset you *must check that:
+*-all variable have a normal distribution
+ -no weird data values and normal data range (no negatives in places
+where negatives is impossible, IE birth weights etc..)
+ -check that dicotomus variables are coded 0,1 and not 2 and check there
+are no 99 or -9 etc for missing)
+ [[BIO213_files/img/Image_HqhM2PKIGU.EyCkkpy6GIg_0001.jpg]]
+
+*** the best way to present data to reviewrs
+
+the best and most belivable way to present your data is to:
+ 1)show a discriptive table (table 1)
+ 2)show a univariate analysis showing significant diffrences
+ 3)show a multivariate analysis stating that even after controling for
+other factors the same significant diffrences as in the univariate
+analysis persists
+
+*** look at data in sas
+
+[[BIO213_files/img/Image_4r9j72gb2SeQqGdvGs5BWg_0001.jpg]]
+ Before starting any tests its always good to look at your data in SAS .
+IE for catagorical data
+ proc freq;
+ tables VARIABLES;
+ run;
+
+** Univariate analysis
+
+*** testing for normality
+
+**** intro
+
+the following steps all try to see if a distribuation is normal. if a
+distribution is normal you continue and run the relevant tests (t
+tests,etc..). When the distibution is not normal a different set of
+tests are required (non parametric tests).
+ Sometimes when the n is big enough you can treat the variable as normal
+even if it isnt
+ In SAS:
+ proc univariate normal plot;
+ var birthweight;
+ run;
+
+**** mean vs median
+
+[[BIO213_files/img/Image_K0KxrZSgne4ErShXBxnEaw_0001.jpg]]
+ A normal distribution is supposed to be symetric. The mean and median
+should be very
+  close to each other. above they are 30g of each other. in a 3000 mean
+that is 1% which is good.
+ then we look at the skewness (see next note)
+
+**** skewness and checking for normality
+
+If the distribution is symetric (perfectly normal) the skewness will be
+zero.
+ if it is negative (like the example before) it means it has a left skew
+(a longer left tail) (more babies with a small birth weight in the class
+example). in the example a mins -0.2 is a very small skew.
+
+**** Visually test for normality
+
+another way is to look at symmetry (normality) visually. sas produces a
+box plot and "stem-leaf" (a histogram on its side) so you can look
+visually to see if there is symmetry.
+ [[BIO213_files/img/Image_Y.Y0U5-GbywmdpqtFCOUiw_0001.jpg]]
+
+**** Kurtosis
+
+another way to check normality is look at kurtosis aka the extent of
+outliers (bell shaped curve). again there are tails here so we are
+looking for a zero value to see symetry, positive numbers mean to many
+outliers and negative numbers to few outliers.
+ to few means the distribution is boxy with no tails.
+ in the example above there is -0.08 which shows its a bit boxy with no
+outliers so it should be fine
+
+**** shapiro wilkes test
+
+[[BIO213_files/img/Image_lXelMlwyMeJ1SjGC2AC10A_0001.jpg]]
+ the most precise way is to run a shapiro-wilk (the most sensative)
+ In SAS if the sample size is more than or equal to 2000 it will *not
+run* the test
+ the null hypothesis (H0) is that the data are normal so a large P value
+(n.s) tells us there is no reason to reject the data is normal.
+ in the above example its safely normal.
+ since there is a large dataset (n=189) it has enough statistical power.
+ In SAS if the sample size is more than or equal to 2000 it will *not
+run* the test
+
+*** type of variables
+
+**** intro
+
+when you know you have a normal distribution in the DV (at least) then
+you can continue to choose the type of test based on your variable type
+(binary,catagorical)
+
+**** binary variables
+
+***** t-test
+
+To the most simple univariate test-a t-test
+ if the distribution is not normal it is common to run a Wilcoxon
+signed-rank test instead of a t-test
+ [[BIO213_files/img/Image_puJKyOmMCrCGE0425NauOQ_0001.jpg]]
+ here in the birth weight example (DV) the IV is smoking. you can see
+the comparison of mean between the smoking (1 -yes) and non smoking
+(0-no) group for BW and the p value (sig. above) that is there is a
+clear difference between the groups.
+
+**** Catagorical variables
+
+***** intro
+
+[[BIO213_files/img/Image_cw6-Y1QXPZE-fjgDuf-SBg_0001.jpg]]h
+ when you have a categorical variable (has more then 2 levels) you can
+either decide to recode it into a binary variable ("Dichotemize" it in
+most cases you *dont*) and then you need to run an *ANOVA*
+
+***** Dichotemizing variables
+
+Dichotemizing means recoding variables into a Dichotemous variabels
+(0,1)
+ for example:
+ [[BIO213_files/img/Image_DUiPFLHsEaixBUc3ilN7eA_0001.jpg]]
+ since black race (2) is a small group you could dichotemize it by
+combining it with the "other" (3) group and then you'd be left with the
+white (0) and other (1)-which is now black and white combined
+ Dichotemizing gets you more power (thus not risking false negatives)
+and show a better difference between groups
+ The cons of Dichotemizing variables:
+ sensibility: why would you expect that blacks would have the same birth
+weight as "other" race?
+ in some cases it does makes sense for example:
+ [[BIO213_files/img/Image_DUiPFLHsEaixBUc3ilN7eA_0002.jpg]]
+ when combining PTL (pre term birth) its makes sense to combine similar
+outcomes (1 PTL, 2 PTL etc..). they all are on the same tail of the
+distribution.
+ nominal data: hard to justify it
+ ordinal data: much more reasonable
+ when you do dichotomies its back to t-tests (normal binary variables)
+ You can also do a comporomise and recode it to 3 catagories: for
+example combine PTL 2 and PTL 3 and then still run an ANOVA with better
+statistical power (n now is 6)
+
+***** Grouping by appropriate logic
+
+[[BIO213_files/img/Image_MfrHUW0LYzIA.vHaf2Jpeg_0001.jpg]]
+ Sometimes grouping has the best logic when done by what makes most
+sense. for example here the best way is to group by "appropriate" visits
+(1,2) VS unusuall visits (0-never visites oe 3,4,6-visis\ted to much)
+
+***** kruskal wallis (non normal test option)
+
+if the groups dont have a normal distribution (sometime even if one isnt
+normal distributed and the sample size is large enough an ANOVA can be
+preformed) then you need to run a *Kruskal wallis*test
+
+***** ANOVA
+
+once again we assume that the DV (birthweights) are normally distributed
+in each of the goups (race for example).
+ if all answers are yes (or the sample size is really large) then we can
+preform the ANOVA
+ [[BIO213_files/img/Image_i5X0G2h8M.V-gstmVPBmHQ_0001.jpg]]
+ When you get a significant result in an ANOVA (see above fig) it means
+there are clear differences between the groups though you cant tell
+between which groups
+
+**** continous variables
+
+***** plot first
+
+when checking associations between continous variables its better to
+plot first (in SAS proc plot) and check to see the relationship between
+the varibles (linear,log,quadratic etc..)
+ Also with plots one can check for outliers.
+ SAS:
+ proc plot;
+ plot tension*depress;
+ run;
+
+***** pearson correlation
+
+We use the pearson correlation when the data (both the outcome and
+predictor) sre normal distributed*
+*below when we want to check the association between BW (DV) and
+maternal age (continous IV) we would use pearson correlations*
+ [[BIO213_files/img/Image_KOnEXWLxNRE-E3OJYH6ghA_0001.jpg]]
+*if the data is not normal distributed then we would use a spearman
+correlation
+
+***** runing a pearson correlation in SAS
+
+SAS Code:
+ [[BIO213_files/img/Image_Kj39YdCBrdd.6V4uTprmWQ_0001.jpg]]
+ if you just want pearson you can just used proc corr
+ also put all the variables (var) you want to check the correlations.
+ [[BIO213_files/img/Image_Kj39YdCBrdd.6V4uTprmWQ_0002.jpg]]
+ the first number (0.73005) is the correlation and the second one
+(0.001) is the p value, the last number (844) is th*e n
+ note that a variables correlation between itself is always 1.00*
+ you can also run it this way (see below) so that each outcome
+variables- (DV) (depress tension) will be corralated with the predictors
+
+***** differenace between pearson and regression
+
+the differenace between pearson, regression and ANOVA for continous
+variables:
+ 1)the R in pearson shows you how close the points are to the line and
+the Beta in regression gives you the angle of the slope
+ 2)if its catagorical variable you would use ANOVA if its a continuous
+variable youd prefer regression
+ 3)
+ [[BIO213_files/img/Image_2JfbN7tYOuT4KHUE94ZS8A_0001.jpg]]
+
+*** linear regression
+
+**** intro
+
+[[BIO213_files/img/Image_xtFU3FhpEjh6CQzF0Nwt7g_0001.jpg]]
+ Epsillon [[BIO213_files/img/Image_xtFU3FhpEjh6CQzF0Nwt7g_0002.jpg]]-
+the error that is the *point*s that dont fall *EXACTLY* on the straight
+linear line.
+ In real life you never get a straight line
+ [[BIO213_files/img/Image_xtFU3FhpEjh6CQzF0Nwt7g_0003.jpg]]
+ To see the association Beta1 must not be Zero. if it is it means no
+association
+
+***** example simple linear regression
+
+[[BIO213_files/img/Image_chL6OdZxzES42oR4qJsc1w_0001.jpg]]
+
+***** assumptions
+
+[[BIO213_files/img/Image_0kUMaE6kJOX58GKBVC7y1Q_0001.jpg]]
+ in linear regression only the DV needs to be nomral not the IV!
+
+***** interpetation of the equation
+
+[[BIO213_files/img/Image_w2KFMYYcqnCi97gJSBebrQ_0001.jpg]]
+ for example in a birth weight study each increase in X (age) by 1 the
+birth weight Y increases/decreases by:
+  Beta 1 grams
+ [[BIO213_files/img/Image_w2KFMYYcqnCi97gJSBebrQ_0002.jpg]]
+ if Beta 1 is not zero (positive or negative) then there is an
+association
+
+***** least squres
+
+[[BIO213_files/img/Image_moudmAX4wANzvGany5Zv2A_0001.jpg]]
+ The goal is to come up with the smallest number possible for the sum of
+squared points that are away from the linear line we are trying to put
+through:
+ [[BIO213_files/img/Image_moudmAX4wANzvGany5Zv2A_0002.jpg]]
+ the Blue line will be the best placement for the line.
+ this is what you used in the most common regression OLS- Ordinary least
+squere
+
+***** maximum likelihood
+
+[[BIO213_files/img/Image_dS-80Z1O1d4DKjjyqzt6Cg_0001.jpg]]
+ different values of Beta have different probabilities for Y (birth
+weights).
+ [[BIO213_files/img/Image_dS-80Z1O1d4DKjjyqzt6Cg_0002.jpg]]
+
+***** residuals
+
+Residulas are the observed value *minus* the predicted
+
+***** MSE (mean squered error)
+
+[[BIO213_files/img/Image_e6Y6ieagwfmc9J6DkMBgSQ_0001.jpg]]
+
+**** linear regression in SAS
+
+to get confidence levels:
+ proc reg;
+ model bwt=age/clb;
+ [[BIO213_files/img/Image_uHvuvaZ18p4Xk8KYv5qwbQ_0001.jpg]]
+
+**** example output in SAS
+
+[[BIO213_files/img/Image_d0yRtYwJu21ZnjegtPQddg_0001.jpg]]
+ When SAS runs a regression it also runs an ANOVA as well (Analysis of
+variance). It also works when you run an ANOVA SAS runs a regression.
+ [[BIO213_files/img/Image_d0yRtYwJu21ZnjegtPQddg_0002.jpg]]
+ You dont report Beta0 in a simple linear regression.
+ Beta 1 represents the relationship between Bsa and LV mass.
+ since [[BIO213_files/img/Image_d0yRtYwJu21ZnjegtPQddg_0003.jpg]]
+ then we dismiss H0 and say that Bsa and LV mass are significant related
+(t=45.22, p<0.0001).
+ Thus for each rise in 1 unit of BSA there is a 103.58142 rise in LVM
+mass.
+ we can also say that we are sure of the results between the CI below,
+so we are sure between 99.07-108.09
+ [[BIO213_files/img/Image_d0yRtYwJu21ZnjegtPQddg_0004.jpg]]
+
+**** save predictions etc in new dataset SAS
+
+[[BIO213_files/img/Image_k7WFHG2..SAm1COxpINu8A_0001.jpg]]
+ *output* is the command to create a new dataset
+ out=NAME of DATASET (results above)
+ the first part will be all the original data plus the predictions
+(pred=NAME OF VARIABLE) and the lower and upper confidence interval
+ then we can plot the CI:
+ [[BIO213_files/img/Image_k7WFHG2..SAm1COxpINu8A_0002.jpg]]
+ overlay means that all plots appear on the same sheet
+ Note the upper (U) CI and the lower (L) CI below
+ [[BIO213_files/img/Image_k7WFHG2..SAm1COxpINu8A_0003.jpg]]
+ *NOTE:*there are also l95m and u95m for the researcher tighter
+intervals. the above are for the wider intervals.
+ [[BIO213_files/img/Image_k7WFHG2..SAm1COxpINu8A_0004.jpg]]
+ [[BIO213_files/img/Image_k7WFHG2..SAm1COxpINu8A_0005.jpg]]
+
+*** Anova
+
+**** theory
+
+**** Anova Output
+
+[[BIO213_files/img/Image_kb-Kr2CE6D7QzDGBjMuP0Q_0001.jpg]]
+ output:
+ [[BIO213_files/img/Image_kb-Kr2CE6D7QzDGBjMuP0Q_0002.jpg]]
+ *Variablity in the outcome (DV) variable (corrected totals)
+ The model sum of squeres is how much the model (the IV) explains the
+outcome
+*so dividing the model sum of squeres by the variabilty in the outcome
+*(corrected totals)*gives you the proportion of the variablity
+explained:*
+*R^{2*
+*Errror is what the model cant explain*^{
+}*The model sum of squares is per df so if there were 2 IV then we would
+divide 697946/2
+ the Error is divided by the DF so in the above it will be 96676/254*
+*The mean squere of the model devided by the error will give us the F
+value*
+*the corrected model always uses the DF minus 1
+ Each Variable will use 1 DF in the model, this is what it "costs" to
+estimate Beta1. since above there is only 1 variable then the modle has
+1 DF*
+*The error will use the corrected total DF minus the model DF so in this
+case 255-1=244
+ annoted view:*
+  [[BIO213_files/img/SS-2010-09-27_14.39.05.jpg]]
+*t squared is F*
+
+[[BIO213_files/img/Image_kb-Kr2CE6D7QzDGBjMuP0Q_0003.jpg]]le="color:#ff0000">^{}*}
+
+** Multiple regression
+
+*** intro
+
+[[BIO213_files/img/SS-2010-09-27_14.53.06.jpg]]
+ [[BIO213_files/img/SS-2010-09-27_14.58.09.jpg]]
+ [[BIO213_files/img/SS-2010-09-27_15.01.44.jpg]]
+ [[BIO213_files/img/SS-2010-09-27_15.05.18.jpg]]
+ [[BIO213_files/img/SS-2010-09-27_15.19.30.jpg]]
+ [[BIO213_files/img/Image_02Y8zfZVLcn0uIevgP60jg_0001.jpg]]
+
+*** in SAS
+
+[[BIO213_files/img/SS-2010-09-27_16.04.07.jpg]]
+ you can add CLB after the / to get confidance limits (CI)
+ /STB above is for standerdized Betas
+ [[BIO213_files/img/SS-2010-09-27_16.06.52.jpg]]
+ [[BIO213_files/img/SS-2010-09-27_16.22.50.jpg]]
+
+*** standart estimates
+
+this is done to get standardized Betas
+ [[BIO213_files/img/Image_xbHjNG8zuJ6D4ONFkeT6JQ_0001.jpg]]
+ that is it is standardized to be *unitless
+*Is done by dividing the SD of IV by the DV
+ or its the # SD deviations of the change DV per # changes DV of one IV
+ Its not reported in paper but is good for saying how important is one
+predictor relative to another (IE mother weight is 3 times more
+important then age)
+
+*** adjusted
+
+[[BIO213_files/img/SS-2010-09-29_13.59.22.jpg]][[BIO213_files/img/SS-2010-09-29_14.44.42.jpg]]
+
+*** catagorical data
+
+in running a regression anything that is a categorical variable with
+more then 2 levels (non dichotomus) will involve testing a few
+comparisons within the variable. for example when you have 4 levels you
+test 3 things.
+ for example when testing race you will compare asian,black and hispanic
+to white
+ you will get a p value for each level
+
+*** partial correlation
+
+[[BIO213_files/img/SS-2010-09-30_09.26.24.jpg]]
+ [[BIO213_files/img/SS-2010-09-30_09.27.20.jpg]]
+ In SAS add the option *pcorr2* in proc reg and you will get this in the
+output:
+
+*** univariate VS multivariate
+
+[[BIO213_files/img/SS-2010-09-30_09.14.17.jpg]]
+
+** linear regression
+
+*** confounding
+
+**** intro
+
+a confounder is a covariate thats *related to the predictor of
+interest*and related *independently to the
+ outcome (after we adjust to the other covariate).
+*See[[#I1NzDJVseGRyOcG8N9cp2A][example note]]
+ Age is related to BM and afert adjusting for BM Age is idependitly
+related to BW
+ [[BIO213_files/img/Image_jas6yLws8GT5y588FxuwKA_0001.jpg]]
+ to search for confounders you run a multivariate model (with your main
+predictor and all other suspect variables) and check:
+ if the predictor of interest is greater then the confounder you compare
+the 2 betas (the crude minus the adjusted beta). if they are similar
+then you dont need to worry about confounding from that covariate
+ if different: then the covariate is trully a confounder
+ *
+ mathematiclly:*
+ [[BIO213_files/img/Image_jas6yLws8GT5y588FxuwKA_0002.jpg]]
+ you multiply Beta*2 (th*e be*ta of the suspect confounder in a
+multivariate regression) X the alpha1 (run a regression with the
+confounder on the left size and predictor on right. the co-effiecent of
+predictor is the alpha1)
+ even when a confounder is not significant it can be a confounder
+
+**** example
+
+[[BIO213_files/img/Image_I1NzDJVseGRyOcG8N9cp2A_0001.jpg]]
+ example:
+ predictor of intrest: bodymass (LdWT)
+ suspect covariate for confounding: AGE
+ outcome: birth weight
+ we are looking to check if lwt is a confounder between age (predictor)
+and bw (outcome)
+ so a confounder is a covariate thats related to the predictor of
+interest and related independently to the
+ outcome (after we adjust to the other covariate).
+ so lwt needs[[BIO213_files/img/Image_I1NzDJVseGRyOcG8N9cp2A_0002.jpg]]
+to be independatly related to age and birth weights:
+ lwt-adjusted- the beta of lwt adjusted for age
+ related to the predictor of interest:
+ the beta of AGE is alpha1
+ then:
+ 4.1*9 X 1.04 = 4.36 (confounding effect)
+ n*egative confoudin
+
+**** real life
+
+in real life when you have 200 covariates you are not going to do a
+confounding test for each one
+ so:
+ you look only at the ones that are most likely to be strongly related
+to predictor of interest and marginally related to outcome
+
+*** effect of adjusment
+
+[[BIO213_files/img/SS-2010-10-15_13.49.55.jpg]]
+ *in linear regression:*
+ when an effect gets stronger the beta coefficient the slope gets
+steeper (either more positive or negative)
+ moving *away* from *zero* in either directions is negative confounding
+ moving *closer* to *zero* is positive confounding
+ there is a "10% rule" that is that if the effect is less then 10%
+change the effect is not confounding
+ for example:
+ [[BIO213_files/img/Image_chj.THQ1Av-AKFG4mlWfZA_0001.jpg]]
+ here LWT went down from 4.44 to 4.19 when age is added. since the
+change is less then 10% 4.44->4.19 (10% is .44), *age* is not considered
+a confounder.
+ *in logisitc*:
+ moving *away* from one in either directions is negative confounding
+ *Example:*
+ in above example (DV= heart mass in children) first the model is run
+separately (univartiate model -> only BSA (body surface area) &DV then
+AGE&DV) and then together (multuvariate model):
+ BSA when put together with age increased by 20% which is called
+negative confounding
+ Age has been confounded by BSA (the relationship between age and DV is
+confounded by BSA)
+ this is just an example, i*t could be that one variable is a confounder
+and one isnt, could be both confounders could be none are confounders
+ l*ooking at the changes in adjusted R2 (.8891 and .7860 compared to
+.8921 in the multivariate model) you can conclude that it adding both
+variables improved the model. if the adjusted r2 goes down it mean
+adding age isnt a good idea.
+ t*wo write it in papers:
+*
+ children of older age will have smaller hearts a*fter adjusting*for BSA
+
+*** "Centering" Continuous Predictors
+
+Problem: The intercept in a regression model is uninterpretable
+ e.g. Birthweight = β0 + β1 Age
+ ⇒ β0 = Birth weight for a mother who is age zero
+ Solution: Get the average of the predictor across the sample, Subtract
+the average from everyone's predictor. use this "centered" value as the
+predictor
+ For example:
+ in SAS:
+ age\_centered=mother\_age-29.84;
+ age\_centered\_sq=age\_centered*age\_centered;
+ Where 29.84 is the mothers mean age across all cases in the dataset
+
+*** dummy coded (0,1) predictors
+
+*Dummy-Coded Predictors*
+ Goal: Predict birthweight, Yi
+ Using: Smoking status
+ Usual Coding:
+ Xi =(1 Smoker 0 Non-Smoker)
+ Model: Yi = β0 +β1Xi +εi
+
+** proc glm (anova)
+
+*** example
+
+[[BIO213_files/img/Image_dGJG3yyZCBHncgzZ6sNgnQ_0001.jpg]]
+ the sig. (pr>F) of the model (0.271) shows us how the model preforms
+well with the 2 IV rather then just the intercept.

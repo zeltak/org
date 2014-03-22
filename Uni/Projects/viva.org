@@ -1,0 +1,131 @@
+#+TITLE: viva
+
+* 3.1.6.VIVA
+
+** 1.intro
+
+*** data sources
+
+data was obtained through steve
+ steves added local 50x50 LU data to the dataset:
+ the RAW NAS data is located at:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.19.VIVA\3.1.6.1.Raw\_data\VIVA
+data\viva\_gisvariables\_50m\_0328012.xls
+
+*** NAS dataset info
+
+*aid\_ct* is the subject id
+ *addressid* is the unique id for location
+
+** 2.gather data
+
+*** 2.create local predictions (50x50)
+
+**** 1.create LU variables
+
+steve already calculated LU variables at a 50x50m resolution for each
+VIVA case.
+ we did however have to add the distance to local point emission
+variable with a simple spatial join
+ also we added the guid closest to each case
+ the *results/output* are located here in :
+ *
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.19.VIVA\3.1.6.4.Work\2.Gather\_data\FN004\_VIVA\_lu\cases\_lu.dbf*
+
+**** 2.calculate local PM
+
+using script cn010\_localPM\_NAS
+ *NOTE: since there are no time varying variables there can only be
+chronic effect and no short term (acute) effect for the NAS patient from
+the local traffic
+*
+ we calculate the local pm prediction for each subject*
+*
+ the *results/output* are located here in :
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.4.Work\2.Gather\_data\FN010\_localPM\_predictions\nas\_lpm.csv*
+
+*** 2.create 10x10 exposure dataset
+
+**** 1.create poll 00-08 dataset
+
+using script cn001\_create\_full\_nas\_dataset we assign exposure to all
+NAS cases. in this detailed script each NAS patient gets a one year lag
+with relative pm for a period if he switched residence
+
+**** 2.Assign exposure to NAS cases
+
+using script cn002\_assign\_exposure the pollution dataset was created
+for all available day for all NAS cases location so we get a full set of
+every case with 9x365 pmnew days (and lags)
+ the *results/output* are located here in :
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.4.Work\2.Gather\_data\FN020\_Final\_NAS\_POLL\final\_nas\_poll.sas7bdat
+*
+ then we add the local pm stage prediction to the above files
+ the *results/output* are located here in :
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.4.Work\2.Gather\_data\FN020\_Final\_NAS\_POLL\final\_nas\_poll\_lpm.sas7bdat
+*
+
+*** 7.prepare for marieablle comparison
+
+**** 1.create met and pm countway data
+
+using script *cn005* we created countway data for pm and met variables
+(spss)
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.1.Raw\_data\MET\countway00\_09.sas7bdat
+
+**** 2.create lags
+
+using script *cn006* we created lags for the countway pm data, temp data
+and humidaty data
+ this is outputed as a sas file here:
+ libname cwx
+"c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.4.Work\2.Gather\_data\cw\_data\cway\_lags"
+
+**** 7.add cw data to NAS\_poll data
+
+using script *cn0067* we added the cw data to the nas dataset with our
+predicted pollution
+ this is outputed as a sas file here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.4.Work\3.Analysis\MB\_analysis\mb1\_met.csv
+
+**** finalize for mb analysis
+
+added met data (temprature and relative humidaty) from the countway
+dataset
+ in addition the key outcome variables were log transformed
+ this was exported to R for the mb analaysis here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.4.Work\3.Analysis\MB\_analysis\mb1\_met.csv
+
+** 3.Analysis
+
+*** 1.marie-belle analysis
+
+**** 1.calculate local PM (resid)
+
+using the cn001 script in R, the local pm (residuals methos) for each
+NAS patient was calculated
+ this is later exported to csv:
+
+c:/Users/ekloog/Documents/$Doc/3.PostDoc/3.1.Projetcs/3.1.6.NAS/3.1.6.4.Work/3.Analysis/nas\_with\_resid/nas\_resid.csv
+ for the lag join so the dataset gets all the lags
+
+**** 2.MB analysis comparison
+
+using the *cn007\_mb* script we ran the same test as marie bell did in
+her analysis but using our PM models instead of the countway PM data
+ we also tried the same exact test using count way PM instead of ours
+using *cn008\_mb*
+
+*** 2.stacey black carbon comparison
+
+**** 2.comparison
+
+we ran a comparison using script *cn009\_mb*

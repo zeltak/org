@@ -1,0 +1,127 @@
+#+TITLE: Births_MA
+* G.Birth weight analysis
+
+** 1.Arrange birth data
+
+*** 1. Original data
+
++The fist stage included obtaining original birth weight data. The data
+came from Ariana Zeka in the following folder:
+ S:\ENVEPI\AZEKA\BIRTHS
+ the file is named ALLCOMPLETE\_07JUNE06.SAS7BDAT:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.11.BirthW\_NE\3.1.11.1.Raw\_data\original
+data\ALLCOMPLETE\_07JUNE06.SAS7BDAT
+ then in SAS the file was opened (NOTE: opening in SPSS first will
+mess-up the date string)
+ NOTE: latitude and longtuide are NOT the cases xy!!! this is:
+ GDTLat -- latitude from GDT (now Teleatlas)
+ GDTLong -- longitude from GDT (now Teleatlas)
+ Later the file was latter exported to dbf for ArcGIS birth\_short.dbf:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.11.BirthW\_NE\3.1.11.1.Raw\_data\original
+data\birth\_short.dbf+
+ New bigger dataset
+ data for 2000-2008 came from the mass-dph through steve
+ the raw file is here:
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.11.BirthW\_NE\3.1.11.1.Raw\_data\original
+data\new 00-09\
+*
+ The file was loaded in sas using this script cn001\_sas\_import.sas
+ and subsseted to relevant years and exported to dbf
+ the *results/output* are located here in :
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.11.BirthW\_NE\3.1.11.4.Work\2.Gather\_data\FN001\_BW\_meta\_Final\births\_guid\_meta0008.dbf*
+  
+
+*** 2.ArcGIS
+
+the exported dbf file for birth cases was imported into arcgis
+ also a cliped guid layer with LU terms was also imported
+ then a spatial join was preformed using*arctoolbox*:
+ [[Births_MA_files/img/Image.png]]
+ where the births layer (cases) was joined to the guid (pm location
+point) to get each a unique guid for each case and the LU for that guid.
+ then the final layer was exported to dbf and is located here
+births\_guid\_meta.dbf:
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.11.BirthW\_NE\3.1.11.4.Work\2.Gather\_data\FN001\_BW\_meta\_Final\births\_guid\_meta0008\_lu.dbf
+*
+ NOTE: we found that in 2003 the lat and long was swithced...so we ran
+the whole 2 and 3 steps again only for 2003 and joined that the full bw
+dataset in step 4
+
+*** 3.SAS join PM to births
+
+[[Births_MA_files/attach/sas_merge.sas][Attachment #01
+(sas\_merge.sas)]]
+ in SAS using cn004\_sas\_merge\_0008
+ the the birth weight file is joined to the poll file
+ the variables are cleaned and re-named
+ the file is subsetted as to not to include any C-section cases.
+ results in this file in the same location:
+ *
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.11.BirthW\_NE\3.1.11.4.Work\3.Analysis\2.R\_analysis\bw0008\_nocs.csv
+*
+
+*** 4.Check localPM pollution
+
+Local lu terms for each mother birth address was calculated using the
+same methods for the local monitor stage in the NE predictions for the
+monitor (see NE documents). the only differenace was tden which use
+method 2 (also see NE documents) since the cases dataset was huge.
+ the data was then exported here:
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.11.BirthW\_NE\3.1.11.4.Work\2.Gather\_data\FN008\_BW\_LU50m\bw\_LU.dbf
+*
+ then the script was executed and it generated local PM prediction for
+each birth case.
+ the *results/output* are located here in :
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.11.BirthW\_NE\3.1.11.4.Work\2.Gather\_data\FN009\_BW\_LPM\g3.csv*
+
+** 2.Bw Statistical analysis
+
+*** 1.Sas mixed model regression exploratory
+
+using these script we explored different models
+ *AN\_001\_SAS\_mixed.sas*-normal mixed model with the BW
+ *AN\_002\_R\_mixed.r*- for logistic regressions
+ *AN\_004\_SAS\_compare\_cw.sas*-comparing to CW data
+ the results are saved here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.11.BirthW\_NE\3.1.11.5.Results\OR001\_SAS\_mixed\_exploratory\
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.11.BirthW\_NE\3.1.11.5.Results\OR002\_R
+logitsic\
+ NOTE: the final results for the paper are in the next script
+
+*** 2.SAS/R Final results
+
+we used the scripts AN\_010\_Paper for the final results for the paper:
+ for the mixed models and interactions. the results are here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.11.BirthW\_NE\3.1.11.5.Results\OR003\_Final
+Results\
+
+** 3.paper preparation
+
+*** a.create GIS maps
+
+in GIS a Empty MA grid was loaded (obtained through steve) for a smaple
+10x10km day
+ to make the " perfectly squre" it was loaded as a UTM 19N proj.
+ mortality rates were improrted with the XY import and also loaded as a
+UTM 19N proj.
+ [[Births_MA_files/img/SS-2011-02-04_11.10.07.jpg]]
+ later other layers such as state border were cleared of the proj and i
+used the import proj from the grid layer
+
+*** 2.discriptives
+
+*Table 2* Descriptive statistics for PM _{2.5} exposure is from script:
+*script cn004\_sas\_merge
+*
+ *Table 1* Descriptive statistics is from

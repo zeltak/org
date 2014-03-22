@@ -1,0 +1,1913 @@
+ #+TITLE:P045_Israel_LST 
+
+* 0.Code run order
+* 1.Data info
+** 1.Air tempreature data
+*** 2.Wunderground data
+**** 0.Pauls notes
+This is Pauls (the programmer who coded the script) original notes
+#+BEGIN_SRC
+HowToUse.txt, Copyright 2012, Paul V Carter
+A brief but hopefully complete guide on how to use the scripts and
+programs for obtaining Weather Underground observations for the USA.
+ Assumptions:
+ -We are running on a Ubuntu Linux box with an internet connection and
+'adaquate' memory (1GB or more) and free disk space (300kB x number of
+weather stations x number of days of observations should give enough
+room.)
+ -Files get-stations.pl, extract-observations-data.pl, WUkey.txt are in
+the same directory. This directory also contains directory
+get-observations-by-date-id-json, which contains executable
+get-observations-by-date-id-json and configuration file
+get-obs-config.txt. (If building observations-by-date-id-json from
+source, this directory should also contain files
+observations-by-date-id-json.cpp, observations-by-date-id-json.h,
+Makefile.)
+ -Package libcurl4-openssl-dev and its dependencies are installed.
+ -Perl modules JSON, Date::Simple and LWP::Simple are installed.
+ Step 1: Get weather stations lists and data for states of interest.
+ Configure states to get weather stations from. In editable script
+get-stations.pl, set the variable @selected\_states to have the list of
+two letter state codes desired. Example:
+ my @selected\_states = ("DE", "MD", "NJ", "NY", "PA", "DC");
+  Complete list of all state codes is in variable %zipcodeprefixes a
+little below.
+ Configure directory to put weather stations lists and data in. In
+editable script get-stations.pl, set the variable $stations\_dir. The
+directory doesn't have to exist, the script will create it for you.
+Example:
+ my $stations\_dir = "stationsMidAtlantic";
+ Now run script from command line: ./get-stations.pl and wait for a few
+minutes. The results should be a new directory $stations\_dir containing
+a lot of .txt files which are json files for stations by zipcode and id
+(which are not of great interest,) four .csv files:
+ airport-stations-list.csv - list of airport station ids
+ airport-stations-data.csv - list of airport station data
+ csv-stations-list.csv - list of airport station ids
+ csv-stations-data.csv - list of airport station data
+ Also get-stations-logfile.txt which contains a lot of status
+information the script logged while running which is only of interest if
+there are problems. If the csv files look good (try loading them into a
+spreadsheet and see,) we can go to the next step.
+ Step 2: Get observations for a the set of stations we collected.
+ Go to directory get-observations-by-date-id-json. Open configuration
+file get-obs-config.txt in a text editor. Edit lines:
+ 4: relative path to airport-stations-list.csv
+ 5: relative path to pws-stations-list.csv
+ 6: observations directory (doesn't have to exist, the program will
+create it)
+ 7: day of month of first observation
+ 8: month of first observation
+ 9: year of first observation
+ 10: day of month of last observation
+ 11: month of first observation
+ 12: year of last observation
+ Example - get observations from 8/16/2012 to 8/17/2012 for stations in
+directory ../stationsMidAtlantic to directory
+../observationsMidAtlantic:
+ 4: ../stationsMidAtlantic/airport-stations-list.csv
+ 5: ../stationsMidAtlantic/pws-stations-list.csv
+ 6: ../observationsMidAtlantic
+ 7: 16
+ 8: 8
+ 9: 2012
+ 10: 17
+ 11: 8
+ 12: 2012
+ Then from a command line, run
+ ./get-observations-by-date-id-json
+ and wait for what could be a rather long time. When the program
+terminates, there should be an observations directory containing a
+subdirectory for each airport and pws station of the stations set, each
+containing json text files of observations for that station. There
+should also be a get-observations-by-date-id=json-logfile.txt which
+contains a lot of status information the program logged while running
+which is only of interest if there are problems.
+ Step 3: Extract observations data to csv files.
+ Go back to the main directory. Open script extract-observations-data.pl
+in a text editor and edit the following variables:
+ $stations\_dir - directory of stations data as set in get-stations.pl
+(step 1)
+ $observations\_dir - directory of observations data as set in
+get-obs-config.txt (step 2)
+ $firstdate - first date of observations to extract
+ $lastdate - last date of observations to extract
+ Example:
+ my $stations\_dir = "stationsRI";
+ my $observations\_dir = "observationsRI";
+ my $firstdate = Date::Simple->new('2012-08-16');
+ my $lastdate = Date::Simple->new('2012-08-17');
+ From command line, run
+ ./extract-observations-data.pl.
+ After a relatively short time, the script should finish. In your
+observations directory should be the files
+airport-stations-observations.csv and pws-stations-observations.csv
+which contain the observations in csv - meanings of the fields as
+documented in files.txt. extract-observations-data-logfile.txt contains
+a lot of status information the program logged while running which is
+only of interest if there are problems.
+#+END_SRC
+**** 1.intro
+notes:
+!Wdsp is in miles per hours!
+
+WU data was obtained through the WU servers using a script written by
+paul carter (pvcarter@gmail.com)
+
+&the script works as follows&:
+
+#+BEGIN_SRC sh
+#this part is one time only at start of region
+cd WU-MIA/ #go into the dir for the region
+
+#launch the relevant perl script to get all the available WU stations for this region
+perl get-stationsLL.pl # or perl get-stations.pl (for the usa)
+
+cd get-observations-by-date-id-json/ #go into the DIR where the actual dl script is
+vim get-obs-config.txt #edit the script to fit your time range
+./get-observations-by-date-id-json #run the script
+
+cd..
+perl extract-observations-data.pl #run this perl script which will aggregate all individual stations into one file (one for Personal stations and one for airport stations).End files will be in the observations folder.
+
+cd observations/
+#this will tar the 3 files and put them in desired location (external HD in the below example)
+tar cvzf /media/My\ Book/WU-MIA/2006/2006.tgz  airport-stations-observations.csv pws-stations-observations.csv
+
+#delete the folder contents for next batch of years
+rm -r *
+cd..
+#note-the X,Y of stations are located here:/home/zeltak/WU/stations/airport-stations-data.csv
+#+END_SRC
+
+
+
+%note-the X,Y of stations are located% here:
+
+/home/zeltak/WU/stations/airport-stations-data.csv
+
+**** 2.proccess data
+
+move the WU personal and airport yearly data into the main PC  (and also the corresponding XY stations)
+then manually in excel (or other app) add headers to the XY data files (IE airport-stations-data.csv).
+
+[[MIA_NE_temp_models_files/img/Image.png]]
+
+these are saved as csv files with the XY added in filename:
+
+f:\Uni\Projects\P020\_Temprature\_NE\_MIA\1\_Raw\_data\WU\NE\stations\airport-stations-data-XY.csv
+
+Then in SAS all files (data and XY locations are imported).
+
+** 2.MODIS Surface temp data and Emissivity
+*** 1.info
+**** Sinsoudial projection
+
+%TIP%- To manually convert points (such as corners X,Y) from sinsoudial to WGS84 lat long one can use the online calculator
+
+http://landweb.nascom.nasa.gov/cgi-bin/developer/tilemap.cgi
+
+Almost all of the fine resolution L3 land products are made in the Sinusoidal Grid. The L3 fine resolution Sea-ice products are the only exception and are made in the in the Lambert Azimuthal Equal-Area projection with the grid centered at the north and south poles. For Collection 3 and before the Sinusoidal Grid products were made in the Integerized Sinusoidal Grid.
+The grid cell size varies by product and is either (approximately) 0.25 km, 0.5 km or 1 km. The actual size depends on the projection.
+Each grid is broken into a number of non-overlapping tiles which cover approximately 10x10 degree area. The tiles are labeled with a vertical and horizontal tile id.
+
+In additional, the MODLAND coarse resolution global Climate Modeling Grid (CMG) products will be made in a geographic projection. The grid cell sizes for these products are 0.05 degrees.
+
+There are 460 non-fill 10 deg. by 10 deg. tiles in the grid.
+The tile coordinate system starts at (0,0) (horizontal tile number, vertical tile number) in the upper left corner and proceeds rightward (horizontal) and downward (vertical). The tile in the bottom left corner is (35, 17).
+Dark blue tiles contain only water (no land).
+Tile system in black and white.
+The boundaries of tiles outside of the grid's image area are not shown.
+Table of Tile Bounding Coordinates (10 deg tiles).
+Table of Tile G-ring Coordinates (10 deg tiles).
+Projection parameters for the General Cartographic Transformation Package (GCTP).
+
+**** conversions
+kelvin to farenhight GIS:
+ ((([tempk]-273) * 1.8)+32)
+
+**** general
+This is the site with the MODIS surface temprature data:
+
+[[https://lpdaac.usgs.gov/products/modis_products_table][https://lpdaac.usgs.gov/products/modis\_products\_table]]
+look at the MODIS Products Table:
+[[
+MIA_NE_temp_models_files/img/Image_Dk9i5VXLnkjjdxxWji1MDQ_0001.png]]
+
+
+We want to use the *MOD11A1* data which is at a 1x1km resolution daily, and should have 2 separate reading for day and night
+we can also check the MODIS Overview page to see which tiles we are interested in
+
+**** scale factor
+Note: when calculating final temperature/emmisivty you must apply the
+scale factor.
+For temp: you multiple by 0.02
+For emissivty you multiple by
+0.02+0.49.
+
+
+see sas code cn004\_modis\_import.sas for more detail
+[[
+MIA_NE_temp_models_files/img/SS-2011-04-26_15.27.46.png]]
+[[
+MIA_NE_temp_models_files/img/Image_owwqUrxD7Lyx2ey2prMabQ_0001.png]]
+
+**** MODIS Tiling system
+
+[[file:MIA_NE_temp_models_files/img/sn_10deg.gif]]
+
+[[MIA_NE_temp_models_files/img/Image_Ti5oxlPHCjx2K4Qxex3RAw_0001.png]]
+
+**** Naming Scheme of Files
+
+MODIS Naming Conventions
+
+MODIS filenames (i.e., the local granule ID) follow a naming convention
+which gives useful information regarding the specific product.
+For example, the filename
+
+MOD09A1.A2006001.h08v05.005.2006012234657.hdf
+indicates:
+
+MOD09A1 - Product Short Name
+.A2006001 - Julian Date of Acquisition (A-YYYYDDD)
+.h08v05 - Tile Identifier (horizontalXXverticalYY)
+.005 - Collection Version
+.2006012234567 - Julian Date of Production (YYYYDDDHHMMSS)
+.hdf - Data Format (HDF-EOS)
+The MODIS Long Name (i.e., Collection
+
+%rename in total commander%:
+[N9-16]\_[N19-23]
+
+**** modis data projections
+[[MIA_NE_temp_models_files/attach/MODIS%20Projection.prj][Attachment #01
+(MODIS Projection.prj)]]
+ see attached file for a prj arcgis file for modis data projection
+
+*** 2.download from modis website
+**** use REVERB
+We used the Reverb site to download the MODIS surface temperature data
+The method is as follows:
+
+first choose a Geo aream choose the dates and sepcific dataset (we use MOD11A1)
+
+[[file:1.Images/2542013w.png]]
+then in the following screen you add all the selected items to the cart
+
+[[file:1.Images/2542013w2.png]]
+
+then press the Download button
+
+[[file:1.Images/2542013w3.png]]
+
+and choose the following options
+
+
+[[file:1.Images/2542013w4.png]]
+
+This is then used to dowload the data on a Linux machine using Wget
+First concatanate all yearly files into one file, ₆In example₆ 
+
+wget FILE1.TXT 
+
+
+#+BEGIN_SRC sh
+wget -i FILE.txt
+#+END_SRC
+
+
+#+BEGIN_SRC sh
+#where file.txt is a simple text file pointion at all the seperate ST.txt batch file IE:
+~/Downloads/LST_ISRAEL/data2005_url_script_2013-04-15_103101.txt
+~/Downloads/LST_ISRAEL/data2010_url_script_2013-04-15_103101.txt
+~/Downloads/LST_ISRAEL/data2011_url_script_2013-04-15_103101.txt
+
+#+END_SRC
+
+this will download all the hdf files (and other files with *.xml,*.jpeg which you can discard)
+
+*** 3.HDF to DBF
+**** Convert using matlab
+***** extract lan and long for each tile
+As a first step we need to extract the fixed lat and long for each tile. we use hdf dump for that:
+
+http://hdfeos.org/software/eosdump.php
+
+you need to download the binary, or use attached file:
+
+[[file:MIA_NE_temp_models_files/attach/eos2dump][EOSdump]]
+
+while the basic command is run from a bash shell on linux
+
+#+BEGIN_SRC sh
+./eos2dump -c -1  h18v04.hdf  > lat_h18v04.output
+./eos2dump -c -2  h18v05.hdf  > long_h18v05.output
+#+END_SRC
+
+where -1 reffers to lat extraction and -2 to long extraction
+
+Save the lat/long file for each tile and move them back to a windows machine
+
+$NOTE: you can also create a simple batch files to run the above commands in batch for multiple tiles$
+
+***** Extract in matlab to dbf
+****** Original Nasa script
+we base our scirpts partly on this script:
+
+http://www.hdfeos.org/zoo/LPDAAC_MOD_matlab.php
+
+#+BEGIN_SRC octave "Original matlab code"
+
+% Copyright (C) 2012 The HDF Group
+% All rights reserved.
+%
+%   This example code illustrates how to access and visualize LP_DAAC
+% MOD Sinusoidal Grid file in Matlab.
+%
+%   If you have any questions, suggestions, comments on this
+% example, please use the HDF-EOS Forum  (http://hdfeos.org/forums).
+
+%   If you would like to see an  example of any other NASA
+% HDF/HDF-EOS data product that is not listed in the HDF-EOS
+% Comprehensive Examples page (http://hdfeos.org/zoo),
+% feel free to contact us at eoshelp@hdfgroup.org or post it at the
+% HDF-EOS Forum (http://hdfeos.org/forums).
+
+clear
+
+% Define file name, grid name, and data field.
+FILE_NAME='MOD11A1.A2012275.h28v04.005.2012276122631.hdf';
+[PATHSTR, BASE_NAME, EXT]=fileparts(FILE_NAME);
+GRID_NAME='MODIS_Grid_Daily_1km_LST';
+DATAFIELD_NAME='LST_Night_1km';
+
+% Open the HDF-EOS2 Grid file.
+file_id = hdfgd('open', FILE_NAME, 'rdonly');
+
+% Read data from a data field.
+grid_id = hdfgd('attach', file_id, GRID_NAME);
+
+
+[data1, fail] = hdfgd('readfield', grid_id, DATAFIELD_NAME, [], [], []);
+
+% Convert the data to double type for plot.
+data2=double(data1);
+
+
+% This file contains coordinate variables that will not properly plot.
+% To properly display the data, the latitude/longitude must be remapped.
+
+[xdimsize, ydimsize, upleft, lowright, status] = hdfgd('gridinfo', grid_id);
+
+% Detach from the grid object.
+hdfgd('detach', grid_id);
+
+% Close the File.
+hdfgd('close', file_id);
+
+% The file contains SINUSOIDAL projection. We need to use eosdump to
+% generate 1D lat and lon and then convert them to 2D lat and lon accordingly.
+% To properly display the data, the latitude/longitude must be remapped.
+% For information on how to obtain the lat/lon data, check [1].
+lat1D = load(['lat_' BASE_NAME '.output']);
+lon1D = load(['lon_' BASE_NAME '.output']);
+
+lat = reshape(lat1D, xdimsize, ydimsize);
+lon = reshape(lon1D, xdimsize, ydimsize);
+
+clear lat1D lon1D;
+
+lat = lat';
+lon = lon';
+
+% Read attributes from the data field.
+SD_id = hdfsd('start', FILE_NAME, 'rdonly');
+
+sds_index = hdfsd('nametoindex', SD_id, DATAFIELD_NAME);
+
+sds_id = hdfsd('select',SD_id, sds_index);
+
+% Read filledValue from the data field.
+fillvalue_index = hdfsd('findattr', sds_id, '_FillValue');
+[fillvalue, status] = hdfsd('readattr',sds_id, fillvalue_index);
+
+% Read units from the data field.
+units_index = hdfsd('findattr', sds_id, 'units');
+[units, status] = hdfsd('readattr',sds_id, units_index);
+
+% Read scale_factor from the data field.
+scale_index = hdfsd('findattr', sds_id, 'scale_factor');
+[scale, status] = hdfsd('readattr',sds_id, scale_index);
+
+% Read long_name from the data field.
+long_name_index = hdfsd('findattr', sds_id, 'long_name');
+[long_name, status] = hdfsd('readattr',sds_id, long_name_index);
+
+% Read valid_range from the data field.
+valid_range_index = hdfsd('findattr', sds_id, 'valid_range');
+[valid_range, status] = hdfsd('readattr',sds_id, valid_range_index);
+
+
+% Terminate access to the corresponding data set.
+hdfsd('endaccess', sds_id);
+% Close the file.
+hdfsd('end', SD_id);
+
+% Replace the filled value with NaN.
+data2(data2 == fillvalue) = NaN;
+
+% Process valid_range.
+data2(data2 < valid_range(1)) = NaN;
+data2(data2 > valid_range(2)) = NaN;
+
+% Apply scale factor according to the field attribute LST.
+% "LST: LST data * scale_factor".
+data2 = data2 * scale;
+
+% Transpose the data to match the map projection.
+data=data2';
+
+% Plot the data using contourfm and axesm.
+latlim=[floor(min(min(lat))),ceil(max(max(lat)))];
+lonlim=[floor(min(min(lon))),ceil(max(max(lon)))];
+min_data=min(min(data));
+max_data=max(max(data));
+
+% Create the figure.
+f=figure('Name', FILE_NAME, 'visible', 'off');
+
+% We need finer grid spacing since the image is zoomed in.
+% MLineLocation and PLineLocation controls the grid spacing.
+axesm('MapProjection','sinusoid','Frame','on','Grid','on',...
+      'MapLatLimit',latlim,'MapLonLimit',lonlim, ...
+      'MeridianLabel','on','ParallelLabel','on', ...
+      'MLabelLocation', 5, 'PLabelLocation', 5)
+coast = load('coast.mat');
+
+surfacem(lat,lon,data);
+colormap('Jet');
+caxis([min_data max_data]);
+
+% Change the value if you want to have more than 10 tick marks.
+ntickmarks = 10;
+granule = (max_data - min_data) / ntickmarks;
+h = colorbar('YTick', min_data:granule:max_data);
+
+set (get(h, 'title'), 'string', units, 'FontSize',16,'FontWeight','bold');
+
+plotm(coast.lat,coast.long,'k')
+
+title({FILE_NAME; long_name}, 'Interpreter', 'None', ...
+    'FontSize',16,'FontWeight','bold');
+
+% The following fixed-size screen size will look better in JPEG if
+% your screen is too large. (cf. scrsz = get(0,'ScreenSize');)
+scrsz = [1 1 800 600];
+set(f,'position',scrsz,'PaperPositionMode','auto');
+saveas(f, [FILE_NAME '.m.jpg']);
+
+% Reference
+%
+% [1] http://hdfeos.org/zoo/note_non_geographic.php
+% [2] http://modis-sr.ltdri.org/products/MOD09_UserGuide_v1_3.pdf
+#+END_SRC
+
+****** Our Script (andrea padoan)
+We had help from a Matlab programmer (andrea.padoan@unipd.it)
+
+There are a series of scripts and functions that are run to get
+Txtfile from the HDF files, attached here as ZIP:
+
+[[file:2.Attach/extract_hdf.zip][Extract_hdf_matlab_scripts]]
+
+!folder structure!
+
+the hdf files must be split into yearly folders 2000-2011, and in
+each folder there should be a copy of all the tiles lat/long files
+and scripts
+
+We run the Batch scripts that goes through all yearly folder but the
+main script is the HDF_import script
+
+the script needs to be changed inside year to year in each folder, IE
+change 2000>2011
+
+#+BEGIN_SRC octave
+
+
+function HDF_Import (whatimport)
+%% Import HDF image file and export lat, long, Day, Night, Emis and Reference day
+% from a list of HDF image files and a series of lat and long files.
+% Lat and long files must be as vectors.
+% Type:
+% HDF_Import ('stage1') or HDF_Import ('stage2') or HDF_Import ('stage3')
+% or HDF_Import ('stage4') to perform single geographical block analysis or
+% HDF_Import ('all') to perform all analyses.
+% Inpath and Outpath should be modified and setted to reflect the file
+% actual position.
+% LEGEND:
+% Stage1: h18v04 files and as output a file named OutputMergedh18v04.txt
+% Stage2: h18v05 files and as output a file named OutputMergedh18v05.txt
+% Stage3: h19v04 files and as output a file named OutputMergedh19v04.txt
+% Stage4: h19v05 files and as output a file named OutputMergedh19v05.txt
+%
+% Legend to the main structure:
+% HDF_I_S = struct('inpath', {'/Users/andrea/Documents/MATLAB/Itai/matlab/'}, ...
+%                                   'outpath', {'/Users/andrea/Documents/MATLAB/Itai/New2/Output/'}, ...
+%                                   'codepath', {'/Users/andrea/Documents/MATLAB/Itai/New2'}, ...
+%                                   'lat1', {'lat_h18v04.output'},'long1', {'long_h18v04.output'}, ...
+%                                   'lat2', {'lat_h18v05.output'},'long2',{'long_h18v05.output'}, ...
+%                                   'lat3', {'lat_h19v04.output'},'long3',{'long_h19v04.output'}, ...
+%                                   'lat4', {'lat_h19v05.output'},'long4',{'long_h19v05.output'}, ...
+%                                   'stage1', {'*h18v04*.hdf'}, 'stage2', {'*h18v05*.hdf'}, ...
+%                                   'stage3', {'*h19v04*.hdf'}, 'stage4', {'*h19v05*.hdf'}, ...
+%                                   'stages', {4}, 'FileExtension', {'*.hdf'}, ...
+%                                   'OutFileName1', {'OutputMergedh18v04.txt'}, ...
+%                                   'OutFileName2', {'OutputMergedh18v05.txt'}, ...
+%                                   'OutFileName3', {'OutputMergedh19v04.txt'}, ...
+%                                   'OutFileName4', {'OutputMergedh19v05.txt'});
+
+
+    if (nargin < 1)
+    fprintf ('\n%s\n', 'This function need some parameters.');
+        return;
+    end
+    %My path
+    HDF_I_S = struct('inpath', {'f:\Uni\Projects\P020_Temprature_ITALY\1_Raw_data\MODIS\T2011\'}, ...
+                                  'outpath', {'f:\Uni\Projects\P020_Temprature_ITALY\1_Raw_data\MODIS\T2011\Output\'}, ...
+                                  'codepath', {'f:\Uni\Projects\P020_Temprature_ITALY\1_Raw_data\MODIS\T2011\'}, ...
+                                  'lat1', {'lat_h18v04.output'},'long1', {'long_h18v04.output'}, ...
+                                  'lat2', {'lat_h18v05.output'},'long2',{'long_h18v05.output'}, ...
+                                  'lat3', {'lat_h19v04.output'},'long3',{'long_h19v04.output'}, ...
+                                  'lat4', {'lat_h19v05.output'},'long4',{'long_h19v05.output'}, ...
+                                  'stage1', {'*h18v04*.hdf'}, 'stage2', {'*h18v05*.hdf'}, ...
+                                  'stage3', {'*h19v04*.hdf'}, 'stage4', {'*h19v05*.hdf'}, ...
+                                  'stages', {4}, 'FileExtension', {'*.hdf'}, ...
+                                  'OutFileName1', {'OutputMergedh18v04.txt'}, ...
+                                  'OutFileName2', {'OutputMergedh18v05.txt'}, ...
+                                  'OutFileName3', {'OutputMergedh19v04.txt'}, ...
+                                  'OutFileName4', {'OutputMergedh19v05.txt'});
+
+    %Create the structure for the edges to trim the blocks.
+     HDF_I_Edges = struct ('latup', 47.4, 'latlow', 36.5, 'longup', 18.6, 'longlow', 6.4);
+
+
+    %Original coordinated given by Itai and Francesco
+    % longTu = 19;
+    %     longTl = 6;
+    %     latTu = 48;
+    %     latTl = 36;
+
+    %Latitute and Longitude structure
+    HDF_I_geog = struct('lat', {}, 'long', {}, 'stage', {});
+
+    %Create the output directory if it doesnt' exist
+    if (~isdir(HDF_I_S.outpath))
+        mkdir(HDF_I_S.outpath);
+    end
+
+    path(path, HDF_I_S.codepath);
+
+    %Change the working dir
+    chdir(HDF_I_S.inpath);
+
+    %Allocate space
+    for i =1:1:HDF_I_S.stages
+        HDF_I_geog(i).lat= zeros(1440000,1);
+        HDF_I_geog(i).long= zeros(1440000,1);
+    end
+
+
+    %% Perform stage 1
+    % Retrieve dir list of files, with the extension you gave
+    %
+    if (strcmpi(whatimport,'stage1') | strcmpi(whatimport,'all'))
+
+        clear dirlist NumberOfFiles sYear hugeM
+
+        %Change the working dir
+        chdir(HDF_I_S.inpath);
+
+        dirlist =dir(HDF_I_S.stage1);
+
+        %Count the number of files in the current directory
+        NumberOfFiles=size(dirlist, 1);
+
+        if (NumberOfFiles ~= 0)
+
+            fprintf('\n\nLoading stage 1 coordinates ....\n')
+            %Load latituge and longitude in memory
+            HDF_I_geog(1).lat = load(HDF_I_S.lat1);
+            HDF_I_geog(1).long = load(HDF_I_S.long1);
+
+            %Obtain all the files al load it in memory (sYear structure)
+            [hugeM]= RetrieveAllYear (HDF_I_S.stage1, HDF_I_Edges, HDF_I_geog(1).lat,  HDF_I_geog(1).long);
+
+%             %Internal check
+%             if NumberOfFiles ~= length(sYear)
+%                 error('Missmatch in file and Structure loaded in memory');
+%             end
+%
+%             %Define the first matrix
+%             hugeM = sYear(1).Data;
+%
+%             %Concatenate matrix
+%             for Index=2:1:length(sYear)
+%                 hugeM = [hugeM; sYear(Index).Data];
+%             end
+            tic;
+            %Save the Merged file
+            SaveHugeFile([HDF_I_S.outpath HDF_I_S.OutFileName1], hugeM);
+
+            fprintf('\nOutputfile : %s\n', [HDF_I_S.outpath HDF_I_S.OutFileName1]);
+            toc
+        else
+            %Display that no the has been processed
+            fprintf('\n\nNo files to process in stage1....\n\n')
+
+        end
+
+        %Chech for the 'single' class
+        if max(max(hugeM(:,1:5))) > 999
+            warning('Class single for hugeM is not enought. Consider double');
+        end
+
+    end
+
+    %% Perform stage 2
+    % Retrieve dir list of files, with the extension you gave
+    %
+    if (strcmpi(whatimport,'stage2') | strcmpi(whatimport,'all'))
+
+        clear dirlist NumberOfFiles sYear hugeM
+
+        %Change the working dir
+        chdir(HDF_I_S.inpath);
+        dirlist =dir(HDF_I_S.stage2);
+
+        %Count the number of files in the current directory
+        NumberOfFiles=size(dirlist, 1);
+
+        if (NumberOfFiles ~= 0)
+
+            fprintf('\n\nLoading stage 2 coordinates ....\n')
+            %Load latituge and longitude in memory
+            HDF_I_geog(2).lat = load(HDF_I_S.lat2);
+            HDF_I_geog(2).long = load(HDF_I_S.long2);
+
+            %Obtain all the files al load it in memory (sYear structure)
+            [hugeM]= RetrieveAllYear (HDF_I_S.stage2,HDF_I_Edges,HDF_I_geog(2).lat,  HDF_I_geog(2).long);
+
+%             %Internal check
+%             if NumberOfFiles ~= length(sYear)
+%                 error('Missmatch in file and Structure loaded in memory');
+%             end
+%
+%             %Define the first matrix
+%             hugeM = sYear(1).Data;
+%
+%             %Concatenate matrix
+%             for Index=2:1:length(sYear)
+%                 hugeM = [hugeM; sYear(Index).Data];
+%             end
+            tic;
+            %Save the Merged file
+            SaveHugeFile([HDF_I_S.outpath HDF_I_S.OutFileName2], hugeM);
+            fprintf('\nOutputfile : %s\n', [HDF_I_S.outpath HDF_I_S.OutFileName2]);
+            toc
+        else
+            %Display that no the has been processed
+            fprintf('\n\nNo files to process in stage2....\n\n');
+
+        end
+        %Chech for the 'single' class
+        if max(max(hugeM(:,1:5))) > 999
+            warning('Class single for hugeM is not enought. Consider double');
+        end
+
+    end
+
+
+    %% Perform stage 3
+    % Retrieve dir list of files, with the extension you gave
+    %
+    if (strcmpi(whatimport,'stage3') | strcmpi(whatimport,'all'))
+
+
+        clear dirlist NumberOfFiles sYear hugeM
+
+
+        %Change the working dir
+        chdir(HDF_I_S.inpath);
+        dirlist =dir(HDF_I_S.stage3);
+
+        %Count the number of files in the current directory
+        NumberOfFiles=size(dirlist, 1);
+
+
+        if (NumberOfFiles ~= 0)
+
+            fprintf('\n\nLoading stage 3 coordinates ....\n')
+            %Load latituge and longitude in memory
+            HDF_I_geog(3).lat = load(HDF_I_S.lat3);
+            HDF_I_geog(3).long = load(HDF_I_S.long3);
+
+            [hugeM]= RetrieveAllYear (HDF_I_S.stage3,HDF_I_Edges,HDF_I_geog(3).lat, HDF_I_geog(3).long);
+
+%             if NumberOfFiles ~= length(sYear)
+%                 error('Missmatch in file and Structure loaded in memory');
+%             end
+%
+%             hugeM = sYear(1).Data;
+%
+%             for Index=2:1:length(sYear)
+%                 hugeM = [hugeM; sYear(Index).Data];
+%             end
+            tic;
+            %Save the Merge
+            fprintf('\nOutputfile : %s\n', [HDF_I_S.outpath HDF_I_S.OutFileName3]);
+            SaveHugeFile([HDF_I_S.outpath HDF_I_S.OutFileName3], hugeM);
+            toc
+        else
+            %Display that no the has been processed
+            fprintf('\n\nNo files to process in stage3....\n\n');
+        end
+        %Chech for the 'single' class
+        if max(max(hugeM(:,1:5))) > 999
+            warning('Class single for hugeM is not enought. Consider double');
+        end
+    end
+
+
+    %% Perform stage 4
+    % Retrieve dir list of files, with the extension you gave
+    %
+    if (strcmpi(whatimport,'stage4') | strcmpi(whatimport,'all'))
+
+        clear dirlist NumberOfFiles sYear hugeM
+
+        %Change the working dir
+        chdir(HDF_I_S.inpath);
+        dirlist =dir(HDF_I_S.stage4);
+
+        %Count the number of files in the current directory
+        NumberOfFiles=size(dirlist, 1);
+
+        if (NumberOfFiles ~= 0)
+
+            fprintf('\n\nLoading stage 4 coordinates ....\n')
+            %Load latituge and longitude in memory
+            HDF_I_geog(4).lat = load(HDF_I_S.lat4);
+            HDF_I_geog(4).long = load(HDF_I_S.long4);
+
+            [hugeM]= RetrieveAllYear (HDF_I_S.stage4, HDF_I_Edges, HDF_I_geog(4).lat,  HDF_I_geog(4).long);
+
+%             if NumberOfFiles ~= length(sYear)
+%                 error('Missmatch in file and Structure loaded in memory');
+%             end
+%             tic;
+%             hugeM = sYear(1).Data;
+%
+%             for Index=2:1:length(sYear)
+%                 hugeM = [hugeM; sYear(Index).Data];
+%             end
+%             toc
+            tic;
+            %Save the Merge
+            SaveHugeFile([HDF_I_S.outpath HDF_I_S.OutFileName4], hugeM);
+            fprintf('\nOutputfile : %s\n', [HDF_I_S.outpath HDF_I_S.OutFileName4]);
+            toc
+        else
+            %Display that no the has been processed
+            fprintf('\n\nNo files to process in stage4....\n\n');
+        end
+        %Chech for the 'single' class
+        if max(max(hugeM(:,1:5))) > 999
+            warning('Class single for hugeM is not enought. Consider double');
+        end
+    end
+
+    %End of the function
+end
+
+
+
+#+END_SRC
+
+when the script finishes its run you should have text files in the
+output folder for each year, a seperate text file per year, IE
+
+f:\Uni\Projects\P020_Temprature_ITALY\1_Raw_data\MODIS\T2011\Output\OutputMergedh19v05.txt
+
+**** OLD METHOD (ARCGIS python script)
+Warning: there was a bug in the script that caused an offset in X,Y from
+the original HDF cords. we adress this in script cn004\_modis\_import
+where we fix the x,y
+ This applies both to the ST and NDVI modis images
+ using using this script
+f:\Uni\Projects\P020\_Temprature\_NE\_MIA\2.Code\2.Gather\_data\cn\_001\_hdf2\_points.py
+results in dbf files for every layer of the hdf file (day ST, night ST
+and emissivty) and the X,Y
+ the files are outputed here:
+
+f:\Uni\Projects\P020\_Temprature\_NE\_MIA\3.Work\2.Gather\_data\FN001\_yearly\_ST\
+
+** 3.Procces and Combine WU and NCDC data
+*** WU data
+using script:
+
+f:\Uni\Projects\P020\_Temprature\_NE\_MIA\2.Code\2.Gather\_data\CN\_002\_WU\_import.sas
+
+we import the WU yearly files and export them to a db file :
+
+f:\Uni\Projects\P020\_Temprature\_NE\_MIA\3.Work\2.Gather\_data\FN002\_WU
+yearly\NEMIA\_2000.dbf
+%Note%: some later years 2005-2011 are HUGE and thus its better to run
+the script one year at a time to save resources otherwise the HD will be
+fileld with temp files
+
+*** NCDC data and combine with WU
+
+using script:
+
+f:\Uni\Projects\P020\_Temprature\_NE\_MIA\2.Code\2.Gather\_data\CN\_003\_WU\_NCDC\_Combo.sas
+ we import the NCDC yearly files, combine them with the WU and export
+them here :
+
+f:\Uni\Projects\P020\_Temprature\_NE\_MIA\3.Work\2.Gather\_data\FN003\_WUNCDC
+yearly\met2000.dbf
+ also we create keytable files for individual station location per year
+and export them here:
+
+f:\Uni\Projects\P020\_Temprature\_NE\_MIA\3.Work\2.Gather\_data\FN007\_Key\_tables\met\_full\_grid.dbf
+ NOTE: we also take care in this script of duplicate station that arise
+from WU stations that appear both on the NE and MIA dataset but are the
+same station
+
+** 5.Modis NDVI data
+*** 1.info
+
+[[MIA_NE_temp_models_files/img/SS-2011-04-25_14.32.00.png]]
+NVDI- ranges from -1 to 1:
+*(1)* means that there is alot of vegetation while *(-1)* means there
+is no veg. (barren/asphalt) there is a negative association between
+LST and NDVI because of the cooling effect of canopy
+
+-The scalling factor from grid code to NVDI is 0.0001
+
+
+[[MIA_NE_temp_models_files/img/SS-2011-04-25_15.01.34.png]]
+
+*** 2.download from modis dataset
+
+The NDVI (vegetation index) is downloaded exactly as the surface
+temperature but using a different data set:
+[[MIA_NE_temp_models_files/img/SS-2011-04-25_14.07.08.png]]
+
+the raw files are located here after a renaming (see same as LST scheme):
+
+f:\Uni\Projects\P020\_Temprature\_NE\_MIA\1\_Raw\_data\ndvi\mia\_ne\A2011152\_11v04.hdf
+
+*** 3.import hdf to table
+using script
+
+f:\Uni\Projects\P020\_Temprature\_NE\_MIA\2.Code\2.Gather\_data\cn\_001\_ndvi2\_points.py
+
+we transformed the hdf file to database tables located here:
+
+f:\Uni\Projects\P020\_Temprature\_NE\_MIA\3.Work\2.Gather\_data\FN006\_NDVI\tblm\_2000032\_0.dbf
+
+*** 4.create yearly datasets and keytable
+
+using script
+f:\Uni\Projects\P020\_Temprature\_NE\_MIA\2.Code\2.Gather\_data\CN\_004\_NDVI\_import.sas
+ we created yearly NDVI files with a month variable:
+
+f:\Uni\Projects\P020\_Temprature\_NE\_MIA\3.Work\2.Gather\_data\FN006\_NDVI\_yearly\ndvi2000.dbf
+ we also created a keytable located here:
+
+f:\Uni\Projects\P020\_Temprature\_NE\_MIA\3.Work\2.Gather\_data\FN007\_Key\_tables\NDVI\_fullgrid.dbf
+
+** 6.models preperation
+*** Land use from rasters
+a unique grid is loaded to GIS
+-we *clip the grid* so only points inside the NEMIA area are prestent
+-we calcualted the elevation and percent\_urban form steve melly
+rasters using using extract values to points
+@Warning:carefully check At each step with gis statistics that the@
+there are not alot of missing , -9999 or other weird values
+
+*** create a near water areas variable
+in order to exclude LST points near water bodies we used the
+following method:
+we loaded a hydrology layer from ESRI
+f:\Uni\data\gis\hydro\uswater.gdb\
+and
+f:\Uni\data\gis\hydro\hydro\_usa.dbf
+these 2 are merged in gis to create hydro\_MERGED\_MIA\_NE
+
+then we take a unique grid
+
+f:\Uni\Projects\P020\_Temprature\_NE\_MIA\3.Work\2.Gather\_data\FN007\_Key\_tables\unique\_XY\_state.dbf
+
+and spatial join it with a 1km buffer:
+[[
+MIA_NE_temp_models_files/img/Image_ahJgbVB7xBPVg0Oq0fgwBg_0001.png]]
+
+then we create a 0,1 Variable for , is near water (0=no 1=yes) based
+on if its within a 1km dist or -1 (not within search radius)
+
+%NOTE%: some manual editing to convert some point to 'water' points was
+still needed (with the help of an overlay bing map)this is later exported here
+
+This is added to the general LU grid
+
+[[file:f:/Uni/Projects/P020_Temprature_NE_MIA/3.Work/2.Gather_data/FN007_Key_tables/FINAL_ALL_GRID.dbf]]
+*** Create a fishid for each grid point
+For the seperate regression for every grid cell anlysis we create big
+a big fish net of ~ 80 grids across the MIA_NE area and assign that
+ID to every 1x1km grid point
+[[file:1.Images/2542013w8.png]]
+
+this id is added again to the main LU file
+
+[[file:f:/Uni/Projects/P020_Temprature_NE_MIA/3.Work/2.Gather_data/FN007_Key_tables/FINAL_ALL_GRID.dbf]]
+
+*** Create a subset of LST relevant to stations (within X km if stations)
+
+~Step1: create a key table~
+
+1)we imported the full LST grid and LU variables from these 2 files:
+
+f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN007_Key_tables\LST_fullgrid.dbf
+f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN004_LU_full_dataset\LU_XY.dbf
+
+Then we did a spatial join so that the full LST grid with guid had a LU value for each grid cell
+
+[[/home/zeltak/org/attach/images/2542013w5.png]]
+
+this was exported here:
+
+f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN007_Key_tables\guid_LU.dbf
+
+&Step 2:create a subset for mod1&
+
+1) we import the Air temp stations (aggregated)
+
+f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN007_Key_tables\met_full_grid.dbf
+
+
+2) we then select by location only the points within X distance from
+   the monitor stations (10km or 1km etc).
+%NOTE: depending on what we decide we define a search distance (below for the 10x10km data its 13km, it will be different for the 1x1km data)%
+
+[[/home/zeltak/org/attach/images/2542013w6.png]]
+
+
+this selection is then exported to a dbf here:
+
+F:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN007_Key_tables\LST_within1km.dbf
+
+re-import the file using import XY
+
+then the file LST_within1km.dbf is joined  to the met_full_grid to add the station variable to all these AOD points to this file in the geodatabase:
+
+LST_within1km_met
+
+[[/home/zeltak/org/attach/images/2542013w7.png]]
+
+
+this is exported to dbf here:
+[[file:f:/Uni/Projects/P020_Temprature_NE_MIA/3.Work/2.Gather_data/FN007_Key_tables/LST_within1km_stn.dbf]]
+
+*** Create complete mod1 and mod2 files
+using this script:
+
+[[file:f:/Uni/Projects/P020_Temprature_NE_MIA/2.Code/2.Gather_data/CNSQL_PART1.sas]]
+
+Full mod 1 and mod2 files are created
+
+example year:
+
+#+BEGIN_SRC sas
+/*data*/
+
+/*data*/
+
+libname mods 'f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\3.Analysis\AN_001_mods\' ;
+
+
+PROC IMPORT OUT= WORK.lst2000pre (drop=x y emis_scale ntc dtc)
+            DATAFILE= "f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN005_MODIS_yearly\lst2000.dbf"
+			            DBMS=DBF   REPLACE;
+                        GETDELETED=NO;
+                        run;
+
+/*all NDVI points*/
+PROC IMPORT OUT= WORK.ndvi2000
+            DATAFILE= "f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN006_NDVI_yearly\ndvi2000.dbf"
+			            DBMS=DBF   REPLACE;
+						     GETDELETED=NO;
+							 RUN;
+
+/*all Met stations points*/
+PROC IMPORT OUT= WORK.met2000
+            DATAFILE= "f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN003_WUNCDC yearly\met2000.dbf"
+			            DBMS=DBF   REPLACE;
+						     GETDELETED=NO;
+							 RUN;
+
+/*ALL guid points for ALL area and closest station (met) to it*/
+PROC IMPORT OUT= WORK.key_full2000
+            DATAFILE= "f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN007_Key_tables\yearly_met_xy\fullgrid_stn_2000.dbf"
+			            DBMS=DBF   REPLACE;
+						     GETDELETED=NO;
+							 RUN;
+/*all met points within 1km of a sattelite point */
+
+PROC IMPORT OUT= WORK.LST_within1km_stn
+            DATAFILE= "f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN007_Key_tables\LST_within1km_stn.dbf"
+			            DBMS=DBF   REPLACE;
+						     GETDELETED=NO;
+							 RUN;
+PROC IMPORT OUT= grid
+                            DATAFILE= "f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN007_Key_tables\FINAL_ALL_GRID.dbf"
+						    DBMS=DBF   REPLACE;
+						    GETDELETED=NO;
+							RUN;
+
+data LST_within1km_stn (drop=xx yy);
+set LST_within1km_stn;
+glong= round(xx,0.00001);
+glat= round(yy,0.00001);
+run;
+
+data grid (drop=xx yy);
+set grid;
+glong= round(xx,0.00001);
+glat= round(yy,0.00001);
+run;
+
+data lst2000pre (drop=xx yy);
+set lst2000pre;
+glong= round(xx,0.00001);
+glat= round(yy,0.00001);
+run;
+
+data ndvi2000 (drop=xx yy);
+set ndvi2000;
+glong= round(xx,0.00001);
+glat= round(yy,0.00001);
+run;
+
+
+
+proc sql;
+  create table lst2000prew  as
+   select *
+    from lst2000pre left join grid
+     on lst2000pre.glong = grid.glong and  lst2000pre.glat = grid.glat ;
+run;
+
+
+
+
+/*add month to lst file*/
+/* deleing missing elev deltes outside map points */
+
+data lst2000prew   ;
+set lst2000prew;
+if near_water=1 then delete;
+/*if nemia ne 1 then delete;*/
+month = month(DATE);
+if Dtckin =0 then Dtckin=0.00000000000001;
+if Ntckin =0 then Ntckin=0.00000000000001;
+Rid=(2*Dtckin)/(Dtckin+NTckin);
+Rin=(2*NTckin)/(Dtckin+NTckin);
+if elev=. then delete;
+run;
+
+proc summary nway data=lst2000prew;
+class glong glat;
+var Rid Rin ;
+output out=sum_Ri mean=Rid_s Rin_s;
+run;
+
+
+
+proc sql;
+  create table DATA3  as
+   select *
+    from lst2000prew left join sum_Ri
+     on lst2000prew.glong = sum_Ri.glong and  lst2000prew.glat = sum_Ri.glat ;
+run;
+
+
+data lst2000;
+set data3;
+if dtckin ne . and ntckin ne . then do;
+mit=(dtckin + ntckin)/2;
+end;
+else if dtckin =. then mit=ntckin/rin_s;
+else if ntckin =. then mit=dtckin/rid_s;
+else mit=.;
+run;
+
+data lst2000 (drop=rid--rin_s);
+set lst2000;
+if mit >40 then delete;
+if mit < -30 then delete;
+run;
+
+
+/*add NDVI to lst file*/
+/*big dataset with all sattelite points and mit for them*/
+/*also save the mod2 file*/
+
+
+
+proc sql;
+  create table  mod2_2000  as
+   select *
+    from  lst2000 left join ndvi2000
+     on lst2000.glong = ndvi2000.glong and lst2000.glat = ndvi2000.glat  and  lst2000.month = ndvi2000.month ;
+run;
+
+/*save mod2*/
+data mods.mod2_2000;
+set mod2_2000;
+run;
+
+
+/*subset large all lst dataset to only relevant within 1km of station datset */
+
+
+
+/*this next step will produce all satellite grid/day combos only within 1.5km of a monitor*/
+
+
+proc sql;
+  create table mod1_2000_s1  as
+   select *
+    from LST_within1km_stn left join mod2_2000
+     on LST_within1km_stn.glong = mod2_2000.glong and LST_within1km_stn.glat = mod2_2000.glat ;
+run;
+
+/*merge all grid/day combos only within 1.5km of a monitor and the actuall met air temp data*/
+
+proc sort data = met2000; by date station   ;run;
+proc sort data = mod1_2000_s1 ; by date station ;run;
+
+data  mod1_2000_s2;
+merge  mod1_2000_s1(in=a) met2000 (in=b)  ;
+  by date station;
+    if b;
+	run;
+
+
+
+/*to leave only THE 1 closest sat data point to station in each day*/
+proc sort data=mod1_2000_s2; by station date dist;
+data mod1_2000_s2s; set mod1_2000_s2; by station date dist;
+if first.date;
+run;
+
+/*delete days where no day or night sat data are avilable*/
+/*also save the mod1 file*/
+data  mods.mod1_2000 (drop= OBJECTID Join_Count dist TARGET_FID month  pressure_m stype  area source _type_ _freq_ x y );
+set mod1_2000_s2s;
+if mit=. then delete;
+if tempc > 130 then delete;
+if elev < -100 then delete;
+if ndvi >1 then delete;
+run;
+
+
+/*CLEAN WORKSPACE*/
+/*CLEAN WORKSPACE*/
+/*CLEAN WORKSPACE*/
+
+proc datasets lib=work kill nolist memtype=data;
+quit;
+
+
+
+
+proc mixed data = mods.mod1_2000  method=reml;
+class date ;
+   model tempc = mit elev purban NDVI / s outpred=pdataA_2000;
+    random int mit/ sub = date s ;
+	 ods output  SolutionF =  SolutionF2000;
+    ods output  SolutionR =  SolutionR2000;
+	run;
+
+
+data check_s1;
+ set work.Solutionr2000;
+run;
+
+data check_s1_int(keep = date Ovr_Int);
+ set check_s1;
+    if Effect = "mit" then delete;
+	Ovr_Int = Estimate;
+run;
+
+
+data check_s1_mit(keep = date Ovr_mit);
+ set check_s1;
+    if Effect = "Intercept" then delete;
+	    Ovr_mit = Estimate;
+run;
+
+
+proc sort data = check_s1_Int;  by date;run;
+proc sort data = check_s1_mit;  by date;run;
+
+data mean_s1;
+ merge check_s1_Int check_s1_mit ;
+  by date;
+run;
+
+/*** Join the Overall slope and intercept with 200% dataset ***/
+
+proc sort data = mods.mod2_2000;    by date;run;
+proc sort data = mean_s1;        by date;run;
+
+data Mod2_2000_v1;
+ merge mods.mod2_2000 (in=a) mean_s1(in=b) ;
+   by date;
+   if a;
+   run;
+
+
+/* Assign Fixed Effect */
+
+proc transpose data = work.Solutionf2000 prefix=fix_ out=transp_3_s1;
+  id Effect;
+run;
+
+data transp_3_s1(drop=_label_);
+ set transp_3_s1;
+   if _NAME_ = "Estimate";
+run;
+
+DATA  Mod2_2000_v4;
+ MERGE Mod2_2000_v1 transp_3_s1;
+RUN;
+
+PROC STANDARD DATA = Mod2_2000_v4 OUT = Mod2_2000_v4 REPLACE;
+  VAR fix_Intercept--fix_NDVI;
+RUN;
+
+
+
+data mods.Mod2_2000_pred;
+ set Mod2_2000_v4;
+  pred = fix_intercept + mit*fix_mit  + elev*fix_elev + purban*fix_purban + NDVI*fix_NDVI + OVR_int + mit*OVR_mit;
+run;
+
+/*check mod 2 predictions*/
+
+/*proc means data=mods.Mod2_2000_pred n min max mean std nmiss;*/
+/*var ; */
+/*run; */
+/**/
+/*proc summary nway data=mods.Mod2_2000_pred;*/
+/*class glat glong;*/
+/*var pred;*/
+/*output out=OUTPUTFILE mean=pred;*/
+/*run; */
+/**/
+/*PROC EXPORT DATA= OUTPUTFILE*/
+/*            OUTFILE= "c:\Users\ekloog\Documents\tmp\gtgOUTDATA.dbf" */
+/*			            DBMS=DBF REPLACE;*/
+/*						RUN;*/
+
+
+/*CLEAN WORKSPACE*/
+/*CLEAN WORKSPACE*/
+/*CLEAN WORKSPACE*/
+
+proc datasets lib=work kill nolist memtype=data;
+quit;
+
+#+END_SRC
+
+@Warning@ the 'weight' process to create mit creates some extreme mit
+observations due to the fact that some grid points have very low ST frequency through the year (IE 1-20 obs. for entire year) .these
+extreme obvs. are taken out in the code:
+
+if mit > 40 or mit < -30 ;
+
+the resulting mod1 and mod2 files are stored here:
+
+[[file:f:/Uni/Projects/P020_Temprature_NE_MIA/3.Work/3.Analysis/AN_001_mods/mod1_2000.sas7bdat]]
+
+*** Create full yearly grids for mod3
+We now create a keytable with every gird point and closest stn (met) station for each year
+This is done yearly since the Met stations change year to year
+We take a unique grid (the LU full grid) and every year do a spatial
+join to the unique Met station layer
+this is exported here:
+
+f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN007_Key_tables\yearly_met_xy\fullgrid_stn_2000.dbf
+
+then to create the mod3 files we use this script
+
+[[file:f:/Uni/Projects/P020_Temprature_NE_MIA/2.Code/2.Gather_data/CN_008_yearly_grids.sas]]
+
+example:
+#+BEGIN_SRC sas
+
+/*proc printto log="nul:"; run;*/
+ods listing close;*to suppress the output printing;
+ proc printto log="f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\Archive\fg2007.log"; run;
+
+
+
+PROC IMPORT OUT= grid
+            DATAFILE= "f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN007_Key_tables\FINAL_ALL_GRID.dbf"
+			            DBMS=DBF   REPLACE;
+						     GETDELETED=NO;
+							 RUN;
+
+
+
+
+
+
+/**** Create Data ****/
+/*creates the complete time series range*/
+
+data seriesj;
+ input date ddmmyy10. Value;
+  format date ddmmyy10.;
+cards;
+01/01/2007 1
+31/12/2007 1
+run;
+
+/*creates the completed time series for above range*/
+/*the output file is 'daily'*/
+
+proc expand data = seriesj out=daily to=day method=step;
+  convert Value  = daily_Value;
+  id date;
+run;
+
+
+/*create full grid*/
+
+/*create a list of dates for cycle-first type macro*/
+
+data id_list(keep = list list_new date);
+  length list $ 30000. list_new $ 30000. ;
+   retain list_new;
+   set Daily;
+     if _n_ = 1 then do;
+        list = trim(left(Date));
+        list_new = list;
+                     output;
+     end;
+     if _n_ > 1 then do;
+      list = trim(left(list_new))||" " || trim(left(Date));
+      list_new = list;
+       call symputx("list",list_new);
+      output;
+     end;
+run;
+
+%put &list;
+
+
+/*launch the macro*/
+
+%put &list;
+
+/*use the macro variable created in cycle*/
+/*The output is called 'Final'*/
+
+%macro full(List = );
+
+%let j=1;
+
+%do %while (%scan(&List,&j) ne);
+ %let date = %scan(&List,&j);
+
+data Daily&date;
+ set Daily;
+  where date = &date;
+run;
+
+data Daily&date(keep = date xx yy);
+  if _N_ = 1 then set Daily&date;
+ set grid;
+run;
+
+proc append base = Final data = Daily&date force;
+run;
+
+proc datasets lib=work; delete id_list Daily&date; run;
+
+%let j=%eval(&j+1);
+%end;
+
+
+%mend full;
+
+%full(List = &list);
+
+
+
+PROC IMPORT OUT= WORK.key_full2007
+            DATAFILE= "f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN007_Key_tables\yearly_met_xy\fullgrid_stn_2007.dbf"
+			            DBMS=DBF   REPLACE;
+						     GETDELETED=NO;
+							 RUN;
+
+
+proc sort data = key_full2007; by xx yy   ;run;
+
+proc sort data =  final; by xx yy   ;run;
+
+data mod2_2007_s1;
+merge final (in=a) key_full2007 (in=b keep=xx yy guid  station)  ;
+  by xx yy ;
+    if a;
+	run;
+
+data mod2_2007_s1 (drop=stn);
+set mod2_2007_s1;
+ stn     = compress(left(station));
+ station = stn;
+ if station = "KNYMT.S" then station = "KNYMT_S";
+run;
+
+
+PROC EXPORT DATA= mod2_2007_s1
+            OUTFILE= "f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN011_mod3_files\mod3_2007all.csv"
+			            DBMS=CSV REPLACE;
+						     PUTNAMES=YES;
+							 RUN;
+
+
+/*** Export ***/
+
+proc datasets lib=work kill; run; quit;
+
+
+#+END_SRC
+
+Which outputs the mod3 files here:
+
+[[file:f:/Uni/Projects/P020_Temprature_NE_MIA/3.Work/2.Gather_data/FN011_mod3_files/mod3_2007all.csv]]
+
+
+*** generate near table (calculate the 100km buffer for every grid cell)
+
+We want to get !all grids within 100km of a met station!
+
+this changes year to year since the stations change. thus it has to be seperatly done year to year
+
+first load the unique grid with XX and YY and the relevant met station for every year from these files:
+
+[[file:f:/Uni/Projects/P020_Temprature_NE_MIA/3.Work/2.Gather_data/FN007_Key_tables/yearly_met_xy/XY2001.dbf]]
+
+and from the geodatabase ‘work’:
+
+uniqueXY_alberts_water_cliped_elev_purban_reg_netid_state
+
+then issue this process (generate near table) :
+
+[[/home/zeltak/org/attach/images/img14062013p3.png]]
+
+the above generates the near Table. you can see the !IN_FID! (the objectID of input feature- MET) and !NEAR_FID! (the objectID of near feature- GRID)
+
+1)first issue a join to the neartable the  MET(monitors) feature layer
+based on !IN_FID! (neartable ) And the original !fid! (MET)
+2)Followed by another join to the neartable with the unique grid(the GRID) based on !NEAR_FID! And the original !fid! (of the GRID):
+3)then the final result will have the attributes of both original table and then near table
+
+this is exported here:
+f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN015_withinkm\km2001.dbf
+
+*** calculate per day mean 100km temp per guid
+
+using script[[
+
+file:f:/Uni/Projects/P020_Temprature_NE_MIA/2.Code/2.Gather_data/MACRO100km.sas]]
+
+We calculate a per day per guid temperture reading that is the mean of all met stations within 100km from that grid cell.
+
+one year example:
+#+BEGIN_SRC sas
+proc printto log="nul:"; run;
+
+
+
+/*---------------------------2000------------------------------*/
+/*---------------------------2000------------------------------*/
+/*---------------------------2000------------------------------*/
+
+
+PROC IMPORT OUT= met2000
+            DATAFILE= "f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN003_WUNCDC yearly\met2000.dbf"
+			            DBMS=DBF   REPLACE;
+						     GETDELETED=NO;
+							 RUN;
+
+
+PROC IMPORT OUT= near_table_2000met(keep = station xx yy)
+            DATAFILE= "f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN015_withinkm\km2000.dbf"
+			            DBMS=DBF   REPLACE;
+						     GETDELETED=NO;
+							 RUN;
+
+
+
+
+/**** Create the date list ****/
+/*creates the complete time series range*/
+
+data seriesj;
+ input date ddmmyy10. Value;
+  format date ddmmyy10.;
+cards;
+01/01/2000 1
+31/12/2000 1
+run;
+
+/*creates the completed time series for above range*/
+/*the output file is 'daily'*/
+
+proc expand data = seriesj out=daily to=day method=step;
+  convert Value  = daily_Value;
+  id date;
+run;
+
+/*create a list of dates for cycle-first type macro*/
+
+data id_elenco(keep = elenco elenco_new date);
+  length elenco $ 30000. elenco_new $ 30000. ;
+   retain elenco_new;
+   set Daily;
+     if _n_ = 1 then do;
+        elenco = trim(left(Date));
+        elenco_new = elenco;
+                     output;
+     end;
+     if _n_ > 1 then do;
+      elenco = trim(left(elenco_new))||" " || trim(left(Date));
+      elenco_new = elenco;
+       call symputx("Lista",elenco_new);
+      output;
+     end;
+run;
+
+
+proc sort data = Near_table_2000met; by station; run;
+
+
+
+
+
+
+/*use the macro variable created in cycle*/
+/*The output is called 'Final'*/
+
+%macro full(List = );
+
+%let j=1;
+
+%do %while (%scan(&List,&j) ne);
+ %let date = %scan(&List,&j);
+
+data Daily&date;
+ set Met2000;
+  where date = &date;
+run;
+
+proc sort data      = Daily&date;                  by station; run;
+proc transpose data = Daily&date  out = Transpose; by station; run;
+
+data Transpose(drop = _NAME_ _label_);
+ set Transpose;
+  if _NAME_ = "tempc";
+run;
+
+data DATA3;
+ merge Near_table_2000met(in=a) Transpose(in=b);
+  by station;
+  if a;
+run;
+
+data DATA3;
+ set DATA3;
+  if col1 = . then delete;
+run;
+
+proc summary nway data=DATA3;
+ class xx yy;
+  var Col1;
+   output out = meanout mean(col1) = TEST_AVE;
+run;
+quit;
+
+data day&date;
+ set meanout;
+ keep date xx yy Test_Ave;
+  date = &date;
+  format date date9.;
+run;
+
+proc append base = mods.Final60kmet2000 data = day&date force;
+run;
+
+proc datasets lib=work; delete Daily&date  day&date DATA3 Transpose; run;
+
+%let j=%eval(&j+1);
+%end;
+
+
+%mend full;
+
+%full(List = &Lista);
+
+#+END_SRC
+
+*** Create mod2 predictions and mod3 predictions
+using this script:
+
+[[file:f:/Uni/Projects/P020_Temprature_NE_MIA/2.Code/2.Gather_data/CNSQL_PART2.sas]]
+
+we create mod2 predicitons based on seperate regressions per grid
+cell, and also mod3 precitions based on the mod2 fits
+
+Example year:
+#+BEGIN_SRC sas
+
+
+libname mods 'f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\3.Analysis\AN_001_mods\' ;
+
+/*END model that works*/
+/*END model that works*/
+/*END model that works*/
+
+
+data Final60kmet2011 (keep= date test_ave  glong glat);
+set mods.Final60kmet2011;
+     glong= round(xx,0.00001);
+     glat= round(yy,0.00001);
+run;
+
+data Mod2_2011_pred (keep= date pred glong glat fishid);
+set mods.Mod2_2011_pred;
+     run;
+
+
+proc sql;
+  create table Mod2_2011_predV3  as
+   select *
+    from Mod2_2011_pred left join Final60kmet2011
+     on Mod2_2011_pred.glong = Final60kmet2011.glong and Mod2_2011_pred.glat = Final60kmet2011.glat and Mod2_2011_pred.date = Final60kmet2011.date ;
+run;
+
+data mods.Mod2_2011_predV3;
+set Mod2_2011_predV3 ;
+if Test_Ave =. then delete;
+run;
+
+ods listing close;*to suppress the output printing;
+
+/*note there may be mising due to small areas being joined*/
+
+%macro Region;
+
+%do i=1 %to 80;
+
+data data&i;
+  set mods.Mod2_2011_predV3;
+where fishid = &i;
+run;
+
+proc mixed data= data&i  method=reml;
+model pred =  Test_Ave /s ;
+ods output solutionf = mods.solutionf2011&i ;
+by glong glat;
+run;
+quit;
+
+
+%end;
+
+%mend;
+
+%Region;
+
+
+
+%macro Region;
+
+%do i=1 %to 80;
+
+PROC APPEND BASE=mods.solutionf2011     DATA=mods.solutionf2011&i;
+RUN;
+
+
+%end;
+
+%mend;
+
+%Region;
+
+
+/*-----------------------------------------------------------*/
+/*mod3 initial regression and extract slopes and intercepts*/
+/*-----------------------------------------------------------*/
+
+PROC IMPORT OUT= grid
+                            DATAFILE= "f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN007_Key_tables\FINAL_ALL_GRID.dbf"
+						    DBMS=DBF   REPLACE;
+						    GETDELETED=NO;
+							RUN;
+
+
+
+data grid (drop=xx yy);
+set grid;
+glong= round(xx,0.00001);
+glat= round(yy,0.00001);
+run;
+
+Proc sort data = mods.solutionf2011; by glong glat   ;run;
+proc sort data = grid ; by glong glat ;run;
+
+
+data solutionf2011_3;
+merge mods.solutionf2011(in=a ) grid (in=b)  ;
+  by glong glat;
+    if a;
+	run;
+
+data solutionf2011_3;
+set solutionf2011_3;
+keep StdErr effect guid estimate glong glat;
+run;
+
+
+data slope2011 (drop=effect estimate StdErr);
+set solutionf2011_3;
+where effect="TEST_AVE";
+slope_tempc=estimate;
+StdErr_tempc=StdErr;
+run;
+
+
+
+data intercept2011 (drop=effect estimate StdErr);
+set solutionf2011_3;
+where effect="Intercept";
+slope_inter=estimate;
+StdErr_inter=StdErr;
+run;
+
+
+
+
+
+proc sort data = Intercept2011 ; by glong glat   ;run;
+proc sort data = slope2011 ; by glong glat ;run;
+
+data fs;
+merge Intercept2011(in=a) slope2011(in=b)  ;
+  by glong glat;
+    if a;
+	run;
+
+data fs (keep=newinter newslope glong glat);
+set fs;
+newinter=slope_inter;
+newslope=slope_tempc;
+run;
+
+
+
+
+
+/*-----------------------------------------------------------*/
+/*import full grid for every grid/day combo */
+/*-----------------------------------------------------------*/
+
+PROC IMPORT OUT= mod3_2011 (drop=tempc ws guid)
+  DATAFILE= "f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\FN011_mod3_files\mod3_2011all.csv"
+    DBMS=CSV REPLACE;
+	  GETNAMES=YES;
+	    DATAROW=2;
+	    GUESSINGROWS=500000;
+		RUN;
+
+data mod3_2011x  (drop=xx yy);
+set mod3_2011;
+glong= round(xx,0.00001);
+glat= round(yy,0.00001);
+run;
+
+proc sql;
+  create table Mod3_2011 as
+   select *
+    from mod3_2011x left join grid
+     on mod3_2011x.glong = grid.glong and mod3_2011x.glat = grid.glat;
+run;
+
+/*delete water and outside map points*/
+
+data Mod3_2011;
+set Mod3_2011;
+if near_water=1 then delete;
+if near_water=. then delete;
+run;
+
+
+
+
+proc sql;
+  create table Mod3_2011V3 as
+   select *
+    from Mod3_2011 left join Final60kmet2011
+     on Mod3_2011.glong = Final60kmet2011.glong and Mod3_2011.glat = Final60kmet2011.glat and Mod3_2011.date = Final60kmet2011.date;
+run;
+
+proc sql;
+  create table mod3_2011fs as
+   select *
+    from Mod3_2011V3 left join fs
+     on Mod3_2011V3.glong = fs.glong and Mod3_2011V3.glat = fs.glat;
+run;
+
+
+data mod3_2011fs_pred;
+ set mod3_2011fs;
+  pred_m3 = newinter +  TEST_AVE*newslope;
+/*  drop station;*/
+run;
+
+data mods.mod3_2011fs_pred;
+set mod3_2011fs_pred;
+run;
+
+/*proc means data=mod3_2011fs_pred n min max mean std nmiss;*/
+/*var ; */
+/*run; */
+
+proc summary nway data=mod3_2011fs_pred;
+ class glat glong;
+ var pred_m3;
+ output out=out2011 mean=pred_m3;
+ run;
+
+/*#yearly map*/
+
+PROC EXPORT DATA= out2011
+            OUTFILE= "f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\3.Analysis\AN_002_longterm_maps\lt2011.dbf"
+			            DBMS=DBF REPLACE;
+						RUN;
+
+/*CLEAN WORKSPACE*/
+/*CLEAN WORKSPACE*/
+/*CLEAN WORKSPACE*/
+
+proc datasets lib=work kill nolist memtype=data;
+quit;
+#+END_SRC
+
+* 3.Analysis
+** Cross validation mod1
+in this part using the scripts:
+
+[[file:f:/Uni/Projects/P020_Temprature_NE_MIA/2.Code/3.Analysis/MOD1CV_DAY.r]]
+[[file:f:/Uni/Projects/P020_Temprature_NE_MIA/2.Code/3.Analysis/MOD1CV_Night.r]]
+[[file:f:/Uni/Projects/P020_Temprature_NE_MIA/2.Code/3.Analysis/MOD1CV_MIT.r]]
+
+a ten folds cross validation is run for all years. we test 3 different models St-day, ST-night and a combined
+'weighted' model (MIT). since all preform very similarly we choose the combined ST model
+we also check the spatial Vs temporal aspect
+
+** Calculate R2, create yearly temp map and cleanup final predictions
+using this script:
+
+[[file:f:/Uni/Projects/P020_Temprature_NE_MIA/2.Code/2.Gather_data/CNSQL_PART3_finalize.sas]]
+
+we calculate R2 for mod3 for each year and in addition output yeraly
+maps for each year
+
+then using this script:
+
+[[file:f:/Uni/Projects/P020_Temprature_NE_MIA/2.Code/2.Gather_data/CNSQL_PART4_cleanup.sas]]
+
+we clean up the predcitions and output FINAL predictions
+
+
+
+* 4.results
+

@@ -1,0 +1,432 @@
+* matlab
+** Basics
+*** Operators
+**** Arithmetic Operators
+
+Arithmetic operators perform numeric computations, for example, adding two numbers or raising the elements of an array to a given power. The following table provides a summary. For more information, see the arithmetic operators reference page.
+
+Operator
+Description
++
+
+Addition
+
+-
+
+Subtraction
+
+.*
+
+Multiplication
+
+./
+
+Right division
+
+.\
+
+Left division
+
++
+
+Unary plus
+
+-
+
+Unary minus
+
+:
+
+Colon operator
+
+.^
+
+Power
+
+.'
+
+Transpose
+
+'
+
+Complex conjugate transpose
+
+*
+
+Matrix multiplication
+
+/
+
+Matrix right division
+
+\
+
+Matrix left division
+
+^
+
+Matrix power
+**** Relational Operators
+Relational operators compare operands quantitatively, using operators like "less than" and "not equal to." The following table provides a summary. For more information, see the relational operators reference page.
+
+Operator
+
+Description
+<
+
+Less than
+
+<=
+
+Less than or equal to
+
+>
+
+Greater than
+
+>=
+
+Greater than or equal to
+
+==
+
+Equal to
+
+~=
+
+Not equal to
+**** Logical Operators
+Returns 1 for every element location that is true (nonzero) in both arrays, and 0 for all other elements.
+
+A & B = 01001
+
+|
+
+Returns 1 for every element location that is true (nonzero) in either one or the other, or both arrays, and 0 for all other elements.
+
+A | B = 11101
+
+~
+
+Complements each element of the input array, A.
+
+~A = 10010
+
+xor
+
+Returns 1 for every element location that is true (nonzero) in only one array, and 0 for all other elements.
+
+xor(A,B) = 10100
+
+For operators and functions that take two array operands, (&, |, and xor), both arrays must have equal dimensions, with each dimension being the same size. The one exception to this is where one operand is a scalar and the other is not. In this case, MATLAB tests the scalar against every element of the other operand.
+
+Note   MATLAB converts any finite nonzero, numeric values used as inputs to logical expressions to logical 1, or true.
+
+Operator Overloading.  You can overload the &, |, and ~ operators to make their behavior dependent upon the class on which they are being used. Each of these operators has a representative function that is called whenever that operator is used. These are shown in the table below.
+
+Logical Operation
+Equivalent Function
+A & B
+
+and(A, B)
+
+A | B
+
+or(A, B)
+
+~A
+
+not(A)
+
+*** Operations
+**** Cancel run
+use Ctrl-c
+**** batch run
+you can run several script with a simple batch script. IE:
+
+#+BEGIN_SRC octave
+chdir f:\Uni\Projects\P020_Temprature_ITALY\1_Raw_data\MODIS\T2010\
+HDF_Import('all')
+chdir f:\Uni\Projects\P020_Temprature_ITALY\1_Raw_data\MODIS\T2011\
+HDF_Import('all')
+#+END_SRC
+
+save the script as a *.m file and run the script
+
+**** Suppresing output
+***** for a specific line
+end the line with a semi-coma (;) to supress the output for that line
+*** Saving and loading
+**** Normal save 
+Save all variables from the workspace in a binary MAT-file, test.mat. If filename is a variable, you must use function syntax.
+
+filename = 'test.mat';
+save(filename)
+
+Otherwise, you also can use command syntax.
+
+save test.mat
+**** Save large objects (in 64 bit systems)
+Create two variables and save them to a version 7.3 MAT-file called example.mat.
+
+#+BEGIN_SRC sh
+A = rand(5);
+B = magic(10);
+save('example.mat','A','B','-v7.3')
+#+END_SRC
+
+You also can use command syntax for the save operation.
+
+#+BEGIN_SRC sh
+save example.mat A B -v7.3
+#+END_SRC
+
+**** Loading
+Remove the variables from the workspace, and then retrieve the data with the load function.
+
+#+BEGIN_SRC sh
+clear
+load('test.mat')
+#+END_SRC
+*** Editing 
+**** comments
+you can a basic comment block with the '%' sign
+to create a comment section/block use '%%' 
+** export/import
+*** export
+**** export to CSV
+Syntax:
+
+csvwrite(filename,M)
+csvwrite(filename,M,row,col)
+
+Description
+
+csvwrite(filename,M) writes matrix M into filename as comma-separated values. The filename input is a string enclosed in single quotes.
+
+csvwrite(filename,M,row,col) writes matrix M into filename starting at the specified row and column offset. The row and column arguments are zero based, so that row=0 and C=0 specify the first value in the file.
+Examples
+
+
+csvwrite('csvlist.dat',m)
+
+The next example writes the matrix to the file, starting at a column offset of 2.
+
+csvwrite('csvlist.dat',m,0,2)
+
+** Data managment
+*** subsetting data
+**** subset by variable value for a matrix
+
+see also http://www.youtube.com/watch?v=98ZI0HF5qvw
+
+use this code
+
+#+BEGIN_SRC octave
+target = 19
+vi = find(sub0(:,2) <= target);
+sub1=sub0(vi,:);
+#+END_SRC
+
+where target is the value you want to subset by
+followed by finding the critirea in the matix (sub0) for all rows(:) column 2 (2) and a statment relative to target value
+finally you subset the full data by the find data (vi)
+
+Example
+#+BEGIN_SRC octave
+target = 19
+vi = find(sub0(:,2) <= target);
+sub1=sub0(vi,:);
+
+target = 6
+vi = find(sub1(:,2) >= target);
+sub2=sub1(vi,:);
+#+END_SRC
+
+** Extract HDF files using matlab
+First enter the current folder where you files are located, you can
+the GUI:
+
+[[file:~/org/attach/images/2013-03-19_11-04-22.png]]
+
+
+This folder is where you insert all your dbf files and the LAT/LONG
+binary files you converted to matlab (alexandra did that).
+
+we then wither run the script fully or enter it command by command
+
+the first command
+
+load Lat_Lon02_01.mat;
+
+*tip*: the ';' makes sure there is no output in the console
+
+ import the lat/long data as a 600x600 matrix (2
+vectors of 3600)
+
+[[file:~/org/attach/images/2013-03-19_11-50-57.png]]
+
+
+
+a = dir('*.hdf');
+
+
+%load the pre prepared matlabe file for lat and long
+load Lat_Lon02_01.mat;
+
+%we create a variable with all files ending with *.hdf
+a = dir('*.hdf');
+
+%takes inside cariable 'a' from 1 to the size of 'a' starting at position 1
+for i =1:size(a,1)
+%this says to go to all files from 'a' to 'i'    . the .name is the name
+%from the 'a' sub properties. this also uses the hdf read function [[*HDF%20read%20function][HDF read function]]
+AOD(:,:,i)=hdfread(a(i).name,'grid1km', 'Fields', 'Optical_Depth_Land');
+end
+
+%rename, change and edit variables created
+AOD=double(AOD);
+f =(AOD==-9999);
+AOD(f)=nan;
+mAOD=AOD*0.001;
+
+VectorAOD_2003_all = reshape(mAOD,[],size(a,1));
+
+VectorAOD_2003_all_coord=[Lat_Lon02_01, VectorAOD_2003_all];
+
+%save the data in matlab .mat format
+save VectorAOD_2003_all_coord VectorAOD_2003_all_coord;
+
+dlmwrite('tile_Boston_2003.txt',VectorAOD_2003_all_coord, 'delimiter', '\t', ...
+'precision', 6);
+
+
+% create list of file names
+
+for i =1:size(a,1)
+    U(i,:)=strcat(a(i).name);
+end
+
+** HDF read function
+
+This function is used to read hdf files. it brings up a seperate
+window when issued:
+
+hdftool
+
+and a window appears:
+
+
+[[file:~/org/attach/images/2013-03-19_12-08-40.png]]
+
+
+then in the HDF tool choose open file and load a hdf image
+
+you will see on the right a "view as EOS" layer. here you will find
+the diffent sub layers of the hdf structure (IE AOD etc). whats
+important is the import command:
+
+[[file:~/org/attach/images/2013-03-19_13-35-44.png]]
+
+in the above example we copy this part:
+
+Optical_Depth_Land = hdfread('F:\wtmp-miac\MAIACAOT.h02v01.20030011755.hdf', 'grid1km', 'Fields', 'Optical_Depth_Land');
+
+to use in our matlab script
+
+** Andrea codes
+*** Run code temperature modis script
+You can unpack the folder wherever you want, it's not a problem. Ideally, It should be better to unpack in the folder you
+unpacked the code the last time (but it's not mandatory). Before launch, you need to set the paths. To do that open the file HDF_Import
+and changes the following paths:
+
+#+BEGIN_SRC octave
+HDF_I_S = struct('inpath', {'/Users/andrea/Documents/MATLAB/Itai/matlab/'}, ...
+                                  'outpath', {'/Users/andrea/Documents/MATLAB/Itai/New2/Output/'}, ...
+                                  'codepath', {'/Users/andrea/Documents/MATLAB/Itai/New2'}
+
+
+'/Users/andrea/Documents/MATLAB/Itai/matlab/' % with '\folder containing the HDF files and lat long files\'
+'/Users/andrea/Documents/MATLAB/Itai/New2/Output/' %with '\folder you want the output files\'
+'/Users/andrea/Documents/MATLAB/Itai/New2' %with '\folder you unpacked the archive i sent you\'
+#+END_SRC
+
+Remember to leave the \ at the end of the path name and save.
+After, write in matlab:  HDF_Import('stage1')
+and look for the output in the output folder.
+Instead of stage1 you can write stage2 or stage3 or stage4 or *all*.
+
+you will need to put all HDF files per that year in a seperate year folder
+you need in every year folder a copy of all code scripts and lat/long files
+in each folder in the hdf_import code you need to change the paths/years as needed
+
+*** Run code MIAC PM data (binary lat/long files)
+**** Run the code
+     create a folder structure with yearly folders (2000,2001 etc)
+in each folder put all the hdf files for that year (all tiles can go
+in one folder) and the lat/long binary files for each tile.
+
+in the ROOT folder put all the scripts.
+
+to run issue :
+
+AOD_Importnew
+
+and let the script run until finished
+
+**** to change regions
+1.change the dimensions according to the data, that is
+-change in all files the X*X dimensions e.g 600*600 to 150*150
+-in the ~retreivelatlong.m~ script change the fread line to
+correspond to the Lat/Long dimensions:
+
+#+BEGIN_SRC octave
+fprintf('\nReading tie : %s', char(AOD_I_Tie.TieName));
+    %Open the file
+    fid = fopen(AOD_I_Tie.TieName);
+    %Read the file. Don't change the single
+    iLatLong = fread(fid, [22500 2], 'single') %!!!!need to change the number !!!
+#+END_SRC
+
+
+so in the above example since the dimension is 150x150 the number is
+2250
+*** Run code MIAC PM data (hdf lat/long files)
+**** Run the code
+-create a folder structure with:
+1.a code directory with all the code in it
+2.at the same level as the code create seperate folders for each tile
+with all years in it
+3.put a copy of all hdf lat/long in each tile directory
+4.add the path of the root folder with the code/tile folders to matlab
+5.run the command 'AOD_ImportHDF'
+$Note it has to be UPPER case for AOD$
+*** Code for NDVI (MODIS HDF)
+put the code in folder and the HDF+lat/long files in another
+folder. both should be in a Root folder. then launch in matlab add to
+the PATH the folder with the code
+go to the root folder and launch NDVI_import
+** meytars code
+*** base scripts 
+-create a text file with all your hdf files and full PATH
+-create a lat and long file hdf files
+
+the code is devided into two main files:
+
+maiacrun- the file you run which calls the function
+maiacread-the function itselfs with most of the code
+
+The code itself is commented so more datailed explenations on ecah step can be viwed in the code but a few important points:
+
+you need to change the matlab PATH to where the function is. this can be done via the gui or with the following command:
+
+
+%change dir to path
+cd '/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/org/files/Uni/Projects/code/P46/MAIAC'
+
+
+also, make sure that the file names are correct for the function, since if you rename it the script will crash and give you an error
+
+@note: an error may occur when trying to extract the dates from the file names, make sure terra is always written as 'tera' in all occurances (paths names, text file with paths etc) so that the terra script part dosent crash@
+
+

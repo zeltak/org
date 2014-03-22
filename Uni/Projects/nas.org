@@ -1,0 +1,263 @@
+#+TITLE: NAS
+
+* 3.1.6.NAS_PM
+
+** 1.intro
+
+*** data sources
+
+data was obtained through steve and Tanya
+ the RAW NAS data is located at:
+ S:\ENVEPI\Airs\nas\SASDATA\nas.sas
+ steves all unique addresses file for 2000-2008 is here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.1.Raw\_data\FULL\_NAS\addressesassociatedwithvisits1999\_2008.xls
+ steves local 50x50 LU data is here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.1.Raw\_data\FULL\_NAS\addressesassociatediwthvisits1999\_2008\_50mvariables.xls
+
+*** NAS dataset info
+
+the format for AddIDNew is:
+ 0004\_1
+ where 0004 is the subject ID
+ and the \_1 is the current adress or rather the number of time the
+subject moved houses (1..to X)
+
+** 2.gather data
+*** 1.LU data
+
+**** 2.Join to guid
+
+each NAS patient was joined to the closest guid to it using spatial
+join. this also gives each NAS address the 10x10km LU variables
+  
+ [[NAS_files/img/Image_kPxYf6bR1saysypDgVhmng_0001.png]]
+ the *results/output* are located here in :
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.4.Work\2.Gather\_data\FN004\_NAS\_lu\nas\_lu.dbf
+
+*** 2.create local predictions (50x50)
+
+**** 1.create LU variables
+
+steve already calculated LU variables at a 50x50m resolution for each
+NAS case.
+ NOTE: if you need to add other cases use the method in the NE models to
+calculate LU
+ The file with the add\_ID and LU variables is located here
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.1.Raw\_data\NAS\_Adresses\addressesassociatediwthvisits1999\_2008\_50mvariables.xls
+*
+ this was loaded to gis (you may beed to export it to dbf/csv before)
+and then we added distance to A1 roads and point emission data with a
+simple spatial join
+ [[NAS_files/img/Image_MXHeU1NpxlpKDGEdUzBxkQ_0001.png]]
+ the *results/output* are located here in :
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.4.Work\2.Gather\_data\FN009\_localPM\lu\_50.dbf*
+
+**** 2.calculate local PM
+
+using script cn010\_localPM\_NAS
+ *NOTE: since there are no time varying variables there can only be
+chronic effect and no short term (acute) effect for the NAS patient from
+the local traffic
+*
+ we calculate the local pm prediction for each subject*
+*
+ the *results/output* are located here in :
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.4.Work\2.Gather\_data\FN010\_localPM\_predictions\nas\_lpm.csv*
+
+*** 2.create 10x10 exposure dataset
+
+**** 1.create poll 00-08 dataset
+
+using script cn001\_create\_full\_nas\_dataset we assign exposure to all
+NAS cases. in this detailed script each NAS patient gets a one year lag
+with relative pm for a period if he switched residence
+
+**** 2.Assign exposure to NAS cases
+
+using script cn002\_assign\_exposure the pollution dataset was created
+for all available day for all NAS cases location so we get a full set of
+every case with 9x365 pmnew days (and lags)
+ the *results/output* are located here in :
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.4.Work\2.Gather\_data\FN020\_Final\_NAS\_POLL\final\_nas\_poll.sas7bdat
+*
+ then we add the local pm stage prediction to the above files
+ the *results/output* are located here in :
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.4.Work\2.Gather\_data\FN020\_Final\_NAS\_POLL\final\_nas\_poll\_lpm.sas7bdat
+*
+
+*** 7.prepare for marieablle comparison
+**** original MB code
+
+*R-code*
+ library(foreign)
+ library(stats)
+ library(mgcv)
+ library(splines)
+ library(MASS)
+ library(nlme)
+ mod<-glmmPQL(LOGFIB ~ BCMA3 + AGE + BMI
+  + TEMPC24H +as.factor(SMK2) + DIABETE+STATIN +
+ COS+ SIN + RHUM24H ,
+ random=~1|ID,family=gaussian, data=try,na=na.omit)
+ summary(mod)$tTable
+ *SAS code:*
+ if smk=1 then smk2=0;
+ else if smk=3 then smk2=2;
+ else if smk=4 then smk2=1;
+ sin=sin(2*3.14159265*date/365.24);
+ cos=cos(2*3.14159265*date/365.24);
+ *The outcomes/exposures used:*
+ Outcomes: Fibrinogen, CRP, ICAM-1, VCAM-1
+ Exposures: PN, BC, PM25, Sulfate, NO2, CO,O3
+
+**** prepare dataset with exposure
+
+using this script Cn003 we load the MB nas dataset and add exposure data
+from the NE model .
+ the file is outputed here:
+ **
+
+C:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.4.Work\3.Analysis\MB\_analysis\mb\_expo.csv;
+
+**** old CW data steps
+
+***** 1.create met and pm countway data
+
+using script *cn005* we created countway data for pm and met variables
+(spss)
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.1.Raw\_data\MET\countway00\_09.sas7bdat
+
+***** 2.create lags
+
+using script *cn006* we created lags for the countway pm data, temp data
+and humidaty data
+ this is outputed as a sas file here:
+
+"c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.4.Work\2.Gather\_data\cw\_data\cway\_lags"
+
+***** 7.add cw data to NAS\_poll data
+
+using script *cn0067* we added the cw data to the nas dataset with our
+predicted pollution
+ this is outputed as a sas file here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.4.Work\3.Analysis\MB\_analysis\mb1\_met.csv
+
+***** finalize for mb analysis
+
+added met data (temprature and relative humidaty) from the countway
+dataset
+ in addition the key outcome variables were log transformed
+ this was exported to R for the mb analaysis here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.6.NAS\3.1.6.4.Work\3.Analysis\MB\_analysis\mb1\_met.csv
+
+** 3.Analysis
+*** 1.marie-belle analysis
+
+**** 1.MB analysis comparison
+
+using the *cn007\_mb* script we ran the same test as marie bell did in
+her analysis but using our PM models instead of the countway PM data
+ we also tried the same exact test using count way PM instead of ours
+using *cn008\_mb*
+
+*** 2.stacey black carbon comparison
+
+**** 2.comparison
+
+we ran a comparison using script *cn009\_mb*
+* NAS_Temperature
+** assign exposure to NAS addresses
+*** joining closets guid to each available address
+addresses updated up to 2012 was obtained from steve
+
+file:f:\Uni\Projects\3.1.6.NAS\3.1.6.1.Raw_data\ORIG_NAS_2013\tblnas_00_12utm19_7_8_13.csv
+
+and are here in gis format here:
+
+'F:\Uni\Projects\3.1.6.NAS\3.1.6.4.Work\2.Gather_data\$GIS Repo\NAS_temperature.gdb\addresses'
+
+then we join the using spatial join to the address layer using the
+final clipped and cleaned layer: 'Final_gird_nobadareas'
+
+the spatial join results are outputed to both the nastemp.gdb and a
+dbf here:
+
+file:f:\Uni\Projects\3.1.6.NAS\3.1.6.4.Work\2.Gather_data\FN007_key\nas_tempguid.dbf
+*** Create lags for NAS cases
+using script
+
+^f:\Uni\Projects\3.1.6.NAS\3.1.6.3.Code\2.Gather_data\cn040_subset_temperature.sas^
+
+we subset the full dataset to only include the exposure grids
+associated with the cases we have thus substanitally reducing the
+data base size/time of proccessing. this creates a exposure DB
+relevant just for our cases
+
+this results in an exposure file located here:
+
+then using this script
+
+^f:\Uni\Projects\3.1.6.NAS\3.1.6.3.Code\2.Gather_data\cn50_assign_lags_to_nas.sas^
+
+we calculated the relative exposure for each NAS case taking into
+account address changes and seasonality home changes.
+we then join the final 'weighted' predictions to the latest NAS
+dataset:
+
+file:f:\Uni\Projects\3.1.6.NAS\3.1.6.1.Raw_data\ORIG_NAS_2013\nas.sas7bdat
+
+and finally export this to both here:
+
+file:f:\Uni\Projects\3.1.6.NAS\3.1.6.4.Work\2.Gather_data\FN040_temp_final\final_nas_temp.sas7bdat
+
+and here:
+
+file:s:\ENVEPI\Airs\nas\AIR POLLUTION AND WEATHER\Temperature_prediction_1x1km_JULY13\final_nas_temp.sas7bdatt
+* NAS MAIAC NE_MIA
+** add PM exposre to NAS cases
+*** load addresses to GIS
+we used the latest addresses file:/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/3.1.6.NAS/3.1.6.1.Raw_data/ORIG_NAS_2014/nasaddr95_11.csv
+that have addresses from 1995-Current dates
+*** assign closest guid (for 1x1) and closest lpmid (for lpm stage)
+
+We convert all layers/files to alberts projections and we issue spatial joins:
+once to get the closet guid (join to al_GUID_pblid_NEMIA_distPE_wflag0_ndviid_regions_metID)
+and then to get lpmidd (join to MIA_NE_alberts_LPM_ID)
+
+we export the guid-cases here:
+file:/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P044_NAS_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/NAS_addresses_guid_2014.csv
+and the lmpid-cases here:
+file:/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P044_NAS_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/NAS_addresses_albertsXY_LPMID_2014.csv
+
+*** create 1x1pm dataset
+we create a dataset with all 1x1 PM predictions only for the relevant nas guids by using this script:
+
+file:/home/zeltak/org/files/Uni/Projects/code/P44/cn005_create_nas_maiac_exposure.r
+
+*** create both 1x1 and LPM database for users
+we use this script: file:/home/zeltak/org/files/Uni/Projects/code/P44/cn007_data_for_NAS.r to
+
+**** 1)create 1x1km PM full grid to all NAS cases
+the PM file is exported here
+file:/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P044_NAS_MAIAC/3.Work/2.Gather_data/FN008_LPM/NASpm.csv
+and the address-guid keytable here:
+file:/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P044_NAS_MAIAC/3.Work/2.Gather_data/FN008_LPM/NASadd.csv
+
+then these can be linked to each other with the variable 'guid'
+
+**** 2)create full daily LPM dataset
+the second part of the scipt creates daily lpm per lpmid (for relevant NAS cases)
+and is outputted here:
+file:/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P044_NAS_MAIAC/3.Work/2.Gather_data/FN008_LPM/allyearslpm.csv
+

@@ -1,0 +1,112 @@
+#+TITLE: Zinc
+
+* 3.1.7.Zinc
+
+@NOTE@ new data and results are here
+
+s:\ENVEPI\Zinc_project\
+
+** 1.intro
+
+** 2.gather data
+
+*** 1.data
+
+data was obtained from Lee Dietrich (lee.dietterich@gmail.com) and
+located here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.7.Zinc\3.1.7.1.Raw\_data\XLS\
+ the document on that is here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.7.Zinc\3.1.7.1.Raw\_data\Docs\
+ the files used were :
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.7.Zinc\3.1.7.1.Raw\_data\XLS\All
+Data Summary.xls
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.7.Zinc\3.1.7.1.Raw\_data\XLS\Original
+Raw Data Final v2.xls*
+*which were loaded to SPSS and converted (*see next step*)
+ the 2 data files differ in that:
+ 1)RAW data- is the primary dataset
+ 2)the SUMMARY data - includes the primary data, secondary data and
+literature data
+
+*** 2.Convert Raw data to R in spss
+
+the original xls file was loaded to Spss from here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.7.Zinc\3.1.7.1.Raw\_data\XLS\Original
+Raw Data Paired Treatment Means.xls
+ unwanted string variables were deleted (comments etc)
+ then recoding took place using cn001
+ 1)water -> irreg :
+ 0-dry
+ 1-wet
+ . sys missing
+ 2)crop -> crop type
+ [[Zinc_files/img/SS-2011-05-12_10.54.09.png]]
+ 3)cultivar -> cultiv
+ [[Zinc_files/img/SS-2011-05-12_10.56.24.png]]
+ *Note:missing had to be recoded again (see script cn001)*
+ 4)nitrogen application -> nitro
+ 0-no
+ 1-yes
+ and
+ nitrogen application -> nitro\_continous
+ to have a continous variable
+ 5) CO2inthissample -> CO
+ 0-ambient
+ 1-elevated
+ 6)study-> study\_area
+ [[Zinc_files/img/SS-2011-05-12_12.20.53.png]]
+ 7)location -> loc
+ [[Zinc_files/img/SS-2011-05-12_12.22.45.png]]
+
+*** 3.Convert summary data to R in spss
+
+recoding took place using cn002\_summary\_data.sps
+
+** 3.Analysis
+
+*** 1.SAS
+
+we used the script sas\_mixed\_with\_v3.sas to run a stratified analysis
+by crop and group for both dataset (raw and summary)
+ the results are outputed here as sas files:
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.7.Zinc\3.1.7.5.Results\SAS\zincsol.sas7bdat*
+
+** archive
+
+*** 1.mixed models for raw data
+
+a mixed model was run using script cn001.
+ NOTE:
+ to extract the random slopes top add to the fixed effect we ran this in
+the above script
+               
+ zinc3 <- lmer( zinc\_ppm ~
+CO+as.factor(year)+(1|pairnumber)+(1+CO|crop),na.action=na.omit,data =
+zinc\_sum)
+ summary(zinc3)
+ ##extract SE extract the random coeefiecnt of random slope and add to
+fixed effect ##NEED TO EXTRACT EACH RANDOM CO COEF AND ADD TO FIXED CO
+(-2.33)
+ ran <- ranef(zinc3)
+ then in the ran object took the random effects for *crop* (copied
+manually):
+ [[Zinc_files/img/SS-2011-05-27_13.31.44.png]]
+ then each random effect was added to the fixed effect to get the final
+coeeficent:
+ [[Zinc_files/img/SS-2011-05-27_13.36.02.png]]
+
+*** 2.mixed models summary data (meta analysis)
+
+for the summary data mixed model was run using script cn002.
+ then in the ran object took the random effects for *crop* (copied
+manually):
+ [[Zinc_files/img/Image_x80Npeq0iXoc5lZJilZ2TA_0001.png]]
+ then each random effect was added to the fixed effect to get the final
+coeeficent:
+ [[Zinc_files/img/Image_x80Npeq0iXoc5lZJilZ2TA_0002.png]]

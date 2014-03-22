@@ -1,0 +1,807 @@
+#+TITLE: MA2003\_temp\_models
+
+* 3.1.3-Temp\_NE
+
+** 1.Intro
+
+*** 1.modis info
+
+*** 2.conversions
+
+kelvin to farenhight GIS:
+ ((([tempk]-273) * 1.8)+32)
+
+*** 3.julian years
+
+[[MA2003_temp_models_files/img/SS-2011-05-03_08.58.55.png]]
+
+*** 4.abbriviations
+
+Ta- air temperature
+ Ts- surface temperature
+
+** 2.Gather data
+
+*** 1.Air tempreature data
+
+**** 1.SVK data intro
+
+*Into*
+ data was takedn form Stephany van klots portable drive under:
+ e:\Boston\temp\
+ SVK obtained Massachusetts daily temperature data for 2000 to 2004 from
+National Climatic Data Center (NCDC), US Environmental Protection Agency
+(EPA), Weatherbug Professional, and Weatherunderground Inc.
+ While the two first institutions have been collecting temperature data
+since decades and are government agencies, the latter two have been
+established after 2000.
+ Weatherbug is a commercial provider of weather information services,
+while weather underground is a network of personal weather stations.
+  After removal of outliers and implausible values there were from 40 up
+to 191 daily values for the years of 2000 to 2004 of temperature minimum
+and maximum available for further analysis.
+ During the study period 2000-2004 maximum daily temperature at Logan
+airport was on average 22 °C and ranged between 2 and 34°C.
+ *info*
+ There are sas datasets that give you a lot of information:
+ epastations\_periods, ncdcstations\_periods etc.. shows all sites and
+paramters with time periods that I got information on (including long
+and lat, original site name and so on)
+ All original information is in the respective folder of the source ie
+EPA, NCDC, wunderground, weatherbug.
+ so for wunderground you could use the code called wundergrounddata2.sas
+to see all I did to the original data, for EPA that is
+epasites3ambrose2.sas, for NCDC NCDCdata.sas and for weatherbug
+weatherbugdata5.sas.
+ Variables that end with r should be means of sites
+("190736","199923","192501","190770") from NCDC, that I used as
+reference
+
+**** 2.NCDC
+
+From NCDC SVK obtained minimum and maximum daily temperatures from 37
+locations.
+ The variables in sas datasets EPA\_met, NCDC are labelled so that you
+can make a proc contents to have tables of variable descriptions
+
+**** 3.EPA
+
+ EPA provided hourly or 3 hour averages of temperature for 13 sites.
+ The variables in sas datasets EPA\_met, NCDC are labelled so that you
+can make a proc contents to have tables of variable descriptions
+
+**** 4.Wunderground data
+
+wunderground data:
+ wunderground.sas7bdat
+ SVK downloaded Weatherunderground minimum and maximum temperature of 59
+locations starting from July 2000 from
+[[http://www.wunderground.com/][http://www.wunderground.com/]].
+ for wunderground there is an xls file with all sources as hyperlinks
+(wundergroundstations.xls). In the sas programs you can see how I
+processed the original data. I usually store newer codes with a count
+number at the end so that I can see which is the lates code
+
+**** 5.weatherbug
+
+Weatherbug contributed daily minimum and maximum temperature values of
+118 sites for 2003 and 2004.
+
+**** 6.combined file
+
+we need mean and min temperature as well as wind speed
+  a combined file was created using script CN001 .
+ [[MA2003_temp_models_files/img/SS-2011-04-26_13.52.54.png]]
+ tmean- mean temprature
+ wmean- mean windspeed
+ tmin- min temprature for that day
+
+**** 7.create GIS daily layers
+
+files were split to daily dbf files using the spps script Cn0012a and
+saved in
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.3.TEMP\_MODELS\3.1.1.4.Work\2.Gather\_data\daily\_stmp\
+ then using a python script Cn0012b with a loop in it, we managed to
+import the dbf, give it a spatial refrence and reproject it
+ the resulting shape files are located here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.3.TEMP\_MODELS\3.1.1.4.Work\2.Gather\_data\metshp\_utm\_proj\
+
+*** 2.MODIS Surface temp data
+
+**** 1.info
+
+***** general
+
+This is the site with the MODIS surface temprature data:
+
+[[https://lpdaac.usgs.gov/products/modis_products_table][https://lpdaac.usgs.gov/products/modis\_products\_table]]
+ look at the MODIS Products Table:
+ [[MA2003_temp_models_files/img/Image.png]]
+ We want to use the *MOD11A1* data which is at a 1x1km resolution daily,
+and should have 2 separate reading for day and night
+ we can also check the MODIS Overview page to see which tiles we are
+interested in
+
+***** scale factor
+
+ [[MA2003_temp_models_files/img/SS-2011-04-26_15.27.46.png]]
+
+***** MODIS Tiling system
+
+ [[MA2003_temp_models_files/img/Image_Ti5oxlPHCjx2K4Qxex3RAw_0001.png]]
+
+***** Naming Scheme of Files
+
+*MODIS Naming Conventions
+*
+ MODIS filenames (i.e., the local granule ID) follow a naming convention
+which gives useful information regarding the specific product. For
+example, the filename MOD09A1.A2006001.h08v05.005.2006012234657.hdf
+indicates:
+ MOD09A1 - Product Short Name
+ .A2006001 - Julian Date of Acquisition (A-YYYYDDD)
+ .h08v05 - Tile Identifier (horizontalXXverticalYY)
+ .005 - Collection Version
+ .2006012234567 - Julian Date of Production (YYYYDDDHHMMSS)
+ .hdf - Data Format (HDF-EOS)
+ The MODIS Long Name (i.e., Collection
+
+**** 2.download from modis website
+
+**
+
+***** NE
+
+[[MA2003_temp_models_files/img/Image_EugAI49Wxr5WywxsFXnyNg_0001.png]]
+
+***** use REVERB
+
+[[MA2003_temp_models_files/img/Image_1nCUHwcr055DofAWFJgnPg_0001.png]]
+ [[MA2003_temp_models_files/img/Image_1nCUHwcr055DofAWFJgnPg_0002.png]]
+
+**** 3.import hdf to tiff script
+
+[[MA2003_temp_models_files/attach/cn002.py][Attachment #01 (cn002.py)]]
+ *Folder: hdf\_2\_tiff*
+ first a base script cn002 was created which included converting the hdf
+to a raster image (tiff).
+ this was done in the model builder and exported to python
+ [[MA2003_temp_models_files/img/SS-2011-04-26_10.19.42.png]]
+ note that only the LST (land surface temprature) swath was selected at
+this stage since its what we only want to extract now.
+ [[MA2003_temp_models_files/img/SS-2011-04-26_10.19.50.png]]
+ this model was exported to a python script
+
+cn002
+
+(see attached example)
+ using a custom python script i obtained i copied the script with day
+001 to 365 scipts where each file corresponds to a different day (see
+attached custom script in python)
+ then using the 'cat' command i joined all python scripts into 1:
+
+cat * > file
+
+or on windows
+
+type * > file
+
+ this file cn002all is run in python and prodcues tiffs for each day
+
+**** 4.define projection for tiff
+
+*Folder: hdf\_2\_tiff*
+ using script cn003 first a model was built and then a repopulated
+script was run ro define a GCS to the tiff files
+ [[MA2003_temp_models_files/img/SS-2011-04-28_10.29.04.png]]
+ this model was exported to a python script
+
+cn003all
+
+(see prev examples)
+
+**** 5.convert tiffs to point layers
+
+[[MA2003_temp_models_files/attach/cn_python_populate_point.py][Attachment
+#02 (cn\_python\_populate\_point.py)]]
+ *folder: tiff\_2\_point*
+ The same procces as the import hdf to tiff was done to convert the
+tiffs to point data
+ a model was created
+ [[MA2003_temp_models_files/img/SS-2011-04-26_11.27.31.png]]
+ this was exported to a pythin script cn004.
+ using a pythin helper script (attached) it was populated for 365, then
+combined to 1 script using cat and run cn004all
+
+**** 6.clip MA data
+
+[[MA2003_temp_models_files/attach/cn_python_populate_clip.py][Attachment
+#03 (cn\_python\_populate\_clip.py)]]
+ folder: clip
+ again a model is built
+ [[MA2003_temp_models_files/img/SS-2011-04-26_12.34.05.png]]
+ this was exported to a pythin script cn005.
+ using a pythin helper script (attached) it was populated for 365, then
+combined to 1 script using cat and run cn005all
+ Note: this script was a bit tricker and thus after the cat command the
+clip layer (MA\_BORDER) is added on top (see attached script)
+
+**** 7.reproject to UTM
+
+*folder: point\_utm*
+ using script cn006 first a model was built and then a repopulated
+script was run to project the files to PCS (UTM 19N)
+ [[MA2003_temp_models_files/img/SS-2011-04-28_11.51.22.png]]
+
+*** 3.MODIS Emissivity data
+
+**** 1.info
+
+The emissivity data come from the same source as the temprature(same hdf
+file)
+
+**** 2.import hdf to tiff script
+
+[[MA2003_temp_models_files/attach/cn002.py][Attachment #04 (cn002.py)]]
+ *Folder: emis\_2\_tiff*
+ first a base script cn007 was based on the cn002 script only the '0'
+value was changed to '1' emmisiivty
+
+**** 4.define projection for tiff
+
+*Folder: emis\_2\_tiff*
+ using script cn008 which was based on the cn003 script
+
+**** 5.convert tiffs to point layers
+
+[[MA2003_temp_models_files/attach/cn_python_populate_point.py][Attachment
+#05 (cn\_python\_populate\_point.py)]]
+ *folder: emis\_2\_point*
+ using script cn009 which was based on the cn004 script
+
+**** 6.clip MA data
+
+[[MA2003_temp_models_files/attach/cn_python_populate_clip.py][Attachment
+#06 (cn\_python\_populate\_clip.py)]]
+ folder: emis\_clip
+ using script
+
+cn010
+
+which was based on the cn005 script
+
+**** 7.reproject to UTM
+
+*folder: emis\_point\_utm*
+ using script cn011 which was based on the cn006 script
+
+*** 3.Modis NDVI data
+
+**** 1.info
+
+[[MA2003_temp_models_files/img/SS-2011-04-25_14.32.00.png]]
+ NVDI- ranges from -1 to 1:
+ *(1)* means that there is alot of vegetation while *(-1)* means there
+is no veg. (barren/asphalt)
+ The scalling factor from grid code to VDI is *0.0001
+ [[MA2003_temp_models_files/img/SS-2011-04-25_15.01.34.png]]*
+
+**** 2.download from modis dataset
+
+The NDVI (vegetation index) is downloaded exatctly as the surface
+temprature but using a diffrent data set:
+ [[MA2003_temp_models_files/img/SS-2011-04-25_14.07.08.png]]
+
+**** 3.import hdf to tiff script
+
+[[MA2003_temp_models_files/attach/cn002.py][Attachment #07 (cn002.py)]]
+ first a base script cn013 was based on the cn007 script
+
+**** 4.define projection for tiff
+
+using script cn014 which was based on the cn003 script
+
+**** 5.convert tiffs to point layers
+
+[[MA2003_temp_models_files/attach/cn_python_populate_point.py][Attachment
+#08 (cn\_python\_populate\_point.py)]]
+ using script cn015 which was based on the cn004 script
+
+**** 6.clip MA data and reproject
+
+[[MA2003_temp_models_files/attach/cn_python_populate_clip.py][Attachment
+#09 (cn\_python\_populate\_clip.py)]]
+ using script
+
+cn016
+
+which was based on the cn005 script the files were first clipped to MA
+and then reprojected to UTM 19N
+
+*** 4.Land use
+
+**** elevation
+
+Using a NED elevation raster obtained through steve (he took it from
+ESRI) i calculated elevation by :
+ 1)converting the raster to point
+ 2)reprojected it to UTM
+ 3)clipped the elevation to fit only MA
+ [[MA2003_temp_models_files/img/SS-2011-04-28_13.50.11.png]]
+
+**** Land use
+
+***** 1.info
+
+[[MA2003_temp_models_files/img/SS-2011-05-03_10.42.26.png]]
+
+***** 2.get LU data
+
+LU data was obtained from the mrlc
+([[http://www.mrlc.gov/][http://www.mrlc.gov/]])
+ [[MA2003_temp_models_files/img/SS-2011-05-04_09.37.26.jpg]]
+ we went then to obtain data
+ [[MA2003_temp_models_files/img/SS-2011-05-04_09.47.29.png]]
+ then
+ [[MA2003_temp_models_files/img/SS-2011-05-04_09.48.47.png]]
+ this gives as a raster of the whole USA which we then cut out the NE
+part
+
+***** 3.process image
+
+Data projection was first converted to UTM 19N
+ then we converted the MA grid ([[#lawWTJf8xd4k6zmo22sFZA][step 8]])
+(the point layer) to a raster:
+ [[MA2003_temp_models_files/img/SS-2011-05-04_09.56.30.png]]
+ we made sure that:
+ 1)the cell size was 1000 (that is 1kmx1km=100meters)
+ 2)the value field was the grid id (guid)
+ this gave us a raster image
+ [[MA2003_temp_models_files/img/SS-2011-05-04_09.56.38.png]]
+ then we went on to use the combine raster feature
+(grid\_raster\_combine\_lu\_2)
+ [[MA2003_temp_models_files/img/SS-2011-05-04_11.22.04.png]]
+ also make sure the environment is defined correctly so that the output
+cell size is at minimum (so it will use the 30x30 ratser instead of the
+1x1km raster) and that the extent is defined correctly:
+ [[MA2003_temp_models_files/img/SS-2011-05-04_11.21.26.png]]
+ [[MA2003_temp_models_files/img/SS-2011-05-04_11.21.40.png]]
+ This resulted in a raster layer of 30x30m resolution with an grid id
+(grid raster) an corresponding LU data (LU\_Orig)
+ [[MA2003_temp_models_files/img/SS-2011-05-04_11.24.02.png]]
+ this table is exported to dbf
+
+***** 4.calculate % built in spss
+
+this table is loaded to spss and using this script (cn017) the following
+was achived:
+ 1)the lu codes are recoded into 0 (empty) and 1(developed)
+ [[MA2003_temp_models_files/img/SS-2011-05-04_11.33.10.png]]
+ then a new variable is computed (lu3) which is lu2 multiplied by the
+counts in each cell (that is the number if 22,22,23 in each guid)
+ [[MA2003_temp_models_files/img/SS-2011-05-04_11.34.26.png]]
+ then using the aggregate function we calcualte the sum of counts for
+each guid and the sum of the lu3 variable
+ [[MA2003_temp_models_files/img/SS-2011-05-04_11.36.12.png]]
+ finally we calcualte a new variable *per\_urban* which is the lu3\_sum
+/ Count\_sum
+ [[MA2003_temp_models_files/img/SS-2011-05-04_11.39.37.png]]
+ this finall file is outputef to dbf
+
+***** 5.join to MA grid
+
+the dbf file from step 4 is imported as a table to GIS
+ using normal Join the data is joined to an empty MA grid polygon file
+so that each grid cell gets the % built space
+ [[MA2003_temp_models_files/img/SS-2011-05-04_11.54.15.png]]
+
+*** 5.wind speed krigging
+
+**** create krigging
+
+using the script Cn017all we used a loop to create a surface (krigging)
+for each day based on windspeed variable of the met dbfs
+
+**** extract values from raster to points
+
+using the script Cn018all we used the extract to point function
+ [[MA2003_temp_models_files/img/SS-2011-05-02_10.48.09.png]]
+ we used the met shape files with all days as the output point features
+to add the krigged wind speed as a variable (RASTERVALUE)
+ [[MA2003_temp_models_files/img/SS-2011-05-02_10.49.24.png]]
+ the files are located here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.3.TEMP\_MODELS\3.1.1.4.Work\2.Gather\_data\wind\_krig\_extract\
+
+*** 6.Spatial Joins mod1
+
+**** J1-join the met data with krigg and the modis Temp
+
+using this script Cn019all we joined the met data with krigg and the
+modis Temp
+ its saved in the Join1 folder
+ [[MA2003_temp_models_files/img/SS-2011-05-02_11.12.56.png]]
+ Rastervalue- is the krigged wind speed
+ Grid\_code is the original modis Stemp values (need to transform to
+farenhight)
+
+**** J2-join with emissivity
+
+using this script Cn020all we joined the J1 data to the emmisivity data
+ its saved in the Join2 folder
+ [[MA2003_temp_models_files/img/SS-2011-05-02_11.26.33.png]]
+ Rastervalue- is the krigged wind speed
+ Grid\_code is the original modis Stemp values (need to transform to
+farenhight)
+ Grid\_code\_ is the original modis emmisivity values (need to transform
+to emmisivity values)
+
+**** J3-join elevation variables
+
+using this script Cn021all we joined the J2 data to the elevation data
+ its saved in the Join3 folder
+
+**** J4-join NDVI data
+
+using this script Cn023all we joined the J3 data to the NDVI data
+ its saved in the Join4 folder
+ *NOTE: in this script i had to manually chnage the - range(XX, YY) for
+each month and the corresponding NDVI file to get accurate month time
+for each file
+*
+ [[MA2003_temp_models_files/img/SS-2011-05-03_09.49.55.png]]
+ GRID\_CODE1- is for the NDVI index
+
+**** J5-join built% data
+
+using this script Cn025all we joined the J3 data to the NDVI data
+ its saved in the Join4 folder
+
+*** 7.SAS prepare
+
+**** 1.import to sas and join-clean
+
+all dbf files were imported to sas, joined to 1 file for year and
+cleaned using the cn022 script.
+ this was exported to csv for the R analysis
+
+*** 8.create grid and guid's
+
+**** 1.create MA grid
+
+using the MA borders and the fish grid Arcgis tool and 1x1 km grid was
+created for MA
+ [[MA2003_temp_models_files/img/SS-2011-05-03_13.29.57.png]]
+ then i created a guid by using the objectID field and copy that to a
+new variable titled guid (using the geo calculator)
+
+*** 9.prepare for CV mod1
+
+**** 1.CV mod1-spss devide
+
+using this script Cn024 we randomly devided the dataset into 90% and 10%
+in SPSS.
+ the data were outputed to CSV files.
+
+*** 10.Spatial Joins mod2
+
+**** J1-join the stemp data with krigg wdsp
+
+using this script Cn026 we joined the surface temp data with krigg wind
+speed
+ its saved in the jmod2\_Join1 folder
+ Rastervalue- is the krigged wind speed
+ Grid\_code is the original modis Stemp values (need to transform to
+farenhight)
+
+**** J2-join with emissivity
+
+using this script Cn027 we joined the J1 data to the emmisivity data
+ its saved in the jmod2\_Join2 folder
+ Rastervalue- is the krigged wind speed
+ Grid\_code is the original modis Stemp values (need to transform to
+farenhight)
+ Grid\_code\_ is the original modis emmisivity values (need to transform
+to emmisivity values)
+
+**** J3-join elevation variables
+
+using this script Cn028all we joined the J2 data to the elevation data
+ its saved in the jmod2\_Join3 folder
+
+**** J4.assign guid to files
+
+using this script Cn029 we joined the J3 data to the pbuilt data which
+also *added the guid*
+
+**** J5.assign guid to NDVI files
+
+using this script Cn030 we added ndvi data to the main data but this
+time not daily but by month
+ for this 12 cn030 scripts were run each for every month
+ the *results* are located here in :
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.3.TEMP\_MODELS\3.1.1.4.Work\2.Gather\_data\Jmod2\_Join5\
+  
+
+*** 11.prepare for mod2
+
+**** 1.sas arrange data and add dates and ndvi
+
+using this script Cn032 we used sas to :
+ 1)import all files
+ 3)add a date variable (converting from julian dates)
+ 4)clean up the data and export it for mod2
+
+*** 12.prepare for mod3
+
+**** 1.assign mean tmp and bimon to mod2pred
+
+using this script Cn0035 we first calculated the mean tempreature in
+each day across the study region (from the combined weather file)
+ then the mod2pred file is loaded and mtmp is joined by day
+ after that a bimon variable is calculated
+
+**** 3.create a full grid
+
+the empty grid we created (MA\_grid) is cliped to the MA border with the
+clip function
+ [[MA2003_temp_models_files/img/SS-2011-05-09_16.33.39.png]]
+ and is exported to a dbf file located here in :
+
+ c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.3.TEMP\_MODELS\3.1.1.4.Work\2.Gather\_data\mod3\_grid\one\_day\_grid.dbf
+ then in SAS using this script Cn036 we create 365 empty datasets based
+on grid and create a seperate date for each dataset by day, then we add
+the bimoth variables.
+ the final file is exported:
+
+C:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.3.TEMP\_MODELS\3.1.1.4.Work\3.Analysis\mod3\T2003\_grid.csv
+
+**** 3.regional temp
+
+***** 1.create 3 regions
+
+at first 2 regions were created under arcGIS:
+ [[MA2003_temp_models_files/img/SS-2011-10-06_15.59.14.png]]
+
+***** 2.assign region to temp stations and grid
+
+using spatial join to the region layer each station got the reg name it
+was in
+ this was exported to a dbf file in:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.3.TEMP\_MODELS\3.1.1.4.Work\2.Gather\_data\key\_tables\Sid\_guid\_region.dbf
+ also using spatial join to the region layer each guid (form the
+complete guid layer) got the reg name it was in
+ this was exported to a dbf file in:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.3.TEMP\_MODELS\3.1.1.4.Work\2.Gather\_data\key\_tables\region\_guid.dbf
+
+***** 3.assign the mod2 predictions mean tmep per region
+
+using script *cn042* each observation in each region got its own mean
+Temp reading
+ the final file is exported for the mod 3 stage:
+
+C:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.3.TEMP\_MODELS\3.1.1.4.Work\3.Analysis\mod3\T2003\_grid.csv
+ also in the same script we do the same to the full empty grid
+ this is exported here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.3.TEMP\_MODELS\3.1.1.4.Work\3.Analysis\mod3\T2003\_grid\_reg.csv
+
+*** 13.check ncdc and wb/wu correlastion
+
+**** 1.export ncdc aggregated data
+
+using this script Cn0061 we create aggregated ncdc stations and export
+them to dbf:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.3.TEMP\_MODELS\3.1.1.4.Work\2.Gather\_data\ncdc-wb
+cor\
+
+**** 2.GIS buffers
+
+in GIS buffers of 10km were created around the ncdc stations
+ [[MA2003_temp_models_files/img/SS-2011-10-13_16.51.53.png]]
+ then key tables were created for the wbwu file and the ncdc file (with
+spatial join) so that each point file got the buffer id it was within
+ these files are exported to dbf here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.3.TEMP\_MODELS\3.1.1.4.Work\2.Gather\_data\ncdc-wb
+cor\agg\_ncdc4.dbf
+ and
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.3.TEMP\_MODELS\3.1.1.4.Work\2.Gather\_data\ncdc-wb
+cor\agg\_wbwu3.dbf
+
+**** 3.calculate correlation
+
+using script *cn061* we imported the key files , merge all files and
+calculate the correlation between the wb-wu stations and the ncdc
+stations
+ the correlation we got was R2=0.960
+
+** 3.Analysis
+
+*** 1.Run first mixed models (mod1)
+
+using the *cn030\_celsius* script in R a mixed model is run to calibrate
+the station Temp (air temprature) with Surface tempratuer from MODIS
+including spatial and temporal variables
+ *Note: emissivity has to be converted using the offset, see code for
+details*
+ the R2 is saved for later reporting.
+
+*** 2.Cross Validation (mod1)
+
+**** 1.normal cross validation
+
+in this part using the script *cn030\_celsius* a regular cross
+validation of the r2 is run for all years
+ also the spatial Vs temporal aspect is checked
+
+*** 3.Run second mixed model (mod2)
+
+using the cn034 script in R a mixed model is run to get predictions for
+days with no Ta but with Ts (mod2)
+
+*** 5.Run GAMM stage model (mod3)
+
+**** 1.run the mod3 GAM
+
+using this script Cn037 we run the GAMM model and export the dbf and csv
+bimons (6 files each) for later re-joining
+
+**** 2.rejoin all bimons and bimon resids
+
+using this script Cn038 we rejoin the seperate bimons into one, add the
+residuals to the predictions, delete the missing values (the areas not
+cliped without tempreture data) and export it as a sas file for each
+full year
+
+**** 3.join to real temp data and run correlations
+
+using this script Cn039 we add to the real temp monitors in the year
+data from our predicted models (mod3) using the key table created in
+2.12.3 and then run a correlation between our predicted data and the
+real temp data
+
+*** 6.Run mod3 CV
+
+**** 1.run mod2 predictions CV
+
+using this script Cn040we created the mod2pred files 10 times for each
+CV file
+
+**** 2.add mean pm and bimon
+
+using this script Cn041 we irst calculated the mean tempreature in each
+day across the study region (from the combined weather file)
+ then the CV mod2pred files are loaded and mtmp is joined by day
+ after that a bimon variable is calculated
+ each files is exported to CSV:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.3.TEMP\_MODELS\3.1.1.4.Work\3.Analysis\mod3\_CV\
+
+**** 3.run the mod3 GAM
+
+using this script Cn042 we run the GAMM model for each CV file and
+export the dbf and csv bimons (6 files each) for later re-joining
+ NOTE: we manually transferred the *fullgrid*and*uniquegrid* files from
+the mod3 folder to the mod3\_CV folder
+ [[MA2003_temp_models_files/img/SS-2011-05-09_16.26.14.png]]
+
+**** 4.rejoin all bimons and bimon resids
+
+using this script Cn043 we rejoin the seperate bimons into one, add the
+residuals to the predictions, delete the missing values (the areas not
+cliped without tempreture data) and export it as a sas file for each
+full year
+
+**** 5.join to real temp data and run correlations
+
+using this script Cn044 we add to the real temp monitors in the year
+data from our predicted models (mod3) using the key table created in
+2.12.3 and then run a correlation between our predicted data and the
+real temp data
+
+*** 7.create yearly temp map
+
+**** 1.extract by guid in sas
+
+using the cn045 script in SAS we extract the mean temp for each guid
+cell across MA
+ this was done for yearly data
+ then summer only
+ then winter only
+ each file is exported to dbf :
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.3.TEMP\_MODELS\3.1.1.4.Work\3.Analysis\tmp\_year\_guid\
+
+**** 2.create maps in GIS
+
+in gis the SAS dbd output is imported (by X,Y) into ArcGis
+ [[MA2003_temp_models_files/img/SS-2011-05-11_12.46.29.png]]
+ then using simple spatial join each guid (from the MA\_cliped\_exact
+layer) gets the closest mean temp to it
+ [[MA2003_temp_models_files/img/SS-2011-05-11_12.51.42.png]]
+ then use symbology with the predicted mean pm to get the nice
+concentration map:
+ [[MA2003_temp_models_files/img/SS-2011-05-11_13.05.17.png]]
+
+*** 8.compare to kriging
+
+using the cn050 script in R we compared our results to simple kriging
+
+** 4.results
+
+*** 1.mod1 results
+
+the results of the mod1 analysis revealed a *pretty high R2 0.948*:
+ Linear mixed-effects model fit by REML
+  Data: F\_T2003\_All
+        AIC BIC logLik
+   30545.68 30624.58 -15260.84
+ Random effects:
+  Formula: ~1 + st\_faren | DATE
+  Structure: General positive-definite, Log-Cholesky parametrization
+             StdDev Corr
+ (Intercept) 17.7765996 (Intr)
+ st\_faren 0.2228565 -0.73
+ Residual 3.8913247
+ Fixed effects: TMIN ~ st\_faren + windsp\_krig * st\_faren + elevation
++ emis\_scale + ndvi + per\_built
+                         Value Std.Error DF t-value p-value
+ (Intercept) 4.13453 6.780018 5105 0.609812 0.5420
+ st\_faren 0.35256 0.027950 5105 12.614055 0.0000
+ windsp\_krig 0.15779 0.053157 5105 2.968348 0.0030
+ elevation -0.00821 0.000742 5105 -11.063774 0.0000
+ emis\_scale 49.00554 13.018768 5105 3.764222 0.0002
+ ndvi -3.66795 0.614065 5105 -5.973228 0.0000
+ per\_built 0.94855 0.231576 5105 4.096060 0.0000
+ st\_faren:windsp\_krig -0.00205 0.000945 5105 -2.173456 0.0298
+  Correlation:
+                      (Intr) st\_frn wndsp\_ elevtn ems\_sc ndvi pr\_blt
+ st\_faren -0.340
+ windsp\_krig -0.012 0.062
+ elevation -0.080 0.092 -0.102
+ emis\_scale -0.969 0.152 -0.007 0.066
+ ndvi -0.022 -0.059 0.061 -0.144 -0.028
+ per\_built -0.015 -0.052 0.053 0.048 -0.022 0.609
+ st\_faren:windsp\_krig 0.015 -0.060 -0.962 0.076 0.003 -0.078 -0.058
+ Standardized Within-Group Residuals:
+         Min Q1 Med Q3 Max
+ -6.77468500 -0.54730630 -0.00199576 0.51597903 6.16919674
+ *Number of Observations: 5305
+ Number of Groups: 193
+ [1] 0.9749885*
+
+*** 1.mod1 CV results
+
+[[MA2003_temp_models_files/attach/mod1_cor_CV_table.dbf][Attachment #10
+(mod1\_cor\_CV\_table.dbf)]]
+ the CV results resulted in a *R2 of 0.946*
+ the CV is attached
+ [[MA2003_temp_models_files/img/SS-2011-05-09_08.55.12.png]]
+
+*** 1.mod1 CV season-spatio-temp results
+
+*spatial Vs Temporal*
+ ##################Temporal##################
+  R-Square 0.9607
+ ##################Spatial##################
+ R-Square 0.7951
+ *Winter Vs Summer seasons*
+
+*** 3.mod3 results
+
+in the mod3 stage we got a R correlation of 0.97
+   [[MA2003_temp_models_files/img/SS-2011-05-09_08.43.12.png]]
+ this gave us a *R2 of 0.94
+*
+
+*** 4.mod3 CV results
+
+R2 CV results for year 2003: was *0.941*

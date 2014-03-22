@@ -1,0 +1,985 @@
+#+TITLE: MIA_PM_10x10
+
+* 3.1.2-MID\_AOD
+
+** Script RUN order
+
+Index file for process order of PM predictions from AOD files
+ 1) c001\_AOD Final.sas
+ 2) c002\_PM Final.sas
+ NOTE: midway in the script (after you create the pmsite file) you now
+need to create The regions in GIS for the study area and create a
+keytable for sitecode\_and guid (see section 7> 1-3 )
+ 3) c003\_J\_AODPM\_Batch.sas
+ 4) c005\_MET\_Final.sas
+ -manually transfer the all world NCDC met file (metXY.dbf) to the
+location:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.1.NE\_PM\_MODELS\3.1.1.1.Raw\_data\NCDC
+Met data\metXY.dbf
+ before starting to run the script.
+ -Change the state ABriv letters to corresopond to study area
+ 5) proceed to build in GIS all LU/emission dataset (see section 4)
+ 6) c006\_J\_AODPM\_METLU\_Batch.sas
+ -you may need to run the script one by one and not batched if batch
+resullts in weird vlalues
+ -also you need to manually change the gris split cords if you change
+regions
+ 7) c008\_create\_weights.sas
+ Analysis
+ 8)c019\_split4cv.r
+ 9) c020\_mod1\_100percent.sas
+ -make sure to save the mixed model outputs for the parameter
+constraints
+ 10) c020\_mod1\_CV\_BATCH.sas
+ 11) c020\_mod1x\_10percent\_localPM
+ 12) c021\_mod2\_100percent.sas
+ 13) c022\_mod2\_CV\_MACRO.sas
+ 14) c012\_create\_mpm
+ -note: if the number or regions are not enough in a a specific year
+(see output for missing) you need yo use proc expand, see 2005 in NE as
+an example
+ 15) c013\_create\_mpm\_CV\_MACRO
+ 16) c014\_prepeare\_pm\_dataset\_forcluster.sas
+ -note this is only needed if you subset the data by population
+ 17) c023\_gamm\_100percent.r
+ 18) c024\_mod3\_100percent\_R2
+ 19) c033\_gamm\_CV.r
+ 20) c034\_mod3\_CV\_R2.sas
+ 21) c035\_mod3\_CV\_localPM
+ 19) c039\_create\_poll\_datasets.sas
+ 20) cn60\_add\_Temp\_and\_lags
+
+** 1.Intro
+
+*** 1.modis info
+
+the way to extract the data if not from bill ridgway is:
+ get the 10x10km grid from modis
+ then in each grid cell you calculate the average PM2.5 falling that day
+in the box
+
+*** 2.state codes
+
+Delaware           DE
+ MARYLAND MD
+ NEW JERSEY NJ
+ NEW YORK NY
+ Pennsylvania PA
+ DISTRICT OF COLUMBIA DC
+ VIRGINIA        VA
+ West Virginia       WV
+
+*** hyung-joo LEE manual modis extraction
+
+Since in petroses' group they didnt have ready made data they had to
+extract the MODIS AOD data manually:
+ 1)they downloaded daily HDF files for the study area
+ 2)they created a grid manually (10x10km) over the studay area. the
+start position of the 10x10 grid was arbitrary
+ 3)using an IDL script they developed and that they ran seperatly for
+each day they extracted the aod values , x cord , y cord and other
+related variables (cloud coverage, solar zenith) that might Bias AOD
+reading
+ 4) this script resulted in a DB file (in excel) which was then
+calibrated with ground stations as we did
+
+** 2.Gather data
+
+*** 1.create daily aod data
+
+**** 1.obtain data
+
+AOD data was obtained through modis satellites with the help of Bill
+Ridgway (Bill.Ridgway@nasa.gov).
+ The files downloaded were monthly txt files with XY data and
+corresponding AOD data for each pixel. Each pixel has a resolution of
+10x10km.
+
+**** 2.process data
+
+AOD data was imported to a full file covering all years using script
+c001\_AOD Final.sas
+ the output is here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.NEW\3.1.1.4.Work\2.Gather\_data\FN001\_AOD\_full\_dataset\all\_aod.sas7bdat
+ in addition and AOD grid (unique points with no dates) is created and
+outputed here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\2.Gather\_data\FN004\_Key\_tables\aodgridfull.dbf
+
+*** 2.daily pm
+
+**** 1.download PM data from Views website
+
+*NOTE: use windowz explorer!!*
+yearly pm data was downloaded from the 'views' website
+ *hold down control and drag the mouse to multi select*
+
+
+#+DOWNLOADED: file:///home/zeltak/org/attach/images/SS-2011-03-16_08.40.36.png @ 2013-11-08 13:58:19
+#+attr_html: :width 500px
+ [[~/org/attach/images_2013//SS-2011-03-16_08.40.36_2013-11-08_13:58:19.png]]
+
+**** 2.create data
+
+AOD data was imported to a full file covering all years using script
+c002\_PM Final.sas
+ PM single year dataset are exported here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\2.Gather\_data\FN002\_PM\_full\_dataset\
+ A single Pm station grid is also created (pm\_sites) and exported to
+dbf:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\2.Gather\_data\FN004\_Key\_tables\pm\_sites.dbf
+ datasets for the mod3 predictions are created when the single pm
+stations are joined with a keytable of guid\_sitecode and outputed here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\3.Analysis\AN008\_mod3\_corr\pmguidt&year.dbf
+
+*** 3.create aodpm
+
+**** 1.Create the AOD-PM joined dataset
+
+using script c003\_J\_AODPM Final we joined the AOD dataset and PM
+dataset by distance, that is the closet AOD point to each PM station at
+a given buffer (13km).
+ data is outputed here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\2.Gather\_data\FN003\_PM\_AOD\_Combined\t2007.sas7bdat
+ *NOTE: there is a script* c003\_J\_AODPM Final\_all *that creates these
+joins for all years but its very resource intensive and thus its in the
+archive folder and you need to run the normal script year by year.*
+
+*** 4.Spatial data (Land use-emissions)
+
+**** 1.10x10km LU
+
+***** 0.Land use data Sources
+
+[[MIA_PM_10x10_files/attach/midatlanticvariables.doc][Attachment #01
+(midatlanticvariables.doc)]]
+ LAND use data was obtained through steve melly from the following
+sources (see attachment for detailed disicription):
+ Elevation: data was obtained in the form of a raster image from the
+USGS DEM
+ population/pop density: obtained from the ESRI census datasets
+ % open space/urban: obtained through the National land cover raster
+ road dist: from the ESRI streetmap layes
+ EPA point and area emission: through the EPA website
+ *NOTE: attached is a document with some variable info*
+
+***** 1.clip data to only cover the study area
+
+In GIS the aodgrid dbf from the aod creation step
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.1.NE\_PM\_MODELS\3.1.1.4.Work\2.Gather\_data\FN004\_Key\_tables\aodgridfull.dbf*
+ was imported to GIS and a polygon layer of the study area was added
+ [[MIA_PM_10x10_files/img/SS-2011-04-01_10.33.27.png]]
+ using clip, only the relevant AOD points falling in the study area were
+left (gn1)
+ [[MIA_PM_10x10_files/img/SS-2011-03-17_13.09.12.png]]
+ [[MIA_PM_10x10_files/img/SS-2011-04-01_10.36.45.png]]
+ Then the cliped data was spatially joined to the region layer so that
+each guid got the region it belonged to (*gn11*)
+  
+
+***** 2.Dist to road
+
+the guid layer (gn1) was loaded and the A1 layer raw data was loaded
+ [[MIA_PM_10x10_files/img/SS-2011-04-07_11.44.53.png]]
+ using spatial join each guid point got the distance from the closet
+road (*gn\_lu\_s1*)
+ this was then multipled by 100 to get it in km
+ [[MIA_PM_10x10_files/img/SS-2011-04-07_11.43.12.png]]
+
+***** 3.Elevation
+
+a raster image from NED (through steve) was loaded to GIS
+ [[MIA_PM_10x10_files/img/SS-2011-04-07_11.47.00.png]]
+ then using the extract values (the hight is the 'value' field) function
+every guid point go an intepulated elevation value from the closet
+elevation points around it:
+ [[MIA_PM_10x10_files/img/SS-2011-04-07_12.31.45.png]]
+ this resulted in elevation values for each guid (*gn\_lu\_s2*)
+ **Note**- a few points got -9999 so using the geo calculator i assgined
+the value 0 (they are all on the coast see map below)
+ [[MIA_PM_10x10_files/img/SS-2011-04-07_12.31.54.png]]
+
+***** 4.population
+
+population data was obtained through steve from the esri tract data.
+ The 10x10 polygon grid created [[javascript:;][HERE]] was exported to a
+polygon feature class in the UTM Zone 19 N projection. These polygons
+were *intersected* with the 2000 census blocks for New England also in
+the UTM Zone 19 projection.
+ Microsoft Access was used to calculate estimated population and
+population density in 10 km grid cells.
+ The table resulting from the intersection of blocks with grid cells was
+exported to MS Access. Tables with the census block area and 10 km grid
+areas were also exported. The nominal 10 km grid cells do not have
+identical areas since they were created in the WGS 1984 geographic
+coordinate system, and areas were calculated using the UTM Zone 19
+projection.
+ MS Access queries were used to:
+ *calculate the fraction of each census block in each grid cell:*
+ Blkfrac = gridblkarea/blkarea
+ *Estimate the population in each grid-block intersection:*
+ Gridblkpopest = blkfrac * totpop (if blkfrac > 1 due to rounding errors
+then gridblkpopest = totpop)
+ *Sum up the estimated populations for the 10 km grid cell and divide by
+grid areas:*
+ Gridpopest = ∑ gridblkpopest
+ Gridpopdens = gridpopest / gridarea
+ the shape file is located here:
+
+*C:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.1.NE\_PM\_MODELS\3.1.1.4.Work\2.Gather\_data\AGIS\_DB\NE\_AOD.gdb\grid\_cliped\_LU
+*
+
+***** 5.Open space
+
+Data was obtained through the national land cover database and proccesed
+by steve
+ first a grod steve created 4x4 was joined by table to the %open space
+and urban i gis
+ [[MIA_PM_10x10_files/img/SS-2011-04-08_10.15.42.png]]
+ then using spatial join the *gn\_lu\_s3*layer was joined to this layer
+producing *gn\_lu\_s4*.
+
+***** 6.emissions
+
+****** 1.download from EPA site
+
+data was downloaded form the EPA emissions site:
+
+[[http://www.epa.gov/ttn/chief/net/2005inventory.html#inventorydata][http://www.epa.gov/ttn/chief/net/2005inventory.html#inventorydata]]
+ 2 files were downloaded : the point emissions and area emissions
+ [[MIA_PM_10x10_files/img/SS-2011-03-18_09.44.38.png]]
+ then the mdb files were open in Access and only the relevant
+counties/states were slected
+ in this subset only the PM annual emission was selected (pollutant\_ =
+'PM25-FIL' OR pollutant\_ = 'PM25-PRI' OR )
+ [[MIA_PM_10x10_files/img/SS-2011-03-18_09.52.35.png]]
+
+****** 2.Area Emmisons
+
+the Area dataset was loaded into GIS as a table and using regular join
+*added to a empty NE Tracts polygon file based on the FIPS ID.
+ [[MIA_PM_10x10_files/img/SS-2011-04-08_10.33.06.png]]*
+ the resulting was the area emissions in each county/tract
+ then the *gn\_lu\_s4* file was spattialy joined to the area emmison
+file so that each guid got the area emission in was closest to/inside it
+ resulting in *gn\_lu\_s5.*
+
+****** 3.Point Emmisons
+
+in GIS the emissions points were added to the latest working layer
+(*gn\_lu\_s5*):
+ 1)first the 2 point emission data sets were joined (the point xy file
+and pm data)
+ [[MIA_PM_10x10_files/img/SS-2011-04-08_10.38.28.png]]
+[[MIA_PM_10x10_files/img/SS-2011-04-08_10.38.46.png]]
+ this point data was then joined to a 10x10km grid polygon layer . the
+'Average' option was used so each polygon got the average emssions (tons
+per year) *gn\_lu\_s6*.
+ Polygons with 0 emissions go the values of half the lowset station
+emittion (0.001). this was done by selecting all polygons with
+ '0' values and with the field calculator assigning a 0.001 value
+ [[MIA_PM_10x10_files/img/SS-2011-04-08_12.44.54.png]]
+ then this poly file was joing to *gn\_lu\_s5*to get the final dataset
+with all LU-emission data *gn\_lu\_s7.*
+ this file is *exported to a dbf:*
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projet3.1.1.NE\_PM\_MODELSSV2\3.1.1.4.Work\2.Gather\_data\FN006\_LU\_full\_dataset\lu\_emission.dbf
+*
+
+**** 2.50x50 local LU
+
+***** 0.intro
+
+NOTE:make sure all layers are projected in UTM before starting to avoid
+issues
+ we can make use of the exact geocodes by doing the following. Take the
+residuals from our model for the grid cells with monitors. Regress them
+against land use terms local to the monitor (distance to road, pop
+density within 300 m, land use within 300 m). Hopefully, this will
+explain something, and we can then get those terms for our Mass
+mortality and births, but also the NAS, Framingham and VIVA cohorts, and
+get better predictions.
+ All LU data was obtained through steve (see 2.1)
+ all outputs are located here:
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.1.NE\_PM\_MODELS\3.1.1.4.Work\2.Gather\_data\AGIS\_DB\NE\_LU50x50.gdb*
+
+***** population density
+
+Population density was added to the point layer of monitoring stations:
+ 1)first we used the extract values to points. the raster values were
+already the population density
+ [[MIA_PM_10x10_files/img/SS-2011-06-22_10.13.09.png]]
+ [[MIA_PM_10x10_files/img/SS-2011-06-22_10.16.05.png]]
+ *
+*
+
+***** percent urban
+
+****** Raw data and calculation
+
+This shows how steve calculated the percent urban variable
+ 1) first a source raster image was downlaoded from the national land
+cover dataset (through steve) at a resolution of 30x30 meters.
+ This raster was loaded to GIS
+ *
+*2)**then using the reclassify tool in spatial analyst we recallified
+the raster into:
+ 0-open space
+ 1-urban areas
+ using the available raster values (22,23,24 were the corresponding NLCD
+values for urban areas)
+ this was exported to a *new raster* located here:
+
+*C:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV3\3.1.1.1.Raw\_data\GIS\nlcd\dev01ma
+ [[MIA_PM_10x10_files/img/Image.png]]*
+ 3) then focal statistics were used. Any cell center encompassed by the
+circle will be included in the processing of the neighborhood
+ [[MIA_PM_10x10_files/img/Image_gSme8PmOBx6xPoPIinQwYg_0001.png]]
+ in statistics type we choose sum to get all cells with the urban value
+in them
+ we choose the 3, HxW to get the surrounding 9 cells.
+ 4)that raster obtained:
+ [[MIA_PM_10x10_files/img/Image_gSme8PmOBx6xPoPIinQwYg_0002.png]]
+ had the value of the sum of all urban areas (the '1' values) in each 30
+meter cell we defined before
+
+****** Add to LU data
+
+*NOTE: since Each variable is called RASTERVALUE, gis wont be able to
+extract values for another variable with the same name (it will give all
+values a NULL value). To address this simple create a new variable ,
+copy the raster value to it and delete the raster value field
+ [[MIA_PM_10x10_files/img/SS-2011-06-22_12.56.54.png]]
+*
+ We use extract value to points to get the raster value in each 50 meter
+grid cell
+ [[MIA_PM_10x10_files/img/Image_HszJTN5c4MSPY7KCV4Njwg_0001.png]]
+ The percent urban the raster value has to be divided by 9 and then
+multiply by 100 to get the actual percent*
+*
+
+***** elevation
+
+we use the extract values to point to get the elevation in each
+monitoring station*
+ [[MIA_PM_10x10_files/img/Image_HDUQwOMnyfepGMJOBrk5aQ_0001.png]]
+*
+
+***** traffic density
+
+****** Method 1 (small datasets)
+
+NOTE: this method is for when you have a moderate amount of cases you
+want to calculate tden. if the cases are greater then ~ 100,000 use
+method 2 (a raster of tden at a 50x50m grid created by steve)
+ *Note: make sure that all projections are the same for all layers/shape
+files use (we used UTM 19N in NE)*
+ we created 50x50 buffers around the pm stations using the buffer from
+the toolbox
+ NOTE: you have to use the buffer from the tool box to keep the station
+id
+ [[MIA_PM_10x10_files/img/Image_Fiafp7La2M24Ds82WagjNQ_0001.png]]
+ this results in the 50m buffer
+ [[MIA_PM_10x10_files/img/Image_Fiafp7La2M24Ds82WagjNQ_0002.png]]
+ then intersect these buffers with a all lanes layer in NE layer
+ [[MIA_PM_10x10_files/img/Image_Fiafp7La2M24Ds82WagjNQ_0003.png]]
+ thus we get all the lanes in the 50x50 buffer
+ [[MIA_PM_10x10_files/img/Image_Fiafp7La2M24Ds82WagjNQ_0004.png]]
+ we then summarize all length of roads within each buffer by the buffer
+id using the summarize option
+ [[MIA_PM_10x10_files/img/Image_Fiafp7La2M24Ds82WagjNQ_0005.png]]
+ and then choosing the length of roads (sum)
+ [[MIA_PM_10x10_files/img/Image_Fiafp7La2M24Ds82WagjNQ_0006.png]]
+
+****** Method 2
+
+NOTE: this method is for when you have a huge amount of cases you want
+to calculate tden (if the cases are greater then ~ 100,000)
+ We create a raster of line density from the all lanes (A1,A2,A3) across
+MIA using the spatial analysit>density>Line density:
+ [[MIA_PM_10x10_files/img/Image_MriUSFvqw7uxQY9L62XATA_0001.png]]
+ [[MIA_PM_10x10_files/img/Image_MriUSFvqw7uxQY9L62XATA_0002.png]]
+ This results in a Raster file 50x50 with the "traffic density" (tden)
+ then we use a simple extract to points toolbox to assign each
+monitor/case the raster value for tdeb
+ [[MIA_PM_10x10_files/img/Image_MriUSFvqw7uxQY9L62XATA_0003.png]]
+
+***** distance to point emission
+
+calculated with spatial join and a distance field to the point emission
+layer
+ the distance field was multiplied by 100 to get the number in km
+
+***** distance to point A1
+
+calculated with spatial join and a distance field to the A1 roads layer
+ the distance field was multiplied by 100 to get the number in km
+ finally the combined 50x50 LU files is outputted here:
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.1.NE\_PM\_MODELS\3.1.1.4.Work\2.Gather\_data\FN004\_LU\_full\_dataset\lu\_50x50.dbf*
+
+**** 3.200x200 local LU
+
+***** intro
+
+NOTE:make sure all layers are projected in UTM before starting to avoid
+issues
+
+***** tden
+
+traffic density was created by
+ 1)creating a raster of all roads across the MIA with the density
+function using the spatial analysit>density>Line density:
+ [[MIA_PM_10x10_files/img/Image_os0nZ0JkQhayE7LcD3fJiA_0001.png]]
+ [[MIA_PM_10x10_files/img/Image_os0nZ0JkQhayE7LcD3fJiA_0002.png]]
+ This results in a Raster file 50x50 with the "traffic density" (tden)
+ then we use a simple extract to points toolbox to assign each
+monitor/case the raster value for tdeb
+ [[MIA_PM_10x10_files/img/Image_os0nZ0JkQhayE7LcD3fJiA_0003.png]]
+
+***** dist to A1 and point emission
+
+NOTE2: make sure in all future calculation to be consistent and cut all
+above 40km variables to 40!!!
+ For these calculatiobns since the dataset was HUGE (~24,000,000) we
+used the near feature
+ *The values are later divided by 1000 to get the distance in Km and not
+meter*
+ [[MIA_PM_10x10_files/img/SS-2012-06-04_09.53.19.png]]
+ NOTE:since the Dataset was HUGE we limited the search for only 40km
+
+***** popden,tden,purban
+
+all these were calculated by steve and are here as a sas file:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV3\3.1.1.1.Raw\_data\GIS\200x200\mdatgrid200.sas7bdat
+
+*** 5.Temporal data (Met data)
+
+**** 1.Obtain MET data
+
+data was obtained through the NCDC:
+
+[[http://www7.ncdc.noaa.gov/CDO/cdoselect.cmd?datasetabbv=GSOD&countryabbv=&georegionabbv=][http://www7.ncdc.noaa.gov/CDO/cdoselect.cmd?datasetabbv=GSOD&countryabbv=&georegionabbv=]]
+ after choosing the USA i went separately from state to state
+ [[MIA_PM_10x10_files/img/SS-2011-03-16_10.47.06.png]]
+ then in each *state* i choose ONLY stations that*ONLY*had continous
+data for the study period (2000-2010):
+ [[MIA_PM_10x10_files/img/SS-2011-03-16_10.47.30.png]]
+ then i selected a time rage and *made sure* its exported in csv (,):
+ [[MIA_PM_10x10_files/img/SS-2011-03-16_10.50.03.png]]
+ finally i download the txt
+file[[MIA_PM_10x10_files/img/SS-2010-10-15_11.19.14.jpg]][[MIA_PM_10x10_files/img/SS-2010-10-15_11.19.33.jpg]]
+
+**** 2.process met data
+
+AOD data was imported to a full file covering all years using script
+c005\_MET Final
+ the met files (both all years and by year) are exported here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\2.Gather\_data\FN005\_MET\_full\_dataset\
+ in addition key files (by years since we dont have all stations in
+every year) are exported here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\2.Gather\_data\FN004\_Key\_tables\
+
+*** 6.Join AOD-PM-MET-LU data
+
+**** 1.create a full met dataset and join to aodpm and LU data
+
+script c006\_J\_AODPM\_METLU we create a full met dataset for each year
+and include next closest stations for days that have missing data in
+some days
+ then the closest met station to each PM station was calculated
+ LU data from the spatial data step is joined
+ Also in this script we create a key table for guid and stn stations
+ *Outputs:*
+ 1) a complete yearly met file (all STN with full 365 data where missing
+data for STN was brought in from closest avilable STN) is here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\2.Gather\_data\FN005\_MET\_full\_dataset\
+ 2)the complete AODPM\_MET\_LU file for Mod1 in SAS output file is here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\2.Gather\_data\FN006\_J\_AODPM\_METLU\mod1\_2000\_prew.sas7bdat
+ While the file for R is outputed here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\3.Analysis\AN001\_mod1\t2000.csv
+ 3)the key table for guid and stn stations which is outputed here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\2.Gather\_data\FN007\_Key\_tables\guid\_stn\_2000.sas7bdat
+
+*** 8.create wieghts and stage2(mod2) files
+
+**** 1.create all aod values for whole year
+
+using script c008\_create\_weights we create first the whole grid for
+every day (weather or not it had AOD)
+ 1) a unique grid file (all grids for one example day) is exported for
+mod3 gamm stage:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\3.Analysis\AN005\_mod3\uniq\_grid.csv
+ 2)full all grid files for all days are exported by year for the add
+mean pm (MPM) stage:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\2.Gather\_data\FN011\_mod3\_pre\_mpm\
+ 3)weight files per year are created and exported here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\2.Gather\_data\FN009\_Weights\y2000.csv
+ 4)files for the stage2 part (mod2) are created and are here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\3.Analysis\AN003\_mod2\y2000.csv
+
+*** 12.create MPM for mod3
+
+**** 1.assign mean PM to fullgrid
+
+in GIS we load the unique PM station id (sitecode) from the output of
+script cn002 located here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\2.Gather\_data\FN007\_Key\_tables\pm\_sites.dbf
+ [[MIA_PM_10x10_files/img/SS-2011-10-27_11.33.48.png]]
+ then using spatial join we assign each sitecode the region it falls in
+resulting in gn030\_sitecode\_region
+ [[MIA_PM_10x10_files/img/SS-2011-10-27_11.37.31.png]]
+ this is exported to dbf in the key table folder :
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\2.Gather\_data\FN007\_Key\_tables\pmcode\_region.dbf
+
+**** 2.create region XY centroid
+
+in addition for the region file we create a x and y variables manually
+(add field) and using calculate geomatry give it a x and y in Wgs 1984
+ [[MIA_PM_10x10_files/img/Image_Y0WjgScbeBODTeKhHMgFtA_0001.png]]
+ we then export that to dbf:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\2.Gather\_data\FN007\_Key\_tables\reg\_centroids\_XY.dbf
+
+**** 2.assign mpm to mod2/mod3
+
+using script c012\_create\_mpm we:
+ 1)create a mpm (mean PM) file for each year for every day in every
+region outputed here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\2.Gather\_data\FN013\_mpm\_peryear\mpm2000.sas7bdat
+ *NOTE: before running this script make sure you have already run mod2
+so that the mod2 files are available*
+ 2)assign mpm per region for a day for *mod2 prediction* file and output
+here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\3.Analysis\AN004\_mod2pred\T2000\_m2\_pred\_mpm.csv
+ 3)assign mpm per region for a day for *mod3*prediction file and output
+here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\3.Analysis\AN005\_mod3\fullgrid\_mpm\_2000.csv
+
+**** 3.2.assign mpm to mod2/mod3 CV
+
+using script c013\_create\_mpm\_CV\_MACRO we take the created files from
+:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\2.Gather\_data\FN013\_mpm\_peryear
+ and give the 90% CV data files (per year at > AN009\_mod2\_CV\_files)
+the mean pm in each region and output it here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\3.Analysis\AN009\_mod2\_CV\_files\_mpm\
+
+*** 13.prepare data for residual\_localpm part
+
+**** 1.create 300 meter buffers from stations
+
+a PM\_Id layer with all pm stations is loaded
+ then a 300 m buffer is created around that
+ [[MIA_PM_10x10_files/img/SS-2011-08-05_13.16.06.png]]
+
+**** 2.elevation
+
+data for elevation on a 250m resolution was obtained from mi-hye (SEEK
+REFERENCE)
+ then each 300 meter buffer was calculated the mean elevation:
+ [[MIA_PM_10x10_files/img/SS-2011-08-05_13.27.41.png]]
+ *
+ NOTE: since Each variable is called RASTERVALUE, gis wont be able to
+extract values for another variable with the same name (it will give all
+values a NULL value). To address this simple create a new variable ,
+copy the raster value to it and delete the raster value field
+*then the -9999 values are changed to '0'*:
+ [[MIA_PM_10x10_files/img/SS-2011-08-05_13.37.27.png]]
+*this files is saved as pd\_elevations
+
+**** 3.calculate traffic density
+
+ 4. Traffic Density
+
+ - In ArcToolbox, double-click the clip tool and clip the roads by
+buffers
+
+ [[MIA_PM_10x10_files/img/Image.jpg]]
+
+ then using the non toolbox spatial join option each buffer of
+monitoring stations was given the sum of all cliped roads intersecting
+it
+
+ [[MIA_PM_10x10_files/img/SS-2011-08-08_10.38.09.png]]
+
+**** 4.join elev and traffic to buffers
+
+using 2 simple spatial joins by closest the 2 above layers with elev and
+total length of roads in each buffer (tden) was joined to the buffer
+layers
+ results in:
+ rn6\_join2\_road
+
+**** 5.land\_cover
+
+**
+
+To calculate land cover (Percentage of urbaness)
+
+ - Add the binary raster of urbaness(refer to Itai's email on criteria
+on reclassification of NLCD)
+
+ [[MIA_PM_10x10_files/img/Image_a3HNT75ALE9hgMLbQkyqVQ_0001.jpg]]
+
+ - Run the '*zonal statistics as table*' and select mean (mean for
+binary data is percentage)
+ NOTE: if the procedure fails try to save it outside of a gdb as a
+normal table in a folder
+
+ [[MIA_PM_10x10_files/img/SS-2011-08-08_10.40.40.png]]
+
+ This results in Percentage of open space(technically, percentage of
+urbaness)
+ [[MIA_PM_10x10_files/img/Image_a3HNT75ALE9hgMLbQkyqVQ_0002.jpg]]
+
+ then using a normal join it was added back to the *rn6\_join2*\_road
+layer based on sitecode:
+ [[MIA_PM_10x10_files/img/SS-2011-08-08_10.43.57.png]]
+
+**** 6.population density
+
+data was obtained through steve from the lanscan data in raster form
+lanscan at a 1x1km resolution
+ first using extract to point we extracted the population values to the
+monitor points (centroid of the 300m buffers).
+ [[MIA_PM_10x10_files/img/SS-2011-08-09_12.04.00.png]]
+ this layer rn7 was then joined to the *rn6\_join2*layer and the key
+variables only left and renamed in the proccess.
+ this results in r*n8
+*then we calcualted the pop density by deviding the population by the
+area of the buffer (*note: the layer had to be reprojected to utm 18n so
+that we could calculate area*)
+ *
+**
+*
+
+**** 7.final data
+
+the final data including all the LU 50x50 terms is located here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\3.Analysis\AN002x\_mod1\_localpm\resid\_lu.csv
+
+*** 15.cluster analysis
+
+**** intro- testing the cluster method
+
+We deciided to test a alternative method to using the bimon way
+(essentially using a cluster for every 2 months per year) and to use 9
+clusters based on PM levels in each day for the whole period
+
+**** create all year pm dataset for the cluster analysis
+
+using *c015\_prepeare\_pm\_dataset\_forcluster*we prepared a data set
+with all years resulting with the *PM* for every*station* in each *day*
+ [[MIA_PM_10x10_files/img/SS-2011-11-17_11.14.13.png]]
+ in the script stations missing PM for a specific day get the PM from
+the next closets (by distance) PM station.
+ If a station is still missing it gets the PM from the meanPM file we
+create in step 12
+ lastly the data is transposed and outputted here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\3.Analysis\AN030\_cluster\pmcluster.csv
+ In addition we tested how the cluster preforms every 3 years instead of
+1 big yearly file. the big file from above was spllit to 3 3year files
+outputted here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\3.Analysis\AN030\_cluster\pmcluster0002.csv
+
+*** 16. PM 10 comparison
+
+**** 1.merge PM data with PM2.5
+
+use script *cn024*
+
+** 3.Analysis
+
+*** 1.Stage 1 (mod1)
+
+**** 1.split files and add weights
+
+using the cn019\_split4cv script in R a weight variable is added to the
+aod-pm-lu-met dataset to take into account the larger number of summer
+days over winter days
+ We incorparate all avilable covariates in the model using a model that
+emulates a 'kernel machine'
+ each spatial and temporal covariate is transformed to a Z-score by
+subtracting the *Mean* from each obs. and deviding by the *SD*:
+ example:
+ F\_T2001\_All$zelev<-(F\_T2001\_All$CONTOUR-*97.22*)/*165.32*
+ and the files are split randomly into the 10% files and 90% files
+ this also creates the files needed for the stage2 splits
+ *output:*
+
+c:/Users/ekloog/Documents/$Doc/3.PostDoc/3.1.Projetcs/3.1.2.MIA\_PM\_MODELSV2/3.1.1.4.Work/3.Analysis/AN002\_mod1\_CV/out2000.dbf
+ *and for mod 2:
+*
+
+c:/Users/ekloog/Documents/$Doc/3.PostDoc/3.1.Projetcs/3.1.2.MIA\_PM\_MODELSV2/3.1.1.4.Work/3.Analysis/AN003\_mod2/sas/out2001.dbf
+
+**** 2.run mod1 for full dataset
+
+Using sas scripts*c020\_mod1\_100percent* a mixed model is run in SAS to
+calibrate the ground station PM with AOD including spatial and temporal
+variables. the outputs of the model is here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\3.Analysis\AN002\_mod1\_CV\overall\_random\
+ *NOTE:*when the covariance paramters are not '0' we get the estimation
+for all the random effects. Since the model is very complex we are
+missing some covariance parameters for the day-region combination (for
+example the random slope for Temp per region)
+ therefore we use the output of the 100% dataset (full) and take the
+covariance parameter estimates to be used in the*CV iterations model*
+ this could happen in the 100% dataset as well so you use the same
+method in the model there.
+ [[MIA_PM_10x10_files/img/SS-2011-10-26_10.13.58.png]]
+ [[MIA_PM_10x10_files/img/SS-2011-10-26_10.31.18.png]]
+
+**** 3.Run first mixed models and CV (mod1)
+
+after adding the boundaries from the full model (prev step) to the
+individual sas scripts*c020macro\_mod1CV\_2000 to
+c020macro\_mod1CV\_2008*we use a batch file *c020macro\_mod1CV\_BATCH*
+to run CV for all years.
+ The CV mixed models predict for the 10% files from the 90% files
+ the files for each year are aggregated to one large file and outputted
+here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\3.Analysis\AN002\_mod1\_CV\sas
+export\t2008\_all\_10p.csv
+ *NOTE: we also used script* *c020\_mod1\_CV\_R
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.3.Code\Archive\$brents
+R method for CV\c020\_mod1\_CV\_R.R to compare the SAS results with R and got the same results
+
+**** 4.add local PM stage for CV results
+
+in addition we add the local pm (resid) part to this script
+*c020\_mod1\_100percent\_localPM
+*
+
+*** 2. Stage 2
+
+**** 1.Run second mixed model (mod2)
+
+using *c021\_mod2* a macro is run and the fit from the full step 1 model
+(mod1) is used to predict PM for the mod2 files (ALL avilable AOD
+points)
+ the files with predictions are located here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\3.Analysis\AN004\_mod2pred\T2000\_m2\_pred.dbf
+ after this *run the MPM stage to get mpm for all these predictions*
+
+**** 2.run second stage cross validation
+
+using script*c032\_mod2\_CV\_MACRO.sas* the CV files for mod2 are
+prepared
+
+*** 3. Stage 3
+
+**** 5.Run GAMM stage model (mod3)
+
+using *c023\_gamm* we run the GAMM stage. we then predict for the all
+points (all days in all the grid).
+ the files are split into the prediction files from the lme outputted
+here as dbf:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\3.Analysis\AN006\_mod3pred\grid\_2000\_bimon1.dbf
+ and the prediction part from the smoothing outputted as csv here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV2\3.1.1.4.Work\3.Analysis\AN006\_mod3pred\T2000\_bimon1.csv
+
+**** 5.Run CV GAMM (mod3 CV)
+
+using *c032\_gamm\_all\_CV* we run the GAMM CV stage
+ the outputs are saved in the results file for all years here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.1.NE\_PM\_MODELS\3.1.1.5.Results\mod3cv\mod3CV\_r2.csv
+
+*** 4.create full poll dataset
+
+**** 1.merge all predcitions
+
+using script *c039\_create\_poll\_datasets.sas*we :
+ 2) combine all datasets into 1 (by guid and date)
+ 3)choose the PM predicted value (pmnew) according to the best avilable
+ NOTE: though initially we used actual PM for best then mod2 and finally
+mod3, in the Final dataset we just used mod2+mod3 since actual pm from
+stations could be biased from lets say a major highway close by to a
+station and thus we decided to use mod2+mod3 that cover a 10x10 grid and
+not just a measurement location
+ this was done with a "if then" statements (see script).
+ this resulted in a data sets for pm2.5 predictions incorporating ALL
+models for New-England for 2000-2008.
+
+**** 2.create lag files
+
+using script *cn60\_add\_Temp\_and\_lags*
+ we import the individual files, add them to a full GRID (so that
+missing days in the very rurual areas get a missing values )
+ then run the lags
+
+*** cluster analysis
+
+**** 1.create clusters for all years
+
+using *c060\_clusters* we create the clusters for the cluster analysis
+ we use the kmeans (ssi criteriion) and look at the output (see *red dot
+in red box*). this shows in the example we need 5 clusters
+ [[MIA_PM_10x10_files/img/SS-2011-11-17_12.27.45.png]]
+ we then extract the cluster data base to a file
+ NOTE: all clusters are present in the file and you have to choose the
+correct cluster variable in your analysis. in the above example its the
+*5groups* (we had 5 clusters):
+ [[MIA_PM_10x10_files/img/SS-2011-11-17_12.32.58.png]]
+
+**** 2.create clusters for individual years
+
+using *c060\_clusters* we also create the clusters for individual years
+in the 2nd part of the script
+ we use the kmeans (ssi criteriion) and look at the output (see *red dot
+in red box*). this shows in the example we need 3 clusters for the 3
+year period
+ [[MIA_PM_10x10_files/img/SS-2011-11-17_13.18.40.png]]
+ we then extract the cluster data base to a file
+ NOTE: all clusters are present in the file and you have to choose the
+correct cluster variable in your analysis. in the above example its the
+*3groups* (we had 3 clusters):
+ [[MIA_PM_10x10_files/img/Image_C5RxCbmsyYQWZgFIUI6gdQ_0001.png]]
+
+*** 5.LPM map
+
+**** 1.predict from pm stgations to full grid
+
+using this script cn070\_LPM\_200x200 we calculate the local pm based on
+the fit of the pm stations (resid~LU terms)
+ this is exported here:
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.2.MIA\_PM\_MODELSV3\3.1.1.4.Work\3.Analysis\AN070\_LPM\_stage\_200x200\_base\lu200LPM.dbf*
+
+**** 2.create raster in GIS
+
+in GIS the DBF file of all LPM points and resid predictions is loaded
+and using the
+ [[MIA_PM_10x10_files/img/Image_U9VdxiqvpVxcUUWkBXKCAQ_0001.png]]
+ we convert the files into a rater to present as a map
+*** 6.calculate RMPSE  
+we used this script 
+
+f:\Uni\Projects\3.1.2.MIA_PM_MODELSV3\3.1.1.3.Code\3.Analysis\cn80_calculate_RMSE_CV_mod1_spatial.sas
+
+#+BEGIN_SRC sas
+
+options mprint;
+%macro import(year=);
+
+
+/*erros will occure in teh import due to sitecode charatcer/numeirc issues..ignore that*/
+
+PROC IMPORT OUT= Pdataa_&year
+  DATAFILE= "c:/Users/ekloog/Documents/$Doc/3.PostDoc/3.1.Projetcs/3.1.2.MIA_PM_MODELSV3/3.1.1.4.Work/3.Analysis/AN080_files_4CV_RMSE/t&year..csv" 
+    DBMS=CSV REPLACE;
+	  GETNAMES=YES;
+	    DATAROW=2; 
+		RUN;
+		 
+
+
+
+proc summary nway data=Pdataa_&year;
+class sitecode;
+var pm25 OApred;
+output out=Pdataa_&year.agg mean=barpm barpred;
+run;
+
+proc sort data = Pdataa_&year ;by sitecode   ;run;
+proc sort data = Pdataa_&year.agg ; by sitecode ;run;
+
+data Pdataa_&year;
+merge Pdataa_&year(in=a) Pdataa_&year.agg (in=b)  ;
+  by sitecode;
+    if a;
+	run; 
+
+
+
+/* summarize the results of the cross-validations */ 
+data sumPdataa_&year; 
+  set Pdataa_&year; 
+  d = barpm-barpred; 
+  absd=abs(d); 
+run; 
+
+/*
+
+Mean absolute error (MAE)
+
+The MAE measures the average magnitude of the errors in a set of forecasts, 
+without considering their direction. It measures accuracy for continuous variables. 
+The equation is given in the library references.
+Expressed in words, the MAE is the average over the verification sample of the absolute 
+values of the differences between forecast and the corresponding observation. 
+The MAE is a linear score which means that all the individual differences are weighted equally in the average.
+
+Root mean squared error (RMSE)
+
+The RMSE is a quadratic scoring rule which measures the average magnitude of the error. 
+The equation for the RMSE is given in both of the references. 
+Expressing the formula in words, the difference between forecast and 
+corresponding observed values are each squared and then averaged over the sample. 
+Finally, the square root of the average is taken. Since the errors are squared before 
+they are averaged, the RMSE gives a relatively high weight to large errors. 
+This means the RMSE is most useful when large errors are particularly undesirable.
+
+*/
+
+
+proc summary data = sumPdataa_&year; 
+  var d absd; 
+  output out= Error_&year std(d)=rmse1 mean(d)= mpe1 mean(absd)= mae1; 
+run; 
+
+data Error_&year(drop = _Type_ _FREQ_); 
+ set Error_&year;
+  Year = &Year;
+run;
+
+data Error_&year(drop = rmse1 mpe1 mae1);
+ set Error_&year;
+  rmse  = round(rmse1,0.001);
+  mpe   = round(mpe1, 0.0000000000001);
+  mae   = round(mae1, 0.001);
+run;
+
+%MEND ;
+
+%import(year=2000);
+
+#+END_SRC
+
+to calculate the RMPSE .We calculated prediction errors for the *spatial components* in each stage (to be comparable to all previous available model which don’t have daily measurements) by subtracting retained observations from the model predictions. We estimated the model prediction precision by taking the square root of the mean squared prediction errors (RMSPE) for each year

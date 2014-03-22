@@ -1,0 +1,194 @@
+#+TITLE: spss
+
+* spss
+
+** Spss Course
+
+*** PhD spps short summary
+
+[[spss_files/attach/part3-spss.doc][Attachment #01 (part3-spss.doc)]]
+
+** Data input
+
+*** does not equal sign spss
+
+does not equal sign spss is:
+ ~=
+
+*** add cases by day to a file
+
+if you have a file with multiple cases for each day and you want to add
+a mean value to all cases for that day use the merge function:
+ [[spss_files/img/image.png]]
+ make sure you put the key variable (date2) in the key variable window
+and matach case using the NON-active dataset as a key table
+
+*** system missing
+
+there is a menu in the sas dialog to deal with missing
+ [[spss_files/img/SS-2011-09-27_15.06.41.png]]
+ then you can use a missing command where missing=1 would indicate to
+choose missing
+
+*** shift values
+
+[[spss_files/img/SS-2011-09-27_15.15.44.png]]
+ you can use shift values to move cases up (lead) or down (lag) based on
+the prev following cells
+
+*** convert string to numeric
+
+recode score (convert) into score2.
+ execute.
+
+** Data manegment
+
+*** aggregate to calculate daily mean
+
+to calulate a mean value by date for a specific variable use the
+aggregate function in spss:
+ [[spss_files/img/Image_8GN0qsPKOXWy-tfPRWm.lw_0001.png]]
+
+*** quickly extract year.month.day from a date variable
+
+ * Date and Time Wizard: c.
+ COMPUTE c=XDATE.YEAR(date).
+ VARIABLE LABELS c "c".
+ VARIABLE LEVEL c(SCALE).
+ FORMATS c(F8.0).
+ VARIABLE WIDTH c(8).
+ EXECUTE.
+ * Date and Time Wizard: m.
+ COMPUTE m=XDATE.MONTH(date).
+ VARIABLE LABELS m "m".
+ VARIABLE LEVEL m(SCALE).
+ FORMATS m(F8.0).
+ VARIABLE WIDTH m(8).
+ EXECUTE.
+ * Date and Time Wizard: d.
+ COMPUTE d=XDATE.MDAY(date).
+ VARIABLE LABELS d "d".
+ VARIABLE LEVEL d(SCALE).
+ FORMATS d(F8.0).
+ VARIABLE WIDTH d(8).
+ EXECUTE.
+  
+
+*** converte F to celsius
+
+use :
+ (temp-32) * 5 / 9
+ [[spss_files/img/SS-2010-10-18_12.16.15.jpg]]
+
+*** convert between numeric variables and string variables
+
+*In SPSS, how do I convert between numeric variables and string
+variables?*
+ In SPSS, to convert a numeric variable to a string variable, use the
+STRING() function.
+ Since the default variable type in SPSS is numeric, you need to define
+your string variable in advance.
+ Consider the following example:
+  STRING str (A8).
+   COMPUTE str = STRING(num, F2.0).
+   EXECUTE.
+ In the example above, A8 indicates a string variable eight characters
+long,
+ and F2.0 is the format of output values of variable num.
+ For example, F8.4 fills four zeros after the decimal point when the
+numeric variable num is an integer.
+ To convert a string variable to a numeric variable num, use the
+NUMBER() function, for example:
+ COMPUTE num = NUMBER(str, F8.2).
+   EXECUTE.
+
+*** select string charecters
+
+to select string characters use the '' IE:
+ pollutant\_ = 'PM25-FIL' OR pollutant\_ = 'PM25-PRI' OR pollutant\_ =
+'PM10-PRI' OR pollutant\_= 'PM10-FIL' OR pollutant\_ = 'PM-CON'
+
+** concentrate (combine) text (string) into 1 variable
+
+use the syntaxt to combine a few variables to one for example:
+ STRING id (A20).
+ COMPUTE id = CONCAT(RTRIM(state), LTRIM(county), LTRIM(site)).
+ execute.
+ where:
+ id :new variable name
+ A20: is the width of the variable
+ Concat is the concentrate command, Rtrim/Ltrim is used to trim empty
+spaces left or right and the orig variables are marked in blue
+
+** Rename Variables in spss
+
+Rename Variables in spss
+ issue this command in syntax:
+ RENAME VARIABLE (varx = vara).
+
+** drop all missing cases from the current SPSS data set
+
+drop all missing cases from the current SPSS data set issue:
+ ELECT IF NOT (SYSMIS(amount)).
+   SAVE OUTFILE= 'newfile.sav'.
+ This example drops all cases whose value of the variable amount is
+missing, and then saves this data to an SPSS system file called
+
+** Statistics
+
+*** Regression
+
+**** Logistic regression
+
+***** Using the Logit Model
+
+Before running logit, check to see if any cells (created by the crosstab
+of our categorical and IV's) are empty or particularly small.  If this
+occurs, there may be difficulty running the logit model. 
+ Coding is very important here!!!!!!!!!!
+ if your variables are not coded properly , use recode to fix that:
+ [[spss_files/img/logistic09.gif]]
+ as a general rule of thumb use "0" for no and "1" for yes
+ SPSS will create an indicator variable for you if you click on the
+CATEGORICAL button in the logistic regression dialog box:
+ [[spss_files/img/Pasted.jpg]]
+ Then you must define the reference category:
+ [[spss_files/img/Image_Sn9Xk78tG-G2tQGjAWqb5g_0001.jpg]]
+ (last means last alphabetically)!
+ If you select *LAST* as the reference category, SPSS will use the code
+0=male, 1=female
+ If you select *FIRST* as the reference category, SPSS will use the code
+0=female, 1=male.
+ example:
+ if you choose *first*:
+ [[spss_files/img/Image_Sn9Xk78tG-G2tQGjAWqb5g_0002.jpg]]
+ will result in this:
+ [[spss_files/img/Image_Sn9Xk78tG-G2tQGjAWqb5g_0003.jpg]]
+ if you choose La
+
+***** spss output
+
+Below is important information in the logistic output:
+ 1) This shows the number of observations and the coding for the DV
+(cases-BC patients and controls)
+ [[spss_files/img/Image_g70jlwWZqh23wNvJRqQ0ow_0001.jpg]]
+ 2) The Block 0 output is for a model that includes only the intercept
+(which PASW calls the constant).
+ 3)Block 1 :
+ The likelihood ratio chi-square tells us weather our model as a whole
+fits significantly better than the empty model (Model 0). The -2 log
+likelihood is used to to compare the fit of this model with Model 0. 
+ the R Square values shown might appear to be just like those you get
+with OLS, but these are forms of "pseudo" R square values which can vary
+considerably depending on the measure you select.
+ 4)Variables in the equation
+ [[spss_files/img/Image_g70jlwWZqh23wNvJRqQ0ow_0002.jpg]]
+ The above table gets into the heart of the results. It shows the
+coefficients (B), their standard errors, the Wald Chi-Square statistic,
+associated p-values, and odds ratio (Exp(B)). 
+ The interpretation of the coefficients can be awkward, so many
+researchers prefer to exponentiate (Exp(B)) the coefficients and
+interpret them as odds-ratios
+ So we can say that for a one unit increase in BR light, the odds of
+being a cancer patient (cases) (versus not being a cancer
+patient-control group) increased by a factor of 1.278

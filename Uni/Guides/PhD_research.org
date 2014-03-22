@@ -1,0 +1,574 @@
+#+TITLE: PhD_research
+
+* phd projects
+
+** 1.breast cancer-lan, israel
+
+*** defenitions
+
+**** lux.pdf
+
+[[PhD_research_files/attach/lux.pdf][Attachment #01 (lux.pdf)]]
+
+*** statistics used
+
+*Sensitivty Test
+*
+ How to find out how an increase in the key IV(LAN in this case)
+corresponds in % to the DV (breast cancer) See [[javascript:;][here]]
+ *How to find percent (%) in equations
+*
+ 1) Take the old value and subtract it from the new value, then divide
+by the old value.
+ 2) Multiply by 100. That number represents the percent change.
+ Example:
+ (83.26-60.88)/60.88X100=36.75 % change in going from min to avg in the
+breast cancer example
+
+*** publications
+
+*Washington post
+*
+ (see attachments for rest of papers)
+
+**** j-post.pdf
+
+[[PhD_research_files/attach/j-post.pdf][Attachment #02 (j-post.pdf)]]
+
+**** lan\_paper2008\_final.pdf
+
+[[PhD_research_files/attach/lan_paper2008_final.pdf][Attachment #03
+(lan\_paper2008\_final.pdf)]]
+
+**** wsj\_bc\_lan.pdf
+
+[[PhD_research_files/attach/wsj_bc_lan.pdf][Attachment #04
+(wsj\_bc\_lan.pdf)]]
+
+**** ynet1.pdf
+
+[[PhD_research_files/attach/ynet1.pdf][Attachment #05 (ynet1.pdf)]]
+
+**** ngm-national\_geographic\_2008.pdf
+
+[[PhD_research_files/attach/ngm-national_geographic_2008.pdf][Attachment
+#06 (ngm-national\_geographic\_2008.pdf)]]
+
+**** nrg.pdf
+
+[[PhD_research_files/attach/nrg.pdf][Attachment #07 (nrg.pdf)]]
+
+**** maariv.png
+
+[[PhD_research_files/attach/maariv.png][Attachment #08 (maariv.png)]]
+
+** 2.breast cancer haifa-kernel density
+
+*** definitions
+
+*Density
+*simple: dosent give diffrent weight to different points no matter where
+they lay
+ Kernel: Closer points set stronger weights
+
+*** methods
+
+the first thing done was to analyze the cancer data file and separate
+each cancer to a different file.then we started creating the density
+layers (see [[javascript:;][density]] note):
+ First we created a breast cancer density layer from the layer of breast
+cancer patients (point data).
+ then this density raster was converted to contours.
+ then we joined (through spatial join) the breast cancer countor to the
+breast cancer patient layer (points)
+ this procedure was repeated for all ensity layer (LAN,Building density
+etc...)
+ then we joined each contour layer (LAN,Building density etc...) to the
+breast cancer patients density and exported it to dbf for spss
+ *
+**Note*: topography was joined as is, no density was needed
+
+*** publications
+
+**** ceus-2009.pdf
+
+[[PhD_research_files/attach/ceus-2009.pdf][Attachment #09
+(ceus-2009.pdf)]]
+
+** 3.prostate cancer worldwide
+
+*** globocan 2002
+
+**** glossary of statistical terms
+
+*Glossary of Statistical Terms
+*
+ Incidence
+ Incidence is the number of new cases arising in a given period in a
+specified population. This information is collected routinely by cancer
+registries. It can be expressed as an absolute number of cases per year
+or as a rate per 100,000 persons per year. The latter provides an
+approximation to the average risk of developing a cancer.
+ Mortality
+ Mortality is the number of deaths occurring in a given period in a
+specified population. It can be expressed as an absolute number of
+deaths per year or as a rate per 100,000 persons per year.
+ Survival
+ It is defined as the probability of survival, expressed as time elapsed
+since diagnosis (1,3 5-year survival). This observed survival
+probability is influenced by mortality both from cancer of interest and
+from other causes. For this reason, relative survival is usually
+calculated. It is defined as the ratio of the observed survival in the
+group of patients to the survival expected in a group of people in the
+general population, who are similar to the patients with respect to all
+possible factors affecting survival at the beginning of the follow-up
+period, except for the disease of interest.
+ Prevalence
+ The prevalence of a particular cancer can be defined as the number of
+persons in a defined population who have been diagnosed with that type
+of cancer, and who are still alive at a given point in time. Complete
+prevalence represents the proportion of people alive on a certain day
+who previously had a diagnosis of the disease, regardless of how long
+ago the diagnosis was, or if the patient is still under treatment or is
+considered cured. Partial prevalence, which limits the number of
+patients to those diagnosed during a fixed time in the past, is a
+particularly useful measure of cancer burden. Prevalence of cancers
+based on cases diagnosed within one, three and five years are presented
+in GLOBOCAN 2002, as they are likely to be of relevance to the different
+stages of cancer therapy, namely, initial treatment (one year), clinical
+follow-up (three years) and cure (five years). Patients who are still
+alive five years after diagnosis are usually considered cured since the
+death rates of such patients are similar to those in the general
+population. There are exceptions, particularly breast cancer.
+ Population at risk
+ The part of a population which is susceptible to have a specific
+cancer. It is defined on the basis of demographic data, such as place of
+residence, sex, age group and (where appropriate) ethnicity.
+ Crude rate
+ Data on incidence or mortality are often presented as rates. For a
+specific tumour and population, a crude rate is calculated simply by
+dividing the number of new cancers observed during a given time period
+by the corresponding number of people in the population at risk. For
+cancer, the result is usually expressed as an annual rate per 100,000
+persons at risk.
+ ASR (age-standardized rate or age-adjusted rate)
+ An age-standardized rate (ASR) is a summary measure of a rate that a
+population would have if it had a standard age structure.
+Standardization is necessary when comparing several populations that
+differ with respect to age because age has such a powerful influence on
+the risk of cancer. The most frequently used standard population is the
+World standard population. The calculated incidence rate is then called
+the World Standardized incidence rate. It is also expressed per 100,000.
+ Cumulative rate/Cumulative risk
+ Cumulative incidence is the probability or risk of individuals getting
+the disease during a specified period. For cancer, it is expressed as
+the number of new born children (out of 100, or 1000) who would be
+expected to develop a particular cancer before the age of 65 (or 70, or
+75) if they had the rates of cancer currently observed. Like the age
+standardized rate, it permits comparisons between populations of
+different age structures.
+ Standard error
+ The standard error of a rate is a measure of the sampling variability
+of the rate.
+ Confidence interval
+ A range of values that has a specified probability of containing the
+rate or trend. The 95% (p-value = .05) and 99% (p-value = .01)
+confidence intervals are the most commonly used.
+ Annual percent change (APC)
+ Annual Percent Change is used to measure trend or the change in rate
+over time. It is the 'average' annual rate of change over the time
+series selected.
+
+*** lan per capita calculation
+
+*In GIS*
+  First add the point layer (of cities) and LAN polygons (from DMSP
+raster) layer which has been cleaned
+  since it is such a huge database of polygons >3,000,000 Spatial join
+will crash therefor i use this way:
+  For each Lan Catagory (gridcode) i issue select by catagory:
+  and select only the specific gridcode
+  then i issue a select by location to choose only the cities (point
+data) that fall in these polygons
+  then with field calculator i manually add the LAN values to each point
+in the LAN colums
+ *in spss
+*
+ 1)compute new variable PopXLan(calibrated)
+ 2)the go to Data>Aggregate
+ a)break value (order by)> put Country ID
+ b)aggregated variables:
+ Pop (in the function option don't forget to use SUM and not MEAN)
+ LanxPop -the new variable created before (in the function option don't
+forget to use SUM and not MEAN)
+ 3)After the aggregation compute> popxlan/pop to get average LAN per
+person
+
+*** publications
+
+**** cbi-2009.pdf
+
+[[PhD_research_files/attach/cbi-2009.pdf][Attachment #10
+(cbi-2009.pdf)]]
+
+**** prostate\_wash\_post.pdf
+
+[[PhD_research_files/attach/prostate_wash_post.pdf][Attachment #11
+(prostate\_wash\_post.pdf)]]
+
+**** prostate\_wash\_post\_part2.pdf
+
+[[PhD_research_files/attach/prostate_wash_post_part2.pdf][Attachment #12
+(prostate\_wash\_post\_part2.pdf)]]
+
+**** rd09sm.pdf
+
+[[PhD_research_files/attach/rd09sm.pdf][Attachment #13 (rd09sm.pdf)]]
+
+**** j-post
+
+*J-Post
+*
+ Q
+
+**** world\_cancer\_nrg.pdf
+
+[[PhD_research_files/attach/world_cancer_nrg.pdf][Attachment #14
+(world\_cancer\_nrg.pdf)]]
+
+** 4.breast cancer worldwide
+
+*** adding the birthrates and sensitivty tests
+
+*adding the birthrates and sensitivty tests
+*after the request from EHP we added the birth rates (***changed to
+fertilty rates after further considiration) variable to the resgression
+and ran OLS again for all cancer types
+ then we used jenks natural breaks from GIS to startify birthrates for
+the crosstab
+ [[PhD_research_files/img/image.png]]
+ then in spss i created a new variable for each birth rate group
+(birth\_low,birth\_med,birth\_high) using the
+ Transform-compute variables
+ [[PhD_research_files/img/image%202.png]]
+
+*** sensitivty test
+
+Sensitivity for breast cancer ASR (*using Jenks natural breaks*)
+ (for detailed explenation on how its run see [[sen][Here]])
+ Marked=Average values
+ Marked= Regression B
+ Marked= LAN Change
+ LOW:
+ Y= -28.486+(0.143*8.60)+(0.003*75.66)+(0.083*55.16)+(4.879*8.786)+(
+2.109*9.511)= 40.474653
+ AVG:
+ Y= -28.486+(0.143*28.95)+(0.003*75.66)+(0.083*55.16)+(4.879*8.786)+(
+2.109*9.511)= 43.384703
+ High:
+ Y= -28.486+(0.143*99.21)+(0.003*75.66)+(0.083*55.16)+(4.879*8.786)+(
+2.109*9.511)= 53.431883
+ From low to med:
+ (((43.384-40.474)/ 40.474)*100)= 7.18
+ From med to high:
+ (((53.431-43.384)/ 43.384)*100)=23.15
+
+*** spatial regression (using geoda)
+
+Start by exporting a shapefile from arcgis
+ [[PhD_research_files/img/Image_NA-u-h-pDQPX.Yx7trb9.w_0001.png]]
+ then open geoda and load the correct shape file
+ [[PhD_research_files/img/Image_NA-u-h-pDQPX.Yx7trb9.w_0002.png]]
+ after that i weight file must be created,
+ [[PhD_research_files/img/image%203.png]]
+ choose the same input file as before m give it a name , choose an id
+(some runing number) and choose queen contiguity option and create the
+weight
+ [[PhD_research_files/img/image%204.png]]
+ then go and open the weight file
+ [[PhD_research_files/img/image%205.png]]
+ and procede to the regression analysis and make sure you have moran's I
+choosen
+ [[PhD_research_files/img/image%206.png]]
+ in the regression box enter the DV and all the IV as usuall and run the
+classic regression first to validate prev results from spss and get the
+morans I value
+ [[PhD_research_files/img/image%207.png]]
+ if the moran I value is in the range that requeires a spatial test
+ru[[javascript:;][here]]ee here) the spatial lag or spatial error tests
+
+*** asr used from globocan
+
+For the Whole analysis we used breast cancer incidence rates ASR
+
+*** jenks groups for anova
+
+[[PhD_research_files/img/Image_edDoNKbjkoIN.eHFCV4Bgw_0001.png]]
+ [[PhD_research_files/img/Image_edDoNKbjkoIN.eHFCV4Bgw_0002.png]]
+ [[PhD_research_files/img/Image_edDoNKbjkoIN.eHFCV4Bgw_0003.png]]
+ [[PhD_research_files/img/Image_edDoNKbjkoIN.eHFCV4Bgw_0004.png]]
+
+*** anova test of differences in breast cancer rates (per 100,000) by
+fertility regions and lan exposure levels
+
+ANOVA test of differences for multiple variables
+ (in this example - breast cancer rates (per 100,000) by fertility
+regions and LAN exposure levels)
+ first use jenks natural breaks to devide the needed variables into 2
+groups: low, medium and high.
+ [[PhD_research_files/img/image%202%202.png]]
+ then recode the variables into a new "grouped" variable
+ [[PhD_research_files/img/Image_K94trWrD57xQu8vH7pmFwA_0001.png]]
+ then select the group of the variable you want to stratify by for
+example in fertility rates (grouped variable), i select the low group
+first:
+ [[PhD_research_files/img/Image_K94trWrD57xQu8vH7pmFwA_0002.png]]
+ then run a normal one-way ANOVA and put in your dependent variable (the
+one you want to see diffrences for) and your factor (the one you want to
+stratify with (lancal groups in our case)
+ [[PhD_research_files/img/Image_K94trWrD57xQu8vH7pmFwA_0003.png]]
+ you get an output file where you want the mean, F and sig
+ [[PhD_research_files/img/Image_K94trWrD57xQu8vH7pmFwA_0004.png]]
+
+*** use aggregation to check grouping overlaping
+
+First choose aggregate data
+ [[PhD_research_files/img/Image_8ikL-9IpD4tf.aWavhuthA_0001.png]]
+ then in the break variable choose the grouping variable and in the
+aggregated variables enter the variable (not the grouped) you want to
+see.
+ [[PhD_research_files/img/Image_8ikL-9IpD4tf.aWavhuthA_0002.png]]
+ Enter it twice and in function make sure the first one is set to
+minimum and the second to maxsimum
+ [[PhD_research_files/img/Image_8ikL-9IpD4tf.aWavhuthA_0003.png]]
+ then choose the create a new dataset, give it a name and run
+
+** 5.lan bc questionere, with rennart
+
+*** Start
+
+The data was received through heddy rennart in RAW spss files.
+ some of the variables were recoded to binary values (0,1).
+ then a logistic binary regression was run in spss.
+
+*** crosstabs
+
+the crosstab procedure was run for Table 1 (the descriptive statistics
+part)
+ in SPSS choose crosstabs
+ [[PhD_research_files/img/Pasted.jpg]]
+ then in crosstabs choose which variable would be in the rows and which
+in the columns
+ [[PhD_research_files/img/Image_KIdKijNH1xskaYB7G6SIbA_0001.jpg]]
+ run the command and see the output:
+ [[PhD_research_files/img/Image_KIdKijNH1xskaYB7G6SIbA_0002.jpg]]
+
+*** cross tab remark on lan exposure
+
+the lan exposure variable was cut into 4 levels in the crosstab
+analysis. (since level 5 was very low)
+
+*** binary regression procedure
+
+in logistic regression, the following variables were used:
+ [[PhD_research_files/img/Image_Jf6XRZfoSO6Ks-7f4pLUyg_0001.jpg]]
+ then using the categorical button the reference indicators were
+defined:
+ [[PhD_research_files/img/Image_Jf6XRZfoSO6Ks-7f4pLUyg_0002.jpg]]
+ the regression was run first with BR\_light as a categorical variable
+and then the same regression was run with the BR\_light variable
+excluded from the "define categorical variables" list in order to report
+this for the paper.
+
+** 6.voronoi polygons vs stat areas
+
+*** methodolgy
+
+**** start
+
+*Voronoi polygons:* Thiessen (sometimes called "Voronoi') polygons are
+deﬁned by a set of “center" points where each polygon is deﬁned as the
+set of all points that are closer to a particular center than any other
+center.
+ In this example we are joining Individual level data to polygons
+(voronoi) and SSA.
+ *NOTE*: You *Cannot*use the SSA aggregated data with the individual
+data, or you will loose the benefits of individual level data.
+ The main data file is
+
+**** step 1 working on the survey db
+
+Before we move to the GIS part we need to look at the Survey database.
+Most variables are binary (0,1) but some are coded with multiple levels
+ for example the origin variable is coded as 1=Africa 2=west Europe
+etc...
+ this needs to be coded to binary variables so we can re-code it into
+ashkenazi and spharadic jews...
+ for example education needs to be recoded to from the 4 category
+variable to no high education to yes high education
+ [[PhD_research_files/img/Image_3KlkC0DhMhf1.m3oPZGRUQ_0001.png]]
+ In addition a "count" variable was created to sum up the total
+population of the survey (given the value 1)
+ [[PhD_research_files/img/Image_3KlkC0DhMhf1.m3oPZGRUQ_0002.png]]
+ after all the database is ready in binary format export to dbf
+
+**** step 2 voronoi map creation
+
+At the beginning i created the Voronoi maps from the point layer in
+Arcmap of Nox stations using the Geo-statistical analysis tool (add as
+extension if missing)
+ [[PhD_research_files/img/Image_euKFRsmDUa1vwrqr37jCzw_0001.png]]
+ Then using the Voronoi map tool i created the voronoi polygons:
+ [[PhD_research_files/img/Image_euKFRsmDUa1vwrqr37jCzw_0002.png]]
+ Choose the layer you want to us*e (*1) as Input and the attribute which
+will be used to create the voronoi polygon*s (2**)*
+ the result should look like this
+ [[PhD_research_files/img/Image_euKFRsmDUa1vwrqr37jCzw_0003.png]]
+
+**** step 3 joining
+
+After the Voronoi layer is ready you can import the dbf with import XY
+into the project. and export the event to a shapefile, and in addition a
+shape file of SSA polygons is added.
+ to both the Voronoi layer and the SSA layer the same procedure is done:
+ Join first Pollution data with the *get closest*attribute command:
+ then to the resulting layer another Join is preformed where individual
+level data from the Hadera DB created in step 1 i added . This time we
+choose the sum values option:
+ [[PhD_research_files/img/Image_0F6X.sQywvQgBtitn4Na9Q_0001.png]]
+ the results is a SSA AND a Voronoi layer layer with pollution data and
+individual survey data:
+ [[PhD_research_files/img/Image_0F6X.sQywvQgBtitn4Na9Q_0002.png]]
+
+**** step 4 calculate the percentage
+
+After the layers are ready we need to calculate the percentage of each
+variable in each polygon
+ we will add a new field for EACH binary variable and choose *Float*as
+type
+ [[PhD_research_files/img/Image_K6vScZ.l-GVggBvtdlh5Nw_0001.png]]
+ and then calculate the percentage for each line using the formula:
+ *
+ (Number of patients X 100)/Total surveyed = % sick people
+*
+ For example to calculate the % of people that live close to a road
+(50m) we would use the field calculator on the new field we created:
+ [[PhD_research_files/img/Image_K6vScZ.l-GVggBvtdlh5Nw_0002.png]]
+
+**** a1 methods
+
+Coded children gender with 1 to 0 and 2 to 1
+
+*** led haifa revision 3.0
+
+**** A.data
+
+***** variables and info
+
+asthma (%)
+ Mean\_pb (led) exposre
+ Avreage age
+ Low income (bituch leumi status)
+ Obesity
+ all areas (ssa or voronoi) of less then 5 kids are deleted
+
+***** 1.original from paper
+
+****** a.voronoi data
+
+****** b.SSA data
+
+***** 2.Krigging
+
+****** a.voronoi with krigging
+
+in this step the original voronoi polygons with all covariets used in
+the analysis are joined to the krigged led exposure data
+ this is done by first joining the krigg resulted contours to an empty
+voronoi polygon layer with the average function in join
+ then we add that average (of led exposure in each voronoi polygon) to
+the original VR dataset with the join and use the within polygons (since
+the orig VR we used in the model are points now)
+ that way each voronoi point (the centroid) gets the average led
+exposure from the krigging resulting in vor\_krig file
+ this is then outputed to dbf named vor krig dbf in *A2b*
+ [[PhD_research_files/img/SS-2010-12-20_13.14.39.jpg]]
+
+****** b.output dbf
+
+this is the output of prev step
+
+****** c.SSA with krigging
+
+The same procedure *exactly* for for VR was done for the SSA part
+ [[PhD_research_files/img/SS-2010-12-20_13.23.43.jpg]]
+
+****** d.output dbf
+
+this is the output of prev step
+
+***** 3.IDW
+
+****** a.methods
+
+idw was run with exactly the same steps and methods as kriging
+
+***** 4.Join individually
+
+****** a.intro
+
+previous steps were methodological wrong. the correct way thus to do it
+is this:
+ join the interpolation contours with *individual children* and only
+then to calculate averages for SCAs.
+ to do this we use the same techniques for krigging and IDW
+
+****** b.joing contours to kids
+
+ the already calculated interoplations (converted to contours) are
+spatially joined to the individual children
+ [[PhD_research_files/img/SS-2011-01-05_08.44.55.jpg]]
+ the resulting files are j\_contour for krigging and j\_contour\_idw for
+the idw stage
+
+****** c.average individual exposure for each SSA and VR
+
+then using empty dummy VP or SSA polygons the average exposure for each
+polygon was calculated
+ each empty polygon layer was spatially joined (using the gets average
+option) with the *j\_contour or j\_contour\_idw*layer.
+ [[PhD_research_files/img/SS-2011-01-05_08.55.22.jpg]]
+
+****** d.add the lead averages back to the analysis set
+
+then we add the new averages (of led exposure in each VP or SSA) to the
+original analysis dataset with the join and use the within polygons
+(since the orig VR we used in the model are points now)
+ that way each VP or SSA point (the centroid) gets the average led
+exposure from the interpolation, resulting in
+ [[PhD_research_files/img/Image_fPUDOKqFUYxT26xAyjwL0A_0001.jpg]]
+
+**** paper
+
+show that there are known issues with led exposre but led exposure and
+Asthma is still unkown
+ create 2 tables one for SSA with ALL models (OLS, stepwise, spatial lag
+,gwr) and one Voronoi with ALL models
+
+**** gwr
+
+show mean max and avrege like CI
+ report std error..the lowset the better
+
+** 7.lan per capita
+
+*** methods
+
+*Latitude variable calculation*
+ 1)calculate the x using the centroid of each polugon
+ 2)Altitude X Latitude=Climate harsness*
+ Variables in Regression:
+*
+ Dummies
+ climate harshness
+ ?

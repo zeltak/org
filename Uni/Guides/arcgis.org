@@ -1,0 +1,1147 @@
+#+TITLE: arcgis
+
+* GIS
+*** tips and glossary
+
+**** gllosary
+
+*Geocoding*
+ a GIS layer that translates addresses to coordinates
+
+**** xy longitude and latitude
+
+*X*Longitude (shown as a vertical line) is the angular distance, in
+degrees, minutes, and seconds, of a point east or west of the Prime
+(Greenwich) Meridian. Lines of longitude are often referred to as
+meridians.
+ *Y-*Latitude (shown as a horizontal line) is the angular distance, in
+degrees, minutes, and seconds of a point north or south of the Equator.
+Lines of latitude are often referred to as parallels.
+
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_VC2z3xSSNWreaVdlPj4SnQ_0002.png]]
+
+*** projections and coordinate systems
+**** 1)projections and coordinate systems
+
+*Projections and Coordinate Systems
+**Types of coordinate systems*
+ There are two common types of coordinate systems used in GIS:
+ *1)GCS:*
+ A global or spherical coordinate system such as latitude--longitude.
+ These are often referred to as geographic coordinate systems *(GCS)
+*is often obtained in Decimal degrees such as x: -70.05 y: 42.15*
+*GCS is used for large areas and worldwide*
+*
+ you will see in GIS when an layer is using GCS that the units are in
+decimal degrees
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_guoO7G6AekzekVC-HwsUpw_0001.png]]
+ *
+ 2)PCS:*
+ A Pojected coordinate system *(PC*S) is based on GCS.
+ it has bigger numbers sometimes such as :
+ it involves a map projection such as transverse Mercator, Albers equal
+area, or Robinson, all of which (along with numerous other map
+projection models) provide various mechanisms to project maps of the
+earth's spherical surface onto a two-dimensional Cartesian coordinate
+plane. Projected coordinate systems are sometimes referred to as map
+projections.
+ PCS is used for states, countries etc.
+ you will see in GIS when an layer is using PCS that the units are in
+meters/km etc..
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_guoO7G6AekzekVC-HwsUpw_0002.png]]
+
+**** 2)order of using: define first and then reproject
+
+when dealing with projections you have to keep this in mind:
+ 1)*FIRST* you need to define the coordinante if missing (GCS). this is
+common when getting x,y cords in db files or rasters etc..
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_xyUw0VyI5kOAsxCgL18WFQ_0001.jpg]]
+ 2)*then*you can reporoject to any PGS system such as UTM etc.
+
+**** 3)converting between projections
+
+converting between different PCS is an important part in order to get
+all the layers to be projected similalrly
+ after you decide which projection to use and type (UTM,NAD etc..) you
+use the reproject tool:
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_vJ2w1YCvUqi0gimOxa673g_0001.png]]
+ then deifne the layer to be projected (to the one you decide to use)
+and the output file
+ NOTE: in some cases you will need to use a transformation
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_vJ2w1YCvUqi0gimOxa673g_0002.png]]
+ the file should now be reprojected
+
+**** fix a offsetted coord system
+
+[[~/Documents/My Dropbox/Org/Uni/Guides/ARCGIS_files/attach/steve_melly_cord_fix_adjusted.xlsx][Attachment #01
+(steve\_melly\_cord\_fix\_adjusted.xlsx)]]
+ if you have a layer/shapefile that moved a bit from the true location
+you can use the following method to get it approximately back in place
+ *In example:*
+ bellow the grey raster is the original location and the green raster is
+the raster that has been shifted to the left and bottom by a bit
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_Ti3nWWTfjaLk2sgmgWgkBA_0006.png]] to
+[[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_Ti3nWWTfjaLk2sgmgWgkBA_0007.png]]
+ *to solve this:*
+ use a correct layer/file to base your correction on. open the layer
+properties and extract the info such as cell size and
+e[[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_Ti3nWWTfjaLk2sgmgWgkBA_0008.png]]xtent:
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_Ti3nWWTfjaLk2sgmgWgkBA_0009.png]]
+ and
+ then take a sample point/grid in the shifted layer:
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_Ti3nWWTfjaLk2sgmgWgkBA_0010.png]]
+ and mark down the X,Y of that point
+ then using a math application (like excel) start calculating the
+differences *(see attachment)*
+ for *X1*use the Left extent of the original layer plus the cell size
+divided by 2:
+ -108.90066788+0.012048575/2
+ for *Y1* use the Bottom extent of the original layer plus the cell size
+divided by 2:
+ 29.9993652723+0.012048575/2
+ for *X2* and *Y2* take the X,Y of the sample point
+ We then calcualte the diff between X2 and X1 and devide it by the cell
+size of the original layer (0.012048575)
+ the rest are other calculation that can be seen in the attached file
+**** Israel projection
+http://tx.technion.ac.il/~zvikabh/software/ITM/
+
+%Tip (the above link also has an online calulator from DD to ITM)%
+
+The standard coordinate grid in Israel is called `Israel Transverse Mercator` (ITM), and is sometimes informally referred to as the "new Israel grid" (רשת ישראל חדשה). This grid appears in detailed maps of Israel. Nonetheless, the older and less accurate Israel Cassini Soldner (ICS) grid or "old Israel grid" (רשת ישראל ישנה) is also still used in many places. For example, despite the official adoption of ITM in 1994, the ICS grid is still displayed more prominently in Israeli hiking maps (מפות סימון שבילים) and is consequently more commonly used by hikers.
+
+The ITM grid is a transverse Mercator projection, meaning that the surface of the earth is projected onto a cylinder whose axis of symmetry is parallel to the equator. This provides an accurate projection along a longitudinal slice of the earth, with the inaccuracy increasing as one moves away from this axis. Thus, for example, the Universal Transverse Mercator (UTM) grid divides the earth into 60 longitudinal slices, each projected separately. Since Israel is a narrow country, whose span from east to west barely exceeds 100 kilometers, a single projection is sufficient for accurately representing the entire area. 
+
+*** spatial join
+
+**** intro
+
+This dialog allows data from a layer or table (join table) to be
+appended to the selected table or layer (target table).
+  
+ 1)In order to join the layers based on a common field (in this example
+serial Number of lamp):
+ · Right click on the layer we want to save the geographic position
+ · Select Join attribute from a table
+ · Choose on which field to base the join (serial number shown here)
+ · Choose which layer to join with the selected layer
+ · Press the advanced tab and choose weather to keep all records or just
+matching records
+
+**** spatial join
+
+*Join by location (spatial join)*
+  
+ Join by location or spatial join uses spatial associations between the
+layers involved to append fields from one layer to another.
+ One of three types of associations can be used to perform a spatial
+join. These associations are described as follows:
+  
+ Match each feature to the closest feature or features - In this
+association, you can either append the attributes of the nearest feature
+or append an aggregate (i.e. min, max etc.) of the numeric attributes of
+the closest features.
+  
+ Match each feature to the feature that it is part of - In this case,
+the attributes of the feature for which the current feature makes up a
+portion are appended.
+  
+ Match each feature to the feature or features that it intersects - Like
+with the closest feature(s) association above, you can either append the
+attributes of a single intersecting feature or an aggregate of the
+numeric attributes of the intersecting features.
+
+*** formulas-converstions
+
+**** to switch from old israel coordinate system to the new system
+
+*To switch from Old Israel coordinate system to the New system
+ in Editor choose the layer you want to edit, select all cases (points
+or polygons)
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_oLdNkaWPPdTXaIyoE-vzNQ_0003.png]]
+ and press move
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_oLdNkaWPPdTXaIyoE-vzNQ_0004.png]]*
+ In the X field: subtract 50,000 from old (original) X:
+ X(old)-50,000=X (new)
+  
+ In the Y field: subtract 500,000 from old (original) Y:
+ Y(old)-500,000=Y (new)
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_oLdNkaWPPdTXaIyoE-vzNQ_0005.png]]
+
+**** convert gridcode to calibrated lan in excel
+
+*Convert Gridcode to Calibrated LAN in Excel
+*
+ Formula:
+ =0.1*POWER(F1,1.5)
+
+**** adding xy cordinantes to polygons
+
+Adding XY cordinantes to polygons:
+  
+ 1) open the polygon table
+ 2) in the attribute table add two fields (x) and (y):
+   
+ Options>add fields
+  
+ 3) right click on the new field and press field calculator (ignore the
+warning if pops up)
+ 4)choose, load and choose the appropriate formula you want to load, in
+this case :
+ *Expression - x centroids of polygons.cal
+*
+  
+ 5)press ok, and GIS will calculate the X values for your polygons
+center
+ 6)follow similar option for the y field
+
+*** kernel density
+
+**** kd function
+
+*Density Function
+*
+ ***NOTE- make sure that tools>extensions>spatial analyst is marked as
+checked!!
+ Stage 1:
+ *To use density function:*
+  
+ Add the spatial analyst tool bar:
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_9J68qZ-vvrUeOMlgtV4WkQ_0004.png]]
+ then choose density there:
+ · Choose input data:
+ · population field (if available)
+ · search radius
+ · area units
+ · output cell size> what is the unit in the raster image created
+  
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_9J68qZ-vvrUeOMlgtV4WkQ_0005.png]]
+ In the my case :I want to use density function on individual breast
+cancer patients (points with XY Cords I have on a Haifa map) so I use
+these options:
+  
+ Kernel
+ No pop
+ 500m radius
+ Square meters
+ Output cell 50
+ Stage 2:
+ Stage 2*:
+ Convert Density to contou*r:
+  
+ in the spatial analyst toolbar choose surface analysis>contour:
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_9J68qZ-vvrUeOMlgtV4WkQ_0006.png]]
+ Then choose:
+  
+ · input surface> which raster you would like to use as surface
+ · contour interval
+ · base contou*r
+ NO**T*E: the total number of contour values (the actual number of
+contour lines (קווי גובה) changes according to contour interval, so if I
+use
+   The value .0000015 I get 100 lines (see picture below) but if I used
+0.00005 I would get 5 lines!
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_9J68qZ-vvrUeOMlgtV4WkQ_0007.png]]
+
+*** exporting data
+
+**** export to dbf giving x and y coordinantes
+
+*Export to DBF: Giving X and Y coordinantes
+*
+  When exporting from within Arcgis to DBF format it is Crucial!!!!!
+ to give X and Y coordinates to the table before Exporting to a database
+(*.dbf) format!
+  
+ NOTE:
+ **For each shape (point,polygon,line) there is a different expression!
+  
+ **in case of using polygons, each polygon gets a center point inside it
+(centroid) that's gets a XY cord!
+   
+ 1) This is done by:
+ Open the attribute table of the layers to be exported
+ Add X and Y fields to the table (Not in Edit Mode)
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_rAIDZoqbjmmxSLgbpB3aRg_0004.png]]
+ Choose Float for best results
+ In both the X and Y fields, Press on top of the field and use the
+calculate values (or filed calculator in some versions)
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_rAIDZoqbjmmxSLgbpB3aRg_0005.png]]
+ Note: ignore the warning if pops up
+ Load the correct expression (example: Expression - x centroids of
+polygons.cal)
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_rAIDZoqbjmmxSLgbpB3aRg_0006.png]]
+ press ok, and GIS will calculate the X values for your polygons center
+ follow similar option for the y field
+ Export to DBF using the options menu in the bottom part of the
+attribute table
+
+*** spatial analysis
+**** Morans I
+
+[[/home/zeltak/keepnote/attach/morans_i.ogg][See Video]]
+**** Calculate block statistcs
+Partitions the input into non-overlapping blocks and calculates the
+statistic of the values within each block. The value is assigned to
+all of the cells in each block in the output.
+you need to define which method you want to calculate (IE mean of all
+in block, max of all in block)
+
+example for caluculating the *max* value in the block and assigning
+it to the whole block:
+[[file:1.images/gis10052003p2.png]]
+
+
+@Make sure to the rasters were projected first (UTM) so we could define a precise 1x1km square@
+
+[[file:1.images/gis10052003p1.png]]
+
+
+**** Focal statistics
+Calculates for each input cell location a statistic of the values within a specified neighborhood around it.
+
+[[file:1.images/gis10052003p3.png]]
+**** Kriging
+***** multivariable regression analysis from kriging
+
+Since multivariable regression analysis cannot directly be applied to continuous surfaces, PM air pollution and sVOCs soil contamination maps (see Subsection 2.5) were had, first, to be converted into discrete point data. For this purpose, 1000 randomly distributed “reference” points were generated according to the methodological approach, suggested in Zusman et al., (2012). In particular, after the layer of reference points was generated using Hawth’s Analysis Tool in ArcGIS10.x, the reference points were linked to the PM2.5 and sVOCs contours, with each reference point received the value from the contaminant contour being closest to that particular point (for more detail on this procedure, see Zusman et al., 2012). The calculation was performed in ArcGIS10.xTM using the "spatial join" tool joining geographic lays (maps) based on their spatial location (ESRI, 2012). The values obtained thereby were then used as the dependent or independent variable in the multivariate analysis. 
+*** Editing
+
+**** divide plygon into many parts (Multipart To Singlepart)
+
+Multipart To Singlepart, Creates a feature class containing singlepart
+features generated by separating multipart input features.
+ choose a polygon you want to divide:
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_XJLoOLdffxEun5Bd3gtuBw_0001.png]]
+ then use the Multipart To Singlepart tool from the toolbox:
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_XJLoOLdffxEun5Bd3gtuBw_0002.png]]
+ then you will get each part as a new polygon in the output file:
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_XJLoOLdffxEun5Bd3gtuBw_0003.png]]
+
+*** voronoi
+
+**** create a voronoi grid from point
+
+in geostatistical analysis use the voronoi map creator
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_yYTsFzER0qkwnXhOf3T4JQ_0001.png]]
+ choose the point layer you want to base the voronoi map on and
+optionally use a clip option to make sure the shapes turn out ok:
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_yYTsFzER0qkwnXhOf3T4JQ_0002.png]]
+ then finally use the 'export' option to create a layer:
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_yYTsFzER0qkwnXhOf3T4JQ_0003.png]]
+
+*** Python
+**** skip errors
+
+to get over crashes in python (for arcgis scripts) for missing files etc
+add a try/exept statemnt above and below the arcpy command
+ try:
+     arcpy.SpatialJoin\_analysis(a2003\_001\_shp.....REST OF ARCPY
+COMMAND)
+ except arcpy.ExecuteError:
+     pass
+ Note:the red parts are the added stuff to the original command
+
+**** loop commands
+
+one can use a loop functions to go over commands each time changing a
+date.
+ example:
+ # Import arcpy module
+ import arcpy
+ for i in range(1, 366):
+   # Local variables
+ *SS*dbf =
+"C:\\Users\\ekloog\\Documents\\$Doc\\3.PostDoc\\3.1.Projetcs\\3.1.3.TEMP\_MODELS\\3.1.1.4.Work\\2.Gather\_data\\daily\_stmp\\a2003\_%03d.dbf"
+% i*
+ SS*layer = "a2003\_%03d\_Layer" % i
+ *SS*shp =
+"C:\\Users\\ekloog\\Documents\\$Doc\\3.PostDoc\\3.1.Projetcs\\3.1.3.TEMP\_MODELS\\3.1.1.4.Work\\2.Gather\_data\\metdbf\_shp\\a2003\_%03d.shp"
+% i
+ *SS*project =
+"C:\\Users\\ekloog\\Documents\\$Doc\\3.PostDoc\\3.1.Projetcs\\3.1.3.TEMP\_MODELS\\3.1.1.4.Work\\2.Gather\_data\\metshp\_utm\_proj\\a2003\_%03d.shp"
+% i
+   # Process: Make XY Event Layer
+ *SS*arcpy.MakeXYEventLayer\_management(dbf, "X", "y", layer,
+"GEOGCS['GCS\_WGS\_1984',DATUM['D\_WGS\_1984',SPHEROID['WGS\_1984',6378137.0,298.257223563]],PRIMEM['Greenwich',0.0],UNIT['Degree',0.0174532925199433]];-400
+-400 1000000000;-100000 10000;-100000
+10000;8.98315284119522E-09;0.001;0.001;IsHighPrecision", "")
+   # Process: Feature To Point
+ *SS*arcpy.FeatureToPoint\_management(layer, shp, "CENTROID")
+   # Process: Project
+ *SS*arcpy.Project\_management(shp, project,
+"PROJCS['WGS\_1984\_UTM\_Zone\_19N',GEOGCS['GCS\_WGS\_1984',DATUM['D\_WGS\_1984',SPHEROID['WGS\_1984',6378137.0,298.257223563]],PRIMEM['Greenwich',0.0],UNIT['Degree',0.0174532925199433]],PROJECTION['Transverse\_Mercator'],PARAMETER['False\_Easting',500000.0],PARAMETER['False\_Northing',0.0],PARAMETER['Central\_Meridian',-69.0],PARAMETER['Scale\_Factor',0.9996],PARAMETER['Latitude\_Of\_Origin',0.0],UNIT['Meter',1.0]]",
+"",
+"PROJCS['WGS\_1984\_UTM\_Zone\_19N',GEOGCS['GCS\_WGS\_1984',DATUM['D\_WGS\_1984',SPHEROID['WGS\_1984',6378137.0,298.257223563]],PRIMEM['Greenwich',0.0],UNIT['Degree',0.0174532925199433]],PROJECTION['Transverse\_Mercator'],PARAMETER['False\_Easting',500000.0],PARAMETER['False\_Northing',0.0],PARAMETER['Central\_Meridian',-69.0],PARAMETER['Scale\_Factor',0.9996],PARAMETER['Latitude\_Of\_Origin',0.0],UNIT['Meter',1.0]]")
+ *NOTE: there is a indent ( marked here as SS )in each line start of the
+local variables. the python proper denting is 2 spaces
+*you can change *range* so IE start at 33 etc:
+ for i in range(33, 365):
+ *also make sure the last range is last number +1*
+
+**** python repopulate script
+
+dir1 =
+'C:\\\\Users\\\\ekloog\\\\Documents\\\\$Doc\\\\3.PostDoc\\\\3.1.Projetcs\\\\3.1.3.TEMP\_MODELS\\\\3.1.1.1.Raw\_data\\\\MODIS\_TEMP\\\\Night
+only'
+ dir2 =
+'C:\\\\Users\\\\ekloog\\\\Documents\\\\$Doc\\\\3.PostDoc\\\\3.1.Projetcs\\\\3.1.3.TEMP\_MODELS\\\\3.1.1.4.Work\\\\2.Gather\_data\\\\hdf\_2\_tiff'
+ for d in range(1, 365):
+     ofile = open('cn{0:03}.py'.format(d), 'w')
+     ofile.write('#
+---------------------------------------------------------------------------\n')
+     ofile.write('# cn{0:03}.py\n'.format(d))
+     ofile.write('# Created on: 2011-04-25 13:31:26.00000\n')
+     ofile.write('# (generated by ArcGIS/ModelBuilder)\n')
+     ofile.write('# Description:\n')
+     ofile.write('#
+---------------------------------------------------------------------------\n')
+     ofile.write('\n')
+     ofile.write('# Import arcpy module\n')
+     ofile.write('import arcpy\n')
+     ofile.write('\n')
+     ofile.write('# Local variables:\n')
+     ofile.write('a2003\_{0:03} =
+"{1}\\\\a2003\_{0:03}.*hdf*"\n'.format(d, dir1))
+     ofile.write('a2003\_{0:03}\_tif =
+"{1}\\\\a2003\_{0:03}.*tif*"\n'.format(d, dir2))
+     ofile.write('\n')
+     ofile.write('arcpy*.ExtractSubDataset\_management*(a2003\_{0:03},
+a2003\_{0:03}\_tif, "0")\n'.format(d))
+     ofile.write('\n')
+ *ExtractSubDataset\_management-this is the actuall GIS command to run*
+
+**** ImportError: No module named arcpy
+
+If importing ArcPy produces either of the following errors, the required
+modules could not be found:
+ *ImportError: No module named arcpy
+     ImportError: No module named arcgisscripting*
+ To address this, browse using Windows Explorer to the
+python27\Lib\site-packages folder and *add* or edit the Desktop10.1.pth
+file. The file should contain the two lines shown below (corrected to
+your system's path if they do not match ):
+ c:\Program Files\ArcGIS\Desktop10.1\arcpy
+ c:\Program Files\ArcGIS\Desktop10.1\bin
+ or if you have a 64bit system this maybe need adjustmetns
+
+**** using pyscripter
+
+make sure the pyscripter version you launch matches the gis py version
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_xpdGx10UPdzNNQAZbQJ9Ng_0002.png]]
+
+**** python discard last  4 characters from string 
+
+[:-4]
+ discard last 4 characters
+**** Snippets
+***** make XY layer from DBF
+
+#+begin_src python
+arcpy.MakeXYEventLayer_management("F:/Uni/Projects/P031_MIAC_MEXICO/3.Work/2.Gather_data/FN007_Key_tables/OUTaody2003dbf.dbf","long_aod","lat_aod","OUTaody2003dbf_Layer","GEOGCS['GCS_WGS_1984',DATUM['D_WGS_1984',SPHEROID['WGS_1984',6378137.0,298.257223563]],PRIMEM['Greenwich',0.0],UNIT['Degree',0.0174532925199433]];-400 -400 1000000000;-100000 10000;-100000 10000;8.98315284119522E-09;0.001;0.001;IsHighPrecision","#")
+#+end_src
+
+*** Raster
+
+**** extract values from a raster to a point layer
+
+a raster is loaded to GIS
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_yc3e8OKpT6dSBgH5XBAeRA_0001.png]]
+ then using the extract values function every point gets a value
+ you can use an intepulated value from the closet 4 points around it by
+using the interpolate values option
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_yc3e8OKpT6dSBgH5XBAeRA_0002.png]]
+
+**** extract a subdata set from a raster
+
+**** Scalling factor
+
+Every raster image from sattellite comes with a vlaue (gridcode)
+ these values*are not*the true number you look for (IE
+tempreatuer,radiaence, AOD etc..)
+ To get the real value you always need to multiply these values by a
+scalling factor.
+ this can be done with the geo calculator
+ the scalling factor is avilabe with the 'product' you use in example in
+modis:
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_NNL9J4ywLmqOIPTqmWup2g_0001.png]]
+
+**** clip raster
+
+***** using data managemen
+
+there are two methods:
+ 1)using data management.....clip:
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_6DyPyagJx5lEmm5PCT908w_0001.png]]
+ then
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_6DyPyagJx5lEmm5PCT908w_0002.png]]
+ make sure you have the check box checked in the clipping geometry   
+
+***** using mask in spatial analyst
+
+use the mask function:
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_BH6gsKPdkmSPbew0CSleOg_0001.png]]
+ then use a masking layer:
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_BH6gsKPdkmSPbew0CSleOg_0002.png]]
+
+**** Zonal staisticcs
+
+***** zonal statistics as a table
+
+Summarizes the values of a raster within the zones of another dataset
+and reports the results to a table. that is> This option allows to
+calculate values from a raster for a polygon
+ Mean- is most commonly used in such procedures
+ for example:
+ **
+
+To calculate land cover (Percentage of urbaness)
+
+ - Add the binary raster of urbaness(refer to criteria on
+reclassification of NLCD)
+
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_3kdqTXIcJDhb806sn7nSOQ_0003.jpg]]
+
+ - Run the '*zonal statistics as table*' and select mean (mean for
+binary data is percentage)
+ NOTE: if the procedure fails try to save it outside of a gdb as a
+normal table in a folder
+
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_3kdqTXIcJDhb806sn7nSOQ_0004.jpg]]
+
+ This results in Percentage of open space (technically, percentage of
+urbaness)
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_3kdqTXIcJDhb806sn7nSOQ_0005.jpg]]
+
+***** calcualte percent from a 0,1 raster
+
+a national land cover database was proccesed and reclassified to 0,1
+(forest areas or not-by ncdc code)
+ the 10x10 polygon layer was loaded and a grid2 field (text) was created
+for the zonal statistic part
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_jOZBcsrXBmYInvbeW1BBYA_0004.png]]
+ then using *zonal statistics as table* the mean ratio between 0(no
+forest) and 1 (forested) was calculated (using the guid2 text variable
+as zone field) and outputed as a table:
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_jOZBcsrXBmYInvbeW1BBYA_0005.png]]
+ then the mean value was multiplied by 100 to get the % forested
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_jOZBcsrXBmYInvbeW1BBYA_0006.png]]
+ Finally the percent forsted was joined (by table) to the 10x10 layer
+
+**** combine 2 rasters
+
+NOTE-THE OLD METHOD WORKS BUT IT CORRUPTS THE NUMERICAL id variable
+ a national land cover database was proccesed and reclassified to 0,1
+(forest areas or not-by ncdc code)
+ then a 10x10 guid point grid was transformed into a raster
+ *Note: the raster cell size needs to match grid resolution you want.
+below its in degrees so its 0.1 degree (10km), also the value field
+needs to be the ID field of the grids*
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_OmB5ziAmdvj7nZaEipxhAg_0002.png]]
+ then we combine the 2 raster (the 10x10 raster and forest raster).
+ *make sure that in the environment you set the cell size to be the one
+of the smallest of the 2 rasters (the forest one)*
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_OmB5ziAmdvj7nZaEipxhAg_0003.png]]
+ the result raster has a count field for each forest type (0,1) for each
+grid id
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_OmB5ziAmdvj7nZaEipxhAg_0004.png]]
+ this table is exported to DBF and then using SAS code c016\_calculate
+forestry the percent was calculated, see code for more detail (attached)
+
+*** manage data
+
+**** merge (combine) multiple layers togheter
+
+to merge (combine) multiple layers togheter we can use the merge
+function under the data managment tools
+ this of course works if all layers are the same type
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_QQRulbcU2qVUbXMDxwvGZQ_0001.png]]
+
+**** How to make square buffers (around points)
+
+1. Use the Buffer tool in the ArcToolbox to create buffers around points
+*(remember to only use half of the actual buffer size you want IE for a
+10km grid you would use a 5km buffer radius)*
+ 2. Use the *Feature Envelope to Polygon tool*(in the ArcToolbox) to
+make round buffers from the above to square buffers.
+ (Therefore, the output from the Buffer tool should be subsequent input
+here) You can search the tool using the Search window.
+  
+ FYI: If you really want a 'square' not a rectangle, use projected data
+not only based on geographic coordinate systems (like latitude and
+longitude)
+  
+
+*** MODELS
+
+**** iterators in ModelBuilder
+
+***** Iterate Rasters (also hdf)
+
+ Iterate Rasters
+
+To understand the use of Iterate Rasters in ModelBuilder, see the
+illustration below, where the model resamples grid datasets and extracts
+a subset for further analysis.The *Input Rasters* variable is a folder
+containing grids, images, and TIFFs. In this case, iteration has been
+restricted with a wildcard A* and raster type of GRID so that it only
+iterates over rasters starting with the letter *A* and only on grids.The
+tool has two outputs:
+
+-  Output *Raster* variable (Aland, Aparcel, and Aroad) connected as
+   input to
+   the [[http://help.arcgis.com/en/arcgisdesktop/10.0/help/0017/00170000009t000000.htm][Resample]] tool.
+-  *Name* variable, which is used in the output name of
+   the Resample and Extract Subset tools as
+   the [[http://help.arcgis.com/en/arcgisdesktop/10.0/help/002w/002w0000001t000000.htm][in-line
+   variable]] %Name%.
+    [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_LEcwuimJ57jy9v4BrMySMQ_0001.png]]
+
+   
+ Pasted from
+<[[http://help.arcgis.com/en/arcgisdesktop/10.0/help/index.html#/Examples_of_using_iterators_in_ModelBuilder/00400000001n000000/ESRI_SECTION1_3D4AA24954D645A0810A250779A2BB11/][http://help.arcgis.com/en/arcgisdesktop/10.0/help/index.html#/Examples\_of\_using\_iterators\_in\_ModelBuilder/00400000001n000000/ESRI\_SECTION1\_3D4AA24954D645A0810A250779A2BB11/]]>
+
+***** model variables
+
+Model Variables
+ Using the %i% system variable with in-line variable substitution
+
+For models that run a process on
+a [[http://help.arcgis.com/en/arcgisdesktop/10.0/help/002w/002w0000007n000000.htm][list]] of
+inputs, each time the process runs, the output will have the same name
+as the output from the previous run of the process, and the previous
+output will be overwritten. To avoid overwriting previous outputs in
+successive iterations, append the name of the output with %i%, which
+will give each output a unique name that indicates its position in the
+list of inputs.
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_zLTL5eKuK4bGAjaKBXdy9Q_0002.png]]
+
+   
+ Using the %n% system variable with in-line variable substitution
+
+ %n% gives the current model iteration number and is used in an
+iterating model. In the example below, the For iterator is used to
+iterate a model four times. The output of the Buffertool is used
+as [[http://help.arcgis.com/en/arcgisdesktop/10.0/help/002w/002w00000065000000.htm][feedback]] into
+the tool as input. The model iterates and creates a new output at each
+iteration. %n% is used in the output name of the Buffer tool to give the
+output of each iteration a new name.
+
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_zLTL5eKuK4bGAjaKBXdy9Q_0003.png]]   
+ Pasted from
+<[[http://help.arcgis.com/en/arcgisdesktop/10.0/help/index.html#/Examples_of_in_line_variable_substitution_with_ModelBuilder_system_variables/002w00000060000000/][http://help.arcgis.com/en/arcgisdesktop/10.0/help/index.html#/Examples\_of\_in\_line\_variable\_substitution\_with\_ModelBuilder\_system\_variables/002w00000060000000/]]>
+
+*** fishnet
+
+**** PCS- create polygon grid (fish grid tool) in Projected systems
+
+note: its much better first convert your border layer to a projected
+system so you can create precise 1x1km grids
+ Use the Create Fishnet tool, Found in Data Management Tools -> Feature
+Class -> Create Fishnet
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_y0YqiPh2J0pKaO0lTLY1GQ_0001.png]]
+ make sure the extent is set to what you require
+ the cell size should be in meters in the case you use a projected PCS
+ use '0' for cell height to auto calculate that
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_y0YqiPh2J0pKaO0lTLY1GQ_0002.png]]
+ if using WGS
+ the cell size should be in *degrees* in the case you use a projected
+WGS
+ use '0' for cell hight to auto calculate that
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_y0YqiPh2J0pKaO0lTLY1GQ_0003.png]]
+
+*** ArcCatalog
+
+**** add size field in view/sort by size
+
+go to options then contents and add the size field
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_7te7bZwuuaYH1VxPyafSDw_0001.png]]
+ then you should get a normal explorer view and you can sort by clicking
+the column
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_7te7bZwuuaYH1VxPyafSDw_0002.png]]
+
+*** Calculating weighted sum of population for each grid
+
+this explains how to calculate weighted sum (or average) of population
+for each grid.
+ It consists of simple and easy tools of ArcGIS and you don't need to
+export data to the other software such as SAS or Access.
+  
+ I will refer to original census area as mom's area and to split area as
+child' area
+  
+ 1. Calculate area of census areas (mom's area)
+ 2. Split census areas by grids using the Intersect tool. (split area:
+child area, original census area: mom area)
+     By this, each child area will be given the grid ID as well as mom
+area's ID on the table.
+ 2. Calculate area for each split area (chid area)
+ 3. Join the split area with original census areas (join mom's area into
+child layer using area ID)
+    -> All children will have mom's area and corresponding population
+ 4. Divide children's area by mom's area (percent of child area in mom's
+area)
+ 5. Multiply percent of children's area by population of mom's area
+    -> Each child area will be given the weighted population from mom's
+area
+ 6. Sum up all children areas into each grid using the Summarize option
+(right click the field name of grid ID and click the Summarize. Then,
+choose the sum or average option for the weighted population field)
+   -> It will calculate statistics such as sum or mean per grid ID
+
+*** density
+
+**** line density
+
+This Calculates a magnitude per unit area from *polyline features* that
+fall within a radius around each cell
+ For example to calculate the traffic density in each 50x50m cell around
+a study area:
+ *NOTE: make sure the line projection and data frame projection match
+before running it*
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_a2AG9FHLYeluP95xbO2vrQ_0002.png]]
+ where:
+ *all\_roads\_MIA* is a input line layer
+ *population field* is an optional (not used above) field where you can
+define population values (the number of times the line should be
+counted) for each polyline. IE you can use 'number of lanes'i in the
+tden example to give a populatuion effect
+ *output cell-* would be the output resolution you want the raster to be
+
+*** krigging
+
+**** glossary
+
+*Variogram:* summarises the relationship between the variance of the
+difference between measurements and the distance of the corresponding
+points from each other.
+ *Semivariance* is a measure of the degree of spatial dependence between
+samples. The magnitude of the semivariance between points depends on the
+distance between the points. A smaller distance yields a smaller
+semivariance and a larger distance results in a larger semivariance. The
+plot of the semivariances as a function of distance from a point is
+referred to as a semivariogram. The semivariance increases as the
+distance increases until at a certain distance away from a point the
+semivariance will equal the variance around the average value, and will
+therefore no longer increase, causing a flat region to occur on the
+semivariogram called a sill. From the point of interest to the distance
+where the flat region begins is termed the range or span of the
+regionalized variable. Within this range, locations are related to each
+other, and all known samples contained in this region, also referred to
+as the neighborhood, must be considered when estimating the unknown
+point of interest. Examples of possible semivariograms are provided in
+the drawing below.
+ *Kriging:* uses the information from a variogram to find an optimal set
+of weights that are used in estimating a surface at unsampled locations.
+ *Sill:* describes where the variogram develops a flat region, i.e.
+where the variance no longer increases.
+ *
+ Range:* the distance between locations beyond which observations appear
+independent i.e. the variance no longer increases.
+ *Nugget variance:* when the variogram appears not to go through the
+origin.
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_6dEyNS8FHzG4RLFjLCOyMg_0001.png]]
+
+**** use kriging through the geostatistical wizard
+
+start the geostatistical wizard
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_bdPzuO1Hbn5YRLdzhpt9Tg_0001.png]]
+ then choose the geostat method (krigging below) and the data source,
+and field
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_bdPzuO1Hbn5YRLdzhpt9Tg_0002.png]]
+ then in the next screen choose if you require other then default
+options
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_bdPzuO1Hbn5YRLdzhpt9Tg_0003.png]]
+[[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_bdPzuO1Hbn5YRLdzhpt9Tg_0004.png]]
+ finally hit finish to get 1)a summury (incl. sill and nugget) and to 2)
+preform the kriging and output a raster kriged layer:
+    
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_bdPzuO1Hbn5YRLdzhpt9Tg_0005.png]]
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_bdPzuO1Hbn5YRLdzhpt9Tg_0006.png]]
+    
+
+*** point distance
+
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_kcWyoeEF92y22PR2xPMSwg_0004.png]]
+
+ In this example we want to join all air temp stations within 60km to a
+grid (guid)
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_kcWyoeEF92y22PR2xPMSwg_0005.png]]
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_kcWyoeEF92y22PR2xPMSwg_0006.png]]
+ (guid
+
+*** generate near table
+
+Generate Near Table (Analysis)
+
+Determines the distances from each feature in the input features to one
+or more nearby features in the near features, within the search radius.
+The results are recorded in the output table.
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_MDhnNt1KxbDKIWJdeneceA_0007.png]]
+
+ This tool behaves the same as
+the[[http://help.arcgis.com/en/arcgisdesktop/10.0/help/0008/00080000001q000000.htm][Near]]ar tool.
+However, instead of updating the input features, it creates a new output
+table. Moreover, it can find as many near features as specified by
+th*e Maximum number of closest match*es parameter.
+
+ Pasted
+from[[http://help.arcgis.com/en/arcgisdesktop/10.0/help/index.html#/Generate_Near_Table/00080000001n000000/][http://help.arcgis.com/en/arcgisdesktop/10.0/help/index.html#/Generate\_Near\_Table/00080000001n000000/]]0/>*
+ In exampl*e:
+ you want to get all stations (met stations) within 60km of a grid cell
+(guid)
+ first issue the generate near table*
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_MDhnNt1KxbDKIWJdeneceA_0008.png]]*
+ then you end up with the near table:
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_MDhnNt1KxbDKIWJdeneceA_0009.png]]
+ you can see the IN\_FI*D (the objectID of input featur*e) and
+NEAR\_FI*D (the objectID of near feature)*
+ then to get back the attributes of the original tables you use the join
+function. IE to get back the attributes of the met stations:
+ first issue a join to the near feature layer (the met stations) based
+on NEAR\_FID And the original OBJECTID (of the met stations):
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_MDhnNt1KxbDKIWJdeneceA_0010.png]]
+ Folowed by another join for the guid feature layer based on neaRFID And
+the original OBJECTID
+
+[[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_MDhnNt1KxbDKIWJdeneceA_0012.png]][[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_MDhnNt1KxbDKIWJdeneceA_0011.png]]
+ then the final result will have the attributes of both original table
+and then near table
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_MDhnNt1KxbDKIWJdeneceA_0013.png]]
+
+*** symbology only shows part of values (Error: Maximum sample size
+reached)
+
+Error:  Maximum sample size reached
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_GxShCFqQGSxIsWwSk2Gd7A_0003.png]]
+ Solution or Workaround
+
+Right-click the layer in the table of contents and click Properties.
+
+Click the Symbology tab and click Quantities in the Show box.
+
+Symbolize the data with graduated colors or graduated symbols.
+
+Click *the Classify button* to display the Classification dialog box.
+
+Click the Sampling button.
+
+[[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_GxShCFqQGSxIsWwSk2Gd7A_0004.png]]
+
+Set the maximum sample size to any number greater than or equal to the
+amount of features in the layer.
+
+Click Apply.
+
+Click OK.
+ Pasted from
+<[[http://support.esri.com/es/knowledgebase/techarticles/detail/20314][http://support.esri.com/es/knowledgebase/techarticles/detail/20314]]>
+
+*** create an outer buffer
+
+to make a buffer only appear on the outside of the polygon select the
+outside only option in side type
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_okGCrifpgyIp4KrlIpwB2g_0002.png]]
+*** Animations
+**** Mapping Time in ArcGIS
+
+One of the new features of ArcGIS 10 is the ability to “time-enable” your data in ArcMap. Visualizing how data changes over time provides opportunities for powerful, more in-depth analysis. Using ArcGIS 9.3, you can visualize temporal change by creating an animation. You can still create animations at version 10, but there’s an easy alternative as well.
+
+The example below shows how to use the new tools to visualize piracy-related incidents that occurred between March, 2007 and February, 2009 in and around the Gulf of Aden.
+
+The map document shown on the right includes the World Topographic Map basemap from ArcGIS Online for geographic context, and an Incidents point layer that represents locations where pirate attacks occurred. The Incidents data is a set of Anti-Shipping Activity Messages that was downloaded as a shapefile from the National Geospatial-Intelligence Agency (NGA) Maritime Safety Information portal and loaded into a file geodatabase feature class.
+
+The points on the map reveal the number of attacks that occurred during the time period, and you can see the incident distribution. By time-enabling the incidents, however, you can visualize the progression of the attacks and find out whether there were “clusters within the cluster.”
+
+
+
+The Incidents layer contains a DateOfOcc attribute, which stores the date (mmddyyyy) that each attack occurred. In order to time-enable a layer, you must have one (or more) fields that stores time data (such as dates). A best practice is to store time data in a date field, but numeric or text fields will also work.
+
+Set Time Properties
+
+[[file:~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/timeanim1.jpg]]
+
+At ArcGIS 10, the ArcMap Layer Properties dialog box has a Time tab. So the first step to visualizing the time component of a layer is to simply open the dialog box and click the Time tab. Then follow the steps below:
+
+Check the box in the upper-left to “Enable time on this layer.”
+In the Layer Time drop-down list, choose ”Each feature has a single time field.”
+For this example, this is the appropriate setting because the attribute table has only one time field. Sometimes, there are two fields that store time data; for example, StartDate and EndDate.
+
+For Time Field, choose the field in the layer that contains your time data. In this case, it’s DateOfOcc.
+For Time Step Interval, you can manually set the interval or you can let the software calculate an interval based on your data. In this example, 2 days was specified.
+At the bottom of the dialog box, check the box to “Display data cumulatively.”
+These settings will draw incidents for each two-day increment and keep earlier incidents displayed as succeeding incidents draw—allowing you to see the pattern of occurrence over the two years spanned by the data.
+
+Time-Enable the Map
+
+[[file:~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/timeanim2.jpg]]
+
+
+Click OK to apply the layer’s time properties, then click the button on the Tools toolbar to open the Time Slider window. The Time Slider window is new at version 10.
+Click the “Enable time on map” button in the upper-left corner of the Time Slider window.
+After clicking this button, only the data associated with the start time displays on the map.
+Click the Play button to see the incidents display in order based on their date of occurrence.
+This time visualization reveals that in 2007 there were fewer incidents of piracy, they were much more spread out, and they did not appear to be consistently in close proximity to land. By early 2009, there were significantly more incidents, and they appear to be far more concentrated in the Gulf of Aden, specifically on the Yemen side of the gulf.
+
+The change in incident distribution could be due to an attempt by ships to avoid the Somali Coast. NGA Special Warning Number 123 advises mariners to remain at least 200 nautical miles distant from the Somali Coast.
+
+Sharing Time Visualizations
+
+The time properties are saved with the map document. You can share the time visualization by sharing the map document. But what if the people you want to share with don’t have ArcMap?
+
+From the Time Slider window, you can quickly export a time-enabled map
+to an .AVI file, which can be viewed using the free Windows Media
+
+*** Symbology
+**** export/import symbology from one layer to another
+in the symbology layer one you have everything set up as you need,
+export that layer as a layer file.
+
+then to each layer you want to apply it to press the *improt* button
+in arcgis in the symbology tab ti apply that symbology
+
+
+**** Batch apply symbology using batch comma
+
+use the !Apply Symbology From Layer (Data Management)! tool to batch
+it.
+you can right click on the toolbox function and press 'batch'
+
+you can use a saved layer for the !based on! layer or a current shape
+file in the project with symbology set
+
+
+**** Apply symbology using python scripts
+you can use the following code after you define the symbologyLayer
+file symbology and save the workspace
+
+#+BEGIN_SRC python
+import arcpy
+from arcpy import env
+
+# Set the current workspace
+env.workspace = "F:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\2.Gather_data\$GIS Repo\yearlymaps.gdb"
+
+# Set layer to apply symbology to
+inputLayers = ["Y2002_fintemp_VR","Y2003_fintemp_VR","Y2004_fintemp_VR"]
+
+# Set layer that output symbology will be based on
+symbologyLayer = "Y2001_fintemp_VR"
+
+# Apply the symbology from the symbology layer to the input layer
+for layer in inputLayers:
+    arcpy.ApplySymbologyFromLayer_management (layer, symbologyLayer)
+#+END_SRC
+
+where:
+#+BEGIN_EXAMPLE
+in_layer : The layer to which the symbology will be applied.
+Feature Layer;Raster Layer; TIN Layer;Network Analysis Layer
+
+in_symbology_layer : The symbology of this layer is applied to the Input Layer.
+Feature Layer; Raster Layer;TIN Layer; Network Analysis Layer
+#+END_EXAMPLE
+
+*** tables
+**** concentrate text/string variables
+
+to concentrate text/string variables
+ just use the & command in the filed calculator so issue:
+ [X] & [Y]
+ should result in x followed by y
+
+**** variables types
+
+"double" is the largest size for numeric variables
+**** select by properties
+***** select NULL cases
+
+Click Select by Attributes from the Selection menu.
+Double-click the field name in the Fields dialog box of the Select by Attributes window.
+Type "is null" (without quotes)
+₆In example₆ 
+
+"region" is null
+
+*** tools
+**** ET Tools
+
+***** convert points to a polygon grid
+
+you can easly do that with the ET geowizards tool:
+ choose the point layer you want to convert, then specify the distance:
+ in the below case and the modis data i used each point had a spatial
+resolution of 10x10km so i choose 0.1 Degree:
+ [[arcgis_files/img/Image_HMiw.TP2Ecmipx01EmaXCw_0001.png]]
+
+**** xtoolspro
+
+***** info
+
+get it from
+[[http://www.xtoolspro.com/default.asp][http://www.xtoolspro.com/default.asp]]
+
+***** add XY data to layers
+
+[[arcgis_files/img/Image_Fyxt55mUht8EMxrvOgGFVg_0001.png]]
+
+**** google earth
+***** Add a Google Earth Satellite Image Into ArcMap
+
+How To: Add a Google Earth Satellite Image Into ArcMap
+ T
+
+he following tutorial guides you through the steps of bringing in
+selected screenshots from Google Earth into ArcMap.  One huge advantage
+of using Google Earth imagery is that you will be able to bring in
+historical data that is now available.
+
+ *Google Earth*
+
+You will navigate to the location in Google Earth that you want to bring
+in to ArcMap.  Then, you will add 4 control points on each corner of the
+image, record their latitude/longitude coordinates, and export the image
+as a jpg file.
+
+•Open Google Earth
+ In the Layers panel, turn everything off
+ Go to Tools -> Options, and change the "Show Lat/Long" option to
+"Decimal Degrees"
+ Navigate to the area and extent that you want to use in ArcMap
+
+Press "r" on your keyboard.  This will reset the view angle to be "top
+down" and rotates the map so that it is "north up"
+ Press F11 to make your map go full screen
+ Click on the "add placemark" button
+ [[arcgis_files/img/Image_Zcdl1XxxQ5BiJTcvvApXJQ_0001.png]]
+ Move the icon from the middle of the screen to the top left corner of
+the map
+ Rename the icon "Top-left"
+
+ Click the button to change the icon
+ [[arcgis_files/img/Image_Zcdl1XxxQ5BiJTcvvApXJQ_0002.png]]
+
+Choose this icon:
+ [[arcgis_files/img/Image_Zcdl1XxxQ5BiJTcvvApXJQ_0003.png]]
+
+Jot down (or copy and paste) the latitude and longitude coordinates
+somewhere you can access later
+ Repeat the process and add icons for "Top-right", "Bottom-left" and
+"Bottom-right"
+ Now it's time to export the image.  Go to File -> Save -> Save Image
+and save your file
+ *ArcMap*
+
+Now you will import your google earth image, and georeference it based
+on the 4 control points you created.
+
+•Open ArcMap
+
+-  Go to Customize -> Toolbars -> Georeferencing
+    Add the image file from Google to ArcMap.  If it prompts you to
+   build pyramids, click ok
+    Zoom into the top left corner of your satellite image
+    From the georeferencing toolbar, click the "add control points"
+   button
+    [[arcgis_files/img/Image_Zcdl1XxxQ5BiJTcvvApXJQ_0004.png]]
+    Hover over the exact center of the top left icon you created, and
+   LEFT click once
+    Now, RIGHT click once and click on "Input X and Y..."
+
+   [[arcgis_files/img/Image_Zcdl1XxxQ5BiJTcvvApXJQ_0005.png]][[http://gis.yohman.com/up206a/files/2011/02/ge7.png][
+   ]]Add the correct coordinates for your Top-left control point
+
+ WARNING:   Remember that "X" is LONGITUDE and "Y" is LATITUDE
+
+Repeat the process for the remaining 3 control points.  If the map has
+disappeared from your view port, just right click on the layer, and
+select "zoom to layer"
+ To finish your georeferencing, click on the "Georeferencing" menu item
+from the toolbar, and select "update georeferencing"
+ [[arcgis_files/img/Image_Zcdl1XxxQ5BiJTcvvApXJQ_0006.png]]
+
+You should now be able to overlay additional layers on top of the
+satellite image.  Below is an example of a landuse layer on top of a
+Google Earth
+ .[[arcgis_files/img/Image_Zcdl1XxxQ5BiJTcvvApXJQ_0007.png]]
+ [[http://gis.yohman.com/up206a/files/2011/02/ge9.png][L]]anduse over
+imported Google Earth imageHot
+ Tip:  Historical ImageryYou can also import historical satellite
+imagery from Google.  This could be useful to see temporal changes in
+the landscape of your project areas.
+
+•Go to View -> Historical Imagery, or just click on the historical
+imagery icon from the toolbar
+ [[arcgis_files/img/Image_Zcdl1XxxQ5BiJTcvvApXJQ_0008.png]]
+
+You can then slide the time bar handle to display imagery for available
+times
+ [[arcgis_files/img/Image_Zcdl1XxxQ5BiJTcvvApXJQ_0009.png]]
+          
+ Pasted from
+<[[http://gis.yohman.com/up206a/how-tos/how-to-add-a-google-earth-satellite-image-into-arcmap/][http://gis.yohman.com/up206a/how-tos/how-to-add-a-google-earth-satellite-image-into-arcmap/]]>
+***** add points from google earth to gis 
+open google earth and use search/browse to add placemarks 
+make sure to add placemarks to a folder so all relevant placemarks are under one folder
+after finishing adding placemarks, right clik on the folder and press save as..
+this will save the placemarks of the folder as a kml file
+then in arcgis import the kml file using the kml to layer in toolbox
+
+*** Legends
+
+**** format numbers in legend
+
+To format numbers in legend under sybmology choose the numbers> right
+click it> choose format number
+ [[arcgis_files/img/Image_pHQk1GvM10TtYfnbmivAhw_0001.jpg]]
+
+*** layout
+**** define sig. digits
+when you want to lower the digit count in the layer/layout:
+go to properties, and press the lablel bar:
+
+
+
+[[~/Documents/My Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_2zJ2141DtUvGYrr5VfMMRQ_0001.png]]
+[[~/Documents/My Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_2zJ2141DtUvGYrr5VfMMRQ_0002.png]]
+
+*** Errors
+**** ImportError: No module named arcpy
+
+If importing ArcPy produces either of the following errors, the required
+modules could not be found:
+ *ImportError: No module named arcpy
+     ImportError: No module named arcgisscripting*
+ To address this, browse using Windows Explorer to the
+python27\Lib\site-packages folder and *add* or edit the Desktop10.1.pth
+file. The file should contain the two lines shown below (corrected to
+your system's path if they do not match ):
+ c:\Program Files\ArcGIS\Desktop10.1\arcpy
+ c:\Program Files\ArcGIS\Desktop10.1\bin
+ or if you have a 64bit system this myabe need adjustmetns
+*** open street maps in gis
+**** import open street map data to GIS
+The trick is to download the OpenStreet data as shapefiles from geofabrik.de
+http://www.geofabrik.de/
+*** import text strings as text and not numeric
+There is a way which you can assign the data type to a field for use with ArcGis.
+
+In the folder where the .csv file resides will be a file called schema.ini
+
+Within this file you can set the values for each field.
+
+eg
+
+#+BEGIN_EXAMPLE
+[YourFile.csv]
+Format=CSVDelimited
+Col1=Attribute1 Text Width 10
+Col2=Attribute2 Double
+Col3=Attribute3 Text Width 32
+#+END_EXAMPLE
+
+Col1 refers to field 1
+Attribute1 will display as the name of the field
+Text Width 10 will create a string field 10 characters wide.
+
+ArcMap and ArcCatalog read this file. 

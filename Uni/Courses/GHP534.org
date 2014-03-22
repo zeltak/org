@@ -1,0 +1,203 @@
+#+TITLE: GHP534
+
+* GHP534
+
+** course methods
+
+*** class 1
+
+sylabus, papers etc
+ go over names and department and thesis info etc
+ presentation on intro to GIS
+
+** 21.3
+
+[[GHP534_files/attach/1-Intro.pdf][Attachment #01 (1-Intro.pdf)]]
+ gis is taking spatial data and mapping them and allowing to do spatial
+maipulations
+ spatial analysis is using stat methods to test hypothesis about
+relationships in space
+ DEM-digital elevation model-sptial resolution of 90m- get from usgs
+ there is a model in arcgis that models slopes. you dl dem and you run a
+model in gis that calculates the slope (its in spatial analyst)
+ you can constrain creation of voronoi polygons by river and roads to
+get a better creation of these thiessan polygons
+
+** 23.3
+
+[[GHP534_files/attach/2-visualization.pdf][Attachment #02
+(2-visualization.pdf)]]
+ you cant compare crude rates it creates a biased map.
+ to compare area/states/counties/etc on a map it needs to be age
+adjusted
+ ESDA:
+ -global tells you if there is a spatial pattern in your data
+ -local tells you if there is a pattern and *where
+*For kernel smoothing you can either use the distance between the points
+or an attribute in the data
+ when u use kernel smoothing for vizualization it dosent say there are
+hotspots/clusters but let you learn about the data which shows you if
+you need to run some specific spatial stat tests
+
+** 28.3
+
+[[GHP534_files/attach/3-autocorr.pdf][Attachment #03 (3-autocorr.pdf)]]
+ spatial hetrogeneity-deals with distributions
+ spatial dependence/spatial auocorrelation- deals with covariances, how
+one observation is correlated to another in space
+ if you have hetrogeneity you have a trend in the data!
+ spatial dependence-we expect points that are close to each other to be
+more correlated then farther points.
+ both hetrogenaoty and spatial dependnce can create clusters
+ most often you dont need to sperate the effects. you need to see which
+effect is occuring and then analyze the effects
+ we always use tests that look to reject the H0 -thats is that there is
+SCR- complete spatial randmomness
+ so that if we reject H0 ten there is spatial auto correlation
+ using Queens case, adjacent units sharing a border are considered 1st
+order neighbourhood in the weight matrix, the 2nd tier (by distnace) are
+2nd order that are adjecnt to the 1st order etc..
+ 'neihbors; can be defined in many ways not just border (adjacnacey) but
+by distance etc..which one to use depends on the data
+ *global test* check weathere there is spatial autocorrelation in data
+ *local test-*anwers the same above global test question but also tells
+you where in your location the effect is (show you)
+ morans I is going to tell you if you have positive or negative auto
+correlation.
+ morans I rearanges the data and puts it in a normal distribution. if
+the data falls in the tails its a rare event and then there is spatial
+autocorrelation.
+ +1 shows positive SAC
+ 0 shows now SAC at all
+ -1 Strong negetive SAC
+ significance is determined by Z-score similar to normal Z-score in
+statistics- 1.96 is a 5% significant values
+ morans I is the slope of the curve of the results of your variable in
+what happens in its neighbors, the higher the slope the higher the
+correlation
+ Gearys C is also a SAC test but instead of covariences it looks at
+diffrences
+ ranges betwwen 0-2 and shoes positive and negative SAC
+ G(d) statistic is also for SAC looking at the distance. it dosent tell
+just tell positive/negative SAC but tells you of clustering
+ not finding a global SAC does not mean there is a local SAC, so if the
+global one is not significant you should still check the local auto
+correlation
+ you start the test with global and then move to local!
+ [[GHP534_files/img/Pasted.jpg]]
+ *order type:*
+ [[GHP534_files/img/Image_KHs3aCodNDHn1NXqyEiPUQ_0001.jpg]]
+ [[GHP534_files/img/Image_KHs3aCodNDHn1NXqyEiPUQ_0002.jpg]]
+ the purple area is where there is SAC while the empty area there is no
+SAC
+
+** 30.3
+
+[[GHP534_files/attach/4-PPA.pdf][Attachment #04 (4-PPA.pdf)]]
+ *LISA*- local indicagtors of spatial auto correlation
+ *an area that is significant (low or high) does not mean that the areas
+surronding it are significant!*
+ we are always looking at clusters of outcomes:
+ high-high- high neigbourhood/area surronded by high areas
+ high-low- high neigbourhood/area surronded by low areas
+ low-low- low neigbourhood/area surronded by low areas
+ low-high- low neigbourhood/area surronded by high areas
+ gi family does not show you negative or positve association as opposed
+to MI. a positive value IE shows high values of SAC not a positive
+association.
+
+** 4.4
+
+[[GHP534_files/attach/5-PPA-cluster.pdf][Attachment #05
+(5-PPA-cluster.pdf)]]
+ k function is a global test
+ the k function tells you at what distance your points cluster or
+disperst
+ it shows that in a graph. if the observed is above or below the min/max
+lines it shoes clustering (above maximum) or disperution (below min)
+ using statscan you can check space-time scans. to check clusterning
+over time as well
+    
+
+** 6.4 (kulldorff)
+
+[[GHP534_files/attach/early-HSPH2011.ppt][Attachment #06
+(early-HSPH2011.ppt)]]
+ [[GHP534_files/attach/scan-HSPH2011.ppt][Attachment #07
+(scan-HSPH2011.ppt)]]
+ [[GHP534_files/attach/survival-HSPH2011.ppt][Attachment #08
+(survival-HSPH2011.ppt)]]
+
+** 11.4
+
+[[GHP534_files/attach/8-dataProbs.pdf][Attachment #09
+(8-dataProbs.pdf)]]
+ kriiging is spatial estemation:
+ based on *points observed* to an *estimated surface
+*the variables must be *continous
+ points need to be stationary with no directional effect
+*if there are directional effects you need to remove them*
+ assumptions*:
+ the overal average must be the same (the are no trends in the data)
+ the varience must be the same
+ the covarience between 2 observations only depend on the distance
+ krigging uses semivarince
+ *h* is always the distance
+ we are looking for a curve that best fits the observed data
+ slide below shows that as distance increases things should be
+dissimmilar (the 1st rule of geopgraphy-things closer are similiar to
+each other)
+ [[GHP534_files/img/Image_GiZ58akgyF7LOMYLNyha6g_0001.jpg]]
+
+** 13.4
+
+[[GHP534_files/attach/8-dataProbs.pdf][Attachment #10
+(8-dataProbs.pdf)]]
+ [[GHP534_files/attach/lecture8.ogg][Attachment #11 (lecture8.ogg)]]
+ scale and data limitations:
+ sometimes its benefical to run the tests in multiple scales to avoid
+MAUP (multi scale analysis)
+ you must be extremmly carefull when interpurting the results of the
+boundry areas
+ empty ares could be due to not sampling or have been masked for
+confindatiality.
+
+** 18.4
+
+with spatial filitering you deal only with the covariates
+
+** 20.4
+
+[[GHP534_files/attach/lecture10.ogg][Attachment #12 (lecture10.ogg)]]
+ spatial autoregressive models:
+ sptatil lag (SL)
+ in spatial lag there is a vector that represents the outcome (DV) on
+the right hand side of the quation with a spatial matrix and lag which
+gets a cooeficent as well. this is a 'lag' but as opposed to the time
+series this lag explains not time but neighbourhoods around.
+ spatial error (SE)
+ to choose if to run SL or SE you run the lagarange test (LM)
+ you run the LM and choose which one is more significant
+ if both SL an SE are sig you run the robust LM model (RLM)
+ *
+ likelihood ratio test for spatial lad dependnce:* the higher the log
+likelihood the bettwer the fit
+ *AIC:* the lower the AIC the better the fit
+
+** 25.4
+
+in gwr you dont present a table of cooefiencts but a map (for publishing
+in papers)
+ bandwith means how many neighbours to capture
+ a large bandwith with catch more neigbours etc
+ the wieghts can be fixed or adaptive, usually its better to use
+adaptive
+ you have to show on a map the coefficents and a map of significnce (2
+maps)
+ you can also have a r2 map
+
+** 27.4
+
+types of resolution:
+ spatial, temporal, spectral (the band numbers),radiomatric resolution
+(semsitvity to magnitude of electromagnetic energy).

@@ -1,0 +1,756 @@
+
+Archived entries from file /home/zeltak/org/files/agenda/z1.org
+
+
+* accident							     :ATTACH:
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2013-09-07 Sat 16:38
+  :ARCHIVE_FILE: ~/org/files/agenda/z1.org
+  :ARCHIVE_OLPATH: home
+  :ARCHIVE_CATEGORY: z1
+  :END:
+   jennifer 617-9896255
+
+   insurance is "sheldon cohen"- 781-4532552
+
+   patty maglio 978-7503450
+   claim number : HPR7819
+
+* ORGsnes
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2013-11-06 Wed 17:50
+  :ARCHIVE_FILE: ~/org/files/agenda/z1.org
+  :ARCHIVE_OLPATH: Software community
+  :ARCHIVE_CATEGORY: z1
+  :END:
+** CRASH
+*** org screenshot
+
+;;org screenshot linux
+   (defun orgshot (&optional filename temp-dir)
+     "Take a screenshot using the crosshairs and saveit to FILENAME,if it is given or to a temp file in the TEMP-DIR
+     directory. Then add an orgmode style link at point."
+     (interactive)
+     (let* ((temporary-file-directory (or temp-dir "images"))
+            (fname (or filename (make-temp-file "img" nil ".jpg"))))
+       (call-process-shell-command (concat 
+                                     "import -pause 2 " fname))
+       (insert "\n[[file:" fname "]]")
+       (org-display-inline-images)))  
+;define key bind
+   (global-set-key (kbd "\C-cs") 'orgshot)
+
+
+** create a quick attach file from org attach dir 
+** make sure to automate git commit with script_cron daily 
+** system
+passes> keepss
+docs-org
+internt pass -last pass
+
+2 pass system
+
+weak-salt21salar
+strong-
+** send to "kitchen tablet" recipe
+
+* ord downlaod
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2013-11-06 Wed 17:51
+  :ARCHIVE_FILE: ~/org/files/agenda/z1.org
+  :ARCHIVE_OLPATH: Software community
+  :ARCHIVE_CATEGORY: z1
+  :END:
+** capture/scrape text areas and text+images (₆In Example₆ a recipe)
+
+* $Inactive
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2013-11-06 Wed 17:51
+  :ARCHIVE_FILE: ~/org/files/agenda/z1.org
+  :ARCHIVE_OLPATH: Software community
+  :ARCHIVE_CATEGORY: z1
+  :END:
+** ranger
+ p -mkdir
+
+Hi hut How are you?  I have been using ranger the past 6 months and loving every minute of it. i have compiled a list of suggestions/ideas/requests over the past few months that i would like to share (i hope this isnt to much :)): add option for directory sizes get dir names instead of 1,2 in the tabs?  run the editor (vim) in seperate window so ranger isnt blocked how does one define what extensions go into a context (ie the container one dosent include .deb and i would like to add that) Tabs that stick between sessions load a profile (that is a list of pre defined tabs)
+
+
+ get this:
+ :shell -d gimp -a %s
+ as a command
+ and this:
+ 'for i in %s; do inkscape -f "$i" -e "${i%%.svg*}.png" -w 128; done
+
+** datacrow
+
+duplicate finder
+ update from internet for a bunch of movies with selection
+
+** Dc requests
+
+no sure if this is technicly possible..but the avbility to have a "selection list" where one would select several files/folder from several locations (/home then /home/downloads etc..) and then press F5 and all selected filed would be copied svg support in icons allow colors in tab names go back command similar to total commander "go back" (alt-left arrow) branch view- show all files in a tree including subdirs in one list ssh connection...the "holy grail" for me :) would love to have the ability like in all other nix file managers ive used (krusader, midnight commander etc..) to be able to use ssh inside the file manager for easy file transfers custom view filters in the toolbar?
+
+** weechat
+** subtle
+
+*** req
+
+krusader very slow to switch and dosent drawwell
+
+** worker
+
+*** req
+
+per directory sort order (change just 1st level of dir and not all
+children levels)
+
+** openbox
+
+*** keynaps
+
+Win+alt+ key > OB stuff
+ Win+alt+Ctrl+key > gensys
+ *Win+alt+:
+*Win+alt+s >toggle sticky (always on top)
+ Win+alt+v > toggle decorations
+ Win+alt+i > toggle menu
+ Win+alt+o > toggle omnipresent*
+*Win+alt+m > toggle maxisimize
+
+*** 2do
+
+ob:
+ main apps on desktop 1
+ fixed position tiling?
+ kill gnome at startup or remove gnome..depency issues?
+ dmenu-launcher where to config colors etc?
+
+** cantata
+
+Hya again
+ I have some more thoughts if you dont mind :)
+ 1) mpd has a new queue-like function (song priority):
+
+[[http://git.musicpd.org/cgit/master/mpd.git/commit/?id=b159bc0c5f64dd4030f18cfa38539c5851d5157d][http://git.musicpd.org/cgit/master/mpd.git/commit/?id=b159bc0c5f64dd4030f18cfa38539c5851d5157d]]
+ would it be possible to add it either with a shortcut or with the cool
+hover like add/play button. here is a mockup:
+ [[http://ompldr.org/vZGR4MQ][http://ompldr.org/vZGR4MQ]]
+ 2) is it possible to add the song info hover like in the album view
+(the box with the file type etc) for the playlist view as well (i often
+want to know if the song is flac/mp3 etc)
+ 3)concerning the backdrops, if you think it wont work for lyrics can
+you maybe consider a middle pane (ala amarok/gmpc?) Gmpc already has
+this implemented and its works really well, as it darkens the fanart and
+uses white text, see screen:
+ [[http://ompldr.org/vZGR4bw][http://ompldr.org/vZGR4bw]]
+ this could be a user option (weather or not to have the pane present)
+ As for the global keyboard shortcut to focus on the search library, i
+didnt mean a key to launch cantata (its always in the background on my
+PC), rather of a way to bring it up and auto focus on the filter box in
+the library view on order to quickly search the album/song and quickly
+add it to the playlist. For example see in screen:
+ [[http://ompldr.org/vZGR4dw][http://ompldr.org/vZGR4dw]]
+ i would press the keyboard shortcut and it would bring me to (1) the
+filter box, then id press tab/other key and i could use the up/down key
+to press play (enter) or add (alt-enter) etc (2)..
+ any thoughts
+ thx again
+ Z.
+
+** GMB
+
+*** Q
+
+MAIN:
+ *launch seach window takes 2-3 sec to load?*
+ gmb keyboard control:
+ jump between objects/panels?
+ IE: ctl-l ,j changes view (tab) bit dosent focus, have to manually
+press with a mouse
+ current start typing in arstist pane..can be changed to filter instead?
+(like in search box)
+ search explained
+ work on the queue system (via labels)
+ mupsey integration-notifications- perhaps a star overlay over the
+artist?
+ filter not search in mosaic view
+
+**** set focus
+
+*setfocus
+*
+ -PluginLyrics (set focus and have the up/down or pgup/pgdwn keys scroll
+lyrics up down. also ctl+/- zoom lyrics bigger smaller,ctrl-e do enter
+edit mode, antother c+e to exit (or maybe esc as a global exit key)?
+these keys btw will also allow to always hide toolbar, maybe in the long
+run a auto hide toolbar options?
+ -filterpaneX inside a VP\_Y- there are a few of these filter panes
+inside a VP. currently the set focus command goes to the NB:
+ NBleft = (hidetabs=1) VPfp PluginLyrics HPfpmosiac VPfplibrary VPfpgen
+VPfpfolder VPfpque VPfpstatic VPfptime
+ VPfp= HPfilterpanes \_VBleft\_songtree
+ VBleft\_songtree= HBleft\_bar \_SongTree1
+ HPfilterpanes= FilterPane1(nb=1,pages=artist,hidebb=1)
+FilterPane2(nb=2,pages=album,hidebb=1)
+ # just a few example buttons :
+ HBleft\_bar= FilterLock9 Refresh9 PlayFilter9 \_SimpleSearch9
+ keys: keep current behaviour of up/down-go one artist up/dowb
+pgup/pgdwn-jump one "page" up/down
+ Tab-circles only between artist/album/songtree in above layout example
+(not bars,buttons etc)
+
+**** keys
+
+tab moves only between 2 filters not songtree?
+  zeltak | im goona do some modification to the screen to make i
+ quentin | the idea is replacing VPcov= \_Cover \_ArtistPic
+  zeltak | hmm i mean below the cover and artist pic
+ quentin | by VPcov= \_Cover \_VBartistpic\_and\_bar
+  zeltak | ahh ok
+ quentin | VBartistpic\_and\_bar= \_ArtistPic HBa\_new\_bar
+ quentin | bbl
+  zeltak | thx for all the help!
+ | SongInfo I think |
+
+*** keep track requests
+
++1 for clear que dosent clear autofil mode :)
+ "esc" or other key to quick dismiss the lyric/contect/search pop up
+window
+ prevent volume from juming to 100% after restart
+ lyric background with artist image
+ locate album in songtree button/menu item
+ localplay
+ change icon for specific play order, random mode (custom)/icon for the
+que button when missing
+ file format in the widgets related to playing song
+ clear queue which dosent change queue mode
+ have the artist image in the artist root image act as a background that
+changes by song instaed of the normal background
+ make up/down or pgup/pgdown move up down in lyrics
+ chain commands: IE set key to focus on lyrics pane and then cover
+ place holder letter box/Cover between artist letters in mosaic view
+ htcbackdrops:
+ Skin inside of the cover widget?
+ if its possible to right click on artist/album in the cover widget and
+open a choose image/search internet
+ fade in/out (up to gstreamer need to wait for them to implement)
+ flashkill for websites, or someway to disable sound from stupid webpage
+adds
+ when using the search search also lyrics? would be cool
+ show folder icons in the filesys tab
+ button to launch a web page (google lyric search/wikipedia etc) using
+the artist,song title currently playing
+ add key to copy artist-album to x clip board
+ quick key cut to add label to all selected
+
+*** Bugs
+
+lyrics dosent save size between fullscreen on/off
+ local play through filesytem add the song to library
+ que in main songtree only works with mouse and only with keyboard (and
+no mouse) in secondary songtree*
+*
+ 'tick' noise after next
+
+*** 2do
+
+move lodger
+ Bboyts vinyl albums rips-change to normal
+
+*** screencast
+
+easy access to album/artist/library
+ random album geneator
+ easly search on the net
+ multipls view modes (mosaic, artist etc)
+ lyrics
+
+*** albumrandom
+
+commands should now be:
+ PLUGIN\_ALBUMRANDOM3\_ToggleAlbumrandom
+ PLUGIN\_ALBUMRANDOM3\_GetNewAlbum
+
+** penta
+
+a keybing to jump to lsat tab used (tv like last channel)
+ ;s opens an external dl program (pref after choosing dir within penta)
+ open bookmark manger in new tab
+
+*** bugs
+
+*** blog
+
+pentablg
+ zorkin468
+
+*** gmpc
+
+**** req
+
+*double click to play now*
+ store lyrics in folders
+ keyboad only operation
+ colors are off
+
+** enlightment
+
+no transparency on non focused windows. maybe a skin with box around
+active window?
+ is there a option to use alt-tab to switch to the last workspace
+(switch to last desktop) or maybe a alt-tab for VWSpace and a seperate
+keybind to switch for all Screens-*not currently!*
+ network manager dosent allow connections (root issues?)
+ forecast
+ tclock
+ screenshot tool, bind by type (full,size) copy to system clipbored)
+ 2do:
+ setup conky
+
+*** new user
+
+ the theme you posted looks amazing :) its very clean and modern. though
+as i said the fonts looks really out of place IMHO. Did u create it? i
+guess you are a man with many talents.
+ i would be glad to join a art team but i am by no means a graphic
+designer :) i can use gimp and inkscape to some extent but mainly i have
+done iconsets using mainly graphic manipulations. i have created
+iconsets form gmpc, gmusicbrowser and other projects. if now one is int
+rested i can take on the job of coordinating stuff and maybe try to
+recruit some people with more experience working on art.
+
+*** scale autor
+
+jeffdameth
+ zeltak: svn co
+http://svn.enlightenment.org/svn/e/trunk/THEMES/darkness/; cd darkness;
+ ./build.sh; cp darkness.edj ~/.e/e/themes
+
+*** disabale effetcs
+
+   @mekius | In that list is a variety of styles to choose from for the
+'Default' behavior of windows
+                  │10:41:17 @mekius | Above that list is tabs which
+allow you to specify different behavior for specific things like menus,
+popup windows, etc
+                  │10:41:34 @mekius | In the list you can see a preview
+of what windows do when they are in a certain state
+                  │10:41:42 @mekius | so focus in, out, hidden,
+disabled, etc
+                  │10:41:56 @mekius | If you set that to something which
+is simpler, it shouldn't darken unfocused windows afaik
+                  │10:42:21 @mekius | I'm not completely sure though
+because I use detourious and it doesn't do this with it's default window
+theme
+                  │10:43:02 @mekius | oh, if you're on the basic dialog
+then you won't see the ability to set anything but the default window
+style
+                  │10:43:36 @mekius | There should be a none option, try
+that one out and see if it fits :)
+                  │11:31:46 zeltak1 | thx mekius while its still
+confusin as hell the non option did the trick ;-)
+                  │11:32:46
+
+*** tiling
+
+default keys
+ *
+ asdfg;lkjh
+ to this:
+ meta-alt > send to
+ ctrl-alt > move to
+ meta-? focus on
+ meta*-f >float
+ [[http://www.enlightenment.org/ss/e-506d7f71e6a827.44112901.png]]
+
+*** launcher
+
+run bash commands?
+
+
+* dunst
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2013-11-06 Wed 17:51
+  :ARCHIVE_FILE: ~/org/files/agenda/z1.org
+  :ARCHIVE_OLPATH: Software community
+  :ARCHIVE_CATEGORY: z1
+  :END:
+
+------> Last modified: Thursday, 18 October 2012 -- 08:48:49 AM.
+Created: 2012.08.21 -- 08:49:22
+
+
+* dwb
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2013-11-06 Wed 17:51
+  :ARCHIVE_FILE: ~/org/files/agenda/z1.org
+  :ARCHIVE_OLPATH: Software community
+  :ARCHIVE_CATEGORY: z1
+  :END:
+
+enable quit (IE :q!) even when there is a protected tab with no nag y/n
+ macros> ie enter i-shift-3 in gmail?
+ rapid links with up/down scrolling avilable (can be done with
+javascript perhaps, currently not possibe)
+ dl by file type
+ task add, then open CLI to add text as annotation
+ map keys for all modes (insert and normal) ala vim?
+ [] to move next/prev in forums?
+ pinned tabs/static tabs that dont move position and always load on
+startup
+ issue pron mode?
+ remove the confirmation of y/n with loced tab
+ you just need a session bus, if you use .xinitrc you can start your
+window manager with exec dbus-launch --exit-with-session
+<window-manager>
+ mycroft search engine support
+
+
+* fb
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2013-11-06 Wed 17:51
+  :ARCHIVE_FILE: ~/org/files/agenda/z1.org
+  :ARCHIVE_OLPATH: Software community
+  :ARCHIVE_CATEGORY: z1
+  :END:
+
+is it possible to always focus on a specific client when switching
+workspaces,IE if i have a WS with 4 clients when swtiching alwyas focus
+client X first
+
+** color borders
+
+ ak|ra | how would i set the font(s)?
+ zeltak | fonts?
+ zeltak | hmm im talking about only color and size of borders?
+ zeltak | brb
+  ak|ra | and i talk about folks showing up here 1 second after someone
+implemented "your" idea and screams: "i want fonts to be different when
+xyz"
+ zeltak | ahh i see lol
+ zeltak | well i cant control that :)
+ zeltak | anything else i should add to the 'specs'
+ tenner | zeltak: step by step, don't rush 'em :)
+ zeltak | tenner: hehe kk :)
+ tenner | is the idea to have only one additional color or many?
+ tenner | bordercolor I mean
+ zeltak | tenner: ideally many, but even an additional one would be
+great
+  ak|ra | zeltak of coz you can "control" that. you could think about
+the spec so that even the fonts-dudes are quiet after realizing how to
+achieve "their" idea.
+  ak|ra | eg,
+  ak|ra | [style] *font: foo
+  ak|ra | [style] *border: 2
+ zeltak | ok sure ill do that i just didnt understand you
+  ak|ra | (any style rule adds)
+ zeltak | ok ill revise the entry in a bit
+  ak|ra | or .borderWidth
+  ak|ra | everything after window. (see
+http://fluxbox.org/help/man-fluxbox-style.php )
+        | [http://is.gd/TaysBy]
+  ak|ra | so, what are the implicit consequences of such a feature? a
+per-window-style, a copy. this adds memory-footprint.
+ zeltak | its a good question, i have really zero coding knowledge so i
+cant really tell, but i cant imagine it would be terribly bad in terms
+of memory? would it?
+  ak|ra | i am just stating facts. i was not argueing for or against it.
+  ak|ra | everything you add, every little "small change" adds
+complexity and complexity is always bad
+ zeltak | yeah i understand, i just dont have enough knowledge to
+estimate such a thing
+  ak|ra | bad in terms of "someone has to write it" and "someone has to
+read the pile of shit someone else wrote and then fix it"
+ zeltak | :)
+  ak|ra | the simpler the solution to your problem, the better
+ zeltak | i understand
+  ak|ra | eg, [style] file-to-theme-to-use
+  ak|ra | one could use a zoo of styles, session.styleFile: defining the
+default one
+ zeltak | i see. really all i want is basic border colors, but i
+understand this opens up requests like different fonts etc
+  ak|ra | while parsing the apps-file we could fill in the zoo with
+other styles and then it wouldn't be a per-window-style-copy any more
+  ak|ra | what i want is you to think about the consequences :)
+  ak|ra | also, .fluxbox/overlay would always overrule any style-thingy
+  ak|ra | stlye-file-thingy .. so .. not an option
+ zeltak | kk
+  ak|ra | "just border" .. its not just border
+  ak|ra | window.frame.focusColor: <color>
+  ak|ra | window.frame.unfocusColor: <color>
+  ak|ra | i wonder why we dont have focus.borderColor and
+unfocus.borderColor
+ zeltak | ak|ra: im starting to understand. i will put some time/thought
+into it a bit later and update he request
+ tenner | ak|ra: we have
+  ak|ra | ah, then the man fluxbox-style is either lacking this
+information or i am blind
+ enport | allowing to change 'theme' might be easy in the apps file,
+does not require a lot of new magic parameters, and allow people to do
+the completely strange things they
+        | can come up with
+ enport | although I am not sure about the .fluxbox/overlay thingy
+
+
+* lyvi
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2013-11-06 Wed 17:51
+  :ARCHIVE_FILE: ~/org/files/agenda/z1.org
+  :ARCHIVE_OLPATH: Software community
+  :ARCHIVE_CATEGORY: z1
+  :END:
+
+ color of text (font size possible?)
+ poll mpd (and maybe other players) for position, to pause lyrics if
+player paused?
+ a hotkey to save the lyrics in a "LYRICS" tag
+ read .lyrics if avilable (check first if it already does)
+
+** issues
+
+
+* ncmpcpp
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2013-11-06 Wed 17:51
+  :ARCHIVE_FILE: ~/org/files/agenda/z1.org
+  :ARCHIVE_OLPATH: Software community
+  :ARCHIVE_CATEGORY: z1
+  :END:
+
+------> Last modified: Monday, 22 October 2012, 05:03:37 PM. Created:
+2012.10.02 21:19:58 21:19:58
+ use mpdcron to run a script when playlist is finished?
+ no replace playlist in 'a' add key menu
+ keybind to add after current track (prio 100)
+ key to launch websearch of current track (mpc+dmenu?)
+ key to transfer album/track to external device
+ s
+
+urfraw yubnub $(mpc current -f %artist%)
+ b
+
+ookmark local file
+
+
+* notecase
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2013-11-06 Wed 17:51
+  :ARCHIVE_FILE: ~/org/files/agenda/z1.org
+  :ARCHIVE_OLPATH: Software community
+  :ARCHIVE_CATEGORY: z1
+  :END:
+
+** requests
+
+shorcut to search title only
+ *if no flashing text perhaps support for animated gif? will flash
+text!*
+ paste as format option, paste as formated text!
+ multi select (IE select several lines that are not one after another)
+ autoload specific autocoplete per notecase
+ script to auto create header from note name when entered
+ [[http://paste.xinu.at/VE65/][http://paste.xinu.at/VE65/]]
+ [[http://paste.xinu.at/VE65/script][http://paste.xinu.at/VE65/script]]
+to enter node name as first line (with formatting)
+ using the styles or autorep with styles , it dosent ignore current font
+size of the line, it needs to use the template size as well as style
+ sync?
+ android must have a widget
+ How does one embed the icons inside the note? IE when i open a NC doc
+made in linux under windows all icons are blank?
+ drop down menu for colors like styles have
+ keybinds for specific notes for easy fast swithing
+ insert jumps one node down
+
+** Archive
+
+*** follow
+
+*hotkeys to specific notes
+*
+ better way to link internal notes (other then drilling down), either
+auto link, or narrow down list by typing (keepnote example)
+ link to an "internal attacment"
+ Auto capitalize each start of sentence/node name
+ bookmarks auto take on nodes icon
+ spell checker in the node names as well
+ disable spell check on specific nodes: when you have some nodes in
+english (where the spell checker defaults to EN) and some notes in
+Unicode, all unicode notes are unreadable since they all have red lines
+under them. switching the spell checker on and off in each note could be
+tiresome :)
+ I dont know if this is possible at all but a search option to cycle in
+ALL notecase files would be really cool
+ change color by search (multile format changes on all matching search
+terms)
+ -Auto create folder link when pasting a local link (same as with
+pasting a weblink)
+ -can the spelling suggestion appear on top of the context menu (like in
+firefox, chrome etc..)? its kind of a hassle to right click> spelling
+suggestions and then choose the right word for EACH word (see
+mockup.png)
+ -auto spell check and replace ala MS word...jump from mi spelled word
+to another
+ Duplicate node/note detector
+ *quick search inside note (/)*
+ have an option for flashing text (color on-off every few seconds?) to
+really get attention in a page
+ global movment in tree keybinds..so that alt-down for example will move
+one node down even if im in the note part
+ allow creation of folders from a txt files
+ clone note in another notecase?
+ drag nodes to text pane to link
+
+** BUGS
+
+enter after image crashes on linux toolbar
+ cut not working
+ paste formatted text isnt working
+
+
+* spacefm
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2013-11-06 Wed 17:51
+  :ARCHIVE_FILE: ~/org/files/agenda/z1.org
+  :ARCHIVE_OLPATH: Software community
+  :ARCHIVE_CATEGORY: z1
+  :END:
+
+------> Last modified: Friday, 02 November 2012, 03:03:48 PM ---
+Created: 2012.08.21 07:57:38
+ dosent auto refresh
+ new copy script works great but there is no confirmation, it will
+overwrite if same name exists
+ spacefm -s set sort\_by size
+ spacefm -s set sort\_by name
+ spacefm -s set sort\_ascend false
+ spacefm -s set sort\_natural true
+ spacefm -s set sort\_first folders
+ spacefm -s get sort\_natural
+ 1
+ run on a headless server as deamon> maybe connect with web, local
+spacefm?
+ menu quick jumo with first letter (popup selection menu, press 'p' will
+jump to PDF)
+ when focused on the location bar up/down move between the toolbar
+items?
+ drag folder from one panle to another symlink option
+ view/edit for differnt files type not just text (IE view avi to vlc
+edit to mplayer etc)
+ Sort command?
+ set panel in other side to currrent panel path
+ command to specify other panel
+ -have the location bar save history and use bash like binds(up/down,
+ctrl-r for history search etc)
+ -command to close tab/panel
+ lock colums (position)
+ chain key commands (vim like g>b>first letter
+ remember X last select by filter (or have a user saved list on the
+side)
+ toggle sort mode with one key
+ filter!
+ select files are cleared by moving up an down with keys? anyway to make
+that stick ?
+ pane equel
+ new folder starts with current name you stand on
+ 2do:
+ Information like username, password, port, etc may also be included in
+the
+ URL - see URL protocols and formats handled by udevil
+ If you would like to use a custom handler for URLs within SpaceFM,
+ right-click on the Path Bar and select Protocol Handler. In the dialog,
+enter
+ the command to be used to open or handle URLs. No substitution
+variables
+ are accepted - the URL is passed as the first argument to your command.
+
+
+* i3
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2013-11-06 Wed 17:51
+  :ARCHIVE_FILE: ~/org/files/agenda/z1.org
+  :ARCHIVE_OLPATH: Software community
+  :ARCHIVE_CATEGORY: z1
+  :END:
+hya all. i have this wierd bug(?) when i launch a app defined as 'floating' in my config and im currently in def. view it launches perfect. but if im in any other view 
+it opens 90% hidden in the upper left corner. heres a short example: http://paste.xinu.at/bta1/                                                       
+
+** planned
+
+sticky mode (overwite also assign [class=".*"] 1:H1)
+
+
+* subtle
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2013-11-06 Wed 17:51
+  :ARCHIVE_FILE: ~/org/files/agenda/z1.org
+  :ARCHIVE_OLPATH: Software community
+  :ARCHIVE_CATEGORY: z1
+  :END:
+
+
+* tmux
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2013-11-06 Wed 17:51
+  :ARCHIVE_FILE: ~/org/files/agenda/z1.org
+  :ARCHIVE_OLPATH: Software community
+  :ARCHIVE_CATEGORY: z1
+  :END:
+
+mouse issue when utf if off..scrolls and kills ncmpcpp
+
+
+* emacs 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2013-11-06 Wed 17:51
+  :ARCHIVE_FILE: ~/org/files/agenda/z1.org
+  :ARCHIVE_OLPATH: Software community
+  :ARCHIVE_CATEGORY: z1
+  :END:
+** yasnippets
+Figure out $VAR snippets in R and yasnippet 
+zeltak: try $1\$$2                                                                                                
+zeltak: if that doesn't work and it's inside a quoted string try $1\\$$2                                          
+jif thx ill try it now                                                                                            
+zeltak: and if THAT doesn't work try looking through the canned snippets for langs that use $ a lot, e.g.
+ 
+** Emacs gen
+
+* ncmpcc requets
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2013-11-06 Wed 17:51
+  :ARCHIVE_FILE: ~/org/files/agenda/z1.org
+  :ARCHIVE_OLPATH: Software community
+  :ARCHIVE_CATEGORY: z1
+  :END:
+a colum/info showing which playlist current playing song belongs to (fav
+or not\_)
+ filter current songs when standing on an artist by comments/genre
+etc...
+ have a key to edit current album in tag (as opposed to just pressing
+e/E on one song at a time)
+ lynx like movment in tag editor/file browser
+ Coolest idea ever...use the show image in transperacy in terminals to
+show current artist from folder/net
+
+
+* org
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2013-11-06 Wed 17:51
+  :ARCHIVE_FILE: ~/org/files/agenda/z1.org
+  :ARCHIVE_OLPATH: Software community
+  :ARCHIVE_CATEGORY: z1
+  :END:
+** BUG This special property is inherited
+so if you set it in a level 1 entry, it will apply to the entire tree. When allowed values are defined, setting the corresponding property becomes easier and is less prone to typing errors- NOT WORKING
+http://orgmode.org/manual/Property-syntax.html#Property-syntax
+
+** BUG?? -make new headings appear after the content for the current one do sent work
+this
+(setq org-insert-heading-respect-content t)
+
+dosent work
+
+

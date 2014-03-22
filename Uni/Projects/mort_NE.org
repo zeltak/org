@@ -1,0 +1,547 @@
+#+TITLE: mort\_NE
+
+* E.Prepare for Mortality study
+
+** 1.info
+
+*** how to define urabn
+
+The U.S. Census Bureau classifies as urban all territory, population,
+and housing units located
+ within urbanized areas (UAs) and urban clusters (UCs). It delineates UA
+and UC boundaries to
+ encompass densely settled territory, which generally consists of:
+ • A cluster of one or more block groups or census blocks each of which
+has a population density
+ of at least 1,000 people per square mile at the time.
+ • Surrounding block groups and census blocks each of which has a
+population density of at least
+ 500 people per square mile at the time.
+ • Less densely settled blocks that form enclaves or indentations, or
+are used to connect discontiguous
+ areas with qualifying densities.
+
+*** massDPH data
+
+[[mort_NE_files/attach/MAmortalitydatacontents.htm][Attachment #01
+(MAmortalitydatacontents.htm)]]
+ see attached html file for details
+
+** 2.Gather data
+
+*** a.intro
+
+Data was obtained from steve. This data is mortality cases for all MA
+years 1995-2008 obtained originally from the MDPH
+ the data is in Access format and is under the original data folder
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.12.MORTALITY\_NE\3.1.10.1.Raw\_data\1.mortality\MAMortGeo.mdb*
+ the data is exported manually to dbf files:
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.12.MORTALITY\_NE\3.1.10.1.Raw\_data\1.mortality\M01.DBF*
+
+*** 4.SES data
+
+**** a.add median income and pop (weighted)
+
+to add SES data (median income, weighted pop per grid ) to the GUID
+dataset , USA census block data ,obtained from steve located at:
+ C:\Documents and Settings\EKLOOG\My
+Documents\Postdoc\~work\C.Data\_gathering\1.Data sources\d.NE land use
+data\cbg00hshldinc\_newengland.shp
+ was loaded into GIS along with a empty 10x10 polygon grid (with guid).
+ First , using the intersect function from the toolbox all census block
+parts that fall in the 10x10 blocks were created (this included median
+incom -the p053001 variable and population)
+ Then a new field "Area\_inter" was created (using float) and the area
+was calculated for each cell (each intersection) using the calculate
+geography function.
+ then the resulting dbf file is outputed to dbf format for SAS
+calculations
+ [[mort_NE_files/img/SS-2010-12-22_12.10.08.jpg]]
+
+**** b.calculate pop\_inc
+
+the dbf outputed from previous step was used in SAS to calculate
+population weighted pop and median income in each GUID grid.
+  in addition X and Y were merged back to the aggregated dataset for
+importing back to GIS.
+
+**** c.add more SES data in GIS (%'s)
+
+1) % age and % minority are calculated from the tiger 2000 census
+dataset (from steve) by doing IE:
+ (Number of white X 100)/Total population = % whites)
+ then i calculated % minority by using 100-%whites
+ same thing was done for age
+ the resulting layer file in E4c is named P\_race\_age
+ 2)education was obtained from steve again (located in C1c) in the form
+of 2 variables :
+ Percent of population 25 and above with college degree (pctcolldeg)
+ Percent of population 25 and above who did not complete high school or
+get graduate equivalency degree (pctnohsdeg)
+ 3)both shapefiles were spatially joined to a dummy/empty 10x10 MA
+*square grid* where each grid polygon gets the average %.
+ then the actual point file with prev SES data are joined to the now
+full grid with %'s to get an average %'s in the point layer
+ 4)average income (p053001 variable) and population was calculated for
+the 10x10km grid cell.
+
+**** d.final output
+
+[[mort_NE_files/attach/cal_popinc.sas][Attachment #02
+(cal\_popinc.sas)]]
+ the dbf file from prev step was exported to dbf located here
+
+*** b.import and subset data
+
+the dbf files are imported in sas using this script
+cn001\_create\_admiss\_DB we
+  we excluded cases where death location was outside the home/nursing
+home/not classified
+ this was using this (*Note in the new file typplcdth
+is[[mort_NE_files/img/Pasted.jpg]] named placdth*):
+ which describes the location of death and then selecting by attribute
+in the codes were 5 (nursing home) or 6 (residence).
+ the resulting datase was exported to dbf for gis guid additions
+
+*** c.subset to EMA and give guid
+
+Then using spatial join each case in MA was joined to guid using an
+empty guid grid:
+ each point will be given all attributes of the point layer closet to it
+ so that each case (patient) got the *guid* (IE fake monitor) it was
+inside/closest to.
+ also a lpm field is added with extract from raster from a 200x200
+created raster for NE
+ the final file is located here:
+
+*c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.12.MORTALITY\_NE\3.1.10.4.Work\2.Gather\_data\FN001\_Cases\_guid\cases\_guid\_reg\_final.dbf*
+
+*** k.lung set
+
+using this script cn002\_create\_finalized\_mort\_files we a added lung
+cancer variable:
+ To add lung cancer rates, using the ICD codes (ENICON\_1 in the
+mortality dataset) i went to the WHO site:
+
+[[http://apps.who.int/classifications/apps/icd/icd10online/index.htm?navi.htm+i00][http://apps.who.int/classifications/apps/icd/icd10online/index.htm?navi.htm+i00]]
+ to look at which codes correspond to lung cancer cause of death
+(C00-C97)                
+ then using the SAS script i recoded these codes to "1" in a new lung
+variable and exported the file to a dbf file
+
+*** l.cardio set
+
+we then wanted to subset the data to cardio vascular set. Using the ICD
+codes (ENICON\_1 in the mortality dataset) i went to the WHO site:
+
+[[http://apps.who.int/classifications/apps/icd/icd10online/index.htm?navi.htm+i00][http://apps.who.int/classifications/apps/icd/icd10online/index.htm?navi.htm+i00]]
+ to look at which codes correspond to general cardio vasuclar cause of
+death (all related death to CV)
+ i manually selected by cases by range (after sorting by ENICON\_1 ) and
+exported only the CV cases to a dbf file
+ *The same exact methods were used to create a carido+resporatory
+(cardio-pulmonary) dataset*
+
+** F.Mortality study analysis
+
+*** 1.Poison time series analysis
+
+**** c.convert to julian dates
+
+using script Time\_Series\_ALL\_MA\_01\_06:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.12.MORTALITY\_NE\3.1.10.3.Code\2.Gather\_data\Time\_Series\_ALL\_MA\_01\_06.sas
+  the file was merged with poll, the date changed to julian and finally
+exported manually to csv for the ts analysis located here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.12.MORTALITY\_NE\3.1.10.4.Work\3.Analysis\AN001\_R\_files\_bycase\m25\_allcases\_reg\_0106.csv
+
+**** e.run ts with lag
+
+[[mort_NE_files/attach/poison_ts_lagpm][Attachment #03
+(poison\_ts\_lagpm)]]
+ The R time series script was run with script m25\_\_9.05.12
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.12.MORTALITY\_NE\3.1.10.3.Code\3.Analysis\m25\_\_9.05.12.r
+ *Note: the file was also run on the server in the FAS code sub
+directory
+*
+ since using the simple lung rates did not work well we used a method to
+get XXXX lung rates
+ we extracted the lung random cooeficent for the intercept using an R
+script:
+ *
+*lung\_new <- (glmmPQL(LUNG ~ 1, random = ~ 1 | GUID,family = poisson,
+data = ts0004lag))
+ ##extract the random intercept
+ #this output is converted to numeric through vim colums
+ coran2 <- lung\_new$coef$random
+ *
+*
+
+*** 2.paper preparation
+
+**** a.create GIS maps
+
+in GIS a Empty MA grid was loaded (obtained through steve) for a smaple
+10x10km day
+ to make the " perfectly squre" it was loaded as a UTM 19N proj.
+ mortality rates were improrted with the XY import and also loaded as a
+UTM 19N proj.
+ [[mort_NE_files/img/SS-2011-02-04_11.10.07.jpg]]
+ later other layers such as state border were cleared of the proj and i
+used the import proj from the grid layer
+
+**** b.density plots
+
+in order to create the weight i opened the last csv
+*ts\_pois\_lag\_0004* file used in the time series analysis *(F5f)* in
+spss and created the weights by dividing the cases in each grid in each
+day by the total cases:
+ [[mort_NE_files/img/SS-2010-10-01_14.25.15.jpg]]
+ then i exported it back to R (csv) and ran the following code:
+ ts0004lag = read.csv("C:/Documents and Settings/EKLOOG/My
+Documents/Postdoc/~work/F.Mortality study analysis/5.posion time series
+analysis/f.run ts with lag/ts\_pois\_lag\_0004w.csv", header=T)
+ plot(density(ts0004lag[["pmnew2d"]], bw="nrd0", adjust=1.00,
+kern="gaussian", n=512.00, weight=ts0004lag$cwt, na.rm=TRUE))
+
+**** c.calculate Discriptives
+
+To get the number of cases and % use the gmodels package in R:
+ IE:
+ library(gmodels)
+ CrossTable(cases$SEX)
+ *sex and race are recoded*
+
+*** 3.Old steps
+
+**** 1.Case crossover theory
+
+***** a.Intro
+
+The case crossover design was introduced in 1991 by Maclure M (Am J
+Epidemiol 1991;133:144-53) to study the transient effect of brief
+exposure on the occurrence of a rare acute-onset disease.
+ The argument is that if there are precipitating events, these events
+should occur much more frequently during a period immediately prior to
+the onset of disease than at a similar period which is more distant from
+the disease onset.
+ For example, it has been reported that physical stress and mental
+stress may trigger sudden cardiac death. If this is true, one would find
+that sudden cardiac death occurred more frequently during or shortly
+after strenuous physical activity, or that there was an increase in
+informant-reported life stress either acutely before sudden cardiac
+death or during the weeks before the event. Another example is the
+alcohol consumption and injury. The effect of alcohol is transient and
+alcohol use is usually associated with injury. Therefore, one would
+expect that the alcohol consumption prior to injury increases the risk
+of injury.
+ in case crossover analysis each case is his own control
+ That is in the day of the disease/death etc he will be a "case" (in
+this example mortality..the day he died). and in other days he will act
+as his control.
+ in my study he will be a control in the same month he died every 3 days
+so for example:
+ date of death : 3.01.2000
+ day case
+ 1      0
+ 3      1
+ 7      0
+    
+ 9      0
+ so he would be a "case" on the day he died (3.01.2000) but a control in
+every 3 days in the month he died (both before and after he died)
+
+***** b.pm2.5 exposure
+
+Each person should get pm2.5 on the day *of exposure* and on the day he
+is *a control*.
+
+***** c.additional variables and info
+
+1) each person would need to get an unique id
+ 2)i will need to add dummy variables for cause of death (IE diabetes
+gets 1 and rest get 0)
+ 3)the final data should be run in a Proportional hazards model
+(conditional logistic regression)
+
+**** 2.Case crossover
+
+***** a.macro run
+
+[[mort_NE_files/attach/crossover_macro.sas][Attachment #04
+(crossover\_macro.sas)]]
+ [[mort_NE_files/attach/crossover_macrodow.sas][Attachment #05
+(crossover\_macrodow.sas)]]
+ *NOTE: the case crossover study didnt preform well-see section F2c for
+further details. thus we focused on the Poisson time series analysis
+instead.*
+  with the prediction pm2.5 data since it didnt take into account the
+smoothing gam part in the model
+ in the first step i manually copid 2 files:
+ the pollution files from step *E2b:
+*C:\Documents and Settings\EKLOOG\My Documents\Postdoc\~work\E.Prepare
+for case crossover\2.SAS stage\b.add weather data to poll
+ and the final cases from step *E4c:*
+ C:\Documents and Settings\EKLOOG\My Documents\Postdoc\~work\E.Prepare
+for case crossover\3.update patient dataset\c.age fix final
+ into this new macro run folder:
+ C:\Documents and Settings\EKLOOG\My Documents\Postdoc\~work\F. Case
+Crossover\2.Case crossover\a.Macro
+ then:
+ Antonella's macro was loaded and with above adjusted and ran (see
+attached macro).
+ NOTE: The macro was run in two seperate ways:
+ 1)each control was created every week
+ 2)each control was created every 3 days
+ The first option (every week) gave us better results.
+
+***** b.macro results
+
+the results of the macro from step *F2a* were manually copied to
+ C:\Documents and Settings\EKLOOG\My Documents\Postdoc\~work\F. Case
+Crossover\2.Case crossover\b.Macro results\
+ there are 2 files one for the weekly controls and one for every 3 days
+controls
+ PHreg can be run to get the full results but the main results for the
+better model (the every week controls) are:
+ pmnew B= 0.0046 P= 0.072
+
+***** c.why the case crossover ISNT the right test for our predicted PM
+data
+
+the case crossover study didnt preform well with the prediction pm2.5
+data since it didnt take into account the smoothing gam part in the
+model. The smoothing with gam was done using the Bimon (bi-monthly..that
+is every two month) time variable.
+ Since in the case-crossover analysis the controls are derived from the
+cases for that month only it dosent include the spatial smoothing that
+is done bi-monthly and thus isnt the correct method to use with our
+data.
+ Thus we decided to use the Poisson time series analysis in step *F25*.
+
+**** 3.verify case crossover with countway PM data
+
+***** a.original data
+
+*NOTE: the case crossover study didnt preform well-see section F2c for
+further details. thus we focused on the Poisson time series analysis
+instead.*
+ To verify the case crossover analysis with our predicted PM the same
+case crossover analysis was run with countway data (one PM monitoring
+station in a central location in boston).
+ the original data for countway PM is located at:
+ C:\Documents and Settings\EKLOOG\My Documents\Postdoc\~work\F. Case
+Crossover\2.verify with countway pm2.4 data\a.original data
+ the file name is:
+ b\_ap\_met\_20100609.sas7bdat
+
+***** b.clean countway data and create new poll dataset
+
+Then the new pollution data-set from step F3a was cleaned and outputted
+here:
+ C:\Documents and Settings\EKLOOG\My Documents\Postdoc\~work\F. Case
+Crossover\2.verify with countway pm2.4 data\b.clean countway data and
+create new poll dataset
+ then it was merged with the cases data already avilable for the F2
+stage (main case crossover analysis)
+ lastly, antonella's code was run again (see modified version attached)
+to compare the results of the main test with predicted AOD pm and the
+real countway data PM.
+
+***** c.output
+
+[[mort_NE_files/attach/ALL_cases_countway.lst][Attachment #06
+(ALL\_cases\_countway.lst)]]
+ there output is attached
+ pmnew B= 0.00203 P= 0.0003
+
+**** 4.OLD possion time series analysis
+
+***** a.merge datasets
+
+[[mort_NE_files/attach/Time_Series_P.sas][Attachment #07
+(Time\_Series\_P.sas)]]
+ The first step of the Poisson time series analysis with our predicted
+PM data was to create counts *for* each grid cell *for* each day .
+ Since every patient already had the grid cell it was in/closets to from
+the previous steps it was a simple SAS proceedure (see attached script)
+
+***** b.create Juilan dates in SAS
+
+the output file in csv format from step *F5s* (*ts0004.csv*) was opened
+in SAS
+ then using the following code the date variable was changed to Julian:
+ data tstsas2;
+ set tstsas2;
+ format date JULIAN.;
+ run;
+ the resulting file was manually exported *(ts\_pois\_0004.csv)* and is
+is located at:
+ C:\Documents and Settings\EKLOOG\My Documents\Postdoc\~work\F.Mortality
+study analysis\5.posion time series analysis\c.run the ts poisson
+analysis in R
+
+***** c.run the ts poisson analysis in R
+
+[[mort_NE_files/attach/Poison_Time_Series.r][Attachment #08
+(Poison\_Time\_Series.r)]]
+ Now, in R statistics the poisson time series was run:
+ code:
+ ts0004 = read.csv("C:/Documents and Settings/EKLOOG/My
+Documents/Postdoc/~work/F.Mortality study analysis/5.posion time series
+analysis/c.run the ts poisson analysis in R/ts\_pois\_0004.csv",
+header=T)
+ library (MASS)
+ library (splines)
+ library(nlme)
+ summary(glmmPQL(count ~ ns(date,df=23) + pmnew + tempc , random = ~ 1 |
+guid,
+                 family = poisson, data = ts0004))
+ *NOTE:* you need to load ALL the above libraries
+
+***** d.output
+
+[[mort_NE_files/attach/pois_ts_00_04.txt][Attachment #09
+(pois\_ts\_00\_04.txt)]]
+ The output is presented here (see also attached):
+ the main finding show that compared the time series countway data the
+PM coefficient is much larger
+ *
+ countway:*
+ (Intercept) 4.0516980 0.0086741 467.100 < 2e-16 ***
+ pmnew 0.0019656 0.0005415 3.630 0.000284 ***
+ tempc 0.0049292 0.0008139 6.056 1.39e-09 ***
+ *PM prediction model:*
+ pmnew 0.0023442 0.00103636 69386 2.261956 0.0237
+ tempc 0.0030944 0.00047671 69386 6.491150 0.0000
+
+***** ---RE-Run---
+
+***** e.merge dataset with time lag\_meta
+
+[[mort_NE_files/attach/timelag.sas][Attachment #10 (timelag.sas)]]
+ [[mort_NE_files/attach/mean_clean.sps][Attachment #11
+(mean\_clean.sps)]]
+ [[mort_NE_files/attach/merge_and_julian.sas][Attachment #12
+(merge\_and\_julian.sas)]]
+ After the good results in the previous steps (*F5a-d*) we decided to
+make the model better by using the pm not just for the same day but for
+the day before death
+ first the prediction PM was analyzed:
+ so first the pollution set used in step *F5a*(poll) was loaded into SAS
+and using the attached script a time lag for one day back was calulated
+for both pmnew and temc
+ Then in *Spss*using the attached file the file was loaded to calculate
+the mean for the 2 days, clean the days without lag data and exported to
+sas as located in the same folder:
+ C:\Documents and Settings\EKLOOG\My Documents\Postdoc\~work\F.Mortality
+study analysis\5.posion time series analysis\e.merge dataset with time
+lag\_meta
+ Then back in *SAS* the file was imported and using the attached script
+(merge\_and\_julian) the file was merged with poll, the date changed to
+julian and finally exported manually to csv for the ts analysis
+(*ts\_pois\_lag\_0004.csv*) located here:
+ C:\Documents and Settings\EKLOOG\My Documents\Postdoc\~work\F.Mortality
+study analysis\5.posion time series analysis\f.run ts with lag
+
+***** f.run ts with lag
+
+[[mort_NE_files/attach/poison_ts_lagpm][Attachment #13
+(poison\_ts\_lagpm)]]
+ The R time series script was run in R see attached script:
+ ts0004lag = read.csv("C:/Documents and Settings/EKLOOG/My
+Documents/Postdoc/~work/F.Mortality study analysis/5.posion time series
+analysis/f.run ts with lag/ts\_pois\_lag\_0004.csv", header=T)
+ library (MASS)
+ library (splines)
+ library(nlme)
+ summary(glmmPQL(count ~ ns(DATE,df=23) + pmnew2d + temp2d , random = ~
+1 | GUID,
+                 family = poisson, data = ts0004lag))
+ ns- is the smoothing factor
+ GUID- this analysis uses only random intercepts for guid. there are no
+random slopes.
+ output is in section *F5g*
+
+***** g.output
+
+[[mort_NE_files/attach/ts_lag_pmpred_out][Attachment #14
+(ts\_lag\_pmpred\_out)]]
+ using the following script this is the main output part:
+ summary(glmmPQL(count ~ ns(DATE,df=23) + pmnew2d + temp2d , random = ~
+1 | GUID,
+                 family = poisson, data = ts0004lag))
+ pmnew2d 0.0043140 0.00119753 69268 3.602360 0.0003
+ temp2d 0.0024376 0.00053916 69268 4.521228 0.0000
+
+***** h.lag for countway data
+
+[[mort_NE_files/attach/timelag.sas][Attachment #15 (timelag.sas)]]
+ [[mort_NE_files/attach/mean_clean.sps][Attachment #16
+(mean\_clean.sps)]]
+ [[mort_NE_files/attach/merge_and_julian.sas][Attachment #17
+(merge\_and\_julian.sas)]]
+ The same lag for pm and temp was run for the countway data.
+ Very similar scripts as with the predicted pm models were run (steps
+*F5e-g*)
+ see attached scripts for details.
+ The only difference was that pm was joined just by date not guid and
+date
+
+***** I.run cway ts with lag
+
+[[mort_NE_files/attach/poison_cw_ts_lagpm][Attachment #18
+(poison\_cw\_ts\_lagpm)]]
+ The R time series script was run in R see attached script:
+ output is in section *F5j*
+
+***** j.output
+
+[[mort_NE_files/attach/ts_cway_lag_pmpred_out][Attachment #19
+(ts\_cway\_lag\_pmpred\_out)]]
+ using the following script this is the main output part:
+  
+ pmnew2d 0.0015139 0.00038875 69246 3.894348 0.0001
+ temp2d 0.0015973 0.00057309 69246 2.787190 0.0053
+
+**** countway
+
+***** j.output
+
+[[mort_NE_files/attach/ts_cway_lag_pmpred_out][Attachment #20
+(ts\_cway\_lag\_pmpred\_out)]]
+ using the following script this is the main output part:
+  
+ pmnew2d 0.0015139 0.00038875 69246 3.894348 0.0001
+ temp2d 0.0015973 0.00057309 69246 2.787190 0.0053
+
+***** f.output
+
+[[mort_NE_files/attach/ts_lag_pmpred_out][Attachment #21
+(ts\_lag\_pmpred\_out)]]
+ pmnew2d 0.0008
+ temp2d 0.0014
+
+***** h.lag for countway data
+
+[[mort_NE_files/attach/timelag.sas][Attachment #22 (timelag.sas)]]
+ [[mort_NE_files/attach/mean_clean.sps][Attachment #23
+(mean\_clean.sps)]]
+ [[mort_NE_files/attach/merge_and_julian.sas][Attachment #24
+(merge\_and\_julian.sas)]]
+ The same lag for pm and temp was run for the countway data.
+
+***** g.create pm\_temp lag for cw
+
+[[mort_NE_files/attach/mean_clean.sps][Attachment #25
+(mean\_clean.sps)]]
+ [[mort_NE_files/attach/merge_and_julian.sas][Attachment #26
+(merge\_and\_julian.sas)]]
+ the final cw pollution set (*E3c*- cwpoll) was loaded into SAS and
+using the attached script a time lag for one day back was calulated for
+both pmnew and temc
+ [[mort_NE_files/img/SS-2010-12-09_14.13.26.jpg]]

@@ -1,0 +1,23 @@
+
+Archived entries from file /home/zeltak/.emacs.d/econf.org
+
+
+* Time stamp
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2013-11-25 Mon 20:36
+  :ARCHIVE_FILE: ~/.emacs.d/econf.org
+  :ARCHIVE_OLPATH: Org
+  :ARCHIVE_CATEGORY: econf
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+(defun bh/test ()
+  "Inserts org timestamp at end of heading"
+  (interactive)
+  (save-excursion
+    (org-back-to-heading)
+    (org-end-of-line nil)
+    (insert " ")
+    (org-insert-time-stamp nil nil t nil nil nil)))
+
+(global-set-key (kbd "<f9> x") 'bh/test)
+#+END_SRC

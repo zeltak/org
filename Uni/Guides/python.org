@@ -1,0 +1,482 @@
+#+TITLE: python
+
+* python basics
+** print
+
+When you run a program you also get to see the output.
+ print("Hello, World!")
+ created one line of output:
+ Hello, World!
+ Here is an analysis of this first program:
+ print is the name of a Python command, which sends messages to output.
+ The brackets () after the print command are used to contain what you
+want to print.
+ The quote marks " " are used as a container for the text Hello, World!
+inside. Without quotes, Python would think that Hello was meant to be a
+command. This would be cause an error since no such command exists.
+ Let's see exactly what happens when we leave out the quotes. This
+Python program will cause an error. Press the Run program button.
+ print(Hello, World)
+ Here, the program crashed: this means we gave a bad command to the
+computer, causing an error and forcing it to stop.
+
+** Variables
+
+*Variables* act as "storage locations" for data in a program. They are a
+way of naming information for later usage.
+ Each variable has a name; an example variable name we will use is
+/myLuckyNumber/. To store information in a variable, we write a command
+using an equal sign in the following way:
+ «the variable name» = «the value you want to store»
+ (We use «double angle brackets» in our examples, like above, to
+indicate special parts of expressions.)
+ For example, the Python line
+ myLuckyNumber = 13
+ stores the value *13* in the variable*myLuckyNumber*. Then, anywhere
+you write the variable name myLuckyNumber again, Python retrieves the
+stored value.
+ *Example:*
+ myLuckyNumber = 13
+ print(myLuckyNumber + 1)
+ print(myLuckyNumber)
+ myLuckyNumber = 5 + 2
+ print(myLuckyNumber)
+ Look at the 5 lines of the program in order, and how they correspond to
+the output. As you can see, myLuckyNumber keeps its value of 13 for the
+first two print statements, then its value is changed to 7.
+ We also introduced the plus operator (+) above, which adds two numbers
+together. Similarly, there are operators for subtraction (-),
+multiplication (*), and division (/). We'll return to these in a later
+lesson.
+ You can simulate the memory storage of a computer with paper and
+pencil, by keeping track of the values in a table. Here is an example;
+remember that * means multiplication in Python.
+ Two Common Errors
+ If you ask Python about a variable that has not been defined, you get
+an error.
+ print(trouble)
+ As you can see, we get an error message saying
+ NameError: name 'trouble' is not defined
+  Sometimes you can get errors like this from simple typos: if you
+define a variable a*dd*ress=32, then try to print(a*d*ress), the same
+type of error occurs.
+ Another error has to do with accidentally swapping the sides of an =
+statement.
+ SyntaxError: can't assign to literal
+ x = 4
+ 4 = x
+ Traceback (most recent call last):
+   In line 2 of the code you submitted:
+     4 = x
+     \^
+ SyntaxError: can't assign to literal
+ The first line is fine but the second line causes an error: Python
+thinks the second line 4 = x is trying to change the value of 4, but you
+are only allowed to change the values of variables, and 4 is not a
+variable. While A = B and B = A are the same in mathematics, they are
+different in programming.
+
+** Errors
+
+As you do more and more programming, you will naturally encounter a lot
+of *errors (or bugs)*. Causing, understanding, and fixing errors is an
+important part of programming. Python will do its best to run anything
+that you tell it to run, but if it can't understand what you're asking,
+then it won't run the program. All the same, Python will try to tell you
+a little bit of information about what went wrong, in order to help you
+try to fix it.
+ Here are two Python errors.
+ *Example: A Syntax Error*
+ print "Gee golly"
+ Traceback (most recent call last):
+   In line 1 of the code you submitted:
+     print "Gee golly"
+                     \^
+ SyntaxError: invalid syntax
+ In this first example, we forget to use the parenthesis that are
+required by print(...). Python does not understand what you are trying
+to do.
+ Here is a second example of a bug in Python.
+ Example: A Run-Time Error
+ print(greeting)
+ In the second example, we f*orget to define the greeting variable*.
+Python knows what you want it to do, but since no greeting has been
+defined, an error occurs.
+ A *syntax error* happens when Python can't understand what you are
+saying.
+ A *run-time error* happens when Python understands what you are saying,
+but runs into trouble when following your instructions.
+ In English, a syntax error would be like the sentence
+ Please cat dog monkey.
+ The grammar of this sentence does not make sense. From the perspective
+of English grammar, it is missing a verb (action). You cannot understand
+what you are being asked to do. Syntax means the same thing as grammar.
+ In English, a run-time error would be like the sentence
+ Please eat the piano.
+ The sentence makes sense from a grammatical perspective --- there is a
+verb and noun in the right place --- so you know what you are being
+asked to do. But, you will encounter problems once you start trying to
+eat the piano (except maybe if you are a termite). This is called a
+run-time error because it occurs after the program starts running.
+ We also will talk about *logic errors* at the end, which means that
+your program runs without crashing, but still produces the wrong result.
+An example would be
+ Please close the back door so that the bugs don't come in.
+ This would be a logic error if the front door is also open: even though
+the command makes sense and you can close the back door, this doesn't
+actually accomplish the goal of keeping the bugs out since they'll still
+come in the front door.
+ Here is another syntax error that is more subtle.
+ Example: Syntax Error
+ class = "Advanced Computronics for Beginners"
+ Traceback (most recent call last):
+   In line 1 of the code you submitted:
+     class = "Advanced Computronics for Beginners"
+           \^
+ SyntaxError: invalid syntax
+ The problem is that*class is a special word in Python*. if you had
+written course instead of class it would have been fine.
+ Run-Time Errors
+ Here are a few common run-time errors. Python is able to understand
+what the program says, but runs into problems when actually performing
+the instructions.
+
+-  using an undefined variable or function. This can also occur if you
+   use capital letters inconsistently in a variable name:
+-  dividing by zero, which makes no sense in mathematics. (Why? Since 0
+   times any number is 0, there is no solution to 1 = X * 0, so 1/0 is
+   undefined.)
+-  using operators on the wrong type of data
+
+** Functions
+
+We have seen one function already, print(), which outputs a message. To
+use a function you always write its name, followed by some arguments in
+parentheses (). The word argument basically means an input to the
+function. Then, the function does some action depending on its
+arguments.
+ When there are*multiple arguments to a function*, you *separate them
+with commas (,)*.
+ For example, you can give multiple arguments to print; it will print
+all of them in order, with spaces separating them. We demonstrate in the
+example below.
+ x = 3
+ print(x, x + x , x * x)    
+ The extra spaces in the sample program above had no effect on the
+output. Extra spaces are meaningless in most other situations too.
+However, be careful that extra space at the beginning of a line, called
+indenting, has a special meaning that can cause errors
+ A function may also give back a value (like an output). For example the
+function max() (short for maximum) gives back the largest out of all of
+its arguments, which must be numbers:
+ print(max(42, 17))
+ print(max(128,281,812))
+ The max function has a friend which behaves similarly: the min function
+returns the minimum (smallest) of its arguments.
+ Functions can be combined to create more complicated expressions.
+ x = min(max(13, 7), 9)
+ print(x)
+ Common Errors
+ If you call a function with not enough arguments (inputs) or too many
+arguments, you get an error. For example, max requires at least one
+input:
+ max()
+ Traceback (most recent call last):
+   In line 1 of the code you submitted:
+     max()
+ TypeError: max expected 1 arguments, got 0
+
+** Comments
+
+A computer program looks like a code language, which is necessary for
+the computer to precisely understand what your commands mean. But, being
+a code language makes it harder for humans to read. To compensate for
+this, you are allowed to write extra notes in your program that the
+computer ignores. These notes are called comments.
+
+** strings
+
+*** intro
+
+Strings
+
+Strings are sequences of letters and numbers, or in other words, chunks
+of text. They are *surrounded by two quotes* for protection: for example
+in [[http://cscircles.cemc.uwaterloo.ca/][Lesson 0]] the part "Hello,
+World!" of the first program was a string. If a pound sign #appears in a
+string, then it does not get treated as a comment.
+ This behaviour is because the part inside the quotes "" is a string
+literal, meaning that it should be literally copied and not interpreted
+as a command. Similarly, print("3 + 4") will not print the number 7, but
+just the string 3 + 4.
+
+ Manipulating strings as sequences of characters: S[]
+
+ In order to manipulate a string, we need to be able to access the
+individual characters that make up a string. In Python this is done in
+the following way: for a string S and an integer index, the notation
+ S[index]
+ returns the character of S at position index. By convention the string
+starts at index 0: so S[0] is the first character, S[1] is the second
+character, etc.
+ In "Hello, World!" the list of characters is:
+ Index: 0 1 2 3 4 5 6 7 8 9 10 11 12
+ Char.: H e l l o , W o r l d !
+ Note that the character at index 6 is a space.
+
+Finding the number of characters in a string: len
+ To get the number of characters in a string, we use the Python
+function len. For example, 
+ len("Hello, World!")
+  is 13.
+ Although len(S) gives you the total number of characters in the string,
+since it starts with index 0, the last character is at index len(S)-1
+
+*** advanced string use
+
+Cutting strings: S[:]
+ Cutting out some part of a string gives you a substring. For example,
+the strings "eat" and "ted" are substrings of "repeated". To extract a
+substring in Python, we use the syntax:
+ S[firstIndex:tailIndex]
+ examples:
+ myString = 'Weighty'
+ print(myString[1:6])
+ print('magic'[3:3])
+ print('chump'[0:4])
+ Note that in taking substrings, firstIndex is included, while the
+tailIndex is not included. This is a common source of errors. However,
+it has some nice effects. For example, because of this choice, the
+length of the substring S[i:j] is always j-i.
+ Pasting strings: +
+ We all know that 1+2=3. With strings, instead we get the following
+result:
+ result = 'one' + 'two'
+ print(result)
+ print(len(result))
+ onetwo
+ 6
+ As you can see, the effect of S+T is to create a new string that starts
+with S and has T immediately afterwards. This string-gluing operation is
+also called *concatenation*.
+ If you want to concatenate numbers, you need to convert them to str
+first. Otherwise you will get one of two errors, depending on the order
+you tried.
+
+** Escape Sequences
+
+Escape Sequences
+ What if you want to include the quote character " inside of a string?
+If you try to execute print("I said"Wow!" to him") this causes an error:
+ Traceback (most recent call last):
+   In line 1 of the code you submitted:
+     print("I said"Wow!" to him.")
+                      \^
+ SyntaxError: invalid syntax
+ the problem is that Python sees one string "I said" followed by
+something Wow! which is not in the string. This is not what we intended!
+ Python does have two simple ways to put quote symbols in strings.
+ You are allowed to start and end a string literal with single quotes
+(also known as apostrophes), like 'blah blah'. Then, double quotes can
+go in between, such as 'I said "Wow!" to him.'
+ You can put a *backslash character* followed by a quote (\" or \' ).
+This is called an escape sequence and Python will remove the backslash,
+and put just the quote in the string. Here is an example.
+ Furthermore, because of escape sequences*, backslash (\)* is a special
+character. So to include a backslash in a string, you actually need to
+"escape it" with a second backslash, or in other words you need to write
+\\ in the string literal.
+
+** Types
+
+Numbers and sentences are fundamentally different objects, and it causes
+a Python error when you try to mix them in the wrong way
+ "Hello, World!" is a *string value*, which is shown as str in Python. A
+string is any sequence of numbers, letters, and punctuation;
+ 35 is an*integer value*, which is shown as int in Python. An *integer
+just means a whole number*; for example, 42, -12, and 0 are integers.
+ Using an object of a bad type is a very common cause of errors in
+programs. It is like trying to drink a sandwich: you can't do it because
+you can only drink things of liquid type, and a sandwich is of solid
+type.
+ You can determine the type of an object by calling the type function on
+it:
+ print(type("Hello, World!"))
+ print(type(34))
+ print(type(1.234))
+ <class 'str'>
+ <class 'int'>
+ <class 'float'>
+ (The meaning of class is similar to type.) The above example
+demonstrates that numbers are further divided into two different types,
+int which we mentioned above, and float, which is used for storing
+decimal numbers. You should think of floats as inexact or approximate
+values. You can usually mix float values with int values, and the result
+will be another float.In fact, what Python really does when you mix a
+float with an int is that it converts the int to a float, and then works
+with the two floats.
+ change types
+ It is often necessary to change data from one type to another type.
+Just as you can convert a sandwich from solid to liquid form by using a
+blender, you can change data from one type to another type using a
+typecast function. You write the name of the desired new type in the
+same way as a function call, for example
+ x = float("3.4")
+ print(x-1)
+ changes the string "3.4" to the float 3.4, and then prints out 2.4.
+Without the typecast, the program would crash, since it cannot subtract
+a number from a string.
+ Sometimes, Python does let you combine strings and numbers using
+arithmetic operators. The statement print("hots" * 2) prints hotshots.
+Python's rule is that multiplying a string s by an integer n means to
+put n copies of the string one after another. We'll see later that
+"addition of two strings" is also well-defined in Python.
+ Various typecasts behave differently:
+ converting a float to an int loses the information after the decimal
+point, e.g. int(1.234) gives 1, and int(-34.7) gives -34.
+ converting a str to an int causes an error if the string is not
+formatted exactly like an integer, e.g. int("1.234") causes an error.
+ converting a str to a float causes an error if the string is not a
+number, e.g. float("sandwich") causes an error.
+ A common use of typecasting that will we see soon is to convert user
+input, which is always a string, to numerical form. Here is a quick
+illustration.
+
+** Input
+
+In Python, the user types one line of input at a time. You should use
+the input() function to actually obtain the next line of input from the
+user. The input() function takes no arguments and always gives back a
+str.
+ Here is an example of using input() to get input. The grader will
+automatically specify the input for the program.
+ line = input()
+ print("The first line of input is:", line)
+ note:the above syntax will not work in python 2.X
+
+** Blocks
+
+Blocks
+ Blocks will be used in many other places later on:
+  in "for loops," and when writing your own functions, for example. (A
+common way for other programming languages to indicate blocks is with
+curly braces {}.) All lines in the block must have exactly the same
+amount of indentation: they must start with the same number of spaces.
+Whenever Python sees that the next line has more spaces, it assumes a
+new block is starting, and when there are less spaces, the block ends.
+
+** if
+
+In this lesson we introduce the ability for a program to make decisions,
+using the "if statement." We introduce this concept by using an example,
+of computing the maximum of two numbers (like the max function). The
+program contains two if statements.
+ *example:*
+ x = int(input())
+ y = int(input())
+ print('In this test case x =', x, 'and y =', y)
+ if x >= y:
+     print('(The maximum is x)')
+     theMax = x
+ if y > x:
+     print('(The maximum is y)')
+     theMax = y
+ print('The maximum is', theMax)
+ The General Structure of an If Statement
+ The first line,
+ if «condition»:
+ has three parts: the word if, the «CONDITION» which must be a
+True/False expression (more on this below), and a colon :
+ Then, a block, which means a series of commands that can be one or
+multiple lines long.
+ Python determines where the block starts and stops using indentation,
+or in other words you need to put an equal number of spaces in front of
+each line of the block.
+ True, False, and bool
+ So far, in the «condition» part of an if statement, we saw some simple
+numerical comparisons like x > y and x <= y, which evaluate as being
+either true or false.
+ More generally, any expression or value that is true or false is called
+Boolean. In Python, the bool type is used to represent Boolean values;
+only two bool values exist, True and False.
+ Note that in Python, when you use
+the bool values True and False directly in a program,
+they [[http://cscircles.cemc.uwaterloo.ca/console/?consolecode=print(true)][must
+be capitalized or you will get an error]].
+ *Boolean comparisons*
+ We already encountered the family of operators <, >, <= and >= which
+compare two numbers and give back a bool. There are two other ways to
+compare numbers:
+ x == y is the equality operator, it returns True if x and y are equal
+ x != y is the not-equal operator, it returns True if x and y are not
+equal
+ == and != also work for strings and other types of data
+ (There are two equal signs == here since the single equals sign already
+has the meaning in x = «expression» of "assign the variable x the value
+of «expression». Confusing = with == is a common source of bugs.)
+
+** advanced if statments
+
+We just introduced the concept of a block (several lines grouped
+together at the same indentation level). You can have a block inside
+another block:
+ if password=='openSesame':
+   print('User logged on.')
+   if hour>17:
+     print('Good evening!')
+   print('Enter a command:')
+ Here the outer block consists of 4 lines and *the inner block* consists
+of just 1 line:
+ [[python_files/img/Image.png]]
+* Snippets
+** File Editing
+*** Delete files based on filename
+#+begin_src python
+#Deleting HDF files containing 'BRF' in their file names
+#Jul 18, 2013
+
+import os
+import time
+from time import gmtime, strftime
+ 
+for i in range(2002, 2013):
+#To loop until 2012, the end of range should be 2013.
+    tm = strftime("%H:%M on %a, %b %d")
+    #H and M should be big character
+    print "Year of " + str(i) + " - Starts at " + str(tm)
+
+    #for f in os.listdir('H:/Satelite Images'):
+    for f in os.listdir('H:/MIAC_USA/' + str(i)):
+        if f[5:8] == 'BRF':
+        #Since file name is i.e., 'MAIACBRF.h00v00.20110081705.hdf',
+        #The year is placed between 5th and 8th
+            os.remove('H:/MIAC_USA/' + str(i) + '/' + str(f))
+            #Need full file path for input
+            
+print "Ends! at " + str(tm)
+#+end_src
+
+*** use python to move files to folders based on file name
+
+#+begin_src python
+#HDF original files are copied into separate folders by year
+#before extracting using Metlab
+#Jul 8, 2013
+
+import os
+import shutil
+import time
+from time import gmtime, strftime
+ 
+for i in range(2000, 2013):    
+    tm = strftime("%H:%M on %a, %b %d")
+    start_time = time.time()
+    print "Year of " + str(i) + " - Starts at " + str(tm)
+
+    for f in os.listdir('H:/Satelite Images'):
+        if f[16:20] == str(i):
+            shutil.copy2('H:/Satelite Images/' + str(f), 'H:/MIAC_USA/' + str(i))
+
+print "End!"
+#+end_src
+ 

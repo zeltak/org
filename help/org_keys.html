@@ -1,0 +1,993 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>emacs<sub>org</sub><sub>shortcuts</sub></title>
+<!-- 2014-03-08 Sat 16:50 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="zeltak" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+<script type="text/javascript" src="http://orgmode.org/mathjax/MathJax.js"></script>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+    MathJax.Hub.Config({
+        // Only one of the two following lines, depending on user settings
+        // First allows browser-native MathML display, second forces HTML/CSS
+        //  config: ["MMLorHTML.js"], jax: ["input/TeX"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+        extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js",
+                     "TeX/noUndefined.js"],
+        tex2jax: {
+            inlineMath: [ ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"], ["\\begin{displaymath}","\\end{displaymath}"] ],
+            skipTags: ["script","noscript","style","textarea","pre","code"],
+            ignoreClass: "tex2jax_ignore",
+            processEscapes: false,
+            processEnvironments: true,
+            preview: "TeX"
+        },
+        showProcessingMessages: true,
+        displayAlign: "center",
+        displayIndent: "2em",
+
+        "HTML-CSS": {
+             scale: 100,
+             availableFonts: ["STIX","TeX"],
+             preferredFont: "TeX",
+             webFont: "TeX",
+             imageFont: "TeX",
+             showMathMenu: true,
+        },
+        MMLorHTML: {
+             prefer: {
+                 MSIE:    "MML",
+                 Firefox: "MML",
+                 Opera:   "HTML",
+                 other:   "HTML"
+             }
+        }
+    });
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">emacs<sub>org</sub><sub>shortcuts</sub></h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Shortcuts</a></li>
+<li><a href="#sec-2">2. Colors</a></li>
+<li><a href="#sec-3">3. Methods of working</a>
+<ul>
+<li><a href="#sec-3-1">3.1. images in org mode and naming scheme</a></li>
+<li><a href="#sec-3-2">3.2. link to other org notes</a>
+<ul>
+<li><a href="#sec-3-2-1">3.2.1. Links to org files (Internal)</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Shortcuts</h2>
+<div class="outline-text-2" id="text-1">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">'keycombo'</th>
+<th scope="col" class="left">'key function'</th>
+<th scope="col" class="left">&#xa0;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">@Structure@</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">?C-c C-x M?</td>
+<td class="left">(org-cut-subtree)</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">?C-c C-x M-w?</td>
+<td class="left">(org-copy-subtree)</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">?C-c C-x C-y?</td>
+<td class="left">(org-paste-subtree)</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">?M-S-&lt;left&gt;/&lt;right&gt;?</td>
+<td class="left">(org-promote/demote-subtre&gt; demote all tree and subheading)</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">?M-S-Enter?</td>
+<td class="left">Insert todo header</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">M-S-&lt;up&gt;/&lt;down&gt;</td>
+<td class="left">(org-move-tree up down)</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c C-w</td>
+<td class="left">(org-refile)</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-space</td>
+<td class="left">to narrow refile (with ido enabled)</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c ^</td>
+<td class="left">(org-sort) Sort same-level entries.</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">?F9-r? / ?C-x n s?</td>
+<td class="left">Narrow buffer to current subtree.</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">?F9-w? / ?C-x n w?</td>
+<td class="left">Widen buffer to remove narrowing.</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c *</td>
+<td class="left">(org-toggle-heading)</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">Shift-TAB</td>
+<td class="left">Return to full view</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-q TAB</td>
+<td class="left">Normal TAB</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c C-q (or C-c C-c when on orgfile on header)</td>
+<td class="left">insert tag</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-u C-u M-RET</td>
+<td class="left">inserts a heading at the end of the parent subtree</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c -</td>
+<td class="left">in a region makes a list item for each line</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-u C-c -</td>
+<td class="left">creates a single item for the whole region</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c *</td>
+<td class="left">turn item/line into headline</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c ^</td>
+<td class="left">sort subtree/region/plain-list</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-'</td>
+<td class="left">cycle agenda files</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">A-ESC</td>
+<td class="left">ido select buffer</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">@spares tree@</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c /</td>
+<td class="left">start sparse tree</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c C-c</td>
+<td class="left">remove higlights in sparse</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c / t</td>
+<td class="left">show sparse by todo</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c / m</td>
+<td class="left">show sparse by tags</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c a m</td>
+<td class="left">(org-tags-view)</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c a &lt; s *SEARCHTERM</td>
+<td class="left">Search in headlines</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">?M-p M-s?</td>
+<td class="left">Search org using lgrep</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">@movment@</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">?C-x C-space?</td>
+<td class="left">move to previous spot</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">?F-10?</td>
+<td class="left">'Alt-tab' between buffer</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">?M-p M-;?</td>
+<td class="left">open org buffers</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">F1</td>
+<td class="left">switch buffer left</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">F2</td>
+<td class="left">switch buffer right</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">S-F1</td>
+<td class="left">switch emacs buffer left</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">S-F2</td>
+<td class="left">switch emacs buffer right</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">F-10</td>
+<td class="left">Jump between 2 buffers</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">@Table@</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">Interactive create table</td>
+<td class="left">C-c</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">M-S-&lt;down&gt;</td>
+<td class="left">insert row</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">M-S-&lt;up&gt;</td>
+<td class="left">KILL row</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c -</td>
+<td class="left">insert horizontal line</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c Pipe</td>
+<td class="left">Convert the active region to table</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">M-S-&lt;left&gt;</td>
+<td class="left">(org-table-delete-column)  <b>UP/RIGHT for rows</b></td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">M-S-&lt;right&gt;</td>
+<td class="left">(org-table-insert-column) <b>UP/RIGHT for rows</b></td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c C-x C-w/M-w/C-y</td>
+<td class="left">cut/copy/paste rectangular region</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c ^</td>
+<td class="left">(org-table-sort-lines)</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-u C-c =</td>
+<td class="left">insert formula here/Edit formula</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">$1</td>
+<td class="left">colum 1</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">@1</td>
+<td class="left">row 1</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">@9$2=vsum(@2..@7)</td>
+<td class="left">sum or vmean for mean</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c }</td>
+<td class="left">Toggle the display of row and column numbers for a table</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">@dired@</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">?M-1?</td>
+<td class="left">dired-jump</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">@Search@</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">?C-c C-j?</td>
+<td class="left">Search headlines</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">@hyperlink@</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-u C-c C-l</td>
+<td class="left">insert relative link</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c C-l</td>
+<td class="left">insert link</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c C-l (while on link)</td>
+<td class="left">Edit the link and description parts of the link</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c C-x C-v (alias='oi')</td>
+<td class="left">(org-toggle-inline-images)</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">@code blocks@</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c C-v d</td>
+<td class="left">choose block</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c '</td>
+<td class="left">edit source code of block</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">@TODO/AGENDA@</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c .</td>
+<td class="left">(org-time-stamp)</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c !</td>
+<td class="left">(org-time-stamp-inactive)-DONT create an agenda entry</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-u C-c . OR !</td>
+<td class="left">Same as above but with TIME added</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c C-o (on Date link)</td>
+<td class="left">access the agenda for that day</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">S- &lt;right&gt; OR &lt;left&gt;</td>
+<td class="left">org-timestamp-up/down for days</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">S- &lt;up&gt; OR &lt;down&gt;</td>
+<td class="left">change cursor time (based on where cursor is</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">M-S-RET</td>
+<td class="left">insert TODO</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">@Drawers/Properties@</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c C-x d</td>
+<td class="left">`org-insert-drawer'</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-u C-c C-x d</td>
+<td class="left">org-insert-property-drawer' !only when on headline!</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-c C-x C-a</td>
+<td class="left">Archive</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">@spelling/review@</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">F6 OR M-$</td>
+<td class="left">Check word</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">S-F6 OR :iss</td>
+<td class="left">Check buffer or highlighted region</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">F5</td>
+<td class="left">Fly spell next</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">@Frequent commands@</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">z-edit-file-as-root</td>
+<td class="left">Edit files as root</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">rotate-windows</td>
+<td class="left">switch between windows</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">toggle-window-split</td>
+<td class="left">switch split position</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">kill-other-buffers</td>
+<td class="left">Kill all other buffers</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">@plugins@</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">comment line(s) NERD</td>
+<td class="left">,ci</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">duplicate and comment NERD</td>
+<td class="left">,cc</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">@editing@</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">?C-x C-q?</td>
+<td class="left">make read only</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+<tbody>
+<tr>
+<td class="left">@editing@</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-S-Pgup</td>
+<td class="left">move line up</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">C-S-Pgdown</td>
+<td class="left">move line down</td>
+<td class="left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+<td class="left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Colors</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+-AAA- Headlines H1
+<del>AAA</del>  Headlines H2                                     
+</p>
+
+<p>
+<code>AAA</code>                                     
+^AAA^ Path                                 
+%AAA% Tip                                     
+\(AAA\) Note                                   
+`AAA` Highlight                                    
+'AAA' Emphasize                                     
+<b>AAA</b> BOLD                                      
+!AAA! Warn1                               
+@AAA@ Warn2                                  
+<span class="underline">AAA</span> underline                                    
+?AAA?-keybind
+</p>
+
+
+
+
+<p>
+¶AAA¶                                                                             
+</p>
+
+<p>
+¤AAA¤                                      
+₁₁ | Ar-S-(-)-1
+</p>
+
+<p>
+₂₂ |Ar-S-(-)-2
+</p>
+
+<p>
+₃₃ |Ar-S-(-)-3
+</p>
+
+<p>
+₄Server₄ |Ar-S-(-)-4
+</p>
+
+<p>
+₅Client₅ |Ar-S-(-)-5
+</p>
+
+<p>
+₆IE₆ |Ar-S-(-)-6
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Methods of working</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> images in org mode and naming scheme</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+download the images manually and save them in the attach folders (new ones open every year), ₆In example₆ 
+<a href="file:///home/zeltak/org/attach/images_2013">file:///home/zeltak/org/attach/images_2013</a>
+give it a name that would be unique:
+</p>
+
+<p>
+'filename' 'Nodename' 'number' 'date of download'
+</p>
+
+<p>
+₆In example₆ 
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">food_shak_1_14092013.jpg
+</pre>
+</div>
+
+<p>
+then in org mode use ?C-c l? to insert a file link and choose the first one in the series (the ons starting with '1')
+then simply copy paste the links to desired locations changing the number to desired one
+finally toggle image display
+</p>
+
+<p>
+to assign a specific size, use the <a href="file:///home/zeltak/org/files/Tech/linux.html#*scale%20inline%20images%20in%20orgmode">attribute</a> options:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">#+attr_html: :width 200px
+[[file:~/org/attach/images/gno_4_8722104799_04354338b1_z.jpg]]
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> link to other org notes</h3>
+<div class="outline-text-3" id="text-3-2">
+</div><div id="outline-container-sec-3-2-1" class="outline-4">
+<h4 id="sec-3-2-1"><span class="section-number-4">3.2.1</span> Links to org files (Internal)</h4>
+<div class="outline-text-4" id="text-3-2-1">
+</div><ol class="org-ol"><li>link to org mode Headline<br  /><div class="outline-text-5" id="text-3-2-1-1">
+<p>
+stand on the section you want to link to and press ?C-c l? to store its location
+then use ?C-c C-l? to insert that save link (location when needed) 
+</p>
+
+<p>
+\(Note-you can also specify it by filename::header name like this:\)
+<a href="file:///home/zeltak/Dropbox/Org/Tech/linux.html#Term color theme (.colors)">file:///home/zeltak/Dropbox/Org/Tech/linux.html#Term color theme (.colors)</a>
+</p>
+</div>
+</li>
+
+<li>link to org mode Line Number<br  /><div class="outline-text-5" id="text-3-2-1-2">
+<p>
+one can use line numbers in file using ::n where 'n' is the line number but thats not recommend
+insert a link that looks like this:
+<a href="file:///PATH/TO/ORGFILE#25">file:///PATH/TO/ORGFILE#25</a>
+where the ::25 means line 25 in that file
+<i>black ice</i>
+</p>
+</div>
+</li></ol>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="author">Author: zeltak</p>
+<p class="date">Created: 2014-03-08 Sat 16:50</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 24.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.5h)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

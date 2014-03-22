@@ -1,0 +1,94 @@
+#+TITLE: medicare\_MIA
+
+* H.Hospital Admitance
+
+** 1.Intro
+
+*** 1.variable info
+
+codes:
+ *sex:*
+ 1-male
+ 2-female
+ *Race:*
+ 1-white
+ 2-black
+ 3-other
+ admission types:
+ cvd- cardiovascular disease
+
+** 2.Gather data
+
+*** 1.create zipcode keytable
+
+using *cn000\_create\_zipcode\_DB.sas* a file with all Zipcodes in MIA
+with XY was loaded to sas:
+ *NOTE: zipcodes for the whole USA is also available in the same
+location*
+
+C:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.10.Medicare\_MIA\3.1.10.1.Raw\_data\a.import
+into GIS\zip\_MIA\_2005.dbf
+ the zipcode file with xy is aggregated and then is exported for
+creating a guid-zipcode keyfile:
+
+C:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.10.Medicare\_MIA\3.1.10.4.Work\2.Gather\_data\ArcGIS\zipagg.dbf
+
+*** 2.Assign guid to zipcodes
+
+The zipagg.dbf file was loaded to GIS and then uising a spatial join it
+was joined to the guid layer with the closest (within 14km) option so
+gricodes outside MIA would get a NULL value iin guid
+ Then resulting key file is *l*ocated here:
+
+C:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.10.Medicare\_MIA\3.1.10.4.Work\2.Gather\_data\FN007\_keyed\_tables\zipcode\_guid.dbf
+
+*** 3.merge keytable with admissions DB
+
+using *cn001\_create\_admiss\_DB.sas* the original admission sas data
+file located:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.17.Medicare\_MIA\3.1.10.1.Raw\_data\medicare
+admission data\midstates.sas7bdat
+ was loaded to SAS then the admission file is merged with the zip codes
+and X,Y cords keytable
+ then the file is split into cases files and outputted as dbf here:
+
+C:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.17.Medicare\_MIA\3.1.10.4.Work\2.Gather\_data\FN001\_Cases\_guid\_MIA\ari.dbf
+
+*** 4.SES status
+
+in GIS using layers/datsets from Steve SES variables are calculated in
+ARCGIS for every 10x10km cell
+ the data is outputted here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.10.Medicare\_MIA\3.1.10.4.Work\2.Gather\_data\FN0021\_calculate\_SES\SES\_MIA.dbf
+ later *we added some LU data to the SES data* (spatial join with LU
+data for the 10x10km grid)
+ this is outputted here:
+
+C:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.10.Medicare\_MIA\3.1.10.4.Work\2.Gather\_data\FN0021\_calculate\_SES\SES\_MIA\_LU.dbf
+
+*** 5.assign exposure
+
+Using cn004
+(c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.10.Medicare\_MIA\3.1.10.3.Code\2.Gather\_data\cn004\_assign\_exposure\_by\_type\_guid.sas)
+:
+ in this step the cases (by admission type seperatly) were assigMIAd
+exposure by guid and date in addition to long term pm exposure (chronic)
+ also SES data were dichotomized
+ the final result is exported to R and located :
+ *NOTE: diab2 is all diabetic cases (weather or not main casue) and diab
+is just main admission casue for daib*
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.10.Medicare\_MIA\3.1.10.4.Work\3.Analysis\AN001\_R\_files\_bycase\diab0106.csv
+
+** 3.Analysis
+
+*** 1.run ts with lag
+
+[[medicare_MIA_files/attach/poison_ts_lagpm][Attachment #01
+(poison\_ts\_lagpm)]]
+ The R time series script was run in R using script ALL\_causes
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.10.Medicare\_MIA\3.1.10.3.Code\3.Analysis\ALL\_causes.r
+ lag 0 ,1 and 2 were tested

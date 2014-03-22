@@ -1,0 +1,51 @@
+#+TITLE: general\_science
+
+* genral science
+
+** Biilogy
+
+*** moms biology tutor
+
+**** bio\_all.pdf
+
+[[general_science_files/attach/bio_all.pdf][Attachment #01
+(bio\_all.pdf)]]
+
+** Environment
+
+*** Glossary
+
+**** ppm
+
+"Parts per" is a convenient notation used for low and very low
+concentrations. Generally speaking it is very similar to weight by
+weight percentage - 1% w/w means 1 gram of substance per every 100 g of
+sample and it is (although very rarely) named pph - parts per hundred.
+Other abbreviations stand for:
+ ppm   parts per milion (106)
+ ppb   parts per bilion (109)
+ ppt   parts per trillion (1012)
+ ppq   parts per quadrilion (1015)
+
+** conversions
+
+*** convert population density from km to per square mile
+
+1 km = 0.62 miles
+ 1 km\^2 = 0.62\^2 miles\^2
+ So IE 60.72 people in 1 sq km
+ = 60.72 people in 0.62\^2 sq miles
+ = 60.72 / 0.62\^2 people per sq mile
+ = 157.96 people per sq mile
+
+*** convert dewpopint and temp to abolute humidaty
+
+WVP = 6.11 * 10^{(7.5 * Td) / (237.7 + Td)}
+ AH = 100000 × WVP / (273.15 + T) × 461.5
+ WVP = water vapor pressure, millibars
+ Td = dew point temperature, °C
+ AH = absolute humidity, g/m3
+ T = ambient or dry bulb temperature, °C
+ *here's the SAS code:*
+ wvp\_mb = 6.11* (10**(((7.5 * dp\_c)/(237.7 + dp\_c))));
+ ah\_gm3 = (1000* (100 * wvp\_mb))/((273.15 + te\_c)* 461.5);

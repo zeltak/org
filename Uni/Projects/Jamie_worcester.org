@@ -1,0 +1,90 @@
+#+TITLE: Jamie\_worcester
+
+* 3.1.6.NAS
+
+** 1.intro
+
+** 2.gather data
+
+*** 1.patient layer
+
+patient data was obtained from Jamie and is located here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.9\_Jamie\_Worcester\3.1.9.1.Raw\_data\patient\_data\
+ *the X,Y cord are in the MA state projection:*
+ Projected Coordinate Systems > State Plane> NAD 1983 (Meters) > NAD
+1983 StatePlane Massachusetts FIPS 2001 (Meters).prj
+ data was imported to GIS using X,Y and converted to layeres
+ then the 2 datasets were combined and a new field to indicate was
+created (ca\_co) where:
+ 0-was for cases
+ 1-for control
+ finally the combined dataset was reprojected to UTM:
+ [[Jamie_worcester_files/img/SS-2011-06-22_10.19.08.png]]
+ resulting in layer*Cases\_controls\_utm*
+
+*** 2.LU data
+
+all the LU variables on a 50x50 resolution for the resid (mod4) stage
+was obtained in rasters from steve:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.9\_Jamie\_Worcester\3.1.9.1.Raw\_data\GIS\
+ *the only one not included* is trafiic density (the total road Length
+in each point (50X50m)
+
+*** 3.joind LU data to patients
+
+in GIS the LU rasters were joined one by one to the cases/control
+dataset using the spatial analyst tools:
+ [[Jamie_worcester_files/img/SS-2011-06-22_10.13.09.png]]
+ [[Jamie_worcester_files/img/SS-2011-06-22_10.16.05.png]]
+ *NOTE: for percent urban the raster value has to be divided by 9 to get
+the actual percent*
+ *
+ NOTE: since Each variable is called RASTERVALUE, gis wont be able to
+extract values for another variable with the same name (it will give all
+values a NULL value). To address this simple create a new variable ,
+copy the raster value to it and delete the raster value field
+ [[Jamie_worcester_files/img/SS-2011-06-22_12.56.54.png]]*
+ for popden- *gn1
+*elev-*gn3*
+ percent urban-*gn4*
+
+*** 4.join patients to guid
+
+the *gn4* layer with all LU data was joined to a guid layer so that each
+patient got a specific guid
+ [[Jamie_worcester_files/img/SS-2011-06-22_13.05.50.png]]
+ *NOTE: we also added the guid LU terms for the deltas later on*
+ resulting in *gn5
+*this is exported to dbf here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.9\_Jamie\_Worcester\3.1.9.4.Work\2.Gather\_data\lu\_guid\_final\lu\_guid\_final.dbf
+
+** 3.Analysis
+
+*** 1.prediction models
+
+using script *cn001* we get prdicted residual PM (local exposure) for
+the wooster cases/control .
+ the output file is here:
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.9\_Jamie\_Worcester\3.1.9.4.Work\2.Gather\_data\lu\_guis\_resid\_final\lu\_resid.csv
+
+*** 2.combine with pm prediction for 2000
+
+using script *cn002* we combine the local pollution with the average
+pollution for the year 2000 from our prediction models
+ the output is here
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.9\_Jamie\_Worcester\3.1.9.4.Work\3.Analysis\final
+cases\casesfinal.sas7bdat
+
+*** 3.multi year pm predictions
+
+using script *cn003* we combine the local pollution with the average
+pollution for all years seperatly 2000-2005 from our prediction models
+ the output is here
+
+c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.9\_Jamie\_Worcester\3.1.9.4.Work\3.Analysis\final
+cases\yearlypm
