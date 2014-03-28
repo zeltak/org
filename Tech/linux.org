@@ -5295,7 +5295,36 @@ Finally, enter the disk free (df) command to confirm you have successfully mount
  [[/home/zeltak/org/attach/images_2014/image11_2014-03-13_14:21:10.png]]
 
 Can't Mount the Shared Folder? The user account you enter here must have access privileges for the shared folder that you wish to map.
+*** ipkg
+Getting a list of programs
+you haven't yet, run ipkg update to get a current list of applications.
 
+#+BEGIN_EXAMPLE
+ipkg list | more 
+#+END_EXAMPLE
+
+provides a list of applications: ENTER moves one line; SPACE moves a page; Q quits.
+
+#+BEGIN_EXAMPLE
+ipkg list_installed
+#+END_EXAMPLE
+
+provides a list of already IPKG-installed applications.
+$Note$ You may use the command grep to help get the information you need.ex:
+
+#+BEGIN_EXAMPLE
+ipkg list | grep -i "git" 
+#+END_EXAMPLE
+
+Some installs to try
+
+ipkg install nano loads the GNU nano editor, which is much more user-friendly than the bundled vi.
+ipkg install less loads the less file viewer, which is murch more user-friendly than the more command.
+After installation try ipkg list | less to test the less command. 
+
+Updating installed applications
+
+ipkg update && ipkg upgrade will update any IPKG-installed applications to the latest ported versions.  
 
 * Software
 ** CLI
@@ -6825,25 +6854,14 @@ use iset to configure
 "[time],[buffer count],[buffer plugin],buffer number+:+buffer name+{buffer nicklist count}+buffer filter,[lag],[hotlist],completion,scroll,[alternatetz]"
 
 ****** filter join/part/quit messages
+to enable
+#+BEGIN_EXAMPLE
+/set irc.look.smart_filter on
+/filter add irc_smart * irc_smart_filter *
+#+END_EXAMPLE
 
-*How can I filter join/part/quit messages on IRC channels?
- (/help filter for help)
- global filter (hide all join/part/quit):
-*------------------------------------------------------------------------------------------------------------------------------------------
- /filter add jpk * irc join,irc part,irc quit *
+also ?Alt+=? will enable disable it
 
-------------------------------------------------------------------------------------------------------------------------------------------
- smart filter (keep join/part/quit from users who spoke recently):
- (/help irc.look.smart filter and /help filter for help)
-
-------------------------------------------------------------------------------------------------------------------------------------------
- /set irc.look.smart filter on
- /filter add irc smart * irc smart filter *
-
-------------------------------------------------------------------------------------------------------------------------------------------
- 
- *
-*
 
 ****** aspell
 
@@ -14245,122 +14263,15 @@ with -S:
  smix(t,2)
 
 *** feh
-**** intro
-
-Too many Linux image viewers are tinged with little annoyances -- they
-take too long to load, are slow to redraw the display, have limited
-format support, sport inconvenient controls -- so when you want to
-settle on one, inevitably there's something to make you utter feh! in
-general discontent. Good call -- feh is the name of a speedy little
-viewer that packs in a surprising number of features for its size.
- Feh takes as arguments the names of image files you want to view. You
-can also give directory names, and feh attempts to load all the files in
-that directory; the -r option recurses through all subdirectories.
-Viewing all image files in the /usr/local/photos directory tree, for
-instance, is done like this:
- $ feh -r /usr/local/photos
- If you specify more than one image, only the first will immediately
-display; type n (or the spacebar) to move to the next and p to move to
-the previous. The Home and End keys bring you to the first and last
-images in the argument list. To quit viewing and exit, type q.
- You can put a list of images to load in a file, with full or relative
-pathnames, and specify the file with the -f option; the -z option will
-randomize the display order. The images can be advanced automatically by
-giving a delay, in seconds, as an argument to the -D option. This
-slideshow mode is the default mode; feh is a modal viewer, so its
-options and controls differ depending on the mode. Its other modes are
-discussed below.
- You can also view images over any http or ftp URL by giving the URL as
-an argument, like so:
- $ feh
-[[http://www.glerl.noaa.gov/pubs/photogallery/Scenic/images/0534.jpg][http://www.glerl.noaa.gov/pubs/photogallery/Scenic/images/0534.jpg]]
- If you have a file that contains a list of image URLs, you can have feh
-display them in a random-order slideshow, with a delay of 30 seconds
-each, with this command:
- $ cat image-urls | xargs feh -z -D30
- Mouse controls
- What's really special about feh is the way it pans and zooms images --
-it's impressively fast and fluid.
- If an image is too large to fit the display, click the left mouse
-button and move the pointer to pan around the image.
- To resize the view, click the middle button and move the pointer toward
-the left or right to shrink or grow the image.
- You can click and release the left mouse button once to move to the
-next image. A few viewing effects are also available: hold down the Ctrl
-key and press the left mouse button: when you do so, moving the pointer
-to the left blurs the image, while moving to the right sharpens it. With
-Ctrl and the middle mouse button pressed, you can move the pointer to
-spin the image around its center.
- When viewing an image, click the right mouse button to display feh's
-menus.
- Menus, edits, and modes
- Feh is strictly an image viewer -- it doesn't attempt to be an editor
-at all, but a couple of the most common editing commands are available
-on the menu: rotation and deletion. Happily, there are no confirmation
-dialogs or windows that pop up when you do anything with these menus --
-the delete command is cleverly given an extra sub-menu with one item,
-"confirm," so you get that extra protection against accidents but don't
-waste time with a verification click.
- These commands also have keyboard equivalents. Type > to rotate an
-image 90 degrees clockwise, and < to rotate it 90 degrees
-counterclockwise. Your changes are immediately saved to the file. To
-delete the current image file, type Ctrl-Del.
- While these commands work in slideshow mode, there are other operation
-modes as well, all of which are specified by command-line options.
-Here's a quick rundown of them:
- Multiwindow mode
- The -w option starts multiwindow mode, which works like slideshow mode,
-but instead of displaying images in tandem in a single window, all
-images are loaded at once, each in a window of its own. Quitting out of
-a single window closes all of the windows -- to just close a single
-window, type x inside that window.
- Fullscreen mode
- The -F option specifies fullscreen mode, where images are shown in the
-entire display. It works the same as slideshow mode and has all the same
-options.
- Montage mode
- The -m option specifies montage mode, where feh displays an image
-montage of thumbnails for all specified files. This mode has a lot of
-its own options; one of the more useful ones is -O, which doesn't
-display the thumbnail montage but instead saves it to the file you
-specify as an argument.
- Collage mode
- The -c option specifies collage mode, which like montage mode creates a
-new image of thumbnails, but images in the montage are displayed in a
-random, overlapping collage.
- Index mode
- The -i option specifies index mode, which makes an index print -- a new
-image of thumbnails with information about the images beneath them. The
-default is to just print the file's name, but if you call index mode
-with the -I option instead, it also prints each file's image (pixel)
-size and disk size in kilobytes. You can specify the font with the -e
-option.
- Thumbnail mode
- The -t option specifies thumbnail mode, which is one of the more useful
-modes -- it looks just like index mode, but you can view the full-size
-images by clicking on their thumbnails.
- List mode
- The -l option specifies list mode, which outputs a listing of images
-with various information about them including format and size.
- For instance, here's how to get a default-style listing of all .jpg
-image files in the current directory:
- $ feh -l *.jpg
- NUM FORMAT WIDTH HEIGHT PIXELS SIZE(bytes) ALPHA FILENAME
- 1 jpeg 800 534 427200 57600 - 0383.jpg
- 2 jpeg 570 800 456000 69362 - 0868.jpg
- 3 jpeg 800 526 420800 58995 - 0894.jpg
- 4 jpeg 800 599 479200 82414 - 1197.jpg
- 5 jpeg 800 601 480800 86439 - 1294.jpg
- $
- You can also customize the output (which is good for scripting) by
-using the -L option instead -- feh's man page describes how to specify
-the format.
 **** CLI option
-| -Z | autozoom                            |
-| -x | boedrelss                           |
-| -f | go through files (with pgup/pgdown) |
-| -t | montage mode                        |
-|    |                                     |
+| -Z                 | autozoom                                      |
+| -x                 | boedrelss                                     |
+| -f                 | go through files (with pgup/pgdown)           |
+| -m                 | montage mode                                  |
+| --scale-down       | make sure image fits screen                   |
+| -t                 | Thumbnail mode                                |
+| --geometry 500x500 | like scale down mode but better for tiling wm |
+| -Sfilename         | sort by filename                              |
 **** display properties of images of dir in CLI
 use -l
 #+NAME: 
@@ -14375,6 +14286,30 @@ show a image with images of 256x256
 #+BEGIN_SRC sh
 feh -t -Sfilename -E 256 -y 256 -W 1024  /home/zeltak/MLT/cheatsheets/
 #+END_SRC
+**** change key bind
+
+`EYS CONFIG SYNTAX`
+
+.config/feh/keys defines key bindings. It has entries of the form “action [key1 [key2 [key3]]]”.
+
+Each key is an X11 keysym name as shown by xev(1), like “Delete”. It may optionally start with modifiers for things like Control, in which case key looks like mod-keysym (for example “C-Delete” for Ctrl+Delete or “C-1-Delete” for Ctrl+Alt+Delete)
+
+Available modifiers are C for Control, S for Shift and 1, 4 for Mod1 and Mod4. To match an uppercase letter like “S” instead of “s”, the Shift modifier is not required.
+
+Specifying an action without any keys unbinds it (i.e. the default bindings are removed).
+
+Note: Do not use the same keybinding for multiple actions. feh does not check for conflicting bindings, so their behaviour is undefined. Either unbind the unwanted action, or bind it to another unused key. The order in which you bind / unbind does not matter, though.
+
+For a list of the action names, see KEYS.
+**** keys
+? and < ? rotate and save new position of image
+?space? show next image
+?n? show file name
+?e? show exif
+?f? fullscreen
+?o? zoom out
+?i? zoom in
+
 *** Display (part of imagemagic)
 use with basic commad+image
 supports svg as well
@@ -27251,7 +27186,6 @@ C-c C-x C-a     (org-archive-subtree-default)
 Archive the current entry using the command specified in the variable org-archive-default-command
 **** agenda and TODO
 ***** Agenda
-****** Custom agenda views
 ****** sample custom agenda command
 #+BEGIN_SRC emacs-lisp :results none
 (setq org-agenda-custom-commands 
@@ -36420,7 +36354,6 @@ Theme/1 Zeltak Current/0 Current\ Theme/Ice\ PhoeNix\
 ------------------------------------------------------------------------------------------------------------------------------------------
  
 *** video
-
 **** use ffmpeg to screencast (capture)
 
 use ffmpeg to screencast
@@ -36521,13 +36454,9 @@ how to deal with empty spaces in paths
 *** bash scripts
 
 **** tips
-
 the {} in find is used to substitute the path of what was found
 
-**** ok
-
-*the OK command
-*
+the OK command
  An important alternative to the -exec parameter is -ok; it behaves the
 same as -exec, but it prompts you to see if you want to run the command
 on that file. Suppose you want to remove most of the .txt files in your
@@ -36642,23 +36571,34 @@ move a bunch of .avi into corresponding dirs
  Note: the dirs need to be name DIRNAME.avi
 
 **** find and delete all jpg and nfo and txt from folders
+find and delete all jpg and nfo and txt from folders
 
-*find and delete all jpg and nfo and txt from folders
-*
- *to list:*
- find /media/movt/ -name *.nfo -exec ls {} \;
- or
- find /media/movt/ -iname '*fanart.jpg' -exec ls '{}' ';'
- *to Delete:
-*
- find /media/movt/ '(' -name '*.nfo' -o -name '*.jpg' -o -name '*.tbn'
-')' -ok rm {} \;
- *Final Version:
-*
- find /media/movt/ '(' -iname '*.nfo' -o -iname '*.jpg' -o -iname
-'*.tbn' -o -iname '*.txt' ')' -exec rm {} \;
- name=case sensitive, iname=case dosent matter
+`to just list the files (dry run):`
 
+#+BEGIN_SRC sh
+#to find in current dir
+find . '(' -iname '*.nfo' -o -iname '*.jpg' -o -iname '*.nfo' -o -iname '*.tbn' -o -iname '*.txt' ')' -exec ls {} \;
+#to find in a specific dir
+find /path/to/dir '(' -iname '*.nfo' -o -iname '*.jpg' -o -iname '*.nfo' -o -iname '*.tbn' -o -iname '*.txt' ')' -exec ls {} \;
+#+END_SRC
+
+`to Delete:`
+
+#+BEGIN_SRC sh
+#to find in current dir
+find . '(' -iname '*.nfo' -o -iname '*.jpg' -o -iname '*.nfo' -o -iname '*.tbn' -o -iname '*.txt' ')' -exec rm {} \;
+#to find in a specific dir
+find /path/to/dir '(' -iname '*.nfo' -o -iname '*.jpg' -o -iname '*.nfo' -o -iname '*.tbn' -o -iname '*.txt' ')' -exec rm {} \;
+#+END_SRC
+
+$Note$ name=case sensitive, iname=case dosent matter
+
+'clean eveything possible'
+
+
+#+BEGIN_SRC sh
+find . '(' -iname '*.nfo' -o -iname '*.jpg'  -o -iname '*.JPEG'    -o -iname '*.png'  -o -iname '*.PNG'  -o -iname '*.jpeg'  -o -iname '*.JPEG'  -o -iname '*.log'  -o -iname '*.m3u'  -o -iname '*.accurip' -iname '*.nfo' -o -iname '*.tbn' -o -iname '*.txt' ')' -exec rm {} \;
+#+END_SRC
 **** delete all non music files form music collection
 
 *
@@ -42302,3 +42242,38 @@ caudec -g /path/to/folder/*.flac
 *** convert FLAC/APE cue to flac 
 for 'FLAC' use flacon to split the large flac to tracs
 for 'ape' files first use gnome soundconverter to convert from ape to flac (the bug music file) and then flacon to split to tracks
+** Video 
+*** Importing Video workflow
+**** clean crap and junk files 
+use this script to clean the folders from junk files
+
+#+begin_src sh
+#!/bin/bash
+find . '(' -iname '*.nfo' -o -iname '*.jpg'  -o -iname '*.JPEG'    -o -iname '*.png'  -o -iname '*.PNG'  -o -iname '*.jpeg'  -o -iname '*.JPEG'  -o -iname '*.log'  -o -iname '*.m3u'  -o -iname '*.accurip' -iname '*.nfo' -o -iname '*.tbn' -o -iname '*.txt' ')' -exec rm {} \;
+#+end_src
+
+$Note- its already built in wokrer$ 
+
+**** move downloaded files to sorting 
+manually (or with a script) move movie to the sort folders here:
+
+file:/home/zeltak/mounts/lraid/Download/transmission/completed/1.In/
+
+if needed for movies auto move files to folder using this script
+
+#+begin_src sh
+#!/bin/bash
+find . -type f | while read file;
+do
+    f=$(basename "$file")
+    f1=${f%.*}
+    mkdir "$f1"
+    mv "$f" "$f1"
+done 
+#+end_src
+
+$Note- its already built in wokrer$ 
+
+Then proceed to movie or TV processing
+**** Movies
+use 'tinymoviemanager' to process the files for xbmc
