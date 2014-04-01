@@ -5,19 +5,20 @@
 
 * How to use
 
--For the food notebook:-
+`For the food notebook:`
 
-'properties':represent food types and review
-'tags'-
-'TODO'-items that are needed to be tries
+'TAGS':represent food types and review
+'properties'-type of food
+'COOK'-items that are needed to be tries
 
--searches-
+`searches`
 use sparse tree ?C-c /? to initiate searches:
 
-?C-c /? t- to bring up all todo items
-?C-c /? p- to match by properties
-?C-c /? m- to match by tag
-?C-c / m type="indian"/TODO? search by property AND TODO state
+?C-c / t?- to bring up all todo items
+?C-c / p?- to match by properties
+?C-c / m?- to match by tag
+?C-c / m type="indian"/COOK? search by property AND TODO state
+?C-c / M type="main"/COOK? search by property AND TODO state but return only TODO headlines
 
 
 * shopping
@@ -65,6 +66,7 @@ use sparse tree ?C-c /? to initiate searches:
     :Time: 10 
     :Rating: 4
     :Fav: yes
+    :Type:
     :END:
     
     | Quantity | scale      | Ingredient | Instructions |
@@ -84,15 +86,14 @@ let cool a bit before eating
 #+attr_html: :width 300px
  [[/home/zeltak/org/attach/images_2014/screenshot_2014-03-16_19:54:49.png]]
 
-*** COOK Pancakes 						   :American:
-
-
+*** COOK Pancakes						   :American:
     :PROPERTIES:
     :Source: Haim Cohen
     :Serves:
     :Time:
     :Rating:
     :Fav:
+    :Type: breakfest
     :ID:       fef4cf11-7d27-4594-a406-1dfbdc9d9ca0
     :END:
     
@@ -106,7 +107,7 @@ let cool a bit before eating
     |       60 | g     | baking powder |              |
     |       10 | g     | salt          |              |
     
-_*Directions*:_
+_Directions:_
 
 #+BEGIN_EXAMPLE
 In a large bowl beat together the eggs, milk and butter.
@@ -8126,23 +8127,39 @@ lemon juice.
 
 ***** itai chicken in cashew sauce
 
-chicken in cashew sauce *
- [[~/org/attach/images/Chicken%2520and%2520Cashew%2520Curry%2520500.jpg]]
-*Recipe*
-**
-*Preparation:**
- to 2 tbsp of hot oil add 1 ground onion and 2 teaspoons of
-ginger-garlic paste. fry until browned. add 1 large pured tomato and
-cook a bit
- add about 1 teaspoon of cardamom-cinnamon-nutmeg mixture and 1.5
-teaspoons of meat masala, and a bit of salt.
- let cook for 10 minutes on low heat
- bleach in hot water about a quarter cup of casehew nuts, and then
-ground them (grounded with a little water)
- add that mixture as well as about 2 tablespoons of cream to the masala.
- at the last step add some chicken breast strips (you can pre marinate
+      :PROPERTIES:
+      :Source: Itai 
+      :Serves:
+      :Time:
+      :Rating: 5 
+      :Fav: F
+      :Type: main
+      :ID:   
+      :END:
+      
+     
+      | Quantity | scale | Ingredient | Instructions |
+      |----------+-------+------------+--------------|
+      |          |       |            |              |
+      |          |       |            |              |
+      |          |       |            |              |
+      |          |       |            |              |
+      
+      _Directions:_
+      #+BEGIN_EXAMPLE
+To 2 tbsp of hot oil add 1 ground onion and 2 teaspoons of ginger-garlic paste. fry until browned. add 1 large pured tomato and
+cook a bit add about 1 teaspoon of cardamom-cinnamon-nutmeg mixture and 1.5
+teaspoons of meat masala, and a bit of salt. let cook for 10 minutes on low heat
+bleach in hot water about a quarter cup of casehew nuts, and then ground them (grounded with a little water)
+add that mixture as well as about 2 tablespoons of cream to the masala.
+at the last step add some chicken breast strips (you can pre marinate
 then with lemon and garlic but not a must)
- cook for a minute or two until done and serve
+cook for a minute or two until done and serve
+
+     
+      #+END_EXAMPLE
+      
+[[~/org/attach/images/Chicken%2520and%2520Cashew%2520Curry%2520500.jpg]]
 
 ***** makloba
 
@@ -9474,11 +9491,73 @@ potatoes with any India bread.
 
 ****** butter chicken (youtube-sunjay)
 
-:PROPERTIES:
-:type: india
-:END:
-Butter chicken (youtube-sunjay)
- 1)marinate the chicken with garlic-ginger paste,corriander seeds
+       :PROPERTIES:
+       :Source: https://www.youtube.com/watch?v=DYju2MySBDc 
+       :Serves:
+       :Time:
+       :Rating:
+       :Fav:
+       :Type: 
+       :ID:   
+       :END:
+       
+       | Quantity | scale | Ingredient | Instructions |
+       |----------+-------+------------+--------------|
+       |          |       |            |              |
+       |          |       |            |              |
+       |          |       |            |              |
+       |          |       |            |              |
+      
+
+ 
+       Directions:_
+       #+BEGIN_EXAMPLE
+ Chicken breast 2 n
+Yogurt 1 c
+Butter 2 tb
+Cumin powder 1 ts
+Coriander powder 1 tb
+Chilly powder 2 tb
+Ginger garlic paste 1 ts
+Kasoori methi 1 ts
+Fried onions 2 tb
+Salt
+Sugar 1 ts
+Butter 2 tb
+All purpose flour ½ ts
+Tomato puree 1 cu
+Khoya 1 tb
+Cream 2 tb
+
+First marinate the chicken breast with yogurt, salt, chilly powder, and rest for 3 to 4 hours. Heat butter in a pan ad chicken breast, cook it for 15 to 20 minutes in a slow flame.
+Take a bowl add ginger garlic paste, cumin powder, chilly powder, coriander powder, kasoori methi powder, crushed brown onions (fried onions), salt, sugar and add water, make this into a paste, and keep it aside.
+Take pan heat butter and add flour, add masala paste, and mix this well, cook for 2 to 3 minutes and add grated khoya, tomato puree, cook it on a slow flame for 15 minutes. In this put the chicken breast pieces and add cream and mix it, cook for 2 minutes and switch off the flame.
+Serve hot this with naan, chapatti, roti, and rice.      
+       #+END_EXAMPLE
+****** butter chicken (old sunjay)
+
+       :PROPERTIES:
+       :Source: sujay youtube 
+       :Serves:
+       :Time:
+       :Rating:
+       :Fav:
+       :Type: 
+       :ID:   
+       :END:
+       
+       | Quantity | scale | Ingredient | Instructions |
+       |----------+-------+------------+--------------|
+       |           |       |            |              |
+       |          |       |            |              |
+       |          |       |            |              |
+       |          |       |            |              |
+       
+       Directions:_
+       #+BEGIN_EXAMPLE
+        
+
+1)marinate the chicken with garlic-ginger paste,corriander seeds
 powder,paprika or chili.
  2)fry the chickn a bit (dont cook fully) and remove
  3)add to the juices in the pan:
@@ -9502,7 +9581,9 @@ powder,paprika or chili.
  add a bit of garam masala
  if needed
  add yougurt and butter
-
+     
+       #+END_EXAMPLE
+       
 ****** almond coriander chicken
 
 :PROPERTIES:

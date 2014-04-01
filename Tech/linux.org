@@ -5030,6 +5030,192 @@ If the destination Client is a x86 series model, please execute the following co
 
 Note
 The procedure is the same when setting up key authentication between two NAS boxes. Simply follow the steps above substituting a NAS device for the Host and Client as per the above example.
+**** setup mysql
+***** Installing MySQL and phpMyAdmin
+****** Enabling MySQL
+
+Enabling MySQL is straight forward; your QNAP NAS already comes with MySQL pre-installed.
+
+Let’s get started … Open the Administration page of your QNAP and go to “Application Servers“. In that section select “MySQL Server“.
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-03-22 21:18:54
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-03-22_21:18:54.png]]
+
+Now check “Enable MySQL Server” and check “Enable TCP/IP Networking” – make sure the “Port Number” is set to “3306” (you can change this later if you’d like, but for now we will use the default MySQL port).
+
+Click the “Apply” button and wait for the MySQL server to activate. In essence: we’re done.
+
+****** QNAP Default Username/Password for MySQL 
+
+The default username for MySQL on your QNAP is “root” and the default password is “admin“.In case you changed the password of root and forgot what it was;
+In the “Application Servers“ → ”MySQL Server” page a “Reset root password” will allow you to reset it to it’s defaults.
+
+****** SSH / Command line access
+
+You can access MySQL from the command line (using SSH) as well. It can be found at:
+
+#+BEGIN_EXAMPLE
+/mnt/ext/opt/mysql/bin/
+#+END_EXAMPLE
+
+****** Web Server (Apache)
+
+To make access to your MySQL database easier we’d also like to install phpMyAdmin so we can actually play with MySQL in a more convenient way, however phpMyAdmin runs on a web-server and needs PHP … so we need to do something about that first.
+
+Both Apache and PHP are already installed on your QNAP under the package “Web Server“ - again, we just need to enable it.
+
+Go to “Network Services” and select “Web Server“.
+
+Check “Enable Web Server“, make sure “Port Number” is set to “80“, remember or bookmark the link for access to the web-server (optional – during the phpMyAdmin installation, a link well be shown again) and click “Apply“.
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-03-22 21:20:55
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-03-22_21:20:55.png]]
+
+
+So, now the web server on your QNAP is running as well – which automatically includes PHP.
+You can test this by going to the link indicated when you enabled the web server (see image above).
+Typically this link looks like this: http://<ip of your NAS>
+
+You should see something like this:
+QNAP - Your webserver is running and welcomes you ...
+
+If you always used http://<ip of your NAS> to get to the admin pages of your QNAP, then you will notice that this no longer works.
+Instead use: https://<ip of your NAS> or http://<ip of your NAS>:8080
+
+****** install the phpMyAdmin QPKG
+
+download through the QPKG page - you can do this “Application Server“ → “QPKG Plugins” section. See How to Install a QNAP QPKG for more details.
+
+When the installation is completed, take note of (or bookmark) the link to access phpMyAdmin:
+http://<ip of your NAS>/phpMyAdmin
+
+%Tip-you can also access the page throgh the desktop shortcut%
+
+OK, we’re almost there … let’s try that link and see if we can access phpMyAdmin.
+First you should see a login page – remember the default username (root) and password (admin) and click “Go” to login:
+
+After login:
+If this all worked out just fine; then we’re good to go …
+***** ! bug cant login!
+reset password in the mysql admin page !AND! reset the php.ini file in the web server admin page 
+**** xbmc via qnap
+***** Preparing a Database
+Go to phpMyAdmin and click the “SQL” tab. In the upcoming text-box type (or paste) the following SQL statements and click the “Go” button in the lower right corner to execute the SQL statements:
+	
+#+BEGIN_EXAMPLE
+CREATE USER 'xbmc' IDENTIFIED BY 'xbmc';
+GRANT ALL ON *.* TO 'xbmc';
+#+END_EXAMPLE
+
+What does this do?
+CREATE USER 'xbmc' IDENTIFIED BY 'xbmc';
+Translated: Create the user “xbmc” with the password “xbmc”
+
+After execution, PHPMyAdmin will jump back to the PHPMyAdmin start page – unless you somehow made a typo. You can click the tab “Privileges” and under the “User Overview”  you should now see (at the bottom) the user “xbmc“.
+
+$Note: I used the password “xbmc” in this example (without the quotes, right after “IDENTIFIED BY”), feel free to use a different password if you’re concerned with security. Make sure to use that new password consistently throughout the next steps.$
+
+#+BEGIN_EXAMPLE
+GRANT ALL ON *.* TO 'xbmc';
+#+END_EXAMPLE
+
+Again a loose translation: Grant the user “xbmc” full access
+This will give the user “xbmc” sufficient access to create and modify databases.
+
+OK, so from a MySQL perspective we’re set …
+***** Configure XBMC
+$Note Use the exact same paths to Movies, Music, and TV-Series!$
+
+Before we proceed with the MySQL connection for our XBMC boxes we should make sure that the path to our Movies, Music, and TV-Series are consistent for all XBMC’s you’re using. So make sure that all “sources” for all your XBMC HTPC’s are setup equally!
+
+This is a must, otherwise the different paths will be seen as different files!
+
+I recommend starting with 1 single XBMC setup. Make clear notes on what shares (path) have been setup for the different sources and media types – we want to replicate those on the other XBMC’s.
+
+Another reason to start with just 1 XBMC box is that we can use PHPMyAdmin to see what XBMC is really saving in the database, and that in turn will give us a better understanding of what might be a reason why certain things do or do not work.
+
+***** Step 1: Export your current Library (optional)
+This is optional, but it might save a lot of time if we simply re-import the hard work once the MySQL Connection is up and running. This way we don’t have to re-scan your entire library and instead use what we already have.
+
+In XBMC go to the “System” menu, select “Settings” → ”Video” where you select “Export Library” option. XBMC will now ask if you want to save this as a single file (yes) and where to save it – pick your destination. After the export you’ll find a folder name (something like) “xbmc_videodb_2012-01-23“.
+
+***** Step 2: Create a file “advancedsettings.xml”
+
+Open a plain text editor and paste the following text, after adapting it to your scenario:
+
+#+begin_src html
+<advancedsettings>
+    <videodatabase>
+        <type>mysql</type>
+        <host>192.168.1.100</host>
+        <port>3306</port>
+        <user>xbmc</user>
+        <pass>xbmc</pass>
+        <name>xbmc_video</name>
+    </videodatabase>
+
+    <musicdatabase>
+        <type>mysql</type>
+        <host>192.168.1.100</host>
+        <port>3306</port>
+        <user>xbmc</user>
+        <pass>xbmc</pass>
+        <name>xbmc_music</name>
+    </musicdatabase>
+</advancedsettings>
+#+end_src
+
+@notes:@
+#+BEGIN_EXAMPLE
+Replace 192.168.1.100 with the IP address of your MySQL Server.
+If you changed the default port number of your MySQL server, then change 3306 to the port number you picked (3306 is the default port, so if you didn’t change it during the MySQL setup, don’t change it here either).
+Enter the proper username between <user> and </user> (if you did not use the suggested “xbmc”)
+Enter the correct password between <pass> and </pass> (if you decided to use something else than “xbmc”)
+#+END_EXAMPLE
+
+Now save this file as “advancedsettings.xml“:
+
+
+'Linux'
+The file needs to go into this folder: ~/.xbmc/userdata
+Accessing this under a live version is a little harder, use either SSH access, or press CTRL+ALT+F2 to go to the shell (use CTRL-ALT-F7 to go back to XBMC) and do this all manually with either VI or nano.
+Some great version can be found at XBMCFreak, or you can use the XBMC Live version.
+
+'OpenElec'
+A shared folder called “userdata” can be found in your network for the machine running OpenElec
+₆In example₆ in samba file:/WORKGROUP/OPENELEC/Userdata/
+
+drop the file in there and reboot the machine.
+
+'Windows Vista, 7, 8 and newer'
+Move this file to “%APPDATA%\XBMC\userdata” (you can paste this in the Windows Explorer).
+
+***** Step 3: Restart XBMC and optionally import the exported library
+Shutdown and restart your XBMC HTPC.
+
+If you find that the startup of your XBMC takes forever then please verify a few things:
+
+Did you use the right IP address, username, password, and database name in the advancedsettings.xml?
+Does your server or XBMC box have a firewall that blocks port 3306?
+Did you execute the SQL statements properly? (most common issue: lack of access rights)
+Is MySQL actually running?
+Does your XBMC version support MySQL syncing?
+ 
+If you see in phpMyAdmin that several tables, and maybe even new databases, have been created, then you’re ready to import the previously (optional) export library – the import steps are similar to the previously executed import steps.
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-03-22 22:31:03
+#+attr_html: :width 300px
+[[/home/zeltak/org/attach/images_2014/screenshot_2014-03-22_22:31:03.png]]
+
+Repeat step 2 and 3 (use the same advancedsettings.xml file) for your other XBMC boxes – even if they run on different operating systems!
+***** !important bug in openelec!
+if you have a fast ssd openelec will boot up to fast before the netowrk and wont be able to connect to MYSQL\
+The OpenELEC Settings GUI has a 'Wait for network' option, make sure that is checked before using mysql
+ 
 *** Synology
 **** How to access files on Synology NAS within the local network (NFS)
 
@@ -5109,7 +5295,36 @@ Finally, enter the disk free (df) command to confirm you have successfully mount
  [[/home/zeltak/org/attach/images_2014/image11_2014-03-13_14:21:10.png]]
 
 Can't Mount the Shared Folder? The user account you enter here must have access privileges for the shared folder that you wish to map.
+*** ipkg
+Getting a list of programs
+you haven't yet, run ipkg update to get a current list of applications.
 
+#+BEGIN_EXAMPLE
+ipkg list | more 
+#+END_EXAMPLE
+
+provides a list of applications: ENTER moves one line; SPACE moves a page; Q quits.
+
+#+BEGIN_EXAMPLE
+ipkg list_installed
+#+END_EXAMPLE
+
+provides a list of already IPKG-installed applications.
+$Note$ You may use the command grep to help get the information you need.ex:
+
+#+BEGIN_EXAMPLE
+ipkg list | grep -i "git" 
+#+END_EXAMPLE
+
+Some installs to try
+
+ipkg install nano loads the GNU nano editor, which is much more user-friendly than the bundled vi.
+ipkg install less loads the less file viewer, which is murch more user-friendly than the more command.
+After installation try ipkg list | less to test the less command. 
+
+Updating installed applications
+
+ipkg update && ipkg upgrade will update any IPKG-installed applications to the latest ported versions.  
 
 * Software
 ** CLI
@@ -6639,25 +6854,14 @@ use iset to configure
 "[time],[buffer count],[buffer plugin],buffer number+:+buffer name+{buffer nicklist count}+buffer filter,[lag],[hotlist],completion,scroll,[alternatetz]"
 
 ****** filter join/part/quit messages
+to enable
+#+BEGIN_EXAMPLE
+/set irc.look.smart_filter on
+/filter add irc_smart * irc_smart_filter *
+#+END_EXAMPLE
 
-*How can I filter join/part/quit messages on IRC channels?
- (/help filter for help)
- global filter (hide all join/part/quit):
-*------------------------------------------------------------------------------------------------------------------------------------------
- /filter add jpk * irc join,irc part,irc quit *
+also ?Alt+=? will enable disable it
 
-------------------------------------------------------------------------------------------------------------------------------------------
- smart filter (keep join/part/quit from users who spoke recently):
- (/help irc.look.smart filter and /help filter for help)
-
-------------------------------------------------------------------------------------------------------------------------------------------
- /set irc.look.smart filter on
- /filter add irc smart * irc smart filter *
-
-------------------------------------------------------------------------------------------------------------------------------------------
- 
- *
-*
 
 ****** aspell
 
@@ -14059,122 +14263,15 @@ with -S:
  smix(t,2)
 
 *** feh
-**** intro
-
-Too many Linux image viewers are tinged with little annoyances -- they
-take too long to load, are slow to redraw the display, have limited
-format support, sport inconvenient controls -- so when you want to
-settle on one, inevitably there's something to make you utter feh! in
-general discontent. Good call -- feh is the name of a speedy little
-viewer that packs in a surprising number of features for its size.
- Feh takes as arguments the names of image files you want to view. You
-can also give directory names, and feh attempts to load all the files in
-that directory; the -r option recurses through all subdirectories.
-Viewing all image files in the /usr/local/photos directory tree, for
-instance, is done like this:
- $ feh -r /usr/local/photos
- If you specify more than one image, only the first will immediately
-display; type n (or the spacebar) to move to the next and p to move to
-the previous. The Home and End keys bring you to the first and last
-images in the argument list. To quit viewing and exit, type q.
- You can put a list of images to load in a file, with full or relative
-pathnames, and specify the file with the -f option; the -z option will
-randomize the display order. The images can be advanced automatically by
-giving a delay, in seconds, as an argument to the -D option. This
-slideshow mode is the default mode; feh is a modal viewer, so its
-options and controls differ depending on the mode. Its other modes are
-discussed below.
- You can also view images over any http or ftp URL by giving the URL as
-an argument, like so:
- $ feh
-[[http://www.glerl.noaa.gov/pubs/photogallery/Scenic/images/0534.jpg][http://www.glerl.noaa.gov/pubs/photogallery/Scenic/images/0534.jpg]]
- If you have a file that contains a list of image URLs, you can have feh
-display them in a random-order slideshow, with a delay of 30 seconds
-each, with this command:
- $ cat image-urls | xargs feh -z -D30
- Mouse controls
- What's really special about feh is the way it pans and zooms images --
-it's impressively fast and fluid.
- If an image is too large to fit the display, click the left mouse
-button and move the pointer to pan around the image.
- To resize the view, click the middle button and move the pointer toward
-the left or right to shrink or grow the image.
- You can click and release the left mouse button once to move to the
-next image. A few viewing effects are also available: hold down the Ctrl
-key and press the left mouse button: when you do so, moving the pointer
-to the left blurs the image, while moving to the right sharpens it. With
-Ctrl and the middle mouse button pressed, you can move the pointer to
-spin the image around its center.
- When viewing an image, click the right mouse button to display feh's
-menus.
- Menus, edits, and modes
- Feh is strictly an image viewer -- it doesn't attempt to be an editor
-at all, but a couple of the most common editing commands are available
-on the menu: rotation and deletion. Happily, there are no confirmation
-dialogs or windows that pop up when you do anything with these menus --
-the delete command is cleverly given an extra sub-menu with one item,
-"confirm," so you get that extra protection against accidents but don't
-waste time with a verification click.
- These commands also have keyboard equivalents. Type > to rotate an
-image 90 degrees clockwise, and < to rotate it 90 degrees
-counterclockwise. Your changes are immediately saved to the file. To
-delete the current image file, type Ctrl-Del.
- While these commands work in slideshow mode, there are other operation
-modes as well, all of which are specified by command-line options.
-Here's a quick rundown of them:
- Multiwindow mode
- The -w option starts multiwindow mode, which works like slideshow mode,
-but instead of displaying images in tandem in a single window, all
-images are loaded at once, each in a window of its own. Quitting out of
-a single window closes all of the windows -- to just close a single
-window, type x inside that window.
- Fullscreen mode
- The -F option specifies fullscreen mode, where images are shown in the
-entire display. It works the same as slideshow mode and has all the same
-options.
- Montage mode
- The -m option specifies montage mode, where feh displays an image
-montage of thumbnails for all specified files. This mode has a lot of
-its own options; one of the more useful ones is -O, which doesn't
-display the thumbnail montage but instead saves it to the file you
-specify as an argument.
- Collage mode
- The -c option specifies collage mode, which like montage mode creates a
-new image of thumbnails, but images in the montage are displayed in a
-random, overlapping collage.
- Index mode
- The -i option specifies index mode, which makes an index print -- a new
-image of thumbnails with information about the images beneath them. The
-default is to just print the file's name, but if you call index mode
-with the -I option instead, it also prints each file's image (pixel)
-size and disk size in kilobytes. You can specify the font with the -e
-option.
- Thumbnail mode
- The -t option specifies thumbnail mode, which is one of the more useful
-modes -- it looks just like index mode, but you can view the full-size
-images by clicking on their thumbnails.
- List mode
- The -l option specifies list mode, which outputs a listing of images
-with various information about them including format and size.
- For instance, here's how to get a default-style listing of all .jpg
-image files in the current directory:
- $ feh -l *.jpg
- NUM FORMAT WIDTH HEIGHT PIXELS SIZE(bytes) ALPHA FILENAME
- 1 jpeg 800 534 427200 57600 - 0383.jpg
- 2 jpeg 570 800 456000 69362 - 0868.jpg
- 3 jpeg 800 526 420800 58995 - 0894.jpg
- 4 jpeg 800 599 479200 82414 - 1197.jpg
- 5 jpeg 800 601 480800 86439 - 1294.jpg
- $
- You can also customize the output (which is good for scripting) by
-using the -L option instead -- feh's man page describes how to specify
-the format.
 **** CLI option
-| -Z | autozoom                            |
-| -x | boedrelss                           |
-| -f | go through files (with pgup/pgdown) |
-| -t | montage mode                        |
-|    |                                     |
+| -Z                 | autozoom                                      |
+| -x                 | boedrelss                                     |
+| -f                 | go through files (with pgup/pgdown)           |
+| -m                 | montage mode                                  |
+| --scale-down       | make sure image fits screen                   |
+| -t                 | Thumbnail mode                                |
+| --geometry 500x500 | like scale down mode but better for tiling wm |
+| -Sfilename         | sort by filename                              |
 **** display properties of images of dir in CLI
 use -l
 #+NAME: 
@@ -14189,6 +14286,30 @@ show a image with images of 256x256
 #+BEGIN_SRC sh
 feh -t -Sfilename -E 256 -y 256 -W 1024  /home/zeltak/MLT/cheatsheets/
 #+END_SRC
+**** change key bind
+
+`EYS CONFIG SYNTAX`
+
+.config/feh/keys defines key bindings. It has entries of the form “action [key1 [key2 [key3]]]”.
+
+Each key is an X11 keysym name as shown by xev(1), like “Delete”. It may optionally start with modifiers for things like Control, in which case key looks like mod-keysym (for example “C-Delete” for Ctrl+Delete or “C-1-Delete” for Ctrl+Alt+Delete)
+
+Available modifiers are C for Control, S for Shift and 1, 4 for Mod1 and Mod4. To match an uppercase letter like “S” instead of “s”, the Shift modifier is not required.
+
+Specifying an action without any keys unbinds it (i.e. the default bindings are removed).
+
+Note: Do not use the same keybinding for multiple actions. feh does not check for conflicting bindings, so their behaviour is undefined. Either unbind the unwanted action, or bind it to another unused key. The order in which you bind / unbind does not matter, though.
+
+For a list of the action names, see KEYS.
+**** keys
+? and < ? rotate and save new position of image
+?space? show next image
+?n? show file name
+?e? show exif
+?f? fullscreen
+?o? zoom out
+?i? zoom in
+
 *** Display (part of imagemagic)
 use with basic commad+image
 supports svg as well
@@ -20534,7 +20655,21 @@ the buttons start and end like this
 **** buttons
 
 [[utils_files/worker_buttonsF%25202.png]]
+***** create a copy structure command
+The command structure is a little bit more strict due to security
+concerns. You can't use the asterisk, it will be protected by quotes
+which will then not be expanded by the shell.
 
+But you can use the following command instead:
+
+#+BEGIN_EXAMPLE
+find {a} -type d -exec mkdir {op}/\{\} ';'
+#or
+find . -type d -exec mkdir {op}/\{\} ';'
+#+END_EXAMPLE
+
+The first one uses the selected entries as a basis, the latter one uses
+the current directory. 
 **** launch programs with start porg command
 
 when a file is not in the filetype defined list you can use the start
@@ -20561,7 +20696,8 @@ the
  Otherwise you will be asked for the password again and again by the
  ssh-askpass program or it doesn't work at all (if your system doesn't
  have this command).
-
+**** start program menu
+you need to have checked the "global program" option for the file to run,If not, worker will try to start ./APP (₆In example₆./vlc)
 *** krusader
 
 **** tips
@@ -23145,18 +23281,20 @@ log into machine with ssh
 ssh -X -C zeltak@132.72.155.204
 #+END_SRC
 
+#+RESULTS:
+
 stop the TV processes and deamon (with htop,init or systemd)
 
 #+BEGIN_SRC sh
-teamviewer --daemon stop
+sudo teamviewer --daemon stop
 #+END_SRC
 
-and use htop to kill all non deamon TV processes
+use 'htop' to kill all non deamon TV processes
 
 and start the TV deamon again:
 #+NAME: 
 #+BEGIN_SRC sh
-teamviewer --daemon start
+sudo teamviewer --daemon start
 #+END_SRC
 $Note- this maybe done with systemd in future debian releases when systemd takes over$
 
@@ -26966,6 +27104,75 @@ the agenda folder is defined in the org config:
 (setq org-agenda-files '("~/org/files/agenda/"))
 #+END_SRC
 
+**** BASE
+***** Manual
+***** Install
+****** Downloading Org as an archive					:Fav:
+
+You can download Org latest release from [[http://orgmode.org/][Org's website]] and simply extract them to where you want, in my case
+
+file:/home/zeltak/.emacs.d/nonelpa/org
+
+Also in first install make sure you set the load-path correctly in your .emacs:
+
+#+BEGIN_SRC lisp
+(add-to-list 'load-path "~/path/to/orgdir/lisp")
+#+END_SRC
+
+The downloaded archive contains contributed libraries that are not included in Emacs. If you want to use them, add the contrib directory to
+your load-path:
+
+#+BEGIN_SRC lisp
+(add-to-list 'load-path "~/path/to/orgdir/contrib/lisp" t)
+#+END_SRC
+
+****** Using Emacs packaging system
+
+Recent Emacs distributions include a packaging system which lets you
+install Elisp libraries. You can install Org with M-x package-install
+RET org. You need to do this in a session where no =.org= file has been
+visited. Then, to make sure your Org configuration is taken into
+account, initialize the package system with =(package-initialize)= in
+your .emacs before setting any Org option. If you want to use Org's
+package repository, check out the [[http://orgmode.org/elpa.html][Org ELPA page]].
+
+****** Using Org's git repository
+       
+
+You can clone Org's repository and install Org like this:
+
+#+BEGIN_EXAMPLE
+cd ~/src/
+git clone git://orgmode.org/org-mode.git
+make autoloads
+#+END_EXAMPLE
+
+Note that in this case, =make autoloads= is mandatory: it defines Org's
+version in org-version.el and Org's autoloads in org-loaddefs.el.
+
+Remember to add the correct load-path as described in the method above.
+
+You can also compile with =make=, generate the documentation with
+=make doc=, create a local configuration with =make config= and install
+Org with =make install=. Please run =make help= to get the list of
+compilation/installation options.
+
+For more detailed explanations on Org's build system, please check the
+Org Build System page on
+[[http://orgmode.org/worg/dev/org-build-system.html][Worg]].
+
+***** Basic setup
+Here are a few things about basic setup that many people change.
+
+org-directory
+Where are my Org files typically located? Org acutally uses this variable only under rare circumstances, like when filing remember notes in an interactive way and prompting you for an Org file to put the note into.
+org-agenda-files
+Which files do I want to be checked for entries when compiling my agenda? Many people do not customize this one, but just use C-c [ and C-c ] to add or remove the current file, respectively.
+org-startup-folded
+When visiting an Org file, in what folding state do I first want to see it? Many use #+STARTUP options to set this on a per-file basis.
+org-archive-location
+When archiving an entry, where will it go?
+
 **** archiving
 ***** base
 use the following lines in your config to define where the archives go
@@ -26979,7 +27186,6 @@ C-c C-x C-a     (org-archive-subtree-default)
 Archive the current entry using the command specified in the variable org-archive-default-command
 **** agenda and TODO
 ***** Agenda
-****** Custom agenda views
 ****** sample custom agenda command
 #+BEGIN_SRC emacs-lisp :results none
 (setq org-agenda-custom-commands 
@@ -27142,75 +27348,6 @@ for example for lisp
     (not (string= lang "emacs-lisp")))  ; don't ask for lisp
 (setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
 #+END_SRC
-
-**** BASE
-***** Manual
-***** Install
-****** Downloading Org as an archive					:Fav:
-
-You can download Org latest release from [[http://orgmode.org/][Org's website]] and simply extract them to where you want, in my case
-
-file:/home/zeltak/.emacs.d/nonelpa/org
-
-Also in first install make sure you set the load-path correctly in your .emacs:
-
-#+BEGIN_SRC lisp
-(add-to-list 'load-path "~/path/to/orgdir/lisp")
-#+END_SRC
-
-The downloaded archive contains contributed libraries that are not included in Emacs. If you want to use them, add the contrib directory to
-your load-path:
-
-#+BEGIN_SRC lisp
-(add-to-list 'load-path "~/path/to/orgdir/contrib/lisp" t)
-#+END_SRC
-
-****** Using Emacs packaging system
-
-Recent Emacs distributions include a packaging system which lets you
-install Elisp libraries. You can install Org with M-x package-install
-RET org. You need to do this in a session where no =.org= file has been
-visited. Then, to make sure your Org configuration is taken into
-account, initialize the package system with =(package-initialize)= in
-your .emacs before setting any Org option. If you want to use Org's
-package repository, check out the [[http://orgmode.org/elpa.html][Org ELPA page]].
-
-****** Using Org's git repository
-       
-
-You can clone Org's repository and install Org like this:
-
-#+BEGIN_EXAMPLE
-cd ~/src/
-git clone git://orgmode.org/org-mode.git
-make autoloads
-#+END_EXAMPLE
-
-Note that in this case, =make autoloads= is mandatory: it defines Org's
-version in org-version.el and Org's autoloads in org-loaddefs.el.
-
-Remember to add the correct load-path as described in the method above.
-
-You can also compile with =make=, generate the documentation with
-=make doc=, create a local configuration with =make config= and install
-Org with =make install=. Please run =make help= to get the list of
-compilation/installation options.
-
-For more detailed explanations on Org's build system, please check the
-Org Build System page on
-[[http://orgmode.org/worg/dev/org-build-system.html][Worg]].
-
-***** Basic setup
-Here are a few things about basic setup that many people change.
-
-org-directory
-Where are my Org files typically located? Org acutally uses this variable only under rare circumstances, like when filing remember notes in an interactive way and prompting you for an Org file to put the note into.
-org-agenda-files
-Which files do I want to be checked for entries when compiling my agenda? Many people do not customize this one, but just use C-c [ and C-c ] to add or remove the current file, respectively.
-org-startup-folded
-When visiting an Org file, in what folding state do I first want to see it? Many use #+STARTUP options to set this on a per-file basis.
-org-archive-location
-When archiving an entry, where will it go?
 
 **** bugs
 ***** files opend are slow- disable line mode
@@ -36217,7 +36354,6 @@ Theme/1 Zeltak Current/0 Current\ Theme/Ice\ PhoeNix\
 ------------------------------------------------------------------------------------------------------------------------------------------
  
 *** video
-
 **** use ffmpeg to screencast (capture)
 
 use ffmpeg to screencast
@@ -36318,13 +36454,9 @@ how to deal with empty spaces in paths
 *** bash scripts
 
 **** tips
-
 the {} in find is used to substitute the path of what was found
 
-**** ok
-
-*the OK command
-*
+the OK command
  An important alternative to the -exec parameter is -ok; it behaves the
 same as -exec, but it prompts you to see if you want to run the command
 on that file. Suppose you want to remove most of the .txt files in your
@@ -36439,23 +36571,34 @@ move a bunch of .avi into corresponding dirs
  Note: the dirs need to be name DIRNAME.avi
 
 **** find and delete all jpg and nfo and txt from folders
+find and delete all jpg and nfo and txt from folders
 
-*find and delete all jpg and nfo and txt from folders
-*
- *to list:*
- find /media/movt/ -name *.nfo -exec ls {} \;
- or
- find /media/movt/ -iname '*fanart.jpg' -exec ls '{}' ';'
- *to Delete:
-*
- find /media/movt/ '(' -name '*.nfo' -o -name '*.jpg' -o -name '*.tbn'
-')' -ok rm {} \;
- *Final Version:
-*
- find /media/movt/ '(' -iname '*.nfo' -o -iname '*.jpg' -o -iname
-'*.tbn' -o -iname '*.txt' ')' -exec rm {} \;
- name=case sensitive, iname=case dosent matter
+`to just list the files (dry run):`
 
+#+BEGIN_SRC sh
+#to find in current dir
+find . '(' -iname '*.nfo' -o -iname '*.jpg' -o -iname '*.nfo' -o -iname '*.tbn' -o -iname '*.txt' ')' -exec ls {} \;
+#to find in a specific dir
+find /path/to/dir '(' -iname '*.nfo' -o -iname '*.jpg' -o -iname '*.nfo' -o -iname '*.tbn' -o -iname '*.txt' ')' -exec ls {} \;
+#+END_SRC
+
+`to Delete:`
+
+#+BEGIN_SRC sh
+#to find in current dir
+find . '(' -iname '*.nfo' -o -iname '*.jpg' -o -iname '*.nfo' -o -iname '*.tbn' -o -iname '*.txt' ')' -exec rm {} \;
+#to find in a specific dir
+find /path/to/dir '(' -iname '*.nfo' -o -iname '*.jpg' -o -iname '*.nfo' -o -iname '*.tbn' -o -iname '*.txt' ')' -exec rm {} \;
+#+END_SRC
+
+$Note$ name=case sensitive, iname=case dosent matter
+
+'clean eveything possible'
+
+
+#+BEGIN_SRC sh
+find . '(' -iname '*.nfo' -o -iname '*.jpg'  -o -iname '*.JPEG'    -o -iname '*.png'  -o -iname '*.PNG'  -o -iname '*.jpeg'  -o -iname '*.JPEG'  -o -iname '*.log'  -o -iname '*.m3u'  -o -iname '*.accurip' -iname '*.nfo' -o -iname '*.tbn' -o -iname '*.txt' ')' -exec rm {} \;
+#+END_SRC
 **** delete all non music files form music collection
 
 *
@@ -38198,7 +38341,7 @@ A new project will be created for the directory and RStudio's version control fe
 ***** fix conflict issues
 ****** Pull is not possible because you have unmerged files error
 Pull is not possible because you have unmerged files.
-Please, fix them up in the work tree, and then use 'git add/rm <file>'
+Please, fix them up in the work tree, and then use git add/rm <file>
 
 there are 2 related issues that you need to fix:
 ******* address conflicts using a merge tool
@@ -42099,3 +42242,38 @@ caudec -g /path/to/folder/*.flac
 *** convert FLAC/APE cue to flac 
 for 'FLAC' use flacon to split the large flac to tracs
 for 'ape' files first use gnome soundconverter to convert from ape to flac (the bug music file) and then flacon to split to tracks
+** Video 
+*** Importing Video workflow
+**** clean crap and junk files 
+use this script to clean the folders from junk files
+
+#+begin_src sh
+#!/bin/bash
+find . '(' -iname '*.nfo' -o -iname '*.jpg'  -o -iname '*.JPEG'    -o -iname '*.png'  -o -iname '*.PNG'  -o -iname '*.jpeg'  -o -iname '*.JPEG'  -o -iname '*.log'  -o -iname '*.m3u'  -o -iname '*.accurip' -iname '*.nfo' -o -iname '*.tbn' -o -iname '*.txt' ')' -exec rm {} \;
+#+end_src
+
+$Note- its already built in wokrer$ 
+
+**** move downloaded files to sorting 
+manually (or with a script) move movie to the sort folders here:
+
+file:/home/zeltak/mounts/lraid/Download/transmission/completed/1.In/
+
+if needed for movies auto move files to folder using this script
+
+#+begin_src sh
+#!/bin/bash
+find . -type f | while read file;
+do
+    f=$(basename "$file")
+    f1=${f%.*}
+    mkdir "$f1"
+    mv "$f" "$f1"
+done 
+#+end_src
+
+$Note- its already built in wokrer$ 
+
+Then proceed to movie or TV processing
+**** Movies
+use 'tinymoviemanager' to process the files for xbmc
