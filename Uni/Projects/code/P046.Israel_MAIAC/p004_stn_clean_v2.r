@@ -1,17 +1,4 @@
-###############
-#LIBS
-###############
-library(lme4)
-library(reshape)
-library(foreign) 
-library(ggplot2)
-library(plyr)
-library(data.table)
-library(reshape2)
-library(Hmisc)
-library(mgcv)
-library(gdata)
-library(car)
+
 
 #PM
 pm10 <- fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/0.raw/PM/PMData10.csv")
@@ -22,8 +9,9 @@ pm10[,c("Year","Month","Day","V10","date"):=NULL]
 setnames(pm10,"StationID","x_stn_ITM")
 setnames(pm10,"X","y_stn_ITM")
 setnames(pm10,"Y", "stn")
-
 summary(pm10)
+tab.pm10<-pm10[,length(na.omit(pm10)),by=list(stn)]
+
 
 
 #PM
@@ -35,8 +23,7 @@ pm25[,c("Year","Month","Day","V10","date"):=NULL]
 setnames(pm25,"StationID","x_stn_ITM")
 setnames(pm25,"X","y_stn_ITM")
 setnames(pm25,"Y", "stn")
-
-
+tab.pm25<-pm25[,length(na.omit(pm25)),by=list(stn)]
 
 
 
@@ -51,7 +38,7 @@ setnames(temp,"X","x_stn_ITM")
 setnames(temp,"Y", "y_stn_ITM")
 #create freq table
 tab.temp<-temp[,length(na.omit(Temp)),by=list(stn)]
-tab.temp.ts<-tab.temp[V1>=4000]
+tab.temp.ts<-tab.temp[V1>=3800]
 setkey(tab.temp.ts,stn)
 setkey(temp,stn)
 temp1 <- merge(tab.temp.ts,temp[,list(stn,x_stn_ITM, y_stn_ITM)], all.x = T)
@@ -112,9 +99,6 @@ alls_agg <- (alls[, list(
                         y_stn_ITM =  y_stn_ITM[1]),
                         by = stn])
 write.csv(alls_agg,"/home/zeltak/ZH_tmp/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/ILstnXY.csv")
-
-
-
 
 
 
@@ -189,7 +173,77 @@ J9$season<-recode(J9$month,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")
 J9$seasonSW<-recode(J9$month,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;12=1")
 
 
+#create daily temperature and RH values since we have alot of missing data
+daymeans <- (J9[, list(daytemp =mean(Temp, na.rm = TRUE),dayRH =mean(RH, na.rm = TRUE),
+                           x_stn_ITM = x_stn_ITM[1],
+                           x_stn_ITM = x_stn_ITM[1]),by = day])  
+
+
+###join daily means
+setkey(daymeans , day)
+setkey(J9, day)
+J10 <- merge(J9,daymeans[,list(day,daytemp,dayRH)], all.x = T)
+describe(J10$daytemp)
+
+
+#import PBL by year and join
+
+###PBL
+pbl <-  fread("/media/NAS/Uni/Data/Europe/PBL_Europe/dailymeanpbl/fianlpblXY_2002.csv")
+
+allbestpredlist <- list()
+path.data<-"/media/NAS/Uni/Data/Europe/PBL_Europe/dailymeanpbl/"
+
+for(i in 2002:2013){
+  allbestpredlist[[paste0("year_", i)]] <- fread(paste0(path.data, "fianlpblXY_", i, ".csv"))
+  print(i)
+} 
+allbestpred <- rbindlist(allbestpredlist)
+rm(allbestpredlist)
+
+pbl <-  allbestpred[ longitude > 32 & longitude < 37 & latitude < 34 & latitude > 29, ]
+pbl <- pbl [, day:=as.Date(strptime(date, "%m/%d/%Y"))]
+#Join PBL
+setkey(pbl , day, pblid)
+setkey(J10, day, pblid)
+J11 <- merge(J10, pbl, all.x = T)
+#head(am2.lu.nd.pb)
+J11[, c("date", "longitude.x", "latitude.x","latitude.y", "longitude.y") := NULL]
+
+#################################################3
+
+#create pm25 datasets
+pm25all <- J11[!is.na(PM25)]
+#create pm10 datasets
+pm10all <- J11[!is.na(PM10)]
+
+
+
+#add dust days
+dust<-fread("/home/zeltak/ZH_tmp/P046_Israel_MAIAC/0.raw/dust_days/DD_allIsr_20022012.csv")
+dust$date<-paste(dust$Day,dust$Month,dust$Year,sep="/")
+dust[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
+dust[,c("Year","Month","Day","V9","V8","date","X","Y"):=NULL]
+setnames(dust,"StationID","stn")
+
+
+
+setkey(pm10all , day, stn)
+setkey(dust, day, stn)
+pm10all <- merge(pm10all, dust, all.x = T)
+pm10all<-pm10all[is.na(Dust), Dust:= 0]
+describe(pm10all$Dust)
+
+
+saveRDS(pm10all,"/home/zeltak/ZH_tmp/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm10all.RDS")
+saveRDS(pm25all,"/home/zeltak/ZH_tmp/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25all.RDS")
+
+
+
+##############################
 #split per year
+##############################
+
 
 J2002 <- J9[c == "2002"]
 J2003 <- J9[c == "2003"]
@@ -203,45 +257,6 @@ J2010 <- J9[c == "2010"]
 J2011 <- J9[c == "2011"]
 J2012 <- J9[c == "2012"]
 J2013 <- J9[c == "2013"]
-
-
-
-#create daily temperature and RH values since we have alot of missing data
-daymeans <- (J9[, list(daytemp =mean(Temp, na.rm = TRUE),dayRH =mean(RH, na.rm = TRUE),
-                           x_stn_ITM = x_stn_ITM[1],
-                           x_stn_ITM = x_stn_ITM[1]),by = day])  
-
-
-
-#import PBL by year and join
-
-###PBL
-pbl <-  fread("/media/NAS/Uni/Data/Europe/PBL_Europe/dailymeanpbl/fianlpblXY_2002.csv")
-str(pbl)
-pbl <- pbl [, day:=as.Date(strptime(date, "%m/%d/%Y"))]
-#Join PBL
-setkey(pbl , day, pblid)
-setkey(J2002, day, pblid)
-J2002.pb <- merge(J2002, pbl, all.x = T)
-#head(am2.lu.nd.pb)
-J2002.pb[, c("date", "longitude.x", "latitude.x","latitude.y", "longitude.y") := NULL]
-
-
-###join daily means
-
-setkey(daymeans , day)
-setkey(J2002.pb, day)
-J2002.pb.tp <- merge(J2002.pb,daymeans[,list(day,daytemp,dayRH)], all.x = T)
-
-
-
-
-
-#################################################3
-
-#create pm25 datasets
-pm25_2002 <- J2002.pb.tp[!is.na(PM25)]
-saveRDS(pm25_2002,"/home/zeltak/ZH_tmp/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25_2002.RDS")
 
 
 

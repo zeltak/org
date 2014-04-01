@@ -4453,6 +4453,21 @@ rmse(sim, obs, na.rm=TRUE, ...)
 example:
  library(hydroGOF)
  rmse(FALL$predicted, FALL$PM25)
+** test the significance of a difference between 2 coefficients 
+To test the significance of a difference between 2 coefficients (b2-b1), compute 
+
+s3=sqrt(s1^2 + s2^2) where s1 is the se of b1, s2 the se of b2
+and s3 is the se of (b2-b1) that should be a t statistic and you can look up the p value from that ( 2*(1-probt((b2-b1)/s3)))
+
+#+BEGIN_SRC R
+#long term
+b1=0.00096339
+#short term
+b2=0.0003317
+s3=sqrt(b1^2)+sqrt(b2^2)
+
+t=(b2-b1)/s3 
+#+END_SRC
 
 * Regressions
 ** Intro
@@ -7004,6 +7019,8 @@ See Here:
 **** subset by date
 #+begin_src R
 add5 <- add4[daystart <= day & dayend > day, ]
+#example 2
+add5 <- met[Date == "2000-12-27"]
 #+end_src
 **** susbet by year
 #+begin_src R
@@ -7124,9 +7141,12 @@ reslults:
 8: a 3 5
 9: a 6 6
 #+END_EXAMPLE
+*** recode data.table
 
-
-
+#+begin_src R
+pm10all[is.na(Dust), Dust:= 0]
+#+end_src
+ 
 *** choose based on best avilable
 #+begin_src R
 # store the best available
@@ -7443,6 +7463,12 @@ qplot(x, y, data=, color=, shape=, size=, alpha=, geom=, method=,
 formula=, facets=, xlim=, ylim=, xlab=, ylab=, main=, sub=)
 #+END_EXAMPLE
 where the parameters/options are defined
+*** Histogram
+**** basics
+#+begin_src R
+ggplot(p2006, aes(x=PM25)) + geom_histogram(binwidth=5, colour="black", fill="white")
+#+end_src
+
 *** qplot
 **** basic manual
 
