@@ -1,6 +1,22 @@
+###############
+#LIBS
+###############
+library(lme4)
+library(reshape)
+library(foreign) 
+library(ggplot2)
+library(plyr)
+library(data.table)
+library(reshape2)
+library(Hmisc)
+library(mgcv)
+library(gdata)
+library(car)
 
 
-#PM
+
+
+#PM10
 pm10 <- fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/0.raw/PM/PMData10.csv")
 pm10$date<-paste(pm10$Day,pm10$Month,pm10$Year,sep="/")
 pm10[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
@@ -14,7 +30,7 @@ tab.pm10<-pm10[,length(na.omit(pm10)),by=list(stn)]
 
 
 
-#PM
+#PM25
 pm25 <- fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/0.raw/PM/PMData25.csv")
 pm25$date<-paste(pm25$Day,pm25$Month,pm25$Year,sep="/")
 pm25[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
@@ -81,6 +97,36 @@ tab.RH.ts<-tab.RH[V1>=3800]
 
 
 
+#no2
+no2 <- fread("/media/NAS/Uni/Data/Israel/IPA_stations/NO2.csv")
+no2$date<-paste(no2$Day,no2$Month,no2$Year,sep="/")
+no2[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
+no2[, c := as.numeric(format(day, "%Y")) ]
+no2[,c("Year","Month","Day","date"):=NULL]
+summary(no2)
+tab.no2<-no2[,length(na.omit(NO2)),by=list(stn)]
+tab.no2.ts<-tab.no2[V1>=3800]
+
+
+#so2
+so2 <- fread("/media/NAS/Uni/Data/Israel/IPA_stations/SO2.csv")
+so2$date<-paste(so2$Day,so2$Month,so2$Year,sep="/")
+so2[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
+so2[, c := as.numeric(format(day, "%Y")) ]
+so2[,c("Year","Month","Day","date"):=NULL]
+summary(so2)
+tab.so2<-so2[,length(na.omit(SO2)),by=list(stn)]
+
+
+#ws
+ws <- fread("/media/NAS/Uni/Data/Israel/IPA_stations/WS.csv")
+ws$date<-paste(ws$Day,ws$Month,ws$Year,sep="/")
+ws[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
+ws[, c := as.numeric(format(day, "%Y")) ]
+ws[,c("Year","Month","Day","date"):=NULL]
+summary(ws)
+tab.ws<-ws[,length(na.omit(WS)),by=list(stn)]
+
 
 
 
@@ -89,6 +135,7 @@ WDx<-WD[,c(3,4,5),with=FALSE]
 tempx<-temp[,c(3,4,5),with=FALSE]
 PM10x<-pm10[,c(3,4,5),with=FALSE]
 PM25x<-pm25[,c(3,4,5),with=FALSE]
+
 
 alls<-rbind(RHx,WDx,tempx,PM10x,PM25x)
 describe(alls)
@@ -143,6 +190,20 @@ J5 <- merge(J4,WD[,list(day,stn,WD)], all.x = T)
 describe(J5$WD)
 describe(WD$WD)
 
+setkey(ws, day,stn)
+setkey(J5, day,stn)
+J5 <- merge(J5,ws[,list(day,stn,WS)], all.x = T)
+describe(J5$WS)
+
+setkey(so2, day,stn)
+setkey(J5, day,stn)
+J5 <- merge(J5,so2[,list(day,stn,SO2)], all.x = T)
+
+setkey(no2, day,stn)
+setkey(J5, day,stn)
+J5 <- merge(J5,no2[,list(day,stn,NO2)], all.x = T)
+
+
 #remove below year 2002 which we dont need
 J5[, c := as.numeric(format(day, "%Y")) ]
 J6 <- J5[c >= 2002]
@@ -150,6 +211,42 @@ J6 <- J5[c >= 2002]
 
 #import LU
 lu1<-fread("/home/zeltak/ZH_tmp/P046_Israel_MAIAC/3.Work/2.Gather_data/FN004_LU_full_dataset/LU1.csv")
+#add Land cover to LU
+p_os<-fread("/home/zeltak/ZH_tmp/P046_Israel_MAIAC/3.Work/2.Gather_data/FN004_LU_full_dataset/p_os.csv")
+p_dev<-fread("/home/zeltak/ZH_tmp/P046_Israel_MAIAC/3.Work/2.Gather_data/FN004_LU_full_dataset/p_devHG.csv")
+p_dos<-fread("/home/zeltak/ZH_tmp/P046_Israel_MAIAC/3.Work/2.Gather_data/FN004_LU_full_dataset/p_devOS.csv")
+p_farm<-fread("/home/zeltak/ZH_tmp/P046_Israel_MAIAC/3.Work/2.Gather_data/FN004_LU_full_dataset/p_farming.csv")
+p_for<-fread("/home/zeltak/ZH_tmp/P046_Israel_MAIAC/3.Work/2.Gather_data/FN004_LU_full_dataset/p_forest.csv")
+p_ind<-fread("/home/zeltak/ZH_tmp/P046_Israel_MAIAC/3.Work/2.Gather_data/FN004_LU_full_dataset/p_industry.csv")
+
+lu1 <- merge(lu1, p_os[, list(aodid,MEAN)], all.x= T, by = c("aodid"))
+lu1[,p_os:=MEAN*100]
+lu1[,MEAN:=NULL]
+
+lu1 <- merge(lu1, p_dev[, list(aodid,MEAN)], all.x= T, by = c("aodid"))
+lu1[,p_dev:=MEAN*100]
+lu1[,MEAN:=NULL]
+
+
+lu1 <- merge(lu1, p_dos[, list(aodid,MEAN)], all.x= T, by = c("aodid"))
+lu1[,p_dos:=MEAN*100]
+lu1[,MEAN:=NULL]
+
+lu1 <- merge(lu1, p_farm[, list(aodid,MEAN)], all.x= T, by = c("aodid"))
+lu1[,p_farm:=MEAN*100]
+lu1[,MEAN:=NULL]
+
+
+lu1 <- merge(lu1, p_for[, list(aodid,MEAN)], all.x= T, by = c("aodid"))
+lu1[,p_for:=MEAN*100]
+lu1[,MEAN:=NULL]
+
+
+lu1 <- merge(lu1, p_ind[, list(aodid,MEAN)], all.x= T, by = c("aodid"))
+lu1[,p_ind:=MEAN*100]
+lu1[,MEAN:=NULL]
+
+describe (lu1)
 #import stn keytable
 stnkey<-fread("/home/zeltak/ZH_tmp/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/ILstnXY_aodid.csv")
 
@@ -184,6 +281,24 @@ setkey(daymeans , day)
 setkey(J9, day)
 J10 <- merge(J9,daymeans[,list(day,daytemp,dayRH)], all.x = T)
 describe(J10$daytemp)
+
+
+
+#Create annual mean and sum of SO2 and NO2
+
+annmean <- (J10[, list(
+                      ymeanNO2 =mean(NO2, na.rm = TRUE),
+                      ysumNO2 =sum(NO2, na.rm = TRUE),
+                      ymeanSO2 =mean(SO2, na.rm = TRUE),
+                      ysumSO2 =sum(SO2, na.rm = TRUE),
+                      x_stn_ITM = x_stn_ITM[1],
+                      x_stn_ITM = x_stn_ITM[1]),
+                      by = c])  
+
+###join daily means
+setkey(annmean , c)
+setkey(J10, c)
+J10 <- merge(J10,annmean[,list(c,ymeanNO2,ysumNO2,ymeanSO2,ysumSO2)], all.x = T)
 
 
 #import PBL by year and join
@@ -233,6 +348,13 @@ setkey(dust, day, stn)
 pm10all <- merge(pm10all, dust, all.x = T)
 pm10all<-pm10all[is.na(Dust), Dust:= 0]
 describe(pm10all$Dust)
+
+setkey(pm25all , day, stn)
+setkey(dust, day, stn)
+pm25all <- merge(pm25all, dust, all.x = T)
+pm25all<-pm25all[is.na(Dust), Dust:= 0]
+describe(pm25all$Dust)
+
 
 
 saveRDS(pm10all,"/home/zeltak/ZH_tmp/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm10all.RDS")

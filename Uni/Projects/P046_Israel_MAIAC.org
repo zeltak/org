@@ -773,7 +773,123 @@ Last column the max PM value per day
 see also escape project databook:
 
 file:/media/NAS/Uni/org/attach/files_2014/ESCAPE_Exposure-manualv9.pdf
+** Land cover data
+*** info on data
+We used the land cover data from the lamas for 2003 (updated partially in 2007)
 
+From LAMAS:
+LAND USE - DEFINITIONS AND EXPLANATIONS
+SOURCE OF DATA: The information is based on processing and integration of a
+variety of administrative sources that were received from government ministries and non-
+government and private organizations.
+The database used for the information on land use was prepared through the
+Geographic Information System (GIS) of the Israeli Central Bureau of Statistics. The
+project was funded by the Ministry of the Interior.
+The information is up-to-date to the end of 2002, except for data on plantations and
+fields.
+Land use: ways in which man takes advantage of the land for activities such as:
+construction, agriculture, forestation, industry, etc.
+Land use relates to the situation today, as opposed to land allocation relating to future
+use.
+The information on land use is national and continuous for all the land in the country.
+Information can be produced according to various geographic categories, such as local
+authorities, regional councils and natural regions.
+Land use can be divided into two main types: constructed area and open area.
+Constructed area is cross-sectioned according to various functions: housing,
+education, health and welfare, public services, culture and leisure, commercial,
+industry and infrastructure, transportation and agricultural buildings.
+Open area is cross-sectioned according to the following types: public open area, forests,
+agriculture and other open areas.
+1. Education –areas used for educational purposes: kindergartens, schools,
+universities, community centers and yeshivas.
+2. Health and Welfare –areas used for health and welfare purposes: sick funds,
+hospitals, and geriatric day centers.
+3. Public services –areas used for public services: emergency services, public
+administration, religion.
+4. Culture, leisure, recreation and sports –areas used for culture - such as theaters,
+cinemas, museums, public libraries, zoos, archeological sites, etc.; for leisure and
+recreation - hotels, hostels, restaurants, amusement parks, etc.; and for sports –
+stadiums, swimming pools, etc.
+5. Commerce –areas used for commercial purposes: malls and commercial centers.
+6. Industry and Infrastructure – areas used for industrial purposes – such as
+industrial zones, waste disposal sites, mining and quarrying areas; and for
+infrastructure facilities – airports, sea ports, sewage treatment plants, reservoirs.
+7. Transportation – areas used for transportation purposes – such as parking lots,
+gas stations, railway stations, taxi stands, and central bus stations.
+8. Agricultural structures – areas used for agricultural structures – such as
+greenhouses and fish ponds.
+9. Residential –areas used for residential purposes and unclassified built area.
+10. Public open area – areas used for public purposes – such as gardens or beaches.
+11. Forest – areas used for man-made forests and wild groves.
+12. Plantations, orchards and olive groves – areas coveredor olive trees.
+13. Cultivated fields – areas used for cultivated fields.
+14. Other open area – unclassified areas.
+by plantations, orchards
+The code for land use appears in the landuse field (valu
+
+
+#+DOWNLOADED: file:///home/zeltak/ZH_tmp/Screenshot%20-%2004032014%20-%2012:32:25%20PM.png @ 2014-04-03 12:32:41
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/Screenshot%20-%2004032014%20-%2012:32:25%20PM_2014-04-03_12:32:41.png]]
+
+In 2007 the constructed areas (residential buildings and agricultural structures) in the
+region that is outside localities in the Negev, were updated. Only residential buildings
+and agricultural structures in regions in the layer, that were originally presented as open
+spaces, were updated.
+Technical details about the layer
+
+Description: The land use layer is a national, continuous layer. It contains
+information regarding 14 various land uses. Parts are constructed areas and parts
+are open areas.
+The name of the layer is land use.
+The layer is in SHP format.
+The layer is presented in the Transverse Mercator projection.
+The MMG layer is up-to-date to the end of 2002. (It includes an update from
+2007, of residential buildings and agricultural structures, in the region outside of
+localities in the Negev).
+The layer is polygonalic.
+The code for land use appears in the landuse field (values 1 – 14).
+*** Calculate the perecent of specific land use in each 1km grid
+We used the national land cover polygon layer from LAMAS ([[*info%20on%20data][info on data)]] was proccesed and reclassified to 0,1 files
+₆In example₆ we classified all the open spaces (code 10-16) into '1' and build areas (1-7) to '0'
+
+
+#+DOWNLOADED: file:///home/zeltak/ZH_tmp/snapshot3.png @ 2014-04-03 13:00:25
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/snapshot3_2014-04-03_13:00:25.png]]
+
+resulting in:
+
+#+DOWNLOADED: file:///home/zeltak/ZH_tmp/snapshot1.png @ 2014-04-03 12:39:32
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/snapshot1_2014-04-03_12:39:32.png]]
+
+we created from the MAIAC centroids a voroni 1x1 polygon layer
+
+then using zonal statistics as table the mean ratio between 0(build area) and 1 (open space) was calculated  (using the aodid variable as zone field) and outputed as a table 
+$Note-the aodid field has to be text other wise there may be issues$ 
+
+#+DOWNLOADED: file:///home/zeltak/ZH_tmp/snapshot2.png @ 2014-04-03 12:49:16
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/snapshot2_2014-04-03_12:49:16.png]]
+
+this gave us the mean value in each aodid cell and was multiplied by 100 to get the % open using field calculator:
+#+BEGIN_EXAMPLE
+[MEAN] * 100
+#+END_EXAMPLE
+
+Finally the percent open was joined (by table) back to the 'FULL' 1x1 point layer by 'aodid'
+
+We repeat this process for each land cover variable we want to try (see next section)
+*** Other Land cover variables calculated
+Developed, Open Space - Includes areas with a mixture of some constructed materials, but mostly vegetation in the form of lawn grasses. 
+
+Developed, High Intensity - Includes highly developed areas where people reside or work in high numbers. Examples include apartment complexes, row houses and commercial/industrial
+
+
+#+DOWNLOADED: file:///home/zeltak/ZH_tmp/snapshot4.png @ 2014-04-03 13:29:17
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/snapshot4_2014-04-03_13:29:17.png]]
  
 * 3.Analysis
 ** Cross validation mod1
