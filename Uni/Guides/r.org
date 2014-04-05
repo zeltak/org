@@ -349,6 +349,10 @@ options(digits=3)
 where '3' is the number of digits after the dot.
 
 *** .Rprofile
+**** location of .rprofile file
+on linux
+file:/home/zeltak/.Rprofile
+ 
 **** using Aliases
 I hate to type the full words 'head', 'summary', 'names' every time, so I use aliases.
 
@@ -360,7 +364,6 @@ s <- base::summary
 h <- utils::head
 n <- base::names
 #+END_EXAMPLE
- 
 *** show numerical format and not scientific notation
 use the scipen in R options . it is an integer- A penalty to be applied when deciding to print numeric values in fixed or exponential notation. Positive values bias towards fixed and negative towards scientific notation: fixed notation will be preferred unless it is more than scipen digits wider.
 So if you type:
@@ -1336,31 +1339,120 @@ data analyses.
  [[R_files/img/Image_Xy4gWAhs814y7d4pGHKsDw_0003.png]]
 
 *** Lists
+**** intro
+A list is a generic vector containing other objects.
 
-Lists are the most complex of the R data types. Basically, a list is an
-ordered collection of objects (components). A list allows you to gather
-a variety of (possibly unrelated) objects under one name.
- For example, a list may contain a combination of vectors, matrices,
-data frames, and even other lists. You create a list using the list()
-function :
- mylist <- list(object1, object2, ...)
- where the objects are any of the structures seen so far. Optionally,
-you can name the objects in a list: mylist <- list(name1=object1,
-name2=object2, ...) The following listing shows an example.
- [[R_files/img/Image_t6aGFee2JPMvtKFtvyybxQ_0003.png]]
- In this example, you create a list with four components: a string, a
-numeric vector, a matrix, and a character vector.
-  You can combine any number of objects and save them as a list. You can
-also specify elements of the list by indicating a component number or a
-name within double brackets.
- In this example, mylist[[2]] and mylist[["ages"]] both refer to the
-same four-element numeric vector. Lists are important R structures for
-two reasons. First, they allow you to organize and recall disparate
-information in a simple way. Second, the results of many R functions
-return lists. It's up to the analyst to pull out the components that are
-needed. You'll see numerous examples of functions that return lists in
-later chapters.
+For example, the following variable x is a list containing copies of three vectors n, s, b, and a numeric value 3.
 
+#+BEGIN_SRC R
+ n = c(2, 3, 5) 
+ s = c("aa", "bb", "cc", "dd", "ee") 
+ b = c(TRUE, FALSE, TRUE, FALSE, FALSE) 
+ x = list(n, s, b, 3)   # x contains copies of n, s, b
+#+END_SRC
+
+'List Slicing'
+
+We retrieve a list slice with the single square bracket "[]" operator. The following is a slice containing the second member of x, which is a copy of s.
+#+BEGIN_SRC R
+x[2] 
+[[1]] 
+[1] "aa" "bb" "cc" "dd" "ee"
+#+END_SRC
+
+With an index vector, we can retrieve a slice with multiple members. Here a slice containing the second and fourth members of x.
+
+#+BEGIN_SRC R
+x[c(2, 4)] 
+[[1]] 
+[1] "aa" "bb" "cc" "dd" "ee" 
+ 
+[[2]] 
+[1] 3
+#+END_SRC
+
+'Member Reference'
+
+In order to reference a list member directly, we have to use the double square bracket "[[]]" operator. The following object x[[2]] is the second member of x. In other words, x[[2]] is a copy of s, but is not a slice containing s or its copy.
+#+BEGIN_SRC R
+x[[2]] 
+[1] "aa" "bb" "cc" "dd" "ee"
+#+END_SRC
+
+We can modify its content directly.
+#+BEGIN_SRC R
+x[[2]][1] = "ta" 
+x[[2]] 
+[1] "ta" "bb" "cc" "dd" "ee" 
+ s 
+[1] "aa" "bb" "cc" "dd" "ee"   # s is unaffected 
+#+END_SRC
+**** Named list members
+We can assign names to list members, and reference them by names instead of numeric indexes.
+
+For example, in the following, v is a list of two members, named "bob" and "john".
+
+#+BEGIN_SRC R
+v = list(bob=c(2, 3, 5), john=c("aa", "bb")) 
+v 
+$bob 
+[1] 2 3 5 
+ 
+$john 
+[1] "aa" "bb"
+#+END_SRC
+
+'List Slicing'
+
+We retrieve a list slice with the single square bracket "[]" operator. Here is a list slice containing a member of v named "bob".
+
+#+BEGIN_SRC R
+v["bob"] 
+$bob 
+[1] 2 3 5
+#+END_SRC
+
+With an index vector, we can retrieve a slice with multiple members. Here is a list slice with both members of v. Notice how they are reversed from their original positions in v.
+
+#+BEGIN_SRC R
+v[c("john", "bob")] 
+$john 
+[1] "aa" "bb" 
+ 
+$bob 
+[1] 2 3 5
+
+#+END_SRC
+
+'Member Reference'
+
+In order to reference a list member directly, we have to use the double square bracket "[[]]" operator. The following references a member of v by name.
+
+#+BEGIN_SRC R
+v[["bob"]]
+[1] 2 3 5
+#+END_SRC
+
+A named list member can also be referenced directly with the "$" operator in lieu of the double square bracket operator.
+
+#+BEGIN_SRC R
+v$bob 
+[1] 2 3 5
+#+END_SRC
+
+'Search Path Attachment'
+
+We can attach a list to the R search path and access its members without explicitly mentioning the list. It should to be detached for cleanup.
+
+#+BEGIN_SRC R
+attach(v) 
+bob 
+[1] 2 3 5 
+detach(v) 
+#+END_SRC
+
+
+ 
 ** Object Modes
 *** check which class a VARIABLE is
 
@@ -4453,6 +4545,21 @@ rmse(sim, obs, na.rm=TRUE, ...)
 example:
  library(hydroGOF)
  rmse(FALL$predicted, FALL$PM25)
+** test the significance of a difference between 2 coefficients 
+To test the significance of a difference between 2 coefficients (b2-b1), compute 
+
+s3=sqrt(s1^2 + s2^2) where s1 is the se of b1, s2 the se of b2
+and s3 is the se of (b2-b1) that should be a t statistic and you can look up the p value from that ( 2*(1-probt((b2-b1)/s3)))
+
+#+BEGIN_SRC R
+#long term
+b1=0.00096339
+#short term
+b2=0.0003317
+s3=sqrt(b1^2)+sqrt(b2^2)
+
+t=(b2-b1)/s3 
+#+END_SRC
 
 * Regressions
 ** Intro
@@ -6785,7 +6892,13 @@ $Note-the time is the last column (elapsed) and is in seconds$
 all.equal(DF1, DF2)
 [1] TRUE
 #+end_src
+** list all variables from a formula
 
+#+BEGIN_SRC R
+#base model for stage 1
+m1.formula <- as.formula(PM25 ~ aod+tempc+WDSP+NDVI+dist_PE+pcturb_1km+logroad+nei05nonpntcntypm25+pop_sqkm+elev_m+ah_gm3+visib+aod*pbl+pbl+NOXsum+PM10sum+SO2sum+pctmd_1km + pctld_1km+pctop_1km+  pctdf_1km+pctmf_1km+pctev_1km+  pctcr_1km+pctpa_1km+pctsh_1km+  pctgr_1km+  pm25stge30_15k  +  pm25stlt30_3k+pm10stge30_15k   + pm10stlt30_3k   +noxstge30_15k+noxstlt30_3k+ so2stge30_15k+so2stlt30_3k+ (1 +aod+tempc|day/region))
+all.vars(testformula)
+#+END_SRC
 
 * Packages specific
 ** Hemisc
@@ -6808,6 +6921,27 @@ returned from getCoefTemplate
  getSummaryTemplate:
  model1=mtable(Rresp\_m25x ,
 summary.stats=FALSE,digits=min(3,getOption("digits")))
+** dplyr
+*** Run models by a grouping varialbles
+#+begin_src R
+library(dplyr)
+
+#####example 1 
+#base model for stage 1
+m1.formula <- as.formula(PM10~ aod+ (1+aod|day))
+t1<- mod1 %.% group_by(c) %.% do(function(df){lmer(m1.formula,data=df)})
+
+####example 2 with summary and rename
+#2007
+seas2007<- mod1PM25_2007 %.% group_by(season) %.% do(function(df){summary(lm(m1.formula,data=df))})
+names(seas2007)<-c("1-winter", "2-spring","3-summer","4-autum")
+seas2007[["1-winter"]][8]
+seas2007[["2-spring"]][8]
+seas2007[["3-summer"]][8]
+seas2007[["4-autum"]][8]
+
+
+#+end_src
 
 * data.table
 *** basics
@@ -6933,7 +7067,11 @@ gestpred <- merge(gestpred,
                all.x = T, by = "folio")
 
 #+end_src
-
+**** use the by instead of setkey
+#+begin_src R
+mod1 <- merge(mod1, filterpm25[, list(day,mon,filterpm25)], all.x= T, by = c("day", "mon"))
+#+end_src
+ 
 *** Dates
 **** extract dates in data.table
 #+begin_src r
@@ -7004,6 +7142,8 @@ See Here:
 **** subset by date
 #+begin_src R
 add5 <- add4[daystart <= day & dayend > day, ]
+#example 2
+add5 <- met[Date == "2000-12-27"]
 #+end_src
 **** susbet by year
 #+begin_src R
@@ -7124,9 +7264,12 @@ reslults:
 8: a 3 5
 9: a 6 6
 #+END_EXAMPLE
+*** recode data.table
 
-
-
+#+begin_src R
+pm10all[is.na(Dust), Dust:= 0]
+#+end_src
+ 
 *** choose based on best avilable
 #+begin_src R
 # store the best available
@@ -7443,6 +7586,12 @@ qplot(x, y, data=, color=, shape=, size=, alpha=, geom=, method=,
 formula=, facets=, xlim=, ylim=, xlab=, ylab=, main=, sub=)
 #+END_EXAMPLE
 where the parameters/options are defined
+*** Histogram
+**** basics
+#+begin_src R
+ggplot(p2006, aes(x=PM25)) + geom_histogram(binwidth=5, colour="black", fill="white")
+#+end_src
+
 *** qplot
 **** basic manual
 

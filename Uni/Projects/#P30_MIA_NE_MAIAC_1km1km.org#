@@ -151,14 +151,16 @@ Single land use
 *Cr* Value: 82 Cultivated Crops - Areas used for the production of annual crops, such as corn, soybeans, vegetables, tobacco, and cotton, and also perennial woody crops such as orchards and vineyards. Crop vegetation accounts for greater than 20 percent of total vegetation. This class also includes all land being actively tilled.
 
 
+NLCD 2006 30 m resolution rasters was reclassified as rasters for each of the individual land uses listed above.  In each raster cells with the specified land use were given the value '1' all other cells were set to '0'
 
-NLCD 2006 30 m resolution rasters was reclassified as rasters for each of the individual land uses listed above.  In each raster cells with the specified land use were given the value 1 all other cells were set to 0
-
-ArcGIS Focal statistics tool was used to sum up the 33 X 33 neighboring 30 m cells and the result divided by 1089 to give an approximate value of percent of each land use within 1 km of center point of each 30 m cell.  Missing values, for example along the coast and boundaries of the study region were treated as zero.  The focal statistics tool used a mask extending 5 km beyond the state boundaries for the eastern US states defining the study area.  
+ArcGIS Focal statistics tool was used to sum up the '33 X 33' neighboring '30 m' cells and the result divided by '1089'(33x33) to give an approximate value of percent of each land use within 1 km of center point of each 30 m cell.  Missing values, for example along the coast and boundaries of the study region were treated as zero.  The focal statistics tool used a mask extending 5 km beyond the state boundaries for the eastern US states defining the study area.  
  
 (This follows the procedure used earlier to calculate percent urban.  Earlier we chose to use cells rather than a circular radius when we were looking at very fine spatial resolutions e.g. 50 km)
 
 ArcGIS extract values to points tool was used with the interpolate option to assign results of focal statistics calculation to grid ids (guid) associated with AOD measurements.  The results were exported to csv files, then imported and merged together in SAS 9.2.  
+
+
+
 * 2.Build database
 *** Land use from rasters
 a unique grid is loaded to GIS
