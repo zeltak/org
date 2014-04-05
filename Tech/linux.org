@@ -12844,6 +12844,15 @@ the config is done in the command line
  IE:
  simpleswitcher -now -font "Envy Code R-13" -fg "#ffffff" -bg "#000000"
 -hlfg "#FFFFFF" -hlbg "#33b5e5" -o 85
+**** Jarvis 
+***** basics
+`j add, j +`-Add the current directory as a bookmark. 
+`j add <file>, j + <file>` Adds the <file> as a bookmark.     
+`j <bookmark>` f the bookmark is for a directory, then cd there, f the bookmark is for a file, then open the file for edit.
+`j del, j -, j del <bookmark>, j - <bookmark>`-Delete a bookmark.
+`j edit, j vim`-Edits your bookmarks using your shell's default editor
+
+
 
 ** graphics
 *** gimp
@@ -19605,6 +19614,48 @@ directory that contains your KeePass installation
  6)go to keefox options>keepass, and fill in the correct
 apps/plugin/mono paths
  [[~/Dropbox/Org/Tech/linux_files/Image_Pfwym04guXgKIJ5Zp78TVg_0001.png]]
+*** Jabref
+**** prefrences
+***** change look and feel
+in advancd enter a java look and feel string
+for example in linux to get proper gtk
+#+BEGIN_EXAMPLE
+com.sun.java.swing.plaf.gtk.GTKLookAndFeel
+#+END_EXAMPLE
+
+other avilable options
+
+#+BEGIN_EXAMPLE
+com.sun.java.swing.plaf.motif.MotifLookAndFeel
+com.sun.java.swing.plaf.windows.WindowsLookAndFeel
+com.jgoodies.plaf.plastic.Plastic3DLookAndFeel
+#+END_EXAMPLE
+***** location of prefrence file
+file:/home/zeltak/jabref.xml
+***** priorities
+enable then in preferances in order to use them
+***** Customizing general fields
+http://jabref.sourceforge.net/help/GeneralFields.php
+
+You can add an arbitrary number of tabs to the entry editor. These will be present for all entry types. To customize these tabs, go to "Options -> Set up general fields".
+
+You specify one tab on each line. The line should start with the name of the tab, followed by a colon (:), and the fields it should contain, separated by semicolons (;).
+
+E.g.
+General:url;keywords;doi;pdf
+Abstract:abstract;annote
+
+which would give one tab named "General" containing the fields url, keywords, doi and pdf, and another tab named "Abstract" containing the fields abstract and annote.
+**** Workflow
+***** attach PDFS
+****** if the pdf is accesible through open access or Uni subscriptions:
+1)add the ref using internal search
+2)use the local copy panel to download the pdf 
+****** if no physical PDF is avilable
+1)add the ref using internal search
+2)manually copy pdf to root pdf folder
+3)attach it to the entry
+use the cleanup in tools to auto rename image7_2014-03-13_09:58:02.pngt
 ** System
 *** java
 
@@ -23035,7 +23086,20 @@ simply giving them access to your .vdi file (VirtualBox VM instance) and
 configuration settings. In addition, once you set up a pristine
 environment you can clone it and always have it stored as a backup
 incase you mess something up with the VM you are currently working with.
+**** move a virtual machine
 
+`VirtualBox v4.0.0 and later`
+
+The basic procedure for moving VMs created by VirtualBox v4.0.0 or later is to copy the VM folder (with contents) to your preferred location, then use the GUI's Machine|Add menu item to register the .vbox file (found in the VM folder) from its new location.
+
+Of course, if the copy is on the same host as the original VM then VirtualBox will object to your attempt to register the same UUID twice. You must remove the original VM from the manager before the copy can be added (*).
+
+(*) There was a bug in VirtualBox versions prior to v4.3.0 in which the background VBoxSVC process retains a memory of media filenames and UUIDs even after the front end has apparantly removed them. If using an affected version then to work around this then you must shut down VirtualBox entirely, wait several seconds or until VBoxSVC unloads, then you can run the GUI again. At this point you should be able to add the VM back without complaint.
+
+If you want the original and the copy to be registered at the same time on the same host then you actually need to make a clone rather than a simple copy. To clone a VM you right click it in the GUI and select "Clone". [ VirtualBox v4.1.0 and later ].
+
+If you are running on a Windows host then be wary of moving VMs to removable storage. Windows has a nasty habit of changing the drive letters of removable drives, which will invalidate the VM path stored when you used Machine|Add.
+ 
 **** launch vm from cli
 
 *Launch a VirtualBox virtual machine from the command line
@@ -39977,7 +40041,6 @@ DAEMONS=(... ... *sshd* ... ...)
 ------------------------------------------------------------------------------------------------------------------
 
 **** SSHFS
-
 ***** Mount
 
 *Installation
@@ -40109,7 +40172,9 @@ workaround=rename -o password stdin
  Example:
  echo baghira | sshfs jsmith@ftp.example.com:/ ~/mounts/example -o
 workaround=rename -o password stdin
-
+***** !bug! sshfs cant mountm dir us busy and ghost files are there
+unmount the drives if needed, delete the folder and recreate it
+then mounts
 **** login to ssh session and execute a command
 
 there are two ways to do that:
