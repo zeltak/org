@@ -778,3 +778,47 @@ Step 8. Copy the new, edited zip file to your phone.
 
 Step 9. Try re-installing ROM, now it should install fine without Status 7 error.
 
+** MTP on linux
+*** mtpfs arch
+Mtpfs is FUSE filesystem that supports reading and writing from any MTP device. Basically it allows you to mount your device as an external drive.
+
+Mtpfs can be installed with the packge mtpfs, available from the official repositories.
+
+First edit your /etc/fuse.conf and uncomment the following line:
+
+#+BEGIN_EXAMPLE
+user_allow_other
+#+END_EXAMPLE
+
+To mount your device
+
+#+BEGIN_SRC sh
+$ mtpfs -o allow_other /media/YOURMOUNTPOINT
+#+END_SRC
+
+    To unmount your device
+
+#+BEGIN_SRC sh
+$ fusermount -u /media/YOURMOUNTPOINT
+#+END_SRC
+
+To unmount your device as root
+
+#+BEGIN_SRC sh
+umount /media/YOURMOUNTPOINT
+#+END_SRC
+
+Also, you can put them into your ~/.bashrc:
+
+#+BEGIN_EXAMPLE
+alias android-connect="mtpfs -o allow_other /media/YOURMOUNTPOINT"
+alias android-disconnect="fusermount -u /media/YOURMOUNTPOINT"
+#+END_EXAMPLE
+
+Or, with sudo
+
+#+BEGIN_EXAMPLE
+alias android-disconnect="sudo umount -u /media/YOURMOUNTPOINT"
+#+END_EXAMPLE
+
+Note: if you want not be asked for password when using sudo, please refer to USB Storage Devices#Mounting USB devices

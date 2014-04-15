@@ -36110,6 +36110,21 @@ servers.
 
 issue
  xset -q
+*** hardware info commands 
+**** lscpu
+The lscpu command reports information about the cpu and processing units. It does not have any further options or functionality.
+**** Hardware info tools: lshw, inxi and hwinfo
+these need to be installed manually
+to run:
+
+#+BEGIN_SRC sh
+sudo lshw -short
+#and
+hwinfo --short
+#or 
+inxi -Fx 
+#+END_SRC
+
 
 *** screen
 

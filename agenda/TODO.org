@@ -13,6 +13,23 @@
     :PROPERTIES:
     :ID:       f7b6a3d8-b1b4-422f-a05f-4e71ca03dc9e
     :END:
+*** TODO C-u C-c C-l solves all problems. Now I can link any file (PDF etc.) from anywhere within org and with tab completion. Thanks.
+*** jump to parent
+ how can you jump to the parent node of whatever area │ elik         
+               │                         | you're in?                                           │ farn         
+               │12:48:23         nslater | so if you have:                                      │ framling     
+               │12:48:24         nslater | * A                                                  │ frumious-    
+               │12:48:27         nslater | ** 1                                                 │ fsbot        
+               │12:48:43         nslater | and you're on ** 1, then this function would take    │ Fuco         
+               │                         | you to * A                                           │ funnel       
+               │12:50:27       YoungFrog | perhaps C-c C-p                                      │ garrison     
+               │12:50:53       YoungFrog | oh, parent.                                          │ gds          
+               │12:51:01       YoungFrog | then C-c C-u                                         │ gko          
+               │13:22:26         nslater | found it. thanks!                                    │ iderrick
+*** below code for by type and todo (cook) create hotkeys
+#+BEGIN_EXAMPLE
++TODO="COOK"+Type="breakfest"
+#+END_EXAMPLE
 *** capture via gmail
 You could also use a %x in a capture template to assist in capturing a   
 selection made on your gmail message.  Eg, select Subject: line, then    
