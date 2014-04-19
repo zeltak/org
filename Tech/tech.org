@@ -1031,7 +1031,6 @@ i talked to the CTO .. Loni
  told me about being able to send the speakers back to change it to 220
 
 ** windows
-
 *** windows
 
 **** symlink in windows
@@ -2185,7 +2184,23 @@ the box and click Next
 -- and click Next
  7. Enter your Box username and password and click Next
  8. Get ready to use your Box!
+**** foobar2000
+***** add the replygain column in playlist view
+The RGain Column
 
+Create one last column named RGain, set width to 60 and make it right-aligned. This one holds replaygain info: the album gain value for album tracks and the track gain value for single tracks. You might want to read some more about replaygain on replaygain.org.
+
+#+BEGIN_EXAMPLE
+$if($get_global(isAlbum)
+,
+$if2(%__replaygain_album_gain%,'n/a')
+,
+$if2(%__replaygain_track_gain%,'n/a')
+)
+#+END_EXAMPLE
+
+
+Nothing fancy here. We check for album tracks and display %__replaygain_album_gain% info or %__replaygain_track_gain% info respectively. Missing replaygain triggers ‘n/a’ display like in the Time column.
 *** installation
 
 **** installation from thumb drive

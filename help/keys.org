@@ -119,7 +119,33 @@
 |------------------------------------------------+-------------------------------------------------------------+---|
 
 
+** Template
 
+| keys | functions |   |
+|------+-----------+---|
+|      |           |   |
+|      |           |   |
+|      |           |   |
+|      |           |   |
+|      |           |   |
+|------+-----------+---|
+|      |           |   |
+|------+-----------+---|
+|      |           |   |
+|      |           |   |
+|      |           |   |
+|      |           |   |
+|      |           |   |
+|      |           |   |
+|      |           |   |
+|      |           |   |
+|      |           |   |
+|      |           |   |
+|      |           |   |
+|      |           |   |
+|      |           |   |
+|      |           |   |
+|      |           |   |
 * Colors                                  
  
 -AAA- Headlines H1
@@ -195,3 +221,184 @@ insert a link that looks like this:
 [[file:/PATH/TO/ORGFILE::25]]
 where the ::25 means line 25 in that file
 [[*black%20ice][black ice]]
+
+* org
+
+** bookmark +
+
+| keys              | functions                           |   |
+|-------------------+-------------------------------------+---|
+| f8-b (C-x p m)    | Bookmark current position           |   |
+| f8 m              | Bookmark menu                       |   |
+| f8-               | Bookmark jump                       |   |
+| f8-f8             | Bookmark jump                       |   |
+| f8- r             | open recents                        |   |
+|-------------------+-------------------------------------+---|
+| In Bookmark lists |                                     |   |
+|-------------------+-------------------------------------+---|
+| d                 | mark for Delete                     |   |
+| x                 | Execute marked files                |   |
+| m                 | mark                                |   |
+| u                 | unmark                              |   |
+| right click       | launch menu                         |   |
+| s k               | Sort by bookmark type (kind)        |   |
+| s n               | Sort by bookmark name               |   |
+| S                 | Save                                |   |
+| .                 | show all bookmakrs                  |   |
+| f8-s              | Filter by tag                       |   |
+| T +               | add Tag (empty tag+ENTER) to finish |   |
+| T c               | copy tag                            |   |
+| T -               | Remove tag                          |   |
+| T e               | Manually edit tag                   |   |
+|                   |                                     |   |
+
+** EVIL mode
+ 
+
+| keys            | functions                                                           |   |
+|-----------------+---------------------------------------------------------------------+---|
+| \-EMACS COMMAND | Launches a command in emacs mode (disables evil mode for 1 command) |   |
+| C-z             | switch to EMACS mode                                                |   |
+| C-*             | Search word forward  (evil-search-symbol-forward)                   |   |
+|-----------------+---------------------------------------------------------------------+---|
+| NERD COMMENT    |                                                                     |   |
+|-----------------+---------------------------------------------------------------------+---|
+| ,ci (or A-;)    | Evil NERD comment                                                   |   |
+| ,,, (or X,,,)   | comment line or multiple lines (with vim motion)                    |   |
+| ,cc             | linecopy and comment lines                                          |   |
+|-----------------+---------------------------------------------------------------------+---|
+| ACE             |                                                                     |   |
+|-----------------+---------------------------------------------------------------------+---|
+| Space           | jump to character                                                   |   |
+| A-space         | jump to line                                                        |   |
+|                 |                                                                     |   |
+|                 |                                                                     |   |
+|                 |                                                                     |   |
+|                 |                                                                     |   |
+|                 |                                                                     |   |
+|                 |                                                                     |   |
+|                 |                                                                     |   |
+|                 |                                                                     |   |
+|                 |                                                                     |   |
+
+** Org-Tables
+|-----------------------+----------------------------------------------------------+-------------------|
+| EDITING               |                                                          |                   |
+|-----------------------+----------------------------------------------------------+-------------------|
+| C-c `                 | Edit the current field in a separate window              |                   |
+| C-c -                 | insert horizontal line                                   | prefix for above  |
+| C-c *PIPE*            | Convert the active region to table                       |                   |
+| C-c C-x *C-w/M-w/C-y* | *cut/copy/paste* rectangular region                      |                   |
+| C-c ^                 | Sort the table lines in the region                       |                   |
+|-----------------------+----------------------------------------------------------+-------------------|
+| SPREADSHEET           |                                                          |                   |
+|-----------------------+----------------------------------------------------------+-------------------|
+| C-c *PLUSSIGN*        | Sum the numbers in the current column                    |                   |
+| C-u C-c =             | insert formula here/Edit formula                         |                   |
+| $1                    | colum 1                                                  |                   |
+| @1                    | row 1                                                    |                   |
+| @9$2=vsum(@2..@7)     | sum or vmean for mean                                    |                   |
+| C-c }                 | Toggle the display of row and column numbers for a table |                   |
+|                       | Add Col1 and Col2                                        | equal col1 + col2 |
+|-----------------------+----------------------------------------------------------+-------------------|
+| Movment               |                                                          |                   |
+|-----------------------+----------------------------------------------------------+-------------------|
+| A-a                   | move previous cells                                      |                   |
+| A *left//right*       | move cell *right/left*                                   |                   |
+| A *Up//Down*          | move cell *up/down*                                      |                   |
+| A S <left>            | kill column                                              |                   |
+| A S <right>           | Insert a new column to the left of the cursor position   |                   |
+| A S <down>            | Insert a new row above the current row                   | prefix for below  |
+|                       |                                                          |                   |
+|                       |                                                          |                   |
+|                       |                                                          |                   |
+|                       |                                                          |                   |
+#+TBLFM: $3=col1+col2
+
+** buffers
+
+f11  s
+f11 q
+f11 C
+f11 W
+f11 Q
+f11 x
+f11 i
+
+A-ESC     
+f11 p           
+f11 n
+f11 P
+f11 N
+f11 f11               
+
+
+save-buffer
+Close file 
+close-other-buffers  
+save buffer and close
+Save all buffers and quit    
+save buffer and quit emacs
+ido menu kill buffer 
+
+ido-switch-buffer                                                            
+switch to prev buffer                                      
+switch to next buffer          
+switch to prev emacs buffer                                      
+switch to next emacs buffer   
+toggle between last 2 buffers
+* packages
+** Helm
+
+| keys         | functions                        |   |
+|--------------+----------------------------------+---|
+| M-p *//* M-n | go *up//down* in command history |   |
+|              |                                  |   |
+|              |                                  |   |
+|              |                                  |   |
+|              |                                  |   |
+|--------------+----------------------------------+---|
+|              |                                  |   |
+|--------------+----------------------------------+---|
+|              |                                  |   |
+|              |                                  |   |
+|              |                                  |   |
+|              |                                  |   |
+|              |                                  |   |
+|              |                                  |   |
+|              |                                  |   |
+|              |                                  |   |
+|              |                                  |   |
+|              |                                  |   |
+|              |                                  |   |
+|              |                                  |   |
+|              |                                  |   |
+|              |                                  |   |
+|              |                                  |   |
+** Company
+
+| keys                 | functions                                               |   |
+|----------------------+---------------------------------------------------------+---|
+| M-n//down M-p//up    | move next/back in completion                            |   |
+| M-(digit)            | to quickly complete with one of the first 10 candidates |   |
+| M-x company-complete | to initiate completion manually                         |   |
+| f1                   | display the documentation for the selected candidate    |   |
+|                      |                                                         |   |
+|----------------------+---------------------------------------------------------+---|
+|                      |                                                         |   |
+|----------------------+---------------------------------------------------------+---|
+|                      |                                                         |   |
+|                      |                                                         |   |
+|                      |                                                         |   |
+|                      |                                                         |   |
+|                      |                                                         |   |
+|                      |                                                         |   |
+|                      |                                                         |   |
+|                      |                                                         |   |
+|                      |                                                         |   |
+|                      |                                                         |   |
+|                      |                                                         |   |
+|                      |                                                         |   |
+|                      |                                                         |   |
+|                      |                                                         |   |
+|                      |                                                         |   |

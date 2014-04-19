@@ -16440,198 +16440,6 @@ issue:
 
  sanatize cookies
 
-** launchers
-*** gnome-do
-
-**** gnome do tips
-
-How to kill gnome-do
- Get the process number and then kill it. once killed you can restart
-from your main menu or via command line with gnome-do
- To get the process number:
- ps aux | grep Do
- To start GNOME Do without showing its window
- use the --quiet option:
- $ gnome-do --quiet
- or
- $ gnome-do -q
- 
- Install gnome-do from SVN
- On an Ubuntu, Debian, or derived system, these dependencies can be
-installed by
- sudo aptitude install automake bzr mono-gmcs libmono-cairo2.0-cil
-gtk-sharp2 libndesk-dbus-glib1.0-cil libndesk-dbus1.0-cil
-libgnome-vfs2.0-cil libgtk2.0-dev libtool intltool gnome-sharp2
-ca-certificates
- Once all the dependencies are installed, the Do source can be branched
-by:
- bzr branch lp:do gnome-do
- and then built and installed by one of the following:
- cd gnome-do
- ./autogen.sh
- make
- sudo make install
- To update run
- $ bzr pull
-
-**** Window layer bug under kde4
-
-Window Layer Bugs
- Some KDE users have reported a bug (particularly in KDE 4) where Do
-stops aphring above their other windows like it is supposed to. Do user
-Killerah has posted a fix on Launchpad, transcribed here:
- In KDE 4 go to System Settings>Window Behavior and create a new window
-specific setting. Change "Window Class" to "Exact Match" and type in
-"do".
- Now click on the "Window Extra" tab and set the window type to "Splash
-Screen", then change "Window Title" to "Exact Match" and type in "Do".
- Now go to the "Workarounds" tab and set "Focus Stealing Prevention" to
-"Force" and "None", then change "Window type" to "Force" and "Splash
-Screen".
- Then just Hit OK and Apply and you should be good to go.
-
-*** gmrun
-
-**** Usage
-
-Usage:
- GUI apps can just be typed in and run by pressing enter, terminal apps
-can be run by using ctrl-enter. Entering ctrl-enter with a blank input
-box will open up a blank terminal.
- Gmrun features tab completion, entering tab will bring up a scrollable
-list of possible matches.
- Web addresses eg
-[[http://crunchbanglinux.org][http://crunchbanglinux.org]], entered into
-Gmrun will launch a web browser automatically.
- The same goes for email addresses, using the '[[mailto:%27][mailto:']]
-prefix eg [[mailto:foo@bar.com][mailto:foo@bar.com]], will launch you
-email client.
- Search:
- You can enter search mode by entering '!' as the first letter, the
-title should change from 'Run program' to 'Search', letters you input
-will then automatically come up with suggestions from your command
-history.
- Ctrl-r will allow you to search backwards through that history.
- Ctrl-s will search forward through the history.
- Ctrl-g will cancel a search
- If an extension has been defined in the configuration file, files can
-be launched by the correct program just by typing the file name.
- Press escape to exit, without running anything.
-
-**** example full rc file
-
-*Example full rc file (.gmrunrc)*
- # gmrun configuration file
- # gmrun is (C) Mihai Bazon, <mishoo@infoiasi.ro>
- # GPL v2.0 applies
- # Set terminal
- Terminal = sakura
- TermExec = ${Terminal} -e
- AlwaysInTerm = ssh telnet ftp lynx mc vi vim pine centericq perldoc man
- # Set window geometry (except height)
- Width = 400
- Top = 100
- Left = 200
- # History size
- History = 256
- # Shows last history line selected when invoked
- ShowLast = 1
- # Show files starting with '.'
- # Default is 0 (off), set it to 1 if you want "hidden" files to show up
- # in the completion window
- ShowDotFiles = 0
- # Timeout (in milliseconds) after which gmrun will simulate a TAB press
- # Set this to NULL if don't like this feature.
- TabTimeout = 0
- # URL handlers
- # If the entered text is "http://www.google.com" then:
- # - %u gets replaced with the whole URL ("http://www.google.com")
- # - %s gets replaced with "//www.google.com". This is useful for URL-s
- # like "man:printf" --> %s will get replaced with "printf"
- URL http = mozilla -remote "openURL(%u, new-window)"
- URL mailto = mozilla -remote "mailto(%s)"
- URL man = ${TermExec} 'man %s'
- URL info = ${TermExec} 'info %s'
- URL pd = ${TermExec} 'perldoc %s'
- URL file = nautilus %s
- URL readme = ${TermExec} 'less /usr/doc/%s/README'
- URL info = ${TermExec} 'info %s'
- URL sh = sh -c '%s'
- # extension handlers
- EXT:doc,rtf = AbiWord %s
- EXT:txt,cc,cpp,h,java,html,htm,epl,tex,latex,js,css,xml,xsl,am = emacs
-%s
- EXT:ps = gv %s
- EXT:pdf = xpdf %s
-
-**** crunchbang specific
-
-*edit your ~/.gmrunrc like this:*
- # Set window geometry
- Width = 500
- Top = 350
- Left = 250
- # You can make aliases withing gmrun, for example:
- # My second firefox profile (made with `firefox -ProfileManager`)
- URL ff =`/usr/bin/firefox -P 2` #type ff:
- Terminal = gnome-terminal #type ctrl-enter
- TermExec = gnome-terminal -e
- URL http = /usr/bin/firefox %u
- URL https = /usr/bin/firefox %u
- URL uf = /usr/bin/firefox http://ubuntuforums.org/ #type uf://
- URL mail = /usr/bin/firefox https://mail.google.com/ #type mail://
- URL top = ${TermExec} '%s' #type [command] ctrl-enter
- URL mc = ${TermExec} '%s'
- *Getting a little more out of GMRun*
- The box that pops up to launch an app when you hit Alt - F2 is gmrun.
- Crunchbang, or at least my version of it (this may have changed)
-doesn't ship with a gmrun config file. It's got the
-/usr/share/gmrun/gmrunrc symlink but not /etc/gmrunrc or ~/.gmrunrc
- I'm getting a little more out of gmrun with the following config
- Terminal = terminator
- TermExec = terminator --command
- URL http = /usr/bin/firefox %u
- It works the same way regardless of location, so you can add it to
-either /etc/gmrunrc or ~/.gmrunrc.
- Why bother? Now Alt+F2 to open the gmrun dialog, then:
- 1) type htop (or whatever), then Ctrl + Enter ==> Terminator will
-open running htop (or whatever)
- 2) leave the dialog blank and hit Ctrl + Enter ==> just Terminator
-ready to go (an openbox keyboard binding is better but worth point out
-you've got this now)
- 3) http://example.com ==> Firefox opens with example.com loaded
- I think you can add your own URL link for anything you want with that
-general format (say ftp to gFTP for example)
- Hopefully that helps someone. Now if only the alt+f2 binding worked all
-the time...
-
-**** using url as aliases
-
-you can use the url function to assign aliases
- for exmaple:
- URL up = ${TermExec} 'sudo pacman -Syu && echo %s'
- to run it in gmenu you would have to enter up://
-
-*** bashrun
-
-**** adding your aliases to bashrun
-
-You can use the same conditional that is in .bashrc to specify another
-file in which you can define all of your aliases, i.e:
- if [ -f ~/.bash aliases ]; then
- . ~/.bash aliases
- fi
- .so you don't have to copy everything across to another config file
-when you want to change things
-
-**** making sure it dosent lose focus on kde
-
-go to the application window settings and make sure the keep above
-"apply initially" is marked
- [[~/Dropbox/Org/Tech/linux_files/Image_N1BLHTjZk8IJ2V1n4vfaYA_0001.jpg]]
-
-**** fix for focus/below window problems
-
 ** multimedia
 *** filebot
 
@@ -18154,7 +17962,9 @@ autospawn=yes
 see here for more up to date info:
 
 http://beets.readthedocs.org/en/latest/reference/config.html#id3v23
-
+***** dependecies needed
+python2-requests
+enum34 
 ***** define a file structure with top level first letters
 use this in your config:
 
@@ -18432,12 +18242,14 @@ lyrics:
 Note that the Google custom search API is limited to 100 queries per day. After that, the lyrics plugin will fall back on its other data sources.
 
 ***** replay gain
-This plugin uses the mp3gain command-line tool or the aacgain fork thereof. To get started, install this tool:
-On Linux, mp3gain is probably in your repositories. On Debian or Ubuntu, for example, you can run apt-get install mp3gain.
+This plugin can use one of two backends to compute the ReplayGain values: GStreamer and mp3gain (and its cousin, aacgain). mp3gain can be easier to install but GStreamer support more audio formats.
 
-The plugin will automatically analyze albums and individual tracks as you import them. It writes tags to each file according to the ReplayGain specification; if your player supports these tags, it can use them to do level adjustment.
+#+BEGIN_SRC 
+replaygain:
+    backend: gstreamer
+#+END_SRC
 
-By default, files that already have ReplayGain tags will not be re-analyzed. If you want to analyze every file on import, you can set the overwrite option for the plugin in your configuration file, like so:
+options:
 
 #+BEGIN_EXAMPLE
 replaygain:
@@ -18450,6 +18262,7 @@ you can also manually analyze files that are already in your library. Use the be
 $ beet replaygain [-a] [QUERY]
 #+END_EXAMPLE
 The -a flag analyzes whole albums instead of individual tracks. Provide a query (see Queries) to indicate which items or albums to analyze.
+
 ***** zero
 
 The Zero plugin  lets you get rid of specific fields during import
@@ -18703,7 +18516,12 @@ beet list -a year:1990..1999
 %tip-To use ranges, write a query that has two dots (..) at the beginning, middle, or end of a string of numbers.%
 -dots in the beginning let you specify a maximum (e.g., ..7)
 -dots at the end mean a minimum (4..); 
--dots in the middle mean a range (4..7). 
+-dots in the middle mean a range (4..7).
+****** find all tracks without replaygain info
+#+begin_src bash
+beet ls rg_track_gain::"^$"  
+#+end_src
+
 **** Remove
 
 #+BEGIN_SRC sh
@@ -18857,11 +18675,12 @@ install foobar on linux with a simple command:
 
 wine /PATH/TO/foobar.exe
 
- then add the files you need to add replaygain to the playlist
- mark then all (ctrl-a) and choose replay gain and use the "scan
-selection by albums (by tags)"
- let it compute all the replaygains and then save the replaygain into
-the tag
+then add the files you need to add replaygain to the playlist
+
+mark then all (ctrl-a) and choose replay gain and use the "scan selection by albums (by tags)"
+y
+let it compute all the replaygains and then save the replaygain into the tag
+
 *** puddletag
 
 **** copy one filed to another
@@ -18940,6 +18759,198 @@ as root issue:
  minidlna -R
 
  note: its not needed if you enabled inotify
+
+** launchers
+*** gnome-do
+
+**** gnome do tips
+
+How to kill gnome-do
+ Get the process number and then kill it. once killed you can restart
+from your main menu or via command line with gnome-do
+ To get the process number:
+ ps aux | grep Do
+ To start GNOME Do without showing its window
+ use the --quiet option:
+ $ gnome-do --quiet
+ or
+ $ gnome-do -q
+ 
+ Install gnome-do from SVN
+ On an Ubuntu, Debian, or derived system, these dependencies can be
+installed by
+ sudo aptitude install automake bzr mono-gmcs libmono-cairo2.0-cil
+gtk-sharp2 libndesk-dbus-glib1.0-cil libndesk-dbus1.0-cil
+libgnome-vfs2.0-cil libgtk2.0-dev libtool intltool gnome-sharp2
+ca-certificates
+ Once all the dependencies are installed, the Do source can be branched
+by:
+ bzr branch lp:do gnome-do
+ and then built and installed by one of the following:
+ cd gnome-do
+ ./autogen.sh
+ make
+ sudo make install
+ To update run
+ $ bzr pull
+
+**** Window layer bug under kde4
+
+Window Layer Bugs
+ Some KDE users have reported a bug (particularly in KDE 4) where Do
+stops aphring above their other windows like it is supposed to. Do user
+Killerah has posted a fix on Launchpad, transcribed here:
+ In KDE 4 go to System Settings>Window Behavior and create a new window
+specific setting. Change "Window Class" to "Exact Match" and type in
+"do".
+ Now click on the "Window Extra" tab and set the window type to "Splash
+Screen", then change "Window Title" to "Exact Match" and type in "Do".
+ Now go to the "Workarounds" tab and set "Focus Stealing Prevention" to
+"Force" and "None", then change "Window type" to "Force" and "Splash
+Screen".
+ Then just Hit OK and Apply and you should be good to go.
+
+*** gmrun
+
+**** Usage
+
+Usage:
+ GUI apps can just be typed in and run by pressing enter, terminal apps
+can be run by using ctrl-enter. Entering ctrl-enter with a blank input
+box will open up a blank terminal.
+ Gmrun features tab completion, entering tab will bring up a scrollable
+list of possible matches.
+ Web addresses eg
+[[http://crunchbanglinux.org][http://crunchbanglinux.org]], entered into
+Gmrun will launch a web browser automatically.
+ The same goes for email addresses, using the '[[mailto:%27][mailto:']]
+prefix eg [[mailto:foo@bar.com][mailto:foo@bar.com]], will launch you
+email client.
+ Search:
+ You can enter search mode by entering '!' as the first letter, the
+title should change from 'Run program' to 'Search', letters you input
+will then automatically come up with suggestions from your command
+history.
+ Ctrl-r will allow you to search backwards through that history.
+ Ctrl-s will search forward through the history.
+ Ctrl-g will cancel a search
+ If an extension has been defined in the configuration file, files can
+be launched by the correct program just by typing the file name.
+ Press escape to exit, without running anything.
+
+**** example full rc file
+
+*Example full rc file (.gmrunrc)*
+ # gmrun configuration file
+ # gmrun is (C) Mihai Bazon, <mishoo@infoiasi.ro>
+ # GPL v2.0 applies
+ # Set terminal
+ Terminal = sakura
+ TermExec = ${Terminal} -e
+ AlwaysInTerm = ssh telnet ftp lynx mc vi vim pine centericq perldoc man
+ # Set window geometry (except height)
+ Width = 400
+ Top = 100
+ Left = 200
+ # History size
+ History = 256
+ # Shows last history line selected when invoked
+ ShowLast = 1
+ # Show files starting with '.'
+ # Default is 0 (off), set it to 1 if you want "hidden" files to show up
+ # in the completion window
+ ShowDotFiles = 0
+ # Timeout (in milliseconds) after which gmrun will simulate a TAB press
+ # Set this to NULL if don't like this feature.
+ TabTimeout = 0
+ # URL handlers
+ # If the entered text is "http://www.google.com" then:
+ # - %u gets replaced with the whole URL ("http://www.google.com")
+ # - %s gets replaced with "//www.google.com". This is useful for URL-s
+ # like "man:printf" --> %s will get replaced with "printf"
+ URL http = mozilla -remote "openURL(%u, new-window)"
+ URL mailto = mozilla -remote "mailto(%s)"
+ URL man = ${TermExec} 'man %s'
+ URL info = ${TermExec} 'info %s'
+ URL pd = ${TermExec} 'perldoc %s'
+ URL file = nautilus %s
+ URL readme = ${TermExec} 'less /usr/doc/%s/README'
+ URL info = ${TermExec} 'info %s'
+ URL sh = sh -c '%s'
+ # extension handlers
+ EXT:doc,rtf = AbiWord %s
+ EXT:txt,cc,cpp,h,java,html,htm,epl,tex,latex,js,css,xml,xsl,am = emacs
+%s
+ EXT:ps = gv %s
+ EXT:pdf = xpdf %s
+
+**** crunchbang specific
+
+*edit your ~/.gmrunrc like this:*
+ # Set window geometry
+ Width = 500
+ Top = 350
+ Left = 250
+ # You can make aliases withing gmrun, for example:
+ # My second firefox profile (made with `firefox -ProfileManager`)
+ URL ff =`/usr/bin/firefox -P 2` #type ff:
+ Terminal = gnome-terminal #type ctrl-enter
+ TermExec = gnome-terminal -e
+ URL http = /usr/bin/firefox %u
+ URL https = /usr/bin/firefox %u
+ URL uf = /usr/bin/firefox http://ubuntuforums.org/ #type uf://
+ URL mail = /usr/bin/firefox https://mail.google.com/ #type mail://
+ URL top = ${TermExec} '%s' #type [command] ctrl-enter
+ URL mc = ${TermExec} '%s'
+ *Getting a little more out of GMRun*
+ The box that pops up to launch an app when you hit Alt - F2 is gmrun.
+ Crunchbang, or at least my version of it (this may have changed)
+doesn't ship with a gmrun config file. It's got the
+/usr/share/gmrun/gmrunrc symlink but not /etc/gmrunrc or ~/.gmrunrc
+ I'm getting a little more out of gmrun with the following config
+ Terminal = terminator
+ TermExec = terminator --command
+ URL http = /usr/bin/firefox %u
+ It works the same way regardless of location, so you can add it to
+either /etc/gmrunrc or ~/.gmrunrc.
+ Why bother? Now Alt+F2 to open the gmrun dialog, then:
+ 1) type htop (or whatever), then Ctrl + Enter ==> Terminator will
+open running htop (or whatever)
+ 2) leave the dialog blank and hit Ctrl + Enter ==> just Terminator
+ready to go (an openbox keyboard binding is better but worth point out
+you've got this now)
+ 3) http://example.com ==> Firefox opens with example.com loaded
+ I think you can add your own URL link for anything you want with that
+general format (say ftp to gFTP for example)
+ Hopefully that helps someone. Now if only the alt+f2 binding worked all
+the time...
+
+**** using url as aliases
+
+you can use the url function to assign aliases
+ for exmaple:
+ URL up = ${TermExec} 'sudo pacman -Syu && echo %s'
+ to run it in gmenu you would have to enter up://
+
+*** bashrun
+
+**** adding your aliases to bashrun
+
+You can use the same conditional that is in .bashrc to specify another
+file in which you can define all of your aliases, i.e:
+ if [ -f ~/.bash aliases ]; then
+ . ~/.bash aliases
+ fi
+ .so you don't have to copy everything across to another config file
+when you want to change things
+
+**** making sure it dosent lose focus on kde
+
+go to the application window settings and make sure the keep above
+"apply initially" is marked
+ [[~/Dropbox/Org/Tech/linux_files/Image_N1BLHTjZk8IJ2V1n4vfaYA_0001.jpg]]
+
+**** fix for focus/below window problems
 
 ** office
 *** keepnote
@@ -26515,13 +26526,13 @@ When you want to add multiple cursors not based on continuous lines, but based o
 ****** Bookmark+
 ******* bookmark to a specifc position in a file
 stand in the line/position in the file you want to bookmark and then issue 
-M-x p m and enter the name desired 
+?C-x p m? and enter the name desired 
 ******* important keys
-mark file > m
-rename > r (will prompt for name followd by location, press ENTER to ignore changed location)
-s-n sort by name
+mark file  ?m?
+rename  ?r? (will prompt for name followd by location, press ENTER to ignore changed location)
+sort by name ?s-n?
 ******* create a sequence bookmark (multiple bookmarks launched from 1)
-mark current bookmarks in bk+ with 'm' then use the menu item 'new sequence bookmark from mared' to create a special bookmark that launches all marked bookmakred in succsion. give it a name and your finished
+mark current bookmarks in bk+ with 'm' then use the menu item 'new sequence bookmark from marked' to create a special bookmark that launches all marked bookmakred in succsion. give it a name and your finished
 ******* higlighting
 to higlight a bookmark first bookmark the position you want (C-x pm)
 then issue ( C-x p h ) to bring the higlight menu
@@ -26529,10 +26540,20 @@ then issue ( C-x p h ) to bring the higlight menu
 ******* bookmark a Region
 You can bookmark a region of text, not just a position.When you jump to a bookmark that records a region, the region is
 activated. to do this select a region and them add the bookmark as ususal.
-******* bookmark multiple files at once
+******* bookmark multiple files at once (using dired)
 start a dired+ session
 mark the files you want with 'm'
 add then as bookmarks with M-b
+******* tags
+******** ask for tag each time you save a bookmark
+add this to your config
+#+BEGIN_SRC emacs-lisp :results none
+;ask for tags when saving a bookmark
+(setq bmkp-prompt-for-tags-flag t)
+#+END_SRC
+******** tagging in list view
+see the hotkeys in config for personal tagging keys
+$Note-when tagging one needs to enter tag> ENTER then ENTER again with an empty prompt to save the tag$ 
 ****** Hippie
 ******* add own expansion
 If hippie-expand fails to find any satisfactory expansion, you may want to add a new one by using function `inverse-add-global-abbrev. The following should probably be the last function in `hippie-expand-try-functions-list:
@@ -26551,6 +26572,94 @@ Instead of loading nonexistent auctex.el do
 #+BEGIN_SRC emacs-lisp :results none
 (require 'tex)
 #+END_SRC
+****** Helm
+******* Helm locate
+First be sure you have locate installed on your system. Most GNU/Linux distros come with locate included, you update or create the database with updatedb command. 
+
+`Search files`
+
+To use, just launch
+
+M-x helm-locate
+
+Then enter filename at prompt. It will search this pattern entered also in directory and subdirectory names. To limit your search to basename, add -b after the pattern. The search is performed on all files known to the database. They maybe not exist anymore, so to limit to really existing files add -e after the pattern. To limit your search to specific number of results, use -n after your pattern with the number of results you want.
+
+Example:
+
+Pattern: emacs -b -e -n 12
+
+You can also launch helm-locate from helm-find-files, just do C-x C-f. (With a prefix arg it will let you choose a local DB file)
+******* find in files (C-x f)
+use:
+`helm-for-files`
+******* helm org integration
+******** searh only org headers (top level) with helm
+use:
+
+'Helm-org-headline'
+******* helm colors
+helm-colors
+******* config
+********  Helm commands
+helm-mini is a Helm command to switch buffers or open recent files. For me this is the most useful Helm command and I use it all the time instead of other buffer switchers like iswitchb or ido-switch-buffer. The source code:
+
+#+BEGIN_SRC emacs-lisp :results none
+(defun helm-mini ()
+  "Preconfigured `helm' lightweight version \(buffer -> recentf\)."
+  (interactive)
+  (require 'helm-files)
+  (let ((helm-ff-transformer-show-only-basename nil))
+    (helm-other-buffer '(helm-source-buffers-list
+                         helm-source-recentf
+                         helm-source-buffer-not-found)
+                       "*helm mini*")))
+#+END_SRC
+We can see that it calls helm-other-buffer with 3 sources, first a list of open buffers, then the recent files and a source to create new files. It is possible to create custom commands with just the sources you might like.
+Helm sources
+
+Sources like helm-source-recentf configure what the source will contain 
+****** google-contacts
+
+http://julien.danjou.info/projects/emacs-packages#google-contacts
+
+
+Manual
+
+The easiest way to use it is to load it from your .emacs:
+
+#+BEGIN_SRC emacs-lisp :results none
+(require 'google-contacts)
+#+END_SRC
+
+
+You can then use M-x google-contacts and type a query string.
+
+Various key bindings are available. Here's a few:
+
+#+BEGIN_EXAMPLE
+    n or p to go the next or previous record;
+    g to refresh the result, bypassing the cache;
+    m to send an e-mail to a contact;
+    s to make a new search;
+    q to quit.
+#+END_EXAMPLE
+
+You can integrate directly Google Contacts into Gnus:
+
+#+BEGIN_SRC emacs-lisp :results none
+(require 'google-contacts-gnus)
+#+END_SRC
+
+
+Then you can use ; to go to a contact information while reading an e-mail.
+
+You can integrate directly Google Contacts into message-mode;
+
+#+BEGIN_SRC emacs-lisp :results none
+(require 'google-contacts-message)
+#+END_SRC
+Then you can use TAB to go to complete e-mail addresses in the header fields.
+
 **** registers
 ***** basics
 
@@ -28897,7 +29006,8 @@ IE
 |-----------------+---------------------------+-------------------------------------+-------------------------------------|
 
 To see the full text, hold the mouse over the fielda tool-tip window will show the full content. To edit such a field, use the command |C-c `| (that is |C-c| followed by the backquote). This will open a new window with the full field. Edit it and finish with |C-c C-c|.
-
+***** insert a vertical bar
+To insert a vertical bar into a table field, use \vert or, inside a word abc\vert{}def. 
 ***** Field refrences
 Formulas can reference the value of another field in two ways. Like in any other spreadsheet, you may reference fields with a letter/number combination like B3, meaning the 2nd field in the 3rd row. However, Org prefers to use another, more general representation that looks like this:
 
@@ -42245,15 +42355,14 @@ Fonts:
  
 * shortcuts-cheatsheets-Audio
 ** zeltak legends (rating etc...)
-*** old system
-
-Zeltak's Premium Photo Collection Rating System
+**** Zeltak's Premium Photo Collection Rating System
  5: Zeltaks GH (Pics I NEVER get tired of)
  4: The best Pics
  3: Good pics
  2: Normal pics (the bulk of Zeltak collection)
  1: Not good (bad pics)
  0: Unrated Zeltak's Premium Music Collection Rating System
+**** SONGS
  5: Zeltaks GH (Songs I NEVER get tired of)
  4: The best Songs
  3: Good music (stuff i can listen to)
@@ -42295,7 +42404,6 @@ find DIRECTORY \( -name "*.flac" -o -name "*.mp3" -o -name "*.ogg" \) -exec ./ar
 
 *** Importing music workflow
 **** import to beets
-
 for an album use:
 
 #+BEGIN_SRC sh
@@ -42312,13 +42420,23 @@ beets import -T /PATH/TO
 file:/home/zeltak/.config/beets/config.yaml
 
 **** replay gain  
-***** using cuaded
-install caudec and use 
+***** basic
+%Tip we always want replaygain by album%
+***** using foobar
+%Tip-look also here to add columns to foobar:%
+[[file:tech.org::*add%20the%20replygain%20column%20in%20playlist%20view][add the replygain column in playlist view]]
+
+this is a good method when you need to mass tag a whole collection, or retag your whole collection
+
+install foobar through wine and launch it
+add a folder with all your music
+select all files and right click Replaygain then choose the 'scan selection by albums (by tags)'
+***** using beets
+if you have the replaygain plugin enabled in beets it will auto assign replaygain while importing
+***** using caudec
 #+BEGIN_SRC sh
 caudec -g /path/to/folder/*.flac
 #+END_SRC
-
-%Tip we always want replaygain by album%
 *** convert FLAC/APE cue to flac 
 for 'FLAC' use flacon to split the large flac to tracs
 for 'ape' files first use gnome soundconverter to convert from ape to flac (the bug music file) and then flacon to split to tracks
