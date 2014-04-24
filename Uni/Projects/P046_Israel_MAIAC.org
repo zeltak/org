@@ -2,7 +2,61 @@
 
 * 0.Code run order
 ** Matlab run
-*** Code Preperati
+*** base scripts 
+
+before you start the following files should be in your matlab script dirs
+
+file:/media/NAS/Uni/org/files/Uni/Projects/code/P046.Israel_MAIAC/MAIAC-Matlab/jl2normaldate.m
+file:/media/NAS/Uni/org/files/Uni/Projects/code/P046.Israel_MAIAC/MAIAC-Matlab/julian2date.m
+file:/media/NAS/Uni/org/files/Uni/Projects/code/P046.Israel_MAIAC/MAIAC-Matlab/MCreadv3.m
+file:/media/NAS/Uni/org/files/Uni/Projects/code/P046.Israel_MAIAC/MAIAC-Matlab/MCrunv3.m
+
+$Note$ the first 2 are matlab functions the last 2 (scripts ) use
+
+-create a text file with all your hdf files and full PATH
+-create a lat and long file hdf files
+
+the code is devided into two main files:
+
+maiacrun- the file you run which calls the function
+maiacread-the function itselfs with most of the code
+
+The code itself is commented so more datailed explenations on ecah step can be viwed in the code but a few important points:
+
+you need to change the matlab PATH to where the function is. this can be done via the gui or with the following command:
+
+#+BEGIN_SRC octave 
+%change dir to path
+cd '/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/org/files/Uni/Projects/code/P46/MAIAC'
+#+END_SRC
+
+also, make sure that the file names are correct for the function, since if you rename it the script will crash and give you an error
+
+@note: an error may occur when trying to extract the dates from the file names, make sure terra is always written as 'tera' in all occurances (paths names, text file with paths etc) so that the terra script part dosent crash@
+
+** R scripts
+***  002-clean AOD
+this script
+file:/media/NAS/Uni/org/files/Uni/Projects/code/P046.Israel_MAIAC/p002_aod_clean.r
+
+will load the matlab output for AOD ,clean the data , run EDA etc and output full and yearly RDS files outputed here:
+
+file:/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaodAQ2002.rds
+*** 004-clean station data and join to AOD
+ 
+file:/media/NAS/Uni/org/files/Uni/Projects/code/P046.Israel_MAIAC/p004_stn_clean.r
+
+We use this script to import all avilable israeli station data (PM,Met,co-pollutants etc)
+we clean, run EDA import LU and join to AOD
+this results in 2 all years files outputed for PM25 and PM10:
+mod1.pm10all.RDS
+mod1.pm25all.RDS
+
+and per year files as well
+
+*** 005 run mod1
+
+file:/media/NAS/Uni/org/files/Uni/Projects/code/P046.Israel_MAIAC/p005_mod1.r
 
 * 1.Data info
 ** 1.Air tempreature data

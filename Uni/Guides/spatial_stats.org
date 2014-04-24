@@ -1,4 +1,4 @@
-#+TITLE: spatial\_stats
+#+TITLE: spatial_stats
 
 * spatial statstics
 
@@ -215,3 +215,765 @@ coefficients due to ecological bias.
 
 [[spatial_stats_files/attach/ecological_fallacy.pdf][Attachment #02
 (ecological\_fallacy.pdf)]]
+
+
+* Spatial interpolation
+** Spatial Interpolation: A Brief Introduction
+*** What is Interpolation?
+
+Assume we are dealing with a variable which has meaningful values at every point within a region (e.g., temperature, elevation, concentration of some mineral). Then, given the values of that 
+variable at a set of sample points, we can use an /interpolation/ method to predict values of this variable at every point
+
+For any unknown point, we take some form of weighted average of the values at surrounding points to predict the value at the point where the value is unknown -  In other words, we create a continuous surface from a set of points 
+
+As an example used throughout this presentation, imagine we have data on the concentration of gold in western Pennsylvania at a set of 200 sample locations
+
+#+DOWNLOADED: file:///home/zeltak/ZH_tmp/pandoc/spacial_interpolation_001.gif @ 2014-04-06 12:07:15
+#+attr_html: :width 300px
+[[/home/zeltak/org/attach/images_2014/spacial_interpolation_001_2014-04-06_12:07:15.gif]]
+
+
+*** Appropriateness of Interpolation
+
+-  Interpolation should /not/ be used when there isn't a meaningful
+   value of the variable at every point in space (within the region of
+   interest)
+-  That is, when points represent merely the presence of events (e.g.,
+   crime), people, or some physical phenomenon (e.g., volcanoes,
+   buildings), interpolation does not make sense
+-  Whereas interpolation tries to predict the value of your variable of
+   interest at each point, /density analysis/ (available, for instance,
+   in ArcGIS's Spatial Analyst) "takes known quantities of some
+   phenomena and spreads it across the landscape based on the quantity
+   that is measured at each location and the spatial relationship of the
+   locations of the measured quantities"
+
+*** Interpolation vs. Extrapolation
+
+-  Interpolation is prediction within the range of our data
+
+ -  E.g., having temperature values for a bunch of locations all throughout PA, predict the temperature values at all other
+   locations within PA
+
+-  Note that the methods we are talking about are strictly those of
+   /interpolation/, and not /extrapolation/
+-  Extrapolation is prediction outside the range of our data
+
+-  E.g., having temperature values for a bunch of locations
+      throughout PA, predict the temperature values in Kazakhstan
+
+*** First Law of Geography
+
+-  "Everything is related to everything else, but near things are more
+   related than distant things." - Waldo Tobler (1970)
+-  This is the basic premise behind interpolation, and near points
+   generally receive higher weights than far away points
+-  Reference: TOBLER, W. R. (1970). A computer movie simulating urban
+   growth in the Detroit region. Economic Geography, 46(2): 234-240.
+
+
+*** Methods of Interpolation
+
+-  `Deterministic methods`
+
+   -  Use mathematical functions to calculate the values at unknown
+      locations based either on the degree of similarity (e.g. IDW) or
+      the degree of smoothing (e.g. RBF) in relation with neighboring
+      data points
+   -  Examples include:
+
+      -  Inverse Distance Weighted (IDW)
+      -  Radial Basis Functions (RBF)
+
+-  `Geostatistical methods`
+
+   -  Use both mathematical and statistical methods to predict values at
+      all locations within region of interest and to provide
+      probabilistic estimates of the quality of the interpolation based
+      on the spatial autocorrelation among data points
+
+      -  Include a deterministic component and errors (uncertainty of
+         prediction)
+
+   -  Examples include:
+
+      -  Kriging
+      -  Co-Kriging
+
+-  Reference:
+   [[http:``www.crwr.utexas.edu`gis`gishydro04`Introduction`TermProjects`Peralvo.pdf][http:``www.crwr.utexas.edu`gis`gishydro04`Introduction`TermProjects`Peralvo.pdf]]
+
+
+*** Exact vs. Inexact Interpolation
+
+-  Interpolators can be either `exact` or `inexact`
+
+   -  At sampled locations, `exact interpolators` yield values identical
+      to the measurements
+
+      -  i.e., if the observed temperature in city A is 90 degrees, the
+         point representing city A on the resulting grid will still have
+         the temperature of 90 degrees
+
+   -  At sampled locations,`inexact interpolators` predict values that
+      are different from the measured values.
+
+      -  i.e., if the observed temperature in city A is 90 degrees, the
+         inexact interpolator will still create a prediction for city A,
+         and this prediction will not be exactly 90 degrees
+
+         -  The resulting surface will not pass through the original
+            point
+         -  Can be used to avoid sharp peaks or troughs in the output
+            surface
+
+      -  Model quality can be assessed by the statistics of the
+         differences between predicted and measured values
+
+   -  Jumping ahead, the two deterministic interpolators that will be
+      briefly presented here are exact.
+      Kriging can be exact or inexact
+** Part 1. Deterministic Interpolation
+*** Inverse Distance Weighted (IDW)
+
+-  IDW interpolation explicitly relies on the First Law of Geography. To
+   predict a value for any unmeasured location, %IDW will use the measured values surrounding the prediction location. Measured values that are nearest to the prediction location will have greater influence% (i.e., `weight`) on the predicted value at that unknown
+   point than those that are farther away
+
+   -  Thus, IDW assumes that each measured point has a local influence
+      that diminishes with distance (or distance to the power of q > 1),
+      and `weighs` the points closer to the prediction location greater
+      than those farther away, hence the name inverse distance weighted
+
+      -  Inverse Squared Distance (i.e., q=2) is a widely used
+         interpolator
+      -  For example, ArcGIS allows you to select the value of q
+
+-  Weights of each measured point are proportional to the inverse
+   distance raised to the power value q. As a result, as the distance
+   increases, the weights decrease rapidly. How fast the weights
+   decrease is dependent on the value for q
+-  Because things that are close to one another are more alike than
+   those farther away, as the locations get farther away, the measured
+   values will have little relationship with the value of the prediction
+   location
+
+   -  To speed up the computation we might only use several points that
+      are the closest
+   -  As a result, it is common practice to limit the number of measured
+      values that are used when predicting the unknown value for a
+      location by specifying a search neighborhood. The specified shape
+      of the neighborhood restricts how far and where to look for the
+      measured values to be used in the prediction. Other neighborhood
+      parameters restrict the locations that will be used within that
+      shape
+
+-  The output surface is sensitive to clustering and the presence of
+   outliers
+
+
+*** Search Neighborhood Specification
+
+-  Points with known values of elevation that are outside the circle are
+   just too far from the target point at which the elevation value is
+   unknown, so their weights are pretty much 0
+
+#+DOWNLOADED: file:///home/zeltak/ZH_tmp/pandoc/spacial_interpolation_003.gif @ 2014-04-06 13:52:38
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/spacial_interpolation_003_2014-04-06_13:52:38.gif]]
+
+
+*** The Accuracy of the Results
+
+-  One way to assess the accuracy of the interpolation is known as
+   `cross-validation`
+
+   -  Remember the initial goal: use `all` the measured points to create
+      a surface
+   -  However, assume we remove `one` of the measured points from our
+      input, and re-create the surface using all the remaining points
+   -  Now, we can look at the `predicted value` at that removed point
+      and compare it to the point's `actual value`!
+   -  We do the same thing for all the points
+   -  If the average (squared) difference between the actual value and
+      the prediction is small, then our model is doing a good job at
+      predicting values at unknown points. If this average squared
+      difference is large, then the model isn't that great. This average
+      squared difference is called 'mean square error of prediction'. For
+      instance, the Geostatistical Analyst of ESRI reports the square
+      root of this average squared difference
+   -  Cross-validation is used in other interpolation methods as well
+*** A Cross-Validation Example
+
+-  Assume you have measurements at 15 data points, from which you want
+   to create a prediction surface
+-  The *Measured* column tells you the `measured value` at that point.
+   The *Predicted* column tells you the `prediction` at that point when
+   we remove it from the input (i.e., use the other 14 points to create
+   a surface). The *Error* column is simply the difference between the
+   measured and predicted values
+-  Because we can have an over-prediction or under-prediction at any
+   point, the error can be positive or negative. So averaging the errors
+   won't do us much good if we want to see the overall error ï¿½ we'll
+   end up with a value that is essentially zero due to these positives
+   and negatives
+-  Thus, in order to assess the extent of error in our prediction, we
+   square each term, and then take the average of these squared errors.
+   This average is called the `mean squared error` (MSE)
+-  For example, ArcGIS reports the `square root` of this mean squared
+   error (referred to as simply Root-Mean-Square in Geostatistical
+   Analyst). This root mean square error is often denoted as RMSE
+
+*** Examples of IDW with Different q's
+
+#+DOWNLOADED: file:///home/zeltak/ZH_tmp/pandoc/spacial_interpolation_005.gif @ 2014-04-06 16:23:06
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/spacial_interpolation_005_2014-04-06_16:23:06.gif]]
+
+-  Larger q's (i.e., power to which distance is raised) yield smoother
+   surfaces
+   
+-  Food for thought: What happens when q is set to 0?
+
+** Part 2. A Review of Stats 101
+*** Normality
+-  A lot of statistical testsincluding many in geostatistics rely on the assumption that the data are `normally distributed`
+-  When this assumption does not hold, the results are often inaccurate
+
+#+DOWNLOADED: file:///home/zeltak/ZH_tmp/pandoc/spacial_interpolation_006.gif @ 2014-04-06 16:24:04
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/spacial_interpolation_006_2014-04-06_16:24:04.gif]]
+
+*** Data Transformations
+
+-  Sometimes, it is possible `to transform` a variable's distribution by
+   subjecting it to some simple algebraic operation
+
+   -  The logarithmic transformation is the most widely used to achieve
+      normality when the variable is `positively skewed` (as in the
+      image on the left below)
+   -  Analysis is then performed on the `transformed` variable
+
+
+#+DOWNLOADED: file:///home/zeltak/ZH_tmp/pandoc/spacial_interpolation_007.gif @ 2014-04-06 16:24:39
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/spacial_interpolation_007_2014-04-06_16:24:39.gif]]
+
+
+*** The Mean and the Variance
+
+-  The `mean` (average) of a variable is also known as the expected
+   value
+   -  As an aside, for a normally distributed variable, the mean is
+      equal to the `median`
+
+-  The `variance` is a measure of dispersion of a variable
+
+   -  Calculated as the average squared distance of the possible values
+      of the variable from mean
+   -  `Standard deviation` is the square root of the variance
+
+*** Covariance and Correlation
+
+-  Defined as a measure of how much two variables X and Y change
+   together
+
+   -  The units of Cov (X, Y) are those of X multiplied by those of Y
+   -  The covariance of a variable X with itself is simply the variance
+      of X
+
+-  Since these units are fairly obscure, a dimensionless measure of the
+   strength of the relationship between variables is often used instead.
+   This measure is known as the `correlation`
+
+   -  Correlations range from -1 to 1, with positive values close to one
+      indicating a strong direct relationship and negative values close
+      to -1 indicating a strong inverse relationship
+
+*** Spatial Autocorrelation
+
+-  Sometimes, rather than examining the association between two
+   variables, we might look at the relationship of values `within` a
+   single variable at different time points or locations
+-  There is said to be (positive) autocorrelation in a variable if
+   observations that are closer to each other in space have related
+   values (recall Tobler's Law)
+-  As an aside, there could also be `temporal autocorrelation`
+    i.e., values of a variable at points close in `time` will be
+   related
+*** Regression
+
+-  A statistical method used to examine the relationship between a
+   variable of interest and one `*or more*` explanatory variables
+
+   -  Strength of the relationship
+   -  Direction of the relationship
+
+-  Often referred to as Ordinary Least Squares (OLS) regression
+-  Available in all statistical packages
+-  Note that the presence of a relationship does not imply causality
+
+*** Some (Very) Basic Regression Diagnostics
+
+-  R-squared: the percent of variance in the dependent variable that is
+   explained by the independent variables
+-  The so-called p-value of the coefficient
+
+   -  The probability of getting a coefficient (slope) value as far from
+      zero as we observe in the case when the slope is actually zero
+   -  When p is less than 0.05, the independent variable is considered
+      to be a statistically significant predictor of the dependent
+      variable
+   -  One p-value per independent variable
+
+-  The sign of the coefficient of the independent variable (i.e., the
+   slope of the regression line)
+
+   -  One coefficient per independent variable
+   -  Indicates whether the relationship between the dependent and
+      independent variables is positive or negative
+   -  We should look at the sign when the coefficient is statistically
+      significant
+
+*** Some (but not all) regression assumptions
+
+1. The dependent variable should be normally distributed (i.e., the
+   histogram of the variable should look like a bell curve)
+2. Very importantly, the observations should be independent of each
+   other. (The same holds for regression residuals). If this assumption
+   is violated, our coefficient estimates could be wrong!
+
+** Part 3. Geostatistical Interpolation
+*** Motivating Example: Ordinary Kriging
+
+-  Imagine we have data on the concentration of gold (denote it by Y) in
+   western Pennsylvania at a set of 200 sample locations (call them
+   points p1ï¿½p200)
+-  Since Y has a meaningful value at every point, our goal is to create
+   a prediction surface for the entire region using these sample points
+-  Notation: In this western PA region, Y(p) will denote the
+   concentration level of gold at any point p
+
+#+DOWNLOADED: file:///home/zeltak/ZH_tmp/pandoc/spacial_interpolation_013.gif @ 2014-04-06 16:28:51
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/spacial_interpolation_013_2014-04-06_16:28:51.gif
+]]
+*** Global and Local Structure
+
+-  Without any `a priori` knowledge about the distribution of gold in
+   Western PA, we have no theoretical reason to expect to find different
+   concentrations of gold at different locations in that region
+
+   -  i.e., theoretically, the expected value of gold concentration
+      should not vary with latitude and longitude
+   -  In other words, we would expect that there is some general,
+      average, value of gold concentration (called `global structure`)
+      that is constant throughout the region (even though we assume it's
+      constant, we do not know what its value is)
+
+-  Of course, when we look at the data, we see that there is some
+   variability in the gold concentrations at different points. We can
+   consider this to be a local deviation from the overall global
+   structure, known as the `local structure` or `residual` or`error
+   term
+-  In other words, geostatisticians would decompose the value of gold
+   Y(p) into the `global structure` ?(p) and `local structure` ?(p).
+
+   -  Y(p) = ?(p) ?(p)
+
+*** ?(p)
+
+-  As per the First Law of Geography, the `local structures` ?(p) of
+   nearby observations will often be `correlated`. That is, there is
+   still some meaningful information (i.e., spatial dependencies) that
+   can be extracted from the spatially dependent component of the
+   residuals
+-  So, our ordinary kriging model will:
+
+   -  Estimate this constant but unknown global structure ?(p), and
+   -  Incorporate the dependencies among the residuals ?(p). Doing so
+      will enable us to create a continuous surface of gold
+      concentration in western PA
+
+*** Assumptions of Ordinary Kriging
+
+-  For the sake of the methods that we will be employing, we need to
+   make some assumptions:
+
+   -  `Y(p)`should be normally distributed
+   -  The global structure `?(p)` is constant and unknown (as in the
+      gold example)
+   -  Covariance between values`of ?` depends `only` on distance between
+      the points,
+
+      -  To put it more formally, for each distance `h` and each pair of
+         locations p and t within the region of interest that are `h`
+         units are apart, there exists a common covariance value,
+         `C(h)`, such that covariance
+          `[?(p), ?(t)] = C(h)`
+      -  This is called `isotropy`
+
+*** Covariance and Distance
+
+[[A%20Brief%20Introduction%20to%20Spatial%20Interpolation_files`spacial_interpolation_014.gif]]
+
+-  From the First Law of Geography it would then follow that as distance
+   between points increases, the similarity (i.e., covariance or
+   correlation) between the values at these points decreases
+-  If we plot this out, with inter-point distance h on the x-axis, and
+   covariance C(h) on the y-axis, we get a graph that looks something
+   like the one below. This representation of `covariance` as a function
+   of distance is called as the `covariogram`
+-  Alternatively, we can plot `correlation` against distance (the
+   `correlogram`)
+
+*** Covariograms and Weights
+
+-  `Geostatistical methods` incorporate this covariance-distance
+   relationship into the interpolation models
+
+   -  More specifically, this information is used to calculate the
+      weights
+   -  As IDW, kriging is a weighted average of points in the vicinity
+
+      -  Recall that in IDW, in order to predict the value at an unknown
+         point, we assume that nearer points will have higher weights
+         (i.e., weights are determined based on distance)
+      -  In geostatistical techniques, we calculate the distances
+         between the unknown point at which we want to make a prediction
+         and the measured points nearby, and use the value of the
+         covariogram for those distances to calculate the weight of each
+         of these surrounding measured points
+
+         -  i.e., the weight of a point h units away will depend on the
+            value of C(h)
+
+*** Butï¿½
+
+-  Unfortunately, it so happens that one generally cannot estimate
+   covariograms and correlograms directly
+-  For that purpose, a related function of distance (h) called the
+   `semi-variogram` (or simply the `variogram`) is calculated
+
+   -  The variogram is denoted by ?(h)
+   -  One can easily obtain the `covariogram` from the `variogram` (but
+      not the other way around)
+
+-  Covariograms and variograms tell us the spatial structure of the data
+
+#+DOWNLOADED: http://www.bisolutions.us/web/graphic/spacial_interpolation_015.gif @ 2014-04-06 16:31:59
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/spacial_interpolation_015_2014-04-06_16:31:59.gif]]
+ 
+*** Interpretation of Variograms
+
+-  As mentioned earlier, a covariogram might be thought of as covariance
+   (i.e.,`similarity`) between point values as a function of distance,
+   such that C(h) is greater at smaller distances
+-  A variogram, on the other hand, might be thought of as
+   "`dissimilarity` between point values as a function of distance",
+   such that the dissimilarity is greater for points that are farther
+   apart
+-  Variograms are usually interpreted in terms of the corresponding
+   covariograms or correlograms
+-  A common mistake when interpreting variograms is to say that
+   `variance increases with distance`
+
+
+
+#+DOWNLOADED: http://www.bisolutions.us/web/graphic/spacial_interpolation_015.gif @ 2014-04-06 16:32:23
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/spacial_interpolation_015_2014-04-06_16:32:23.gif]]
+
+*** Bandwidth (The Maximum Value of h)
+
+-  When there are n points, the number of inter-point distances is equal
+   to (n(n-1))`2
+-  Example:
+
+   -  With 15 points, we have (15(15-1))`2 = 105 inter-point distances
+      (marked in yellow on the grid in the lower left)
+   -  Since we're using Euclidean distance, the distance between points
+      1 and 2 is the same as the distance between points 2 and 1, so we
+      count it only once. Also, the distance between a point and itself
+      will always be zero, and is of no interest here
+
+-  The maximum distance h on a covariogram or variogram is called the
+   `bandwidth`, and should equal half the maximum inter-point distance
+
+   -  In the figure on the lower right, the blue line connects the
+      points that are the farthest away from each other. The bandwidth
+      in this example would then equal to half the length of the blue
+      line
+      
+
+#+DOWNLOADED: http://www.bisolutions.us/web/graphic/spacial_interpolation_016.gif @ 2014-04-06 16:32:44
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/spacial_interpolation_016_2014-04-06_16:32:44.gif]]
+
+*** Mathematical definition of a variogram
+
+[[A%20Brief%20Introduction%20to%20Spatial%20Interpolation_files`spacial_interpolation_017.gif]]
+
+-  In other words, for each distance `h` between 0 and the bandwidth
+
+   -  Find all pairs of points `i` and `j` that are separated by that
+      distance `h`
+   -  For each such point pair, subtract the value of `Y` at point `j`
+      from the value of `Y` at point`i`, and square the difference
+   -  Average these square distances across all point pairs and divide
+      the average by 2. That's your variogram value!
+
+      -  Division by 2 -> hence the occasionally used name
+         `semi-variogram`
+
+-  However, in practice, there will generally be only one pair of points
+   that are exactly `h` units apart, unless we're dealing with regularly
+   spaced samples. Therefore, we create "bins", or distance ranges, into
+   which we place point pairs with similar distances, and estimate ?
+   only for midpoints of these bins rather than at all individual
+   distances
+
+   -  These bins are generally of the same size
+   -  It's a rule of thumb to have at least 30 point pairs per bin
+
+-  We call these estimates of ?(h) at the bin midpoints the `empirical
+   variogram`
+
+*** Fitting a Variogram Model
+
+-  Now, we're going to fit a variogram model (i.e., curve) to the
+   empirical variogram
+-  That is, based on the shape of the empirical variogram, different
+   variogram curves might be fit
+-  The curve fitting generally employs the method of `least squares` ï¿½
+   the same method that's used in regression analysis
+   
+
+#+DOWNLOADED: http://www.bisolutions.us/web/graphic/spacial_interpolation_018.gif @ 2014-04-06 16:33:24
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/spacial_interpolation_018_2014-04-06_16:33:24.gif]]
+
+*** The Variogram Parameters
+
+-  The variogram models are a function of three parameters, known as the
+   `range`, the `sill`, and the `nugget`
+
+   -  The `range` is typically the level of `h` at the correlation
+      between point values is zero (i.e., there is no longer any spatial
+      autocorrelation)
+   -  The value of `?` at `r` is called the `sill`, and is generally
+      denoted by s
+
+      -  The variance of the sample is used as an estimate of the sill
+
+   -  Different models have slightly different definitions of these
+      parameters
+   -  The `nugget` deserves a slide of its own
+
+
+#+DOWNLOADED: http://www.bisolutions.us/web/graphic/spacial_interpolation_019.gif @ 2014-04-06 16:33:45
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/spacial_interpolation_019_2014-04-06_16:33:45.gif]]
+
+*** Spatial Independence at Small Distances
+
+-  Even though we assume that values at points that are very near each
+   other are correlated, points that are separated by very, very small
+   values might be considerably less correlated
+
+   -  E.g.: you might find a gold nugget and no more gold in the
+      vicinity
+
+-  In other words, even though `?(0)` is always 0, however ? at very,
+   very small distances will be equal to a value a that is considerably
+   greater than 0
+-  This value denoted by a is called the`nugget`
+-  The ratio of the nugget to the sill is known as the `nugget effect`,
+   and may be interpreted as the percentage of variation in the data
+   that is not spatial
+-  The difference between the sill and the nugget is known as the
+   `partial sill`
+
+   -  The partial sill, and not the sill itself, is reported in
+      GeoStatistical Analyst
+
+*** Pure Nugget Effect Variograms
+
+-  Pure nugget effect is when the covariance between point values is
+   zero at `all` distances `h`
+-  That is, there is absolutely no spatial autocorrelation in the data
+   (even at small distances)
+-  Pure nugget effect covariogram and variogram are presented below
+-  Interpolation won't give a reasonable predictions
+-  Most cases are not as extreme and have both a spatially dependent and
+   a spatially independent component, regardless of variogram model
+   chosen (discussed on following slides)
+
+
+#+DOWNLOADED: http://www.bisolutions.us/web/graphic/spacial_interpolation_020.gif @ 2014-04-06 16:34:02
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/spacial_interpolation_020_2014-04-06_16:34:02.gif]]
+
+
+*** The Spherical Model
+
+
+
+#+DOWNLOADED: http://www.bisolutions.us/web/graphic/spacial_interpolation_021.gif @ 2014-04-06 16:34:22
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/spacial_interpolation_021_2014-04-06_16:34:22.gif]]
+
+-  The spherical model is the most widely used variogram model
+-  Monotonically non-decreasing
+
+   -  i.e., as h increases, the value of `?(h)` does not decrease -
+      i.e., it goes up (until `h?r`) or stays the same (h>r)
+
+-  `?(h?r)=s` and `C(h?r)=0`
+
+   -  That is, covariance is assumed to be exactly zero at distances
+      `h?r`
+
+*** The Exponential Model
+
+#+DOWNLOADED: http://www.bisolutions.us/web/graphic/spacial_interpolation_021.gif @ 2014-04-06 16:34:22
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/spacial_interpolation_021_2014-04-06_16:34:22.gif]]
+
+
+-  The exponential variogram looks very similar to the spherical model,
+   but assumes that the correlation never reaches exactly zero,
+   regardless of how great the distances between points are
+-  In other words, the variogram approaches the value of the sill
+   asymptotically
+-  Because the sill is never actually reached, the range is generally
+   considered to be the smallest distance after which the covariance is
+   5% or less of the maximum covariance
+-  The model is monotonically increasing
+
+   -  i.e., as h goes up, so does `?(h)`
+
+*** The Wave (AKA Hole-Effect) Model
+    
+
+
+#+DOWNLOADED: http://www.bisolutions.us/web/graphic/spacial_interpolation_023.jpg @ 2014-04-06 16:34:51
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/spacial_interpolation_023_2014-04-06_16:34:51.jpg]]
+
+-  On the picture to the left, the waves exhibit a periodic pattern. A
+   non-standard form of spatial autocorrelation applies. Peaks are
+   similar in values to other peaks, and troughs are similar in values
+   to other troughs. However, note the `dampening` in the covariogram
+   and variogram on the right: That is, peaks that are closer together
+   have values that are more correlated than peaks that are father apart
+   (and same holds for troughs)
+*** Variograms and Kriging Weights
+
+-  Imagine our dataset exhibits a wave pattern, as shown on the
+   variogram. IDW weights (based only on distance) would ignore it,
+   however kriging weights would take that spatial structure into
+   account
+
+   -  Because of this wave pattern, the unknown point will actually be
+      more similar to the point that is 400m away than to the point that
+      is 150m away
+    
+#+DOWNLOADED: http://www.bisolutions.us/web/graphic/spacial_interpolation_024.gif @ 2014-04-06 16:35:10
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/spacial_interpolation_024_2014-04-06_16:35:10.gif]]
+
+*** Reviewing Ordinary Kriging
+
+-  Again, ordinary kriging will:
+
+   -  Give us an estimate of the constant but unknown global structure
+      `?(p)`, and
+   -  Use `variography` to examine the dependencies among the residuals
+      `?(p)` and to create kriging weights
+
+      -  We calculate the distances between the unknown point at which
+         we want to make a prediction and the measured points that are
+         nearby and use the value of the covariogram for those distances
+         to calculate the weight of each of these surrounding measured
+         points
+
+-  *The end result is, of course, a continuous prediction surface*
+-  Prediction standard errors can also be obtained ï¿½ this is a surface
+   indicating the accuracy of prediction
+
+*** Universal Kriging
+
+-  Now, take another example: imagine we have data on the temperature at
+   100 different weather stations (call them `w1..w100`) throughout
+   Florida, and we want to predict the values of temperature `(T)` at
+   every point w in the entire state using these data
+-  Notation: temperature at point w is denoted by `T(w)`
+-  We know that temperature at lower latitudes are expected to be
+   higher. So, `T(w)` will be expected to vary with latitude
+
+   -  Ordinary kriging is not appropriate here, because it assumes that
+      the global structure is the same everywhere. This is clearly not
+      the case here
+   -  A method called universal kriging allows for a non-constant global
+      structure
+
+      -  We might model the global structure ? as in regression:
+         [[A%20Brief%20Introduction%20to%20Spatial%20Interpolation_files`spacial_interpolation_025.gif]]
+      -  Everything else in universal kriging is pretty much the same as
+         in ordinary kriging (e.g., variography)
+
+*** Some More Advanced Techniques
+
+-  `Indicator Kriging` is a geostatistical interpolation method does not
+   require the data to be normally distributed
+-  `Co-kriging` is an interpolation technique that is used when there is
+   a second variable that is strongly correlated with the variable from
+   which we're trying to create a surface, and which is sampled at the
+   same set of locations as our variable of interest and at a number of
+   additional locations
+-  For more details on `indicator kriging` and `co-kriging`, see one of
+   the texts suggested at the end of this presentation
+
+*** Isotropy vs. Anisotropy
+
+-  When we use `isotropic` (or `omnidirectional`) covariograms, we
+   assume that the covariance between the point values depends only on
+   distance
+
+   -  Recall the covariance stationarity assumption
+
+-  `Anisotropic` (or directional) covariograms are used when we have
+   reason to believe that direction plays a role as well (i.e.,
+   covariance is a function of both distance and direction)
+
+   -  E.g., in some problems, accounting for direction is appropriate
+      (e.g., when wind or water currents might be a factor)
+
+-  For more on anisotropic variograms, see
+   [[http:``web.as.uky.edu`statistics`users`yzhen8`STA695`lec05.pdf][http:``web.as.uky.edu`statistics`users`yzhen8`STA695`lec05.pdf]]
+
+*** IDW vs. Kriging
+
+-  We get a more "natural" look to the data with Kriging
+-  You see the "bulls eye" effect in IDW but not (as much) in Kriging
+-  Helps to compensate for the effects of data clustering, assigning
+   individual points within a cluster less weight than isolated data
+   points (`or, treating clusters more like single points`)
+-  Kriging also give us a standard error
+-  If the data locations are quite dense and uniformly distributed
+   throughout the area of interest, we will get decent estimates
+   regardless of which interpolation method we choose
+-  On the other hand, if the data locations fall in a few clusters and
+   there are gaps in between these clusters, we will obtain pretty
+   unreliable estimates regardless of whether we use IDW or Kriging
+ These are interpolation results using the gold data in Western PA (IDW
+vs. Ordinary Kriging)
+
+
+
+#+DOWNLOADED: http://www.bisolutions.us/web/graphic/spacial_interpolation_026.gif @ 2014-04-06 16:35:42
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/spacial_interpolation_026_2014-04-06_16:35:42.gif]]
+

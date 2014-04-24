@@ -15,16 +15,41 @@ library(car)
 library(dplyr)
 
 
+###############
+#TABLES
+###############
+#create main CV table
+mod1table <- data.frame(model=character(40), r2002=numeric(40), r2003=numeric(40),
+                        r2004=numeric(40),r2005=numeric(40),
+                        r2006=numeric(40),r2007=numeric(40),
+                        r2008=numeric(40),r2009=numeric(40),
+                        r2010=numeric(40),r2011=numeric(40),
+                        r2012=numeric(40), r2013=numeric(40),mean=numeric(40))
 
-#EDA
+#name columns
 
+mod1table$model<- c("allyears","mod1CV_R2","mod1CV_int","mod1CV_int_SE",
+                   "mod1CV_Slope","mod1CV_Slope SE","mod1CV_RMSPE",
+                   "mod1CV_spatial","mod1CV_temporal","mod1CV_RMSPE_spatial",
+                   "mod1CVLPM_R2","mod1CVLPM_int","mod1CVLPM_int_SE",
+                   "mod1CVLPM_Slope","mod1CVLPM_Slope_SE","mod1CVLPM_RMSPE",
+                   "mod1CVLPM_spatial","mod1CVLPM_temporal","mod1CVLPM_RMSPE_spatial",
+                   "mod2_R2","mod3a_pre_gam","mod3b_post_gam","mod3_pm_mod3","mod3_int",
+                   "mod3_int_SE","mod3_Slope","mod3_Slope SE","mod3_RMSPE",
+                   "mod3_spatial","mod3_temporal","mod3_RMSPE_spatial",
+                   "mod3LPM_pm_mod3LPM","mod3LPM_int","mod3LPM_int_SE","mod3LPM_Slope",
+                   "mod3LPM_Slope SE","mod3LPM_RMSPE","mod3LPM_spatial","mod3LPM_temporal","mod3LPM_RMSPE_spatial")
+
+mod1table$model[1] <-"allyears_Pm25"
+
+#EDA PM25
 #import all terra aod
-terra<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_terraa/FN003_aod_allyears/aod_allyears.RDS")
+terra<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/AOD_allyears.RDS")
 
 ######REPORT 1
 #raw correlaction of aod and PM stations for 2 years
 
-summary(lm(PM25~aod,data=mod1PM25_2012))
+summary(lm(PM25~aod,data=mod1PM25_2012))$r.squared
 #Multiple R-squared:  0.004063
 summary(lm(PM25~aod,data=mod1PM25_2002))
 #Multiple R-squared:  0.006503
@@ -33,6 +58,18 @@ summary(lm(PM25~aod,data=mod1PM25_2004))
 summary(lm(PM25~aod,data=mod1PM25_2007))
 #Multiple R-squared:  0.03155
 
+
+######REPORT 1
+#raw correlaction of aod and PM stations for 2 years
+
+summary(lm(PM10~aod,data=mod1PM10_2012))
+#Multiple R-squared:  0.004063
+summary(lm(PM10~aod,data=mod1PM10_2002))
+#Multiple R-squared:  0.006503
+summary(lm(PM10~aod,data=mod1PM10_2004))
+#Multiple R-squared:  0.009647
+summary(lm(PM10~aod,data=mod1PM10_2007))
+#Multiple R-squared:  0.03155
 
 ### by season
 m1.formula <- as.formula(PM25~aod)
@@ -68,6 +105,25 @@ seas2012[["1-winter"]][8]
 seas2012[["2-spring"]][8]
 seas2012[["3-summer"]][8]
 seas2012[["4-autum"]][8]
+
+
+##### run PM25 per station
+mod1PM25_2012[,unique(stn)]
+
+mod1PM25_2002[,]
+
+#2012
+stn2002<- mod1PM25_2002 %.% group_by(stn) %.% do(function(df){summary(lm(m1.formula,data=df))})
+seas2002[[1]][8]
+seas2002[[2]][8]
+seas2002[[3]][8]
+seas2002[[4]][8]
+seas2002[[5]][8]
+
+
+
+
+
 
 
 
@@ -165,7 +221,131 @@ summary(lm(aod~AOT_440,data=temp04))
 
 
 
-#EDA
+#EDA PM10
+
+
+#pm10
+pm10all<-readRDS("/home/zeltak/ZH_tmp/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm10all.RDS")
+summary(pm10all)
+pm10all[,DOW:=NULL]
+pm10all[,Holiday:=NULL]
+pm10all[,PM25:=NULL]
+pm10all[,RH:=NULL]
+pm10all[,WD:=NULL]
+pm10all[,Temp:=NULL]
+pm10all[,SO2:=NULL]
+pm10all[,NO2:=NULL]
+pm10all[,WS:=NULL]
+
+pm10all<-na.omit(pm10all)
+#clean
+#pm10all<-pm10all[pm10 <= 500]
+describe(pm10all$pm10)
+summary(pm10all)
+
+
+
+# import monitor data and spatial merge with nearestbyday()
+source("/home/zeltak/org/files/Uni/Projects/code/P031.MIAC_PM/code_snips/nearestbyday.r")
+
+#create PM matrix
+pm.m <- makepointsmatrix(pm10all, "x_stn_ITM", "y_stn_ITM", "stn")
+
+#create aod matrix
+aod.m <- makepointsmatrix(terra[terra[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
+
+# use the nearestbyday() function
+###########
+closestaod <- nearestbyday(pm.m, aod.m, 
+                           pm10all, terra [, list(day, aodid, aod)], 
+                           "stn", "aodid", "closestaod", "aod", knearest = 5, maxdistance = 1500)
+# this has aod even when there is no pm; it gets dropped on the merge
+
+
+
+setkey(pm10all,stn,day)
+setkey(closestaod,stn,day)
+mod1pm10 <- merge(pm10all, closestaod, all.x = T)
+#head(mod1)
+mod1pm10 <- mod1pm10[aod != "NA"]
+summary(mod1pm10)
+
+
+mod1pm10_2002 <- mod1pm10[c == "2002"]
+mod1pm10_2003 <- mod1pm10[c == "2003"]
+mod1pm10_2004 <- mod1pm10[c == "2004"]
+mod1pm10_2005 <- mod1pm10[c == "2005"]
+mod1pm10_2006 <- mod1pm10[c == "2006"]
+mod1pm10_2007 <- mod1pm10[c == "2007"]
+mod1pm10_2008 <- mod1pm10[c == "2008"]
+mod1pm10_2009 <- mod1pm10[c == "2009"]
+mod1pm10_2010 <- mod1pm10[c == "2010"]
+mod1pm10_2011 <- mod1pm10[c == "2011"]
+mod1pm10_2012 <- mod1pm10[c == "2012"]
+
+
+
+
+
+######REPORT 1
+#raw correlaction of aod and PM stations for 2 years
+
+summary(lm(PM10~aod,data=mod1pm10_2012))
+#0.005431
+summary(lm(PM10~aod,data=mod1pm10_2002))
+#0.005326
+summary(lm(PM10~aod,data=mod1pm10_2004))
+#0.01678
+summary(lm(PM10~aod,data=mod1pm10_2007))
+# 0.06286
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # describe aod

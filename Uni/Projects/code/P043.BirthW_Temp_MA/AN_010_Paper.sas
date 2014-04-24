@@ -1,7 +1,7 @@
 /*birth weight analysis*/
 
-libname bwr 'f:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.5.Results\RN_001_results_paper\' ;
-libname bww 'f:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\2.Gather_data\FN010_bwdatasets\' ;
+libname bwr 'z:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.5.Results\RN_001_results_paper\' ;
+libname bww 'z:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\2.Gather_data\FN010_bwdatasets\' ;
 
  ods listing close;*to suppress the output printing;
 
@@ -729,7 +729,7 @@ Iqrfintempmabirth;
 run;
 
 PROC EXPORT DATA= fintemp_paper
-            OUTFILE= "f:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.5.Results\RN_002_results_paper_final\fintemp_paper.csv" 
+            OUTFILE= "z:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.5.Results\RN_002_results_paper_final\fintemp_paper.csv" 
 			            DBMS=CSV REPLACE;
 						     PUTNAMES=YES;
 							 RUN;
@@ -750,7 +750,7 @@ Iqrtncdcmabirth;
 run;
 
 PROC EXPORT DATA= tncdc_paper
-            OUTFILE= "f:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.5.Results\RN_002_results_paper_final\tncdc_paper.csv" 
+            OUTFILE= "z:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.5.Results\RN_002_results_paper_final\tncdc_paper.csv" 
 			            DBMS=CSV REPLACE;
 						     PUTNAMES=YES;
 							 RUN;
@@ -833,7 +833,7 @@ run;
 
 
 PROC IMPORT OUT= ur
-            DATAFILE= "f:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\2.Gather_data\FN007_keytables\urb_rural30km.dbf" 
+            DATAFILE= "z:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\2.Gather_data\FN007_keytables\urb_rural30km.dbf" 
 			            DBMS=DBF   REPLACE;
 						     GETDELETED=NO;
 							 RUN; 
@@ -1039,3 +1039,71 @@ diab  hyper lungd diab_other prevpret kess
    ods output  SolutionF =  bwr.IQR_SENS_Iqrfintempmabirth;
 run;
 
+
+
+
+
+/*So fit a logistic model for BW < 2500 g and for GA < 37 weeks. */
+
+
+
+  
+data bww.Bw_noces;
+set bww.Bw_noces;
+lowbw=0;
+if BIRTHW < 2500  then lowbw=1;
+NSGA=0;
+if gacalc < 37  then NSGA=1;
+run; 
+
+data bw_all;
+set db.bw9;
+keep uniqueid_y pmnew--pm12_24 localpm date;
+
+
+
+
+PROC EXPORT DATA= bww.Bw_noces 
+            OUTFILE= "Z:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\3.Analysis\2.R_analysis\bw_nocesv2.csv" 
+			            DBMS=CSV REPLACE;
+						     PUTNAMES=YES;
+							 RUN;
+							  
+
+
+ proc glimmix data=bww.Bw_noces  ;
+  class kess  MRN EDU_GROUP fips byob ;
+    model  NSGA (event= "1")= IQRfintempma3month adtmean age_centered age_centered_sq cig_preg cig_pre med_income p_ospace gender prev_400
+  hyper lungd diab diab_other prevpret kess  
+  MRN edu_group   byob   /s dist=binary link=logit or cl ;
+   random intercept / subject=FIPS ;
+ods output  ParameterEstimates =  yy ;
+run;
+
+
+
+ proc glimmix data=bww.Bw_noces  ;
+  class kess  MRN EDU_GROUP fips byob ;
+    model  lowbw (event= "1")= IQRfintempma3month parity  age_centered age_centered_sq cig_preg cig_pre med_income p_ospace gender prev_400
+  hyper lungd diab diab_other prevpret   /s dist=binary link=logit or cl ;
+   random intercept / subject=FIPS ;
+ods output  ParameterEstimates =  xx ;
+run;
+
+
+ proc glimmix data=bww.Bw_noces  ;
+  class kess  MRN EDU_GROUP fips byob ;
+    model  lowbw (event= "1")= IQRfintempma3month parity    /s dist=binary link=logit or cl ;
+   random intercept / subject=FIPS ;
+ods output  ParameterEstimates =  xx ;
+run;
+
+
+proc mixed data = bww.Bw_noces method=reml covtest;
+class kess  MRN EDU_GROUP fips byob ;
+ model BIRTHW = IQRfintempma3  parity sinetime costime age_centered age_centered_sq cig_preg cig_pre med_income p_ospace gender prev_400
+diab  hyper lungd diab_other prevpret kess  
+  MRN edu_group   byob    / s cl outpred=OUTFILE;
+  random int  / sub = fips s ;
+   ods output  SolutionF = z1;
+run;

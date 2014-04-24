@@ -1,0 +1,54 @@
+ #+TITLE:P051_wrf
+
+* intro
+** introduction
+
+WP entry: http://en.wikipedia.org/wiki/Weather_Research_and_Forecasting_Model
+
+each run of the model needs inputs:
+
+#+DOWNLOADED: file:///home/zeltak/ZH_tmp/WRF_flow_chart-arw_noVAPOR.png @ 2014-04-11 08:19:11
+#+attr_html: :width 300px
+[[/home/zeltak/org/attach/images_2014/WRF_flow_chart-arw_noVAPOR_2014-04-11_08:19:11.png]]
+
+
+namelist: this is where variables for the model are defined:
+
+#+BEGIN_EXAMPLE
+Description of namelist variables
+(Updated for WRF 2.1)
+---------------------------------
+
+ Note: variables followed by (max_dom) indicate that this variable needs to
+       be defined for the nests when max_dom > 1.
+
+ &time_control
+ run_days                            = 1,	; run time in days
+ run_hours                           = 0,	; run time in hours
+                                                  Note: if it is more than 1 day, one may use both run_days and run_hours
+                                                  or just run_hours. e.g. if the total run length is 36 hrs, you may
+                                                  set run_days = 1, and run_hours = 12, or run_days = 0, and run_hours = 36
+ run_minutes                         = 0,	; run time in minutes
+ run_seconds                         = 0,	; run time in seconds
+ start_year (max_dom)                = 2001,	; four digit year of starting time
+ start_month (max_dom)               = 06,	; two digit month of starting time
+ start_day (max_dom)                 = 11,	; two digit day of starting time
+ start_hour (max_dom)                = 12,	; two digit hour of starting time
+ start_minute (max_dom)              = 00,	; two digit minute of starting time
+ start_second (max_dom)              = 00,	; two digit second of starting time
+                                                  Note: the start time is used to name the first wrfout file.
+                                                  It also controls the start time for nest domains, and the time to restart
+ end_year (max_dom)                  = 2001,	; four digit year of ending time
+ end_month (max_dom)                 = 06,	; two digit month of ending time
+ end_day (max_dom)                   = 12,	; two digit day of ending time
+ end_hour (max_dom)                  = 12,	; two digit hour of ending time
+ end_minute (max_dom)                = 00,	; two digit minute of ending time
+ end_second (max_dom)                = 00,	; two digit second of ending time
+                                                  It also controls when the nest domain integrations end
+                                                  All start and end times are used by real.exe.
+
+                                                  Note that one may use either run_days/run_hours etc. or 
+                                                  end_year/month/day/hour etc. to control the length of 
+                                                  model integration. But run_days/run_hours
+                                                  takes precedence over the end times. 
+#+END_EXAMPLE
