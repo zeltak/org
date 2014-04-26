@@ -8,7 +8,7 @@
 ***** backup current system (pre install)
 backup these dirs:
 
-#+BEGIN_SRC sh
+#+BEGIN_EXAMPLE
 /home/USER/
 from /etc:
 fstab
@@ -17,7 +17,7 @@ exports
 mpd.conf
 ssh directory
 smb.conf
-#+END_SRC
+#+END_EXAMPLE
 
 ***** Download latest Iso
 -download latest iso:
@@ -27512,8 +27512,11 @@ the +1m is a repeater; the intended interpretation is that the task has a deadli
 ***** run ssh with command inside org
 use something like this
 #+begin_src sh :dir /ssh:zeltak@192.168.0.2:
-      ls -la
+ls -la
     #+end_src
+***** "tangling"
+'tangling' is the proccess of creating pure source code files by extracting code from source blocks in the current buffer. 
+During “tangling” of code blocks their bodies are expanded using org-babel-expand-src-block which can expand both variable and “noweb” style references. In order to tangle a code block it must have a :tangle header argument (see [[*header%20arguments][header arguments]] )
 ***** disable confirmation checks for certain languages
 for example for lisp
 #+BEGIN_SRC emacs-lisp :results none
@@ -27521,7 +27524,193 @@ for example for lisp
     (not (string= lang "emacs-lisp")))  ; don't ask for lisp
 (setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
 #+END_SRC
+***** header arguments
+****** intro
+http://orgmode.org/manual/Specific-header-arguments.html#Specific-header-arguments
 
+Many aspects of the evaluation and export of code blocks are controlled through header arguments. These can be specified globally, at the file level, at the outline subtree level, and at the individual code block level. The following describes some of the header arguments. 
+
+`Structure of Code Blocks`
+
+The structure of code blocks is as follows:
+
+     #+NAME: <name>
+     #+BEGIN_SRC <language> <switches> <header arguments>
+       <body>
+     #+END_SRC
+
+Where <name> is a string used to name the code block, <language> specifies the language of the code block (e.g. emacs-lisp, shell, R, python, etc...), <switches> can be used to control export of the code block, <header arguments> can be used to control many aspects of code block behavior as demonstrated below, and <body> contains the actual source code. 
+
+****** 'Common examples'
+
+`silence results` (no output)
+#+BEGIN_EXAMPLE
+:results none
+#+END_EXAMPLE
+
+`overwrite results` 
+#+BEGIN_EXAMPLE
+:results output replace
+#+END_EXAMPLE
+
+`verbatim results` (not formatting)
+
+#+BEGIN_EXAMPLE
+:results verbatim 
+#+END_EXAMPLE
+
+****** :results 
+******* info
+There are four classes of `:results` header argument. Only one option per class may be supplied per code block.
+
+v `collection` header arguments specify how the results should be collected from the code block
+
+`type` header arguments specify what type of result the code block will return—which has implications for how they will be processed before insertion into the Org mode buffer
+
+`format` header arguments specify what type of result the code block will return—which has implications for how they will be inserted into the Org mode buffer
+
+`handling` header arguments specify how the results of evaluating the code block should be handled. 
+
+******* Collection
+The following options are mutually exclusive, and specify how the results should be collected from the code block.
+
+`value` This is the default. The result is the value of the last statement in the code block. This header argument places the evaluation in functional mode. Note that in some languages, e.g., Python, use of this result type requires that a return statement be included in the body of the source code block. E.g., :results value.
+
+`output` The result is the collection of everything printed to STDOUT during the execution of the code block. This header argument places the evaluation in scripting mode. E.g., :results output. 
+
+******* Type
+
+The following options are mutually exclusive and specify what type of results the code block will return. By default, results are inserted as either a table or scalar depending on their value.
+
+`table, vector` The results should be interpreted as an Org mode table. If a single value is returned, it will be converted into a table with one row and one column. E.g., :results value table.
+
+`list` The results should be interpreted as an Org mode list. If a single scalar value is returned it will be converted into a list with only one element.
+
+`scalar, verbatim` The results should be interpreted literally—they will not be converted into a table. The results will be inserted into the Org mode buffer as quoted text. E.g., :results value verbatim.
+
+`file` The results will be interpreted as the path to a file, and will be inserted into the Org mode buffer as a file link. E.g., :results value file. 
+
+******* Format
+The following options are mutually exclusive and specify what type of results the code block will return. By default, results are inserted according to the type as specified above.
+
+`raw` The results are interpreted as raw Org mode code and are inserted directly into the buffer. If the results look like a table they will be aligned as such by Org mode. E.g., :results value raw.
+
+`org` The results are will be enclosed in a BEGIN_SRC org block. They are not comma-escaped by default but they will be if you hit TAB in the block and/or if you export the file. E.g., :results value org.
+
+`html` Results are assumed to be HTML and will be enclosed in a BEGIN_HTML block. E.g., :results value html.
+
+`latex` Results assumed to be LaTeX and are enclosed in a BEGIN_LaTeX block. E.g., :results value latex.
+
+`code` Result are assumed to be parsable code and are enclosed in a code block. E.g., :results value code.
+
+`pp` The result is converted to pretty-printed code and is enclosed in a code block. This option currently supports Emacs Lisp, Python, and Ruby. E.g., :results value pp.
+
+`drawer` The result is wrapped in a RESULTS drawer. This can be useful for inserting raw or org syntax results in such a way that their extent is known and they can be automatically removed or replaced. 
+
+******* Handling
+
+The following results options indicate what happens with the results once they are collected.
+
+`silent` The results will be echoed in the minibuffer but will not be inserted into the Org mode buffer. E.g., :results output silent.
+
+`replace` The default value. Any existing results will be removed, and the new results will be inserted into the Org mode buffer in their place. E.g., :results output replace.
+
+`append` If there are pre-existing results of the code block then the new results will be appended to the existing results. Otherwise the 
+
+`new` results will be inserted as with replace.
+
+`prepend` If there are pre-existing results of the code block then the new results will be prepended to the existing results. Otherwise the new results will be inserted as with replace
+
+****** :Session
+
+#+BEGIN_EXAMPLE
+:session
+#+END_EXAMPLE
+
+The `:session` header argument starts a session for an interpreted language where state is preserved.
+
+By default, a session is not started.
+
+A string passed to the :session header argument will give the 'session a name'.
+
+This makes it possible to run concurrent sessions for each interpreted language.
+
+****** :shebang
+Setting the :shebang header argument to a string value (e.g., :shebang "#!/bin/bash") causes the string to be inserted as the first line of any tangled file holding the code block, and the file permissions of the tangled file are set to make it executable.
+****** :eval
+The :eval header argument can be used to limit the evaluation of specific code blocks. The :eval header argument can be useful for protecting against the evaluation of dangerous code blocks or to ensure that evaluation will require a query regardless of the value of the org-confirm-babel-evaluate variable. The possible values of :eval and their effects are shown below.
+
+never or no
+    The code block will not be evaluated under any circumstances.
+query
+    Evaluation of the code block will require a query.
+never-export or no-export
+    The code block will not be evaluated during export but may still be called interactively.
+query-export
+    Evaluation of the code block during export will require a query. 
+
+If this header argument is not set then evaluation is determined by the value of the org-confirm-babel-evaluate variable see Code evaluation security.
+****** :file
+The header argument :file is used to specify an external file in which to save code block results. After code block evaluation an Org mode style [[file:]] link (see Link format) to the file will be inserted into the Org mode buffer. Some languages including R, gnuplot, dot, and ditaa provide special handling of the :file header argument automatically wrapping the code block body in the boilerplate code required to save output to the specified file. This is often useful for saving graphical output of a code block to the specified file.
+
+The argument to :file should be either a string specifying the path to a file, or a list of two strings in which case the first element of the list should be the path to a file and the second a description for the link.
+****** :dir and remote execution
+While the :file header argument can be used to specify the path to the output file, :dir specifies the default directory during code block execution. If it is absent, then the directory associated with the current buffer is used. In other words, supplying :dir path temporarily has the same effect as changing the current directory with M-x cd path RET, and then not supplying :dir. Under the surface, :dir simply sets the value of the Emacs variable default-directory.
+
+When using :dir, you should supply a relative path for file output (e.g., :file myfile.jpg or :file results/myfile.jpg) in which case that path will be interpreted relative to the default directory.
+In other words, if you want your plot to go into a folder called Work in your home directory, you could use
+
+     #+BEGIN_SRC R :file myplot.png :dir ~/Work
+     matplot(matrix(rnorm(100), 10), type="l")
+     #+END_SRC
+
+`Remote execution`
+
+A directory on a remote machine can be specified using tramp file syntax, in which case the code will be evaluated on the remote machine. An example is:
+
+     #+BEGIN_SRC R :file plot.png :dir /dand@yakuba.princeton.edu:
+     plot(1:10, main=system("hostname", intern=TRUE))
+     #+END_SRC
+
+Text results will be returned to the local Org mode buffer as usual, and file output will be created on the remote machine with relative paths interpreted relative to the remote directory. An Org mode link to the remote file will be created.
+
+Most of this functionality follows immediately from the fact that :dir sets the value of the Emacs variable default-directory, thanks to tramp. Those using XEmacs, or GNU Emacs prior to version 23 may need to install tramp separately in order for these features to work correctly.
+
+`Further points`
+If :dir is used in conjunction with :session, although it will determine the starting directory for a new session as expected, no attempt is currently made to alter the directory associated with an existing session.
+:dir should typically not be used to create files during export with :exports results or :exports both. The reason is that, in order to retain portability of exported material between machines, during export links inserted into the buffer will not be expanded against default directory. Therefore, if default-directory is altered using :dir, it is probable that the file will be created in a location to which the link does not point.
+****** :exports
+The :exports header argument specifies what should be included in HTML or LaTeX exports of the Org mode file.
+
+    code The default. The body of code is included into the exported file. E.g., :exports code.
+    results The result of evaluating the code is included in the exported file. E.g., :exports results.
+    both Both the code and results are included in the exported file. E.g., :exports both.
+    none Nothing is included in the exported file. E.g., :exports none.
+****** :comments
+
+By default code blocks are tangled to source-code files without any insertion of comments beyond those which may already exist in the body of the code block. The :comments header argument can be set as follows to control the insertion of extra comments into the tangled code file.
+
+no The default. No extra comments are inserted during tangling.
+link The code block is wrapped in comments which contain pointers back to the original Org file from which the code was tangled.
+yes A synonym for “link” to maintain backwards compatibility.
+org Include text from the Org mode file as a comment. The text is picked from the leading context of the tangled code and is limited by the nearest headline or source block as the case may be.
+both Turns on both the “link” and “org” comment options.
+noweb Turns on the “link” comment option, and additionally wraps expanded noweb references in the code block body in link comments.
+****** :cache
+
+The :cache header argument controls the use of in-buffer caching of the results of evaluating code blocks. It can be used to avoid re-evaluating unchanged code blocks. Note that the :cache header argument will not attempt to cache results when the :session header argument is used, because the results of the code block execution may be stored in the session outside of the Org mode buffer. The :cache header argument can have one of two values: yes or no.
+
+    no The default. No caching takes place, and the code block will be evaluated every time it is called.
+    yes Every time the code block is run a SHA1 hash of the code and arguments passed to the block will be generated. This hash is packed into the #+RESULTS: line and will be checked on subsequent executions of the code block. If the code block has not changed since the last time it was evaluated, it will not be re-evaluated. 
+
+Code block caches notice if the value of a variable argument to the code block has changed. If this is the case, the cache is invalidated and the code block is re-run. In the following example, caller will not be re-run unless the results of random have changed since it was last run.
+***** batch proccess code blokcs
+for a subtree/buffer
+#+BEGIN_SRC emacs-lisp :results none
+org-babel-execute-buffer
+;and for subtrees 
+org-babel-execute-subtree
+#+END_SRC 
 **** bugs
 ***** files opend are slow- disable line mode
 
@@ -32697,18 +32886,14 @@ job (not the PID) number.
 
 ** systemd
 **** systemctl
+The main command used to introspect and control systemd is systemctl. Some of its uses are examining the system state and managing the system and services. Note: systemadm is the official graphical frontend for systemctl. It is provided by the systemd-ui-git package from the AUR.
 
-Basic systemctl usage
- The main command used to introspect and control systemd is systemctl.
-Some of its uses are examining the system state and managing the system
-and services.
- Note: systemadm is the official graphical frontend for systemctl. It is
-provided by the systemd-ui-git package from the AUR.
- Analyzing the system state
- List running units:
+Analyzing the system state
+List running units:
 
- $ systemctl
-
+#+BEGIN_SRC sh
+systemctl
+#+END_SRC
  or to list all units:
 
  $ systemctl list-units
@@ -38526,6 +38711,23 @@ b)Choose to create a new project from an Existing Directory
 c)Select the appropriate directory and then click Create Project
 
 A new project will be created for the directory and RStudio's version control features will then be available for that directory.
+**** 'Force overwrite of local file with whats it origin repo'
+If you want to overwrite only one file:
+
+#+BEGIN_SRC sh
+git fetch
+git checkout origin/master <filepath>
+#+END_SRC
+
+If you want to overwrite all changed files:
+
+@this will overwrite ALL the repo@
+#+BEGIN_SRC sh
+git fetch
+git reset --hard origin/master
+#+END_SRC
+@this will overwrite ALL the repo@
+
 **** !Errors/bugs!
 ***** fix conflict issues
 ****** Pull is not possible because you have unmerged files error

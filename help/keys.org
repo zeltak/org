@@ -1,5 +1,20 @@
 #+TITLE: emacs_org_shortcuts
 
+* Template
+** Template
+
+| keys | functions | comment |
+|------+-----------+---------|
+|      |           |         |
+|      |           |         |
+|      |           |         |
+|      |           |         |
+|      |           |         |
+|      |           |         |
+|      |           |         |
+|      |           |         |
+|      |           |         |
+|      |           |         |
 
 * Shortcuts
 
@@ -223,7 +238,6 @@ where the ::25 means line 25 in that file
 [[*black%20ice][black ice]]
 
 * org
-
 ** bookmark +
 
 | keys              | functions                           |   |
@@ -347,29 +361,45 @@ switch to next buffer
 switch to prev emacs buffer                                      
 switch to next emacs buffer   
 toggle between last 2 buffers
+** babbel
+
+
+| keys  | functions                | comment |
+|-------+--------------------------+---------|
+| C-c ' | edit code in full editor |         |
+| C-c ' | edit code in full editor |         |
+|       |                          |         |
+|       |                          |         |
+|       |                          |         |
+|       |                          |         |
+|       |                          |         |
+|       |                          |         |
+|       |                          |         |
+|       |                          |         |
+
 * packages
 ** Helm
 
 | keys         | functions                        |   |
 |--------------+----------------------------------+---|
 | M-p *//* M-n | go *up//down* in command history |   |
-|              |                                  |   |
+| *C-}// C-{*  | to narrow/enlarge helm window    |   |
 |              |                                  |   |
 |              |                                  |   |
 |              |                                  |   |
 |--------------+----------------------------------+---|
-|              |                                  |   |
+| helm views   |                                  |   |
 |--------------+----------------------------------+---|
-|              |                                  |   |
-|              |                                  |   |
-|              |                                  |   |
-|              |                                  |   |
-|              |                                  |   |
-|              |                                  |   |
-|              |                                  |   |
-|              |                                  |   |
-|              |                                  |   |
-|              |                                  |   |
+| f7 b         | helm-bookmarks                   |   |
+| f7 f7        | mini helm                        |   |
+| f7 y         | helm killring                    |   |
+| f7 f         | helm search                      |   |
+| f7 r         | helm recent files                |   |
+| f7 l         | helm locate                      |   |
+| f7           |                                  |   |
+| f7           |                                  |   |
+| f7           |                                  |   |
+| f7           |                                  |   |
 |              |                                  |   |
 |              |                                  |   |
 |              |                                  |   |
@@ -402,3 +432,27 @@ toggle between last 2 buffers
 |                      |                                                         |   |
 |                      |                                                         |   |
 |                      |                                                         |   |
+
+
+
+* TEST
+
+#+NAME:test 
+#+BEGIN_SRC sh :eval query
+ls -a
+#+END_SRC
+
+#+RESULTS: test
+| .          |
+| ..         |
+| .#keys.org |
+| #keys.org# |
+| keys.org   |
+
+
+
+ #+CALL: test
+#+call:"test"
+
+
+

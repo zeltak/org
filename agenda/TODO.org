@@ -9,10 +9,46 @@
 ** work on help dmenu
 * Linux
 ** Org
+*** TODO Chain babel blocks, ₆In example₆ launch multiple blocks togheter 
+    :PROPERTIES:
+    :ID:       fb029f96-1704-475c-9083-14b7e3855130
+    :END:
+*** TODO launch bash code blocks in term- *check sudo options as well*
+    :PROPERTIES:
+    :ID:       f649bbe7-025f-4791-9c98-ff8e63fcdf41
+    :END:
+*** TODO library of babel
+    :PROPERTIES:
+    :ID:       cc76272a-3bf2-4bf7-a043-2ff71452a2ce
+    :END:
+*** TODO explore #+CALL
+    :PROPERTIES:
+    :ID:       9c99a02a-1d60-4802-8c7e-c5ff032d2259
+    :END:
 *** TODO why is org-capture taking ~ 10-20 seconds to come up?
     :PROPERTIES:
     :ID:       f7b6a3d8-b1b4-422f-a05f-4e71ca03dc9e
     :END:
+*** TODO org babel terminal
+    :PROPERTIES:
+    :ID:       938c0de7-3df3-49e1-9e7b-3932a978d410
+    :END:
+
+#+begin_src emacs-lisp
+(defadvice org-babel-execute:sh (around sacha activate)
+  (if (assoc-default :term (ad-get-arg 1) nil)
+    (let ((buffer (make-term "babel" "/bin/bash")))
+      (with-current-buffer buffer
+        (insert (org-babel-expand-body:generic
+             body params (org-babel-variable-assignments:sh params)))
+        (term-send-input)))
+    ad-do-it))
+#+end_src
+
+
+#+begin_src sh :term t
+ls -l
+#+end_src
 *** TODO C-u C-c C-l solves all problems. Now I can link any file (PDF etc.) from anywhere within org and with tab completion. Thanks.
     :PROPERTIES:
     :ID:       6810f526-f19c-400a-923f-44951a00d963
@@ -248,9 +284,12 @@ subtree and only realized maybe a month later.
 **** sol 2
 https://github.com/simonthum/git-sync
 **** s3
-http://translate.google.com/translate?hl=en&sl=auto&tl=en&u=http://www.mkblog.org/2011/12/zwei-rechner-daten-verloren-dokumente-fehlen/
+     http://translate.google.com/translate?hl=en&sl=auto&tl=en&u=http://www.mkblog.org/2011/12/zwei-rechner-daten-verloren-dokumente-fehlen/
 ** Emacs
+*** keys for kill buffer C-x k
+*** emacs mode on a specific frame   
 ***  auto complete load dictnionary and load specific dictnionary per mode/file
+*** explore terminal integration 
 *** TODO Emacs 24.4 has the new command isearch-forward-symbol-at-point
     :PROPERTIES:
     :ID:       06883f77-7f39-4327-8ef3-ae5fb7355f23
@@ -351,6 +390,10 @@ remove starts, update zfav etc/tmpfiles
 -create a demnu entry to my mpd script to rate the current playing song
 - get switches for beet import for multiple scenarios (₆In example₆ single:)
 ** worker
+*** TODO sticky bakcground program in launch menu
+    :PROPERTIES:
+    :ID:       80069380-a064-405d-8b73-5813ad0717b8
+    :END:
 *** colored tabs
 option to color tab by name/location/other
 *** copy to clip/paste from clip?
@@ -394,5 +437,9 @@ apples
 citrus
 *** snacks?
 low calorie candies? werters original etc
+
+
+
+
 
 
