@@ -1,0 +1,1926 @@
+#+TITLE: BW_TA 
+
+
+* Session config
+** load library
+#+BEGIN_SRC R :session R1  :results silent
+library(lme4)
+library(reshape)
+library(foreign) 
+library(ggplot2)
+library(plyr)
+library(data.table)
+library(reshape2)
+library(Hmisc)
+library(mgcv)
+library(gdata)
+library(car)
+library(dplyr)
+library(gamm4)
+library(memisc)
+#+END_SRC
+
+** disable sci notations
+#+BEGIN_SRC R :session R1  :results silent
+options(scipen = 99)
+#+END_SRC
+
+* imports
+
+#+BEGIN_SRC R :session R1  :results output
+bd<-fread("/media/NAS/Uni/Projects/P043_BirthW_Temp_MA/3.1.11.4.Work/3.Analysis/2.R_analysis/bw_nocesv2.csv")
+names(bd)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+  [1] "bthctyn"              "bthctyc"              "sex"                 
+  [4] "plur"                 "bthord"               "byob"                
+  [7] "bmob"                 "bdayob"               "bdob"                
+ [10] "myob"                 "mmob"                 "mbpstt"              
+ [13] "mbpstc"               "mresctn"              "mresctc"             
+ [16] "mrescnn"              "mrescnc"              "marstat"             
+ [19] "fbpstt"               "fbpstc"               "fage"                
+ [22] "mrace"                "methn"                "mlangp"              
+ [25] "medu"                 "frace"                "fethn"               
+ [28] "flangp"               "fedu"                 "lbnl"                
+ [31] "lbnd"                 "yrllb"                "mtllb"               
+ [34] "dyllb"                "dtllb"                "parit"               
+ [37] "gravid"               "gacalc"               "clinega"             
+ [40] "yrfpncv"              "mtfpncv"              "dyfpncv"             
+ [43] "dtfpncv"              "mpncp"                "npncv"               
+ [46] "pncgov"               "kess"                 "kotck"               
+ [49] "cigdpp"               "cigddp"               "mwgl"                
+ [52] "modvag"               "modvbac"              "modfor"              
+ [55] "modvac"               "modpcs"               "modrcs"              
+ [58] "bwg"                  "apgar1"               "apgar5"              
+ [61] "breast"               "disyr"                "dismt"               
+ [64] "disdy"                "disdt"                "distim"              
+ [67] "dhwmot"               "balive"               "rflungd"             
+ [70] "rfanem"               "rfcard"               "rfdiabg"             
+ [73] "rfdiabo"              "rfhypc"               "rfhyppr"             
+ [76] "rfincer"              "rfpiwbd"              "rfpi4k"              
+ [79] "rfpisga"              "rfrenal"              "rfrhsen"             
+ [82] "rfsickl"              "rfutbld"              "avnlt30"             
+ [85] "avnge30"              "jaund"                "mocode"              
+ [88] "micode"               "focode"               "ficode"              
+ [91] "tract"                "long"                 "lat"                 
+ [94] "yrod"                 "mtod"                 "dyod"                
+ [97] "dtod"                 "randint"              "duprandint"          
+[100] "uniqueid"             "uniqueid_y"           "myredu"              
+[103] "gridadt"              "FIPS"                 "medhhinctr"          
+[106] "pctreccono"           "date"                 "xx"                  
+[109] "yy"                   "stn"                  "guid"                
+[112] "glong"                "glat"                 "fintemp"             
+[115] "fintemp_l0"           "fintemp_l1"           "fintemp_l2"          
+[118] "fintemp_l3"           "fintempma1"           "fintempma3"          
+[121] "fintempmaweek"        "fintempma2week"       "fintempma3week"      
+[124] "fintempmamonth"       "fintempma3month"      "fintempmabirth"      
+[127] "fintempmayear"        "gender1"              "mother_race"         
+[130] "father_race"          "csect1"               "birthw"              
+[133] "prevpre"              "age"                  "med_income"          
+[136] "p_ospace"             "fage1"                "frace1"              
+[139] "fethn1"               "fedu1"                "flangp1"             
+[142] "mlangp1"              "methn1"               "marstat1"            
+[145] "mbpstc1"              "gravid1"              "mpncp1"              
+[148] "pncgov1"              "methnic"              "fethnic"             
+[151] "gender"               "pre_vists"            "parity"              
+[154] "prevpret"             "cig_pre"              "cig_preg"            
+[157] "cig_preq"             "cig_pregq"            "ges_calc"            
+[160] "ges_clinic"           "lges"                 "lgescl"              
+[163] "csect"                "utbleed"              "lungd"               
+[166] "renal"                "hyper_other"          "hyper"               
+[169] "diab"                 "diab_other"           "prev_400"            
+[172] "prev_sga"             "MRN"                  "lbw"                 
+[175] "m"                    "season"               "npar"                
+[178] "year"                 "age_centered"         "age_centered_sq"     
+[181] "edu_group"            "adtmean"              "med_incomeq"         
+[184] "f_age"                "f_age_centered"       "f_age_centered_sq"   
+[187] "f_race"               "FRN"                  "f_lang"              
+[190] "p_birth"              "m_lang"               "mstat"               
+[193] "m_care"               "bw"                   "plural"              
+[196] "pcare"                "aged"                 "pctwhttr00"          
+[199] "pctblktr00"           "pctasiantr00"         "pctothracetr00"      
+[202] "pct2ormoreracetr00"   "pctwhtnhtr00"         "pctblknhtr00"        
+[205] "pctasiannhtr00"       "pctothracenhtr00"     "pct2ormoreracenhtr00"
+[208] "pcthisptr00"          "pctnonwhttr00"        "medhhinctr00"        
+[211] "pctfamfemhdtr00"      "pctcrowdtr00"         "pcthsdropouttr00"    
+[214] "pct16_64mntemptr00"   "pctlowinctr00"        "pcthiinctr00"        
+[217] "pctbelpovlt18tr00"    "pctbelpov18_64tr00"   "pctbelpovgt64tr00"   
+[220] "pctbelpovtr00"        "pctnohstr00"          "pcthstr00"           
+[223] "pctbachtr00"          "pctadvdegtr00"        "pctbachorhighertr00" 
+[226] "sevdisnbhdpov"        "sevdisnbhdfam"        "sevdisnbhdhs"        
+[229] "sevdisnbhdemp"        "sevdisnhbdscoretr00"  "pctocchutr00"        
+[232] "pctownerocctr00"      "medgrrenttr00"        "medvalspecownoctr00" 
+[235] "TEMP_Cma1"            "TEMP_Cma3"            "TEMP_Cmaweek"        
+[238] "TEMP_Cma2week"        "TEMP_Cmamonth"        "TEMP_Cma3month"      
+[241] "TEMP_Cmabirth"        "TEMP_Cmayear"         "tncdc"               
+[244] "tncdc_l0"             "tncdc_l1"             "tncdc_l2"            
+[247] "tncdc_l3"             "tncdcma1"             "tncdcma3"            
+[250] "tncdcmaweek"          "tncdcma2week"         "tncdcmamonth"        
+[253] "tncdcma3month"        "tncdcmabirth"         "tncdcmayear"         
+[256] "dow"                  "doy"                  "doy2"                
+[259] "sinetime"             "costime"              "newvar"              
+[262] "udate"                "devtemp"              "findevtemp"          
+[265] "findevtemplag3"       "IQRfintemp"           "IQRfintemp_l0"       
+[268] "IQRfintemp_l1"        "IQRfintemp_l2"        "IQRfintemp_l3"       
+[271] "IQRfintempma1"        "IQRfintempma3"        "IQRfintempmaweek"    
+[274] "IQRfintempma2week"    "IQRfintempma3week"    "IQRfintempmamonth"   
+[277] "IQRfintempma3month"   "IQRfintempmabirth"    "IQRtncdc"            
+[280] "IQRtncdc_l0"          "IQRtncdc_l1"          "IQRtncdc_l2"         
+[283] "IQRtncdc_l3"          "IQRtncdcma1"          "IQRtncdcma3"         
+[286] "IQRtncdcmaweek"       "IQRtncdcma2week"      "IQRtncdcmamonth"     
+[289] "IQRtncdcma3month"     "IQRtncdcmabirth"      "bwcat"               
+[292] "edu01"                "mrn01"                "minc01"              
+[295] "fedu01"               "fmrn01"               "fminc01"             
+[298] "lowbw"                "NSGA"                 "pmnew"               
+[301] "pmnew_l0"             "pmnew_l1"             "pmnew_l2"            
+[304] "pmnew_l3"             "pmnewma1"             "pmnewma3"            
+[307] "pmnewmaweek"          "pmnewma2week"         "pmnewmamonth"        
+[310] "pmnewma3month"        "pmnewmabirth"         "pm12_24"             
+[313] "localpm"
+#+end_example
+
+
+fix date:
+
+#+BEGIN_SRC R :session R1  :results output
+bd[, day:=as.Date(strptime(date, "%d/%m/%y"))]
+#+END_SRC
+
+#+RESULTS:
+
+
+* Models
+** Linear
+*** full birth
+**** lm
+***** full birth
+****** paper base model
+#+BEGIN_SRC R :session R1  :results output
+bw_full_birth <- lm(birthw ~ IQRfintempmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity,data =  bd)
+summary(bw_full_birth)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = birthw ~ IQRfintempmabirth + sinetime + costime + 
+    age_centered + age_centered_sq + cig_preg + cig_pre + med_income + 
+    p_ospace + gender + prev_400 + diab + hyper + lungd + diab_other + 
+    prevpret + as.factor(kess) + as.factor(MRN) + as.factor(edu_group) + 
+    as.factor(byob) + parity, data = bd)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2909.5  -292.4     7.3   309.0  6273.0 
+
+Coefficients:
+                           Estimate    Std. Error t value             Pr(>|t|)
+(Intercept)           3689.61624009    8.52769913 432.663 < 0.0000000000000002
+IQRfintempmabirth       -7.83397880    1.43969906  -5.441      0.0000000528907
+sinetime                -2.09169091    1.14068101  -1.834               0.0667
+costime                 -1.56323727    1.34731114  -1.160               0.2459
+age_centered             4.37963663    0.14178109  30.890 < 0.0000000000000002
+age_centered_sq         -0.39695225    0.01696639 -23.396 < 0.0000000000000002
+cig_preg               -16.45318540    0.38171924 -43.103 < 0.0000000000000002
+cig_pre                 -1.92722805    0.20875467  -9.232 < 0.0000000000000002
+med_income               0.00024643    0.00004131   5.965      0.0000000024500
+p_ospace                 0.44186498    0.06858811   6.442      0.0000000001178
+gender                -114.38000100    1.43257004 -79.843 < 0.0000000000000002
+prev_400               498.33452524    8.17062059  60.991 < 0.0000000000000002
+diab                    21.44548290    4.05699480   5.286      0.0000001250426
+hyper                 -145.01519276    4.33784593 -33.430 < 0.0000000000000002
+lungd                  -56.00510818    4.09783848 -13.667 < 0.0000000000000002
+diab_other              34.89741983    8.75656217   3.985      0.0000674089614
+prevpret              -297.70182160    7.35774003 -40.461 < 0.0000000000000002
+as.factor(kess)2       -41.54116600    1.92983691 -21.526 < 0.0000000000000002
+as.factor(kess)3       -51.07996751    4.07362647 -12.539 < 0.0000000000000002
+as.factor(kess)4       -93.63447274   11.00220955  -8.511 < 0.0000000000000002
+as.factor(kess)5      -262.77106935   15.89970554 -16.527 < 0.0000000000000002
+as.factor(MRN)1       -153.77223609    2.88086781 -53.377 < 0.0000000000000002
+as.factor(MRN)2       -140.06733773    1.96371991 -71.328 < 0.0000000000000002
+as.factor(edu_group)2  -19.44998737    4.49336449  -4.329      0.0000150090874
+as.factor(edu_group)3    3.22292760    4.68991987   0.687               0.4920
+as.factor(edu_group)4    1.99308755    4.70205322   0.424               0.6717
+as.factor(byob)2001    -11.96782906    2.86750356  -4.174      0.0000299872475
+as.factor(byob)2002    -18.80085284    2.88143971  -6.525      0.0000000000682
+as.factor(byob)2003    -29.25937911    2.98791904  -9.793 < 0.0000000000000002
+as.factor(byob)2005    -57.66720663    3.30741365 -17.436 < 0.0000000000000002
+as.factor(byob)2006    -53.08175381    2.95186748 -17.982 < 0.0000000000000002
+as.factor(byob)2007    -55.42869181    3.01608917 -18.378 < 0.0000000000000002
+as.factor(byob)2008    -53.73709888    2.95272898 -18.199 < 0.0000000000000002
+parity                   6.10813599    0.26882431  22.722 < 0.0000000000000002
+                         
+(Intercept)           ***
+IQRfintempmabirth     ***
+sinetime              .  
+costime                  
+age_centered          ***
+age_centered_sq       ***
+cig_preg              ***
+cig_pre               ***
+med_income            ***
+p_ospace              ***
+gender                ***
+prev_400              ***
+diab                  ***
+hyper                 ***
+lungd                 ***
+diab_other            ***
+prevpret              ***
+as.factor(kess)2      ***
+as.factor(kess)3      ***
+as.factor(kess)4      ***
+as.factor(kess)5      ***
+as.factor(MRN)1       ***
+as.factor(MRN)2       ***
+as.factor(edu_group)2 ***
+as.factor(edu_group)3    
+as.factor(edu_group)4    
+as.factor(byob)2001   ***
+as.factor(byob)2002   ***
+as.factor(byob)2003   ***
+as.factor(byob)2005   ***
+as.factor(byob)2006   ***
+as.factor(byob)2007   ***
+as.factor(byob)2008   ***
+parity                ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 481.7 on 452262 degrees of freedom
+  (3272 observations deleted due to missingness)
+Multiple R-squared:  0.07921,	Adjusted R-squared:  0.07914 
+F-statistic:  1179 on 33 and 452262 DF,  p-value: < 0.00000000000000022
+#+end_example
+
+****** DONE base model with PMdata
+
+#+BEGIN_SRC R :session R1  :results output
+bw_full_birth <- lm(birthw ~ IQRfintempmabirth+pmnewmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity,data =  bd)
+summary(bw_full_birth)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = birthw ~ IQRfintempmabirth + pmnewmabirth + sinetime + 
+    costime + age_centered + age_centered_sq + cig_preg + cig_pre + 
+    med_income + p_ospace + gender + prev_400 + diab + hyper + 
+    lungd + diab_other + prevpret + as.factor(kess) + as.factor(MRN) + 
+    as.factor(edu_group) + as.factor(byob) + parity, data = bd)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2908.8  -292.3     7.2   308.9  6273.0 
+
+Coefficients:
+                           Estimate    Std. Error t value             Pr(>|t|)
+(Intercept)           3715.84474108   11.29715795 328.919 < 0.0000000000000002
+IQRfintempmabirth       -6.71872403    1.47375412  -4.559      0.0000051431309
+pmnewmabirth            -3.04602970    0.86053885  -3.540             0.000401
+sinetime                -2.07882964    1.14067226  -1.822             0.068386
+costime                 -2.10020417    1.35580741  -1.549             0.121372
+age_centered             4.39598669    0.14185450  30.989 < 0.0000000000000002
+age_centered_sq         -0.39654257    0.01696657 -23.372 < 0.0000000000000002
+cig_preg               -16.45586201    0.38171512 -43.110 < 0.0000000000000002
+cig_pre                 -1.93375047    0.20876014  -9.263 < 0.0000000000000002
+med_income               0.00023371    0.00004147   5.636      0.0000000174404
+p_ospace                 0.42947559    0.06867648   6.254      0.0000000004014
+gender                -114.37742331    1.43255196 -79.842 < 0.0000000000000002
+prev_400               498.00262003    8.17105448  60.947 < 0.0000000000000002
+diab                    21.30713625    4.05713136   5.252      0.0000001507093
+hyper                 -145.08783502    4.33783919 -33.447 < 0.0000000000000002
+lungd                  -55.35778456    4.10186493 -13.496 < 0.0000000000000002
+diab_other              35.20166198    8.75687239   4.020      0.0000582347957
+prevpret              -297.95818609    7.35800271 -40.494 < 0.0000000000000002
+as.factor(kess)2       -41.57149027    1.92983133 -21.542 < 0.0000000000000002
+as.factor(kess)3       -50.97678109    4.07367885 -12.514 < 0.0000000000000002
+as.factor(kess)4       -93.01879237   11.00344415  -8.454 < 0.0000000000000002
+as.factor(kess)5      -262.44715082   15.89976623 -16.506 < 0.0000000000000002
+as.factor(MRN)1       -152.91357517    2.89102640 -52.892 < 0.0000000000000002
+as.factor(MRN)2       -139.29382557    1.97581661 -70.499 < 0.0000000000000002
+as.factor(edu_group)2  -19.94317601    4.49546694  -4.436      0.0000091545883
+as.factor(edu_group)3    2.77029497    4.69160308   0.590             0.554870
+as.factor(edu_group)4    1.79443749    4.70232819   0.382             0.702754
+as.factor(byob)2001     -5.44784526    3.40811171  -1.598             0.109934
+as.factor(byob)2002    -13.46278878    3.25219064  -4.140      0.0000347965335
+as.factor(byob)2003    -22.98095001    3.47470119  -6.614      0.0000000000375
+as.factor(byob)2005    -53.80599505    3.48261856 -15.450 < 0.0000000000000002
+as.factor(byob)2006    -52.01840168    2.96707689 -17.532 < 0.0000000000000002
+as.factor(byob)2007    -56.23915411    3.02472924 -18.593 < 0.0000000000000002
+as.factor(byob)2008    -52.57041792    2.97103062 -17.694 < 0.0000000000000002
+parity                   6.10125710    0.26882791  22.696 < 0.0000000000000002
+                         
+(Intercept)           ***
+IQRfintempmabirth     ***
+pmnewmabirth          ***
+sinetime              .  
+costime                  
+age_centered          ***
+age_centered_sq       ***
+cig_preg              ***
+cig_pre               ***
+med_income            ***
+p_ospace              ***
+gender                ***
+prev_400              ***
+diab                  ***
+hyper                 ***
+lungd                 ***
+diab_other            ***
+prevpret              ***
+as.factor(kess)2      ***
+as.factor(kess)3      ***
+as.factor(kess)4      ***
+as.factor(kess)5      ***
+as.factor(MRN)1       ***
+as.factor(MRN)2       ***
+as.factor(edu_group)2 ***
+as.factor(edu_group)3    
+as.factor(edu_group)4    
+as.factor(byob)2001      
+as.factor(byob)2002   ***
+as.factor(byob)2003   ***
+as.factor(byob)2005   ***
+as.factor(byob)2006   ***
+as.factor(byob)2007   ***
+as.factor(byob)2008   ***
+parity                ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 481.7 on 452261 degrees of freedom
+  (3272 observations deleted due to missingness)
+Multiple R-squared:  0.07923,	Adjusted R-squared:  0.07916 
+F-statistic:  1145 on 34 and 452261 DF,  p-value: < 0.00000000000000022
+#+end_example
+
+***** 3month birth
+****** paper
+#+BEGIN_SRC R :session R1  :results output
+bw_full_3m <- lm(birthw ~ IQRfintempma3month+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity,data =  bd)
+summary(bw_full_3m)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = birthw ~ IQRfintempma3month + sinetime + costime + 
+    age_centered + age_centered_sq + cig_preg + cig_pre + med_income + 
+    p_ospace + gender + prev_400 + diab + hyper + lungd + diab_other + 
+    prevpret + as.factor(kess) + as.factor(MRN) + as.factor(edu_group) + 
+    as.factor(byob) + parity, data = bd)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2906.8  -292.4     7.3   308.9  6272.3 
+
+Coefficients:
+                           Estimate    Std. Error t value             Pr(>|t|)
+(Intercept)           3698.28417958   10.75760347 343.783 < 0.0000000000000002
+IQRfintempma3month     -30.33066135    6.43433418  -4.714    0.000002431193591
+sinetime               -20.39381450    4.61049252  -4.423    0.000009720548425
+costime                -14.05659372    1.93594560  -7.261    0.000000000000385
+age_centered             4.38485203    0.14180083  30.923 < 0.0000000000000002
+age_centered_sq         -0.39671742    0.01696661 -23.382 < 0.0000000000000002
+cig_preg               -16.45607767    0.38172479 -43.110 < 0.0000000000000002
+cig_pre                 -1.92888112    0.20876481  -9.239 < 0.0000000000000002
+med_income               0.00024387    0.00004135   5.898    0.000000003691479
+p_ospace                 0.43882659    0.06861889   6.395    0.000000000160568
+gender                -114.39023333    1.43257903 -79.849 < 0.0000000000000002
+prev_400               498.13944485    8.17089913  60.965 < 0.0000000000000002
+diab                    21.42139223    4.05705776   5.280    0.000000129221202
+hyper                 -145.05935776    4.33786030 -33.440 < 0.0000000000000002
+lungd                  -55.90298593    4.09875114 -13.639 < 0.0000000000000002
+diab_other              34.98669453    8.75670951   3.995    0.000064591052555
+prevpret              -297.71427847    7.35785286 -40.462 < 0.0000000000000002
+as.factor(kess)2       -41.57304879    1.92991022 -21.541 < 0.0000000000000002
+as.factor(kess)3       -51.11284646    4.07364191 -12.547 < 0.0000000000000002
+as.factor(kess)4       -93.81810821   11.00210541  -8.527 < 0.0000000000000002
+as.factor(kess)5      -262.48081013   15.89995524 -16.508 < 0.0000000000000002
+as.factor(MRN)1       -153.60546984    2.88454307 -53.251 < 0.0000000000000002
+as.factor(MRN)2       -139.93065091    1.96686840 -71.144 < 0.0000000000000002
+as.factor(edu_group)2  -19.57759322    4.49388847  -4.356    0.000013219201461
+as.factor(edu_group)3    3.06345540    4.69072220   0.653                0.514
+as.factor(edu_group)4    1.88457477    4.70220861   0.401                0.689
+as.factor(byob)2001    -13.32869172    2.90427580  -4.589    0.000004447816362
+as.factor(byob)2002    -19.68126066    2.87562677  -6.844    0.000000000007702
+as.factor(byob)2003    -31.82444865    3.22608221  -9.865 < 0.0000000000000002
+as.factor(byob)2005    -52.08028175    3.00140333 -17.352 < 0.0000000000000002
+as.factor(byob)2006    -54.31895584    2.94123333 -18.468 < 0.0000000000000002
+as.factor(byob)2007    -56.99057440    3.03891705 -18.754 < 0.0000000000000002
+as.factor(byob)2008    -55.36741613    2.98510379 -18.548 < 0.0000000000000002
+parity                   6.10577656    0.26883132  22.712 < 0.0000000000000002
+                         
+(Intercept)           ***
+IQRfintempma3month    ***
+sinetime              ***
+costime               ***
+age_centered          ***
+age_centered_sq       ***
+cig_preg              ***
+cig_pre               ***
+med_income            ***
+p_ospace              ***
+gender                ***
+prev_400              ***
+diab                  ***
+hyper                 ***
+lungd                 ***
+diab_other            ***
+prevpret              ***
+as.factor(kess)2      ***
+as.factor(kess)3      ***
+as.factor(kess)4      ***
+as.factor(kess)5      ***
+as.factor(MRN)1       ***
+as.factor(MRN)2       ***
+as.factor(edu_group)2 ***
+as.factor(edu_group)3    
+as.factor(edu_group)4    
+as.factor(byob)2001   ***
+as.factor(byob)2002   ***
+as.factor(byob)2003   ***
+as.factor(byob)2005   ***
+as.factor(byob)2006   ***
+as.factor(byob)2007   ***
+as.factor(byob)2008   ***
+parity                ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 481.7 on 452262 degrees of freedom
+  (3272 observations deleted due to missingness)
+Multiple R-squared:  0.07919,	Adjusted R-squared:  0.07913 
+F-statistic:  1179 on 33 and 452262 DF,  p-value: < 0.00000000000000022
+#+end_example
+
+****** paper with PM
+#+BEGIN_SRC R :session R1  :results output
+bw_full_3m <- lm(birthw ~ IQRfintempma3month+pmnewma3month+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity,data =  bd)
+summary(bw_full_3m)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+Call:
+lm(formula = birthw ~ IQRfintempma3month + pmnewma3month + sinetime + 
+    costime + age_centered + age_centered_sq + cig_preg + cig_pre + 
+    med_income + p_ospace + gender + prev_400 + diab + hyper + 
+    lungd + diab_other + prevpret + as.factor(kess) + as.factor(MRN) + 
+    as.factor(edu_group) + as.factor(byob) + parity, data = bd)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-2906.9  -292.4     7.3   308.9  6274.3 
+
+Coefficients:
+                           Estimate    Std. Error t value             Pr(>|t|)
+(Intercept)           3704.64870496   11.29387692 328.023 < 0.0000000000000002
+IQRfintempma3month     -28.45518655    6.51362847  -4.369     0.00001250953735
+pmnewma3month           -0.86248513    0.46602478  -1.851             0.064209
+sinetime               -19.41315911    4.64082916  -4.183     0.00002875858723
+costime                -13.66613344    1.94740247  -7.018     0.00000000000226
+age_centered             4.39116640    0.14184149  30.958 < 0.0000000000000002
+age_centered_sq         -0.39656195    0.01696678 -23.373 < 0.0000000000000002
+cig_preg               -16.45609474    0.38172377 -43.110 < 0.0000000000000002
+cig_pre                 -1.93025753    0.20876558  -9.246 < 0.0000000000000002
+med_income               0.00024057    0.00004139   5.812     0.00000000616721
+p_ospace                 0.43553624    0.06864173   6.345     0.00000000022254
+gender                -114.39530793    1.43257781 -79.853 < 0.0000000000000002
+prev_400               498.05712755    8.17099828  60.954 < 0.0000000000000002
+diab                    21.38421115    4.05709662   5.271     0.00000013588040
+hyper                 -145.10077968    4.33790641 -33.449 < 0.0000000000000002
+lungd                  -55.74273695    4.09965463 -13.597 < 0.0000000000000002
+diab_other              35.05600974    8.75676613   4.003     0.00006247351797
+prevpret              -297.77993188    7.35791865 -40.471 < 0.0000000000000002
+as.factor(kess)2       -41.56135392    1.92991539 -21.535 < 0.0000000000000002
+as.factor(kess)3       -51.08620312    4.07365642 -12.541 < 0.0000000000000002
+as.factor(kess)4       -93.65507920   11.00242855  -8.512 < 0.0000000000000002
+as.factor(kess)5      -262.40975550   15.89995897 -16.504 < 0.0000000000000002
+as.factor(MRN)1       -153.38739254    2.88694108 -53.131 < 0.0000000000000002
+as.factor(MRN)2       -139.73953036    1.96957223 -70.949 < 0.0000000000000002
+as.factor(edu_group)2  -19.70197521    4.49437894  -4.384     0.00001167107056
+as.factor(edu_group)3    2.94872572    4.69111924   0.629             0.529627
+as.factor(edu_group)4    1.82087101    4.70232199   0.387             0.698588
+as.factor(byob)2001    -11.29561064    3.10508322  -3.638             0.000275
+as.factor(byob)2002    -18.47169517    2.94895376  -6.264     0.00000000037601
+as.factor(byob)2003    -29.96173347    3.37942991  -8.866 < 0.0000000000000002
+as.factor(byob)2005    -51.17112021    3.04133123 -16.825 < 0.0000000000000002
+as.factor(byob)2006    -54.49524796    2.94276753 -18.518 < 0.0000000000000002
+as.factor(byob)2007    -57.08399636    3.03932812 -18.782 < 0.0000000000000002
+as.factor(byob)2008    -55.36499800    2.98509607 -18.547 < 0.0000000000000002
+parity                   6.10320023    0.26883420  22.702 < 0.0000000000000002
+                         
+(Intercept)           ***
+IQRfintempma3month    ***
+pmnewma3month         .  
+sinetime              ***
+costime               ***
+age_centered          ***
+age_centered_sq       ***
+cig_preg              ***
+cig_pre               ***
+med_income            ***
+p_ospace              ***
+gender                ***
+prev_400              ***
+diab                  ***
+hyper                 ***
+lungd                 ***
+diab_other            ***
+prevpret              ***
+as.factor(kess)2      ***
+as.factor(kess)3      ***
+as.factor(kess)4      ***
+as.factor(kess)5      ***
+as.factor(MRN)1       ***
+as.factor(MRN)2       ***
+as.factor(edu_group)2 ***
+as.factor(edu_group)3    
+as.factor(edu_group)4    
+as.factor(byob)2001   ***
+as.factor(byob)2002   ***
+as.factor(byob)2003   ***
+as.factor(byob)2005   ***
+as.factor(byob)2006   ***
+as.factor(byob)2007   ***
+as.factor(byob)2008   ***
+parity                ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 481.7 on 452261 degrees of freedom
+  (3272 observations deleted due to missingness)
+Multiple R-squared:  0.0792,	Adjusted R-squared:  0.07913 
+F-statistic:  1144 on 34 and 452261 DF,  p-value: < 0.00000000000000022
+#+end_example
+
+**** lmer
+***** full birth
+#+BEGIN_SRC R :session R1  :results output
+bw_full_birth <- lmer(birthw ~ IQRfintempmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+ (1 |FIPS),data =  bd)
+summary(bw_full_birth)
+#+END_SRC
+
+#+begin_example
+Linear mixed model fit by REML ['lmerMod']
+Formula: birthw ~ IQRfintempmabirth + sinetime + costime + age_centered +      age_centered_sq + cig_preg + cig_pre + med_income + p_ospace +      gender + prev_400 + diab + hyper + lungd + diab_other + prevpret +      as.factor(kess) + as.factor(MRN) + as.factor(edu_group) +      as.factor(byob) + parity + (1 | FIPS) 
+   Data: bd 
+
+REML criterion at convergence: 7036162 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ FIPS     (Intercept)    800.3  28.29  
+ Residual             231486.9 481.13  
+Number of obs: 463146, groups: FIPS, 1358
+
+Fixed effects:
+                           Estimate    Std. Error t value
+(Intercept)           3677.58793543    8.84639037   415.7
+IQRfintempmabirth       -6.22218807    1.48567022    -4.2
+sinetime                -1.60622556    1.14284957    -1.4
+costime                 -2.94779548    1.34572394    -2.2
+age_centered             4.32847900    0.14082812    30.7
+age_centered_sq         -0.38906256    0.01684569   -23.1
+cig_preg               -16.18855520    0.37495987   -43.2
+cig_pre                 -2.03877198    0.20584610    -9.9
+med_income               0.00029447    0.00005633     5.2
+p_ospace                 0.45639437    0.09966406     4.6
+gender                -114.64510819    1.41511319   -81.0
+prev_400               496.50911119    8.07475133    61.5
+diab                    24.06126581    4.02025033     6.0
+hyper                 -147.01979646    4.29187816   -34.3
+lungd                  -53.72515463    4.08326548   -13.2
+diab_other              36.61666116    8.65305083     4.2
+prevpret              -296.99703564    7.27361951   -40.8
+as.factor(kess)2       -41.20369072    1.91083083   -21.6
+as.factor(kess)3       -49.73612350    4.02637085   -12.4
+as.factor(kess)4       -98.19542987   10.95281909    -9.0
+as.factor(kess)5      -259.69570108   15.69348608   -16.5
+as.factor(MRN)1       -147.31995618    3.04173415   -48.4
+as.factor(MRN)2       -136.00004194    2.03295239   -66.9
+as.factor(edu_group)2  -18.84542302    4.47136641    -4.2
+as.factor(edu_group)3    2.17292807    4.67918585     0.5
+as.factor(edu_group)4    2.72310739    4.70055698     0.6
+as.factor(byob)2001    -10.93252501    2.72792977    -4.0
+as.factor(byob)2002    -18.22716806    2.74286392    -6.6
+as.factor(byob)2003    -27.75542176    2.85641448    -9.7
+as.factor(byob)2005    -55.04315067    3.20329631   -17.2
+as.factor(byob)2006    -52.45721884    2.81992891   -18.6
+as.factor(byob)2007    -54.59378280    2.89142583   -18.9
+as.factor(byob)2008    -52.27440183    2.81842574   -18.5
+parity                   5.99592781    0.26543977    22.6
+
+Correlation matrix not shown by default, as p = 34 > 20.
+Use print(...., correlation=TRUE)  or
+    vcov(....)	 if you need it
+#+end_example
+
+***** DONE full birth PAPER
+#+BEGIN_SRC R :session R1  :results output
+bw_full_birth <- lmer(birthw ~ IQRfintempmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+ (1 |FIPS),data =  bd)
+summary(bw_full_birth)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+Linear mixed model fit by REML ['lmerMod']
+Formula: birthw ~ IQRfintempmabirth + sinetime + costime + age_centered +      age_centered_sq + cig_preg + cig_pre + med_income + p_ospace +      gender + prev_400 + diab + hyper + lungd + diab_other + prevpret +      as.factor(kess) + as.factor(MRN) + as.factor(edu_group) +      as.factor(byob) + parity + (1 | FIPS) 
+   Data: bd 
+
+REML criterion at convergence: 7036162 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ FIPS     (Intercept)    800.3  28.29  
+ Residual             231486.9 481.13  
+Number of obs: 463146, groups: FIPS, 1358
+
+Fixed effects:
+                           Estimate    Std. Error t value
+(Intercept)           3677.58793543    8.84639037   415.7
+IQRfintempmabirth       -6.22218807    1.48567022    -4.2
+sinetime                -1.60622556    1.14284957    -1.4
+costime                 -2.94779548    1.34572394    -2.2
+age_centered             4.32847900    0.14082812    30.7
+age_centered_sq         -0.38906256    0.01684569   -23.1
+cig_preg               -16.18855520    0.37495987   -43.2
+cig_pre                 -2.03877198    0.20584610    -9.9
+med_income               0.00029447    0.00005633     5.2
+p_ospace                 0.45639437    0.09966406     4.6
+gender                -114.64510819    1.41511319   -81.0
+prev_400               496.50911119    8.07475133    61.5
+diab                    24.06126581    4.02025033     6.0
+hyper                 -147.01979646    4.29187816   -34.3
+lungd                  -53.72515463    4.08326548   -13.2
+diab_other              36.61666116    8.65305083     4.2
+prevpret              -296.99703564    7.27361951   -40.8
+as.factor(kess)2       -41.20369072    1.91083083   -21.6
+as.factor(kess)3       -49.73612350    4.02637085   -12.4
+as.factor(kess)4       -98.19542987   10.95281909    -9.0
+as.factor(kess)5      -259.69570108   15.69348608   -16.5
+as.factor(MRN)1       -147.31995618    3.04173415   -48.4
+as.factor(MRN)2       -136.00004194    2.03295239   -66.9
+as.factor(edu_group)2  -18.84542302    4.47136641    -4.2
+as.factor(edu_group)3    2.17292807    4.67918585     0.5
+as.factor(edu_group)4    2.72310739    4.70055698     0.6
+as.factor(byob)2001    -10.93252501    2.72792977    -4.0
+as.factor(byob)2002    -18.22716806    2.74286392    -6.6
+as.factor(byob)2003    -27.75542176    2.85641448    -9.7
+as.factor(byob)2005    -55.04315067    3.20329631   -17.2
+as.factor(byob)2006    -52.45721884    2.81992891   -18.6
+as.factor(byob)2007    -54.59378280    2.89142583   -18.9
+as.factor(byob)2008    -52.27440183    2.81842574   -18.5
+parity                   5.99592781    0.26543977    22.6
+
+Correlation matrix not shown by default, as p = 34 > 20.
+Use print(...., correlation=TRUE)  or
+    vcov(....)	 if you need it
+#+end_example
+
+***** NEXT full birth + parity+pm
+#+BEGIN_SRC R :session R1  :results output
+bw_full_birth <- lmer(birthw ~ IQRfintempmabirth+pmnewmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+ (1 |FIPS),data =  bd)
+summary(bw_full_birth)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+Linear mixed model fit by REML ['lmerMod']
+Formula: birthw ~ IQRfintempmabirth + pmnewmabirth + sinetime + costime +      age_centered + age_centered_sq + cig_preg + cig_pre + med_income +      p_ospace + gender + prev_400 + diab + hyper + lungd + diab_other +      prevpret + as.factor(kess) + as.factor(MRN) + as.factor(edu_group) +      as.factor(byob) + parity + (1 | FIPS) 
+   Data: bd 
+
+REML criterion at convergence: 6870852 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ FIPS     (Intercept)    793.7  28.17  
+ Residual             231245.4 480.88  
+Number of obs: 452296, groups: FIPS, 1358
+
+Fixed effects:
+                          Estimate   Std. Error t value
+(Intercept)           3693.1009594   12.7432348  289.81
+IQRfintempmabirth       -6.0528112    1.5071091   -4.02
+pmnewmabirth            -1.6023694    0.9837176   -1.63
+sinetime                -1.6613372    1.1499627   -1.44
+costime                 -2.6431583    1.3697248   -1.93
+age_centered             4.3060367    0.1425146   30.21
+age_centered_sq         -0.3917482    0.0170385  -22.99
+cig_preg               -16.3670631    0.3817705  -42.87
+cig_pre                 -1.9797950    0.2089894   -9.47
+med_income               0.0002852    0.0000567    5.03
+p_ospace                 0.4460485    0.1001758    4.45
+gender                -114.3972620    1.4312612  -79.93
+prev_400               496.1166868    8.1699847   60.72
+diab                    22.6298590    4.0580230    5.58
+hyper                 -144.4538503    4.3385957  -33.30
+lungd                  -53.5056864    4.1248879  -12.97
+diab_other              35.0021867    8.7519898    4.00
+prevpret              -296.4759170    7.3629632  -40.27
+as.factor(kess)2       -40.7660731    1.9344141  -21.07
+as.factor(kess)3       -49.7930757    4.0745073  -12.22
+as.factor(kess)4       -94.4490248   11.0135049   -8.58
+as.factor(kess)5      -262.8018331   15.8881935  -16.54
+as.factor(MRN)1       -146.2302621    3.0753746  -47.55
+as.factor(MRN)2       -135.2618758    2.0565294  -65.77
+as.factor(edu_group)2  -18.4501377    4.5301582   -4.07
+as.factor(edu_group)3    3.0606770    4.7395586    0.65
+as.factor(edu_group)4    3.5404164    4.7592350    0.74
+as.factor(byob)2001     -8.6569159    3.5462929   -2.44
+as.factor(byob)2002    -16.4014193    3.3663962   -4.87
+as.factor(byob)2003    -25.8054850    3.5758119   -7.22
+as.factor(byob)2005    -54.4316076    3.5077124  -15.52
+as.factor(byob)2006    -53.0174864    2.9747873  -17.82
+as.factor(byob)2007    -56.1682872    3.0303166  -18.54
+as.factor(byob)2008    -52.9400635    2.9747063  -17.80
+parity                   6.0537019    0.2688245   22.52
+
+Correlation matrix not shown by default, as p = 35 > 20.
+Use print(...., correlation=TRUE)  or
+    vcov(....)	 if you need it
+#+end_example
+
+**** lme
+#+BEGIN_SRC R :session R1  :results output
+bw.270 <- lme(birthw ~ IQRfintempmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity, random=~1|FIPS,data =  bd)
+summary(bw.270)
+#+END_SRC
+
+#+RESULTS:
+: Error in na.fail.default(list(birthw = c(3379L, 3459L, 3415L, 1899L, 3770L,  : 
+:   missing values in object
+: Error in summary(bw.270) : 
+:   error in evaluating the argument 'object' in selecting a method for function 'summary': Error: object 'bw.270' not found
+
+#+BEGIN_SRC R :session R1  :results output
+mtable("Model 1"=bw_full_birth,
+     			coef.style = "est.ci", # using "homegrown" est.ci, specified above
+     			summary.stats=c("AIC","BIC"),
+     			getSummary = "getSummary.lmer")#,
+#+END_SRC
+
+#+RESULTS:
+:  Error in get(as.character(FUN), mode = "function", envir = envir) : 
+:   object 'getSummary.lmer' of mode 'function' was not found
+
+** logistic
+*** SGA (NSGA) 
+**** logisitc
+***** full birth
+****** paper
+#+BEGIN_SRC R :session R1  :results output
+log.sga.270 <- glm(NSGA ~ IQRfintempmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity,data=bd,family=binomial)
+summary(log.sga.270)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+Call:
+glm(formula = NSGA ~ IQRfintempmabirth + sinetime + costime + 
+    age_centered + age_centered_sq + cig_preg + cig_pre + med_income + 
+    p_ospace + gender + prev_400 + diab + hyper + lungd + diab_other + 
+    prevpret + as.factor(kess) + as.factor(MRN) + as.factor(edu_group) + 
+    as.factor(byob) + parity, family = binomial, data = bd)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.4117  -0.4069  -0.3612  -0.3295   2.7728  
+
+Coefficients:
+                           Estimate    Std. Error z value             Pr(>|z|)
+(Intercept)           -2.4986936120  0.0651899477 -38.329 < 0.0000000000000002
+IQRfintempmabirth      0.0244675486  0.0113472108   2.156             0.031063
+sinetime               0.0431416565  0.0091155128   4.733 0.000002214726752326
+costime                0.0126180182  0.0105842775   1.192             0.233203
+age_centered           0.0070831701  0.0010621705   6.669 0.000000000025828787
+age_centered_sq        0.0018832086  0.0001240658  15.179 < 0.0000000000000002
+cig_preg               0.0220710137  0.0027102630   8.143 0.000000000000000384
+cig_pre               -0.0016520147  0.0016138052  -1.024             0.305988
+med_income            -0.0000015254  0.0000003386  -4.505 0.000006638033310678
+p_ospace              -0.0007210609  0.0005516097  -1.307             0.191147
+gender                -0.1701916195  0.0114067261 -14.920 < 0.0000000000000002
+prev_400              -0.7246909226  0.0894393217  -8.103 0.000000000000000538
+diab                   0.2800981144  0.0279666977  10.015 < 0.0000000000000002
+hyper                  0.6522770131  0.0269865781  24.170 < 0.0000000000000002
+lungd                  0.2284534339  0.0284304935   8.036 0.000000000000000932
+diab_other             0.7035932725  0.0504211598  13.954 < 0.0000000000000002
+prevpret               1.2554057576  0.0369892855  33.940 < 0.0000000000000002
+as.factor(kess)2       0.2311430104  0.0143200975  16.141 < 0.0000000000000002
+as.factor(kess)3       0.2280986871  0.0290512956   7.852 0.000000000000004108
+as.factor(kess)4       0.6184948258  0.0664945180   9.301 < 0.0000000000000002
+as.factor(kess)5       1.3643820449  0.0762243881  17.900 < 0.0000000000000002
+as.factor(MRN)1        0.3867512357  0.0200085543  19.329 < 0.0000000000000002
+as.factor(MRN)2        0.1903868628  0.0150738389  12.630 < 0.0000000000000002
+as.factor(edu_group)2 -0.0500053629  0.0314119158  -1.592             0.111402
+as.factor(edu_group)3 -0.1388614893  0.0333450119  -4.164 0.000031219202731348
+as.factor(edu_group)4 -0.2304032432  0.0336793302  -6.841 0.000000000007859426
+as.factor(byob)2001    0.0032960409  0.0223624918   0.147             0.882823
+as.factor(byob)2002   -0.0090135805  0.0225007535  -0.401             0.688722
+as.factor(byob)2003    0.0484282765  0.0231490391   2.092             0.036437
+as.factor(byob)2005    0.1017584348  0.0254332679   4.001 0.000063076090704445
+as.factor(byob)2006    0.0805482805  0.0225528924   3.572             0.000355
+as.factor(byob)2007    0.1033298482  0.0230479090   4.483 0.000007351007872658
+as.factor(byob)2008    0.0384955245  0.0227372900   1.693             0.090445
+parity                -0.0036857477  0.0023829859  -1.547             0.121937
+                         
+(Intercept)           ***
+IQRfintempmabirth     *  
+sinetime              ***
+costime                  
+age_centered          ***
+age_centered_sq       ***
+cig_preg              ***
+cig_pre                  
+med_income            ***
+p_ospace                 
+gender                ***
+prev_400              ***
+diab                  ***
+hyper                 ***
+lungd                 ***
+diab_other            ***
+prevpret              ***
+as.factor(kess)2      ***
+as.factor(kess)3      ***
+as.factor(kess)4      ***
+as.factor(kess)5      ***
+as.factor(MRN)1       ***
+as.factor(MRN)2       ***
+as.factor(edu_group)2    
+as.factor(edu_group)3 ***
+as.factor(edu_group)4 ***
+as.factor(byob)2001      
+as.factor(byob)2002      
+as.factor(byob)2003   *  
+as.factor(byob)2005   ***
+as.factor(byob)2006   ***
+as.factor(byob)2007   ***
+as.factor(byob)2008   .  
+parity                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 242081  on 463145  degrees of freedom
+Residual deviance: 237185  on 463112  degrees of freedom
+  (3387 observations deleted due to missingness)
+AIC: 237253
+
+Number of Fisher Scoring iterations: 5
+#+end_example
+
+****** paper with PM
+#+BEGIN_SRC R :session R1  :results output
+log.sga.270 <- glm(NSGA ~ IQRfintempmabirth+pmnewmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity,data=bd,family=binomial)
+summary(log.sga.270)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+Call:
+glm(formula = NSGA ~ IQRfintempmabirth + sinetime + costime + 
+    age_centered + age_centered_sq + cig_preg + cig_pre + med_income + 
+    p_ospace + gender + prev_400 + diab + hyper + lungd + diab_other + 
+    prevpret + as.factor(kess) + as.factor(MRN) + as.factor(edu_group) + 
+    as.factor(byob) + parity, family = binomial, data = bd)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.4117  -0.4069  -0.3612  -0.3295   2.7728  
+
+Coefficients:
+                           Estimate    Std. Error z value             Pr(>|z|)
+(Intercept)           -2.4986936120  0.0651899477 -38.329 < 0.0000000000000002
+IQRfintempmabirth      0.0244675486  0.0113472108   2.156             0.031063
+sinetime               0.0431416565  0.0091155128   4.733 0.000002214726752326
+costime                0.0126180182  0.0105842775   1.192             0.233203
+age_centered           0.0070831701  0.0010621705   6.669 0.000000000025828787
+age_centered_sq        0.0018832086  0.0001240658  15.179 < 0.0000000000000002
+cig_preg               0.0220710137  0.0027102630   8.143 0.000000000000000384
+cig_pre               -0.0016520147  0.0016138052  -1.024             0.305988
+med_income            -0.0000015254  0.0000003386  -4.505 0.000006638033310678
+p_ospace              -0.0007210609  0.0005516097  -1.307             0.191147
+gender                -0.1701916195  0.0114067261 -14.920 < 0.0000000000000002
+prev_400              -0.7246909226  0.0894393217  -8.103 0.000000000000000538
+diab                   0.2800981144  0.0279666977  10.015 < 0.0000000000000002
+hyper                  0.6522770131  0.0269865781  24.170 < 0.0000000000000002
+lungd                  0.2284534339  0.0284304935   8.036 0.000000000000000932
+diab_other             0.7035932725  0.0504211598  13.954 < 0.0000000000000002
+prevpret               1.2554057576  0.0369892855  33.940 < 0.0000000000000002
+as.factor(kess)2       0.2311430104  0.0143200975  16.141 < 0.0000000000000002
+as.factor(kess)3       0.2280986871  0.0290512956   7.852 0.000000000000004108
+as.factor(kess)4       0.6184948258  0.0664945180   9.301 < 0.0000000000000002
+as.factor(kess)5       1.3643820449  0.0762243881  17.900 < 0.0000000000000002
+as.factor(MRN)1        0.3867512357  0.0200085543  19.329 < 0.0000000000000002
+as.factor(MRN)2        0.1903868628  0.0150738389  12.630 < 0.0000000000000002
+as.factor(edu_group)2 -0.0500053629  0.0314119158  -1.592             0.111402
+as.factor(edu_group)3 -0.1388614893  0.0333450119  -4.164 0.000031219202731348
+as.factor(edu_group)4 -0.2304032432  0.0336793302  -6.841 0.000000000007859426
+as.factor(byob)2001    0.0032960409  0.0223624918   0.147             0.882823
+as.factor(byob)2002   -0.0090135805  0.0225007535  -0.401             0.688722
+as.factor(byob)2003    0.0484282765  0.0231490391   2.092             0.036437
+as.factor(byob)2005    0.1017584348  0.0254332679   4.001 0.000063076090704445
+as.factor(byob)2006    0.0805482805  0.0225528924   3.572             0.000355
+as.factor(byob)2007    0.1033298482  0.0230479090   4.483 0.000007351007872658
+as.factor(byob)2008    0.0384955245  0.0227372900   1.693             0.090445
+parity                -0.0036857477  0.0023829859  -1.547             0.121937
+                         
+(Intercept)           ***
+IQRfintempmabirth     *  
+sinetime              ***
+costime                  
+age_centered          ***
+age_centered_sq       ***
+cig_preg              ***
+cig_pre                  
+med_income            ***
+p_ospace                 
+gender                ***
+prev_400              ***
+diab                  ***
+hyper                 ***
+lungd                 ***
+diab_other            ***
+prevpret              ***
+as.factor(kess)2      ***
+as.factor(kess)3      ***
+as.factor(kess)4      ***
+as.factor(kess)5      ***
+as.factor(MRN)1       ***
+as.factor(MRN)2       ***
+as.factor(edu_group)2    
+as.factor(edu_group)3 ***
+as.factor(edu_group)4 ***
+as.factor(byob)2001      
+as.factor(byob)2002      
+as.factor(byob)2003   *  
+as.factor(byob)2005   ***
+as.factor(byob)2006   ***
+as.factor(byob)2007   ***
+as.factor(byob)2008   .  
+parity                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 242081  on 463145  degrees of freedom
+Residual deviance: 237185  on 463112  degrees of freedom
+  (3387 observations deleted due to missingness)
+AIC: 237253
+
+Number of Fisher Scoring iterations: 5
+#+end_example
+
+**** mixed model
+***** glm
+#+BEGIN_SRC R :session R1  :results output
+log.sga.270 <- glm(NSGA ~ IQRfintempmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity,data=bd,family=binomial)
+summary(log.sga.270)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+Call:
+glm(formula = NSGA ~ IQRfintempmabirth + sinetime + costime + 
+    age_centered + age_centered_sq + cig_preg + cig_pre + med_income + 
+    p_ospace + gender + prev_400 + diab + hyper + lungd + diab_other + 
+    prevpret + as.factor(kess) + as.factor(MRN) + as.factor(edu_group) + 
+    as.factor(byob) + parity, family = binomial, data = bd)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.4117  -0.4069  -0.3612  -0.3295   2.7728  
+
+Coefficients:
+                           Estimate    Std. Error z value             Pr(>|z|)
+(Intercept)           -2.4986936120  0.0651899477 -38.329 < 0.0000000000000002
+IQRfintempmabirth      0.0244675486  0.0113472108   2.156             0.031063
+sinetime               0.0431416565  0.0091155128   4.733 0.000002214726752326
+costime                0.0126180182  0.0105842775   1.192             0.233203
+age_centered           0.0070831701  0.0010621705   6.669 0.000000000025828787
+age_centered_sq        0.0018832086  0.0001240658  15.179 < 0.0000000000000002
+cig_preg               0.0220710137  0.0027102630   8.143 0.000000000000000384
+cig_pre               -0.0016520147  0.0016138052  -1.024             0.305988
+med_income            -0.0000015254  0.0000003386  -4.505 0.000006638033310678
+p_ospace              -0.0007210609  0.0005516097  -1.307             0.191147
+gender                -0.1701916195  0.0114067261 -14.920 < 0.0000000000000002
+prev_400              -0.7246909226  0.0894393217  -8.103 0.000000000000000538
+diab                   0.2800981144  0.0279666977  10.015 < 0.0000000000000002
+hyper                  0.6522770131  0.0269865781  24.170 < 0.0000000000000002
+lungd                  0.2284534339  0.0284304935   8.036 0.000000000000000932
+diab_other             0.7035932725  0.0504211598  13.954 < 0.0000000000000002
+prevpret               1.2554057576  0.0369892855  33.940 < 0.0000000000000002
+as.factor(kess)2       0.2311430104  0.0143200975  16.141 < 0.0000000000000002
+as.factor(kess)3       0.2280986871  0.0290512956   7.852 0.000000000000004108
+as.factor(kess)4       0.6184948258  0.0664945180   9.301 < 0.0000000000000002
+as.factor(kess)5       1.3643820449  0.0762243881  17.900 < 0.0000000000000002
+as.factor(MRN)1        0.3867512357  0.0200085543  19.329 < 0.0000000000000002
+as.factor(MRN)2        0.1903868628  0.0150738389  12.630 < 0.0000000000000002
+as.factor(edu_group)2 -0.0500053629  0.0314119158  -1.592             0.111402
+as.factor(edu_group)3 -0.1388614893  0.0333450119  -4.164 0.000031219202731348
+as.factor(edu_group)4 -0.2304032432  0.0336793302  -6.841 0.000000000007859426
+as.factor(byob)2001    0.0032960409  0.0223624918   0.147             0.882823
+as.factor(byob)2002   -0.0090135805  0.0225007535  -0.401             0.688722
+as.factor(byob)2003    0.0484282765  0.0231490391   2.092             0.036437
+as.factor(byob)2005    0.1017584348  0.0254332679   4.001 0.000063076090704445
+as.factor(byob)2006    0.0805482805  0.0225528924   3.572             0.000355
+as.factor(byob)2007    0.1033298482  0.0230479090   4.483 0.000007351007872658
+as.factor(byob)2008    0.0384955245  0.0227372900   1.693             0.090445
+parity                -0.0036857477  0.0023829859  -1.547             0.121937
+                         
+(Intercept)           ***
+IQRfintempmabirth     *  
+sinetime              ***
+costime                  
+age_centered          ***
+age_centered_sq       ***
+cig_preg              ***
+cig_pre                  
+med_income            ***
+p_ospace                 
+gender                ***
+prev_400              ***
+diab                  ***
+hyper                 ***
+lungd                 ***
+diab_other            ***
+prevpret              ***
+as.factor(kess)2      ***
+as.factor(kess)3      ***
+as.factor(kess)4      ***
+as.factor(kess)5      ***
+as.factor(MRN)1       ***
+as.factor(MRN)2       ***
+as.factor(edu_group)2    
+as.factor(edu_group)3 ***
+as.factor(edu_group)4 ***
+as.factor(byob)2001      
+as.factor(byob)2002      
+as.factor(byob)2003   *  
+as.factor(byob)2005   ***
+as.factor(byob)2006   ***
+as.factor(byob)2007   ***
+as.factor(byob)2008   .  
+parity                   
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 242081  on 463145  degrees of freedom
+Residual deviance: 237185  on 463112  degrees of freedom
+  (3387 observations deleted due to missingness)
+AIC: 237253
+
+Number of Fisher Scoring iterations: 5
+#+end_example
+***** full birth
+#+BEGIN_SRC R :session R1  :results output 
+sga.270<-(glmmPQL(NSGA ~ IQRfintempmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity, random = ~ 1 | FIPS ,family=binomial, data =  bd))
+
+summary(sga.270 )$tTable
+
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+iteration 1
+iteration 2
+                                Value      Std.Error     DF     t-value
+(Intercept)           -2.490439033664 0.066137423516 461757 -37.6555194
+IQRfintempmabirth      0.021824535092 0.011463034870 461757   1.9039055
+sinetime               0.042204236062 0.009087020650 461757   4.6444525
+costime                0.014516190472 0.010583589304 461757   1.3715754
+age_centered           0.007065537706 0.001058512750 461757   6.6749670
+age_centered_sq        0.001865218671 0.000123552633 461757  15.0965513
+cig_preg               0.022064660190 0.002693365354 461757   8.1922269
+cig_pre               -0.001644086461 0.001604761534 461757  -1.0245052
+med_income            -0.000001606367 0.000000381284   1355  -4.2130460
+p_ospace              -0.000561880444 0.000645849457   1355  -0.8699867
+gender                -0.170126571157 0.011324809168 461757 -15.0224669
+prev_400              -0.726491964402 0.088836886552 461757  -8.1778188
+diab                   0.284136984827 0.027794976878 461757  10.2226019
+hyper                  0.657654046853 0.026829137053 461757  24.5126798
+lungd                  0.224337916622 0.028380659188 461757   7.9046056
+diab_other             0.697956818660 0.050128992490 461757  13.9232166
+prevpret               1.262145423778 0.036839396835 461757  34.2607516
+as.factor(kess)2       0.228329022219 0.014253381370 461757  16.0192881
+as.factor(kess)3       0.223702719245 0.028873047110 461757   7.7478043
+as.factor(kess)4       0.606350595172 0.066176559362 461757   9.1626189
+as.factor(kess)5       1.357164293616 0.075827387191 461757  17.8980754
+as.factor(MRN)1        0.364375623238 0.020735177546 461757  17.5728239
+as.factor(MRN)2        0.182146081108 0.015363051921 461757  11.8561131
+as.factor(edu_group)2 -0.042805973960 0.031364388952 461757  -1.3647954
+as.factor(edu_group)3 -0.132406070163 0.033334698134 461757  -3.9720195
+as.factor(edu_group)4 -0.221394283627 0.033705929972 461757  -6.5684075
+as.factor(byob)2001    0.002763597414 0.022202908126 461757   0.1244701
+as.factor(byob)2002   -0.008729364329 0.022341051335 461757  -0.3907320
+as.factor(byob)2003    0.048003197761 0.023010090731 461757   2.0861803
+as.factor(byob)2005    0.099907517624 0.025359123467 461757   3.9397071
+as.factor(byob)2006    0.082100326412 0.022401436450 461757   3.6649581
+as.factor(byob)2007    0.105417205860 0.022923691170 461757   4.5986139
+as.factor(byob)2008    0.039117128527 0.022583384158 461757   1.7321199
+parity                -0.003821708812 0.002382338844 461757  -1.6041836
+                                                                                                                                                                                                                                                                                                                                             p-value
+(Intercept)           0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000007886674
+IQRfintempmabirth     0.0569231141687130612338840762731706490740180015563964843750000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+sinetime              0.0000034107317355537726076412149284200481247353309299796819686889648437500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+costime               0.1701963303958243800551031199574936181306838989257812500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+age_centered          0.0000000000247565486469502076922320208380678789594764310777463833801448345184326171875000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+age_centered_sq       0.0000000000000000000000000000000000000000000000000017553503629777122801217137519205937270336849705438094837779511390660773429467516912525877454164576531035854364658931542833241964442214655406360179767943918704986572265625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+cig_preg              0.0000000000000002570811391076653144686452599271863626909006487857023426357727657887153327465057373046875000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+cig_pre               0.3055972748492644663897976897715125232934951782226562500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+med_income            0.0000268603369247449839398410309510012439204729162156581878662109375000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+p_ospace              0.3844617552121839532119906834850553423166275024414062500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+gender                0.0000000000000000000000000000000000000000000000000053799034765063188782075466966631083582338047168730409697893060675851514987670960318982816778608030230171208953774967400492340672407687307554624567274004220962524414062500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+prev_400              0.0000000000000002897493566639098859295621792043641910238556652201075136687791200529318302869796752929687500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+diab                  0.0000000000000000000000015801633912748543423442061064739799952597519415904235490257414550657397156463446208363166078925132751464843750000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+hyper                 0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000013162821793373212823982470058807149496294595432605578150238705987228577910614192314217639431676192583360963999013139293563466624829109116145635864785258530712129465948533445708429177985
+lungd                 0.0000000000000026937008553495914142054642318355933685145215967376985943815270729828625917434692382812500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+diab_other            0.0000000000000000000000000000000000000000000467332877153537083957536516872204355712938632497835245672820979761656769479136143328726333667982797804976564351626955318153022744809277355670928955078125000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+prevpret              0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000636072092365759566615409467872603581536448618984524949873783
+as.factor(kess)2      0.0000000000000000000000000000000000000000000000000000000009714436326888252107605990732561864933119018658463351023520346907711708540262067451165934332033071046673373439816867576492673039442141548817659293252324559375665558036416769027709960937500000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(kess)3      0.0000000000000093683672198385731497424519864593066402491412097974787798193574417382478713989257812500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(kess)4      0.0000000000000000000508510516924066577252445039954987342590721444346749216839850826765712099586380645632743835449218750000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(kess)5      0.0000000000000000000000000000000000000000000000000000000000000000000000129083206022216779039667412546851964089713141938188721023709895973296962558182544532326385174074939068048878953147323508979788119986008459376922292026759504569174515509053018059645867587903467210708186030387878417968750000000000000000000000000000
+as.factor(MRN)1       0.0000000000000000000000000000000000000000000000000000000000000000000041907677042669172980593249043092595292838167179991442217203002917787067204917466769596200073695941187980769739313375326259178625435735688209049775459302591690160141429380077915389790632616495713591575622558593750000000000000000000000000000000000000
+as.factor(MRN)2       0.0000000000000000000000000000000202229847278703522511067493611713887690373270176390632244727631530525868321589506762091942304593317203398328274488449096679687500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(edu_group)2 0.1723180280718742962697831444529583677649497985839843750000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(edu_group)3 0.0000712766889128293437347116956459558423375710844993591308593750000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(edu_group)4 0.0000000000509098339745647418915658321007713243977477191037905868142843246459960937500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2001   0.9009431550118450759967458907340187579393386840820312500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2002   0.6959955013761649489367755450075492262840270996093750000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2003   0.0369628422864468481057187432270438876003026962280273437500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2005   0.0000815931495174846186475489662193183448835043236613273620605468750000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2006   0.0002474067407687936728105659867082977143581956624984741210937500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2007   0.0000042542364003440857211533684956172862712264759466052055358886718750000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2008   0.0832528891022895206619480745757755357772111892700195312500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+parity                0.1086742809488536604112240979702619370073080062866210937500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+#+end_example
+
+***** last trimester  
+#+BEGIN_SRC R :session R1  :results output 
+sga.90<-(glmmPQL(NSGA ~ IQRfintempma3month+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity, random = ~ 1 | FIPS ,family=binomial, data =  bd))
+
+summary(sga.90)$tTable
+
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+iteration 1
+iteration 2
+iteration 3
+                               Value       Std.Error     DF     t-value
+(Intercept)           -2.43942275523 0.0845561600959 461757 -28.8497343
+IQRfintempma3month     0.03134060925 0.0520991078159 461757   0.6015575
+sinetime               0.05597307629 0.0374998288204 461757   1.4926222
+costime                0.03580242545 0.0157020718218 461757   2.2801084
+age_centered           0.00706773642 0.0010603682876 461757   6.6653600
+age_centered_sq        0.00186457731 0.0001237536138 461757  15.0668514
+cig_preg               0.02206482575 0.0026978451247 461757   8.1786851
+cig_pre               -0.00166141174 0.0016076054862 461757  -1.0334698
+med_income            -0.00000161981 0.0000003821536   1355  -4.2386366
+p_ospace              -0.00058048183 0.0006472484214   1355  -0.8968455
+gender                -0.17007941803 0.0113436781429 461757 -14.9933219
+prev_400              -0.72628520252 0.0889981517563 461757  -8.1606774
+diab                   0.28406112896 0.0278391499397 461757  10.2036567
+hyper                  0.65785779414 0.0268685454691 461757  24.4843099
+lungd                  0.22484998660 0.0284297500850 461757   7.9089681
+diab_other             0.69791631017 0.0501960543150 461757  13.9038082
+prevpret               1.26179564154 0.0368860926083 461757  34.2078966
+as.factor(kess)2       0.22832084109 0.0142774799937 461757  15.9916765
+as.factor(kess)3       0.22393790661 0.0289208911580 461757   7.7431192
+as.factor(kess)4       0.60737597927 0.0662646012108 461757   9.1659192
+as.factor(kess)5       1.35676750549 0.0759164626387 461757  17.8718483
+as.factor(MRN)1        0.36529768219 0.0207894329820 461757  17.5713153
+as.factor(MRN)2        0.18284265405 0.0154039273873 461757  11.8698725
+as.factor(edu_group)2 -0.04284459267 0.0314220000431 461757  -1.3635221
+as.factor(edu_group)3 -0.13254356454 0.0333968731168 461757  -3.9687417
+as.factor(edu_group)4 -0.22118654692 0.0337660391433 461757  -6.5505624
+as.factor(byob)2001    0.00229417576 0.0224235866227 461757   0.1023108
+as.factor(byob)2002   -0.00628150640 0.0223478199367 461757  -0.2810792
+as.factor(byob)2003    0.04284098853 0.0247168568938 461757   1.7332701
+as.factor(byob)2005    0.07937407461 0.0227824283333 461757   3.4840041
+as.factor(byob)2006    0.08556510639 0.0223607097959 461757   3.8265828
+as.factor(byob)2007    0.10650752777 0.0230540448225 461757   4.6199063
+as.factor(byob)2008    0.03974175939 0.0227761192881 461757   1.7448872
+parity                -0.00383302435 0.0023876909743 461757  -1.6053268
+                                                                                                                                                                                                                                                                                       p-value
+(Intercept)           0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000074327816665747663056690440447145800558950543884858589102523522209831472176102701
+IQRfintempma3month    0.5474690189617781310715827203239314258098602294921875000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+sinetime              0.1355367969672993389007586984007502906024456024169921875000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+costime               0.0226017154487745050572833349633583566173911094665527343750000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+age_centered          0.0000000000264312159741937745979685992884862977443660714271800316055305302143096923828125000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+age_centered_sq       0.0000000000000000000000000000000000000000000000000027519934201452892019648867005649972251787592387353244061139520785162407618299667825493450270031287912938169516389916876994303925572926683429386685020290315151214599609375000000000000000000000000000000000000000000
+cig_preg              0.0000000000000002876745312947101424452161249495584172972148062456809736175955549697391688823699951171875000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+cig_pre               0.3013846309590556549196094238141085952520370483398437500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+med_income            0.0000240102132036080839283878618495293721935013309121131896972656250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+p_ospace              0.3699606749077445355666782234038691967725753784179687500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+gender                0.0000000000000000000000000000000000000000000000000083460356139251605481981541418570520391394844857715526118495011136583724016990816978968988967247449392615476541100337879083295115206775349747658765409141778945922851562500000000000000000000000000000000000000000000
+prev_400              0.0000000000000003339757349832096718057487555817049521614959921040483026288825385563541203737258911132812500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+diab                  0.0000000000000000000000019209029896703626194687199977350837572765204484178075444150549967725627453773995512165129184722900390625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+hyper                 0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000026381612477742436236004203314654040703308532545139663300064850296283356405171632460849372957545796977140088302013774746513745073414
+lungd                 0.0000000000000026009890476827923454206358344052773904938170943662578693533760088030248880386352539062500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+diab_other            0.0000000000000000000000000000000000000000000612989534454878579977904817594518135425422974741703147885824045878618963056493905217516834431946396961774921568859297860143442449043504893779754638671875000000000000000000000000000000000000000000000000000000000000000000
+prevpret              0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000003872764
+as.factor(kess)2      0.0000000000000000000000000000000000000000000000000000000015135088525976425011352302327506286926429544336122528125026820560321721207632937637614218667607581138822313957352068454121785683116935463120343932641453932319564046338200569152832031250000000000000000000000
+as.factor(kess)3      0.0000000000000097202270343589175136557265163613849136888672708423086987750139087438583374023437500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(kess)4      0.0000000000000000000493190252240795532338127733101528031863182233505910393150245552007504556968342512845993041992187500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(kess)5      0.0000000000000000000000000000000000000000000000000000000000000000000000206574107026551380208068452094932549318905191838092295232854607017300261054157390792665003327924529694439111440878733324639175738408946354270428553130831923895040500204456324854357385234493449
+as.factor(MRN)1       0.0000000000000000000000000000000000000000000000000000000000000000000043036354846790959786817647395956885706523211874473409085219228537530184392322838338921341318799479058725245399083712717622634936744734017271539752264228359554066102318032813189851992774492828175
+as.factor(MRN)2       0.0000000000000000000000000000000171585795390361563846150509250294690034861646085146753910900067071040549999038428733919015023445808765245601534843444824218750000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(edu_group)2 0.1727186771302070822375895886580110527575016021728515625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(edu_group)3 0.0000722640463413328008575667316115698213252471759915351867675781250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(edu_group)4 0.0000000000573805991660730741063861881517564394669661531622750771930441260337829589843750000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2001   0.9185100037637250469657601570361293852329254150390625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2002   0.7786498128275237684547960270720068365335464477539062500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2003   0.0830483436546285841428627350069291424006223678588867187500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2005   0.0004940175896609788142380126352293245872715488076210021972656250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2006   0.0001299515823991846544607775548740846716100350022315979003906250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2007   0.0000038401673489463482188922480164983142003620741888880729675292968750000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2008   0.0810051682371728809517463787415181286633014678955078125000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+parity                0.1084225847957837468582553697160619776695966720581054687500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+#+end_example
+
+
+
+
+
+
+
+
+***** last month 
+#+BEGIN_SRC R :session R1  :results output 
+sga.30<-(glmmPQL(NSGA ~ IQRfintempmamonth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity, random = ~ 1 | FIPS ,family=binomial, data =  bd))
+
+summary(sga.30)$tTable
+
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+iteration 1
+iteration 2
+iteration 3
+                                Value       Std.Error     DF     t-value
+(Intercept)           -2.358266130716 0.0706332657611 461757 -33.3874713
+IQRfintempmamonth     -0.029650900941 0.0436803210235 461757  -0.6788160
+sinetime               0.019514753592 0.0226980139296 461757   0.8597560
+costime                0.010908873833 0.0259765152579 461757   0.4199514
+age_centered           0.007088075042 0.0010604085840 461757   6.6842867
+age_centered_sq        0.001864535875 0.0001237529960 461757  15.0665918
+cig_preg               0.022055732905 0.0026978023944 461757   8.1754442
+cig_pre               -0.001681855102 0.0016075421294 461757  -1.0462277
+med_income            -0.000001640366 0.0000003822056   1355  -4.2918424
+p_ospace              -0.000609669571 0.0006475465127   1355  -0.9415070
+gender                -0.170054120996 0.0113435812661 461757 -14.9912199
+prev_400              -0.726673900879 0.0889963612317 461757  -8.1652091
+diab                   0.283949921857 0.0278384161186 461757  10.1999309
+hyper                  0.657895083530 0.0268682118576 461757  24.4860018
+lungd                  0.225641426424 0.0284255063193 461757   7.9379915
+diab_other             0.698259801409 0.0501957612258 461757  13.9107324
+prevpret               1.261441824688 0.0368849897305 461757  34.1993270
+as.factor(kess)2       0.228197614589 0.0142771618863 461757  15.9834018
+as.factor(kess)3       0.224072815020 0.0289207854664 461757   7.7478122
+as.factor(kess)4       0.607743600212 0.0662615761463 461757   9.1718857
+as.factor(kess)5       1.357231647218 0.0759173262111 461757  17.8777588
+as.factor(MRN)1        0.366676678397 0.0207764116912 461757  17.6487010
+as.factor(MRN)2        0.183884175624 0.0153933193937 461757  11.9457130
+as.factor(edu_group)2 -0.043154338369 0.0314218557327 461757  -1.3733861
+as.factor(edu_group)3 -0.133033953831 0.0333963572980 461757  -3.9834870
+as.factor(edu_group)4 -0.221228207502 0.0337671454474 461757  -6.5515816
+as.factor(byob)2001   -0.000540853621 0.0222507598659 461757  -0.0243072
+as.factor(byob)2002   -0.005653441287 0.0223166439221 461757  -0.2533285
+as.factor(byob)2003    0.030840124357 0.0236373251207 461757   1.3047214
+as.factor(byob)2005    0.076443363498 0.0225318654522 461757   3.3926780
+as.factor(byob)2006    0.087510223347 0.0224089735227 461757   3.9051420
+as.factor(byob)2007    0.103542763574 0.0231035836143 461757   4.4816755
+as.factor(byob)2008    0.036989426144 0.0226750848750 461757   1.6312806
+parity                -0.003854987074 0.0023894440414 461757  -1.6133406
+                                                                                                                                                                                                                                                                                       p-value
+(Intercept)           0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000004084347203734949470
+IQRfintempmamonth     0.4972547927192314531907868513371795415878295898437500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+sinetime              0.3899240064117185378123053851595614105463027954101562500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+costime               0.6745211562553840023426232619385700672864913940429687500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+age_centered          0.0000000000232314099863457941130558889216681283176879624363664333941414952278137207031250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+age_centered_sq       0.0000000000000000000000000000000000000000000000000027628188355841637888765872405850158689527785260797137738081598590112869424546785598044509425640663018517118588361670063240560155093383798430295428261160850524902343750000000000000000000000000000000000000000000000
+cig_preg              0.0000000000000002955128650545982175009525725950239013389726761265458021554763945459853857755661010742187500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+cig_pre               0.2954564653037935473278707831923384219408035278320312500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+med_income            0.0000189790858910798479605372413026032063498860225081443786621093750000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+p_ospace              0.3466129263312213160119767962896730750799179077148437500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+gender                0.0000000000000000000000000000000000000000000000000086143068981334153088688871874051797308735481962297421129469862413679542041887551167799691046242051873074327121547849295422411486020108917216475674649700522422790527343750000000000000000000000000000000000000000000
+prev_400              0.0000000000000003216749684817749677765573824155020382088304719842702938947809343517292290925979614257812500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+diab                  0.0000000000000000000000019960190884569250574474782932127877606343322638298926387533566194701362128682831098558381199836730957031250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+hyper                 0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000025310678830982881225424053616580565058712114037351113433316987705275099231029523570799438765145438014255949355549124980737183217813
+lungd                 0.0000000000000020593758244214990219982553028596769678252665150552935813266230979934334754943847656250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+diab_other            0.0000000000000000000000000000000000000000000556461831640016033433935756587835776566508218435048699068137931533186133425564298689681055199717970890374978154037377553464693846763111650943756103515625000000000000000000000000000000000000000000000000000000000000000000
+prevpret              0.0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000005189246
+as.factor(kess)2      0.0000000000000000000000000000000000000000000000000000000017283429780741265729164270981532821990467065150324854806902486216290818197862402989918439570498899133113982549955024334783014643155186824583727928095200354619009885936975479125976562500000000000000000000000
+as.factor(kess)3      0.0000000000000093677850100829140409817884567804480863370021614944249677137122489511966705322265625000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(kess)4      0.0000000000000000000466642249976352484982092744531144889370763842880338273348683753027899001608602702617645263671875000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(kess)5      0.0000000000000000000000000000000000000000000000000000000000000000000000185815668069789888767275944434088506873652166315658855425512957253158429443908523666226698456922914234882393296333800998882996328332410342458008371382979458077210259625772562075418647964397678
+as.factor(MRN)1       0.0000000000000000000000000000000000000000000000000000000000000000000010977340857950191311844331757463841197794312609709373964314967495604030876742483858774805322560741628627272017776717301312003901229222212844718570448500395151164698042176416994952781180927559035
+as.factor(MRN)2       0.0000000000000000000000000000000069129904803501121747548579106975861615547362524054534948512948784883420120123780468418886457904193321155617013573646545410156250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(edu_group)2 0.1696330305938122950948354628053493797779083251953125000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(edu_group)3 0.0000679218008068753633472633413070695951319066807627677917480468750000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(edu_group)4 0.0000000000569903150134747877193968670291474585068436375934197712922468781471252441406250000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2001   0.9806075823218803888536854174162726849317550659179687500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2002   0.8000145094276859270010504587844479829072952270507812500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2003   0.1919883757673851165659328898982494138181209564208984375000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2005   0.0006921876078096642851550379660352518840227276086807250976562500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2006   0.0000941834582966915066044519266874601726158289238810539245605468750000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2007   0.0000074077069793226274811107773254903463566733989864587783813476562500000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+as.factor(byob)2008   0.1028318061342487488296626452211057767271995544433593750000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+parity                0.1066712147352666117949837598644080571830272674560546875000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+#+end_example
+
+
+
+
+
+
+
+
+
+*** LBW
+**** logisitc
+***** fullbirth
+#+BEGIN_SRC R :session R1  :results output
+log.lbw.270 <- glm(lowbw ~ IQRfintempmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity,data=bd,family=binomial)
+summary(log.lbw.270)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+Call:
+glm(formula = lowbw ~ IQRfintempmabirth + sinetime + costime + 
+    age_centered + age_centered_sq + cig_preg + cig_pre + med_income + 
+    p_ospace + gender + prev_400 + diab + hyper + lungd + diab_other + 
+    prevpret + as.factor(kess) + as.factor(MRN) + as.factor(edu_group) + 
+    as.factor(byob) + parity, family = binomial, data = bd)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.6182  -0.3073  -0.2510  -0.2179   5.2699  
+
+Coefficients:
+                           Estimate    Std. Error z value             Pr(>|z|)
+(Intercept)           -3.6822356098  0.0892364531 -41.264 < 0.0000000000000002
+IQRfintempmabirth      0.0279675297  0.0150415969   1.859             0.062978
+sinetime               0.0240336173  0.0121117695   1.984             0.047220
+costime                0.0095824239  0.0140623431   0.681             0.495603
+age_centered           0.0063352408  0.0015045150   4.211 0.000025444608546354
+age_centered_sq        0.0021685313  0.0001624992  13.345 < 0.0000000000000002
+cig_preg               0.0490741472  0.0029601910  16.578 < 0.0000000000000002
+cig_pre                0.0109881060  0.0018893167   5.816 0.000000006030295242
+med_income            -0.0000038159  0.0000004698  -8.123 0.000000000000000454
+p_ospace              -0.0015397407  0.0007436779  -2.070             0.038411
+gender                 0.1872968118  0.0151456078  12.366 < 0.0000000000000002
+prev_400              -2.0361001178  0.2436813208  -8.356 < 0.0000000000000002
+diab                   0.0886444586  0.0396293613   2.237             0.025297
+hyper                  0.9127624182  0.0320220057  28.504 < 0.0000000000000002
+lungd                  0.3769561693  0.0344918986  10.929 < 0.0000000000000002
+diab_other             0.3347349420  0.0749854046   4.464 0.000008044308302751
+prevpret               1.4619994849  0.0437467082  33.420 < 0.0000000000000002
+as.factor(kess)2       0.2673006057  0.0185865556  14.381 < 0.0000000000000002
+as.factor(kess)3       0.3071180903  0.0360493046   8.519 < 0.0000000000000002
+as.factor(kess)4       0.8154407533  0.0771231813  10.573 < 0.0000000000000002
+as.factor(kess)5       1.4183457854  0.0884990717  16.027 < 0.0000000000000002
+as.factor(MRN)1        0.5939049149  0.0252177753  23.551 < 0.0000000000000002
+as.factor(MRN)2        0.3884548559  0.0195420454  19.878 < 0.0000000000000002
+as.factor(edu_group)2  0.1050027538  0.0410078351   2.561             0.010451
+as.factor(edu_group)3 -0.0682078466  0.0440425915  -1.549             0.121459
+as.factor(edu_group)4 -0.1763097544  0.0450680684  -3.912 0.000091505720318587
+as.factor(byob)2001    0.0339476694  0.0300023894   1.131             0.257845
+as.factor(byob)2002    0.0406898712  0.0301086518   1.351             0.176556
+as.factor(byob)2003    0.0905522231  0.0310700126   2.914             0.003563
+as.factor(byob)2005    0.1571314422  0.0337536015   4.655 0.000003235883558248
+as.factor(byob)2006    0.1405806328  0.0300258064   4.682 0.000002840983725411
+as.factor(byob)2007    0.1621804336  0.0307709197   5.271 0.000000135997197950
+as.factor(byob)2008    0.1088993335  0.0302553272   3.599             0.000319
+parity                -0.1070090440  0.0081999607 -13.050 < 0.0000000000000002
+                         
+(Intercept)           ***
+IQRfintempmabirth     .  
+sinetime              *  
+costime                  
+age_centered          ***
+age_centered_sq       ***
+cig_preg              ***
+cig_pre               ***
+med_income            ***
+p_ospace              *  
+gender                ***
+prev_400              ***
+diab                  *  
+hyper                 ***
+lungd                 ***
+diab_other            ***
+prevpret              ***
+as.factor(kess)2      ***
+as.factor(kess)3      ***
+as.factor(kess)4      ***
+as.factor(kess)5      ***
+as.factor(MRN)1       ***
+as.factor(MRN)2       ***
+as.factor(edu_group)2 *  
+as.factor(edu_group)3    
+as.factor(edu_group)4 ***
+as.factor(byob)2001      
+as.factor(byob)2002      
+as.factor(byob)2003   ** 
+as.factor(byob)2005   ***
+as.factor(byob)2006   ***
+as.factor(byob)2007   ***
+as.factor(byob)2008   ***
+parity                ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 156290  on 463145  degrees of freedom
+Residual deviance: 149873  on 463112  degrees of freedom
+  (3387 observations deleted due to missingness)
+AIC: 149941
+
+Number of Fisher Scoring iterations: 7
+#+end_example
+
+***** last trimester
+#+BEGIN_SRC R :session R1  :results output
+log.lbw.90 <- glm(lowbw ~ IQRfintempma3month+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity,data=bd,family=binomial)
+summary(log.lbw.90)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+Call:
+glm(formula = lowbw ~ IQRfintempma3month + sinetime + costime + 
+    age_centered + age_centered_sq + cig_preg + cig_pre + med_income + 
+    p_ospace + gender + prev_400 + diab + hyper + lungd + diab_other + 
+    prevpret + as.factor(kess) + as.factor(MRN) + as.factor(edu_group) + 
+    as.factor(byob) + parity, family = binomial, data = bd)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.6098  -0.3074  -0.2510  -0.2179   5.2736  
+
+Coefficients:
+                           Estimate    Std. Error z value             Pr(>|z|)
+(Intercept)           -3.5624532901  0.1113214901 -32.001 < 0.0000000000000002
+IQRfintempma3month     0.0014340033  0.0668745477   0.021             0.982892
+sinetime               0.0144097184  0.0483467199   0.298             0.765665
+costime                0.0268855422  0.0204057487   1.318             0.187655
+age_centered           0.0063715871  0.0015048021   4.234 0.000022939778858128
+age_centered_sq        0.0021677261  0.0001624974  13.340 < 0.0000000000000002
+cig_preg               0.0490648248  0.0029603461  16.574 < 0.0000000000000002
+cig_pre                0.0109434173  0.0018895395   5.792 0.000000006972775351
+med_income            -0.0000038546  0.0000004703  -8.196 0.000000000000000249
+p_ospace              -0.0015760401  0.0007442351  -2.118             0.034204
+gender                 0.1873812622  0.0151454902  12.372 < 0.0000000000000002
+prev_400              -2.0358822711  0.2436778404  -8.355 < 0.0000000000000002
+diab                   0.0884110733  0.0396290947   2.231             0.025684
+hyper                  0.9131200433  0.0320208716  28.516 < 0.0000000000000002
+lungd                  0.3787471284  0.0345028834  10.977 < 0.0000000000000002
+diab_other             0.3348145314  0.0749854213   4.465 0.000008004568602049
+prevpret               1.4611021181  0.0437471953  33.399 < 0.0000000000000002
+as.factor(kess)2       0.2671658440  0.0185866854  14.374 < 0.0000000000000002
+as.factor(kess)3       0.3075620524  0.0360490439   8.532 < 0.0000000000000002
+as.factor(kess)4       0.8177792120  0.0771154109  10.605 < 0.0000000000000002
+as.factor(kess)5       1.4185192032  0.0885013457  16.028 < 0.0000000000000002
+as.factor(MRN)1        0.5966643626  0.0252617908  23.619 < 0.0000000000000002
+as.factor(MRN)2        0.3905512177  0.0195731103  19.953 < 0.0000000000000002
+as.factor(edu_group)2  0.1044543672  0.0410131239   2.547             0.010870
+as.factor(edu_group)3 -0.0690270227  0.0440511890  -1.567             0.117121
+as.factor(edu_group)4 -0.1762245112  0.0450704495  -3.910 0.000092304146008338
+as.factor(byob)2001    0.0309887599  0.0302148672   1.026             0.305074
+as.factor(byob)2002    0.0447178564  0.0300717311   1.487             0.137004
+as.factor(byob)2003    0.0756091594  0.0330794889   2.286             0.022273
+as.factor(byob)2005    0.1286961934  0.0305195992   4.217 0.000024775225809112
+as.factor(byob)2006    0.1457580333  0.0299288001   4.870 0.000001115081376341
+as.factor(byob)2007    0.1618363837  0.0308852242   5.240 0.000000160638336064
+as.factor(byob)2008    0.1076548039  0.0304404017   3.537             0.000405
+parity                -0.1071526890  0.0082013846 -13.065 < 0.0000000000000002
+                         
+(Intercept)           ***
+IQRfintempma3month       
+sinetime                 
+costime                  
+age_centered          ***
+age_centered_sq       ***
+cig_preg              ***
+cig_pre               ***
+med_income            ***
+p_ospace              *  
+gender                ***
+prev_400              ***
+diab                  *  
+hyper                 ***
+lungd                 ***
+diab_other            ***
+prevpret              ***
+as.factor(kess)2      ***
+as.factor(kess)3      ***
+as.factor(kess)4      ***
+as.factor(kess)5      ***
+as.factor(MRN)1       ***
+as.factor(MRN)2       ***
+as.factor(edu_group)2 *  
+as.factor(edu_group)3    
+as.factor(edu_group)4 ***
+as.factor(byob)2001      
+as.factor(byob)2002      
+as.factor(byob)2003   *  
+as.factor(byob)2005   ***
+as.factor(byob)2006   ***
+as.factor(byob)2007   ***
+as.factor(byob)2008   ***
+parity                ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 156290  on 463145  degrees of freedom
+Residual deviance: 149877  on 463112  degrees of freedom
+  (3387 observations deleted due to missingness)
+AIC: 149945
+
+Number of Fisher Scoring iterations: 7
+#+end_example
+
+***** last month
+#+BEGIN_SRC R :session R1  :results output
+log.lbw.30 <- glm(lowbw ~ IQRfintempmamonth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity,data=bd,family=binomial)
+summary(log.lbw.30)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+
+Call:
+glm(formula = lowbw ~ IQRfintempmamonth + sinetime + costime + 
+    age_centered + age_centered_sq + cig_preg + cig_pre + med_income + 
+    p_ospace + gender + prev_400 + diab + hyper + lungd + diab_other + 
+    prevpret + as.factor(kess) + as.factor(MRN) + as.factor(edu_group) + 
+    as.factor(byob) + parity, family = binomial, data = bd)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-1.6034  -0.3073  -0.2510  -0.2179   5.2746  
+
+Coefficients:
+                          Estimate   Std. Error z value             Pr(>|z|)
+(Intercept)           -3.525547846  0.094607650 -37.265 < 0.0000000000000002
+IQRfintempmamonth     -0.027315202  0.056878035  -0.480             0.631056
+sinetime               0.000084808  0.029712351   0.003             0.997723
+costime                0.011025784  0.033981175   0.324             0.745584
+age_centered           0.006391304  0.001504822   4.247         0.0000216442
+age_centered_sq        0.002167632  0.000162497  13.340 < 0.0000000000000002
+cig_preg               0.049059452  0.002960309  16.572 < 0.0000000000000002
+cig_pre                0.010932593  0.001889415   5.786         0.0000000072
+med_income            -0.000003866  0.000000470  -8.226 < 0.0000000000000002
+p_ospace              -0.001587226  0.000744105  -2.133             0.032919
+gender                 0.187399118  0.015145507  12.373 < 0.0000000000000002
+prev_400              -2.036064268  0.243677081  -8.356 < 0.0000000000000002
+diab                   0.088353330  0.039628515   2.230             0.025778
+hyper                  0.913125212  0.032020415  28.517 < 0.0000000000000002
+lungd                  0.379255860  0.034490835  10.996 < 0.0000000000000002
+diab_other             0.335007269  0.074985851   4.468         0.0000079100
+prevpret               1.460950534  0.043744687  33.397 < 0.0000000000000002
+as.factor(kess)2       0.267101286  0.018586236  14.371 < 0.0000000000000002
+as.factor(kess)3       0.307670098  0.036048971   8.535 < 0.0000000000000002
+as.factor(kess)4       0.818031161  0.077109172  10.609 < 0.0000000000000002
+as.factor(kess)5       1.418926351  0.088499457  16.033 < 0.0000000000000002
+as.factor(MRN)1        0.597518645  0.025228821  23.684 < 0.0000000000000002
+as.factor(MRN)2        0.391192090  0.019548711  20.011 < 0.0000000000000002
+as.factor(edu_group)2  0.104208405  0.041011208   2.541             0.011054
+as.factor(edu_group)3 -0.069373366  0.044048168  -1.575             0.115270
+as.factor(edu_group)4 -0.176353809  0.045070914  -3.913         0.0000912293
+as.factor(byob)2001    0.030063110  0.030009238   1.002             0.316443
+as.factor(byob)2002    0.044720863  0.030028968   1.489             0.136420
+as.factor(byob)2003    0.070261513  0.031757356   2.212             0.026936
+as.factor(byob)2005    0.127954044  0.030230166   4.233         0.0000230942
+as.factor(byob)2006    0.146962642  0.029994526   4.900         0.0000009601
+as.factor(byob)2007    0.160200361  0.030945544   5.177         0.0000002257
+as.factor(byob)2008    0.106577474  0.030318566   3.515             0.000439
+parity                -0.107226851  0.008201858 -13.073 < 0.0000000000000002
+                         
+(Intercept)           ***
+IQRfintempmamonth        
+sinetime                 
+costime                  
+age_centered          ***
+age_centered_sq       ***
+cig_preg              ***
+cig_pre               ***
+med_income            ***
+p_ospace              *  
+gender                ***
+prev_400              ***
+diab                  *  
+hyper                 ***
+lungd                 ***
+diab_other            ***
+prevpret              ***
+as.factor(kess)2      ***
+as.factor(kess)3      ***
+as.factor(kess)4      ***
+as.factor(kess)5      ***
+as.factor(MRN)1       ***
+as.factor(MRN)2       ***
+as.factor(edu_group)2 *  
+as.factor(edu_group)3    
+as.factor(edu_group)4 ***
+as.factor(byob)2001      
+as.factor(byob)2002      
+as.factor(byob)2003   *  
+as.factor(byob)2005   ***
+as.factor(byob)2006   ***
+as.factor(byob)2007   ***
+as.factor(byob)2008   ***
+parity                ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 156290  on 463145  degrees of freedom
+Residual deviance: 149876  on 463112  degrees of freedom
+  (3387 observations deleted due to missingness)
+AIC: 149944
+
+Number of Fisher Scoring iterations: 7
+#+end_example
+
+**** mixed model
+***** full birth
+#+BEGIN_SRC R :session R1  :results output 
+lbw.270<-(glmmPQL(lowbw ~ IQRfintempmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity, random = ~ 1 | FIPS ,family=binomial, data =  bd))
+summary(lbw.270)$tTable
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+                                Value     Std.Error     DF     t-value
+(Intercept)           -3.682235185297 0.33574688061 461757 -10.9672953
+IQRfintempmabirth      0.027968126476 0.05659311955 461757   0.4941966
+sinetime               0.024034434194 0.04556981524 461757   0.5274200
+costime                0.009581691592 0.05290873359 461757   0.1810985
+age_centered           0.006335395219 0.00566064843 461757   1.1191996
+age_centered_sq        0.002168521767 0.00061139352 461757   3.5468511
+cig_preg               0.049073962241 0.01113754333 461757   4.4061748
+cig_pre                0.010988237370 0.00710844207 461757   1.5458011
+med_income            -0.000003815962 0.00000176744   1355  -2.1590331
+p_ospace              -0.001539740594 0.00279804488   1355  -0.5502916
+gender                 0.187298096369 0.05698445167 461757   3.2868281
+prev_400              -2.036095332672 0.91683652697 461757  -2.2207834
+diab                   0.088642398759 0.14910312350 461757   0.5945040
+hyper                  0.912762769343 0.12048089919 461757   7.5759957
+lungd                  0.376954512797 0.12977372674 461757   2.9047059
+diab_other             0.334729842302 0.28212814107 461757   1.1864461
+prevpret               1.461999977731 0.16459439853 461757   8.8824407
+as.factor(kess)2       0.267303310866 0.06993081417 461757   3.8223967
+as.factor(kess)3       0.307119615432 0.13563337241 461757   2.2643366
+as.factor(kess)4       0.815456497894 0.29017140117 461757   2.8102580
+as.factor(kess)5       1.418346254451 0.33297251361 461757   4.2596497
+as.factor(MRN)1        0.593902063490 0.09488039593 461757   6.2594813
+as.factor(MRN)2        0.388455504461 0.07352579229 461757   5.2832549
+as.factor(edu_group)2  0.104998882659 0.15428955152 461757   0.6805314
+as.factor(edu_group)3 -0.068212391108 0.16570764286 461757  -0.4116430
+as.factor(edu_group)4 -0.176314980939 0.16956593963 461757  -1.0398019
+as.factor(byob)2001    0.033950548193 0.11288221187 461757   0.3007608
+as.factor(byob)2002    0.040689125248 0.11328201807 461757   0.3591843
+as.factor(byob)2003    0.090557079067 0.11689908147 461757   0.7746603
+as.factor(byob)2005    0.157132885715 0.12699592650 461757   1.2373065
+as.factor(byob)2006    0.140583666832 0.11297031703 461757   1.2444301
+as.factor(byob)2007    0.162184221683 0.11577376238 461757   1.4008720
+as.factor(byob)2008    0.108901734365 0.11383387570 461757   0.9566725
+parity                -0.107009248701 0.03085186673 461757  -3.4684854
+                                                   p-value
+(Intercept)           0.0000000000000000000000000005532856
+IQRfintempmabirth     0.6211675856538267925799345903214999
+sinetime              0.5979021770802934732103040005313233
+costime               0.8562903518027463745099225889134686
+age_centered          0.2630555966709622883747954347199993
+age_centered_sq       0.0003899034855744901596069640348219
+cig_preg              0.0000105235736177582688027258919772
+cig_pre               0.1221533034457254751625754352062359
+med_income            0.0310226675167533973154210258371677
+p_ospace              0.5822100856928329459805127044091932
+gender                0.0010133022500498976674332407554857
+prev_400              0.0263661192660496514206247553602225
+diab                  0.5521753795134874964745108627539594
+hyper                 0.0000000000000357041885105802485522
+lungd                 0.0036761573271291494990897774641780
+diab_other            0.2354467723271669588047672050379333
+prevpret              0.0000000000000000006563550428093712
+as.factor(kess)2      0.0001321781885660022705028526779358
+as.factor(kess)3      0.0235538790159069283403070471649698
+as.factor(kess)4      0.0049503884665352496791124181640953
+as.factor(kess)5      0.0000204788014380789356845904980453
+as.factor(MRN)1       0.0000000003865974432400100659260342
+as.factor(MRN)2       0.0000001269659243067631089509615140
+as.factor(edu_group)2 0.4961683955428666248366198487929069
+as.factor(edu_group)3 0.6806013009964753113223423497402109
+as.factor(edu_group)4 0.2984325050845830773482703079935163
+as.factor(byob)2001   0.7635970116347218228369797543564346
+as.factor(byob)2002   0.7194573660040499696322058298392221
+as.factor(byob)2003   0.4385408045100882556965871117427014
+as.factor(byob)2005   0.2159739437097770720086487017397303
+as.factor(byob)2006   0.2133419294849052683105128380702808
+as.factor(byob)2007   0.1612530260930019054832484926009784
+as.factor(byob)2008   0.3387331015632696340489360409264918
+parity                0.0005234486715406056010074786755126
+#+end_example
+
+***** last trimester  
+#+BEGIN_SRC R :session R1  :results output 
+lbw.90<-(glmmPQL(lowbw ~ IQRfintempma3month+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity, random = ~ 1 | FIPS ,family=binomial, data =  bd))
+summary(lbw.90)$tTable
+#+END_SRC
+
+#+ Text
++
+RESULTS:
+#+begin_example
+                                Value      Std.Error     DF      t-value
+(Intercept)           -3.562450965289 0.422106071373 461757 -8.439705579
+IQRfintempma3month     0.001434513615 0.253573259177 461757  0.005657196
+sinetime               0.014410679009 0.183319898345 461757  0.078609464
+costime                0.026885308203 0.077374012475 461757  0.347472069
+age_centered           0.006371742504 0.005705870892 461757  1.116699383
+age_centered_sq        0.002167716580 0.000616153668 461757  3.518142782
+cig_preg               0.049064639715 0.011224966239 461757  4.371027821
+cig_pre                0.010943548090 0.007164708657 461757  1.527424019
+med_income            -0.000003854638 0.000001783331   1355 -2.161481981
+p_ospace              -0.001576040412 0.002821973103   1355 -0.558488814
+gender                 0.187382549489 0.057428290972 461757  3.262896150
+prev_400              -2.035877551855 0.923971540436 461757 -2.203398549
+diab                   0.088409003461 0.150264610455 461757  0.588355456
+hyper                  0.913120408099 0.121415940579 461757  7.520597409
+lungd                  0.378745502651 0.130827172764 461757  2.895006402
+diab_other             0.334809469337 0.284327845482 461757  1.177547239
+prevpret               1.461102617859 0.165879522660 461757  8.808215712
+as.factor(kess)2       0.267168549145 0.070476529487 461757  3.790886854
+as.factor(kess)3       0.307563582971 0.136689863416 461757  2.250083329
+as.factor(kess)4       0.817794989158 0.292404288760 461757  2.796795466
+as.factor(kess)5       1.418519672032 0.335577190433 461757  4.227103964
+as.factor(MRN)1        0.596661557438 0.095787037198 461757  6.229042832
+as.factor(MRN)2        0.390551902629 0.074216834826 461757  5.262308795
+as.factor(edu_group)2  0.104450477174 0.155512539920 461757  0.671653085
+as.factor(edu_group)3 -0.069031590217 0.167032199660 461757 -0.413283130
+as.factor(edu_group)4 -0.176229751318 0.170897006582 461757 -1.031204436
+as.factor(byob)2001    0.030991604382 0.114567977891 461757  0.270508435
+as.factor(byob)2002    0.044717184871 0.114025238108 461757  0.392169187
+as.factor(byob)2003    0.075613798017 0.125429980673 461757  0.602836719
+as.factor(byob)2005    0.128697074584 0.115723453095 461757  1.112108835
+as.factor(byob)2006    0.145761167869 0.113483275689 461757  1.284428626
+as.factor(byob)2007    0.161840185601 0.117109821208 461757  1.381952290
+as.factor(byob)2008    0.107657202273 0.115423154170 461757  0.932717556
+parity                -0.107152903006 0.031097805379 461757 -3.445674114
+                                         p-value
+(Intercept)           0.000000000000000031903743
+IQRfintempma3month    0.995486237214432856390545
+sinetime              0.937343293455182524631653
+costime               0.728236856928783149456308
+age_centered          0.264123462824938426418697
+age_centered_sq       0.000434620199534311527773
+cig_preg              0.000012368998718192411452
+cig_pre               0.126656292578297136053322
+med_income            0.030832795610179670325879
+p_ospace              0.576602914146954637075737
+gender                0.001102879293765137184644
+prev_400              0.027567162217419883402103
+diab                  0.556294017293837428361769
+hyper                 0.000000000000054624341434
+lungd                 0.003791685605998957979412
+diab_other            0.238977761441995478763900
+prevpret              0.000000000000000001275792
+as.factor(kess)2      0.000150129399373466709778
+as.factor(kess)3      0.024444124878805682105076
+as.factor(kess)4      0.005161432896295286773536
+as.factor(kess)5      0.000023676372615409218864
+as.factor(MRN)1       0.000000000469695665373454
+as.factor(MRN)2       0.000000142320855408407415
+as.factor(edu_group)2 0.501804910960214400894586
+as.factor(edu_group)3 0.679399380541524600118919
+as.factor(edu_group)4 0.302445500881857787245366
+as.factor(byob)2001   0.786769249568047279730365
+as.factor(byob)2002   0.694933390861389610471122
+as.factor(byob)2003   0.546617612905669680856136
+as.factor(byob)2005   0.266091937549060242318433
+as.factor(byob)2006   0.198992666543698071279778
+as.factor(byob)2007   0.166987019334272984716350
+as.factor(byob)2008   0.350966305627589125748500
+parity                0.000569687482625094655971
+#+end_example
+
+***** last month 
+#+BEGIN_SRC R :session R1  :results output 
+lbw.30<-(glmmPQL(lowbw ~ IQRfintempmamonth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity, random = ~ 1 | FIPS ,family=binomial, data =  bd))
+
+summary(lbw.30)$tTable
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+                                Value      Std.Error     DF       t-value
+(Intercept)           -3.525547579424 0.359887710361 461757 -9.7962433224
+IQRfintempmamonth     -0.027313031521 0.216364170713 461757 -0.1262363885
+sinetime               0.000086466731 0.113025850205 461757  0.0007650173
+costime                0.011026650229 0.129264466109 461757  0.0853030269
+age_centered           0.006391458015 0.005724344346 461757  1.1165397516
+age_centered_sq        0.002167622618 0.000618139423 461757  3.5066888417
+cig_preg               0.049059266990 0.011261019598 461757  4.3565563991
+cig_pre                0.010932724187 0.007187338092 461757  1.5211089346
+med_income            -0.000003866214 0.000001787754   1355 -2.1626093828
+p_ospace              -0.001587225197 0.002830579602   1355 -0.5607421164
+gender                 0.187400404459 0.057613537860 461757  3.2527147511
+prev_400              -2.036059542036 0.926948110798 461757 -2.1965194365
+diab                   0.088351263739 0.150746952224 461757  0.5860898840
+hyper                  0.913125579430 0.121805725593 461757  7.4965735394
+lungd                  0.379254204189 0.131203208139 461757  2.8905863627
+diab_other             0.335002196623 0.285246327723 461757  1.1744312339
+prevpret               1.460951045899 0.166404880950 461757  8.7794963558
+as.factor(kess)2       0.267103995453 0.070702080764 461757  3.7778802628
+as.factor(kess)3       0.307671620662 0.137130359101 461757  2.2436433674
+as.factor(kess)4       0.818046926615 0.293323449770 461757  2.7888903095
+as.factor(kess)5       1.418926794626 0.336652114287 461757  4.2148162284
+as.factor(MRN)1        0.597515785239 0.095970499118 461757  6.2260360291
+as.factor(MRN)2        0.391192736955 0.074363339794 461757  5.2605590072
+as.factor(edu_group)2  0.104204525068 0.156006718961 461757  0.6679489561
+as.factor(edu_group)3 -0.069377916910 0.167559322201 461757 -0.4140498780
+as.factor(edu_group)4 -0.176359043382 0.171449851067 461757 -1.0286334009
+as.factor(byob)2001    0.030065989014 0.114155201115 461757  0.2633781792
+as.factor(byob)2002    0.044720204719 0.114230256868 461757  0.3914917636
+as.factor(byob)2003    0.070266445421 0.120805045538 461757  0.5816515784
+as.factor(byob)2005    0.127954942741 0.114995612240 461757  1.1126941302
+as.factor(byob)2006    0.146965693689 0.114099237624 461757  1.2880514958
+as.factor(byob)2007    0.160204267748 0.117716912989 461757  1.3609282106
+as.factor(byob)2008    0.106579925520 0.115331886796 461757  0.9241149909
+parity                -0.107227060246 0.031199885092 461757 -3.4367774090
+                                            p-value
+(Intercept)           0.000000000000000000000117447
+IQRfintempmamonth     0.899544862820263579905599727
+sinetime              0.999389604892569449745565180
+costime               0.932020522176099985856012609
+age_centered          0.264191745449394999045722443
+age_centered_sq       0.000453762408140119272853541
+cig_preg              0.000013215309603770226246403
+cig_pre               0.128233187470829179677167531
+med_income            0.030745720157020230839384212
+p_ospace              0.575066058365511612038289968
+gender                0.001143163867111200975718033
+prev_400              0.028055280766908212430887914
+diab                  0.557815400410486050830627391
+hyper                 0.000000000000065623733016632
+lungd                 0.003845417742657791879828943
+diab_other            0.240222946478424598248935240
+prevpret              0.000000000000000001647509736
+as.factor(kess)2      0.000158188722737881963141190
+as.factor(kess)3      0.024855828574443544765060210
+as.factor(kess)4      0.005289113926502013798836010
+as.factor(kess)5      0.000025002909040819939443271
+as.factor(MRN)1       0.000000000478793296558556085
+as.factor(MRN)2       0.000000143681907632987651239
+as.factor(edu_group)2 0.504166509659189410186286295
+as.factor(edu_group)3 0.678837771124242594922293392
+as.factor(edu_group)4 0.303652515142907919454273724
+as.factor(byob)2001   0.792259225054490867634626738
+as.factor(byob)2002   0.695433956199064340353288571
+as.factor(byob)2003   0.560801677262531161893832632
+as.factor(byob)2005   0.265840396616645269212142466
+as.factor(byob)2006   0.197728683512746333805765175
+as.factor(byob)2007   0.173537041591183105460061142
+as.factor(byob)2008   0.355426931979545557283017843
+parity                0.000588730983618195556628105
+#+end_example
+
+
+
+
+
+
+
+
+
+
