@@ -3,21 +3,15 @@
 #+TAGS:  first(f) 
 #+STARTUP: overview  inlineimages eval: (org-columns)
 #+PRIORITIES: A
-
 * how to use
 ** Refrences
 use org-bibtex-yank to 'paste' a single reference thats been yanked(copied to kill ring)
 In example open a bibtex file/snippet and copy to kill ring ('y' in evil mode) 
-
 then use 'org-bibtex-export-to-kill-ring' while standing on an org header to export that refrence back to bibtex format
-
 ** Columns 
 to sort by multiple criteria first sort by one the by the other:
 In example to sort by year published and then todo do this: sort by property (r) and choose year as property. then sort by todo state
- 
-
 * @Ongoing@
-
 ** PAUSED PM2.5 1kmx1km NEMIA					    :ucurent:
 *** Brainstorm
 -there may be degredation in data quality in Terra from 2000-2008 may introduce noide, we may need to address this at some stage in the future
@@ -25,38 +19,26 @@ In example to sort by year published and then todo do this: sort by property (r)
 0-1 indicates normal AOD days
 0.7-1.2 Days where heavy PM concentrations are transported from elsewhere
 2-4 HEavy sand stroms days, days in Africa etc
-
 When you see values of 1.2 in Western counties (IE MA) it is most likley clouds
-
 aod-PM convesion table, is that avilable?
-
 - masking algoryhtm :
-
 for dayswith "." calculate distance to pixel with cloud , then use distance to cloud and maybe a histogram (tail of histogram)?
-
 -LPM- interact lpm with z scores to get spatio-temporal stuff working.
-
 -weights in gamm 3rd stage?
-
 -for non pm2.5 countries perhaps calculate a ratio of Pm10/2.5 by season> imputation> convert pm10 to pm 2.5
-
 *** model ideas
 -look into predicting with a spatial correlation matrix (with nested days)
 -try subtracting monitor elev-pbl to see of that helps
 - look at correlation table of all LU variables with med_income to see which ones to take out for health studies
 -look into auto correlation between the random slops of stage one: there is a R function (ACF? auto correlation function)
-
 *** Decompose local/area
 http://svitsrv25.epfl.ch/R-doc/library/quantreg/html/predict.rqss.html
-
 -smooth of top 5%
-
 #+begin_src r
 xmat <- ns(x,y)
 quantreg(pred~xmat)
 #vqss?
 #+end_src
-
 -decompose:
 1)smooth geo components
 2)deviance from smooth will give us the local contribution
@@ -74,13 +56,10 @@ interactions with pbl/wdsp with source/are emissions
 -ask steve about traffic modeling, nescam
 -check out Nldas data set (the North American Land Data Assimilation System)
 http://ldas.gsfc.nasa.gov/nldas/NLDAS2forcing.php
-
 2.smoothing of the residuals-lucas neas suggestion
-
 #+BEGIN_SRC sh
 vresid~ LU+MET+Interactions+ s(x,y)
 #+END_SRC
-
 **** meet 04.10.2013 with joel
 -pls and kernel not working well
 running just LU variables Spatial R2=~0.83
@@ -129,7 +108,6 @@ How do you proccess HDF? she uses matlab for that
 -will you talk to alexei?
 -deep blue data where to get from
 -Variables used in current model:
-
 pm25
 aod
 tempc
@@ -149,8 +127,6 @@ NOXsum
 PM10sum
 SO2sum 
 Classified Land use data (to mimic the Joel Kaufman paper)
-
-
 -PBL for Israel
 - create a grid based on aod points
 -match all LU/met variables to 1x1km grid
@@ -180,7 +156,6 @@ if (icd11 in (415, 451, 453)) then thromb=1;
 - interact with ndvi/percet of open space in both short and long term
   (CXover and Ts)
 -look at interacting with season (winter vs summer)
-
 **** Survival analysis
      :PROPERTIES:
      :ID:       8e80e09e-3dba-4bb1-a09e-50c09b8b28f5
@@ -229,7 +204,6 @@ Greg will send over the tract and i will assign exposure per tract, if the tract
  pm~aod+aod01
 if prev day isnt avilable we use the same day twice
 -to borrow information across space create a variable that weights and down weights low aod observations per day
-
 * Future Research Ideas
 ** PM model (NEXT BRANCH)
 *** NEW ideas
@@ -241,7 +215,6 @@ resid~ LU+MET+Interactions+ s(x,y)
 #+END_SRC
 ***** Take those smoothed surfaces from stage 3 and put them into stage 1 as another predictor, and if CV R2 goes up, use them?
 ***** mod1 take the mean of the nonmissing aod's from the immediately surrounding cells, subtracted the aod from the cell with the monitor, and put that difference into the model to perhaps better capture the more slowly changing particle concentrations, and hence increasing spatial R2
-
 ** alexandra
 *** comparison paper spatial and temporal scaling of sattelite based models
 - comparing model outputs of various spatial resolution
@@ -254,14 +227,11 @@ season-same as above
 maiac is similar to modis but much more obsrv with more variability
 range of true PM, pred 10, pred 1-check ranges in each 
 range of variablilty of 1x1m pixels within a 10x10km model.
-
 figures:
 fig 1: 10x10 vs 1x1km for 2003-2008
 fig 2: box plot city/pop vs pm
 fig 3- going further from A1 roads and PM levels
 fig 4-
-
-
 *** no2 modles
 *** O3 models
 *** So2 models
@@ -277,7 +247,6 @@ Ask alexandra about this
 antonella dosent have sulfate data, is it from EPA data website?
 - specification data from antonella
 -also email choon min
-
 ** Assign temperature to NAS
 *** DONE create exposure datasets
 *** test various previous temp-nas studies
@@ -291,7 +260,6 @@ about this
 ** Multi Pollutant project-living in the modern environment (with Jamie)
 *** meeting with jamie
 **** 15.7.2013 prepare MA datasets of temp,PM,NDVI,SES stuff and other perhaps to prepare to the regression tree
-
 -look into Ozone (O3) and sat. data for possible future modeling
 -So2 is very low in the usa, better to look at NO2
 -NDVI as an exposure
@@ -364,7 +332,6 @@ look at birth weight, preterm, preclampsia, IGUR, diabetes, hyper tension,birth 
        ohio
        illinoy
        indiana
-
 ** Michelle bell colaboration-Conn data, maybe other world areas brasil etc
 Wants to use 1x1km temp data for health studies that we are not going to persue
 very intrested in other parts of the world as well:
@@ -372,7 +339,6 @@ Brasil (sau paolo -lots of monitors but spatialy all clustered)
 Nepal- few monitos, only specific years and then they stopped
 Asia- Japan etc
 study of nursing home cases, dont move much good for 1x1 km data
-
 ** Joel NAS paper about no correlation with SES and PM, try with 1km data
 ** Look into developing spatio temporal ozone (O3) modles from sattelite
 ** Look into developing spatio temporal Nox modles from sattelite
@@ -392,10 +358,7 @@ when we get the 1x1km data ready go back to the icam/vcam reanalysis by marie-ab
 -maybe consider an EHF ov birth outcomes and Autism
 -there is a connection between MLT and Autism, could be used in future LAN studies
 ** Ta and birth outcomes (preterm,defects, diab etc) in usa and israel?   
-
-
 * Grants
-
 ** TODO EHF grant: birth weight outcomes (defects, Ultra sound measurements and Ta,PM2.5
    :PROPERTIES:
    :ID:       39e8a4e3-a097-46c4-a3a5-8c35b9452187
@@ -434,7 +397,6 @@ the grant can be submitted directly to the EHF anytime up to July 2014
 -Joel: Placental abruption , acute effect that can happen
 http://en.wikipedia.org/wiki/Placental_abruption
 ***** A3:look at interactions between PM and Ta exposures and birth outcomes
-
 ** WAITING ISF grant				    :WAITING:
    :PROPERTIES:
    :ID:       2d51f244-9704-406f-87ae-9a02c28cfcaa
@@ -445,7 +407,6 @@ http://en.wikipedia.org/wiki/Placental_abruption
    :ID:       e363cfbc-1013-42d0-a32a-d25303f43814
    :END:
 alexandra schnider
-
 ** WAITING Diane gold: sleep lan				    :WAITING:
    :PROPERTIES:
    :ID:       31c09f26-0ce2-475e-b3fa-f8c8771b5d64
@@ -469,7 +430,6 @@ bringing in Data set from differnet sources both spatilly and temporally differn
 ** Andrea padwan LAN-Prostate Italian SIR grant
 ** R21 with Sara Adar
 ** R21 with Allan Mexico
-
 * Office/Budgets
   :PROPERTIES:
   :ID:       248dff94-3c3f-4b05-b9d3-4c25addf746b
@@ -484,11 +444,9 @@ for a post-doc the $$ is between 4-20
 department sections starts with '5'
 grant money sections starts with '3'
 other research sections starts with '8'
-
 to see how much is left you need to check in "מחקרים"
 *** Move budget that is unused
 check how to move unused budget to department/faculty to pay for other students ans somehow get the money back
-
 ** Office Hardware
 *** IP
 Beast IP: 132.72.155.204
@@ -496,7 +454,6 @@ NAS BGU:
 132.72.154.204 (main)
 132.72.152.204
 *** Phone
-
 ** look into buying fridge/micro from CIG grant
 ** maabadot budget
 *** Proffesional camera 
@@ -514,12 +471,9 @@ NAS BGU:
    :PROPERTIES:
    :ID:       1a33c229-6aa6-4064-9960-5a2a1ef21eb1
    :END:
-
 -buy DSLR?
 -buy projector?
 -buy LAN meters
-
-
 ** TODO Buy Laptop
    :PROPERTIES:
    :ID:       d8da2a30-f5f0-46d7-8a45-c80e1e72fc27
@@ -542,24 +496,23 @@ Intel wifi card (strongly recommended for Linux)
    :PROPERTIES:
    :ID:       6c1e9592-8c50-41e4-b187-c42884527820
    :END:
+** TODO check refund on thinkpad dock from harel
+   :PROPERTIES:
+   :ID:       976318c6-2f29-4d33-ab27-fcfae4582cba
+   :END:
 ** TODO finish greg Ta anaylsis
    :PROPERTIES:
    :ID:       54595f52-7965-4bb0-904c-38c61ab614b4
    :END:
-** DONE USA TAX!!!
+** TODO USA TAX-check refund from federal in bank
+   :PROPERTIES:
+   :ID:       58f28c2f-2484-44d1-8b5c-924f49b85aff
+   :END:
 ** TODO make 3D course students do Beer Sheva in 3D
    :PROPERTIES:
    :ID:       acc68642-21de-4dd2-84b3-b99d7d29436d
    :END:
 ** home paint color is 016 
-** meytar
--send meytar X,y cords from hdf explorer for ndvi
--set with allan meeting aroung 08:30, preffer not monday
-** TODO talk to johanna
-   :PROPERTIES:
-   :ID:       b9605eb7-013f-43f6-857f-8e87ccb79fb6
-   :END:
-** check with TAL/others about deviding israel by regions
 ** TODO look for a teacher in GIS for  spatial geodatabases
    :PROPERTIES:
    :ID:       a673b5fa-fd24-4993-9fc1-bf3fda554a1b
@@ -567,7 +520,6 @@ Intel wifi card (strongly recommended for Linux)
 course will include mysql, geodatabases etc
 job Benefits:
 16,000 NIS for course +travel expenses
-
 ** porgress with the virtual geography Library
 ** check with hendrick bruins about aridity index for regions in Israel
 * long term Misc
@@ -577,16 +529,11 @@ job Benefits:
     :END:
 **** do you know the numbers/ration in other universities and abroad in geo departments?
 penn state is one of the leaders in GIS masters degree
-
 http://www.worldcampus.psu.edu/degrees-and-certificates/geographic-information-systems-gis-masters/courses
-
 All courses, including electives, are GIS-related
-
 **** split maybe into 2 tracks:
-
 ***** work focused (non thesis):
 will admit even non GIS background people
-
 stress jobs at every level from high tech (google maps, waze etc) to municipalities, governmental (hevrat hasmal etc), education (teaching in colleges etc), urban and regional planning,environmental resource management,surveying etc
 ***** academia focus- thesis as a focused GIS/geospatial track track
 plus advertise GIS services for EPI/Health/Archeology etc
@@ -605,7 +552,5 @@ Geospatial statistics
 GIS project managment
 Cartography and imaging software
 remote sensing
-
 ** Mapi Maagal project 
 Zipcode proxy
-

@@ -20760,6 +20760,8 @@ the
  have this command).
 **** start program menu
 you need to have checked the "global program" option for the file to run,If not, worker will try to start ./APP (₆In example₆./vlc)
+**** fonts
+a good tiny font for the button bar is ProggyTiny (part of proggy fonts): https://aur.archlinux.org/packages/proggyfonts/ 
 *** krusader
 
 **** tips
@@ -23004,16 +23006,15 @@ spacefm -s set selected_files 'fstab' 'hosts'
 ***** select  by filename
 
 spacefm -s set selected_pattern '*.jpg'
-*** Menus 
-**** use keyboard to select item menus
+**** Menus 
+***** use keyboard to select item menus
 
 append a ' ' before the item name to make it keyboard accessible
  IE:
  [[/home/zeltak/org/attach/images/Image_8Xs6hbyyo4DRhLWdZsES7g_0001.png]]
-**** Pop up a menu
+***** Pop up a menu
 spacefm -s show-menu 'Gizmos'
 *** telescope
-
 **** config
 
 General configuration is done on /etc/telescope.conf, with the following
@@ -23350,23 +23351,25 @@ Android virtual machines. Click Start to run it.
 ***** fix wierd issues on debian with VPN in BGU
 1)log in with VPN in browser
 
-log into machine with ssh
+https://vpn.bgu.ac.il/extender.html
 
-#+BEGIN_SRC sh
+2)log into machine with ssh
+
+#+BEGIN_SRC sh :term t
 ssh -X -C zeltak@132.72.155.204
 #+END_SRC
 
 #+RESULTS:
 
-stop the TV processes and deamon (with htop,init or systemd)
+3)stop the TV processes and deamon (with htop,init or systemd)
 
-#+BEGIN_SRC sh
+#+BEGIN_SRC sh :term t
 sudo teamviewer --daemon stop
 #+END_SRC
 
-use 'htop' to kill all non deamon TV processes
+4)use 'htop' to kill all non deamon TV processes
 
-and start the TV deamon again:
+5)and start the TV deamon again:
 #+NAME: 
 #+BEGIN_SRC sh
 sudo teamviewer --daemon start
@@ -24481,8 +24484,7 @@ then call align-regexp  you get:
 ***** How do I get to the menu in Emacs in console mode
 M-x menu-bar-open, which is usually bound to ?F10? (or ?C-F10?). This works with and without menu-bar-mode (which just shows the names of the menus at the top of the screen).
 **** config/Elisp
-***** Basics
-****** issue commands based on hostname in emacs config
+***** issue commands based on hostname in emacs config
 you can config emacs so that some specific commands (such as paths, themes anything really) run on a specific machine while others run on another machine. this can be done based on hostname. 
 here is an example of defining a path for a org-mode plugin based on which machine emacs is run
 
@@ -24510,7 +24512,7 @@ you can also add more then one command with the 'progn' command, ₆In example�
 )
 #+END_SRC
 
-****** True and False
+***** True and False
 In elisp, the symbol nil is false, anything else is considered true. So, 0 is true, and empty string "" is also true. Also, nil is equivalent to the empty list (), so () is also false.
 
 ; all the following are false. They all evaluate to nil
@@ -24518,7 +24520,7 @@ In elisp, the symbol nil is false, anything else is considered true. So, 0 is tr
 (if () "yes" "no") ;  "no"
 (if '() "yes" "no") ;  "no"
 (if (list) "yes" "no") ;  "no", because (list) eval to a empty list, same as ()
-****** setq
+***** setq
 *Setq* - '/setq means the variable is not evaluated
 
 setq is just like set with a quoted first arg:
@@ -24528,13 +24530,13 @@ setq is just like set with a quoted first arg:
 is just like
 
 (setq foo '(bar baz))
-****** load path/add to list
+***** load path/add to list
 to manually load functions/plugins to the emacs load path so you can require them use the add to list command
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/evil")
 #+END_SRC
 
-****** Require
+***** Require
 when you need to load feautres that are not in stock emacs installion default you need to require it
 so as opposed to lets say !winner-mode! which is stock emacs !evil! is a plugin so you need to require it on startup:
 (require 'evil)
@@ -24542,7 +24544,7 @@ so as opposed to lets say !winner-mode! which is stock emacs !evil! is a plugin 
 after you require the feature you can define options (make use of the c-h f to describe the specific option) as you would for other emacs native commands:
 
 (setq evil-want-fine-undo t)
-****** describe Functions
+***** describe Functions
 to get info on a specific function
 
 c-h f FUNCTIONNAME
@@ -24562,7 +24564,7 @@ so here if its 1 (positive) it works and if -1 (negative) its disabled
 (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
 #+END_SRC
        
-****** printing
+***** printing
 to print something in the botom bar use the message command
 #+BEGIN_SRC emacs-lisp
 ; printing
@@ -24571,13 +24573,18 @@ to print something in the botom bar use the message command
 
 will preint the word hi in bottom bar
 
-****** functions
+***** functions
+
 Basic function definition is of the form:
+
 #+BEGIN_SRC emacs-lisp
-(defun function name (param1 param2 ) "doc string" body) . Example:
+(defun function name (param1 param2 ) "doc string" body)
+
 ;IE
+
 (defun myFunction () "testing" (message "Yay!") )
 #+END_SRC
+
 When a function is called, the last expression in the function's definition body is returned. (You do not have to write Return .)
 This function can be called in other places in a elisp program but the function won't be available when user types Alt+x unless you make it interactive. To make a function available for interactive use, add the (interactive) right after the doc string. this makes the function a !command!.
 
@@ -24601,14 +24608,14 @@ The (interactive "x") form takes a single-letter code to indicate how the comman
 (interactive "s"), prompt user for a string as argument.
 (interactive "r"), for commands that takes 2 arguments, the beginning and ending positions of the current region. This form is typically used for commands that act on a text selection.
 
-****** auto mode list
+***** auto mode list
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
 #+END_SRC
 to open specific file types in specific modes use auto-mode-alist, Ie to open all *.org files in org
 You can use C-h v to descrive auto-mode-alist fully
 
-****** Hooks
+***** Hooks
 
 %Tip most major modes will have a hook name Ie markdown-mode-hool, which can be used to assign hooks%
 #+BEGIN_SRC emacs-lisp
@@ -24616,6 +24623,60 @@ You can use C-h v to descrive auto-mode-alist fully
 (add-hook 'org-mode-hook  
           (lambda ()      
             (flyspell-mode)))
+#+END_SRC
+**** Functions
+***** simple food template Function
+here is an anotated version
+#+BEGIN_SRC emacs-lisp :results none
+;name of the functiom
+(defun recipe-template ()
+;make it interactive
+        (interactive)
+;       this will move the cursor to a 0 poistion so the "search forward from point" command below will work
+         (goto-line 0)
+;       search for a specific keyword/header to place the sub entries
+         (search-forward "* Inbox")
+;move via org command 
+         (org-meta-return)
+         (org-metaright)
+; define a variable called recipe-name and use read-string to give it a user entered string`
+         (setq recipe-name (read-string "Title: "))
+;insert the string recipe-name
+         (insert recipe-name)
+;ask for org tags to be entered
+         (org-set-tags)
+         
+;create 2 sub headers: "ingridients" and "Preperation" by using the org mode meta-enter and meta right and then entering strings
+         (org-meta-return)
+         (org-metaright)
+         (insert "Ingridients")
+         (org-meta-return)
+         (insert "Preperation")
+; go back to main header by matcing on the recipe-name string from above
+         (search-backward recipe-name)
+; in the below property drawer example we will define a variable use the read-string to give it a user entered string
+;src1 src2 etc will be the individual var names where the read-string will be the user entered names
+         (setq src1 (read-string "Time: "))
+;then we use the src1 etc to set the relevant org property value
+         (org-set-property "Time" src1)
+         (setq src2 (read-string "Rating: "))
+         (org-set-property "Rating" src2)
+         (setq source (read-string "Sources: "))
+         (org-set-property "Source" source)
+         (setq amount (read-string "Ammount: "))
+         (org-set-property "Ammount" amount)
+         (setq src5 (read-string "Fav: "))
+         (org-set-property "Fav" src5)
+         ;move to the ingridients section and start a yasnippet expansion
+         (search-forward "Ingridients")
+         (yas-insert-snippet)
+
+
+)
+
+
+
+
 #+END_SRC
 
 **** copy,cut,paste
@@ -28375,6 +28436,20 @@ agenda
  entry.
 
 **** Functions
+***** get rid of blank Lines
+
+#+BEGIN_SRC emacs-lisp :results none
+(defun flush-blank-lines ()
+    "Removes all blank lines from buffer or region"
+     (interactive)
+     (save-excursion
+       (let (min max)
+         (if (equal (region-active-p) nil)
+             (mark-whole-buffer))
+         (setq min (region-beginning) max (region-end))
+         (flush-lines "^ *$" min max t))))
+#+END_SRC 
+
 ***** Archived functions
 ****** Recursive find text
 #+BEGIN_SRC emacs-lisp
@@ -28411,7 +28486,6 @@ If FILEXT is provided, return files with extension FILEXT instead."
 
 
 #+END_SRC
-      
 **** images
 ***** functions to insert images
 ******* Automatic screenshot insertion- Suggested by Russell Adams
@@ -38068,10 +38142,11 @@ for example:
 sudo dd if=/home/zeltak/Downloads/debian-6.0.3-amd64-netinst.iso of=/dev/sdb
 #+END_SRC
 *** xclip
-
 **** xsel
 
+#+BEGIN_SRC sh
 echo -n {f} | xsel -i
+#+END_SRC
 
 ** Text manuiplulation
 
@@ -42368,193 +42443,6 @@ command line*
 issue:
  speaker-test -t wav -c 6
 
-* graphics
-** Term color theme (.colors)
-*** zblink
- 
-[[~/Dropbox/Org/Tech/linux_files/2010-12-12-17-24-46-scrot.jpg]]
-
-@default fg/bg@
-foreground: #000000
-background: #F5F5F5
- 
- @!black@
- *color0: #1B1D1E
- [[~/Dropbox/Org/Tech/linux_files/2010-12-11-19-47-48-scrot.jpg]]
- *color8: #5B5B5B
- [[~/Dropbox/Org/Tech/linux_files/2010-12-11-19-47-14-scrot.jpg]]
-
- @!white@ 
- #F2F2F2
- *color15: #F8F8F2
-
-@!red@
- *color1: [[~/Dropbox/Org/Tech/linux_files/2010-12-11-19-48-34-scrot.jpg]] #F92672
- *color9: #[[~/Dropbox/Org/Tech/linux_files/2010-12-11-15-56-16-scrot.jpg]]A50640
-@!green@
- *color2: [[~/Dropbox/Org/Tech/linux_files/2010-12-11-15-56-53-scrot.jpg]] #2AFF18
- *color10: [[~/Dropbox/Org/Tech/linux_files/2010-12-11-15-58-28-scrot.jpg]]#39B52F
-@!yellow@
- *color3: [[~/Dropbox/Org/Tech/linux_files/2010-12-11-16-03-33-scrot.jpg]] #FD971F
- *color11: #C59B4
-
-@!blue@
- *color4: [[~/Dropbox/Org/Tech/linux_files/2010-12-11-16-13-17-scrot.jpg]] #3C576
- *color12: #B6C4[[~/Dropbox/Org/Tech/linux_files/2010-12-11-19-37-43-scrot.jpg]]FF
-
-@!magenta@
- *color5: [[~/Dropbox/Org/Tech/linux_files/2010-12-11-21-39-22-scrot.jpg]] #8C54E
- *color13: #[[~/Dropbox/Org/Tech/linux_files/2010-12-11-19-44-43-scrot.jpg]]8D8A95
- 
-@!cyan@
- *color6: [[~/Dropbox/Org/Tech/linux_files/2010-12-11-19-50-11-scrot.jpg]] #57AEF5
- *color14: #3[[~/Dropbox/Org/Tech/linux_files/2010-12-11-19-50-39-scrot.jpg]]6F0D5
-
-** fonts
-*** zeltak fav
-
-Envy Code R
- [[http://ethanschoonover.com/solarized/img/andalemono14/][Andale Mono
-14]]
- monaco
-
-*** install office 2007 fonts
-
-[[~/Dropbox/Org/Tech/linux_files/attach/vista-fonts-installer.sh][Attachment #29
-(vista-fonts-installer.sh)]]
- To install the Vista ClearType fonts in Ubuntu, you need to install
-cabextract first.
- Cabextract is a utility found in the universe repository, so before you
-run the following command, make sure you have universe enabled in your
-repository list. Once this is done, install cabextract using:
-
-$sudo apt-get install cabextract
-
- Then, once that is done, use this script to install the Vista fonts.
-Create a file called "vista-fonts-installer.sh" in your home (~)
-directory.
- Then open up a text editor and copy and paste the script into that file
-(see attached script)
- Do a chmod a+x ~/vista-fonts-installer.sh to make the file/script
-executable.
- Then run the script using:
-
-$ ~/vista-fonts-installer.sh
-
- The script downloads the Powerpoint Viewer installer from
-microsoft.com, and then extracts the Vista cleartype fonts using
-cabextract. These fonts are then installed in the ~/.fonts directory.
-
-** cheatsheets
-** color themes
-*** black ice
-
-[[~/Dropbox/Org/Tech/linux_files/2011-01-04-20-01-38-scrot.jpg]] blue (main text)
- #080808 Black (background)
- [[~/Dropbox/Org/Tech/linux_files/2011-01-04-21-35-09-scrot.jpg]] orange
- [[~/Dropbox/Org/Tech/linux_files/2011-01-04-21-35-47-scrot.jpg]] light foreground
- [[~/Dropbox/Org/Tech/linux_files/2011-01-04-21-38-00-scrot.jpg]]
- [[~/Dropbox/Org/Tech/linux_files/2011-01-05-21-30-45-scrot.jpg]]
- urxvt -bg '#1b1d1e' -fg '#00bbff'
-
-*** color palette
-[[~/Dropbox/Org/Tech/linux_files/2011-05-22-09-49-39-scrot.png]]
-*** invert colorscheme
-
-its pretty simple to invert the color scheme. there are only 4 changes
-that need to be applied. in each mode, four monotones form the core
-values (with an optional fifth for emphasized content).
- in practice look at the Xresources example:
- *from dark:*
- #define S base03 #002b36
- #define S base02 #073642
- #define S base01 #586e75
- #define S base00 #657b83
- #define S base0 #839496
- #define S base1 #93a1a1
- #define S base2 #eee8d5
- #define S base3 #fdf6e3
- #define S yellow #b58900
- #define S orange #cb4b16
- #define S red #dc322f
- #define S magenta #d33682
- #define S violet #6c71c4
- #define S blue #268bd2
- #define S cyan #2aa198
- #define S green #859900
- *to light:*
- #define S base3 #002b36
- #define S base2 #073642
- #define S base1 #586e75
- #define S base0 #657b83
- #define S base00 #839496
- #define S base01 #93a1a1
- #define S base02 #eee8d5
- #define S base03 #fdf6e3
- #define S yellow #b58900
- #define S orange #cb4b16
- #define S red #dc322f
- #define S magenta #d33682
- #define S violet #6c71c4
- #define S blue #268bd2
- #define S cyan #2aa198
- #define S green #859900
-
-*** html color numers
-
-base3 #002b36
- base2 #073642
- base1 #586e75
- base0 #657b83
- base00 #839496
- base01 #93a1a1
- base02 #eee8d5
- base03 #fdf6e3
- yellow #b58900
- orange #cb4b16
- red #dc322f
- magenta #d33682
- violet #6c71c4
- blue #268bd2
- cyan #2aa198
- green #859900
-
-*** notcase pastels
-[[~/Dropbox/Org/Tech/linux_files/Image_afFf9KZQkxJjMQbfbYy4jg_0001.png]]
-[[~/Dropbox/Org/Tech/linux_files/Image_afFf9KZQkxJjMQbfbYy4jg_0002.png]]
-
-*** android
-**** color pallete
-
-#+DOWNLOADED: file:///home/zeltak/org/attach/images/Image_mAifAlddTmhCpqrved84pw_0001.png @ 2013-12-20 07:29:58
-#+attr_html: :width 300px
- [[~/org/attach/images_2013//Image_mAifAlddTmhCpqrved84pw_0001_2013-12-20_07:29:58.png]]
-
-
-    #33B5E5      #AA66CC     #99CC00          #FFBB33      #FF4444
-    #0099CC      #9933CC     #669900          #FF8800      #CC0000
-*** blue org
-
-colors
-
-
-#+DOWNLOADED: /tmp/screenshot.png @ 2013-12-21 08:42:51
-#+attr_html: :width 300px
- [[~/org/attach/images_2013//screenshot_2013-12-21_08:42:51.png]]
- 
-#0099CC
-#CCFFCC
-#66CCFF
-#003399
- 
-Fonts:
-
-
-#+DOWNLOADED: /tmp/screenshot.png @ 2013-12-21 08:43:57
-#+attr_html: :width 500px
-
- [[~/org/attach/images_2013//screenshot_2013-12-21_08:43:57.png]]
- 
 * shortcuts-cheatsheets-Audio
 ** zeltak legends (rating etc...)
 **** Zeltak's Premium Photo Collection Rating System
