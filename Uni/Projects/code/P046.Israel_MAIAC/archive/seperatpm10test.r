@@ -13,40 +13,14 @@ library(mgcv)
 library(gdata)
 library(car)
 
+########### import datasets
+#import full XY
 
-
-
-#PM10
-pm10 <- fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/0.raw/PM/PMData10.csv")
-pm10$date<-paste(pm10$Day,pm10$Month,pm10$Year,sep="/")
-pm10[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
-pm10[, c := as.numeric(format(day, "%Y")) ]
-pm10[,c("Year","Month","Day","V10","date"):=NULL]
-setnames(pm10,"StationID","x_stn_ITM")
-setnames(pm10,"X","y_stn_ITM")
-setnames(pm10,"Y", "stn")
-summary(pm10)
-pm10[,length(na.omit(PM10)),by=list(stn,c)]
-pm10[, pm10_miss := length(na.omit(PM10)),by=list(stn,c)]
-pm10<-pm10[!is.na(PM10)]
-
-
-
-
-#PM25
-pm25 <- fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/0.raw/PM/PMData25.csv")
-pm25$date<-paste(pm25$Day,pm25$Month,pm25$Year,sep="/")
-pm25[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
-pm25[, c := as.numeric(format(day, "%Y")) ]
-pm25[,c("Year","Month","Day","V10","date"):=NULL]
-setnames(pm25,"StationID","x_stn_ITM")
-setnames(pm25,"X","y_stn_ITM")
-setnames(pm25,"Y", "stn")
-pm25[,length(na.omit(PM25)),by=list(stn,c)]
-pm25[, pm25_miss := length(na.omit(PM25)),by=list(stn,c)]
-pm25<-pm25[!is.na(PM25)]
-
-
+fullxy<-fread("/media/NAS/Uni/Data/Israel/IPA_stations/pmstn_miss.csv")
+setnames(fullxy,"V2","stn")
+setnames(fullxy,"V3","x_stn_ITM.n")
+setnames(fullxy,"V4", "y_stn_ITM.n")
+fullxy<-fullxy[,c(2:4),with=FALSE]
 
 #Temp
 temp <- fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/0.raw/temporal MOEP/Temp.csv")
@@ -57,6 +31,12 @@ temp[,c("Year","Month","Day","date"):=NULL]
 setnames(temp,"StationID/AOD","stn")
 setnames(temp,"X","x_stn_ITM")
 setnames(temp,"Y", "y_stn_ITM")
+
+setkey(fullxy , stn)
+setkey(temp, stn)
+temp.1 <- merge(temp, fullxy, all.x = T)
+
+
 temp[,length(na.omit(Temp)),by=list(stn,c)]
 temp[, Temp_miss := length(na.omit(Temp)),by=list(stn,c)]
 temp<-temp[Temp_miss > 300]
@@ -128,75 +108,133 @@ ws<-ws[WS_miss > 300]
 
 
 
-#map location
+###load Terra
 
-RHx<-RH[,c(3,4,5),with=FALSE]
-WDx<-WD[,c(3,4,5),with=FALSE]
-tempx<-temp[,c(3,4,5),with=FALSE]
-PM10x<-pm10[,c(3,4,5),with=FALSE]
-PM25x<-pm25[,c(3,4,5),with=FALSE]
-so2x<-so2[,c(3,4,5),with=FALSE]
-no2x<-no2[,c(3,4,5),with=FALSE]
-wsx<-ws[,c(3,4,5),with=FALSE]
+#load aod data
+terra<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/AOD_allyears.RDS")
+terra<- terra[yr >= "2002"]
+terra<- terra[ y_aod_ITM >= 500000]
+# terra<- terra[ aod >= 0.1 &  aod <= 2]
 
 
-alls<-rbind(RHx,WDx,tempx,PM10x,PM25x)
-describe(alls)
+summary(terra$aod)
 
-#export unique stn location to join to guid
-alls_agg <- (alls[, list(
-                        x_stn_ITM =  x_stn_ITM[1], 
-                        y_stn_ITM =  y_stn_ITM[1]),
-                        by = stn])
-write.csv(alls_agg,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/ILstnXY.csv")
+###load Aqua
+#load aod data
+aqua<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/AOD_allyearsAQ.RDS")
+aqua<- aqua[yr >= "2002"]
+aqua<- aqua[ y_aod_ITM >= 500000]
+
+
+
+
+#PM10
+pm10 <- fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/0.raw/PM/PMData10.csv")
+pm10$date<-paste(pm10$Day,pm10$Month,pm10$Year,sep="/")
+pm10[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
+pm10[, c := as.numeric(format(day, "%Y")) ]
+pm10[,c("Year","Month","Day","V10","date"):=NULL]
+setnames(pm10,"StationID","x_stn_ITM")
+setnames(pm10,"X","y_stn_ITM")
+setnames(pm10,"Y", "stn")
+summary(pm10)
+pm10[,length(na.omit(PM10)),by=list(stn,c)]
+pm10[, pm10_miss := length(na.omit(PM10)),by=list(stn,c)]
+pm10<-pm10[!is.na(PM10)]
+pm10<-na.omit(pm10)
+
+# import monitor data and spatial merge with nearestbyday()
+source("/home/zeltak/org/files/Uni/Projects/code/P031.MIAC_PM/code_snips/nearestbyday.r")
+
+#create PM matrix
+pm.m <- makepointsmatrix(pm10, "x_stn_ITM", "y_stn_ITM", "stn")
+
+#create aod terra matrix
+aod.m <- makepointsmatrix(terra[terra[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
+#create aod aqua matrix
+aod.m.aq <- makepointsmatrix(aqua[aqua[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
+
+########### join Terra to pm10
+closestaod <- nearestbyday(pm.m, aod.m, 
+                           pm10, terra [, list(day, aodid, aod)], 
+                           "stn", "aodid", "closestaod", "aod", knearest = 5, maxdistance = 1500)
+
+########### join aqua to pm10
+closestaod.aq <- nearestbyday(pm.m, aod.m.aq, 
+                              pm10.m1, aqua [, list(day, aodid, aod)], 
+                              "stn", "aodid", "closestaod", "aod", knearest = 5, maxdistance = 1500)
+# this has aod even when there is no pm; it gets dropped on the merge
+
+setnames(closestaod.aq,"aod","aod.aq")
+
+
+
+setkey(pm10,stn,day)
+setkey(closestaod,stn,day)
+pm10.m1 <- merge(pm10, closestaod[,list(stn,day,aod)], all.x = T)
+#head(mod1)
+# pm10.m1 <- pm10.m1[aod != "NA"]
+
+setkey(pm10.m1 ,stn,day)
+setkey(closestaod.aq ,stn,day)
+pm10.m1 <- merge(pm10.m1 , closestaod.aq[,list(stn,day,aod.aq)] , all.x = T)
+
+ 
+# 
+# #map location
+# 
+# RHx<-RH[,c(3,4,5),with=FALSE]
+# WDx<-WD[,c(3,4,5),with=FALSE]
+# tempx<-temp[,c(3,4,5),with=FALSE]
+# PM10x<-pm10[,c(3,4,5),with=FALSE]
+# PM25x<-pm25[,c(3,4,5),with=FALSE]
+# so2x<-so2[,c(3,4,5),with=FALSE]
+# no2x<-no2[,c(3,4,5),with=FALSE]
+# wsx<-ws[,c(3,4,5),with=FALSE]
+# 
+# 
+# alls<-rbind(RHx,WDx,tempx,so2x,no2x,wsx,PM10x,PM25x)
+# describe(alls)
+# 
+# #export unique stn location to join to guid
+# alls_agg <- (alls[, list(
+#   x_stn_ITM =  x_stn_ITM[1], 
+#   y_stn_ITM =  y_stn_ITM[1]),
+#   by = stn])
+# write.csv(alls_agg,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/ILstnXY.csv")
+
+
 
 
 
 
 #####################
 #to create a date range based on start and end points use
-days<-seq.Date(from = as.Date("2000-01-01"), to = as.Date("2013-12-31"), 1)
+days<-seq.Date(from = as.Date("2002-01-01"), to = as.Date("2013-12-31"), 1)
 #create date range
-mg <- data.table(expand.grid(stn = alls[,unique(stn)], day = days))
+mg <- data.table(expand.grid(stn = pm10.m1[,unique(stn)], day = days))
 
 
 
-setkey(pm10, day,stn)
+setkey(pm10.m1, day,stn)
 setkey(mg, day,stn)
-J1 <- merge(mg,pm10, all.x = T)
+J1 <- merge(mg,pm10.m1, all.x = T)
 
 setkey(temp, day,stn)
 setkey(J1, day,stn)
-J2 <- merge(J1,temp[,list(day,stn,Temp)], all.x = T)
-
-describe(J2$Temp)
-describe(temp$Temp)
-
-setkey(pm25, day,stn)
-setkey(J2, day,stn)
-J3 <- merge(J2,pm25[,list(day,stn,PM25)], all.x = T)
-
-describe(J3$PM25)
-describe(pm25$PM25)
+J3 <- merge(J1,temp[,list(day,stn,Temp)], all.x = T)
 
 setkey(RH, day,stn)
 setkey(J3, day,stn)
 J4 <- merge(J3,RH[,list(day,stn,RH)], all.x = T)
 
-describe(J4$RH)
-describe(RH$RH)
-
-
 setkey(WD, day,stn)
 setkey(J4, day,stn)
 J5 <- merge(J4,WD[,list(day,stn,WD)], all.x = T)
-describe(J5$WD)
-describe(WD$WD)
 
 setkey(ws, day,stn)
 setkey(J5, day,stn)
 J5 <- merge(J5,ws[,list(day,stn,WS)], all.x = T)
-describe(J5$WS)
 
 setkey(so2, day,stn)
 setkey(J5, day,stn)
@@ -205,13 +243,6 @@ J5 <- merge(J5,so2[,list(day,stn,SO2)], all.x = T)
 setkey(no2, day,stn)
 setkey(J5, day,stn)
 J5 <- merge(J5,no2[,list(day,stn,NO2)], all.x = T)
-
-
-#remove below year 2002 which we dont need
-J5[, c := as.numeric(format(day, "%Y")) ]
-J6 <- J5[c >= 2002]
-
-
 
 #import LU
 lu1<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN004_LU_full_dataset/LU1.csv")
@@ -255,8 +286,8 @@ lu1[,MEAN:=NULL]
 stnkey<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/ILstnXY_aodid.csv")
 
 setkey(stnkey,stn)
-setkey(J6,stn)
-J7 <- merge(J6,stnkey[,list(stn, aodid)], all.x = T)
+setkey(J5,stn)
+J7 <- merge(J5,stnkey[,list(stn, aodid)], all.x = T)
 
 
 
@@ -350,16 +381,6 @@ setkey(J12,  ndviid, m)
 J13 <- merge(J12, ndvi, all.x = T)
 
 
-
-
-#################################################3
-
-#create pm25 datasets
-pm25all <- J13[!is.na(PM25)]
-#create pm10 datasets
-pm10all <- J13[!is.na(PM10)]
-
-
 #add dust days
 dust<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/0.raw/dust_days/DD_allIsr_20022012.csv")
 dust$date<-paste(dust$Day,dust$Month,dust$Year,sep="/")
@@ -368,28 +389,17 @@ dust[,c("Year","Month","Day","V9","V8","date","X","Y"):=NULL]
 setnames(dust,"StationID","stn")
 
 
-setkey(pm10all , day, stn)
+setkey(J13 , day, stn)
 setkey(dust, day, stn)
-pm10all <- merge(pm10all, dust, all.x = T)
-pm10all<-pm10all[is.na(Dust), Dust:= 0]
-describe(pm10all$Dust)
+J14 <- merge(J13, dust, all.x = T)
+J14<-J14[is.na(Dust), Dust:= 0]
 
-setkey(pm25all , day, stn)
-setkey(dust, day, stn)
-pm25all <- merge(pm25all, dust, all.x = T)
-pm25all<-pm25all[is.na(Dust), Dust:= 0]
-describe(pm25all$Dust)
+summary(J14)
 
 setnames(pm10all,"c.y","c")
 setnames(pm25all,"c.y","c")
 
 pm25all[,c("c.x"):=NULL]
 pm10all[,c("c.x"):=NULL]
-
-saveRDS(pm10all,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm10all.RDS")
-saveRDS(pm25all,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25all.RDS")
-
-
-
 
 

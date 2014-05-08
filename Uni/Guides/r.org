@@ -2050,11 +2050,15 @@ header=T)
  *771-*is the row number in the table (dataset)
 
 *** delete duplicate cases
-
 to delete duplicate cases
- DATA<-subset(DATA,!duplicated(DATA$VARIABLE))
- example:
- metstat2<-subset(metstat,!duplicated(metstat$STN))
+
+#+BEGIN_SRC R
+DATA<-subset(DATA,!duplicated(DATA$VARIABLE))
+#example:
+metstat2<-subset(metstat,!duplicated(metstat$STN))
+#for multiple
+tss<-ndviX[!duplicated(ndviX[,c("ndviid","m")]),]
+#+END_SRC
 
 *** Excluding (DROPPING-deleting) Variables
 
@@ -3652,6 +3656,7 @@ there are no empty cells when the grouping variables are crossed
 *** using ddply
 **** get frequnecy of observations per monitor
 #+begin_src R
+$Note$-this uses data.table syntax
 #group by station
 ddply(na.omit(temp[,c("Temp","stn"),with=F]),.(stn),nrow)
 
@@ -4712,11 +4717,16 @@ involving one or more variables as an independent predictor.
 **** na.action
 
 to omit missing values use:
- na.action=na.omit,
- IE:
- out.model\_zinc = lme( Znppm ~ CO +nitro+cultiv+iregg,
- random = ~1 | crop\_type, na.action=na.omit,
- data = zinc)
+
+#+BEGIN_EXAMPLE
+na.action=na.omit
+#+END_EXAMPLE
+
+IE:
+
+#+BEGIN_SRC R
+out.model_zinc = lme( Znppm ~ CO +nitro+cultiv+iregg, random = ~1 | crop\_type, na.action=na.omit, data = zinc)
+#+END_SRC
 
 **** Residuals
 
@@ -5225,7 +5235,6 @@ in the bootstrap package. The following listing provides a function
 using k-fold cross-validation.
 
 ** lme
-
 *** remove missing values from lme model
 
 you can use na.omit:
@@ -6947,6 +6956,14 @@ returned from getCoefTemplate
  getSummaryTemplate:
  model1=mtable(Rresp\_m25x ,
 summary.stats=FALSE,digits=min(3,getOption("digits")))
+** plyr
+*** sort data
+use arrange
+
+#+begin_src R
+df <- arrange(df, date, mh)
+#+end_src
+
 ** dplyr
 *** Run models by a grouping varialbles
 #+begin_src R
@@ -7166,7 +7183,7 @@ m2.smooth = lme(predicted.m2 ~ mpm*as.factor(bimon),random = list(aodid= ~1 + mp
 #+end_src
 **** select missing values (NA's)
 #+begin_src R
-try2 <- midmod3grid[is.na(mpmid),]
+try2 <- midmod3grid[is.na(mpmid)]
 #+end_src
 **** leave X obsv out 
 See Here:
@@ -7397,6 +7414,15 @@ temp[,length(na.omit(Temp)),by=list(stn)]
 temp[,length(na.omit(Temp)),by=list(stn,year)]
 #+end_src
 
+*** by statments
+
+#+begin_src R
+#single
+,by=day
+#multiple
+by=list(c,stn)
+#+end_src
+     
 * SQLdf
 ** intro
 *** General
