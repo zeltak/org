@@ -2728,6 +2728,11 @@ for more information.
 don't match x.
  Examples
  MERGED\_DATA<-join(ne,yw,by=c("zipcode"))
+**** merge datasets with duplicates
+
+#+begin_src R
+tst<- merge(x, y[!duplicated(y[,c("aodid","day")]),], by=c("aodid","day"))                               
+#+end_src
 
 *** Append (adding rows)
 
@@ -3611,35 +3616,52 @@ variable, you can use code like:
  by=list(name1=groupvar1, name2=groupvar2, ... , groupvarN).
 
 **** Doby package
-
+***** Base
 The doBy package provides much of the functionality of SAS PROC SUMMARY.
- The *summaryBy()* function in the doBy package has the format
- *summaryBy(formula, data=dataframe, FUN=function)*
- where the*formula* takes the form:
- var1 + var2 + var3 + ... + varN ~ groupvar1 + groupvar2 + ... +
-groupvarN
- Variables on the left of the ~ are the*numeric variables to be
-analyzed*
- Variables on the right are *categorical grouping variables*
- The function can be any [[#6WidyD3pF97CtIhGJoBD1g][built-in]] or user
-created R function.
- It is possible use a vector of predefined functions. A typical usage
-will be by invoking a list of predefined functions:
- summaryBy(uptake~Plant, data=CO2, FUN=c(mean,var,median))
- *or:*
- library(doBy)
- tden$count<-1
- summaryBy(count~guid, data=tden, FUN=sum)
- *using functions:*
- library(doBy)
- # produces mean and SD for birth weight and mean30 for each level of
-new\_race
- summaryBy( birthw+mean30~ new\_race, data = bw,
- FUN = function(x) { c(m = mean(x), s = sd(x)) } )
- also it can be written like this with defining the function first:
- myfun1 <- function(x){c(m=mean(x), v=var(x))}
- summaryBy(conc+uptake~Plant, data=CO2,
- FUN=myfun1)
+The `summaryBy()` function in the doBy package has the format
+
+#+BEGIN_EXAMPLE
+summaryBy(formula, data=dataframe, FUN=function)
+where the*formula* takes the form:
+
+var1 + var2 + var3 + ... + varN ~ groupvar1 + groupvar2 + ... +groupvarN
+
+Variables on the left of the ~ are the numeric variables to be analyzed
+Variables on the right are categorical grouping variables
+#+END_EXAMPLE
+
+The function can be any [[#6WidyD3pF97CtIhGJoBD1g][built-in]] or user created R function.
+It is possible use a vector of predefined functions. A typical usage will be by invoking a list of predefined functions:
+
+#+BEGIN_SRC R
+library(doBy)
+summaryBy(uptake~Plant, data=CO2, FUN=c(mean,var,median))
+#+END_SRC
+
+***** 'Calculate counts per ID variable'				:fav:
+#+BEGIN_SRC R
+library(doBy)
+tden$count<-1
+summaryBy(count~guid, data=tden, FUN=sum)
+#+END_SRC
+
+***** using functions:
+
+library(doBy)
+# produces mean and SD for birth weight and mean30 for each level of new_race
+
+#+BEGIN_EXAMPLE
+summaryBy( birthw+mean30~ new\_race, data = bw,FUN = function(x) { c(m = mean(x), s = sd(x)) } )
+
+#+END_EXAMPLE
+
+also it can be written like this with defining the function first:
+
+#+BEGIN_EXAMPLE
+myfun1 <- function(x){c(m=mean(x), v=var(x))}
+summaryBy(conc+uptake~Plant, data=CO2,
+FUN=myfun1)
+#+END_EXAMPLE
 
 **** using psych
 
@@ -3658,7 +3680,8 @@ there are no empty cells when the grouping variables are crossed
 #+begin_src R
 $Note$-this uses data.table syntax
 #group by station
-ddply(na.omit(temp[,c("Temp","stn"),with=F]),.(stn),nrow)
+table_temp<-ddply(na.omit(temp[,c("Temp","stn","c"),with=F]),.(stn,c),nrow)
+
 
 #group by station and year
 table_temp<-ddply(na.omit(temp[,c("Temp","stn","c"),with=F]),.(stn,c),nrow)
@@ -3680,7 +3703,6 @@ count(df,"VAR")
 
 *Generating Frequency Tables*
 R provides many methods for creating frequency and contingency tables.
-
 [[R_files/img/Image_wo5vv0tDDExxafUfvb8bpw_0003.png]]
 
 In the following examples, assume that A, B, and C represent
@@ -3689,19 +3711,19 @@ categorical variables.
 *** One way tables
 
 You can generate simple frequency counts using the table() function.
- *TABLE <- with(DATASET,table(CAT\_VAR))
-*
- *NOTE: The table() function ignores missing values (NAs) by default. To
+TABLE <- with(DATASET,table(CAT_VAR))
+
+NOTE: The table() function ignores missing values (NAs) by default. To
 include NA as a valid category in the frequency counts, include the
 table option useNA="ifany".*
  IE:
- mytable <- with(F\_T2000\_All, table(reg\_id))
- more example:
- [[R_files/img/Image_YKTjpQG4sEyGgwgcnK4gmA_0003.png]]
- code:
- mytable <- with(Arthritis, table(Improved))
- prop.table(mytable)
- prop.table(mytable)*100
+mytable <- with(F_T2000_All, table(reg_id))
+
+#+BEGIN_SRC R
+mytable <- with(Arthritis, table(Improved))
+prop.table(mytable)
+prop.table(mytable)*100
+#+END_SRC
 
 *** two-way tables
 
@@ -7170,6 +7192,10 @@ will keep in m1 rows 6,44,55
 #+begin_src R
 mod1 <- mod1[!mon %in% c("SAG", "PER", "XAL"), ]
 #+end_src
+**** select values to keep by matching in vector/dataset
+#+begin_src R
+mod3grid.se <- mod3grid [mod3grid$guid %in% m2_agg$guid, ] 
+#+end_src
 **** subset data in a model
 @you have to sort the subset variable by setley@
 
@@ -7199,6 +7225,11 @@ add5 <- met[Date == "2000-12-27"]
 #+begin_src R
 dat2013 <- clippedaod[yr == "2013"]
 #+end_src
+**** subset to remove NAs
+#+begin_src R
+temp <- temp[x_stn_ITM != 'NA']
+#+end_src
+
 **** subset by value
 #+begin_src R
 pm25 <- pm25[PM25>= 0]
@@ -7265,6 +7296,11 @@ setnames(DT,c("X","Y","Z"))        # replace all
 aodidlur[, aodid := paste(round(long_aod, 4), round(lat_aod, 4), sep = "_")]
 #+end_src
 *** Dates
+**** convert to R dates
+#+BEGIN_SRC R
+SO2[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
+#+END_SRC
+
 **** extract part of a date
 
 #+begin_src R
@@ -7272,6 +7308,9 @@ aodidlur[, aodid := paste(round(long_aod, 4), round(lat_aod, 4), sep = "_")]
 am2.lu[, m := as.numeric(format(date, "%m")) ]
 #as a factor with levels
 am2.lu[, m:=factor(format(date, "%m"), levels = c("1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"))]
+
+#for years
+SO2[, c := as.numeric(format(day, "%Y")) ]
 #+end_src
 **** subset by date range
 
@@ -7405,8 +7444,15 @@ DT[, summary(lm(Rev~predbrand))$r.squared]
  monsummary
  dput(head(monsummary[order(monsummary$adj.r.sq, decreasing = T),"mon"], 12))
 #+end_src
-*** Frequencies
-**** aggregate observations by station
+*** Discriptives
+**** count number of obvs per ID 
+this works when there isant NAs in the DATASET
+#+BEGIN_SRC emacs-lisp :results none
+pm2009[, .N, by=c("guid")]
+# for multiple vars
+pm2009[, .N, by=c("guid","year")]
+#+END_SRC
+**** aggregate observations by station with missing
 #+begin_src R
 #temp readings by station
 temp[,length(na.omit(Temp)),by=list(stn)]

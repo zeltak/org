@@ -15,74 +15,8 @@ library(car)
 library(dplyr)
 
 
-###load Terra
-
-#load aod data
-terra<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/AOD_allyears.RDS")
-terra<- terra[yr >= "2002"]
-terra<- terra[ y_aod_ITM >= 500000]
-# terra<- terra[ aod >= 0.1 &  aod <= 2]
-
-
-summary(terra$aod)
-
-###load Aqua
-#load aod data
-aqua<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/AOD_allyearsAQ.RDS")
-aqua<- aqua[yr >= "2002"]
-aqua<- aqua[ y_aod_ITM >= 500000]
-
-
-#Pm10
-pm10all<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm10all.RDS")
-summary(pm10all)
-pm10knn<-pm10all[,c(1,2,5,9,10,11),with=FALSE]
-# pm10all[,RH:=NULL]
-# pm10all[,WD:=NULL]
-# pm10all[,Temp:=NULL]
-
-
-# import monitor data and spatial merge with nearestbyday()
-source("/home/zeltak/org/files/Uni/Projects/code/P031.MIAC_PM/code_snips/nearestbyday.r")
-
-#create PM matrix
-pm.m <- makepointsmatrix(pm10knn, "x_stn_ITM", "y_stn_ITM", "stn")
-
-#create aod matrix
-aod.m <- makepointsmatrix(terra[terra[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
-
-# use the nearestbyday() function
-###########
-closestaod <- nearestbyday(pm.m, aod.m, 
-                           pm10knn, terra [, list(day, aodid, aod)], 
-                           "stn", "aodid", "closestaod", "aod", knearest = 5, maxdistance = 1500)
-# this has aod even when there is no pm; it gets dropped on the merge
-
-
-
-setkey(pm10knn,stn,day)
-setkey(closestaod,stn,day)
-mod1 <- merge(pm10knn, closestaod, all.x = T)
-#head(mod1)
-mod1 <- mod1[aod != "NA"]
-
-x<-as.data.frame(mod1)
-y<-as.data.frame(pm10all)
-
-#tst<- merge(x[!duplicated(x[,c("aodid","day")]),], y[!duplicated(y[,c("aodid","day")]),], by=c("aodid","day"))                               
-#since we have day/aodid duplicates we merge with no duplicates from the Y (pm10all) to get back the lu/temporal variables to the dataset
-tst<- merge(x, y[!duplicated(y[,c("aodid","day")]),], by=c("aodid","day"))                               
-mod1<-as.data.table(tst)
-mod1[,c:=NULL]
-
-
-
-
-
-
-
-
-
+pm10.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm10all.RDS")
+pm25.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25all.RDS")
 
 
 
