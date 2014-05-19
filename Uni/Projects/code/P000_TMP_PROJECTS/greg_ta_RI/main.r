@@ -21,17 +21,15 @@ clean.guid[, guid := paste( glong,glat,sep="")]
 #these are grids with missing days
 fxn <- fintemp[is.na(fintemp)]
 #take out missing grids
-tc2000.c <- clean.guid[clean.guid$guid %in% fxn$guid, ] 
-
-write.csv(fxn,"/home/zeltak/ZH_tmp/7/ffd.csv")
-
-
+clean.guid.c <- clean.guid[!(clean.guid$guid %in% fxn$guid), ] 
+#export only full Time series blocks
+write.csv(clean.guid.c,"/media/NAS/Uni/Projects/P000_TMP_PROJECTS/greg_w_temperature/cleangrid.csv")
 
 
 
 census<-fread("/media/NAS/Uni/Projects/P000_TMP_PROJECTS/greg_w_temperature/census_guid.csv")
-census[,guid:=NULL]
-census[, guid := paste( xx,yy,sep="")]
+
+
 
 #import yearly me
 tc2000<-fread("/media/NAS/Uni/Projects/P020_Temprature_NE_MIA/3.Work/3.Analysis/Fintmpc_2000.csv")
@@ -146,26 +144,17 @@ rm(tc2011)
 fintemp<- rbindlist(list(tc2000.c, tc2001.c,tc2002.c,tc2003.c,tc2004.c,tc2005.c,tc2006.c,tc2007.c,tc2008.c,tc2009.c,tc2010.c,tc2011.c))
 fintemp[, day:=as.Date(strptime(date, "%d%b%Y"))]
 fintemp[, y := as.numeric(format(day, "%y")) ]
+describe(fintemp$fintemp)
 
+hist(fintemp$fintemp)
+fintemp[,y:=NULL]
+fintemp[,glong:=NULL]
+fintemp[,glat:=NULL]
 
+census[,glong:=NULL]
+census[,glat:=NULL]
 
-
-
-
-
-
-
-
-
-fintemp.clean<-fintemp[fintemp < 35 & fintemp > -25 ]
-describe(fintemp.clean$fintemp)
-hist(fintemp.clean$fintemp)
-
-#check
-xtest<-fintemp[fintemp < -25  ]
-write.csv(xtest,"/home/zeltak/ZH_tmp/7/ffd.csv")
-
-
+summary(fintemp)
 
 #for greg
 write.csv(census,"/media/NAS/Uni/Projects/P000_TMP_PROJECTS/greg_w_temperature/final_product/census_gridid.csv")

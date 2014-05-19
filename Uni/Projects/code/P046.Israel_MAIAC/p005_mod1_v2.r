@@ -46,52 +46,81 @@ mod1table$model[1] <-"allyears_Pm10"
 
 pm10.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm10all.RDS")
 pm25.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25all.RDS")
+summary(pm10.m1)
 
 names(pm10.m1)
+########
+##pm10
+########
+
+#lme formulas
+#base raw
+m1t.formula <- as.formula(PM10~ aod+(1+aod|day)) #0.80
+#base+regions
+m1t.formula <- as.formula(PM10~ aod+(1+aod|day/reg_num))#0.836
+#base+covars
+m1t.formula <- as.formula(PM10~ aod+elev+tden+pden+dist2rail+dist2A1+dist2water+Temp+RH+ndvi+season+MeanPbl+p_os+p_dev+p_dos+p_farm+p_for+p_ind+(1+aod|day))#0.8193
+#base+reg+covars
+m1t.formula <- as.formula(PM10~ aod+WS+elev+tden+pden+dist2rail+dist2A1+dist2water+Temp+RH+ndvi+season+MeanPbl+p_os+p_dev+p_dos+p_farm+p_for+p_ind+(1+aod|day/reg_num)) # 0.8832 
+#base+reg+covars+interactions
+m1t.formula <- as.formula(PM10~ aod+elev+tden+pden+dist2rail+dist2A1+dist2water+Temp+RH+WS+ndvi+season+MeanPbl+p_os+p_dev+p_dos+p_farm+p_for+p_ind+(1+aod|day/reg_num))#0.8831 
 
 
-#lme
-m1.formula <- as.formula(PM10~ aod,random=~1+aod|day)
-m1.formula <- as.formula(PM10 ~ aod+elev+tden+pden+dist2rail+dist2A1+dist2water+daytemp+dayRH+season+MeanPbl+(1+aod+daytemp|day)+(1|stn))
-m1.formula <- as.formula(PM10 ~ aod*c+elev+tden+pden+dist2rail+dist2A1+dist2water+daytemp+dayRH+season+MeanPbl+(1+aod+daytemp|day)+(1|stn))
-
-summary(pm10.m1)
-pm10.m1<-na.omit(pm10.m1)
-
-
+####################################################
+####################################################
 #model terra
-###Base formula
-m1.formula <- as.formula(PM10~ aod+(1+aod|day))
-out.m1 = lmer(m1.formula ,data =  pm10.m1)
+###Base formula terra
+out.m1 = lmer(m1t.formula ,data =  pm10.m1,na.action = na.exclude)
 pm10.m1$predicted <- predict(out.m1)
 summary(lm(PM10~predicted,data=pm10.m1))
 
 
-#model terra
-###Base formula
-m1.formula <- as.formula(PM10~ aod.aq+(1+aod.aq|day))
-out.m1 = lmer(m1.formula ,data =  pm10.m1)
+
+### Aqua formulas
+
+m1t.formula <- as.formula(PM10~ aod.aq+(1+aod.aq|day))  #0.804
+#base+regions
+m1t.formula <- as.formula(PM10~ aod.aq+(1+aod.aq|day/reg_num))#0.8377
+#base+covars
+m1aq.formula <- as.formula(PM10~ aod.aq+elev+tden+pden+dist2rail+dist2A1+dist2water+Temp+RH+ndvi+season+MeanPbl+p_os+p_dev+p_dos+p_farm+p_for+p_ind+(1+aod.aq|day))#0.8098 
+#base+reg+covars
+m1aq.formula <- as.formula(PM10~ aod.aq+elev+tden+pden+dist2rail+dist2A1+dist2water+Temp+RH+ndvi+season+MeanPbl+p_os+p_dev+p_dos+p_farm+p_for+p_ind+(1+aod.aq|day/reg_num))#0.8503 
+
+
+#model Aqua
+###Base formula terra
+out.m1 = lmer(m1aq.formula ,data =  pm10.m1,na.action = na.exclude)
 pm10.m1$predicted <- predict(out.m1)
 summary(lm(PM10~predicted,data=pm10.m1))
 
-R2, slope, AIC per year per sat per expo (10/25)
-
-#PM25
-pmbyc<- pm10.m1 %.% group_by(c) %.% do(function(df){summary(lmer(m1.formula,data=df))})
-mod1table$r2002[1]<-pmbyc[[1]][8]
-mod1table$r2003[1]<-pmbyc[[2]][8]
-mod1table$r2004[1]<-pmbyc[[3]][8]
-mod1table$r2005[1]<-pmbyc[[4]][8]
-mod1table$r2006[1]<-pmbyc[[5]][8]
-mod1table$r2007[1]<-pmbyc[[6]][8]
-mod1table$r2008[1]<-pmbyc[[7]][8]
-mod1table$r2009[1]<-pmbyc[[8]][8]
-mod1table$r2010[1]<-pmbyc[[9]][8]
-mod1table$r2011[1]<-pmbyc[[10]][8]
-mod1table$r2012[1]<-pmbyc[[11]][8]
 
 
 
+
+
+
+
+
+
+
+
+
+
+# #PM25
+# pmbyc<- pm10.m1 %.% group_by(c) %.% do(function(df){summary(lmer(m1.formula,data=df,na.action = na.exclude))})
+# mod1table$r2002[1]<-pmbyc[[1]][8]
+# mod1table$r2003[1]<-pmbyc[[2]][8]
+# mod1table$r2004[1]<-pmbyc[[3]][8]
+# mod1table$r2005[1]<-pmbyc[[4]][8]
+# mod1table$r2006[1]<-pmbyc[[5]][8]
+# mod1table$r2007[1]<-pmbyc[[6]][8]
+# mod1table$r2008[1]<-pmbyc[[7]][8]
+# mod1table$r2009[1]<-pmbyc[[8]][8]
+# mod1table$r2010[1]<-pmbyc[[9]][8]
+# mod1table$r2011[1]<-pmbyc[[10]][8]
+# mod1table$r2012[1]<-pmbyc[[11]][8]
+# pm10.m1$predicted <- predict(out.m1)
+# 
 
 
 

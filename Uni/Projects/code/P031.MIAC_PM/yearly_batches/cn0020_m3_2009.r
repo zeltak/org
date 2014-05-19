@@ -11,24 +11,16 @@ library(reshape2)
 library(Hmisc)
 library(mgcv)
 library(gdata)
-library (doBy)
 
-#sink("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/sink_mod3_2009.txt", type = c("output", "message"))
 
 ##############################
 #MeanPM calculations
 ##############################
 #import grid+mpm
 mpmg<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN015_MPM/bestmpm2009.rds")
-mpmg <-mpmg[!is.na(bestmpm) , ]
 mpmg$month <- as.numeric(format(mpmg$day, "%m"))
 #create biomon
 mpmg[, bimon := (month + 1) %/% 2]
-
-mpmg$count<-1
-sum.mpm<-summaryBy(count~guid, data=mpmg, FUN=sum)
-describe(sum.mpm)
-
 
 #import mop2
 m2_2009<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2009_pred.m2.rds")
@@ -46,21 +38,14 @@ m2mpm[,lat_aod.y:=NULL]
 m2mpm[,long_aod.y:=NULL]
 setnames(m2mpm,"lat_aod.x","lat_aod")
 setnames(m2mpm,"long_aod.x","long_aod")
-
-#############saving point
-saveRDS(m2mpm, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/m2mpm_2009.rds")
-#clean
-keep(m2mpm,mpmg, sure=TRUE) 
-gc()
-
-
+names(m2mpm)
 
 ###############
 #Mod3
 ###############
 mod1table<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2009_p2.rds")
 #run the lmer part regressing stage 2 pred Vs mean pm
-m2.smooth = lme(predicted.m2 ~ bestmpm*as.factor(bimon),random = list(guid= ~1 + bestmpm),control=lmeControl(opt = "optim"),data= m2mpm )
+m2.smooth = lme(predicted.m2 ~ meanPMmean*as.factor(bimon),random = list(guid= ~1 + meanPMmean),control=lmeControl(opt = "optim"),data= m2mpm )
 
 #correlate to see everything from mod2 and the mpm works
 m2mpm$tpred <- predict(m2.smooth)
@@ -102,7 +87,7 @@ Xpred_6=(T2009_bimon6$pred - fit2_6$fitted)
 m2mpm$newpred <- c( Xpred_1,Xpred_2, Xpred_3, Xpred_4, Xpred_5, Xpred_6)
 
 #rerun the lme on the predictions including the spatial spline (smooth)
-Final_pred_2009  = lme(newpred ~ bestmpm ,random = list(guid= ~1 + bestmpm ),control=lmeControl(opt = "optim"),data= m2mpm  )
+Final_pred_2009  = lme(newpred ~ meanPMmean ,random = list(guid= ~1 + meanPMmean ),control=lmeControl(opt = "optim"),data= m2mpm  )
 
 #check correlations
 m2mpm$tpred2 <- predict(Final_pred_2009)
@@ -122,7 +107,7 @@ saveRDS(fit2_6 , "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN00
 
 
 #clean
-keep(Final_pred_2009,mpmg,mod1table, sure=TRUE) 
+keep(Final_pred_2009,mpmg,mod1table,fit2_1,fit2_2,fit2_3,fit2_4,fit2_5,fit2_6, sure=TRUE) 
 gc()
 
 
@@ -144,40 +129,16 @@ gc()
 #### PREDICT for all daily grids for study area (for mixed model part)
 ###############
 #mpmg$mixpred<-  predict(Final_pred_2009,mpmg)
-mpmg.seT1<-mpmg[1:20000000,]
-mpmg.seT1$mixpred<-  predict(Final_pred_2009,mpmg.seT1)
-mpmg.seT2<-mpmg[20000001:40000000,]
-mpmg.seT2$mixpred<-  predict(Final_pred_2009,mpmg.seT2)
-mpmg.seT3<-mpmg[40000001:60000000,]
-mpmg.seT3$mixpred<-  predict(Final_pred_2009,mpmg.seT3)
-mpmg.seT4<-mpmg[60000001:80000000,]
-mpmg.seT4$mixpred<-  predict(Final_pred_2009,mpmg.seT4)
-gc()
-cc<-dim(mpmg)
-mpmg.seT5<-mpmg[80000001:cc[1],]
-mpmg.seT5$mixpred<-  predict(Final_pred_2009,mpmg.seT5)
-mpmg<-rbind(mpmg.seT1,mpmg.seT2,mpmg.seT3,mpmg.seT4,mpmg.seT5)
 
+mpmg$mixpred<-predict(Final_pred_2009,mpmg)
 
 
 saveRDS(mpmg, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mpmg_Temp2009.rds")
-rm(mpmg.seT1)
-rm(mpmg.seT2)
-rm(mpmg.seT3)
-rm(mpmg.seT4)
-gc()
+
 
 ################
 #### PREDICT Gam part
 ###############
-
-mpmg<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mpmg_Temp2009.rds")
-fit2_1<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/fit2_1_2009.rds")
-fit2_2<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/fit2_2_2009.rds")
-fit2_3<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/fit2_3_2009.rds")
-fit2_4<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/fit2_4_2009.rds")
-fit2_5<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/fit2_5_2009.rds")
-fit2_6<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/fit2_6_2009.rds")
 
 #split back into bimons to include the gam prediction in final prediction  			
 
@@ -247,11 +208,15 @@ mod3$predicted.m3 <-mod3$mixpred+mod3$gpred
 #summary(mod3$predicted.m3)
 #describe(mod3$predicted.m3)
 #recode negative into zero
-mod3 <- mod3[predicted.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m3_2009.pred3.rds")
+mod3<- mod3[predicted.m3  < 0 , predicted.m3  := 0.01]
+#hist(mod3$predicted.m3)
+saveRDS(mod3,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m3_2009.pred3_NM.rds")
 #clean
 keep(mod3, sure=TRUE) 
 gc()
+
+
+describe(mod3$predicted.m3)
 
 
 #########################
@@ -277,7 +242,6 @@ mod1 <- merge(mod1,mod3[, list(day,guid,predicted.m3)], all.x = T)
 mod3d_reg <- lm(PM25~predicted.m3,data=mod1)
 mod1table$r2009[23] <-summary(mod3d_reg)$r.squared
 saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2009_p3.rds.rds")
-saveRDS(mod1, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2009w_p.m3.rds")
 
 #########################
 #import mod2
@@ -300,7 +264,7 @@ mod3best[,bestpred := predicted.m3]
 mod3best[!is.na(predicted.m2),bestpred := predicted.m2]
 mod3best[!is.na(predicted.m1),bestpred := predicted.m1]
 #save
-saveRDS(mod3best,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod3best_2009.rds")
+saveRDS(mod3best,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod3best_2009NM.rds")
 
 
 #map the predictions
@@ -328,7 +292,7 @@ write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T),
                           npred.m1 = sum(!is.na(predicted.m1)),
                           npred.m2 = sum(!is.na(predicted.m2)),
                           npred.m3 = sum(!is.na(predicted.m3)),
-                          long_aod =  long_aod[1], lat_aod = lat_aod[1]),by=guid], "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/pestpred2009LPM.csv", row.names = F)
+                          long_aod =  long_aod[1], lat_aod = lat_aod[1]),by=guid], "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/pestpred2009LPM_NM.csv", row.names = F)
 
 
 

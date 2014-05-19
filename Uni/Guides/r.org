@@ -5356,6 +5356,10 @@ use the
  smooth\_T2004\_yearly = lme(pred ~ mpm ,
  random = list(guid= ~1 + mpm ),*control=lmeControl(opt = "optim")*,
  data= GAM\_T2004 )
+*** exclude missing values
+#+BEGIN_SRC R
+out.m1 = lmer(m1.formula ,data =  pm10.m1,na.action = na.exclude)
+#+END_SRC
 
 *** extract lme4 object to a table
 
@@ -7196,6 +7200,11 @@ mod1 <- mod1[!mon %in% c("SAG", "PER", "XAL"), ]
 #+begin_src R
 mod3grid.se <- mod3grid [mod3grid$guid %in% m2_agg$guid, ] 
 #+end_src
+**** subset and rename
+#+BEGIN_SRC R
+age4subset <- age4[, list(folio, age4date = fecha_vis, weight_m_mean, 
+                          height_m_mean, momfatmass = M_body_m)]
+#+END_SRC
 **** subset data in a model
 @you have to sort the subset variable by setley@
 
@@ -7354,11 +7363,15 @@ reslults:
 9: a 6 6
 #+END_EXAMPLE
 *** recode data.table
-
+**** recode missing to 0
 #+begin_src R
 pm10all[is.na(Dust), Dust:= 0]
 #+end_src
- 
+**** recode value to Value
+#+BEGIN_SRC R
+x<- mod3[predicted.m3  < 0 , predicted.m3  := 0.01]
+#+END_SRC
+
 *** choose based on best avilable
 #+begin_src R
 # store the best available
@@ -7446,7 +7459,7 @@ DT[, summary(lm(Rev~predbrand))$r.squared]
 #+end_src
 *** Discriptives
 **** count number of obvs per ID 
-this works when there isant NAs in the DATASET
+this works when there isnt NAs in the DATASET
 #+BEGIN_SRC emacs-lisp :results none
 pm2009[, .N, by=c("guid")]
 # for multiple vars
@@ -7454,6 +7467,7 @@ pm2009[, .N, by=c("guid","year")]
 #+END_SRC
 **** aggregate observations by station with missing
 #+begin_src R
+#@note-
 #temp readings by station
 temp[,length(na.omit(Temp)),by=list(stn)]
 #temp readings by station and year
@@ -8067,6 +8081,24 @@ grep a position of a variable in table based on name
 #+BEGIN_SRC sh
 grep("precip", names(mod1))
 #+END_SRC
+* ESS
+** Useful keyboard shortcuts and tips for ESS/R
+*** Control and up/down arrow keys to search history with matching what you've already typed:
+#+BEGIN_SRC R
+(define-key comint-mode-map [C-up] 'comint-previous-matching-input-from-input)
+(define-key comint-mode-map [C-down] 'comint-next-matching-input-from-input)
+#+END_SRC
+
+*** Comment-uncomment a selected region with C-d or C-maj-d
+ #+BEGIN_SRC R
+(defun uncomment-region (beg end)
+  "Like `comment-region' invoked with a C-u prefix arg."
+  (interactive "r")
+  (comment-region beg end -1))
+
+(define-key ess-mode-map (kbd "C-d") 'comment-region)
+(define-key ess-mode-map (kbd "C-S-d") 'uncomment-region)
+ #+END_SRC
 * org mode and r
 ** basics shortcuts
 ?C-c ' ?- open code block for editing in ESS
