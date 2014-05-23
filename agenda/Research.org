@@ -99,38 +99,13 @@ in the discussion compare our model to the liu paper and the seattle's group pap
    :PROPERTIES:
    :ID:       599074f7-2550-40ab-ba04-782947688ce0
    :END:
-*** MEytar skype chat 
-How do you proccess HDF? she uses matlab for that
--time fraame would be starting Oct 2013
--looking at MIAC but also deep blue
-*** meytar meeting <2013-10-27 Sun>
--to progress:
--will you talk to alexei?
--deep blue data where to get from
--Variables used in current model:
-pm25
-aod
-tempc
-WDSP
-NDVI
-Distance to point emission
-% Urban
-traffic density 
-population density 
-elevation
-Abosute Humidity
-Visibilty
-PBL
-Area emissions of:
-PM2.5sum
-NOXsum
-PM10sum
-SO2sum 
-Classified Land use data (to mimic the Joel Kaufman paper)
--PBL for Israel
-- create a grid based on aod points
--match all LU/met variables to 1x1km grid
--when/where to meet
+*** TODO Weekly TODOS
+    :PROPERTIES:
+    :ID:       7716b93c-4a8f-42a4-a602-5e57d517febf
+    :END:
+-why do we correlate 24h and not by overpass
+- better regions
+-go over PM25 and see if it looks
 *** improvment
 run by season
 ask california group whats the raw pm-aod correlations
@@ -167,7 +142,11 @@ if running a posion SA we can extract the random slopes fro every zipcode and wi
     :PROPERTIES:
     :ID:       fe0074ba-f87f-4f0c-88c4-74cd3bf5d5a5
     :END:
-** TODO Greg Willenius RI temperature study <2014-03-16 Sun>
+*** TODO submit DVT paper
+    :PROPERTIES:
+    :ID:       3d179259-c23a-40d4-bf58-471987418313
+    :END:
+** Greg Willenius RI temperature study <2014-03-16 Sun>
    :PROPERTIES:
    :ID:       609c383c-bbda-4910-8fb7-a0fcee7fd0bc
    :END:
@@ -177,7 +156,7 @@ Greg will send over the tract and i will assign exposure per tract, if the tract
    :PROPERTIES:
    :ID:       58b0d767-b470-4bbf-907f-ed977ca0b55d
    :END:
-*** DONE Revise paper <2014-03-23 Sun>
+*** TODO Revise paper <2014-03-23 Sun>
     :PROPERTIES:
     :ID:       a4d12737-b033-4032-bc15-6591c7f2e9ce
     :END:
@@ -216,28 +195,56 @@ resid~ LU+MET+Interactions+ s(x,y)
 ***** Take those smoothed surfaces from stage 3 and put them into stage 1 as another predictor, and if CV R2 goes up, use them?
 ***** mod1 take the mean of the nonmissing aod's from the immediately surrounding cells, subtracted the aod from the cell with the monitor, and put that difference into the model to perhaps better capture the more slowly changing particle concentrations, and hence increasing spatial R2
 ** alexandra
+*** TODO assign shiran to download data
+    :PROPERTIES:
+    :ID:       7441f396-72a0-4841-9c82-8339fe13f1d1
+    :END:
+ask alexandra about this in next weeks meeting 
+*** Alexandra meetings
+**** Kenes haifa agoda- give a talk
+**** methods paper 10x10 Vs 1x1k etc
+comparison betweemulti resolution levels of
+comparing multiple resolution models to better charecterize fine particulate matter in urban Environments:
+years 2003-2008
+Boston, Worcster, NYC, Newark
+4 rural
+
+-fig 1: 10x10 NE usa 10x10 and 1x1km NE USA
+-plot 2: box plot of true pm and pm 10km vs 1km per ( and maybe 200) city and by season
+range of true PM, pred 10, pred 1-check ranges in each 
+-plot 3: distances from main roads and/or urban rings and levels of PM: take NYC and boston and see how much the levels of pm go down for each few km's from the city: downtown, surrondings area, outer core , rural
+-plot 4: transported pm by trajectories and thresholds
+-discussion: show how you might underestimate the health effect (exposure bias)
+maiac is similar to modis but much more obsrv with more variability
+
+
+**** NEXT maiaic
+     :PROPERTIES:
+     :ID:       9e059ff6-569c-4b02-adad-7e153e9cff0a
+     :END:
+2010 co located tel aviv 
+angstorm component for dust Storm
+17.04.2010--20.04.2010 in tel aviv
 *** comparison paper spatial and temporal scaling of sattelite based models
-- comparing model outputs of various spatial resolution
 comparing rural vs urban areas, comparing cities by decreasing populations
-distances from main roads and levels of PM
 comparing 10x10,3x3,1x1,200x200
-take boston,NY, Vs ruran area
 X-city size or popultaion  and scale Y-PM and create 3 box plots 10,1,200
 season-same as above
-maiac is similar to modis but much more obsrv with more variability
-range of true PM, pred 10, pred 1-check ranges in each 
 range of variablilty of 1x1m pixels within a 10x10km model.
 figures:
 fig 1: 10x10 vs 1x1km for 2003-2008
 fig 2: box plot city/pop vs pm
 fig 3- going further from A1 roads and PM levels
-fig 4-
-*** no2 modles
-*** O3 models
-*** So2 models
+
+*** 2004-current OMI 
+**** no2 modles
+**** O3 models
+**** So2 models
+*** check spatial need for health studies for these exposures 
+*** WRF tel aviv shai
+*** deeep blue with meeytar
+
 ** Neuro outcomes and pm exposure
-** Ozone model in israel
-Ask alexandra about this
 ** Mortality and Ta 
 ** Sulfate analysis-explore calibrating the data we have with Sulfate instead of PM2.5
     :PROPERTIES:
@@ -297,16 +304,12 @@ exposure paper-massimo first/last
 ** France Pm models
 ** France temp models
 ** cmaq from EPA and compare components in models
-** OMI sattelite for NO2 and O# callibration models
+** OMI sattelite for NO2 and O3 callibration models
 develop no2 and/or O3 sattelite models (look at omi sattelite)
 http://aura.gsfc.nasa.gov/instruments/omi.html
 ** Israel temp models
 ** LAN project with Joel
 *** LAN in NEW-England
-**** TODO talk to steve about municipal LAN datasets, IE position,hight,watt for street lights
-     :PROPERTIES:
-     :ID:       cb79f8ee-8db7-4619-aa2d-762e1754a635
-     :END:
 **** Email DMSP regarding data purchuse
      :PROPERTIES:
      :ID:       199c0727-d677-4471-8d2e-239ac3644405
@@ -340,8 +343,7 @@ Nepal- few monitos, only specific years and then they stopped
 Asia- Japan etc
 study of nursing home cases, dont move much good for 1x1 km data
 ** Joel NAS paper about no correlation with SES and PM, try with 1km data
-** Look into developing spatio temporal ozone (O3) modles from sattelite
-** Look into developing spatio temporal Nox modles from sattelite
+** Look into developing spatio temporal ozone (O3) modles from sattelite in USA
 ** Compare our BW study with low "western world" effetcs to a high polluted (mexico city) area
 ** Temerature model results and Liu CMAQ results
    -look at mortality cases and temperature (short term, acute temprature days), and compare results with our model and CMAQ
@@ -357,7 +359,6 @@ when we get the 1x1km data ready go back to the icam/vcam reanalysis by marie-ab
 -the BSF is with a group from drexler uni
 -maybe consider an EHF ov birth outcomes and Autism
 -there is a connection between MLT and Autism, could be used in future LAN studies
-** Ta and birth outcomes (preterm,defects, diab etc) in usa and israel?   
 * Grants
 ** TODO EHF grant: birth weight outcomes (defects, Ultra sound measurements and Ta,PM2.5
    :PROPERTIES:
@@ -397,7 +398,7 @@ the grant can be submitted directly to the EHF anytime up to July 2014
 -Joel: Placental abruption , acute effect that can happen
 http://en.wikipedia.org/wiki/Placental_abruption
 ***** A3:look at interactions between PM and Ta exposures and birth outcomes
-** WAITING ISF grant				    :WAITING:
+** WAITING ISF grant
    :PROPERTIES:
    :ID:       2d51f244-9704-406f-87ae-9a02c28cfcaa
    :END:
@@ -419,7 +420,7 @@ alexandra schnider
 -run a poisson regression where we regress counts by zipcode and day (like 10x10 NE) ~1 year lags of the pollutants, and a spline for date (See 10x10 code). this will be run togheter for 10 years
 -also to check if the association changed from year to year we will run these exact models by year (IE each year speratley in a seperate model) !note! remember to change the DF for the dats spline for 1 year
 !note! once can run the same model instead of yearly in 1 model with all year with interactions so that each pollutant interacts with a year variable, but you need a very large N`
-** WAITING Antonella whole USA 1x1km grant			    :WAITING:
+** WAITING Antonella whole USA 1x1km grant
    :PROPERTIES:
    :ID:       5a8c67d0-bd9b-4eff-9d5b-8ae444153490
    :END:
@@ -427,7 +428,7 @@ alexandra schnider
 will look into it for next round (~june)
 maybe leveraging Open source application/stat programs (R,Octovo etc) for big data proccesing)
 bringing in Data set from differnet sources both spatilly and temporally differnt resolutions
-** Andrea padwan LAN-Prostate Italian SIR grant
+** WAITING Andrea padwan LAN-Prostate Italian SIR grant
 ** R21 with Sara Adar
 ** R21 with Allan Mexico
 * Office/Budgets
@@ -454,6 +455,8 @@ NAS BGU:
 132.72.154.204 (main)
 132.72.152.204
 *** Phone
+*** bgu wifi network
+use id BGU-USERS\ikloog  
 ** look into buying fridge/micro from CIG grant
 ** maabadot budget
 *** Proffesional camera 
@@ -492,17 +495,13 @@ Intel wifi card (strongly recommended for Linux)
    :ID:       1822ad1f-279c-4192-9c1d-a5fddc899b1a
    :END:
 * Short term Misc
-** TODO make sense of all kopot gemel
+** NEXT make sense of all kopot gemel
    :PROPERTIES:
    :ID:       6c1e9592-8c50-41e4-b187-c42884527820
    :END:
 ** TODO check refund on thinkpad dock from harel
    :PROPERTIES:
    :ID:       976318c6-2f29-4d33-ab27-fcfae4582cba
-   :END:
-** TODO finish greg Ta anaylsis
-   :PROPERTIES:
-   :ID:       54595f52-7965-4bb0-904c-38c61ab614b4
    :END:
 ** TODO USA TAX-check refund from federal in bank
    :PROPERTIES:
@@ -513,20 +512,32 @@ Intel wifi card (strongly recommended for Linux)
    :ID:       acc68642-21de-4dd2-84b3-b99d7d29436d
    :END:
 ** home paint color is 016 
-** TODO look for a teacher in GIS for  spatial geodatabases
+** TODO look for a teacher in GIS for spatial geodatabases
    :PROPERTIES:
    :ID:       a673b5fa-fd24-4993-9fc1-bf3fda554a1b
    :END:
 course will include mysql, geodatabases etc
 job Benefits:
 16,000 NIS for course +travel expenses
-** porgress with the virtual geography Library
-** check with hendrick bruins about aridity index for regions in Israel
+** TODO Maayan power calculations
+   :PROPERTIES:
+   :ID:       0cf54e4f-f8ae-41e3-81fc-bdb75b1b815c
+   :END:
+** TODO bank poalim
+   :PROPERTIES:
+   :ID:       0ba6485f-a94b-4512-8935-1fcce02ad04f
+   :END:
+*** שיק 	
+00010006 aviva 9400?
+*** check master card per month
+** Allan
+*** Knn0 ignore missing data (missings in dataset)
 * long term Misc
-** GIS Track
+** GIS Trac k
     :PROPERTIES:
     :ID:       836c5749-6059-4d98-9844-6611b7726cb9
     :END:
+*** info 
 **** do you know the numbers/ration in other universities and abroad in geo departments?
 penn state is one of the leaders in GIS masters degree
 http://www.worldcampus.psu.edu/degrees-and-certificates/geographic-information-systems-gis-masters/courses
@@ -552,5 +563,60 @@ Geospatial statistics
 GIS project managment
 Cartography and imaging software
 remote sensing
+*** meeting with tal
+**** program:
+non offical BA 
+offical MA we sign certificate
+look at existing courses and make the program more modern
+assign to each person in the geo informatics program (tal,eran,aviva) which courses they take and whats included.
+
+**** marketing 
+***** TODO email sagi langer about geoinformatics marketing
+      :PROPERTIES:
+      :ID:       ab06e34d-92f2-4914-9e87-a086a408d4cf
+      :END:
+***** Find better MA students that do Research
+**** TODO email micael friger and tal about meeting 
+     :PROPERTIES:
+     :ID:       a34ee90b-c86f-42ba-8a5a-9ac0e0aecfc5
+     :END:
+**** TODO talk to raanan about GIS and public health course.
+     :PROPERTIES:
+     :ID:       b492d810-5333-4e61-abd7-774e7e61c507
+     :END:
+**** relevant departments
+-epi
+-geology
+-biology
+- sde noker mahcon lecheker hmdbar
+-archeolgy
+- marachot media 
+- sociology
+- medical School
+- envinmontal engineering
+- computer engineering
+- neihol
+-tourism (manegment faculty)
+**** mundaine missions
+***** TODO before start of uni year mifgash megama
+      :PROPERTIES:
+      :ID:       c243b581-4a00-42db-bf1f-b286c0437506
+      :END:
+- talk to student in the geoinformatics group and tell them which courses they need to take
+
+***** TODO meet first year students for BA
+      :PROPERTIES:
+      :ID:       d58d6dba-bf72-4343-a5a9-f4dfd6edddd9
+      :END:
+add some propaganda, Waze, python, work in high tech
+***** TODO before start of uni year mifgah with MA megama students
+      :PROPERTIES:
+      :ID:       648a0805-3737-4c38-a256-93627565d17e
+      :END:
+-talk to sigalit to set a date and place for this meetings 
+- talk to student in the geoinformatics group that MA
 ** Mapi Maagal project 
 Zipcode proxy
+** porgress with the virtual geography Library
+** MIT tracking project with petros
+ 

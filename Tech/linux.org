@@ -24670,12 +24670,7 @@ here is an anotated version
          ;move to the ingridients section and start a yasnippet expansion
          (search-forward "Ingridients")
          (yas-insert-snippet)
-
-
 )
-
-
-
 
 #+END_SRC
 
@@ -34729,7 +34724,6 @@ do mount -B /{,mnt/}$f; done; chroot /mnt
 note that the above \^\^\^\^ is all in one command
 
 *** date
-
 **** set date abd time from command line
 
 Changing the date and time:
@@ -38306,7 +38300,6 @@ use this command:
 
 ** `networking`
 *** dyndns
-
 **** ddclient
 
 *Update IP addresses at dynamic DNS services Using ddclient
@@ -38370,7 +38363,20 @@ ppp something that the install wizard doesn't cover.
  More info:
 
 http://www.linuxhomenetworking.com/wiki/index.php/Quick HOWTO : Ch19 : Dynamic DNS
+**** freedns setup
+register for an account in 
+http://freedns.afraid.org/
 
+then register a subdomain
+type A and choose you own subdomain, ₆In example₆ zeltak.mooo.com
+
+then in the Dynamic DNS tab copy the direct link URL at the bottom and configure ddwrt hostname with
+DOMAIN, the token part of the url you just copied, ₆In example₆ 
+
+zeltak.mooo.com,Q2liUVRmbFR1T201V3RVcWpqRDFralExOjExNjUyODgw
+
+ 
+ 
 *** firewall
 
 **** glossary and info
@@ -38843,6 +38849,77 @@ stash apply
 you may get a merge commit which is normal          
 
 use git diff to see the changes of the stuff you are going to commit
+**** git merge
+***** How a Merge Conflict Occurs
+In Git, "merging" is the act of integrating another branch into your current working branch. Youre taking changes from another context (thats what a branch effectively is: a context) and combine them with your current working files.
+
+A great thing about having Git as your version control system is that it makes merging extremely easy: in most cases, Git will figure out how to integrate new changes.
+
+However, theres a handful of situations where you might have to step in and tell Git what to do. Most notably, this is when changing the same file. Even in this case, Git will most likely be able to figure it out on its own. But if two people changed the same lines in that same file, or if one person decided to delete it while the other person decided to modify it, Git simply cannot know what is correct. Git will then mark the file as having a conflict - which you'll have to solve before you can continue your work.
+***** How to Solve a Merge Conflict
+When faced with a merge conflict, the first step is to understand what happened. E.g.: Did one of your colleagues edit the same file on the same lines as you/Did he delete a file that you modified/Did you both add a file with the same name?
+
+Git will tell you that you have "unmerged paths" (which is just another way of telling you that you have one or more conflicts) via "git status":
+
+#+BEGIN_SRC sh
+$ git status
+# On branch contact-form
+# You have unmerged paths.
+#   (fix conflicts and run "git commit")
+#
+# Unmerged paths:
+#   (use "git add <file>..." to mark resolution)
+#
+#       both modified:   contact.html
+#
+no changes added to commit (use "git add" and/or "git commit -a")
+#+END_SRC
+
+Let's take an in-depth look on how to solve the most common case, when two changes affected the same file on the same lines.
+Now is the time to have a look at the contents of the conflicted file.
+Git was nice enough to mark the problematic area in the file by enclosing it in "<<<<<<< HEAD" and ">>>>>>> [other/branch/name]".
+
+
+#+DOWNLOADED: file:///home/zeltak/ZH_tmp/conflict-markers.png @ 2014-05-14 10:15:14
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/conflict-markers_2014-05-14_10:15:14.png]]
+
+
+The contents after the first marker originate from your current working branch. After the angle brackets, Git tells us where (from which branch) the changes came from. A line with "=======" separates the two conflicting changes.
+
+Our job is now to clean up these lines: when we are done, the file should look exactly as we want it to look. It can be necessary to consult the teammate who wrote the conflicting changes to decide which code is finally correct. Maybe its yours, maybe it's his - or maybe a mixture between the two.
+
+Opening the raw file in your editor and cleaning it up there is perfectly valid, but not very comfortable. Using a dedicated merge tool can make this job a great deal easier.
+
+You can configure your tool of choice using the "git config" command. Consult your tool's documentation for detailed instructions.
+Then, in case of a conflict, you can later invoke it by simply typing `git mergetool`.
+
+#+DOWNLOADED: file:///home/zeltak/ZH_tmp/merge-conflict-in-gui.jpg @ 2014-05-14 10:21:04
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/merge-conflict-in-gui_2014-05-14_10:21:04.jpg]]
+
+The left and right panes stand for the conflicting changes; a far more elegant visualization than "<<<<<<<" and ">>>>>>>". 
+You can now simply toggle which change shall be taken. The middle pane shows the resulting code; in good tools, you can even edit this further.
+
+Now, after cleaning up the file with the final code, all that is left is to save it.
+
+To give Git a hint that youre done with this file, you should quit the merge tool to continue. Behind the scenes, this told Git to execute a "git add" command on the (now formerly) conflicted file. This marks the conflict as solved. Should you decide not to use a merge tool and instead clean up the file in your editor, you'll have to mark the file as resolved by hand (by executing "git add <filename>").
+
+Finally, after solving all conflicts, a merge conflict situation needs to be concluded by a regular commit.
+
+***** How to Undo a Merge
+
+You should always keep in mind that you can return to the state before you started the merge at any time. This should give you the confidence that you can't break anything. On the command line, a simple "git merge --abort" will do this for you.
+
+In case you've made a mistake while resolving a conflict and realize this only after completing the merge, you can still easily undo it: just roll back to the commit before the merge happened with "git reset --hard " and start over again.
+
+**** check git Status
+issue:
+
+#+NAME: 
+#+BEGIN_SRC sh
+git status
+#+END_SRC
 **** Manage dotfiles with git
 ***** Initial Setup
 create a dotfile folder and initiate a git dir
@@ -38883,6 +38960,13 @@ Finally, if you come back to use this machine later after you’ve tweaked these
 
 #+BEGIN_SRC sh
 git pull
+#+END_SRC
+**** How do I make git use the editor of my choice for commit 
+issue: 
+
+#+NAME: 
+#+BEGIN_SRC sh
+git config --global core.editor "vim"
 #+END_SRC
 
 *** netcfg
@@ -41210,7 +41294,6 @@ To login (from unix shell) use -h only if needed.
  mysql> drop table [table name];
  Show all data in a table.
  mysql> SELECT * FROM [table name];
-
 ** X system
 *** X11
 **** keyboard
@@ -42352,10 +42435,8 @@ unmounting disks (but it won't reboot. See above).*The main key sequence
 is:
 **Alt + PrintScreen+ R+S+E+U+I+B*
 
-** powersave
-
-*Saving Power on Intel systems with Linux*
- Screensavers/DPMS
+** Battery/Powersave
+*** Screensavers/DPMS
  Fancy screensavers can be very pretty, however from a power savings
 perspective using such a visual screensaver is not a good idea at all.
  First of all, the screensaver will spend quite a bit of CPU time (and
@@ -42395,6 +42476,32 @@ program like this:
  xbacklight -set 50
  Various Linux desktops also have brightness control applications that
 can replace the xbacklight program.
+*** PowerTOP
+**** auto tune 
+to auto enhance battery use this Command
+
+#+NAME: 
+#+BEGIN_SRC sh
+sudo powertop --auto-tune
+#+END_SRC
+*** enable power top as a systemd service
+add thie file
+file:/etc/systemd/system/powertop.service
+
+#+BEGIN_SRC emacs-lisp :results none
+[Unit]
+Description=Powertop tunings
+[Service]
+Type=oneshot
+RemainAfterExit=no
+ExecStart=/usr/bin/powertop --auto-tune
+#"powertop --auto-tune" still needs a terminal for some reason.
+#Possibly a bug?
+Environment="TERM=xterm"
+
+[Install]
+WantedBy=multi-user.target
+#+END_SRC
 
 ** cd-dvd
 
