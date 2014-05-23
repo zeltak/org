@@ -1964,3 +1964,19 @@ then using this script:
 we clean up the predcitions and output FINAL predictions
 
 * 4.results
+* 5.issues
+
+0.Do you have the Italy LST temperature dataset or is it on the Harvard server
+YES the LST data is here
+
+1. temperature values for Toscana stations are Tmax  instead of Tmean so cannot compare stations.
+
+2. I hope I am correct in defining stations with LIxx codes as WU and NOAA with station names eg "MILANO LINATE", even if in NOAA file numeric values were used as station id (160xxx).
+
+2a. the WU dataset has the same value repeated when data is missing (there are entire months with the same value!) there must be some problem either in the dataset or in the importing I cannot check this as I don't have the raw data.
+
+3. DATE check. For some years  dates are a bit random and do not correspond to what is in NOAA\other database sources in terms of available meteo data eg for 2000 dataset starts with 5/3/2000 even if  data is avaiable from 1/1/2000,  years with missing dates or periods are 2003, 2001, 2004, 2007, 2008, 2010, (eg. dates are 1, 3, 4, 6, 9 jan 2004).  Is there a reason for this? Can you check this please.
+
+5. IMPORTANT Fran I already mentioned this to you , %urban and pop density are not unique for each station, while I imagine they should be constant.
+
+6. where there are single days with different %urban and pop dens NDVI also changes randomly compared to the rest of the month. 

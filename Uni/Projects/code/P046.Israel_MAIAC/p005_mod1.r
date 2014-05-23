@@ -15,75 +15,24 @@ library(car)
 library(dplyr)
 
 
-###load Terra
+pm10.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm10all.RDS")
+pm25.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25all.RDS")
 
-#load aod data
-terra<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/AOD_allyears.RDS")
-terra<- terra[yr >= "2002"]
-terra<- terra[ y_aod_ITM >= 500000]
-# terra<- terra[ aod >= 0.1 &  aod <= 2]
-
-
-summary(terra$aod)
-
-###load Aqua
-#load aod data
-aqua<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/AOD_allyearsAQ.RDS")
-aqua<- aqua[yr >= "2002"]
-aqua<- aqua[ y_aod_ITM >= 500000]
-
-
-#Pm10
-pm10all<-readRDS("/home/zeltak/ZH_tmp/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm10all.RDS")
-summary(pm10all)
-pm10all[,DOW:=NULL]
-pm10all[,Holiday:=NULL]
-pm10all[,PM25:=NULL]
-pm10all[,RH:=NULL]
-pm10all[,WD:=NULL]
-pm10all[,Temp:=NULL]
-
-pm10all<-na.omit(pm10all)
-#clean
-pm10all<-pm10all[PM10 <= 1000]
-describe(pm10all$PM10)
-summary(pm10all)
-
-
-
-# import monitor data and spatial merge with nearestbyday()
-source("/home/zeltak/org/files/Uni/Projects/code/P031.MIAC_PM/code_snips/nearestbyday.r")
-
-#create PM matrix
-pm.m <- makepointsmatrix(pm10all, "x_stn_ITM", "y_stn_ITM", "stn")
-
-#create aod matrix
-aod.m <- makepointsmatrix(terra[terra[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
-
-# use the nearestbyday() function
-###########
-closestaod <- nearestbyday(pm.m, aod.m, 
-                           pm10all, terra [, list(day, aodid, aod)], 
-                           "stn", "aodid", "closestaod", "aod", knearest = 5, maxdistance = 1500)
-# this has aod even when there is no pm; it gets dropped on the merge
-
-
-
-setkey(pm10all,stn,day)
-setkey(closestaod,stn,day)
-mod1 <- merge(pm10all, closestaod, all.x = T)
-#head(mod1)
-mod1 <- mod1[aod != "NA"]
 
 
 #base model for stage 1
-m1.formula <- as.formula(PM10~ aod+ (1+aod|day))
+#lme
+m1.formula <- as.formula(PM10~ aod,random=~1+aod|day)
 m1.formula <- as.formula(PM10 ~ aod+elev+tden+pden+dist2rail+dist2A1+dist2water+daytemp+dayRH+season+MeanPbl+(1+aod+daytemp|day)+(1|stn))
 
 m1.formula <- as.formula(PM10 ~ aod*c+elev+tden+pden+dist2rail+dist2A1+dist2water+daytemp+dayRH+season+MeanPbl+(1+aod+daytemp|day)+(1|stn))
 
 
 #model
+#lme
+x<-  lme(PM10~ aod,data=mod1,      random=~1+aod|day)
+
+
 m1.formula <- as.formula(PM10~ aod)
 out.m1 = lm(m1.formula ,data =  mod1)
 mod1$predicted <- predict(out.m1)
@@ -168,7 +117,7 @@ summary(lm(PM10~predicted,data=mod1_Ndust))
 
 
 #Pm25
-pm25all<-readRDS("/home/zeltak/ZH_tmp/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25all.RDS")
+pm25all<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25all.RDS")
 summary(pm25all)
 pm25all[,DOW:=NULL]
 pm25all[,Holiday:=NULL]

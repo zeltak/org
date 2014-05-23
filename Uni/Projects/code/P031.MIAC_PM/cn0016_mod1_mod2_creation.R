@@ -55,12 +55,12 @@ source("/home/zeltak/org/files/Uni/Projects/code/P31/code_snips/CV_splits.r")
 ###############
 
 #import whole NE_MIA grid
-basegrid <-  fread("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/basegrid.csv")
+basegrid <-  fread("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/basegrid.csv")
 
 
 #import and clip data
-mod1<-readRDS ("//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2003.rds")
-mod2<-readRDS ("//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2003.rds")
+mod1<-readRDS ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2003.rds")
+mod2<-readRDS ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2003.rds")
 #clip to just NE and NY/NJ
 mod2C <- mod2[long_aod > -76 & long_aod < -66.7 & lat_aod < 47 & lat_aod > 38.8, ]
 mod1C <- mod1[long_aod > -76 & long_aod < -66.7 & lat_aod < 47 & lat_aod > 38.8, ]
@@ -92,7 +92,7 @@ mod1_reg <- lm(m1_2003$PM25~m1_2003$predicted)
 
 mod1table$r2003[1] <-summary(mod1_reg)$r.squared
 
-saveRDS(m1_2003, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2003_pred.m1.rds")
+saveRDS(m1_2003, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2003_pred.m1.rds")
 
 ###############
 #MOD1 CV
@@ -178,7 +178,7 @@ mod1d_10_s10$predicted <- predict(object=out_90_s10,newdata=mod1d_10_s10,allow.n
 
 mod1CV_all<- data.table(rbind(mod1d_10_s1,mod1d_10_s2,mod1d_10_s3,mod1d_10_s4,mod1d_10_s5,mod1d_10_s6,mod1d_10_s7,mod1d_10_s8,mod1d_10_s9, mod1d_10_s10))
 
-saveRDS(mod1CV_all_2003, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1CV_all_2003_pred.m1.rds")
+saveRDS(mod1CV_all_2003, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1CV_all_2003_pred.m1.rds")
 
 
 # cleanup (remove from WS) objects from CV
@@ -220,7 +220,7 @@ mod1table$r2003[10]<- sqrt(mean(dat$spatresid^2))
 #>>ADD LOCAL PM STAGE
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-luf<-readRDS("//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/luf_NE_MIA.rds")
+luf<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/luf_NE_MIA.rds")
 
 #add 50m LU to CV data
 setkey(mod1CV_all,SiteCode)
@@ -274,7 +274,7 @@ mod1table$r2003[19]<- sqrt(mean(dat$spatresid^2))
 
 
 #############save midpoint
-saveRDS(mod1table, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2003_p1.rds")
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2003_p1.rds")
 
 ###############
 #MOD2
@@ -292,7 +292,7 @@ m2_2003$logroad<-log(m2_2003$Mjrrdden_1 +.1)
 m2_2003[, predicted.m2 := predict(object=out.m1_2003,newdata=m2_2003,allow.new.levels=TRUE,REform=NULL)]
 m2_2003 <- m2_2003[predicted.m2 > 0.00000000000001 , ]
 #save mod2 with predictions
-saveRDS(m2_2003, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2003_pred.m2.rds")
+saveRDS(m2_2003, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2003_pred.m2.rds")
 
 #######
 #M2 R2
@@ -314,14 +314,14 @@ mod1table$r2003[20] <-summary(mod2_reg)$r.squared
 #map the predictions
 #aggregate by guid
 m2_agg <- m2_2003[, list(LTPM.m2 = mean(predicted.m2, na.rm = TRUE), lat_aod = lat_aod[1], long_aod = long_aod[1]), by = guid]
-saveRDS(m2_agg, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2003.rds")
+saveRDS(m2_agg, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2003.rds")
 #map the predictions
 ggplot(m2_agg, aes(long_aod,lat_aod, color = LTPM.m2)) + 
   geom_point(size = 3, shape = 15) +  xlab("longitude") + ylab("latitude") + 
   scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(5)) + theme_bw() + ggtitle("Long term predictions")
-ggsave(file="//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
+ggsave(file="/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
 
-saveRDS(mod1table, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2003_p2.rds")
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2003_p2.rds")
 
 keep(mod1table , sure=TRUE) 
 gc()
@@ -347,12 +347,12 @@ source("/home/zeltak/org/files/Uni/Projects/code/P31/code_snips/CV_splits.r")
 ###############
 
 #import whole NE_MIA grid
-basegrid <-  fread("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/basegrid.csv")
+basegrid <-  fread("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/basegrid.csv")
 
 
 #import and clip data
-mod1<-readRDS ("//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2004.rds")
-mod2<-readRDS ("//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2004.rds")
+mod1<-readRDS ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2004.rds")
+mod2<-readRDS ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2004.rds")
 #clip to just NE and NY/NJ
 mod2C <- mod2[long_aod > -76 & long_aod < -66.7 & lat_aod < 47 & lat_aod > 38.8, ]
 mod1C <- mod1[long_aod > -76 & long_aod < -66.7 & lat_aod < 47 & lat_aod > 38.8, ]
@@ -384,7 +384,7 @@ mod1_reg <- lm(m1_2004$PM25~m1_2004$predicted)
 
 mod1table$r2004[1] <-summary(mod1_reg)$r.squared
 
-saveRDS(m1_2004, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2004_pred.m1.rds")
+saveRDS(m1_2004, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2004_pred.m1.rds")
 
 ###############
 #MOD1 CV
@@ -470,7 +470,7 @@ mod1d_10_s10$predicted <- predict(object=out_90_s10,newdata=mod1d_10_s10,allow.n
 
 mod1CV_all<- data.table(rbind(mod1d_10_s1,mod1d_10_s2,mod1d_10_s3,mod1d_10_s4,mod1d_10_s5,mod1d_10_s6,mod1d_10_s7,mod1d_10_s8,mod1d_10_s9, mod1d_10_s10))
 
-saveRDS(mod1CV_all_2004, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1CV_all_2004_pred.m1.rds")
+saveRDS(mod1CV_all_2004, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1CV_all_2004_pred.m1.rds")
 
 
 # cleanup (remove from WS) objects from CV
@@ -514,8 +514,8 @@ mod1table$r2004[10]<- sqrt(mean(dat$spatresid^2))
 
 
 #import 50x50LU terms
-lu2 <-read.dbf("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50.dbf")
-lu <-read.dbf("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50_MIA.dbf")
+lu2 <-read.dbf("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50.dbf")
+lu <-read.dbf("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50_MIA.dbf")
 
 lu$guid<-as.factor(lu$guid)
 lu<-as.data.table(lu)
@@ -578,7 +578,7 @@ mod1table$r2004[19]<- sqrt(mean(dat$spatresid^2))
 
 
 #############save midpoint
-saveRDS(mod1table, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2004_p1.rds")
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2004_p1.rds")
 
 ###############
 #MOD2
@@ -596,7 +596,7 @@ m2_2004$logroad<-log(m2_2004$Mjrrdden_1 +.1)
 m2_2004[, predicted.m2 := predict(object=out.m1_2004,newdata=m2_2004,allow.new.levels=TRUE,REform=NULL)]
 m2_2004 <- m2_2004[predicted.m2 > 0.00000000000001 , ]
 #save mod2 with predictions
-saveRDS(m2_2004, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2004_pred.m2.rds")
+saveRDS(m2_2004, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2004_pred.m2.rds")
 
 #######
 #M2 R2
@@ -618,14 +618,14 @@ mod1table$r2004[20] <-summary(mod2_reg)$r.squared
 #map the predictions
 #aggregate by guid
 m2_agg <- m2_2004[, list(LTPM.m2 = mean(predicted.m2, na.rm = TRUE), lat_aod = lat_aod[1], long_aod = long_aod[1]), by = guid]
-saveRDS(m2_agg, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2004.rds")
+saveRDS(m2_agg, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2004.rds")
 #map the predictions
 ggplot(m2_agg, aes(long_aod,lat_aod, color = LTPM.m2)) + 
   geom_point(size = 3, shape = 15) +  xlab("longitude") + ylab("latitude") + 
   scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(5)) + theme_bw() + ggtitle("Long term predictions")
-ggsave(file="//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
+ggsave(file="/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
 
-saveRDS(mod1table, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2004_p2.rds")
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2004_p2.rds")
 
 keep(mod1table , sure=TRUE) 
 gc()
@@ -646,12 +646,12 @@ source("/home/zeltak/org/files/Uni/Projects/code/P31/code_snips/CV_splits.r")
 ###############
 
 #import whole NE_MIA grid
-basegrid <-  fread("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/basegrid.csv")
+basegrid <-  fread("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/basegrid.csv")
 
 
 #import and clip data
-mod1<-readRDS ("//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2005.rds")
-mod2<-readRDS ("//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2005.rds")
+mod1<-readRDS ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2005.rds")
+mod2<-readRDS ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2005.rds")
 #clip to just NE and NY/NJ
 mod2C <- mod2[long_aod > -76 & long_aod < -66.7 & lat_aod < 47 & lat_aod > 38.8, ]
 mod1C <- mod1[long_aod > -76 & long_aod < -66.7 & lat_aod < 47 & lat_aod > 38.8, ]
@@ -683,7 +683,7 @@ mod1_reg <- lm(m1_2005$PM25~m1_2005$predicted)
 
 mod1table$r2005[1] <-summary(mod1_reg)$r.squared
 
-saveRDS(m1_2005, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2005_pred.m1.rds")
+saveRDS(m1_2005, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2005_pred.m1.rds")
 
 ###############
 #MOD1 CV
@@ -769,7 +769,7 @@ mod1d_10_s10$predicted <- predict(object=out_90_s10,newdata=mod1d_10_s10,allow.n
 
 mod1CV_all<- data.table(rbind(mod1d_10_s1,mod1d_10_s2,mod1d_10_s3,mod1d_10_s4,mod1d_10_s5,mod1d_10_s6,mod1d_10_s7,mod1d_10_s8,mod1d_10_s9, mod1d_10_s10))
 
-saveRDS(mod1CV_all_2005, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1CV_all_2005_pred.m1.rds")
+saveRDS(mod1CV_all_2005, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1CV_all_2005_pred.m1.rds")
 
 
 # cleanup (remove from WS) objects from CV
@@ -813,8 +813,8 @@ mod1table$r2005[10]<- sqrt(mean(dat$spatresid^2))
 
 
 #import 50x50LU terms
-lu2 <-read.dbf("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50.dbf")
-lu <-read.dbf("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50_MIA.dbf")
+lu2 <-read.dbf("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50.dbf")
+lu <-read.dbf("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50_MIA.dbf")
 
 lu$guid<-as.factor(lu$guid)
 lu<-as.data.table(lu)
@@ -877,7 +877,7 @@ mod1table$r2005[19]<- sqrt(mean(dat$spatresid^2))
 
 
 #############save midpoint
-saveRDS(mod1table, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2005_p1.rds")
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2005_p1.rds")
 
 ###############
 #MOD2
@@ -895,7 +895,7 @@ m2_2005$logroad<-log(m2_2005$Mjrrdden_1 +.1)
 m2_2005[, predicted.m2 := predict(object=out.m1_2005,newdata=m2_2005,allow.new.levels=TRUE,REform=NULL)]
 m2_2005 <- m2_2005[predicted.m2 > 0.00000000000001 , ]
 #save mod2 with predictions
-saveRDS(m2_2005, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2005_pred.m2.rds")
+saveRDS(m2_2005, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2005_pred.m2.rds")
 
 #######
 #M2 R2
@@ -917,14 +917,14 @@ mod1table$r2005[20] <-summary(mod2_reg)$r.squared
 #map the predictions
 #aggregate by guid
 m2_agg <- m2_2005[, list(LTPM.m2 = mean(predicted.m2, na.rm = TRUE), lat_aod = lat_aod[1], long_aod = long_aod[1]), by = guid]
-saveRDS(m2_agg, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2005.rds")
+saveRDS(m2_agg, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2005.rds")
 #map the predictions
 ggplot(m2_agg, aes(long_aod,lat_aod, color = LTPM.m2)) + 
   geom_point(size = 3, shape = 15) +  xlab("longitude") + ylab("latitude") + 
   scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(5)) + theme_bw() + ggtitle("Long term predictions")
-ggsave(file="//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
+ggsave(file="/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
 
-saveRDS(mod1table, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2005_p2.rds")
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2005_p2.rds")
 
 keep(mod1table , sure=TRUE) 
 gc()
@@ -945,12 +945,12 @@ source("/home/zeltak/org/files/Uni/Projects/code/P31/code_snips/CV_splits.r")
 ###############
 
 #import whole NE_MIA grid
-basegrid <-  fread("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/basegrid.csv")
+basegrid <-  fread("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/basegrid.csv")
 
 
 #import and clip data
-mod1<-readRDS ("//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2006.rds")
-mod2<-readRDS ("//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2006.rds")
+mod1<-readRDS ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2006.rds")
+mod2<-readRDS ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2006.rds")
 #clip to just NE and NY/NJ
 mod2C <- mod2[long_aod > -76 & long_aod < -66.7 & lat_aod < 47 & lat_aod > 38.8, ]
 mod1C <- mod1[long_aod > -76 & long_aod < -66.7 & lat_aod < 47 & lat_aod > 38.8, ]
@@ -982,7 +982,7 @@ mod1_reg <- lm(m1_2006$PM25~m1_2006$predicted)
 
 mod1table$r2006[1] <-summary(mod1_reg)$r.squared
 
-saveRDS(m1_2006, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2006_pred.m1.rds")
+saveRDS(m1_2006, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2006_pred.m1.rds")
 
 ###############
 #MOD1 CV
@@ -1068,7 +1068,7 @@ mod1d_10_s10$predicted <- predict(object=out_90_s10,newdata=mod1d_10_s10,allow.n
 
 mod1CV_all<- data.table(rbind(mod1d_10_s1,mod1d_10_s2,mod1d_10_s3,mod1d_10_s4,mod1d_10_s5,mod1d_10_s6,mod1d_10_s7,mod1d_10_s8,mod1d_10_s9, mod1d_10_s10))
 
-saveRDS(mod1CV_all_2006, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1CV_all_2006_pred.m1.rds")
+saveRDS(mod1CV_all_2006, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1CV_all_2006_pred.m1.rds")
 
 
 # cleanup (remove from WS) objects from CV
@@ -1112,8 +1112,8 @@ mod1table$r2006[10]<- sqrt(mean(dat$spatresid^2))
 
 
 #import 50x50LU terms
-lu2 <-read.dbf("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50.dbf")
-lu <-read.dbf("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50_MIA.dbf")
+lu2 <-read.dbf("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50.dbf")
+lu <-read.dbf("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50_MIA.dbf")
 
 lu$guid<-as.factor(lu$guid)
 lu<-as.data.table(lu)
@@ -1176,7 +1176,7 @@ mod1table$r2006[19]<- sqrt(mean(dat$spatresid^2))
 
 
 #############save midpoint
-saveRDS(mod1table, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2006_p1.rds")
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2006_p1.rds")
 
 ###############
 #MOD2
@@ -1194,7 +1194,7 @@ m2_2006$logroad<-log(m2_2006$Mjrrdden_1 +.1)
 m2_2006[, predicted.m2 := predict(object=out.m1_2006,newdata=m2_2006,allow.new.levels=TRUE,REform=NULL)]
 m2_2006 <- m2_2006[predicted.m2 > 0.00000000000001 , ]
 #save mod2 with predictions
-saveRDS(m2_2006, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2006_pred.m2.rds")
+saveRDS(m2_2006, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2006_pred.m2.rds")
 
 #######
 #M2 R2
@@ -1216,14 +1216,14 @@ mod1table$r2006[20] <-summary(mod2_reg)$r.squared
 #map the predictions
 #aggregate by guid
 m2_agg <- m2_2006[, list(LTPM.m2 = mean(predicted.m2, na.rm = TRUE), lat_aod = lat_aod[1], long_aod = long_aod[1]), by = guid]
-saveRDS(m2_agg, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2006.rds")
+saveRDS(m2_agg, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2006.rds")
 #map the predictions
 ggplot(m2_agg, aes(long_aod,lat_aod, color = LTPM.m2)) + 
   geom_point(size = 3, shape = 15) +  xlab("longitude") + ylab("latitude") + 
   scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(5)) + theme_bw() + ggtitle("Long term predictions")
-ggsave(file="//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
+ggsave(file="/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
 
-saveRDS(mod1table, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2006_p2.rds")
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2006_p2.rds")
 
 keep(mod1table , sure=TRUE) 
 gc()
@@ -1244,12 +1244,12 @@ source("/home/zeltak/org/files/Uni/Projects/code/P31/code_snips/CV_splits.r")
 ###############
 
 #import whole NE_MIA grid
-basegrid <-  fread("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/basegrid.csv")
+basegrid <-  fread("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/basegrid.csv")
 
 
 #import and clip data
-mod1<-readRDS ("//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2007.rds")
-mod2<-readRDS ("//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2007.rds")
+mod1<-readRDS ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2007.rds")
+mod2<-readRDS ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2007.rds")
 #clip to just NE and NY/NJ
 mod2C <- mod2[long_aod > -76 & long_aod < -66.7 & lat_aod < 47 & lat_aod > 38.8, ]
 mod1C <- mod1[long_aod > -76 & long_aod < -66.7 & lat_aod < 47 & lat_aod > 38.8, ]
@@ -1281,7 +1281,7 @@ mod1_reg <- lm(m1_2007$PM25~m1_2007$predicted)
 
 mod1table$r2007[1] <-summary(mod1_reg)$r.squared
 
-saveRDS(m1_2007, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2007_pred.m1.rds")
+saveRDS(m1_2007, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2007_pred.m1.rds")
 
 ###############
 #MOD1 CV
@@ -1367,7 +1367,7 @@ mod1d_10_s10$predicted <- predict(object=out_90_s10,newdata=mod1d_10_s10,allow.n
 
 mod1CV_all<- data.table(rbind(mod1d_10_s1,mod1d_10_s2,mod1d_10_s3,mod1d_10_s4,mod1d_10_s5,mod1d_10_s6,mod1d_10_s7,mod1d_10_s8,mod1d_10_s9, mod1d_10_s10))
 
-saveRDS(mod1CV_all_2007, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1CV_all_2007_pred.m1.rds")
+saveRDS(mod1CV_all_2007, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1CV_all_2007_pred.m1.rds")
 
 
 # cleanup (remove from WS) objects from CV
@@ -1411,8 +1411,8 @@ mod1table$r2007[10]<- sqrt(mean(dat$spatresid^2))
 
 
 #import 50x50LU terms
-lu2 <-read.dbf("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50.dbf")
-lu <-read.dbf("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50_MIA.dbf")
+lu2 <-read.dbf("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50.dbf")
+lu <-read.dbf("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50_MIA.dbf")
 
 lu$guid<-as.factor(lu$guid)
 lu<-as.data.table(lu)
@@ -1475,7 +1475,7 @@ mod1table$r2007[19]<- sqrt(mean(dat$spatresid^2))
 
 
 #############save midpoint
-saveRDS(mod1table, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2007_p1.rds")
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2007_p1.rds")
 
 ###############
 #MOD2
@@ -1493,7 +1493,7 @@ m2_2007$logroad<-log(m2_2007$Mjrrdden_1 +.1)
 m2_2007[, predicted.m2 := predict(object=out.m1_2007,newdata=m2_2007,allow.new.levels=TRUE,REform=NULL)]
 m2_2007 <- m2_2007[predicted.m2 > 0.00000000000001 , ]
 #save mod2 with predictions
-saveRDS(m2_2007, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2007_pred.m2.rds")
+saveRDS(m2_2007, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2007_pred.m2.rds")
 
 #######
 #M2 R2
@@ -1515,14 +1515,14 @@ mod1table$r2007[20] <-summary(mod2_reg)$r.squared
 #map the predictions
 #aggregate by guid
 m2_agg <- m2_2007[, list(LTPM.m2 = mean(predicted.m2, na.rm = TRUE), lat_aod = lat_aod[1], long_aod = long_aod[1]), by = guid]
-saveRDS(m2_agg, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2007.rds")
+saveRDS(m2_agg, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2007.rds")
 #map the predictions
 ggplot(m2_agg, aes(long_aod,lat_aod, color = LTPM.m2)) + 
   geom_point(size = 3, shape = 15) +  xlab("longitude") + ylab("latitude") + 
   scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(5)) + theme_bw() + ggtitle("Long term predictions")
-ggsave(file="//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
+ggsave(file="/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
 
-saveRDS(mod1table, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2007_p2.rds")
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2007_p2.rds")
 
 keep(mod1table , sure=TRUE) 
 gc()
@@ -1542,12 +1542,12 @@ source("/home/zeltak/org/files/Uni/Projects/code/P31/code_snips/CV_splits.r")
 ###############
 
 #import whole NE_MIA grid
-basegrid <-  fread("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/basegrid.csv")
+basegrid <-  fread("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/basegrid.csv")
 
 
 #import and clip data
-mod1<-readRDS ("//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2008.rds")
-mod2<-readRDS ("//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2008.rds")
+mod1<-readRDS ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2008.rds")
+mod2<-readRDS ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2008.rds")
 #clip to just NE and NY/NJ
 mod2C <- mod2[long_aod > -76 & long_aod < -66.7 & lat_aod < 47 & lat_aod > 38.8, ]
 mod1C <- mod1[long_aod > -76 & long_aod < -66.7 & lat_aod < 47 & lat_aod > 38.8, ]
@@ -1579,7 +1579,7 @@ mod1_reg <- lm(m1_2008$PM25~m1_2008$predicted)
 
 mod1table$r2008[1] <-summary(mod1_reg)$r.squared
 
-saveRDS(m1_2008, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2008_pred.m1.rds")
+saveRDS(m1_2008, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2008_pred.m1.rds")
 
 ###############
 #MOD1 CV
@@ -1665,7 +1665,7 @@ mod1d_10_s10$predicted <- predict(object=out_90_s10,newdata=mod1d_10_s10,allow.n
 
 mod1CV_all<- data.table(rbind(mod1d_10_s1,mod1d_10_s2,mod1d_10_s3,mod1d_10_s4,mod1d_10_s5,mod1d_10_s6,mod1d_10_s7,mod1d_10_s8,mod1d_10_s9, mod1d_10_s10))
 
-saveRDS(mod1CV_all_2008, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1CV_all_2008_pred.m1.rds")
+saveRDS(mod1CV_all_2008, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1CV_all_2008_pred.m1.rds")
 
 
 # cleanup (remove from WS) objects from CV
@@ -1709,8 +1709,8 @@ mod1table$r2008[10]<- sqrt(mean(dat$spatresid^2))
 
 
 #import 50x50LU terms
-lu2 <-read.dbf("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50.dbf")
-lu <-read.dbf("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50_MIA.dbf")
+lu2 <-read.dbf("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50.dbf")
+lu <-read.dbf("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50_MIA.dbf")
 
 lu$guid<-as.factor(lu$guid)
 lu<-as.data.table(lu)
@@ -1773,7 +1773,7 @@ mod1table$r2008[19]<- sqrt(mean(dat$spatresid^2))
 
 
 #############save midpoint
-saveRDS(mod1table, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2008_p1.rds")
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2008_p1.rds")
 
 ###############
 #MOD2
@@ -1791,7 +1791,7 @@ m2_2008$logroad<-log(m2_2008$Mjrrdden_1 +.1)
 m2_2008[, predicted.m2 := predict(object=out.m1_2008,newdata=m2_2008,allow.new.levels=TRUE,REform=NULL)]
 m2_2008 <- m2_2008[predicted.m2 > 0.00000000000001 , ]
 #save mod2 with predictions
-saveRDS(m2_2008, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2008_pred.m2.rds")
+saveRDS(m2_2008, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2008_pred.m2.rds")
 
 #######
 #M2 R2
@@ -1813,14 +1813,14 @@ mod1table$r2008[20] <-summary(mod2_reg)$r.squared
 #map the predictions
 #aggregate by guid
 m2_agg <- m2_2008[, list(LTPM.m2 = mean(predicted.m2, na.rm = TRUE), lat_aod = lat_aod[1], long_aod = long_aod[1]), by = guid]
-saveRDS(m2_agg, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2008.rds")
+saveRDS(m2_agg, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2008.rds")
 #map the predictions
 ggplot(m2_agg, aes(long_aod,lat_aod, color = LTPM.m2)) + 
   geom_point(size = 3, shape = 15) +  xlab("longitude") + ylab("latitude") + 
   scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(5)) + theme_bw() + ggtitle("Long term predictions")
-ggsave(file="//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
+ggsave(file="/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
 
-saveRDS(mod1table, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2008_p2.rds")
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2008_p2.rds")
 
 keep(mod1table , sure=TRUE) 
 gc()
@@ -1840,12 +1840,12 @@ source("/home/zeltak/org/files/Uni/Projects/code/P31/code_snips/CV_splits.r")
 ###############
 
 #import whole NE_MIA grid
-basegrid <-  fread("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/basegrid.csv")
+basegrid <-  fread("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/basegrid.csv")
 
 
 #import and clip data
-mod1<-readRDS ("//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2009.rds")
-mod2<-readRDS ("//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2009.rds")
+mod1<-readRDS ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2009.rds")
+mod2<-readRDS ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2009.rds")
 #clip to just NE and NY/NJ
 mod2C <- mod2[long_aod > -76 & long_aod < -66.7 & lat_aod < 47 & lat_aod > 38.8, ]
 mod1C <- mod1[long_aod > -76 & long_aod < -66.7 & lat_aod < 47 & lat_aod > 38.8, ]
@@ -1877,7 +1877,7 @@ mod1_reg <- lm(m1_2009$PM25~m1_2009$predicted)
 
 mod1table$r2009[1] <-summary(mod1_reg)$r.squared
 
-saveRDS(m1_2009, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2009_pred.m1.rds")
+saveRDS(m1_2009, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2009_pred.m1.rds")
 
 ###############
 #MOD1 CV
@@ -1963,7 +1963,7 @@ mod1d_10_s10$predicted <- predict(object=out_90_s10,newdata=mod1d_10_s10,allow.n
 
 mod1CV_all<- data.table(rbind(mod1d_10_s1,mod1d_10_s2,mod1d_10_s3,mod1d_10_s4,mod1d_10_s5,mod1d_10_s6,mod1d_10_s7,mod1d_10_s8,mod1d_10_s9, mod1d_10_s10))
 
-saveRDS(mod1CV_all_2009, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1CV_all_2009_pred.m1.rds")
+saveRDS(mod1CV_all_2009, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1CV_all_2009_pred.m1.rds")
 
 
 # cleanup (remove from WS) objects from CV
@@ -2007,8 +2007,8 @@ mod1table$r2009[10]<- sqrt(mean(dat$spatresid^2))
 
 
 #import 50x50LU terms
-lu2 <-read.dbf("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50.dbf")
-lu <-read.dbf("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50_MIA.dbf")
+lu2 <-read.dbf("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50.dbf")
+lu <-read.dbf("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50_MIA.dbf")
 
 lu$guid<-as.factor(lu$guid)
 lu<-as.data.table(lu)
@@ -2071,7 +2071,7 @@ mod1table$r2009[19]<- sqrt(mean(dat$spatresid^2))
 
 
 #############save midpoint
-saveRDS(mod1table, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2009_p1.rds")
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2009_p1.rds")
 
 ###############
 #MOD2
@@ -2089,7 +2089,7 @@ m2_2009$logroad<-log(m2_2009$Mjrrdden_1 +.1)
 m2_2009[, predicted.m2 := predict(object=out.m1_2009,newdata=m2_2009,allow.new.levels=TRUE,REform=NULL)]
 m2_2009 <- m2_2009[predicted.m2 > 0.00000000000001 , ]
 #save mod2 with predictions
-saveRDS(m2_2009, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2009_pred.m2.rds")
+saveRDS(m2_2009, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2009_pred.m2.rds")
 
 #######
 #M2 R2
@@ -2111,14 +2111,14 @@ mod1table$r2009[20] <-summary(mod2_reg)$r.squared
 #map the predictions
 #aggregate by guid
 m2_agg <- m2_2009[, list(LTPM.m2 = mean(predicted.m2, na.rm = TRUE), lat_aod = lat_aod[1], long_aod = long_aod[1]), by = guid]
-saveRDS(m2_agg, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2009.rds")
+saveRDS(m2_agg, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2009.rds")
 #map the predictions
 ggplot(m2_agg, aes(long_aod,lat_aod, color = LTPM.m2)) + 
   geom_point(size = 3, shape = 15) +  xlab("longitude") + ylab("latitude") + 
   scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(5)) + theme_bw() + ggtitle("Long term predictions")
-ggsave(file="//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
+ggsave(file="/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
 
-saveRDS(mod1table, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2009_p2.rds")
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2009_p2.rds")
 
 keep(mod1table , sure=TRUE) 
 gc()
@@ -2138,12 +2138,12 @@ source("/home/zeltak/org/files/Uni/Projects/code/P31/code_snips/CV_splits.r")
 ###############
 
 #import whole NE_MIA grid
-basegrid <-  fread("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/basegrid.csv")
+basegrid <-  fread("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/basegrid.csv")
 
 
 #import and clip data
-mod1<-readRDS ("//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2010.rds")
-mod2<-readRDS ("//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2010.rds")
+mod1<-readRDS ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2010.rds")
+mod2<-readRDS ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2010.rds")
 #clip to just NE and NY/NJ
 mod2C <- mod2[long_aod > -76 & long_aod < -66.7 & lat_aod < 47 & lat_aod > 38.8, ]
 mod1C <- mod1[long_aod > -76 & long_aod < -66.7 & lat_aod < 47 & lat_aod > 38.8, ]
@@ -2175,7 +2175,7 @@ mod1_reg <- lm(m1_2010$PM25~m1_2010$predicted)
 
 mod1table$r2010[1] <-summary(mod1_reg)$r.squared
 
-saveRDS(m1_2010, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2010_pred.m1.rds")
+saveRDS(m1_2010, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2010_pred.m1.rds")
 
 ###############
 #MOD1 CV
@@ -2261,7 +2261,7 @@ mod1d_10_s10$predicted <- predict(object=out_90_s10,newdata=mod1d_10_s10,allow.n
 
 mod1CV_all<- data.table(rbind(mod1d_10_s1,mod1d_10_s2,mod1d_10_s3,mod1d_10_s4,mod1d_10_s5,mod1d_10_s6,mod1d_10_s7,mod1d_10_s8,mod1d_10_s9, mod1d_10_s10))
 
-saveRDS(mod1CV_all_2010, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1CV_all_2010_pred.m1.rds")
+saveRDS(mod1CV_all_2010, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1CV_all_2010_pred.m1.rds")
 
 
 # cleanup (remove from WS) objects from CV
@@ -2305,8 +2305,8 @@ mod1table$r2010[10]<- sqrt(mean(dat$spatresid^2))
 
 
 #import 50x50LU terms
-lu2 <-read.dbf("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50.dbf")
-lu <-read.dbf("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50_MIA.dbf")
+lu2 <-read.dbf("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50.dbf")
+lu <-read.dbf("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50_MIA.dbf")
 
 lu$guid<-as.factor(lu$guid)
 lu<-as.data.table(lu)
@@ -2369,7 +2369,7 @@ mod1table$r2010[19]<- sqrt(mean(dat$spatresid^2))
 
 
 #############save midpoint
-saveRDS(mod1table, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2010_p1.rds")
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2010_p1.rds")
 
 ###############
 #MOD2
@@ -2387,7 +2387,7 @@ m2_2010$logroad<-log(m2_2010$Mjrrdden_1 +.1)
 m2_2010[, predicted.m2 := predict(object=out.m1_2010,newdata=m2_2010,allow.new.levels=TRUE,REform=NULL)]
 m2_2010 <- m2_2010[predicted.m2 > 0.00000000000001 , ]
 #save mod2 with predictions
-saveRDS(m2_2010, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2010_pred.m2.rds")
+saveRDS(m2_2010, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2010_pred.m2.rds")
 
 #######
 #M2 R2
@@ -2409,14 +2409,14 @@ mod1table$r2010[20] <-summary(mod2_reg)$r.squared
 #map the predictions
 #aggregate by guid
 m2_agg <- m2_2010[, list(LTPM.m2 = mean(predicted.m2, na.rm = TRUE), lat_aod = lat_aod[1], long_aod = long_aod[1]), by = guid]
-saveRDS(m2_agg, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2010.rds")
+saveRDS(m2_agg, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2010.rds")
 #map the predictions
 ggplot(m2_agg, aes(long_aod,lat_aod, color = LTPM.m2)) + 
   geom_point(size = 3, shape = 15) +  xlab("longitude") + ylab("latitude") + 
   scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(5)) + theme_bw() + ggtitle("Long term predictions")
-ggsave(file="//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
+ggsave(file="/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
 
-saveRDS(mod1table, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2010_p2.rds")
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2010_p2.rds")
 
 keep(mod1table , sure=TRUE) 
 gc()
@@ -2436,12 +2436,12 @@ source("/home/zeltak/org/files/Uni/Projects/code/P31/code_snips/CV_splits.r")
 ###############
 
 #import whole NE_MIA grid
-basegrid <-  fread("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/basegrid.csv")
+basegrid <-  fread("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/basegrid.csv")
 
 
 #import and clip data
-mod1<-readRDS ("//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2011.rds")
-mod2<-readRDS ("//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2011.rds")
+mod1<-readRDS ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2011.rds")
+mod2<-readRDS ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2011.rds")
 #clip to just NE and NY/NJ
 mod2C <- mod2[long_aod > -76 & long_aod < -66.7 & lat_aod < 47 & lat_aod > 38.8, ]
 mod1C <- mod1[long_aod > -76 & long_aod < -66.7 & lat_aod < 47 & lat_aod > 38.8, ]
@@ -2473,7 +2473,7 @@ mod1_reg <- lm(m1_2011$PM25~m1_2011$predicted)
 
 mod1table$r2011[1] <-summary(mod1_reg)$r.squared
 
-saveRDS(m1_2011, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2011_pred.m1.rds")
+saveRDS(m1_2011, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2011_pred.m1.rds")
 
 ###############
 #MOD1 CV
@@ -2559,7 +2559,7 @@ mod1d_10_s10$predicted <- predict(object=out_90_s10,newdata=mod1d_10_s10,allow.n
 
 mod1CV_all<- data.table(rbind(mod1d_10_s1,mod1d_10_s2,mod1d_10_s3,mod1d_10_s4,mod1d_10_s5,mod1d_10_s6,mod1d_10_s7,mod1d_10_s8,mod1d_10_s9, mod1d_10_s10))
 
-saveRDS(mod1CV_all_2011, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1CV_all_2011_pred.m1.rds")
+saveRDS(mod1CV_all_2011, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1CV_all_2011_pred.m1.rds")
 
 
 # cleanup (remove from WS) objects from CV
@@ -2603,8 +2603,8 @@ mod1table$r2011[10]<- sqrt(mean(dat$spatresid^2))
 
 
 #import 50x50LU terms
-lu2 <-read.dbf("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50.dbf")
-lu <-read.dbf("//media/NAS//Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50_MIA.dbf")
+lu2 <-read.dbf("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50.dbf")
+lu <-read.dbf("/media/NAS/Uni/Projects/p031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/lu_50x50_MIA.dbf")
 
 lu$guid<-as.factor(lu$guid)
 lu<-as.data.table(lu)
@@ -2667,7 +2667,7 @@ mod1table$r2011[19]<- sqrt(mean(dat$spatresid^2))
 
 
 #############save midpoint
-saveRDS(mod1table, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2011_p1.rds")
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2011_p1.rds")
 
 ###############
 #MOD2
@@ -2685,7 +2685,7 @@ m2_2011$logroad<-log(m2_2011$Mjrrdden_1 +.1)
 m2_2011[, predicted.m2 := predict(object=out.m1_2011,newdata=m2_2011,allow.new.levels=TRUE,REform=NULL)]
 m2_2011 <- m2_2011[predicted.m2 > 0.00000000000001 , ]
 #save mod2 with predictions
-saveRDS(m2_2011, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2011_pred.m2.rds")
+saveRDS(m2_2011, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2011_pred.m2.rds")
 
 #######
 #M2 R2
@@ -2707,15 +2707,15 @@ mod1table$r2011[20] <-summary(mod2_reg)$r.squared
 #map the predictions
 #aggregate by guid
 m2_agg <- m2_2011[, list(LTPM.m2 = mean(predicted.m2, na.rm = TRUE), lat_aod = lat_aod[1], long_aod = long_aod[1]), by = guid]
-saveRDS(m2_agg, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2011.rds")
+saveRDS(m2_agg, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2011.rds")
 #map the predictions
 ggplot(m2_agg, aes(long_aod,lat_aod, color = LTPM.m2)) + 
   geom_point(size = 3, shape = 15) +  xlab("longitude") + ylab("latitude") + 
   scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(5)) + theme_bw() + ggtitle("Long term predictions")
-ggsave(file="//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
+ggsave(file="/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
 
-saveRDS(mod1table, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2011_p2.rds")
-saveRDS(mod1table, "//media/NAS//Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1tableALL_p2.rds")
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2011_p2.rds")
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1tableALL_p2.rds")
 
 
 keep(mod1table , sure=TRUE) 
