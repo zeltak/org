@@ -25,8 +25,8 @@ mpmg[, bimon := (month + 1) %/% 2]
 #import mop2
 m2_2006<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2006_pred.m2.rds")
 #get names order
-#l=seq(names(m2_2006));names(l)=names(m2_2006);l
-m2_2006s<-m2_2006[,c(1,2,5,7,8,9,56),with=FALSE]
+l=seq(names(m2_2006));names(l)=names(m2_2006);l
+m2_2006s<-m2_2006[,c(1,2,5,7,8,9,52),with=FALSE]
 #remove uneeded files and save
 #merge with mod2 predicted data to create mod2
 setkey(m2_2006s,day, guid)

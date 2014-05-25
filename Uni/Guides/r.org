@@ -5360,7 +5360,6 @@ use the
 #+BEGIN_SRC R
 out.m1 = lmer(m1.formula ,data =  pm10.m1,na.action = na.exclude)
 #+END_SRC
-
 *** extract lme4 object to a table
 
 use the The memisc package which does lme4 tables
@@ -5378,6 +5377,14 @@ ns(date,df=35)+pmnew\_l0+pmnewmayear+temp\_f\_l0+medhhin\_wtd+pctnonwht\_wtd+pct
  you can export that table to lateX with this command:
  toLatex(model1)
  Fore more option see the memsic options HERE:
+
+*** override lmer to give sig levels
+To override lmer to give sig levels
+#+BEGIN_SRC R
+library(lmerTest)
+
+summary(lmer(momwt24 ~ pmpreg + momht + primiparous + momage + mombmiat06 + factor(SES_scored) + factor(educlevels) + (1|firstaodid), data = gestpred))
+#+END_SRC
 
 ** Generalized Linear Models
 *** Intro
@@ -7467,13 +7474,13 @@ pm2009[, .N, by=c("guid","year")]
 #+END_SRC
 **** aggregate observations by station with missing
 #+begin_src R
-#@note-
 #temp readings by station
 temp[,length(na.omit(Temp)),by=list(stn)]
 #temp readings by station and year
 temp[,length(na.omit(Temp)),by=list(stn,year)]
+#@NOTE-gives missing in each stn each year= 0 means no data 365 means full TS@
 #+end_src
-
+@NOTE-gives missing in each stn each year= 0 means no data 365 means full TS@
 *** by statments
 
 #+begin_src R
@@ -7483,6 +7490,19 @@ temp[,length(na.omit(Temp)),by=list(stn,year)]
 by=list(c,stn)
 #+end_src
      
+*** Tips
+**** construct a dataset based on means, SD etc
+#+BEGIN_SRC R
+loclongsummary <- loclong[, list(pmpreg = mean(.SD[day<birthdate,bestpred], na.rm = T), 
+                  pm1styrpp = mean(.SD[day>=birthdate & day<(birthdate + 365),bestpred]),
+                  pm2ndyrpp = mean(.SD[day>=(birthdate + 365) & day<(birthdate +365*2),bestpred]),
+                  pm3rdyrpp = mean(.SD[day>=(birthdate + 365*2) & day<(birthdate + 365*3),bestpred]),
+                 pm3yrspp = mean(.SD[day>=birthdate & day<(birthdate + 365*3),bestpred]),
+                pmbirthtonow = mean(.SD[day>=birthdate,bestpred]),
+                ndaysbirthtonow = nrow(.SD[day>=birthdate])),by=folio]
+
+#+END_SRC
+
 * SQLdf
 ** intro
 *** General
@@ -8194,16 +8214,52 @@ several things to notice.
 use 'org-babel-execute-buffer' or  'org-babel-execute-subtree' 
 ** tangeling
 *** intro
-*** Tangling the document 
-
+*** Tangling the document for selective code blocks 
 Now that we have seen how to instruct org-mode how to produce source code files from our org-mode document, how do we actually tangle the document?
 
-We simply have to call the 'org-babel-tangle function', bound by default to ?C-c C-v C-t?
+We simply have to call the 'org-babel-tangle' function, bound by default to ?C-c C-v C-t?
 
-Org-mode confirms in the minibuffer how many code blocks have been
-tangled, and inspecting the file system should show that your source
-code files have been created. There exists a hook function that will
-run any post-processing programs you have defined, for example, a
-compiler, `R CMD build`, or running `make` with a Makefile, possibly
-itself generated from the org-mode document!
+to do this you will need to have a the tangle switch in each code block 
+#+BEGIN_SRC emacs-lisp :results none
+:tangle yes
 
+;;examples
+:tangle no
+;The default. The code block is not included in the tangled output.
+:tangle yes
+;Include the code block in the tangled output. The output file name is the name of the org file with the extension ‘.org’ replaced by the extension for the block language.
+:tangle filename
+;Include the code block in the tangled output to file ‘filename’. 
+#+END_SRC								    
+								  
+*** Tangeling the full document
+
+use a property drwaer in the top level header (*)
+
+like this:
+
+#+BEGIN_SRC emacs-lisp :results none
+`*` Toplevel
+    :PROPERTIES:
+    :comments: org
+    :tangle:   comments.r
+    :END:
+#+END_SRC
+
+you can specify which type of comments are exported:
+
+#+BEGIN_EXAMPLE
+
+no
+    retains its behavior of not tangling any comments 
+yes
+    retains its behavior of wrapping the code in links back to the original org-mode file 
+link
+    is synonymous with "yes" 
+org
+    does not wrap the code in links back to the original org file, but does include preceding text from the org-mode file as a comment before the code block 
+both
+    turns on both the "link" and "org" options 
+#+END_EXAMPLE
+
+and the output file in the ':tangle' part
