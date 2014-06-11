@@ -96,38 +96,37 @@ saveRDS(clippedaod,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_da
 # saveRDS(ylist[13],"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaodAQ2012.rds")
 # saveRDS(ylist[14],"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaodAQ2013.rds")
 
-
-#old methos (use for lopp above instead)
-dat2000 <- clippedaod[yr == "2000"]
-dat2001 <- clippedaod[yr == "2001"]
-dat2002 <- clippedaod[yr == "2002"]
-dat2003 <- clippedaod[yr == "2003"]
-dat2004 <- clippedaod[yr == "2004"]
-dat2005 <- clippedaod[yr == "2005"]
-dat2006 <- clippedaod[yr == "2006"]
-dat2007 <- clippedaod[yr == "2007"]
-dat2008 <- clippedaod[yr == "2008"]
-dat2009 <- clippedaod[yr == "2009"]
-dat2010 <- clippedaod[yr == "2010"]
-dat2011 <- clippedaod[yr == "2011"]
-dat2012 <- clippedaod[yr == "2012"]
-dat2013 <- clippedaod[yr == "2013"]
-
-
-saveRDS(dat2000,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2000.rds")
-saveRDS(dat2001,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2001.rds")
-saveRDS(dat2002,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2002.rds")
-saveRDS(dat2003,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2003.rds")
-saveRDS(dat2004,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2004.rds")
-saveRDS(dat2005,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2005.rds")
-saveRDS(dat2006,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2006.rds")
-saveRDS(dat2007,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2007.rds")
-saveRDS(dat2008,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2008.rds")
-saveRDS(dat2009,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2009.rds")
-saveRDS(dat2010,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2010.rds")
-saveRDS(dat2011,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2011.rds")
-saveRDS(dat2012,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2012.rds")
-saveRDS(dat2013,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2013.rds")
+# #old methos (use for lopp above instead)
+# dat2000 <- clippedaod[yr == "2000"]
+# dat2001 <- clippedaod[yr == "2001"]
+# dat2002 <- clippedaod[yr == "2002"]
+# dat2003 <- clippedaod[yr == "2003"]
+# dat2004 <- clippedaod[yr == "2004"]
+# dat2005 <- clippedaod[yr == "2005"]
+# dat2006 <- clippedaod[yr == "2006"]
+# dat2007 <- clippedaod[yr == "2007"]
+# dat2008 <- clippedaod[yr == "2008"]
+# dat2009 <- clippedaod[yr == "2009"]
+# dat2010 <- clippedaod[yr == "2010"]
+# dat2011 <- clippedaod[yr == "2011"]
+# dat2012 <- clippedaod[yr == "2012"]
+# dat2013 <- clippedaod[yr == "2013"]
+# 
+# 
+# saveRDS(dat2000,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2000.rds")
+# saveRDS(dat2001,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2001.rds")
+# saveRDS(dat2002,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2002.rds")
+# saveRDS(dat2003,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2003.rds")
+# saveRDS(dat2004,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2004.rds")
+# saveRDS(dat2005,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2005.rds")
+# saveRDS(dat2006,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2006.rds")
+# saveRDS(dat2007,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2007.rds")
+# saveRDS(dat2008,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2008.rds")
+# saveRDS(dat2009,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2009.rds")
+# saveRDS(dat2010,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2010.rds")
+# saveRDS(dat2011,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2011.rds")
+# saveRDS(dat2012,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2012.rds")
+# saveRDS(dat2013,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaod2013.rds")
 
 
 keep(path.data, sure=TRUE) 
@@ -191,40 +190,6 @@ saveRDS(clippedaod,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_da
 clippedaod<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/AOD_allyearsAQ.RDS")
 
 
-######## EDA
-#describe(clippedaod$aod)
-#dat <- dat[AOD <= 1.5]
-###########
-
-
-#old methos (use for lopp above instead)
-dat2002 <- clippedaod[yr == "2002"]
-dat2003 <- clippedaod[yr == "2003"]
-dat2004 <- clippedaod[yr == "2004"]
-dat2005 <- clippedaod[yr == "2005"]
-dat2006 <- clippedaod[yr == "2006"]
-dat2007 <- clippedaod[yr == "2007"]
-dat2008 <- clippedaod[yr == "2008"]
-dat2009 <- clippedaod[yr == "2009"]
-dat2010 <- clippedaod[yr == "2010"]
-dat2011 <- clippedaod[yr == "2011"]
-dat2012 <- clippedaod[yr == "2012"]
-dat2013 <- clippedaod[yr == "2013"]
-
-
-
-saveRDS(dat2002,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaodAQ2002.rds")
-saveRDS(dat2003,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaodAQ2003.rds")
-saveRDS(dat2004,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaodAQ2004.rds")
-saveRDS(dat2005,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaodAQ2005.rds")
-saveRDS(dat2006,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaodAQ2006.rds")
-saveRDS(dat2007,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaodAQ2007.rds")
-saveRDS(dat2008,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaodAQ2008.rds")
-saveRDS(dat2009,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaodAQ2009.rds")
-saveRDS(dat2010,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaodAQ2010.rds")
-saveRDS(dat2011,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaodAQ2011.rds")
-saveRDS(dat2012,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaodAQ2012.rds")
-saveRDS(dat2013,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/allaodAQ2013.rds")
 
 
 

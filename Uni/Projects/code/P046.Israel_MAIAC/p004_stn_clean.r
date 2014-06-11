@@ -377,6 +377,14 @@ saveRDS(J14,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN00
 
 
 
+
+
+
+
+
+
+
+
 ##################################
 #PM25
 ##################################
@@ -389,6 +397,10 @@ PM25[, c := as.numeric(format(day, "%Y")) ]
 PM25[,c("Year","Month","Day","V10","date","X","StationID"):=NULL]
 setnames(PM25,"Y","stn")
 
+
+
+
+
 #add full X,Y values
 setkey(fullxy , stn)
 setkey(PM25, stn)
@@ -398,6 +410,11 @@ PM25[,length(na.omit(PM25)),by=list(stn,c)]
 PM25[, PM25_miss := length(na.omit(PM25)),by=list(stn,c)]
 PM25<-PM25[!is.na(PM25)]
 PM25<-na.omit(PM25)
+
+# PM25[, .N, by=c("stn")] 
+# x5 <- PM25[stn== "AGR"]
+# summary(x5)
+
 
 # import monitor data and spatial merge with nearestbyday()
 source("/home/zeltak/org/files/Uni/Projects/code/P031.MIAC_PM/code_snips/nearestbyday.r")
@@ -542,4 +559,20 @@ J14<-J14[is.na(Dust), Dust:= 0]
 
 saveRDS(J14,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25all.RDS")
 
+#add regions
 
+pm10.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm10all.RDS")
+pm25.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25all.RDS")
+reg<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/IL_reg_accurate.csv")
+
+#pm10
+setkey(pm10.m1 , aodid)
+setkey(reg, aodid)
+jreg10 <- merge(pm10.m1, reg, all.x = T)
+saveRDS(jreg10,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm10all.RDS")
+
+#pm25
+setkey(pm25.m1 , aodid)
+setkey(reg, aodid)
+jreg25 <- merge(pm25.m1, reg, all.x = T)
+saveRDS(jreg25,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25all.RDS")

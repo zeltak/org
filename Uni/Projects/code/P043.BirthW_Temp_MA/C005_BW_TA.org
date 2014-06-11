@@ -1,8 +1,14 @@
 #+TITLE: BW_TA 
 
+* bw-TA analysis
 
-* Session config
-** load library
+    :PROPERTIES:
+    :comments: org
+    :tangle:   comments.r
+    :END:
+
+** Session config
+*** load library
 #+BEGIN_SRC R :session R1  :results silent
 library(lme4)
 library(reshape)
@@ -20,15 +26,15 @@ library(gamm4)
 library(memisc)
 #+END_SRC
 
-** disable sci notations
+*** disable sci notations
 
 #+BEGIN_SRC R :session R1  :results silent
 options(scipen = 99)
 #+END_SRC
 
 
-* imports
-** Import
+** imports
+*** Import
 #+BEGIN_SRC R :session R1  :results silent
 bd<-fread("/media/NAS/Uni/Projects/P043_BirthW_Temp_MA/3.1.11.4.Work/3.Analysis/2.R_analysis/bw_nocesv2.csv")
 #+END_SRC
@@ -151,15 +157,15 @@ names(bd)
 [319] "localpm"
 #+end_example
 
-* fixes 
-
+** fixes 
+*** dates
 #+BEGIN_SRC R :session R1  :results silent
 bd[, day:=as.Date(strptime(date, "%d/%m/%y"))]
 bd$rfpisga[bd$rfpisga== 9] <- NA
 bd$rfpisga[bd$rfpisga== 2] <- 0
 #+END_SRC
 
--aggreagted PM
+*** aggreagted PM
 
 #+BEGIN_SRC R :session R1  :results silent
 bd$tpm270<- bd$pmnewmabirth+bd$localpm
@@ -169,13 +175,22 @@ bd$tpm30<- bd$pmnewmamonth+bd$localpm
 
 #+RESULTS:
 
+*** calcute SGA
 
-* Models
-** Birth weight  
-*** full birth
-**** lm
-***** 270d
-****** paper base model
+#+BEGIN_SRC R
+sgamodel <- lm(birthw ~ges_calc+gende,data =  bd)
+#+END_SRC
+
+#+RESULTS:
+
+
+
+** Models
+*** Birth weight  
+**** full birth
+***** lm
+****** 270d
+******* paper base model
 #+BEGIN_SRC R :session R1  :results output
 bw_full_birth <- lm(birthw ~ IQRfintempmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity,data =  bd)
 summary(bw_full_birth)
@@ -275,7 +290,7 @@ Multiple R-squared:  0.07921,	Adjusted R-squared:  0.07914
 F-statistic:  1179 on 33 and 452262 DF,  p-value: < 0.00000000000000022
 #+end_example
 
-****** DONE base model with PMdata
+******* DONE base model with PMdata
 
 #+BEGIN_SRC R :session R1  :results output
 bw_full_birth <- lm(birthw ~ IQRfintempmabirth+pmnewmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity,data =  bd)
@@ -378,7 +393,7 @@ Multiple R-squared:  0.07923,	Adjusted R-squared:  0.07916
 F-statistic:  1145 on 34 and 452261 DF,  p-value: < 0.00000000000000022
 #+end_example
 
-****** DONE base model with PMdata
+******* DONE base model with PMdata
 
 #+BEGIN_SRC R :session R1  :results output table html
 bw_full_birth <- lm(birthw ~ IQRfintempmabirth+pmnewmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity,data =  bd)
@@ -481,8 +496,8 @@ Multiple R-squared:  0.07923,	Adjusted R-squared:  0.07916
 F-statistic:  1145 on 34 and 452261 DF,  p-value: < 0.00000000000000022
 #+END_HTML
 
-***** 90d
-****** paper
+****** 90d
+******* paper
 #+BEGIN_SRC R :session R1  :results output
 bw_full_3m <- lm(birthw ~ IQRfintempma3month+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity,data =  bd)
 summary(bw_full_3m)
@@ -582,7 +597,7 @@ Multiple R-squared:  0.07919,	Adjusted R-squared:  0.07913
 F-statistic:  1179 on 33 and 452262 DF,  p-value: < 0.00000000000000022
 #+end_example
 
-****** paper with PM
+******* paper with PM
 #+BEGIN_SRC R :session R1  :results output
 bw_full_3m <- lm(birthw ~ IQRfintempma3month+pmnewma3month+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity,data =  bd)
 summary(bw_full_3m)
@@ -684,9 +699,9 @@ Multiple R-squared:  0.0792,	Adjusted R-squared:  0.07913
 F-statistic:  1144 on 34 and 452261 DF,  p-value: < 0.00000000000000022
 #+end_example
 
-**** lmer
-***** 270
-****** NEXT full birth
+***** lmer
+****** 270
+******* NEXT full birth
 #+BEGIN_SRC R :session R1  :results output
 bw_full_birth <- lmer(birthw ~ IQRfintempmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN)+ges_calc+elev+ (1 |FIPS),data =  bd)
 summary(bw_full_birth)
@@ -752,7 +767,7 @@ Use print(...., correlation=TRUE)  or
     vcov(....)	 if you need it
 #+end_example
 
-****** NEXT full birth+pm
+******* NEXT full birth+pm
 
 #+begin_example
   [1] "bthctyn"              "bthctyc"              "sex"                 
@@ -929,8 +944,8 @@ Use print(...., correlation=TRUE)  or
     vcov(....)	 if you need it
 #+end_example
 
-***** 90d
-****** NEXT 90d 
+****** 90d
+******* NEXT 90d 
 
 #+BEGIN_SRC R :session R1  :results output
 bw_full_birth <- lmer(birthw ~ IQRfintempma3month+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN)+ges_calc+elev+(1 |FIPS),data =  bd)
@@ -996,7 +1011,7 @@ Use print(...., correlation=TRUE)  or
     vcov(....)	 if you need it
 #+end_example
 
-****** NEXT 90d+pm
+******* NEXT 90d+pm
 
 #+BEGIN_SRC R :session R1  :results output
 bw_full_birth <- lmer(birthw ~ IQRfintempma3month+pmnewma3month+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN)+ges_calc+elev+(1 |FIPS),data =  bd)
@@ -1064,8 +1079,8 @@ Use print(...., correlation=TRUE)  or
 #+end_example
 
 
-***** 30d
-****** NEXT 30d 
+****** 30d
+******* NEXT 30d 
 
 #+BEGIN_SRC R :session R1  :results output
 bw_full_birth <- lmer(birthw ~ IQRfintempmamonth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN)+ges_calc+elev+(1 |FIPS),data =  bd)
@@ -1131,7 +1146,7 @@ Use print(...., correlation=TRUE)  or
     vcov(....)	 if you need it
 #+end_example
 
-****** NEXT 30d
+******* NEXT 30d
 
 #+BEGIN_SRC R :session R1  :results output
 bw_full_birth <- lmer(birthw ~ IQRfintempmamonth+pmnewmamonth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN)+ges_calc+elev+(1 |FIPS),data =  bd)
@@ -1198,8 +1213,8 @@ Use print(...., correlation=TRUE)  or
     vcov(....)	 if you need it
 #+end_example
 
-***** 14d
-****** NEXT full birth 
+****** 14d
+******* NEXT full birth 
 
 #+BEGIN_SRC R :session R1  :results output
 bw_full_birth <- lmer(birthw ~ IQRfintempmaweek+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN)+ges_calc+elev+(1 |FIPS),data =  bd)
@@ -1271,8 +1286,8 @@ ICAM_restable$beta[1] <- bw_full_birth$coef$fixed[2]  #extract Betas
 #+END_SRC
 
 
-**** lme
-***** NEXT 270
+***** lme
+****** NEXT 270
 
 #+BEGIN_SRC R :session R1  :results output
 bw_full_birth <- lme(birthw ~ IQRfintempmabirth+pmnewmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN)+ pcthstr00,random=~1|FIPS,na.action=na.omit,
@@ -1753,10 +1768,10 @@ Number of Observations: 452296
 Number of Groups: 1358
 #+end_example
 
-** SGA (NSGA) 
-*** logisitc
-**** 270d 
-***** base
+*** SGA (NSGA) 
+**** logisitc
+***** 270d 
+****** base
 #+BEGIN_SRC R :session R1  :results output
 log.sga.270 <- glm(NSGA ~ IQRfintempmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity,data=bd,family=binomial)
 summary(log.sga.270)
@@ -1860,7 +1875,7 @@ AIC: 237253
 Number of Fisher Scoring iterations: 5
 #+end_example
 
-***** paper with PM
+****** paper with PM
 #+BEGIN_SRC R :session R1  :results output
 log.sga.270 <- glm(NSGA ~ IQRfintempmabirth+pmnewmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+f_age_centered+f_age_centered_sq,data=bd,family=binomial)
 summary(log.sga.270)
@@ -2084,8 +2099,8 @@ AIC: 200067
 Number of Fisher Scoring iterations: 5
 #+end_example
 
-**** 90d   
-***** paper
+***** 90d   
+****** paper
 #+BEGIN_SRC R :session R1  :results output 
 sga.90<-glm(NSGA ~ IQRfintempma3month+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN),family=binomial, data =  bd)
 summary(sga.90)
@@ -2195,7 +2210,7 @@ AIC: 231136
 Number of Fisher Scoring iterations: 5
 #+end_example
 
-***** paper PM
+****** paper PM
 #+BEGIN_SRC R :session R1  :results output
 log.sga.90 <- glm(NSGA ~ IQRfintempma3month+pmnewma3month++sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN)+f_age_centered+f_age_centered_sq,data=bd,family=binomial)
 summary(log.sga.90)
@@ -2310,8 +2325,8 @@ AIC: 200077
 Number of Fisher Scoring iterations: 5
 #+end_example
 
-**** 30d   
-***** paper
+***** 30d   
+****** paper
 #+BEGIN_SRC R :session R1  :results output 
 sga.30<-glm(NSGA ~ IQRfintempmamonth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN),family=binomial, data =  bd)
 summary(sga.30)
@@ -2421,7 +2436,7 @@ AIC: 231138
 Number of Fisher Scoring iterations: 5
 #+end_example
 
-***** paper PM
+****** paper PM
 #+BEGIN_SRC R :session R1  :results output
 log.sga.30 <- glm(NSGA ~ IQRfintempmamonth+pmnewmamonth++sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN)+f_age_centered+f_age_centered_sq,data=bd,family=binomial)
 summary(log.sga.30)
@@ -2536,8 +2551,8 @@ AIC: 200079
 Number of Fisher Scoring iterations: 5
 #+end_example
 
-*** mixed model
-**** NEXT 270d 
+**** mixed model
+***** NEXT 270d 
 #+BEGIN_SRC R :session R1  :results output 
 sga.270<-(glmmPQL(NSGA ~ IQRfintempmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN)+elev, random = ~ 1 | FIPS ,family=binomial, data =  bd))
 
@@ -2867,7 +2882,7 @@ as.factor(FRN)1        1.036481e-01
 as.factor(FRN)2        1.100507e-04
 #+end_example
 
-**** NEXT 270d+PM
+***** NEXT 270d+PM
 #+BEGIN_SRC R :session R1  :results output 
 sga.270<-(glmmPQL(NSGA ~ IQRfintempmabirth+pmnewmabirth+ +sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN), random = ~ 1 | FIPS ,family=binomial, data =  bd))
 summary(sga.270 )$tTable
@@ -3036,7 +3051,7 @@ as.factor(FRN)1        1.036481e-01
 as.factor(FRN)2        1.100507e-04
 #+end_example
 
-**** NEXT full birth NCDC
+***** NEXT full birth NCDC
 
 #+BEGIN_SRC R :session R1  :results output 
 sga.270<-(glmmPQL(NSGA ~ IQRtncdcmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN), random = ~ 1 | FIPS ,family=binomial, data =  bd))
@@ -3125,7 +3140,7 @@ as.factor(FRN)1        9.920144e-02
 as.factor(FRN)2        9.855735e-05
 #+end_example
 
-**** 90d   
+***** 90d   
 
 #+BEGIN_SRC R :session R1  :results output 
 sga.90<-(glmmPQL(NSGA ~ IQRfintempma3month+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN)+elev, random = ~ 1 | tract ,family=binomial, data =  bd))
@@ -3302,7 +3317,7 @@ as.factor(FRN)2        7.392507e-05
 #+end_example
 
 
-****** best so far
+******* best so far
 #+begin_example
 iteration 1
 iteration 2
@@ -3382,7 +3397,7 @@ as.factor(FRN)1        1.027074e-01
 as.factor(FRN)2        1.083273e-04
 #+end_example
 
-**** 90d/pm  
+***** 90d/pm  
 #+BEGIN_SRC R :session R1  :results output 
 sga.90<-(glmmPQL(NSGA ~ IQRfintempma3month+pmnewma3month+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN), random = ~ 1 | FIPS ,family=binomial, data =  bd))
 
@@ -3472,7 +3487,7 @@ as.factor(FRN)1        9.810855e-02
 as.factor(FRN)2        9.601352e-05
 #+end_example
 
-**** 90d NCDC   
+***** 90d NCDC   
 
 #+BEGIN_SRC R :session R1  :results output 
 sga.90<-(glmmPQL(NSGA ~ IQRtncdcma3month+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN), random = ~ 1 | tract ,family=binomial, data =  bd))
@@ -3562,7 +3577,7 @@ as.factor(FRN)1        8.860856e-02
 as.factor(FRN)2        6.451085e-05
 #+end_example
 
-**** 30d 
+***** 30d 
 #+BEGIN_SRC R :session R1  :results output 
 sga.30<-(glmmPQL(NSGA ~ IQRfintempmamonth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN), random = ~ 1 | FIPS ,family=binomial, data =  bd))
 
@@ -3657,7 +3672,7 @@ as.factor(FRN)2        9.463879e-05
 
 
 
-**** 3d 
+***** 3d 
 #+BEGIN_SRC R :session R1  :results output 
 sga.3<-(glmmPQL(NSGA ~ IQRfintempma3 +sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN), random = ~ 1 | FIPS ,family=binomial, data =  bd))
 
@@ -3745,7 +3760,7 @@ as.factor(FRN)1        9.810092e-02
 as.factor(FRN)2        9.601665e-05
 #+end_example
 
-**** 1d 
+***** 1d 
 #+BEGIN_SRC R :session R1  :results output 
 sga.1<-(glmmPQL(NSGA ~ IQRfintemp_l1 +sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN), random = ~ 1 | FIPS ,family=binomial, data =  bd))
 
@@ -3833,9 +3848,9 @@ as.factor(FRN)1        1.064887e-01
 as.factor(FRN)2        1.137929e-04
 #+end_example
 
-** LBW
-*** logisitc
-**** fullbirth
+*** LBW
+**** logisitc
+***** fullbirth
 #+BEGIN_SRC R :session R1  :results output
   log.lbw.270 <- glm(lowbw ~ IQRfintempmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN),data=bd,family=binomial)
 #+END_SRC
@@ -3950,7 +3965,7 @@ AIC: 146172
 Number of Fisher Scoring iterations: 7
 #+end_example
 
-**** 90d
+***** 90d
 #+BEGIN_SRC R :session R1  :results output
 log.lbw.90 <- glm(lowbw ~ IQRfintempma3month+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN)+f_age_centered+f_age_centered_sq,data=bd,family=binomial)
 summary(log.lbw.90)
@@ -4063,7 +4078,7 @@ AIC: 124124
 Number of Fisher Scoring iterations: 7
 #+end_example
 
-**** 30d
+***** 30d
 #+BEGIN_SRC R :session R1  :results output
 log.lbw.30 <- glm(lowbw ~ IQRfintempmamonth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN)+f_age_centered+f_age_centered_sq,data=bd,family=binomial)
 summary(log.lbw.30)
@@ -4175,8 +4190,254 @@ AIC: 124124
 
 Number of Fisher Scoring iterations: 7
 #+end_example
-*** mixed model
-**** 270d 
+**** mixed model
+***** 270d+PM							  :CANCELLED:
+#+BEGIN_SRC R :session R1  :results output 
+lbw.270<-(glmmPQL(lowbw ~ IQRfintempmabirth+pmnewmabirth+ +sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN), random = ~ 1 | FIPS ,family=binomial, data =  bd))
+summary(lbw.270 )$tTable
+
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+iteration 1
+                                Value      Std.Error     DF     t-value
+(Intercept)           -3.614916922248 0.433509984834 450516 -8.33871664
+IQRfintempmabirth      0.032987840268 0.055323754536 450516  0.59626901
+pmnewmabirth          -0.015232708582 0.032931334760 450516 -0.46255971
+sinetime               0.024297422786 0.043559110940 450516  0.55780346
+costime                0.003359623788 0.051369421624 450516  0.06540124
+age_centered           0.007748416513 0.005485114954 450516  1.41262609
+age_centered_sq        0.002043432496 0.000588958418 450516  3.46957006
+cig_preg               0.048511255408 0.010786520865 450516  4.49739596
+cig_pre                0.010612222717 0.006869680451 450516  1.54479132
+med_income            -0.000003499034 0.000001707106   1355 -2.04968779
+p_ospace              -0.001346295937 0.002688750921   1355 -0.50071426
+gender                 0.189360823946 0.054739086593 450516  3.45933474
+prev_400              -2.008221862870 0.869792926374 450516 -2.30885053
+diab                   0.095318588485 0.142511714791 450516  0.66884739
+hyper                  0.906290560462 0.115976128067 450516  7.81445782
+lungd                  0.379645305558 0.124502008150 450516  3.04931070
+diab_other             0.341992338018 0.269680071203 450516  1.26814094
+prevpret               1.466068537292 0.157888856018 450516  9.28544657
+as.factor(kess)2       0.259458994154 0.067293055656 450516  3.85565779
+as.factor(kess)3       0.294315436817 0.130446978356 450516  2.25620739
+as.factor(kess)4       0.796228881277 0.278145329256 450516  2.86263617
+as.factor(kess)5       1.379349499956 0.320545863389 450516  4.30312681
+as.factor(MRN)1        0.499356520293 0.126242749672 450516  3.95552633
+as.factor(MRN)2        0.230711594812 0.093937632568 450516  2.45600819
+as.factor(edu_group)2  0.107127041217 0.148159442094 450516  0.72305241
+as.factor(edu_group)3 -0.059939817429 0.159318302066 450516 -0.37622682
+as.factor(edu_group)4 -0.162506946673 0.162974805320 450516 -0.99712926
+as.factor(byob)2001    0.076847135498 0.133224192542 450516  0.57682568
+as.factor(byob)2002    0.077573011879 0.127261114218 450516  0.60955786
+as.factor(byob)2003    0.130976262560 0.135013302846 450516  0.97009894
+as.factor(byob)2005    0.181145835933 0.132797019181 450516  1.36408059
+as.factor(byob)2006    0.152047335396 0.113846668032 450516  1.33554489
+as.factor(byob)2007    0.164191071706 0.116135931041 450516  1.41378357
+as.factor(byob)2008    0.119181423977 0.114790721218 450516  1.03824963
+parity                -0.105531923904 0.029604362586 450516 -3.56474231
+as.factor(FRN)1        0.106680498933 0.133567586893 450516  0.79870050
+as.factor(FRN)2        0.230275110176 0.091082653450 450516  2.52819940
+                                           p-value
+(Intercept)           0.00000000000000007530866250
+IQRfintempmabirth     0.55099583081182090804617246
+pmnewmabirth          0.64368021864842561718944580
+sinetime              0.57697887710650752612906444
+costime               0.94785456714253124577140852
+age_centered          0.15776638320153366090714542
+age_centered_sq       0.00052134080442258498664515
+cig_preg              0.00000688079385917123290177
+cig_pre               0.12239745042510057071449836
+med_income            0.04058705800654563433660371
+p_ospace              0.61665355240011621162921074
+gender                0.00054156151377080148385385
+prev_400              0.02095232694643197127182255
+diab                  0.50359317573690676184128279
+hyper                 0.00000000000000553181722008
+lungd                 0.00229380438746118811565999
+diab_other            0.20474828019830540459800261
+prevpret              0.00000000000000000001617114
+as.factor(kess)2      0.00011543487348023247272919
+as.factor(kess)3      0.02405812317523681881370479
+as.factor(kess)4      0.00420152047024715657314031
+as.factor(kess)5      0.00001684398343634829788820
+as.factor(MRN)1       0.00007637800954899959108343
+as.factor(MRN)2       0.01404937028208181129529386
+as.factor(edu_group)2 0.46964806286250659894676573
+as.factor(edu_group)3 0.70674845874429603753696938
+as.factor(edu_group)4 0.31870230866187798657307439
+as.factor(byob)2001   0.56405750804258791841760967
+as.factor(byob)2002   0.54215504392536539857161415
+as.factor(byob)2003   0.33199769598155093319746811
+as.factor(byob)2005   0.17254288521470997896933852
+as.factor(byob)2006   0.18169874909628483394818943
+as.factor(byob)2007   0.15742614876559229974972709
+as.factor(byob)2008   0.29915440893063993677003509
+parity                0.00036425149417192490388165
+as.factor(FRN)1       0.42446451567843401786461754
+as.factor(FRN)2       0.01146526022722741018633474
+#+end_example
+
+
+***** 270d 
+#+BEGIN_SRC R :session R1  :results output 
+  lbw.270<-(glmmPQL(lowbw ~ IQRfintempmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+gender+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN)+elev, random = ~ 1 | FIPS ,family=binomial, data =  bd))
+  summary(lbw.270)$tTable
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+iteration 1
+                               Value    Std.Error     DF     t-value
+(Intercept)           -3.97519756016 0.2885282983 450519 -13.7774963
+IQRfintempmabirth      0.04684976099 0.0503042698 450519   0.9313277
+sinetime               0.03106123602 0.0391511713 450519   0.7933667
+costime               -0.00518272611 0.0464703730 450519  -0.1115275
+age_centered           0.00540996439 0.0048291339 450519   1.1202763
+age_centered_sq        0.00197541490 0.0005255585 450519   3.7586963
+cig_preg               0.04876449714 0.0096310678 450519   5.0632493
+cig_pre                0.00734495146 0.0060896499 450519   1.2061369
+gender                 0.18968092980 0.0488338808 450519   3.8842076
+diab                   0.10425997544 0.1269967876 450519   0.8209655
+hyper                  0.90919839149 0.1033867903 450519   8.7941447
+lungd                  0.41185344090 0.1108064066 450519   3.7168739
+diab_other             0.34653218968 0.2405414489 450519   1.4406340
+prevpret               1.46156026809 0.1406441068 450519  10.3919055
+as.factor(kess)2       0.27085935493 0.0600067024 450519   4.5138184
+as.factor(kess)3       0.31657899873 0.1162629133 450519   2.7229577
+as.factor(kess)4       0.85628335682 0.2475586730 450519   3.4589108
+as.factor(kess)5       1.38592369586 0.2855983476 450519   4.8527021
+as.factor(edu_group)2  0.08465245623 0.1317065145 450519   0.6427355
+as.factor(edu_group)3 -0.10103040290 0.1411785717 450519  -0.7156214
+as.factor(edu_group)4 -0.25328338929 0.1428667623 450519  -1.7728643
+as.factor(byob)2001    0.04828510213 0.1009870192 450519   0.4781318
+as.factor(byob)2002    0.04873453029 0.1012745098 450519   0.4812122
+as.factor(byob)2003    0.11236934411 0.1045569025 450519   1.0747195
+as.factor(byob)2005    0.18467661534 0.1129957881 450519   1.6343672
+as.factor(byob)2006    0.14696142154 0.1010459016 450519   1.4544026
+as.factor(byob)2007    0.16110653372 0.1032849340 450519   1.5598261
+as.factor(byob)2008    0.11931802877 0.1017857158 450519   1.1722473
+parity                -0.10135787509 0.0263882567 450519  -3.8410220
+as.factor(FRN)1        0.50610738978 0.0852201154 450519   5.9388254
+as.factor(FRN)2        0.44131248158 0.0593422943 450519   7.4367277
+elev                   0.00007134583 0.0003762468 450519   0.1896251
+                                                                  p-value
+(Intercept)           0.0000000000000000000000000000000000000000003552414
+IQRfintempmabirth     0.3516845652530127264157044919556938111782073974609
+sinetime              0.4275646168795407264795471746765542775392532348633
+costime               0.9111980823057754808047548067406751215457916259766
+age_centered          0.2625966261131948975560135295381769537925720214844
+age_centered_sq       0.0001708225358897841794549726790464205805619712919
+cig_preg              0.0000004123321952525384348062686881014604622919251
+cig_pre               0.2277653447336662473343693591232295148074626922607
+gender                0.0001026788220260749711710071552239753600588301197
+diab                  0.4116663801111657416953448773710988461971282958984
+hyper                 0.0000000000000000014463323039743609982552240961252
+lungd                 0.0002017274356478585418516596972082766114908736199
+diab_other            0.1496888046936572236322859907886595465242862701416
+prevpret              0.0000000000000000000000002716906178080739695850634
+as.factor(kess)2      0.0000063686838567710562041923431919610010254473309
+as.factor(kess)3      0.0064702825295921539278110046211622830014675855637
+as.factor(kess)4      0.0005424146878153978052275463461739946069428697228
+as.factor(kess)5      0.0000012183119458541015130598498747427349542249431
+as.factor(edu_group)2 0.5203960503685078897717630752595141530036926269531
+as.factor(edu_group)3 0.4742255452703149076754129964683670550584793090820
+as.factor(edu_group)4 0.0762518632922813965890895815391559153795242309570
+as.factor(byob)2001   0.6325566540252653968678941964753903448581695556641
+as.factor(byob)2002   0.6303659200907913984224251180421561002731323242188
+as.factor(byob)2003   0.2825008969214508058875878759863553568720817565918
+as.factor(byob)2005   0.1021824596511739235982219042853103019297122955322
+as.factor(byob)2006   0.1458354176366385701602013114097644574940204620361
+as.factor(byob)2007   0.1188016888701592110866300799898453988134860992432
+as.factor(byob)2008   0.2410984098485901006014842096192296594381332397461
+parity                0.0001225398832017665911187781491165083025407511741
+as.factor(FRN)1       0.0000000028728064771083583134924615540067502350574
+as.factor(FRN)2       0.0000000000001033916318629756667492963712120966802
+elev                  0.8496030261329481358956172698526643216609954833984
+#+end_example
+
+
+b
+#+begin_example
+iteration 1
+                                Value      Std.Error     DF     t-value
+(Intercept)           -3.748083478569 0.317137541220 450517 -11.8184793
+IQRfintempmabirth      0.027764878293 0.052880207408 450517   0.5250524
+sinetime               0.024005678229 0.042568671176 450517   0.5639283
+costime                0.005818802181 0.049941983173 450517   0.1165112
+age_centered           0.007633911768 0.005359879146 450517   1.4242694
+age_centered_sq        0.002043051085 0.000576061121 450517   3.5465874
+cig_preg               0.048507938511 0.010549357882 450517   4.5981887
+cig_pre                0.010651650517 0.006718221657 450517   1.5854866
+med_income            -0.000003429154 0.000001662529   1355  -2.0626133
+p_ospace              -0.001290648204 0.002625011750   1355  -0.4916733
+gender                 0.189346730591 0.053540355513 450517   3.5365236
+prev_400              -2.007202870962 0.850757617817 450517  -2.3593123
+diab                   0.095799857423 0.139399728930 450517   0.6872313
+hyper                  0.906827821855 0.113427778946 450517   7.9947596
+lungd                  0.376414243047 0.121581722489 450517   3.0959772
+diab_other             0.340587996316 0.263769991959 450517   1.2912310
+prevpret               1.467174886061 0.154409907996 450517   9.5018183
+as.factor(kess)2       0.259569712741 0.065821065614 450517   3.9435659
+as.factor(kess)3       0.293908791136 0.127585605861 450517   2.3036203
+as.factor(kess)4       0.792973984691 0.271975485314 450517   2.9156083
+as.factor(kess)5       1.377626411796 0.313518879884 450517   4.3940780
+as.factor(MRN)1        0.496083137438 0.123279135602 450517   4.0240640
+as.factor(MRN)2        0.227832849970 0.091696719215 450517   2.4846347
+as.factor(edu_group)2  0.109269756614 0.144841531861 450517   0.7544090
+as.factor(edu_group)3 -0.057987795612 0.155771567068 450517  -0.3722617
+as.factor(edu_group)4 -0.161718302429 0.159398457457 450517  -1.0145537
+as.factor(byob)2001    0.044389892010 0.110708955626 450517   0.4009603
+as.factor(byob)2002    0.051017023587 0.111037800554 450517   0.4594564
+as.factor(byob)2003    0.099817380357 0.114418111162 450517   0.8723914
+as.factor(byob)2005    0.162071263043 0.123543521493 450517   1.3118556
+as.factor(byob)2006    0.146503576016 0.110745166175 450517   1.3228891
+as.factor(byob)2007    0.168494263555 0.113241852529 450517   1.4879151
+as.factor(byob)2008    0.113396151760 0.111608983888 450517   1.0160128
+parity                -0.105132607438 0.028941807166 450517  -3.6325516
+as.factor(FRN)1        0.105154143666 0.130595323586 450517   0.8051907
+as.factor(FRN)2        0.228746124921 0.089046989084 450517   2.5688249
+                                                       p-value
+(Intercept)           0.00000000000000000000000000000003167628
+IQRfintempmabirth     0.59954704304729777852855931996600702405
+sinetime              0.57280321223169983202438970693037845194
+costime               0.90724743374784166949353902964503504336
+age_centered          0.15436919925491238148040906708047259599
+age_centered_sq       0.00039029492147991734149470310910601256
+cig_preg              0.00000426295415868703904621953015841029
+cig_pre               0.11285651743761587750825015064037870616
+med_income            0.03933960636190163978609390937890566420
+p_ospace              0.62302994763634012009845264401519671082
+gender                0.00040547096999694274546341410392358284
+prev_400              0.01830926698598513494009587532218574779
+diab                  0.49193733471286804626032562737236730754
+hyper                 0.00000000000000130130748425984188521995
+lungd                 0.00196177462832588947808099000269521639
+diab_other            0.19662424351081964069010155071737244725
+prevpret              0.00000000000000000000207212482627793875
+as.factor(kess)2      0.00008029103471549186850191037745361200
+as.factor(kess)3      0.02124442047440461278640100317716132849
+as.factor(kess)4      0.00355013355002331901233425526243081549
+as.factor(kess)5      0.00001112692289152827947846212397475796
+as.factor(MRN)1       0.00005721168045945657462019243166828630
+as.factor(MRN)2       0.01296880397939363833981207818624170613
+as.factor(edu_group)2 0.45060405754634258457258511043619364500
+as.factor(edu_group)3 0.70969815215983067524518901336705312133
+as.factor(edu_group)4 0.31031914124592108183975369684048928320
+as.factor(byob)2001   0.68844957017610597382883952377596870065
+as.factor(byob)2002   0.64590670571030084357033729247632436454
+as.factor(byob)2003   0.38299533556503539966087146240170113742
+as.factor(byob)2005   0.18956952238866089932578518073569284752
+as.factor(byob)2006   0.18587292369867214336665028895367868245
+as.factor(byob)2007   0.13677398201195772875493616993480827659
+as.factor(byob)2008   0.30962385592018859536977970492444001138
+parity                0.00028066358461818709160023876947320787
+as.factor(FRN)1       0.42071005113294590582739829187630675733
+as.factor(FRN)2       0.01020471871775891631317634278275363613
+#+end_example
+
+***** 270d+PM 
 #+BEGIN_SRC R :session R1  :results output 
   lbw.270<-(glmmPQL(lowbw ~ IQRfintempmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+gender+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN)+elev, random = ~ 1 | FIPS ,family=binomial, data =  bd))
   summary(lbw.270)$tTable
@@ -4334,7 +4595,7 @@ as.factor(FRN)2       0.01020471871775891631317634278275363613
 #+end_example
 
 
-**** 90d   
+***** 90d   
 #+BEGIN_SRC R :session R1  :results output 
 lbw.90<-(glmmPQL(lowbw ~ IQRfintempma3month+ sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+elev+ges_calc, random = ~ 1 | FIPS ,family=binomial, data =  bd))
 summary(lbw.90)$tTable
@@ -4415,7 +4676,7 @@ elev                   7.528848e-01
 ges_calc              4.711225e-109
 #+end_example
 
-**** 30d 
+***** 30d 
 #+BEGIN_SRC R :session R1  :results output 
 lbw.30<-(glmmPQL(lowbw ~ pmnewmabirthi+IQfintempmamonth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+med_income+p_ospace+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity, random = ~ 1 | FIPS ,family=binomial, data =  bd))
 
@@ -4507,7 +4768,7 @@ parity                0.000588730983618195556628105
 
 
 
-* CI
+** CI
 
 #+BEGIN_SRC R
 ICAM_restable$beta[1] <- mlag001$coef$fixed[2]  #extract Betas
