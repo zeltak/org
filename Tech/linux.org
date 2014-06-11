@@ -12773,10 +12773,8 @@ you can issue a SIGUSR1 with
 
 #+BEGIN_SRC sh
 kill -10 PID
-
 ###or better yet
 pkill -USR1 -x sxhkd
-
 #+END_SRC
 
 or using htop
@@ -17391,7 +17389,8 @@ server
 *** Cantata
 **** Manual
 See file:/home/zeltak/org/attach/files_2013/Cantata_Readme.txt 
-*** Look and feel
+
+**** Look and feel
 **** Show only lyrics
 drag the play queue all the way to the left untill cantata auto resizes the info pane to incorprate all 2 views into one. then you can choose the bottom selector that appears
 
@@ -17399,12 +17398,16 @@ drag the play queue all the way to the left untill cantata auto resizes the info
 #+attr_html: :width 300px
 
  [[~/org/attach/images_2013//screenshot_2013-11-10_08:53:08.png]]
-*** Options
+**** Options
 **** Add local file play
 -make sure the http is running
 -then just drag files to Cantata or just "open with cantata" files from any FM
+**** start cantata in debug mode
+     #+NAME: 
+     #+BEGIN_SRC sh
+CANTATA_DEBUG=512 cantata
+     #+END_SRC
 *** amarok
-
 **** tips
 
 *fix sound issues amarok4
@@ -18589,9 +18592,9 @@ alias badd='sed "s:/home/zeltak/music/::" | sed "s/ /\ /g" | mpc add'
 beet ls -ap 'a_query' | badd
 #+end_src
 **** Cookbook
+***** adding 
 beet list -a added:="last 10 days" 
 beet ls -a added:2014-02
- 
 *** Picard
 **** Basic tagging
 
@@ -20762,6 +20765,11 @@ the
 you need to have checked the "global program" option for the file to run,If not, worker will try to start ./APP (₆In example₆./vlc)
 **** fonts
 a good tiny font for the button bar is ProggyTiny (part of proggy fonts): https://aur.archlinux.org/packages/proggyfonts/ 
+**** find version for AUR
+check this link
+
+http://www.boomerangsworld.de/cms/worker/downloads/
+
 *** krusader
 
 **** tips
@@ -33429,7 +33437,12 @@ editor of your choice.
 full path to the text editor of your choice. Save, and from now on
 launching visudo with gksu visudo for Ubuntu; kdesu visudo for Kubuntu
 or sudo visudo in the terminal will now open with your chosen editor.
-
+*** kill
+**** send usersig kill (SIGUSR1)
+     #+NAME: 
+     #+BEGIN_SRC sh
+kill -10 1140  
+     #+END_SRC 
 *** cron
 
 **** intro
@@ -36078,7 +36091,6 @@ ifconfig wlan0| awk 'NR==2 {print $2}'| awk -F: '{print $2}'
  ifconfig eth0| awk 'NR==2 {print $2}'| awk -F: '{print $2}'
 
 ** files and directories
-
 *** tips
 Find and replace Files/Folder Tricks
 
@@ -36261,30 +36273,16 @@ input is not a terminal.
  filename The name of the file you want to move directory - The
 directory of were you want the file to go.
 
-*** archive (tar)
+*** compress/archive/zip 
+**** compress all files in a directory seperatly
+Individually compress each file in a directory
 
-*Tar Command
-*
- tar's basic syntax is
- tar option(s) archive name file name(s)
- Creating a tar file:
- tar -cvvf file.tar myfile.txt
- In the above example the system would create a tar named file.tar in
-the directory you currently are in. Wildcards could also be used in this
-command, for example:
- tar -cvvf file.tar *.txt
- would compress all txt files in the current directory.
- tar -cvvf home.tar home/
- In the above example command the system would create a tar file named
-home.tar in the directory you currently are in of the home directory.
- Extracting the files from a tar file:
- tar -xvvf myfile.tar
- In the above example command the system would uncompress (untar)
-the myfile.tar file in the current directory.
- tar -xvvzf myfile.tar.gz
- In the above example command the system would uncompress (untar)
-the myfile.tar.gz file in the current directory.
-
+#+NAME: 
+#+BEGIN_SRC sh
+gzip *
+#you can also use it recursivly
+gzip -r .
+#+END_SRC
 *** list (ls)
 
 **** general
@@ -37159,7 +37157,6 @@ the best way to do that would be this:
  su zeltak
 
 *** installations
-
 **** apt
 
 ***** install
@@ -37648,7 +37645,6 @@ manager)
 just shutting down the operating system)
 
 *** disk utils
-
 **** hdparm
 
 *check which hard drive (physical) is a /dev/Device
@@ -38123,7 +38119,7 @@ seconds), you would type:
  Command to suspend computer from CLI*
  sudo /etc/acpi/sleep.sh
 
-*** create boot up disk from ISO					:Fav:
+*** create boot up disk from ISO (using dd) 				:Fav:
 
 Use the dd command
 

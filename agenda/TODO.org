@@ -416,7 +416,81 @@ add reload all tabs
 keybind to quickly enable/disable cvim
 ** Rasi
 *** ask about replay gain:
-it lowers voulme for all tracks alot, without replay gain most track have higher colume output 
+it lowers voulme for all tracks alot, without replay gain most track have higher colume output
+** btsync
+WebGUI can be accessed at http://localhost:8888
+
+  Running btsync system instance (will use dedicated btsync:btsync account):
+
+        To reload system systemd modules, execute
+
+                systemctl daemon-reload
+
+        To start btsync, execute:
+
+                systemctl start btsync
+
+        To autostart btsync on system start, execute
+
+                systemctl enable btsync
+
+  Running btsync user instance (will used current user account):
+
+        To reload user systemd modules, execute
+
+                systemctl --user daemon-reload
+
+        To start btsync manually, execute:
+
+                systemctl --user start btsync
+
+        To autostart btsync on user login, execute
+
+                systemctl --user enable btsync
+
+
+(1/1) installing btsync-gui                                                                                            [#######################################################################] 100%
+# [NOTE! ] ###########################################################
+The btsync-gui is an integrated system that manages the btsync process
+and its configuration. This installer detected the following btsync
+services are currently enabled:
+
+  * btsync@zeltak.service 
+
+If you want to use the btsync-gui as your preferred personal btsync
+application, you should perform the following steps:
+
+  1. Stop personal btsync service(s)
+
+     systemctl stop btsync@zeltak.service 
+
+  2. Disable auto starting btsync service(s)
+
+     systemctl disable btsync@zeltak.service 
+
+  3. Migrate the internal database of your btsync service to the
+     where btsync-gui expects to find it, btsync-gui expects it in
+     ~/.btsync
+     You can find the current location of your btsync database in the
+     configuration file of your current btsync service by checking the
+     "storage_path" parameter.
+
+Please take in to account that btsync-gui makes the btsync web UI
+inaccessible (for security reasons) by default and binds the web UI
+interface to 127.0.0.1 using internal random credentials at each
+start. If you do not want this behaviour, please execute this command
+before starting btsync-gui:
+
+btsync-gui —webui —username <yourpreferredname> —password <yourpreferredpwd> —bindui all —savedefaults
+
+This command persistently configures btsync-gui to enable the web UI,
+binding it to all adapters and configured to use the supplied
+credentials for accessing the web UI.
+######################################################################
+
+
+
+ 
 * Home
 ** el al frequent flyer
 ** diet
