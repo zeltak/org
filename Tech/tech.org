@@ -5712,6 +5712,11 @@ help me here.
 firmware into my Belkin router. Its out of the box support for 3G/UMTS
 actually surprised me. Samba support is also great. Great going guys!!!!
 
+**** comcast WAN
+
+*Use this setup:*
+ [[tech_files/img/Image_Gm89GZ8OCwKXLPdOKCf0fw_0001.png]]
+
 **** Static DHCP
 
 Configuration
@@ -5780,7 +5785,7 @@ Log in to the DD-WRT router. Open a browser and enter your router's IP address, 
 Click "Administration."
 Click "Keep Alive." Click "Enable" next to "Schedule Reboot."
 Choose either the "Interval" or the "Set time" you want to reboot.
-**** DNSMasq Local Network ('sync' dynamic IP/local IP)
+**** DNSMasq Local Network ('symc' dynamic IP/local IP)
 
 **Warning** you must reboot the device before you see the effects (IE
 after you finish all the configs)
@@ -5806,6 +5811,43 @@ to point to.
  If your devices don't see the changes after they've been made you may
 need to try restarting them since that is often the simplest way to
 clear the DNS cache.
+*** current tapouch 7 setup 12.6.2014
+the model (bezeq) is in the power closet and acts as a dialer with the following setup and using the `10.0.0.X` network subsystem 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-06-12 16:33:15
+#+attr_html: :width 300px
+[[/home/zeltak/org/attach/images_2014/screenshot_2014-06-12_16:33:15.png]]
+
+Interface Description Type Vlan802.1p VlanMuxId	Igmp NAT Firewall IPv4	IPv6 Mld Remove Edit	Action
+ptm0.2	br_0_1_1	Bridge	N/A	N/A	 Disabled	 Disabled	 Disabled	 Enabled	 Enabled	 Disabled
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-06-12 18:05:24
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-06-12_18:05:24.png]]
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-06-12 18:05:40
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-06-12_18:05:40.png]]
+
+press next in all other screens
+
+in the LAN window enter the following
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-06-12 19:00:27
+#+attr_html: :width 300px
+[[/home/zeltak/org/attach/images_2014/screenshot_2014-06-12_19:00:27.png]]
+
+@note- make sure you have DHCP working and define the DNS servers.@
+
+in the wireless router (dd-wrt) make sure WAN connections and DHCP are Disabled
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-06-12 21:36:53
+#+attr_html: :width 300px
+[[/home/zeltak/org/attach/images_2014/screenshot_2014-06-12_21:36:53.png]]
+
 
 ** Apple
 
