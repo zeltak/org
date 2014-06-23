@@ -5543,46 +5543,6 @@ colored.
  [[tech_files/img/Image_FAVTh.VnuxKsT8bQhRK7bQ_0001.png]]
  grey border 0.3 color 969696ee
 
-** ip tables
-
-*** home lan
-
-*Zeltak IP Table*
- Host/Device name (Static IP Address) (Local services)
-  
-  Voices (Main Quad 6600)
-  192.168.0.1 Marvin (Media server TNG)
-  192.168.0.3 ZTPC (Living room HTPC)
-  192.168.0.7
-  xbmc web interface
-  192.168.0.7:8083 Michal (Shanti)   
-  192.168.0.14 BTPC (bedroom HTPC)
-  192.168.0.3 Zwind
-  192.168.0.33 OR Dhcp (101 usually) TP-Link Router/Firewall
-  192.168.0.44Belkin Access Point
- 192.168.0.93 Eddie (Media server) RETIRED
- 192.168.0.2
-
-*** misc addresses-info
-
-Shahar's home IP address:
- 192.115.133.122
- Netvision server IP
- 212.143.205.253
- Setup bezeq simple network with ADSL modem
- Network card (connected to the hub/netwrok):
-  
- -192.168.0.1
- -255.255.255.0
- -Leave gateway blank!
-  
- Modem card (connected to ADSL modem)
-  
- -10.0.0.2
- -255.0.0.0
- -Leave gateway blank!
- -DNS: 192.115.106.10 (11 alt)
-
 ** gen glossary-info
 
 *** audio glossary
@@ -5598,13 +5558,83 @@ first song on the soundtrack to the film Batman Forever, which is "Hold
 Me, Thrill Me, Kiss Me, Kill Me" by the band U2, would have an "Album
 Artist" of "Various Artists" and a "Track Artist" of “U2″
 
+** Networking
+*** Create LAN connectors
+the correct order with lan cables are
+
+| 1 | Orange-white |
+| 2 | Orange       |
+| 3 | Green-white  |
+| 4 | Blue         |
+| 5 | Blue-white   |
+| 6 | Green        |
+| 7 | Brown-white  |
+| 8 | Brown        |
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-06-23 21:34:05
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-06-23_21:34:04.png]]
+*** Create wall LAN connectors
+the correct order with wall mounted lan connectors are
+| Brown-white | Orange-white |
+| Brown       | Orange       |
+| Blue-white  | Green-white  |
+|             | Green        |
+| Blue        |              |
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-06-23 22:01:58
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-06-23_22:01:58.png]]
+
+*** 'Home LAN setup'- based on `10.0.0.X` sub-network
+**** Routers
+the house central hub is located in the electricity closet utility closet.
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-06-23 22:01:29
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-06-23_22:01:29.png]]
+
+Current setup (Tapouch street as of 1.6.2014) has:
+$Note for more in depth details on router setups look here:$ [[*current%20tapouch%207%20setup%2012.6.2014][current tapouch 7 setup 12.6.2014]]
+*****  Bezeq VDSL model (10.0.0.138)
+acting as:
+1)`dialer` see [[*current%20tapouch%207%20setup%2012.6.2014][current tapouch 7 setup 12.6.2014]]
+2)`DHCP`
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-06-23 21:45:51
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-06-23_21:45:51.png]]
+***** Belkin Wifi Router(10.0.0.44)
+
+Acting as a wifi provider and Switch
+the dialer is disabled
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-06-23 21:48:33
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-06-23_21:48:33.png]]
+
+the following info is Used
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-06-23 21:48:51
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-06-23_21:48:51.png]]
+also make sure the DHCP server is disabled
+**** Physical LAN lines
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-06-23 22:25:03
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-06-23_22:25:03.png]]
+**** IP tables
+| Machine | IP |
+
 ** Routers
-*** bezeq VDSL modem (boradcom chip) 
-**** Default Password
+**** bezeq VDSL modem (boradcom chip) 
+***** Default Password
 U:Admin
 P:Admin
-*** dd-wrt
-**** Hardware reset
+**** dd-wrt
+***** Hardware reset
 
 Hard Reset (aka 30/30/30 reset):
  The following procedure will clear out the NVRAM and set dd-wrt back to
@@ -5619,7 +5649,7 @@ mode...see note below!)
  This procedure should be done BEFORE and AFTER every firmware
 upgrade/downgrade.
 
-**** restart network and get new dhcp IP on linux
+***** restart network and get new dhcp IP on linux
 
 first kill off any running dhcp deamon:
 
@@ -5629,7 +5659,7 @@ first kill off any running dhcp deamon:
 
  sudo dhcpcd eth0
 
-**** belkin flash ddwrt
+***** belkin flash ddwrt
 
 Okay, I successfully installed DD-WRT in my Belkin f7d3302 v1000.
  Below is my experience
@@ -5712,12 +5742,12 @@ help me here.
 firmware into my Belkin router. Its out of the box support for 3G/UMTS
 actually surprised me. Samba support is also great. Great going guys!!!!
 
-**** comcast WAN
+***** comcast WAN
 
 *Use this setup:*
  [[tech_files/img/Image_Gm89GZ8OCwKXLPdOKCf0fw_0001.png]]
 
-**** Static DHCP
+***** Static DHCP
 
 Configuration
  -Log into the DD-WRT Web GUI
@@ -5742,7 +5772,7 @@ lease information later on and have the host automatically get the new
 information without having to manually release/renew the lease on the
 host.
 
-**** port forward
+***** port forward
 
 ﻿Port Range Forward
  [[tech_files/img/Image_VmNRbluxnnuzybgw8vvFlg_0001.png]]
@@ -5780,12 +5810,12 @@ on 192.168.1.2.
  Pasted from
 <[[http://www.dd-wrt.com/wiki/index.php/Port_Forwarding][http://www.dd-wrt.com/wiki/index.php/Port\_Forwarding]]>
 
-**** How to Auto-Reboot in DD-WRT (schedule reboot)
+***** How to Auto-Reboot in DD-WRT (schedule reboot)
 Log in to the DD-WRT router. Open a browser and enter your router's IP address, by default this is "192.168.1.1" unless you have changed this. Enter the username and password you have set to log in.
 Click "Administration."
 Click "Keep Alive." Click "Enable" next to "Schedule Reboot."
 Choose either the "Interval" or the "Set time" you want to reboot.
-**** DNSMasq Local Network ('symc' dynamic IP/local IP)
+***** DNSMasq Local Network ('symc' dynamic IP/local IP)
 
 **Warning** you must reboot the device before you see the effects (IE
 after you finish all the configs)
@@ -5811,7 +5841,7 @@ to point to.
  If your devices don't see the changes after they've been made you may
 need to try restarting them since that is often the simplest way to
 clear the DNS cache.
-*** current tapouch 7 setup 12.6.2014
+**** current tapouch 7 setup 12.6.2014
 the model (bezeq) is in the power closet and acts as a dialer with the following setup and using the `10.0.0.X` network subsystem 
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2014-06-12 16:33:15
@@ -5847,13 +5877,10 @@ in the wireless router (dd-wrt) make sure WAN connections and DHCP are Disabled
 #+DOWNLOADED: /tmp/screenshot.png @ 2014-06-12 21:36:53
 #+attr_html: :width 300px
 [[/home/zeltak/org/attach/images_2014/screenshot_2014-06-12_21:36:53.png]]
-
-
 ** Apple
+**** iphone
 
-*** iphone
-
-**** Bypass activation screen
+***** Bypass activation screen
 
 ﻿In case an iPhone is stuck upon activation screen you're going to get
 either SIM not valid or Activation Failed Error whilst activating your
@@ -5870,5 +5897,5 @@ is going to be bypassed and you'll get to iPhone's House screen.
  Pasted from
 <[[http://www.unlockboot.com/2012/05/how-to-bypass-iphone-activation-screan.html][http://www.unlockboot.com/2012/05/how-to-bypass-iphone-activation-screan.html]]>
 ** D30
-*** Bios startup key
+**** Bios startup key
 ?F1?-get to bios

@@ -16437,7 +16437,15 @@ if dwb is slow and freezes evert few seconds, on these specific webpages
 issue:
 
  sanatize cookies
+*** cvim
+**** disable specific keybinds in sepcific websites
+for gmail one might have something like this:
+#+BEGIN_EXAMPLE
+let blacklists = ["https://mail.google.com/* gi gt x r f"]
+#+END_EXAMPLE
+that would disable keys gi, gt, x, r, and f on gmail.
 
+ 
 ** multimedia
 *** filebot
 
