@@ -5331,10 +5331,10 @@ ipkg update && ipkg upgrade will update any IPKG-installed applications to the l
 *** archive
 **** pod catchers
 
-Available*Commands
-*
- Name Description
- -
+Available Commands
+
+Name Description
+
  add Add a new podcast
  catchup Tell hpodder to ignore old undownloaded episodes
  disable Stop updating and downloading given podcasts
@@ -21911,47 +21911,41 @@ information to look like this:
 "gmail-archive" directory, as well as the tmp, new, and cur directories
 under the gmail-archive directory.
 
-*** Bittorrent-sync
-**** Arch setup as user 'zeltak'
+*** Bittorrent-sync (btsync)
+**** Arch Basics
+btsync can be installed from the AUR
+https://aur.archlinux.org/packages/btsync/
+Once installed, you'll first need to create a configuration file at file:~/.config/btsync/btsync.conf
+the config file can be copied from here:
 
-Configuration is located at /etc/btsync.conf and contains sample data.
+#+BEGIN_SRC sh
+cp /etc/btsync.conf ~/.config/btsync/btsync.conf
+#+END_SRC
 
-The corresponding systemd-unit is 'btsync.service'
+in the file edit the following:
+device_name
+storage_path
+webui/login
+webui/password
+$Note$ The storage_path setting defines where metadata will be saved, not the synced files themselves. Where synced files are saved is configured on a per-folder basis in the WebGUI.
+@make sure that no errors are in the config files@
+
+then start/enable BTSync
+
+#+BEGIN_SRC sh
+systemctl start btsync@user
+systemctl enable btsync@user
+#replacing user by the desired username. The service will run as the named user.
+#₆In example₆
+sudo systemctl start btsync@zeltak  
+#+END_SRC
+
+to check the status and if its working use:
+#+BEGIN_SRC sh
+sudo systemctl status btsync@zeltak  
+#+END_SRC
 
 WebGUI can be accessed at http://localhost:8888
-
-User-specific BTSync configuration
-
-Helps to set ownership to someone other than root for files that are copied
-with btsync. Copy /etc/btsync.conf to ~/.config/btsync/btsync.conf for
-the user you wish to configure btsync as:
-
-mkdir -p ~/.config/btsync
-cp /etc/btsync.conf ~/.config/btsync/btsync.conf
-
-Alternatively, you can run the btsync-makeconfig script that guesses some
-default values such as device name and login name:
-
-mkdir -p ~/.config/btsync
-source /usr/share/bittorrent-sync/btsync-makeconfig.sh > ~/.config/btsync/btsync.conf
-
-Replace user-specific references with the appropriate information,
-particularly the following settings:
-
-- webui.listen
-- webui.login
-- webui.password
-
-The systemd script (/usr/lib/systemd/system/btsync@.service) assumes the
-following two settings:
-- storage_path: $HOME/.config/btsync
-- pid_file: $HOME/.config/btsync/sync.pid (default, leave this commented out)
-
-To start btsync, execute:
-
-systemctl start btsync@user
-
-where 'user' is your username.
 
 **** cant launch service errors
 launch like this until fix
@@ -23570,7 +23564,12 @@ Emacs +N filename: Go to the Nth line of the file after opening it.
 
 kill the buffer (C-x k)
  open file (C-x C-f)
- 
+***** launching emacs 
+****** launching emacs as a SHell
+#+BEGIN_SRC sh
+emacs -f eshell
+#+END_SRC
+
 **** .emacs
 ***** Org mode file as a emacs config
 
@@ -27791,7 +27790,15 @@ for a subtree/buffer
 org-babel-execute-buffer
 ;and for subtrees 
 org-babel-execute-subtree
-#+END_SRC 
+#+END_SRC
+***** auto display images after eval
+Try (org-redisplay-inline-images). Note "re".
+
+#+BEGIN_SRC <lang> :post (org-redisplay-inline-images)
+
+#+END_SRC
+#+RESULTS:
+ 
 **** bugs
 ***** files opend are slow- disable line mode
 
