@@ -5331,10 +5331,10 @@ ipkg update && ipkg upgrade will update any IPKG-installed applications to the l
 *** archive
 **** pod catchers
 
-Available*Commands
-*
- Name Description
- -
+Available Commands
+
+Name Description
+
  add Add a new podcast
  catchup Tell hpodder to ignore old undownloaded episodes
  disable Stop updating and downloading given podcasts
@@ -12773,10 +12773,8 @@ you can issue a SIGUSR1 with
 
 #+BEGIN_SRC sh
 kill -10 PID
-
 ###or better yet
 pkill -USR1 -x sxhkd
-
 #+END_SRC
 
 or using htop
@@ -16439,7 +16437,15 @@ if dwb is slow and freezes evert few seconds, on these specific webpages
 issue:
 
  sanatize cookies
+*** cvim
+**** disable specific keybinds in sepcific websites
+for gmail one might have something like this:
+#+BEGIN_EXAMPLE
+let blacklists = ["https://mail.google.com/* gi gt x r f"]
+#+END_EXAMPLE
+that would disable keys gi, gt, x, r, and f on gmail.
 
+ 
 ** multimedia
 *** filebot
 
@@ -17391,7 +17397,8 @@ server
 *** Cantata
 **** Manual
 See file:/home/zeltak/org/attach/files_2013/Cantata_Readme.txt 
-*** Look and feel
+
+**** Look and feel
 **** Show only lyrics
 drag the play queue all the way to the left untill cantata auto resizes the info pane to incorprate all 2 views into one. then you can choose the bottom selector that appears
 
@@ -17399,12 +17406,16 @@ drag the play queue all the way to the left untill cantata auto resizes the info
 #+attr_html: :width 300px
 
  [[~/org/attach/images_2013//screenshot_2013-11-10_08:53:08.png]]
-*** Options
+**** Options
 **** Add local file play
 -make sure the http is running
 -then just drag files to Cantata or just "open with cantata" files from any FM
+**** start cantata in debug mode
+     #+NAME: 
+     #+BEGIN_SRC sh
+CANTATA_DEBUG=512 cantata
+     #+END_SRC
 *** amarok
-
 **** tips
 
 *fix sound issues amarok4
@@ -18589,9 +18600,9 @@ alias badd='sed "s:/home/zeltak/music/::" | sed "s/ /\ /g" | mpc add'
 beet ls -ap 'a_query' | badd
 #+end_src
 **** Cookbook
+***** adding 
 beet list -a added:="last 10 days" 
 beet ls -a added:2014-02
- 
 *** Picard
 **** Basic tagging
 
@@ -20762,6 +20773,11 @@ the
 you need to have checked the "global program" option for the file to run,If not, worker will try to start ./APP (₆In example₆./vlc)
 **** fonts
 a good tiny font for the button bar is ProggyTiny (part of proggy fonts): https://aur.archlinux.org/packages/proggyfonts/ 
+**** find version for AUR
+check this link
+
+http://www.boomerangsworld.de/cms/worker/downloads/
+
 *** krusader
 
 **** tips
@@ -21895,47 +21911,41 @@ information to look like this:
 "gmail-archive" directory, as well as the tmp, new, and cur directories
 under the gmail-archive directory.
 
-*** Bittorrent-sync
-**** Arch setup as user 'zeltak'
+*** Bittorrent-sync (btsync)
+**** Arch Basics
+btsync can be installed from the AUR
+https://aur.archlinux.org/packages/btsync/
+Once installed, you'll first need to create a configuration file at file:~/.config/btsync/btsync.conf
+the config file can be copied from here:
 
-Configuration is located at /etc/btsync.conf and contains sample data.
+#+BEGIN_SRC sh
+cp /etc/btsync.conf ~/.config/btsync/btsync.conf
+#+END_SRC
 
-The corresponding systemd-unit is 'btsync.service'
+in the file edit the following:
+device_name
+storage_path
+webui/login
+webui/password
+$Note$ The storage_path setting defines where metadata will be saved, not the synced files themselves. Where synced files are saved is configured on a per-folder basis in the WebGUI.
+@make sure that no errors are in the config files@
+
+then start/enable BTSync
+
+#+BEGIN_SRC sh
+systemctl start btsync@user
+systemctl enable btsync@user
+#replacing user by the desired username. The service will run as the named user.
+#₆In example₆
+sudo systemctl start btsync@zeltak  
+#+END_SRC
+
+to check the status and if its working use:
+#+BEGIN_SRC sh
+sudo systemctl status btsync@zeltak  
+#+END_SRC
 
 WebGUI can be accessed at http://localhost:8888
-
-User-specific BTSync configuration
-
-Helps to set ownership to someone other than root for files that are copied
-with btsync. Copy /etc/btsync.conf to ~/.config/btsync/btsync.conf for
-the user you wish to configure btsync as:
-
-mkdir -p ~/.config/btsync
-cp /etc/btsync.conf ~/.config/btsync/btsync.conf
-
-Alternatively, you can run the btsync-makeconfig script that guesses some
-default values such as device name and login name:
-
-mkdir -p ~/.config/btsync
-source /usr/share/bittorrent-sync/btsync-makeconfig.sh > ~/.config/btsync/btsync.conf
-
-Replace user-specific references with the appropriate information,
-particularly the following settings:
-
-- webui.listen
-- webui.login
-- webui.password
-
-The systemd script (/usr/lib/systemd/system/btsync@.service) assumes the
-following two settings:
-- storage_path: $HOME/.config/btsync
-- pid_file: $HOME/.config/btsync/sync.pid (default, leave this commented out)
-
-To start btsync, execute:
-
-systemctl start btsync@user
-
-where 'user' is your username.
 
 **** cant launch service errors
 launch like this until fix
@@ -23349,9 +23359,18 @@ Android virtual machines. Click Start to run it.
 *** Teamviewer
 **** Bugs
 ***** fix wierd issues on debian with VPN in BGU
+
+@note-on arch make aure latest version of `snx` package is installed thorugh AUR@
+
+https://aur.archlinux.org/packages/snx/
+
+
 1)log in with VPN in browser
 
 https://vpn.bgu.ac.il/extender.html
+
+U:ikloog@vpn
+Pass:4862
 
 2)log into machine with ssh
 
@@ -23545,7 +23564,12 @@ Emacs +N filename: Go to the Nth line of the file after opening it.
 
 kill the buffer (C-x k)
  open file (C-x C-f)
- 
+***** launching emacs 
+****** launching emacs as a SHell
+#+BEGIN_SRC sh
+emacs -f eshell
+#+END_SRC
+
 **** .emacs
 ***** Org mode file as a emacs config
 
@@ -27766,7 +27790,15 @@ for a subtree/buffer
 org-babel-execute-buffer
 ;and for subtrees 
 org-babel-execute-subtree
-#+END_SRC 
+#+END_SRC
+***** auto display images after eval
+Try (org-redisplay-inline-images). Note "re".
+
+#+BEGIN_SRC <lang> :post (org-redisplay-inline-images)
+
+#+END_SRC
+#+RESULTS:
+ 
 **** bugs
 ***** files opend are slow- disable line mode
 
@@ -33429,7 +33461,12 @@ editor of your choice.
 full path to the text editor of your choice. Save, and from now on
 launching visudo with gksu visudo for Ubuntu; kdesu visudo for Kubuntu
 or sudo visudo in the terminal will now open with your chosen editor.
-
+*** kill
+**** send usersig kill (SIGUSR1)
+     #+NAME: 
+     #+BEGIN_SRC sh
+kill -10 1140  
+     #+END_SRC 
 *** cron
 
 **** intro
@@ -36078,7 +36115,6 @@ ifconfig wlan0| awk 'NR==2 {print $2}'| awk -F: '{print $2}'
  ifconfig eth0| awk 'NR==2 {print $2}'| awk -F: '{print $2}'
 
 ** files and directories
-
 *** tips
 Find and replace Files/Folder Tricks
 
@@ -36261,30 +36297,16 @@ input is not a terminal.
  filename The name of the file you want to move directory - The
 directory of were you want the file to go.
 
-*** archive (tar)
+*** compress/archive/zip 
+**** compress all files in a directory seperatly
+Individually compress each file in a directory
 
-*Tar Command
-*
- tar's basic syntax is
- tar option(s) archive name file name(s)
- Creating a tar file:
- tar -cvvf file.tar myfile.txt
- In the above example the system would create a tar named file.tar in
-the directory you currently are in. Wildcards could also be used in this
-command, for example:
- tar -cvvf file.tar *.txt
- would compress all txt files in the current directory.
- tar -cvvf home.tar home/
- In the above example command the system would create a tar file named
-home.tar in the directory you currently are in of the home directory.
- Extracting the files from a tar file:
- tar -xvvf myfile.tar
- In the above example command the system would uncompress (untar)
-the myfile.tar file in the current directory.
- tar -xvvzf myfile.tar.gz
- In the above example command the system would uncompress (untar)
-the myfile.tar.gz file in the current directory.
-
+#+NAME: 
+#+BEGIN_SRC sh
+gzip *
+#you can also use it recursivly
+gzip -r .
+#+END_SRC
 *** list (ls)
 
 **** general
@@ -37159,7 +37181,6 @@ the best way to do that would be this:
  su zeltak
 
 *** installations
-
 **** apt
 
 ***** install
@@ -37648,7 +37669,6 @@ manager)
 just shutting down the operating system)
 
 *** disk utils
-
 **** hdparm
 
 *check which hard drive (physical) is a /dev/Device
@@ -38123,7 +38143,7 @@ seconds), you would type:
  Command to suspend computer from CLI*
  sudo /etc/acpi/sleep.sh
 
-*** create boot up disk from ISO					:Fav:
+*** create boot up disk from ISO (using dd) 				:Fav:
 
 Use the dd command
 

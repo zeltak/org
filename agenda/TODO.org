@@ -406,6 +406,11 @@ i know there is a star but can i request an option make the listview or modtime/
 perhaps clearer syntax ₆In example₆ (N)
 *** DONE Toggle sort mode
 is there a way toggle a sort mode, so that the same button pressed once would sort asecding and then second press descinding? if not is there a way to maybe script this
+*** tmep pnames
+
+
+
+ 
 ** cvim
 visual mode, act start visual block/line option
 VIUSAL clues to some command like : copied link to clip (yy) etc
@@ -416,7 +421,81 @@ add reload all tabs
 keybind to quickly enable/disable cvim
 ** Rasi
 *** ask about replay gain:
-it lowers voulme for all tracks alot, without replay gain most track have higher colume output 
+it lowers voulme for all tracks alot, without replay gain most track have higher colume output
+** btsync
+WebGUI can be accessed at http://localhost:8888
+
+  Running btsync system instance (will use dedicated btsync:btsync account):
+
+        To reload system systemd modules, execute
+
+                systemctl daemon-reload
+
+        To start btsync, execute:
+
+                systemctl start btsync
+
+        To autostart btsync on system start, execute
+
+                systemctl enable btsync
+
+  Running btsync user instance (will used current user account):
+
+        To reload user systemd modules, execute
+
+                systemctl --user daemon-reload
+
+        To start btsync manually, execute:
+
+                systemctl --user start btsync
+
+        To autostart btsync on user login, execute
+
+                systemctl --user enable btsync
+
+
+(1/1) installing btsync-gui                                                                                            [#######################################################################] 100%
+# [NOTE! ] ###########################################################
+The btsync-gui is an integrated system that manages the btsync process
+and its configuration. This installer detected the following btsync
+services are currently enabled:
+
+  * btsync@zeltak.service 
+
+If you want to use the btsync-gui as your preferred personal btsync
+application, you should perform the following steps:
+
+  1. Stop personal btsync service(s)
+
+     systemctl stop btsync@zeltak.service 
+
+  2. Disable auto starting btsync service(s)
+
+     systemctl disable btsync@zeltak.service 
+
+  3. Migrate the internal database of your btsync service to the
+     where btsync-gui expects to find it, btsync-gui expects it in
+     ~/.btsync
+     You can find the current location of your btsync database in the
+     configuration file of your current btsync service by checking the
+     "storage_path" parameter.
+
+Please take in to account that btsync-gui makes the btsync web UI
+inaccessible (for security reasons) by default and binds the web UI
+interface to 127.0.0.1 using internal random credentials at each
+start. If you do not want this behaviour, please execute this command
+before starting btsync-gui:
+
+btsync-gui —webui —username <yourpreferredname> —password <yourpreferredpwd> —bindui all —savedefaults
+
+This command persistently configures btsync-gui to enable the web UI,
+binding it to all adapters and configured to use the supplied
+credentials for accessing the web UI.
+######################################################################
+
+
+
+** kroner 
 * Home
 ** el al frequent flyer
 ** diet
@@ -479,24 +558,12 @@ teka trx645> 18 50
 beko 1001 white 
 5
 
-
 *** TODO Masger for soragim
     :PROPERTIES:
     :ID:       9323c1aa-99ed-4150-a20c-73ca30981e42
     :END:
 nisim: 052-3923940
-*** TODO sattelite dish
-    :PROPERTIES:
-    :ID:       da41e5f7-b9cf-4cd7-99e2-fad1f7844ab3
-    :END:
-goda: 052-2356796
-0574488856
-
-1)al gezira sport package for 1 year+install+sat+box > 2200
-box is Aiclass s810HD
-2)basic hotbird+israel+sat+basic box > 1300 
-3)visionet+box+sat > 2000
-box fireball 101
+*** home paint color is 016
 ** freedns
 zeltak.mooo.com
 ** Gnus
@@ -510,3 +577,25 @@ x1 carbon
 CTO HP Elitebook 840 G1
 Dell Latitude E7440
 ATIV Book 9 Plus(next gen)
+** garden
+*** place to order stuff for garden
+קמחי ובניו חומרי בניין
+
+ כתובת הפלס 9 עמק שרה באר שבע הגדל מפה שעות פעילות
+יום א' - יום ה'	17:30 - 07:00
+יום שישי	13:30 - 07:00
+*** renting equipment
+http://www.brener.co.il/
+
+ברנר שמעון - מחירון 2014
+ציוד להשכרה, חשמל ובנזין לבנין ולתעשיה
+באר שבע, רח. מורדי הגיטאות 70, טל. בעבודה: 08-6277737 נייד שמעון: 050-5284031 
+נייד משה: 050-5408724 * טלפון חינם: 1-800-200-330 * פקס: 08-6278249
+*** שתילי בזיליקום תאי אפשר לקנות ברוב המשתלות שמחזיקות צמחי תבלין, לפעמים תחת השם מלכת סיאם.
+*** Pini
+**** deck one layer is off
+**** spary Vs knima
+**** make water source much closer to trees (extend it)
+**** ceramics all around
+** Pikod haoref
+הנך משוייך לאזור התרעה: באר שבע 286 (45 שניות)
