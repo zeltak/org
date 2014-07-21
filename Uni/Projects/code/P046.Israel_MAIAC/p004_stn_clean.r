@@ -361,18 +361,18 @@ J13 <- merge(J12, ndvi, all.x = T)
 
 
 #add dust days
-dust<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/0.raw/dust_days/DD_allIsr_20022012.csv")
-dust$date<-paste(dust$Day,dust$Month,dust$Year,sep="/")
-dust[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
-dust[,c("Year","Month","Day","V9","V8","date","X","Y"):=NULL]
-setnames(dust,"StationID","stn")
+#add dust days
+dust2<-fread("/media/NAS/Uni/Data/Israel/Dust/DDAqTer28.5.2014.csv")
+dust2$date<-paste(dust2$Day,dust2$Month,dust2$Year,sep="/")
+dust2[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
+dust2[,c("Year","Month","Day","Max","date"):=NULL]
+setnames(dust2,"StationID","stn")
 
 
 setkey(J13 , day, stn)
-setkey(dust, day, stn)
-J14 <- merge(J13, dust, all.x = T)
+setkey(dust2, day, stn)
+J14 <- merge(J13, dust2, all.x = T)
 J14<-J14[is.na(Dust), Dust:= 0]
-
 saveRDS(J14,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm10all.RDS")
 
 
@@ -410,6 +410,8 @@ PM25[,length(na.omit(PM25)),by=list(stn,c)]
 PM25[, PM25_miss := length(na.omit(PM25)),by=list(stn,c)]
 PM25<-PM25[!is.na(PM25)]
 PM25<-na.omit(PM25)
+PM25 <- PM25[PM25 > 0  , ]
+PM25 <- PM25[PM25 < 1200  , ]
 
 # PM25[, .N, by=c("stn")] 
 # x5 <- PM25[stn== "AGR"]
@@ -545,21 +547,24 @@ J13 <- merge(J12, ndvi, all.x = T)
 
 
 #add dust days
-dust<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/0.raw/dust_days/DD_allIsr_20022012.csv")
-dust$date<-paste(dust$Day,dust$Month,dust$Year,sep="/")
-dust[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
-dust[,c("Year","Month","Day","V9","V8","date","X","Y"):=NULL]
-setnames(dust,"StationID","stn")
+dust2<-fread("/media/NAS/Uni/Data/Israel/Dust/DDAqTer28.5.2014.csv")
+dust2$date<-paste(dust2$Day,dust2$Month,dust2$Year,sep="/")
+dust2[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
+dust2[,c("Year","Month","Day","Max","date"):=NULL]
+setnames(dust2,"StationID","stn")
 
 
 setkey(J13 , day, stn)
-setkey(dust, day, stn)
-J14 <- merge(J13, dust, all.x = T)
+setkey(dust2, day, stn)
+J14 <- merge(J13, dust2, all.x = T)
 J14<-J14[is.na(Dust), Dust:= 0]
 
 saveRDS(J14,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25all.RDS")
 
-#add regions
+
+
+
+#add regions and flags
 
 pm10.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm10all.RDS")
 pm25.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25all.RDS")
@@ -569,10 +574,20 @@ reg<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007
 setkey(pm10.m1 , aodid)
 setkey(reg, aodid)
 jreg10 <- merge(pm10.m1, reg, all.x = T)
-saveRDS(jreg10,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm10all.RDS")
+
+y<-as.data.frame(jreg10)
+y$aod.both<-rowMeans(y[,14:15], na.rm=T)
+jreg10<-as.data.table(y)
+saveRDS(jreg10,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm10all_reg.RDS")
 
 #pm25
 setkey(pm25.m1 , aodid)
 setkey(reg, aodid)
 jreg25 <- merge(pm25.m1, reg, all.x = T)
-saveRDS(jreg25,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25all.RDS")
+y<-as.data.frame(jreg25)
+y$aod.both<-rowMeans(y[,14:15], na.rm=T)
+jreg25<-as.data.table(y)
+saveRDS(jreg25,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25all_reg.RDS")
+
+
+

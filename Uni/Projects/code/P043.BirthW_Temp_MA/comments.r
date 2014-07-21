@@ -433,3 +433,4 @@ ICAM_restable$ciw[1] <-ICAM_restable$L_CI[1]+ICAM_restable$H_CI[1]
 bw_full_birth <- lmer(sga ~ IQRfintempmabirth+pmnewmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN)+ges_calc+elev+(1 |FIPS),data =  bd)
 summary(bw_full_birth)
 
+difflsmeans(bw_full_birth)

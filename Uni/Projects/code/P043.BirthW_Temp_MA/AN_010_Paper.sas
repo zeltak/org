@@ -1056,18 +1056,25 @@ NSGA=0;
 if gacalc < 37  then NSGA=1;
 run; 
 
+
+libname x1 'z:\Uni\Projects\P011.BirthW_NE\3.1.11.4.Work\3.Analysis\4.sas analysis\' ;
+
+
+
+ 
+
 /*import PM 10x10*/
 
-data bw_all;
-set db.bw9;
+data bw9;
+set x1.bw9;
 keep uniqueid_y pmnew--pm12_24 popden--localpm date;
 run;
 
-proc sort data = bw_all; by uniqueid_y   ;run;
-proc sort data = bww.Bw_noces ; by uniqueid_y ;run;
+proc sort data = bw9; by uniqueid_y   ;run;
+proc sort data = bww.bw_all ; by uniqueid_y ;run;
 
 data DATA3;
-merge bww.Bw_noces(in=a) bw_all (in=b)  ;
+merge bww.bw_all(in=a) bw9 (in=b)  ;
   by uniqueid_y;
     if a;
 	run; 
@@ -1079,7 +1086,7 @@ run;
 
 
 PROC EXPORT DATA= DATA4 
-            OUTFILE= "Z:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\3.Analysis\2.R_analysis\bw_nocesv2.csv" 
+            OUTFILE= "z:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\3.Analysis\2.R_analysis\bw_all.csv" 
 			            DBMS=CSV REPLACE;
 						     PUTNAMES=YES;
 							 RUN;
@@ -1179,5 +1186,3 @@ run;
 ods output  ParameterEstimates =  xx ;
 run;
 
-
-+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN)+ges_calc+elev+ (1 |FIPS),data =  bd)
