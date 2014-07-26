@@ -44,8 +44,8 @@ mod1table$model<- c("allyears","mod1CV_R2","mod1CV_int","mod1CV_int_SE",
 mod1table$model[1] <-"allyears_Pm10"
 
 
-pm10.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm10all.RDS")
-pm25.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25all.RDS")
+pm10.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm10all_reg.RDS")
+pm25.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25all_reg.RDS")
 summary(pm10.m1)
 
 names(pm10.m1)
@@ -73,6 +73,23 @@ m1t.formula <- as.formula(PM10~ aod+elev+tden+pden+dist2rail+dist2A1+dist2water+
 out.m1 = lmer(m1t.formula ,data =  pm10.m1,na.action = na.exclude)
 pm10.m1$predicted <- predict(out.m1)
 summary(lm(PM10~predicted,data=pm10.m1))
+###############
+#MOD1 CV
+###############
+source("/media/NAS/Uni/org/files/Uni/Projects/code/P031.MIAC_PM/code_snips/CV_splits.r")
+#s1
+splits_s1 <- splitdf(pm10.m1)
+mod1d_10_s1 <- splits_s1$trainset
+mod1d_90_s1 <- splits_s1$testset
+out_90_s1 =  lmer(m1t.formula ,data =  mod1d_90_s1,na.action = na.exclude)
+mod1d_10_s1$predicted <- predict(object=out_90_s1,newdata=mod1d_10_s1,allow.new.levels=TRUE,REform=NULL )
+
+
+
+
+
+
+
 
 
 

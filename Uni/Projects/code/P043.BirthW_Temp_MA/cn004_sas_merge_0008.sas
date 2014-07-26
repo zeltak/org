@@ -1,7 +1,7 @@
 /*IMPORT AND FIX 2003*/
 
 PROC IMPORT OUT= WORK.bw
-            DATAFILE= "f:\Uni\Projects\3.1.11.BirthW_NE\3.1.11.4.Work\2.Gather_data\FN001_BW_meta_Final\births_guid_meta0008_lu.dbf" 
+            DATAFILE= "z:\Uni\Projects\P011.BirthW_NE\3.1.11.4.Work\2.Gather_data\FN001_BW_meta_Final\births_guid_meta0008_lu.dbf" 
             DBMS=DBF REPLACE;
      GETDELETED=NO;
 RUN;
@@ -18,7 +18,7 @@ format date ddmmyy10.;
 run;
 
 PROC IMPORT OUT= WORK.bw03
-            DATAFILE= "f:\Uni\Projects\3.1.11.BirthW_NE\3.1.11.4.Work\2.Gather_data\FN001_BW_meta_Final\births_guid_2003_lu.dbf" 
+            DATAFILE= "z:\Uni\Projects\P011.BirthW_NE\3.1.11.4.Work\2.Gather_data\FN001_BW_meta_Final\births_guid_2003_lu.dbf" 
             DBMS=DBF REPLACE;
      GETDELETED=NO;
 RUN;
@@ -33,7 +33,7 @@ run;
 
 
 PROC IMPORT OUT= bwid_guid
-            DATAFILE= "f:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\2.Gather_data\FN007_keytables\births_guid_stn.dbf" 
+            DATAFILE= "z:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\2.Gather_data\FN007_keytables\births_guid_stn.dbf" 
 			            DBMS=DBF   REPLACE;
 						     GETDELETED=NO;
 							 RUN; 
@@ -72,7 +72,7 @@ proc sort data=data34;
 by guid date;
 run;
 
-libname exp 'f:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\2.Gather_data\FN002_BW_exposure\' ;
+libname exp 'z:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\2.Gather_data\FN002_BW_exposure\' ;
 
 
 
@@ -346,7 +346,7 @@ run;
 
 /*continue with dataset preperation*/
 
-libname ses 'f:\Uni\Projects\3.1.11.BirthW_NE\3.1.11.1.Raw_data\tract level SES\' ;
+libname ses 'z:\Uni\Projects\P011.BirthW_NE\3.1.11.1.Raw_data\tract level SES\' ;
 
 data tses;
 set ses.tr00_clarcsumv3;
@@ -456,10 +456,13 @@ set bw11;
 run; 
 
 
-libname bww 'f:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\2.Gather_data\FN010_bwdatasets\' ;
 
 
-/*data for preterm analysis*/
+
+libname bww 'z:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\2.Gather_data\FN010_bwdatasets\' ;
+
+
+data for preterm analysis
 data bww.bw_noces;
 set bw12;
 if csect= 1 then delete;
@@ -476,22 +479,17 @@ run;
 
 data bww.bw_all;
 set bw12;
-if csect= 1 then delete;
+/*if csect= 1 then delete;*/
 if birthw < 700 then delete;
 if plural =1;
 if yrod ne 0 then delete;
-if ges_calc >=37 then bwcat=1;
-else if ges_calc = 36 then  bwcat=2;
-else if ges_calc =35 then bwcat=2;
-else if ges_calc < 35 then bwcat=3;
-if pctwhttr00=. then delete;
 run; 
 
 
 
 
-PROC EXPORT DATA= bww.bw_noces
-            OUTFILE= "f:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\3.Analysis\2.R_analysis\bw_noces.csv" 
+PROC EXPORT DATA= bww.bw_all
+            OUTFILE= "z:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\3.Analysis\2.R_analysis\bw_all.csv" 
 			            DBMS=CSV REPLACE;
 						     PUTNAMES=YES;
 							 RUN;

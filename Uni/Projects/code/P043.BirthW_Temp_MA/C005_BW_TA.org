@@ -10,20 +10,21 @@
 ** Session config
 *** load library
 #+BEGIN_SRC R :session R1  :results silent
-library(lme4)
-library(reshape)
-library(foreign) 
-library(ggplot2)
-library(plyr)
-library(data.table)
-library(reshape2)
-library(Hmisc)
-library(mgcv)
-library(gdata)
-library(car)
-library(dplyr)
-library(gamm4)
-library(memisc)
+  library(lme4)
+  library(lmerTest)
+  library(reshape)
+  library(foreign) 
+  library(ggplot2)
+  library(plyr)
+  library(data.table)
+  library(reshape2)
+  library(Hmisc)
+  library(mgcv)
+  library(gdata)
+  library(car)
+  library(dplyr)
+  library(gamm4)
+  library(memisc)
 #+END_SRC
 
 *** disable sci notations
@@ -769,123 +770,103 @@ Use print(...., correlation=TRUE)  or
 
 ******* NEXT full birth+pm
 
-#+begin_example
-  [1] "bthctyn"              "bthctyc"              "sex"                 
-  [4] "plur"                 "bthord"               "byob"                
-  [7] "bmob"                 "bdayob"               "bdob"                
- [10] "myob"                 "mmob"                 "mbpstt"              
- [13] "mbpstc"               "mresctn"              "mresctc"             
- [16] "mrescnn"              "mrescnc"              "marstat"             
- [19] "fbpstt"               "fbpstc"               "fage"                
- [22] "mrace"                "methn"                "mlangp"              
- [25] "medu"                 "frace"                "fethn"               
- [28] "flangp"               "fedu"                 "lbnl"                
- [31] "lbnd"                 "yrllb"                "mtllb"               
- [34] "dyllb"                "dtllb"                "parit"               
- [37] "gravid"               "gacalc"               "clinega"             
- [40] "yrfpncv"              "mtfpncv"              "dyfpncv"             
- [43] "dtfpncv"              "mpncp"                "npncv"               
- [46] "pncgov"               "kess"                 "kotck"               
- [49] "cigdpp"               "cigddp"               "mwgl"                
- [52] "modvag"               "modvbac"              "modfor"              
- [55] "modvac"               "modpcs"               "modrcs"              
- [58] "bwg"                  "apgar1"               "apgar5"              
- [61] "breast"               "disyr"                "dismt"               
- [64] "disdy"                "disdt"                "distim"              
- [67] "dhwmot"               "balive"               "rflungd"             
- [70] "rfanem"               "rfcard"               "rfdiabg"             
- [73] "rfdiabo"              "rfhypc"               "rfhyppr"             
- [76] "rfincer"              "rfpiwbd"              "rfpi4k"              
- [79] "rfpisga"              "rfrenal"              "rfrhsen"             
- [82] "rfsickl"              "rfutbld"              "avnlt30"             
- [85] "avnge30"              "jaund"                "mocode"              
- [88] "micode"               "focode"               "ficode"              
- [91] "tract"                "long"                 "lat"                 
- [94] "yrod"                 "mtod"                 "dyod"                
- [97] "dtod"                 "randint"              "duprandint"          
-[100] "uniqueid"             "uniqueid_y"           "myredu"              
-[103] "gridadt"              "FIPS"                 "medhhinctr"          
-[106] "pctreccono"           "date"                 "xx"                  
-[109] "yy"                   "stn"                  "guid"                
-[112] "glong"                "glat"                 "fintemp"             
-[115] "fintemp_l0"           "fintemp_l1"           "fintemp_l2"          
-[118] "fintemp_l3"           "fintempma1"           "fintempma3"          
-[121] "fintempmaweek"        "fintempma2week"       "fintempma3week"      
-[124] "fintempmamonth"       "fintempma3month"      "fintempmabirth"      
-[127] "fintempmayear"        "gender1"              "mother_race"         
-[130] "father_race"          "csect1"               "birthw"              
-[133] "prevpre"              "age"                  "med_income"          
-[136] "p_ospace"             "fage1"                "frace1"              
-[139] "fethn1"               "fedu1"                "flangp1"             
-[142] "mlangp1"              "methn1"               "marstat1"            
-[145] "mbpstc1"              "gravid1"              "mpncp1"              
-[148] "pncgov1"              "methnic"              "fethnic"             
-[151] "gender"               "pre_vists"            "parity"              
-[154] "prevpret"             "cig_pre"              "cig_preg"            
-[157] "cig_preq"             "cig_pregq"            "ges_calc"            
-[160] "ges_clinic"           "lges"                 "lgescl"              
-[163] "csect"                "utbleed"              "lungd"               
-[166] "renal"                "hyper_other"          "hyper"               
-[169] "diab"                 "diab_other"           "prev_400"            
-[172] "prev_sga"             "MRN"                  "lbw"                 
-[175] "m"                    "season"               "npar"                
-[178] "year"                 "age_centered"         "age_centered_sq"     
-[181] "edu_group"            "adtmean"              "med_incomeq"         
-[184] "f_age"                "f_age_centered"       "f_age_centered_sq"   
-[187] "f_race"               "FRN"                  "f_lang"              
-[190] "p_birth"              "m_lang"               "mstat"               
-[193] "m_care"               "bw"                   "plural"              
-[196] "pcare"                "aged"                 "pctwhttr00"          
-[199] "pctblktr00"           "pctasiantr00"         "pctothracetr00"      
-[202] "pct2ormoreracetr00"   "pctwhtnhtr00"         "pctblknhtr00"        
-[205] "pctasiannhtr00"       "pctothracenhtr00"     "pct2ormoreracenhtr00"
-[208] "pcthisptr00"          "pctnonwhttr00"        "medhhinctr00"        
-[211] "pctfamfemhdtr00"      "pctcrowdtr00"         "pcthsdropouttr00"    
-[214] "pct16_64mntemptr00"   "pctlowinctr00"        "pcthiinctr00"        
-[217] "pctbelpovlt18tr00"    "pctbelpov18_64tr00"   "pctbelpovgt64tr00"   
-[220] "pctbelpovtr00"        "pctnohstr00"          "pcthstr00"           
-[223] "pctbachtr00"          "pctadvdegtr00"        "pctbachorhighertr00" 
-[226] "sevdisnbhdpov"        "sevdisnbhdfam"        "sevdisnbhdhs"        
-[229] "sevdisnbhdemp"        "sevdisnhbdscoretr00"  "pctocchutr00"        
-[232] "pctownerocctr00"      "medgrrenttr00"        "medvalspecownoctr00" 
-[235] "TEMP_Cma1"            "TEMP_Cma3"            "TEMP_Cmaweek"        
-[238] "TEMP_Cma2week"        "TEMP_Cmamonth"        "TEMP_Cma3month"      
-[241] "TEMP_Cmabirth"        "TEMP_Cmayear"         "tncdc"               
-[244] "tncdc_l0"             "tncdc_l1"             "tncdc_l2"            
-[247] "tncdc_l3"             "tncdcma1"             "tncdcma3"            
-[250] "tncdcmaweek"          "tncdcma2week"         "tncdcmamonth"        
-[253] "tncdcma3month"        "tncdcmabirth"         "tncdcmayear"         
-[256] "dow"                  "doy"                  "doy2"                
-[259] "sinetime"             "costime"              "newvar"              
-[262] "udate"                "devtemp"              "findevtemp"          
-[265] "findevtemplag3"       "IQRfintemp"           "IQRfintemp_l0"       
-[268] "IQRfintemp_l1"        "IQRfintemp_l2"        "IQRfintemp_l3"       
-[271] "IQRfintempma1"        "IQRfintempma3"        "IQRfintempmaweek"    
-[274] "IQRfintempma2week"    "IQRfintempma3week"    "IQRfintempmamonth"   
-[277] "IQRfintempma3month"   "IQRfintempmabirth"    "IQRtncdc"            
-[280] "IQRtncdc_l0"          "IQRtncdc_l1"          "IQRtncdc_l2"         
-[283] "IQRtncdc_l3"          "IQRtncdcma1"          "IQRtncdcma3"         
-[286] "IQRtncdcmaweek"       "IQRtncdcma2week"      "IQRtncdcmamonth"     
-[289] "IQRtncdcma3month"     "IQRtncdcmabirth"      "bwcat"               
-[292] "edu01"                "mrn01"                "minc01"              
-[295] "fedu01"               "fmrn01"               "fminc01"             
-[298] "lowbw"                "NSGA"                 "pmnew"               
-[301] "pmnew_l0"             "pmnew_l1"             "pmnew_l2"            
-[304] "pmnew_l3"             "pmnewma1"             "pmnewma3"            
-[307] "pmnewmaweek"          "pmnewma2week"         "pmnewmamonth"        
-[310] "pmnewma3month"        "pmnewmabirth"         "pm12_24"             
-[313] "popden"               "pcturban"             "elev"                
-[316] "tden"                 "dist_A1"              "dist_pemis"          
-[319] "localpm"
-#+end_example
-
 #+BEGIN_SRC R :session R1  :results output
-bw_full_birth <- lmer(birthw ~ IQRfintempmabirth+pmnewmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN)+ges_calc+elev+(1 |FIPS),data =  bd)
+bw_full_birth <- lmer(birthw ~ IQRfintempmabirth+pmnewmabirth+sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+gender+prev_400+med_income+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+as.factor(FRN)+ges_calc+elev+(1 |FIPS),data =  bd,REML = FALSE, control = lmerControl(optimizer = "Nelder_Mead"))
 summary(bw_full_birth)
 
 #+END_SRC
 
 #+RESULTS:
+#+begin_example
+Warning messages:
+1: In checkScaleX(X, ctrl = control) :
+  Some predictor variables are on very different scales: consider rescaling
+2: In checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv,  :
+  Model failed to converge with max|grad| = 6645.54 (tol = 0.002)
+Linear mixed model fit by maximum likelihood  ['merModLmerTest']
+Formula: birthw ~ IQRfintempmabirth + pmnewmabirth + sinetime + costime +  
+    age_centered + age_centered_sq + cig_preg + cig_pre + gender +  
+    prev_400 + med_income + diab + hyper + lungd + diab_other +  
+    prevpret + as.factor(kess) + as.factor(MRN) + as.factor(edu_group) +  
+    as.factor(byob) + parity + as.factor(FRN) + ges_calc + elev +  
+    (1 | FIPS)
+   Data: bd
+Control: lmerControl(optimizer = "Nelder_Mead")
+
+     AIC      BIC   logLik deviance df.resid 
+ 6796542  6796983 -3398231  6796462   451868 
+
+Scaled residuals: 
+    Min      1Q  Median      3Q     Max 
+-7.7459 -0.6480 -0.0153  0.6351 13.9570 
+
+Random effects:
+ Groups   Name        Variance Std.Dev.
+ FIPS     (Intercept)   1270    35.64  
+ Residual             198460   445.49  
+Number of obs: 451908, groups: FIPS, 1358
+
+Fixed effects:
+                        Estimate Std. Error         df t value Pr(>|t|)    
+(Intercept)           -4.070e+01  1.914e+01  1.045e+05  -2.127  0.03341 *  
+IQRfintempmabirth     -4.503e+00  1.422e+00  3.772e+05  -3.167  0.00154 ** 
+pmnewmabirth          -6.436e-01  9.950e-01  3.888e+04  -0.647  0.51777    
+sinetime              -4.966e-01  1.075e+00  4.391e+05  -0.462  0.64426    
+costime               -2.533e+00  1.282e+00  4.341e+05  -1.976  0.04814 *  
+age_centered           5.966e+00  1.335e-01  4.448e+05  44.704  < 2e-16 ***
+age_centered_sq       -2.740e-01  1.586e-02  4.469e+05 -17.275  < 2e-16 ***
+cig_preg              -1.443e+01  3.544e-01  4.519e+05 -40.716  < 2e-16 ***
+cig_pre               -2.344e+00  1.940e-01  4.514e+05 -12.087  < 2e-16 ***
+gender                -1.260e+02  1.328e+00  4.516e+05 -94.944  < 2e-16 ***
+prev_400               4.727e+02  7.576e+00  4.519e+05  62.403  < 2e-16 ***
+med_income             4.275e-04  5.948e-05  1.012e+03   7.187 1.28e-12 ***
+diab                   5.292e+01  3.765e+00  4.519e+05  14.056  < 2e-16 ***
+hyper                 -8.871e+01  4.027e+00  4.519e+05 -22.027  < 2e-16 ***
+lungd                 -3.724e+01  3.832e+00  4.383e+05  -9.718  < 2e-16 ***
+diab_other             9.540e+01  8.117e+00  4.518e+05  11.754  < 2e-16 ***
+prevpret              -1.946e+02  6.839e+00  4.517e+05 -28.448  < 2e-16 ***
+as.factor(kess)2      -5.802e+01  1.798e+00  4.504e+05 -32.277  < 2e-16 ***
+as.factor(kess)3      -6.076e+01  3.784e+00  4.519e+05 -16.060  < 2e-16 ***
+as.factor(kess)4      -1.056e+02  1.021e+01  4.516e+05 -10.335  < 2e-16 ***
+as.factor(kess)5      -1.544e+02  1.474e+01  4.517e+05 -10.473  < 2e-16 ***
+as.factor(MRN)1       -1.025e+02  3.831e+00  2.915e+05 -26.748  < 2e-16 ***
+as.factor(MRN)2       -7.814e+01  2.529e+00  4.070e+05 -30.904  < 2e-16 ***
+as.factor(edu_group)2 -1.801e+01  4.210e+00  4.397e+05  -4.278 1.89e-05 ***
+as.factor(edu_group)3  7.917e-02  4.411e+00  4.287e+05   0.018  0.98568    
+as.factor(edu_group)4 -5.970e+00  4.433e+00  4.161e+05  -1.347  0.17809    
+as.factor(byob)2001   -5.255e+00  3.387e+00  1.820e+05  -1.552  0.12073    
+as.factor(byob)2002   -9.527e+00  3.208e+00  2.159e+05  -2.970  0.00298 ** 
+as.factor(byob)2003   -1.371e+01  3.378e+00  2.363e+05  -4.059 4.93e-05 ***
+as.factor(byob)2005   -3.046e+01  3.262e+00  4.243e+05  -9.339  < 2e-16 ***
+as.factor(byob)2006   -3.050e+01  2.768e+00  4.489e+05 -11.020  < 2e-16 ***
+as.factor(byob)2007   -3.267e+01  2.813e+00  4.505e+05 -11.613  < 2e-16 ***
+as.factor(byob)2008   -3.506e+01  2.762e+00  4.510e+05 -12.691  < 2e-16 ***
+parity                 6.539e+00  2.492e-01  4.519e+05  26.239  < 2e-16 ***
+as.factor(FRN)1       -1.681e+01  3.748e+00  4.473e+05  -4.483 7.35e-06 ***
+as.factor(FRN)2       -5.846e+01  2.435e+00  4.404e+05 -24.007  < 2e-16 ***
+ges_calc               9.524e+01  3.514e-01  4.519e+05 271.013  < 2e-16 ***
+elev                  -2.178e-02  1.711e-02  1.539e+03  -1.272  0.20339    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Correlation matrix not shown by default, as p = 38 > 20.
+Use print(...., correlation=TRUE)  or
+	 vcov(....)	 if you need it
+
+Warning messages:
+1: In checkScaleX(X, ctrl = control) :
+  Some predictor variables are on very different scales: consider rescaling
+2: In checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv,  :
+  Model failed to converge with max|grad| = 6645.54 (tol = 0.002)
+3: In checkScaleX(X, ctrl = control) :
+  Some predictor variables are on very different scales: consider rescaling
+4: In checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv,  :
+  Model failed to converge with max|grad| = 6645.54 (tol = 0.002)
+#+end_example
+
+
+
+RESULTS:
 #+begin_example
 Linear mixed model fit by REML ['lmerMod']
 Formula: birthw ~ IQRfintempmabirth + pmnewmabirth + sinetime + costime +      age_centered + age_centered_sq + cig_preg + cig_pre + gender +      prev_400 + diab + hyper + lungd + diab_other + prevpret +      as.factor(kess) + as.factor(MRN) + as.factor(edu_group) +      as.factor(byob) + parity + as.factor(FRN) + ges_calc + elev +      (1 | FIPS) 
@@ -1768,7 +1749,7 @@ Number of Observations: 452296
 Number of Groups: 1358
 #+end_example
 
-*** SGA (NSGA) 
+*** preterm 
 **** logisitc
 ***** 270d 
 ****** base
@@ -4594,7 +4575,6 @@ as.factor(FRN)1       0.42071005113294590582739829187630675733
 as.factor(FRN)2       0.01020471871775891631317634278275363613
 #+end_example
 
-
 ***** 90d   
 #+BEGIN_SRC R :session R1  :results output 
 lbw.90<-(glmmPQL(lowbw ~ IQRfintempma3month+ sinetime+costime+age_centered+age_centered_sq+cig_preg+cig_pre+gender+prev_400+ diab+hyper+lungd+diab_other+prevpret+as.factor(kess)+as.factor(MRN)+as.factor(edu_group)+as.factor(byob)+parity+elev+ges_calc, random = ~ 1 | FIPS ,family=binomial, data =  bd))
@@ -4768,7 +4748,7 @@ parity                0.000588730983618195556628105
 
 
 
-** CI
+
 
 #+BEGIN_SRC R
 ICAM_restable$beta[1] <- mlag001$coef$fixed[2]  #extract Betas

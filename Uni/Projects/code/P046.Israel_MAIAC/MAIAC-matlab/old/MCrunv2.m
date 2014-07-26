@@ -33,10 +33,7 @@ save ('MAIAC_DATA_Aqua','TableA');
 
 
 
-
-
 %% Terra
-
 %change dir to path
 cd '/media/NAS/Uni/org/files/Uni/Projects/code/P46/MAIAC'
 clear

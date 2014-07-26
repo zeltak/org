@@ -1538,6 +1538,7 @@ save specific objects to a file, if you don't specify the path, the cwd is assum
 
 #+BEGIN_SRC R
 save(object list,file="myfile.RData")
+save(list=c("x", "y", "z"), file="xyz.rda")
 #+END_SRC
 
 *** Save RDS
@@ -1545,6 +1546,7 @@ use save and read RDS to save and open a single R object and import it as anothe
 #+BEGIN_EXAMPLE
 saveRDS(mod, "mymodel.rds")
 mod2 <- readRDS("mymodel.rds")
+
 #+END_EXAMPLE
 *** Load Rds
 #+begin_src R
@@ -2099,21 +2101,15 @@ calll:
 ** Missing Data
 *** delete missing cases from dataset based on a specific variables:
 
-*to delete missing cases from dataset based on a specific variables:*
- use:
- NEWDATA
+to delete missing cases from dataset based on a specific variable use:
+#+BEGIN_SRC R
+NEWDATA <-  OLDDATA[complete.cases(OLDDATA$VARIABLEUSED),]
 
-= OLDDATA[complete.cases(OLDDATA$VARIABLEUSED),]
+#delete missing cases in predictions
+T2000_merged <- T2000_merged[complete.cases(T2000_merged$pred),]
 
- #delete missing cases in predictions
- *T2000\_merged* =
-*T2000\_merged*[complete.cases(*T2000\_merged*$*pred*),]
- where:
- *T2000\_merged-is the new data set without missing (in this case its
-the old one without the missing)
- T2000\_merged-is the dataset with the missing
- pred-is the variable with the missing the removal will be based on
-*
+#+END_SRC
+
 
 *** delete all missing data from all dataset (na.omit)
 
@@ -2185,7 +2181,16 @@ m
 [2,]    0    0   10    0
 #+END_SRC
 
- 
+*** calculate a mean across a row 
+use the rowMwans function
+@note this syntax seems to only work on data.frame objetcs@
+
+#+BEGIN_SRC R
+#calculate means for all rows in column 14,15
+#also dont failon NA
+y$tst<-rowMeans(y[,14:15], na.rm=T)
+#+END_SRC
+
 ** Recode variables
 *** Recode into breaks
 
@@ -3333,6 +3338,12 @@ dim(mod3grid)
 sample(DF, 3)
 #+end_src
 
+** rounding
+*** round up variable
+#+BEGIN_SRC R
+paper_table$bw.crude.270<-round(paper_table$bw.crude.270,4)
+#+END_SRC
+
 * Control flow (functions/loops/macros)
 ** Basic
 statement is a single R statement or a compound statement (a group of statements enclosed in curly braces { } and separated by semicolons)
@@ -3529,24 +3540,33 @@ range, and quantile.
 
 ***** summary subseted
 
-summary(nas1$bc\_pred[nas1$Year == 1995])
+summary(nas1$bc_pred[nas1$Year == 1995])
 
 **** external packages
-***** Hmisc
+***** Describe (Hmisc)
+****** base
+The describe() function in the Hmisc package returns the number of variables and observations, the number of missing and unique values, the mean, quantiles, and the five highest and lowest values.
+ 
+#+BEGIN_SRC R
+library(Hmisc)
+describe(mydata)
+# n, nmiss, unique, mean, 5,10,25,50,75,90,95th percentiles
+# 5 lowest and 5 highest scores
+#+END_SRC
+****** limit digits in output 
+use the dig=switch
+#+BEGIN_SRC R
+describe(bda$sga,dig=2)
+#+END_SRC
+****** describe only a subset of the data1
+#+BEGIN_SRC R
+describe(bd$birthw[bd$mrn.n == 4])
+#+END_SRC
 
-*Using the Hmisc package
-*
- The describe() function in the Hmisc package returns the number of
-variables and observations, the number of missing and unique values, the
-mean, quantiles, and the five highest and lowest values.
- *
-*library(Hmisc)
- describe(mydata)
- # n, nmiss, unique, mean, 5,10,25,50,75,90,95th percentiles
- # 5 lowest and 5 highest scores
- [[R_files/img/Image_HHYtteFRaLyts49n0TiDog_0003.png]]
- *NOTE:* [[#DNZDHnrs0PMggw2EsCwRzA][see masking]] to address same name
-function in packages
+****** exclude missing
+#+BEGIN_SRC R
+ exclude.missing=TRUE
+#+END_SRC
 
 ***** pastecs
 
@@ -5256,6 +5276,16 @@ in the bootstrap package. The following listing provides a function
 (called shrinkage()) for cross-validating a model's R-square statistic
 using k-fold cross-validation.
 
+*** extract coeficents
+#+BEGIN_SRC R
+summary(crude270.mod)$coefficients[2,1]  #extract Betas
+#+END_SRC
+
+*** extract CI 
+#+BEGIN_SRC R
+confint(MODEL)[2,1]
+#+END_SRC
+
 ** lme
 *** remove missing values from lme model
 
@@ -5295,6 +5325,39 @@ to extract and then subset residuals:
  write.dbf(x.sub1 ,"c:/Users/ekloog/Documents/tmp/resid11.dbf")
 
 ** lme4
+*** extract part of results of lme4 Objects
+**** using arm Packages
+install arm package and then use:
+
+#+BEGIN_EXAMPLE
+se.coef (object, ...)
+se.fixef (object)
+se.ranef (object)
+
+#  lmer fit
+   M3 <- lmer (y1 ~ x + (1 + x |group))
+   se.coef (M3)
+   se.fixef (M3)
+   se.ranef (M3)
+#+END_EXAMPLE
+**** using lmerTest
+after you load the package and run your lme model you can use the summery output to extract the needed info
+
+#+BEGIN_SRC R
+bw270.mod <- lmer(birthw ~ IQRfintempmabirth+elev+(1 |FIPS),data =  bd)
+bw270.res<- summary(bw270.mod)
+#for sig level
+bw270.res$coefficients[2,5]
+#+END_SRC
+ 
+**** extract manually
+
+#+BEGIN_SRC R
+round(fixef(bw270.mod),3)
+# and the standard errors with
+round(sqrt(diag(vcov(bw270.mod))),3)
+#+END_SRC
+
 *** extract random effect from mer (lme4) objects
 **** simple print out random effects (all)
 
@@ -5312,7 +5375,8 @@ mod1 <- merge(mod1, m1ranef, by = "day", all.x = T)
 #+end_src
 
 **** Extract individual componenets
-use the following code example:
+
+Use the following code example:
 
 #+BEGIN_SRC sh
 #run the lme4 model, $Note$ this is has 2 random slopes and a nested region within a day here 
@@ -5356,11 +5420,18 @@ use the
  smooth\_T2004\_yearly = lme(pred ~ mpm ,
  random = list(guid= ~1 + mpm ),*control=lmeControl(opt = "optim")*,
  data= GAM\_T2004 )
+*** calculate confidance intervals
+use the 'confit' command which are part of lme4
+#+BEGIN_SRC R
+confint(bw270.mod, method="Wald",'IQRfintempmabirth', level=0.95)
+#+END_SRC
+
+
 *** exclude missing values
 #+BEGIN_SRC R
 out.m1 = lmer(m1.formula ,data =  pm10.m1,na.action = na.exclude)
 #+END_SRC
-*** extract lme4 object to a table
+*** extract lme4 object to a latex table
 
 use the The memisc package which does lme4 tables
  Pasted from
@@ -5401,25 +5472,19 @@ regression, and survival analysis.
 
 *** Logistic Regression
 
-Logistic Regression
- Logistic regression is useful when you are predicting a binary outcome
-from a set of continuous predictor variables. It is frequently preferred
-over discriminant function analysis because of its less restrictive
-assumptions.
- # Logistic Regression
- # where F is a binary factor and
- # x1-x3 are continuous predictors
-
 #+BEGIN_SRC R
 fit <- glm(NSGA ~ IQRfintempmabirth,data=bd,family=binomial)
 #+END_SRC
 
+#+BEGIN_EXAMPLE
 summary(fit) # display results
 confint(fit) # 95% CI for the coefficients
 exp(coef(fit)) # exponentiated coefficients
 exp(confint(fit)) # 95% CI for exponentiated coefficients
 predict(fit, type="response") # predicted values
 residuals(fit, type="deviance") # residuals
+#+END_EXAMPLE
+
 
 You can use anova(fit1,fit2, test="Chisq") to compare nested models.
 Additionally, cdplot(F~x, data=mydata) will display the conditional
@@ -5598,7 +5663,6 @@ to a glm object, it gives a different kind of result:
 -----------------------------------------------------------------------------------------------------------------------
  And that is what we would consider to be our answer from the
 regression.
-
 *** weights
 
 to add a weight use:
@@ -5608,9 +5672,19 @@ to add a weight use:
 discrimination + alienation ,weights=weight, data=roni\_r2, dist =
 "negbin", na.action=na.omit)
 
+*** extract items from objects (coefs..etc)
+**** extract coeficents
+use the coef option. you can specify name and/or position
+
+#+BEGIN_SRC R
+coef(pt270.res)[2,"Estimate"]
+coef(pt270.res)[2,"Std. Error"]
+coef(pt270.res)[2,3]
+#+END_SRC
+
+ 
 * Advanced Statistics
 ** calculate odds-ratio
-
 *** calculate odds-ratio and CI
 
 Extract the coefficients from the final model and compute odds ratio.
@@ -5751,7 +5825,6 @@ CO+as.factor(year)+iregg+nitro+(1|Paircount)+(1+CO|crop)+(1|crop/Cultivar),na.ac
 **** Background
 see [[file:KSG.org::*Background%20of%20mixed%20logistic][Background of mixed logistic]]
 **** glmer
-
 We use the glmer command to estimate a mixed effects logistic
 regression models.
 
@@ -5907,10 +5980,9 @@ family=binomial(), data=hanesna, correlation= corAR1(form=~1 |locode))
 
 **** run a logistic (binomal) mixed model
 
- bp.model.gamm1<-gamm(d.total~ sex + as.factor(race) + smokpkyr +
-s(bmi,bs='cr')+ as.factor(booze) + s(age,bs='cr')+
-s(ser.chol,bs='cr')+s(bp1sys,bs='cr'), *random=list(locode=~1)*,
-*family=binomial()*, data=hanesna)
+#+BEGIN_SRC R
+p.model.gamm1<-gamm(d.total~ sex + as.factor(race) + smokpkyr + s(bmi,bs='cr')+ as.factor(booze) + s(age,bs='cr')+ s(ser.chol,bs='cr')+s(bp1sys,bs='cr'), random=list(locode=~1), family=binomial(), data=hanesna) 
+#+END_SRC
 
 *** gamm4
 **** run a mixed model with nested regions
