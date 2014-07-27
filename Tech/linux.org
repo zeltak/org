@@ -23692,6 +23692,33 @@ kill the buffer (C-x k)
 emacs -f eshell
 #+END_SRC
 
+**** Debug
+***** How to startup emacs without loading any customization
+
+How to startup emacs without loading any customization?
+To run emacs without loading your personal init file, start emacs like this:
+#+BEGIN_SRC sh
+emacs -q
+#+END_SRC
+To not load any site-wide startup file, start emacs with emacs -Q. The site-wide startup file is usually part of your emacs
+distribution, such as from Carbon emacs, Aquamacs, ErgoEmacs. Starting
+emacs with "-Q" is like running a bare bone GNU Emacs.
+
+***** debugging your config file
+to see whats wrong in your start up files and if emacs give you startup error messages, go over all your init files (base init.el and all
+sourced files) and issue this command:
+
+#+BEGIN_EXAMPLE
+M-x check-parens
+#+END_EXAMPLE
+
+it will check extra parenthesis and quotes and let you know where andwhat is wrong
+
+****** debug erros in code
+type ~M-x toggle-debug-on-error RET~, reproduce the problem/error you have to get the debug info 
+
+you can then M-x goto-char RET to get to the to-the-charachter-of-the-invalid-read 
+
 **** .emacs
 ***** Org mode file as a emacs config
 
@@ -23943,15 +23970,6 @@ today, the file's creation date will become today. Note: unixes
 doesn't matter. (ctime is not creation date.) Windows and OS X do record
 file creation date.).
 
-***** How to startup emacs without loading any customization
-
-How to startup emacs without loading any customization?
- To run emacs without loading your personal init file, start emacs like
-this: emacs -q. To not load any site-wide startup file, start emacs with
-emacs -Q. The site-wide startup file is usually part of your emacs
-distribution, such as from Carbon emacs, Aquamacs, ErgoEmacs. Starting
-emacs with "-Q" is like running a bare bone GNU Emacs.
-
 ***** How to avoid restarting emacs when adding code to emacs init file
 
 How to avoid restarting emacs when adding code to emacs init file?
@@ -24044,19 +24062,6 @@ the scroll bars, menu-bar and tool-bar, respectively.
  (scroll-bar-mode -1)
  (menu-bar-mode -1)
  (tool-bar-mode -1)
-
-***** debugging
-to see whats wrong in your start up files and if emacs give you startup
-error messages, go over all your init files (base init.el and all
-sourced files) and issue this command:
- M-x
- check-parens
- it will check extra parenthesis and quotes and let you know where and
-what is wrong
-****** debug erros in code
-type ~M-x toggle-debug-on-error RET~, reproduce the problem/error you have to get the debug info 
-
-you can then M-x goto-char RET to get to the to-the-charachter-of-the-invalid-read 
 
 ***** debug slowdowns
 
@@ -27564,6 +27569,13 @@ compilation/installation options.
 For more detailed explanations on Org's build system, please check the
 Org Build System page on
 [[http://orgmode.org/worg/dev/org-build-system.html][Worg]].
+***** `Update org from Git`
+
+#+BEGIN_EXAMPLE
+cd ~/.emacs.d/src/
+git pull 
+make autoloads
+#+END_EXAMPLE
 
 ***** Basic setup
 Here are a few things about basic setup that many people change.
@@ -41004,7 +41016,31 @@ the connection between destination and source must be alive at all time.
 see this:
 [[*reconnect%20a%20ssh%20session%20that%20has%20different%20res][reconnect a ssh session that has different res]] 
 *** vnc
-**** How to access a current desktop session remotely using VNC and ssh (debian)
+**** x11vnc
+***** general x11vnc options
+****** keep alive forever (dont kill connection after client stops)
+use the -forever option 
+****** place the x11vnc line in a script which is called at login
+use something like this
+
+#+NAME: 
+#+BEGIN_SRC sh
+#!/bin/bash
+x11vnc -nap -wait 50 -noxdamage -passwd PASSWORD -display :0 -forever -o /var/log/x11vnc.log -bg
+#+END_SRC 
+****** Scale the Displays
+use the -scale options, ₆In example₆ 
+
+#+NAME: 
+#+BEGIN_SRC sh
+x11vnc -display :0 -xinerama -scale 3/4
+#+END_SRC 
+
+$Note$ one can use fractions such as 0.70 etc 
+****** send x11vnc to Background
+use the -bg option 
+
+***** X11vnc- How to access a current desktop session remotely using VNC and ssh (debian)
 SSH into the computer whose current desktop you want to access and install x11vnc if it hasn’t been installed already:
 
 ssh into remote computer (server) and issue
@@ -41038,7 +41074,32 @@ I use remmina for VNC, but if you’re using vncviewer from the command line, ty
 vncviewer localhost:5555
 #+END_SRC
 
-**** setup vnc server and connect through a browser
+***** multi monitor support
+****** use x11vnc on a multi-headed display that is not Xinerama (i.e. separate screens :0.0, :0.1, ... for each monitor) 
+You can, but it is a little bit awkward: you must start separate x11vnc processes for each screen, and on the viewing end start up separate VNC viewer processes connecting to them. e.g. on the remote end:
+
+#+BEGIN_SRC sh
+x11vnc -display :0.0 -bg -q -rfbport 5900
+x11vnc -display :0.1 -bg -q -rfbport 5901
+#this could be automated in the display manager Xsetup for example) and then on the local machine where you are sitting:
+vncviewer somehost:0 &
+vncviewer somehost:1 &
+#+END_SRC
+
+****** with a pc running Xinerama
+use the 
+
+#+BEGIN_EXAMPLE
+-clip xinerama0
+#+END_EXAMPLE
+
+to clip to the first xinerama sub-screen (if xinerama is active.) xinerama1 for the 2nd sub-screen, etc. 
+This way you dont need to figure out the WxH+X+Y of the desired xinerama sub-screen. screens are sorted in increasing distance from the (0,0) origin (I.e. not the Xserver's order.)
+
+If the viewing-end monitor is not as big as the remote Xinerama display, then the vncviewer scrollbars, etc, will have to be used to pan across the large area. However one user started two x11vnc's, one with "-clip 1280x1024+0+0" and the other with "-clip 1280x1024+1280+0" to split the big screen into two and used two VNC viewers to access them
+
+**** Misc
+***** setup vnc server and connect through a browser
 
  1) Install packages
  sudo aptitude install x11vnc vnc-java
@@ -41053,7 +41114,11 @@ each login
  6) If you want to test it out on a browser, type this in the URL field:
  192.168.115.10:5800
  Of course, replace the example IP with your external IP address.
-
+**** my (zeltak) prefferd v11vnc options 
+     #+NAME: 
+     #+BEGIN_SRC sh
+x11vnc -display :0 -xinerama -scale 0.73  -forever -bg
+     #+END_SRC
 *** wicd
 
 **** tips
