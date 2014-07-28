@@ -323,6 +323,7 @@ run;
 
 
 
+/*3month*/
 
 proc lifereg data = lr;
 class kess  mrnn EDU_GROUP fips byob ;
@@ -330,6 +331,14 @@ class kess  mrnn EDU_GROUP fips byob ;
 diab hyper lungd diab_other prevpret kess adtmean mrnn edu_group ges_calc parity elev  / d=gamma;
 ods OUTPUT ParameterEstimates= x2.plr_3month;
 run;
+
+proc lifereg data = lr;
+class kess  mrnn EDU_GROUP fips byob ;
+  model (lmp,bdob) = tncdcma3month pmnewma3month sinetime costime age_centered age_centered_sq cig_preg cig_pre med_income p_ospace gender prev_400
+diab hyper lungd diab_other prevpret kess adtmean mrnn edu_group ges_calc parity elev  / d=gamma;
+ods OUTPUT ParameterEstimates= x2.ncdc_plr_3month;
+run;
+
 
 
 proc lifereg data = lr;
@@ -342,21 +351,31 @@ run;
 
 
 proc lifereg data = lr;
-class kess  mrnn EDU_GROUP fips byob gesgroup  ;
-  model (lmp,bdob) = fintempma3month*gesgroup  pmnewmabirth sinetime costime age_centered age_centered_sq cig_preg cig_pre med_income p_ospace gender prev_400
+class kess  mrnn EDU_GROUP fips byob ;
+  model (lmp,bdob) = tncdcmabirth pmnewmabirth sinetime costime age_centered age_centered_sq cig_preg cig_pre med_income p_ospace gender prev_400
 diab hyper lungd diab_other prevpret kess adtmean mrnn edu_group ges_calc parity elev  / d=gamma;
-ods OUTPUT ParameterEstimates= x2.plr_3month_gesgroup;
+ods OUTPUT ParameterEstimates= x2.plr_ncdcfullbirth;
 run;
 
-
-proc lifereg data = lr;
-class kess  mrnn EDU_GROUP fips byob gesgroup  ;
-  model (lmp,bdob) = fintempmabirth*gesgroup pmnewmabirth sinetime costime age_centered age_centered_sq cig_preg cig_pre med_income p_ospace gender prev_400
-diab hyper lungd diab_other prevpret kess adtmean mrnn edu_group ges_calc parity elev  / d=gamma;
-ods OUTPUT ParameterEstimates= x2.plr_fullbirth_gesgroup;
-run;
-
-
+/**/
+/**/
+/**/
+/*proc lifereg data = lr;*/
+/*class kess  mrnn EDU_GROUP fips byob gesgroup  ;*/
+/*  model (lmp,bdob) = fintempma3month*gesgroup  pmnewmabirth sinetime costime age_centered age_centered_sq cig_preg cig_pre med_income p_ospace gender prev_400*/
+/*diab hyper lungd diab_other prevpret kess adtmean mrnn edu_group ges_calc parity elev  / d=gamma;*/
+/*ods OUTPUT ParameterEstimates= x2.plr_3month_gesgroup;*/
+/*run;*/
+/**/
+/**/
+/*proc lifereg data = lr;*/
+/*class kess  mrnn EDU_GROUP fips byob gesgroup  ;*/
+/*  model (lmp,bdob) = fintempmabirth*gesgroup pmnewmabirth sinetime costime age_centered age_centered_sq cig_preg cig_pre med_income p_ospace gender prev_400*/
+/*diab hyper lungd diab_other prevpret kess adtmean mrnn edu_group ges_calc parity elev  / d=gamma;*/
+/*ods OUTPUT ParameterEstimates= x2.plr_fullbirth_gesgroup;*/
+/*run;*/
+/**/
+/**/
 
 
 

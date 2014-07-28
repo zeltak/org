@@ -3541,7 +3541,6 @@ range, and quantile.
 ***** summary subseted
 
 summary(nas1$bc_pred[nas1$Year == 1995])
-
 **** external packages
 ***** Describe (Hmisc)
 ****** base
@@ -3562,6 +3561,20 @@ describe(bda$sga,dig=2)
 #+BEGIN_SRC R
 describe(bd$birthw[bd$mrn.n == 4])
 #+END_SRC
+****** Get percents in dichotomous variable (0,1)
+
+#+BEGIN_SRC R
+#$Note$ that you may need to manually run is at a factor to make hmisc know its not continous
+Hmisc::describe(as.factor(bd$lungd))
+#+END_SRC
+results:
+#+BEGIN_EXAMPLE
+as.factor(bd$lungd) 
+      n missing  unique 
+ 452316    1342       2 
+
+0 (437753, 97%), 1 (14563, 3%) 
+#+END_EXAMPLE
 
 ****** exclude missing
 #+BEGIN_SRC R
@@ -3569,58 +3582,97 @@ describe(bd$birthw[bd$mrn.n == 4])
 #+END_SRC
 
 ***** pastecs
+gives the following:
 
-*Using the pastecs package*
- The pastecs package includes a function named stat.desc() that provides
-a wide range of descriptive statistics. The format is:
- *stat.desc(x, basic=TRUE, desc=TRUE, norm=FALSE, p=0.95)
-*
- where x is a data frame or time series. If basic=TRUE (the default),
-the number of values, null values, missing values, minimum, maximum,
-range, and sum are provided. If desc=TRUE (also the default), the
-median, mean, standard error of the mean, 95 per-
- cent confidence interval for the mean, variance, standard deviation,
-and coefficient of variation are also provided. Finally, if norm=TRUE
-(not the default), normal distribution statistics are returned,
-including skewness and kurtosis (and their statistical signifi-
- cance), and the Shapiro--Wilk test of normality. A p-value option is
-used to calculate the confidence interval for the mean (.95 by default).
-Listing 7.4 gives an example.*
-*
- [[R_files/img/Image_zYgybyVESc5i4LGhLkxzlQ_0003.png]]
- As if this isn't enough, the psych package also has a function called
-describe() that provides the number of nonmissing observations, mean,
-standard deviation, median, trimmed mean, median absolute deviation,
-minimum, maximum, range, skew, kurtosis, and standard error of the mean.
-You can see an example in the following listing.
- Examples:
- library(pastecs)
- stat.desc(mydata)
+#+BEGIN_EXAMPLE
+# nbr.val, nbr.null, nbr.na, min max, range, sum,
+# median, mean, SE.mean, CI.mean, var, std.dev, coef.var 
+#+END_EXAMPLE
+
+example:
+use `stat.desc`
+#+BEGIN_SRC R
+stat.desc(bd$ta270)
+          nbr.val          nbr.null            nbr.na               min               max             range               sum            median 
+ 453658.000000000       0.000000000       0.000000000      -0.419630007       8.376250511       8.795880518 1844219.041496962       4.122560722 
+             mean           SE.mean      CI.mean.0.95               var           std.dev          coef.var 
+      4.065218825       0.001191507       0.002335318       0.644053584       0.802529491       0.197413602 
+ 
+#+END_SRC
 
 ***** psych package
 
-*Using the psych package is the recommended way for simple descriptive
-statistics*
- library(psych)
- describe(mydata)
- [[R_files/img/Image_fsPo7A1n7M5ysB1jlyaBCA_0003.png]]
- *NOTE:* [[#DNZDHnrs0PMggw2EsCwRzA][see masking]] to address same name
-function in packages
+# item name ,item number, nvalid, mean, sd,
+# median, mad, min, max, skew, kurtosis, se
+
+
+#+BEGIN_SRC R
+library(psych)
+describe(bd$ta270)
+  vars      n mean  sd median trimmed  mad   min  max range  skew kurtosis se
+1    1 453658 4.07 0.8   4.12    4.13 0.74 -0.42 8.38   8.8 -1.15     2.43  0
+#+END_SRC
+
+
+$Note$ see [[*Solve%20the%20masking%20problmes][Solve the masking problmes]] to address same name function in packages
 
 ***** Solve the masking problmes
 
-*NOTE:*
- The packages psych and Hmisc both provide functions named *describe()*.
-Simply put, the package last loaded takes precedence.
- If psych is loaded after Hmisc, a message is printed indicating that
-the describe() function in Hmisc is masked by the function in psych.
- When you type in the describe() function and R searches for it, R comes
-to the psych package first and executes it. If you want the Hmisc
-version instead, you can type
- Hmisc::describe(mt)
- The function is still there. You have to give R more information to
-find it.
+The packages psych and Hmisc both provide functions named 'describe()'. Simply put, the package last loaded takes precedence.
+If psych is loaded after Hmisc, a message is printed indicating that the describe() function in Hmisc is masked by the function in psych. When you type in the describe() function and R searches for it, R comes to the psych package first and executes it. If you want the Hmisc version instead, you can type
 
+#+BEGIN_EXAMPLE
+Hmisc::describe(mt)
+#+END_EXAMPLE
+
+The function is still there. You have to give R more information to find it.
+
+**** zeltak example of full EPI discriptives
+
+#+BEGIN_SRC R
+Hmisc::describe(bd$birthw)
+describe(bd$cig_pre)
+describe(bd$cig_preg)
+describe(bd$tden)
+describe(bd$med_income)
+describe(bd$p_ospace)  
+describe(bd$cig_pre)
+describe(bd$gender)  
+describe(bd$prev_400)
+describe(bd$diab)
+describe(bd$hyper) 
+describe(bd$lungd)
+describe(bd$diab_other)
+describe(bd$prevpret)
+stat.desc(bd$kess)  
+describe(bd$mrn.n)
+Hmisc::describe(as.factor(bd$edu_group))
+describe(bd$byob)     
+describe(bd$parity)
+Hmisc::describe(as.factor((bd$mrn.n))
+describe(bd$ges_calc)
+describe(bd$elev)
+describe(bd$parity)
+
+Hmisc::describe(as.factor(bd$diab_other))
+describe(bd$birthw[bd$diab_other == 1])
+
+Hmisc::describe(as.factor(bd$diab))
+describe(bd$birthw[bd$diab == 1])
+
+Hmisc::describe(as.factor(bd$prev_400))
+describe(bd$birthw[bd$prev_400 == 1])
+
+Hmisc::describe(as.factor(bd$prevpret))
+describe(bd$birthw[bd$prevpret == 1])
+
+Hmisc::describe(as.factor(bd$hyper))
+describe(bd$birthw[bd$hyper == 1])
+
+Hmisc::describe(as.factor(bd$lungd))
+describe(bd$birthw[bd$lungd == 1])
+#+END_SRC
+ 
 *** Descriptive statistics by group
 **** use the aggregate()
 
@@ -3710,7 +3762,8 @@ table_temp<-ddply(na.omit(temp[,c("Temp","stn","c"),with=F]),.(stn,c),nrow)
 $Note there is a Data.table way of doing it, look:$
 
  
-
+*** using Hmisc
+you can also use [[*Get%20percents%20in%20dichotomous%20variable%20(0,1)][Hmisc]] to get simple freq like percents. 
 ** Counts
 *** count number of occurances per variable
 #+begin_src R
@@ -5476,6 +5529,8 @@ regression, and survival analysis.
 fit <- glm(NSGA ~ IQRfintempmabirth,data=bd,family=binomial)
 #+END_SRC
 
+`if you have a numeric 0/1 response, you are predicting 1's and if you use a two level factor, you are predicting the second level of the factor`
+
 #+BEGIN_EXAMPLE
 summary(fit) # display results
 confint(fit) # 95% CI for the coefficients
@@ -5485,12 +5540,20 @@ predict(fit, type="response") # predicted values
 residuals(fit, type="deviance") # residuals
 #+END_EXAMPLE
 
-
 You can use anova(fit1,fit2, test="Chisq") to compare nested models.
 Additionally, cdplot(F~x, data=mydata) will display the conditional
 density plot of the binary outcome F on the continuous x variable.
 
-[[R_files/img/Image_vMyDKmtVjOfGOxmWRHtnyw_0003.jpg]]
+A typical predictor has the form:
+
+#+BEGIN_EXAMPLE
+response ~ terms
+#+END_EXAMPLE
+
+where response is the (numeric) response vector and terms is a series of terms which specifies a linear predictor for response.
+For binomial and quasibinomial families the response can also be specified as a factor (when the first level denotes failure and all others success) or as a two-column matrix with the columns giving the numbers of successes and failures, thus if you have a numeric 0/1 response, you are predicting 1's and if you use a two level factor, you are predicting the second level of the factor
+
+
 
 *** Poisson Regression
 
@@ -5828,6 +5891,7 @@ see [[file:KSG.org::*Background%20of%20mixed%20logistic][Background of mixed log
 We use the glmer command to estimate a mixed effects logistic
 regression models.
 
+`if you have a numeric 0/1 response, you are predicting 1's and if you use a two level factor, you are predicting the second level of the factor`
 example formula
 
 #+begin_src r
@@ -6665,7 +6729,7 @@ over pie charts because people are able to judge length more accurately
 than volume. Pie charts are created with the function pie(x, labels=)
 where x is a non-negative numeric vector indicating the area of each
 slice and labels= notes a character vector of names for the slices.
- *
+ * 
  Simple Pie Chart*
  # Simple Pie Chart
  slices <- c(10, 12,4, 16, 8)
