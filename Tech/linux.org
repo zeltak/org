@@ -2655,6 +2655,22 @@ To add the user foo to the sudo group:
 adduser foo sudo
 #+END_SRC
 @After being added to a new group the user must log out and then log back in again for the new group to take effect@
+*** Boot debian to CLI prompt (level 3) >> no GDM/KDM
+
+uninstall gui DM if present ₆In example₆ 
+
+#+BEGIN_SRC sh
+sudo apt-get remove lightdm
+#+END_SRC
+
+add the '3' state to you grub.cfg kernel line:
+
+#+BEGIN_EXAMPLE
+linux/boot/vmlinuz-3.12-1-amd64 root=UUID=6b403e64-0515-4600-9728-c5f5be87144c ro  3
+#+END_EXAMPLE
+
+reboot
+
 *** install virtualbox
 VirtualBox 4.3.2 is packaged for Debian "Jessie".
 
@@ -2683,6 +2699,59 @@ The virtualbox-* packages were moved to contrib at VirtualBox 4.2, as a non-free
 see [[*add%20user%20to%20sudo][add user to sudo]]
 **** install 
 chromium R-base
+*** install rofi
+install needed compiling dependencies:
+
+#+BEGIN_SRC sh
+sudo apt-get install  autoconf  libx11-dev libxft-dev libxinerama-dev libxdg-basedir-dev
+#+END_SRC
+
+If compiling from GIT, first run to generate the needed build files:
+
+#+BEGIN_SRC sh
+autoreconf --install
+#+END_SRC
+
+To build rofi, run the following steps:
+
+#+BEGIN_SRC sh
+mkdir build/
+cd build/
+## to install under the ~/bin location
+../configure --prefix=/home/zeltak
+make
+make install
+#+END_SRC
+*** install ZSH
+Installing zsh:
+
+For Debian based distros:
+
+
+#+BEGIN_SRC sh
+$ sudo apt-get update -y
+$ sudo apt-get install -y zsh
+#+END_SRC
+
+Get ohmyzsh
+#+BEGIN_SRC sh
+wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
+#+END_SRC
+
+Change your shell to zsh:
+
+#+BEGIN_SRC sh
+chsh -s `which zsh`
+#+END_SRC
+
+and then restart:
+
+#+BEGIN_SRC sh
+sudo shutdown -r 0
+#+END_SRC
+
+
+
 *** Team viewer on debian 64bit
 
 On newer 64-bit DEB-systems with Multiarch-support (Debian 7) teamviewer_linux_x64.deb cannot be installed because the package ia32-libs is not available anymore on these systems. In this case you can use teamviewer_linux.deb instead.
@@ -29018,6 +29087,25 @@ important things to notice:
 ***** find which properties the symbol is
 Finally, if you would like verbose information about the properties of the text under the cursor, you can type
 ?C-u C-x =?
+***** Colors                                  
+-AAA- Headlines H1
++AAA+  Headlines H2                                     
+~AAA~                                     
+^AAA^ Path                                 
+%AAA% Tip                                     
+$AAA$ Note                                   
+`AAA` Highlight                                    
+'AAA' Emphasize                                     
+*AAA* BOLD                                      
+!AAA! Warn1                               
+@AAA@ Warn2                                  
+_AAA_ underline                                    
+?AAA?-keybind
+
+₄Server₄ |Ar-S-(-)-4
+₅Client₅ |Ar-S-(-)-5
+₆IE₆ |Ar-S-(-)-6
+
 **** movment
 ***** search headlines only using org-goto
 the max level 10 tells it to search first 10 levels of headlines (so only headlines are checked)
@@ -38408,6 +38496,9 @@ use with either of following:
  cat -n /proc/mdstat | grep "\^ *3" | tail -c 8
 
 ** Zsh
+*** zsh config file locations
+Put all the PATH variables in a .zshenv file:
+file:/home/zeltak/.zshenv
 
 *** make Zsh the default shell
 

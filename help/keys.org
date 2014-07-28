@@ -1,24 +1,4 @@
 #+TITLE: emacs_org_shortcuts
-#+bind: org-export-publishing-directory "/home/zeltak/ZH_tmp/org_expo"
-
-
-
-* Template
-** Template
-
-| keys | functions | comment |
-|------+-----------+---------|
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-
 
 * Shortcuts
 
@@ -137,71 +117,9 @@
 |                                                |                                                             |   |
 |------------------------------------------------+-------------------------------------------------------------+---|
 
-
-** Template
-
-| keys | functions |   |
-|------+-----------+---|
-|      |           |   |
-|      |           |   |
-|      |           |   |
-|      |           |   |
-|      |           |   |
-|------+-----------+---|
-|      |           |   |
-|------+-----------+---|
-|      |           |   |
-|      |           |   |
-|      |           |   |
-|      |           |   |
-|      |           |   |
-|      |           |   |
-|      |           |   |
-|      |           |   |
-|      |           |   |
-|      |           |   |
-|      |           |   |
-|      |           |   |
-|      |           |   |
-|      |           |   |
-|      |           |   |
-* Colors                                  
- 
--AAA- Headlines H1
-+AAA+  Headlines H2                                     
-
-~AAA~                                     
-^AAA^ Path                                 
-%AAA% Tip                                     
-$AAA$ Note                                   
-`AAA` Highlight                                    
-'AAA' Emphasize                                     
-*AAA* BOLD                                      
-!AAA! Warn1                               
-@AAA@ Warn2                                  
-_AAA_ underline                                    
-?AAA?-keybind
-
-
-
-
-¶AAA¶                                                                             
-
-¤AAA¤                                      
-₁₁ | Ar-S-(-)-1
-
-₂₂ |Ar-S-(-)-2
-
-₃₃ |Ar-S-(-)-3
-
-₄Server₄ |Ar-S-(-)-4
-
-₅Client₅ |Ar-S-(-)-5
-
-₆IE₆ |Ar-S-(-)-6
-
-
 * Methods of working
+** '*'-F1 help
+to see all keycombo options type KEY followed by F1 to get a list
 ** images in org mode and naming scheme
 
 download the images manually and save them in the attach folders (new ones open every year), ₆In example₆ 
@@ -281,6 +199,7 @@ where the ::25 means line 25 in that file
 | F2 y y | yas insert          | insert a yas snippet |
 | F2 y n | Yas new snippet     |                      |
 | F2 y r | reload all snippets |                      |
+| F2 y v | visit snippet file  |                      |
 |        |                     |                      |
 |        |                     |                      |
 |        |                     |                      |
@@ -328,49 +247,67 @@ where the ::25 means line 25 in that file
 
 
 
-** gnus
-| keys | functions | comment |
-|------+-----------+---------|
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
+** Gnus (F5)
+| keys | functions  | comment |
+|------+------------+---------|
+| F5 g | start Gnus |         |
+|      |            |         |
+|      |            |         |
+|      |            |         |
+|      |            |         |
+|      |            |         |
+|      |            |         |
+|      |            |         |
+|      |            |         |
+|      |            |         |
 
 ** org1 (F9)
-| keys | functions | comment |
-|------+-----------+---------|
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
 
-**  org-id goto F9-F9
-| keys | functions | comment |
-|------+-----------+---------|
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
+| keys          | functions                          | comment                                         |
+|---------------+------------------------------------+-------------------------------------------------|
+| F9 x          | org-archive                        |                                                 |
+| F9 u          | outline up                         | move to upper level of outline                  |
+| F9 e // C-c e | org-export                         | open org export menu                            |
+| F9 t          | toggle inline Images               |                                                 |
+| F9 c          | org Columns                        | open column view in Org                         |
+| F9 q          | close column View                  |                                                 |
+| F9 b          | bibtex yank                        | paste a bibtex entry from killring              |
+| F9 B          | bibtex create                      | create a bibtex entry                           |
+| F9 s          | org-sort                           | all marked entries will be sorted (with dialog) |
+| F9 n          | narrow buffer                      | narrow to only header                           |
+| F9 w          | widen buffer                       |                                                 |
+| F9 d          | org-downlaod screenshot            | take a screenshot and insert to Org             |
+| F9 D          | org-download delete screenshotshot |                                                 |
+| F9 I          | org create and paste id            |                                                 |
+| F9 p // C-c c | org-capture                        | open org capture dialog                         |
+| F9 l          | org-store-link                     | store current header as link in clip            |
+| F9 i          | org-insert-link                    | paste the link stored in org clipboad           |
+|               |                                    |                                                 |
 
-** 
+** org-id goto F9-F9
+
+  ;movies DL
+  (global-set-key (kbd "<f9> <f9> v")
+    (lambda ()
+      (interactive)
+        (org-id-goto "62b49339-cd19-4a3c-a6fd-70dd45be4670")))
+;  emacs
+  (global-set-key (kbd "<f9> <f9> e ")
+    (lambda ()
+      (interactive)
+        (org-id-goto "38a15adf-f505-4a54-b1d9-f76b22ce1147")))
+  
+| keys    | functions         | comment       |
+|---------+-------------------+---------------|
+| F9 F9 e | open emacs header | *in linux.org |
+| F9 F9 o | open Org header   | *in linux.org |
+| F9 F9 p | open papers       |               |
+| F9 F9 m | open mobile-org   |               |
+| F9 F9 g | open git header   |               |
+| F9 F9 b | open beets header |               |
+| F9 F9 s | open ssh header   |               |
+| F9 F9 v | open movies DL    |               |
+|         |                   |               |
 
 ** Org2 (f10)
 | keys | functions | comment |
@@ -386,97 +323,33 @@ where the ::25 means line 25 in that file
 |      |           |         |
 |      |           |         |
 
+** window operations (f11)
 
-** bookmark +
 
-| keys              | functions                           |   |
-|-------------------+-------------------------------------+---|
-| f8-b (C-x p m)    | Bookmark current position           |   |
-| f8 m              | Bookmark menu                       |   |
-| f8-               | Bookmark jump                       |   |
-| f8-f8             | Bookmark jump                       |   |
-| f8- r             | open recents                        |   |
-|-------------------+-------------------------------------+---|
-| In Bookmark lists |                                     |   |
-|-------------------+-------------------------------------+---|
-| d                 | mark for Delete                     |   |
-| x                 | Execute marked files                |   |
-| m                 | mark                                |   |
-| u                 | unmark                              |   |
-| right click       | launch menu                         |   |
-| s k               | Sort by bookmark type (kind)        |   |
-| s n               | Sort by bookmark name               |   |
-| S                 | Save                                |   |
-| .                 | show all bookmakrs                  |   |
-| f8-s              | Filter by tag                       |   |
-| T +               | add Tag (empty tag+ENTER) to finish |   |
-| T c               | copy tag                            |   |
-| T -               | Remove tag                          |   |
-| T e               | Manually edit tag                   |   |
-|                   |                                     |   |
+| keys    | functions                  | comment                            |
+|---------+----------------------------+------------------------------------|
+| F11 F11 | swith previous buffer      | "alt-tab" for buffers              |
+| F11 s   | save current buffer        |                                    |
+| F11 q   | kill buffer                | close the current buffer           |
+| F11 C   | close other buffer         | close all other buffer but current |
+| F11 W   | save and kill buffer       |                                    |
+| F11 Q   | save-buffers-kill-terminal |                                    |
+| F11 i   | ido kill buffer            | kill buffer using IDO              |
+| F11 S   | save and close window      |                                    |
+| F11 p   | prev buffer                |                                    |
+| F11 n   | next buffer                |                                    |
+| F11 P   | prev EMACS buffer          |                                    |
+| F11 N   | next EMACS buffer          |                                    |
 
-** EVIL mode
- 
 
-| keys            | functions                                                           |   |
-|-----------------+---------------------------------------------------------------------+---|
-| \-EMACS COMMAND | Launches a command in emacs mode (disables evil mode for 1 command) |   |
-| C-z             | switch to EMACS mode                                                |   |
-| C-*             | Search word forward  (evil-search-symbol-forward)                   |   |
-|-----------------+---------------------------------------------------------------------+---|
-| NERD COMMENT    |                                                                     |   |
-|-----------------+---------------------------------------------------------------------+---|
-| ,ci (or A-;)    | Evil NERD comment                                                   |   |
-| ,,, (or X,,,)   | comment line or multiple lines (with vim motion)                    |   |
-| ,cc             | linecopy and comment lines                                          |   |
-|-----------------+---------------------------------------------------------------------+---|
-| ACE             |                                                                     |   |
-|-----------------+---------------------------------------------------------------------+---|
-| Space           | jump to character                                                   |   |
-| A-space         | jump to line                                                        |   |
-|                 |                                                                     |   |
-|                 |                                                                     |   |
-|                 |                                                                     |   |
-|                 |                                                                     |   |
-|                 |                                                                     |   |
-|                 |                                                                     |   |
-|                 |                                                                     |   |
-|                 |                                                                     |   |
-|                 |                                                                     |   |
+* windows/splits F12
 
-** Org-Tables
-|-----------------------+----------------------------------------------------------+-------------------|
-| EDITING               |                                                          |                   |
-|-----------------------+----------------------------------------------------------+-------------------|
-| C-c `                 | Edit the current field in a separate window              |                   |
-| C-c -                 | insert horizontal line                                   | prefix for above  |
-| C-c *PIPE*            | Convert the active region to table                       |                   |
-| C-c C-x *C-w/M-w/C-y* | *cut/copy/paste* rectangular region                      |                   |
-| C-c ^                 | Sort the table lines in the region                       |                   |
-|-----------------------+----------------------------------------------------------+-------------------|
-| SPREADSHEET           |                                                          |                   |
-|-----------------------+----------------------------------------------------------+-------------------|
-| C-c *PLUSSIGN*        | Sum the numbers in the current column                    |                   |
-| C-u C-c =             | insert formula here/Edit formula                         |                   |
-| $1                    | colum 1                                                  |                   |
-| @1                    | row 1                                                    |                   |
-| @9$2=vsum(@2..@7)     | sum or vmean for mean                                    |                   |
-| C-c }                 | Toggle the display of row and column numbers for a table |                   |
-|                       | Add Col1 and Col2                                        | equal col1 + col2 |
-|-----------------------+----------------------------------------------------------+-------------------|
-| Movment               |                                                          |                   |
-|-----------------------+----------------------------------------------------------+-------------------|
-| A-a                   | move previous cells                                      |                   |
-| A *left//right*       | move cell *right/left*                                   |                   |
-| A *Up//Down*          | move cell *up/down*                                      |                   |
-| A S <left>            | kill column                                              |                   |
-| A S <right>           | Insert a new column to the left of the cursor position   |                   |
-| A S <down>            | Insert a new row above the current row                   | prefix for below  |
-|                       |                                                          |                   |
-|                       |                                                          |                   |
-|                       |                                                          |                   |
-|                       |                                                          |                   |
-#+TBLFM: $3=col1+col2
+| F12 x   | delete window                  |   |
+| F12 z   | delete other window            |   |
+| F12 v   | split windows vertically       |   |
+| F12 l   | add split window to the right  |   |
+| F12 j   | add split window to the bottom |   |
+| F12 F12 | jump between split windows     |   |
 
 ** buffers
 
@@ -528,33 +401,100 @@ toggle between last 2 buffers
 |       |                          |         |
 
 * packages
-** Helm
+** bookmark+ (F8)
 
-| keys         | functions                        |   |
-|--------------+----------------------------------+---|
-| M-p *//* M-n | go *up//down* in command history |   |
-| *C-}// C-{*  | to narrow/enlarge helm window    |   |
-|              |                                  |   |
-|              |                                  |   |
-|              |                                  |   |
-|--------------+----------------------------------+---|
-| helm views   |                                  |   |
-|--------------+----------------------------------+---|
-| f7 b         | helm-bookmarks                   |   |
-| f7 f7        | mini helm                        |   |
-| f7 y         | helm killring                    |   |
-| f7 f         | helm search                      |   |
-| f7 r         | helm recent files                |   |
-| f7 l         | helm locate                      |   |
-| f7           |                                  |   |
-| f7           |                                  |   |
-| f7           |                                  |   |
-| f7           |                                  |   |
-|              |                                  |   |
-|              |                                  |   |
-|              |                                  |   |
-|              |                                  |   |
-|              |                                  |   |
+| keys              | functions                           |                     |
+|-------------------+-------------------------------------+---------------------|
+| f8-f8             | Bookmark jump                       |                     |
+| f8 h              | helm-bookmarks                      | show helm bookmakrs |
+| f8 m              | Bookmark menu                       |                     |
+| f8 r              | open BM+ recents                    |                     |
+| f8-b // (C-x p m) | Bookmark current position           |                     |
+|-------------------+-------------------------------------+---------------------|
+| In Bookmark lists |                                     |                     |
+|-------------------+-------------------------------------+---------------------|
+| d                 | mark for Delete                     |                     |
+| x                 | Execute marked files                |                     |
+| m                 | mark                                |                     |
+| u                 | unmark                              |                     |
+| right click       | launch menu                         |                     |
+| s k               | Sort by bookmark type (kind)        |                     |
+| s n               | Sort by bookmark name               |                     |
+| S                 | Save                                |                     |
+| .                 | show all bookmakrs                  |                     |
+| f8-s              | Filter by tag                       |                     |
+| T +               | add Tag (empty tag+ENTER) to finish |                     |
+| T c               | copy tag                            |                     |
+| T -               | Remove tag                          |                     |
+| T e               | Manually edit tag                   |                     |
+|                   |                                     |                     |
+
+** EVIL mode
+ 
+
+| keys            | functions                                                           |   |
+|-----------------+---------------------------------------------------------------------+---|
+| \-EMACS COMMAND | Launches a command in emacs mode (disables evil mode for 1 command) |   |
+| C-z             | switch to EMACS mode                                                |   |
+| C-*             | Search word forward  (evil-search-symbol-forward)                   |   |
+|-----------------+---------------------------------------------------------------------+---|
+| NERD COMMENT    |                                                                     |   |
+|-----------------+---------------------------------------------------------------------+---|
+| ,ci (or A-;)    | Evil NERD comment                                                   |   |
+| ,,, (or X,,,)   | comment line or multiple lines (with vim motion)                    |   |
+| ,cc             | linecopy and comment lines                                          |   |
+|-----------------+---------------------------------------------------------------------+---|
+| ACE             |                                                                     |   |
+|-----------------+---------------------------------------------------------------------+---|
+| Space           | jump to character                                                   |   |
+| A-space         | jump to line                                                        |   |
+|                 |                                                                     |   |
+|                 |                                                                     |   |
+|                 |                                                                     |   |
+|                 |                                                                     |   |
+|                 |                                                                     |   |
+|                 |                                                                     |   |
+|                 |                                                                     |   |
+|                 |                                                                     |   |
+|                 |                                                                     |   |
+
+** ELPA
+| keys | functions                       | comment |
+|------+---------------------------------+---------|
+| U x  | Upgrade and install all packges |         |
+| d    | delete (uninstall) Packages     |         |
+| i    | install Packages                |         |
+| r    | refresh                         |         |
+| x    | executed marked items           |         |
+|      |                                 |         |
+|      |                                 |         |
+|      |                                 |         |
+|      |                                 |         |
+|      |                                 |         |
+
+** Helm (F7)
+
+| keys         | functions                        |                      |
+|--------------+----------------------------------+----------------------|
+| M-p *//* M-n | go *up//down* in command history |                      |
+| *C-}// C-{*  | to narrow/enlarge helm window    |                      |
+|--------------+----------------------------------+----------------------|
+| helm views   |                                  |                      |
+|--------------+----------------------------------+----------------------|
+| f7 f7        | mini helm                        |                      |
+| f7 k         | helm killring                    |                      |
+| f7 f         | helm search                      |                      |
+| f7 r         | helm recent files                |                      |
+| f7 l         | helm locate                      |                      |
+| f7 h         | helm org headlines               | search org headlines |
+| f7 x         | helm M-x                         | helm m-x Menus       |
+| f7           |                                  |                      |
+| f7           |                                  |                      |
+|              |                                  |                      |
+|              |                                  |                      |
+|              |                                  |                      |
+|              |                                  |                      |
+
 ** Company
 
 | keys                 | functions                                               |   |
