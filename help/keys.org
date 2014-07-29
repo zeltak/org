@@ -130,9 +130,7 @@ give it a name that would be unique:
 
 ₆In example₆ 
 
-#+BEGIN_SRC sh
 food_shak_1_14092013.jpg
-#+END_SRC
 
 then in org mode use ?C-c l? to insert a file link and choose the first one in the series (the ons starting with '1')
 then simply copy paste the links to desired locations changing the number to desired one
@@ -140,10 +138,10 @@ finally toggle image display
 
 to assign a specific size, use the [[file:~/org/files/Tech/linux.org::*scale%20inline%20images%20in%20orgmode][attribute]] options:
 
-#+BEGIN_SRC sh
 #+attr_html: :width 200px
 [[file:~/org/attach/images/gno_4_8722104799_04354338b1_z.jpg]]
-#+END_SRC
+
+
 ** link to other org notes
 *** Links to org files (Internal) 
 **** link to org mode Headline
@@ -297,17 +295,19 @@ where the ::25 means line 25 in that file
       (interactive)
         (org-id-goto "38a15adf-f505-4a54-b1d9-f76b22ce1147")))
   
-| keys    | functions         | comment       |
-|---------+-------------------+---------------|
-| F9 F9 e | open emacs header | *in linux.org |
-| F9 F9 o | open Org header   | *in linux.org |
-| F9 F9 p | open papers       |               |
-| F9 F9 m | open mobile-org   |               |
-| F9 F9 g | open git header   |               |
-| F9 F9 b | open beets header |               |
-| F9 F9 s | open ssh header   |               |
-| F9 F9 v | open movies DL    |               |
-|         |                   |               |
+| keys      | functions         | comment       |
+|-----------+-------------------+---------------|
+| F9 F9 e   | open emacs header | *in linux.org |
+| F9 F9 o   | open Org header   | *in linux.org |
+| F9 F9 p   | open papers       |               |
+| F9 F9 m   | open mobile-org   |               |
+| F9 F9 g   | open git header   |               |
+| F9 F9 b   | open beets header |               |
+| F9 F9 s   | open ssh header   |               |
+| F9 F9 v   | open movies DL    |               |
+| F9 F9 c c | open econf.org    |               |
+| F9 F9 c k | keybinds          | *In econf.org |
+|           |                   |               |
 
 ** Org2 (f10)
 | keys | functions | comment |

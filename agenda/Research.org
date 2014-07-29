@@ -1,17 +1,8 @@
-#+BEGIN_SRC sh
 #+TITLE: Research 
-#+TODO: TODO NEXT | PAUSED DONE 
+#+TODO: TODO NEXT | SUBMITTED K_TRACK PAUSED DONE 
 #+TAGS:  first(f) 
 #+STARTUP: overview  inlineimages eval: (org-columns)
 #+PRIORITIES: A
-* how to use
-** Refrences
-use org-bibtex-yank to 'paste' a single reference thats been yanked(copied to kill ring)
-In example open a bibtex file/snippet and copy to kill ring ('y' in evil mode) 
-then use 'org-bibtex-export-to-kill-ring' while standing on an org header to export that refrence back to bibtex format
-** Columns 
-to sort by multiple criteria first sort by one the by the other:
-In example to sort by year published and then todo do this: sort by property (r) and choose year as property. then sort by todo state
 * @Ongoing@
 ** PAUSED PM2.5 1kmx1km NEMIA					    :ucurent:
 *** Brainstorm
@@ -111,7 +102,7 @@ in the discussion compare our model to the liu paper and the seattle's group pap
 run by season
 ask california group whats the raw pm-aod correlations
 create yearly nox etc variables 
-** NEXT DVT admissions and PM
+** SUBMITTED DVT admissions and PM
    :PROPERTIES:
    :ID:       2668bdf2-f4de-40cd-b57f-101a88076ba7
    :END:
@@ -147,13 +138,13 @@ if running a posion SA we can extract the random slopes fro every zipcode and wi
     :PROPERTIES:
     :ID:       3d179259-c23a-40d4-bf58-471987418313
     :END:
-** Greg Willenius RI temperature study <2014-03-16 Sun>
+** PAUSED Greg Willenius RI temperature study <2014-03-16 Sun>
    :PROPERTIES:
    :ID:       609c383c-bbda-4910-8fb7-a0fcee7fd0bc
    :END:
 *** Prepare Exposure
 Greg will send over the tract and i will assign exposure per tract, if the tracts are very big we will can calculate a weighted average for each tract
-** NEXT Ta-Bw EHP
+** SUBMITTED Ta-Bw EHP
    :PROPERTIES:
    :ID:       58b0d767-b470-4bbf-907f-ed977ca0b55d
    :END:
@@ -165,11 +156,7 @@ Greg will send over the tract and i will assign exposure per tract, if the tract
    :PROPERTIES:
    :ID:       221d8731-4375-4c80-9605-16acbc29ea80
    :END:
-** TODO MAIAC Mortality
-   :PROPERTIES:
-   :ID:       19d82831-212c-4cab-8150-47fe84cc189c
-   :END:
-** TODO Mexico
+** NEXT Mexico
    :PROPERTIES:
    :ID:       6bbf7400-720f-437e-bbbc-213154482dd2
    :END:
@@ -184,32 +171,40 @@ Greg will send over the tract and i will assign exposure per tract, if the tract
  pm~aod+aod01
 if prev day isnt avilable we use the same day twice
 -to borrow information across space create a variable that weights and down weights low aod observations per day
-** Joel
-*** 11.6.2014
-**** New iteration has new KNN algoryhtm to calculate 60km buffers so that even areas with no active PM monitors for that day in that area are supplemnted by nearby regions
-**** EHP paper 
-***** pm+ta in birth wieght (both mixed and reg works well)
-***** in logisitcs using gee and glmpql only full birth preterm works   
-**** WRF Models- for future predictions
-**** Italy
-regress log of pm vs log of aod and all variables
+** Italy PM models
+*** Diffrances then NE paper:
+- in in europe
+- mountanius regions in north mediteranian climate in south
+-Submit to a Euro journal
+-compare the model to the ESCAPE LUR models, show how we do much
+better
+-compare in Brecsia- the town with and without smellter, talk to
+Brent about this
+-regress log of pm vs log of aod and all variables
 -we have multicliple model so all interactions are build in
+
 - aod in upwind squere is excellent predictor for a specifc grid cell 
 avg Per day, weighted average per grid cell 
-**** alexei-black body radiation. black particles are going to observer and scatter roughly the same ammount vs other particles wont. it might be possible in NEW-England at least to use that information on how to use the diff on wave lenghts in aod for BC model.
 
-
-* Future Research Ideas
-** PM model (NEXT BRANCH)
-*** NEW ideas
-**** Future models ideas
-***** look into predicting with a spatial correlation matrix (with nested days)
-***** smoothing of the residuals-lucas neas suggestion
-#+BEGIN_SRC sh
-resid~ LU+MET+Interactions+ s(x,y)
-#+END_SRC
-***** Take those smoothed surfaces from stage 3 and put them into stage 1 as another predictor, and if CV R2 goes up, use them?
-***** mod1 take the mean of the nonmissing aod's from the immediately surrounding cells, subtracted the aod from the cell with the monitor, and put that difference into the model to perhaps better capture the more slowly changing particle concentrations, and hence increasing spatial R2
+check with Joel about F.forestierti mill data in lazio
+*** Bob Wright italian Grant
+*** Massimo meetings
+**** 10.10.2013
+ask about pop den reso  ltion
+*** grant reports,how do we publish so the grant doesent get annoyed, first author where, etc
+exposure paper- france -last or first
+exposure paper-massimo first/last
+** italy temperature models
+** Israel temperature models
+** Sulfate analysis-explore calibrating the data we have with Sulfate instead of PM2.5
+    :PROPERTIES:
+    :ID:       d458a94c-40a6-4b76-9ebe-020f7b9a3fa8
+    :END:
+**** Get and use 3X3 km data?
+**** get sulfate data from EPA
+antonella dosent have sulfate data, is it from EPA data website?
+- specification data from antonella
+-also email choon min
 ** alexandra
 *** TODO assign shiran to download data
     :PROPERTIES:
@@ -259,28 +254,29 @@ fig 3- going further from A1 roads and PM levels
 *** check spatial need for health studies for these exposures 
 *** WRF tel aviv shai
 *** deeep blue with meeytar 
+
+
+
+* Future Research Ideas
+** PM model (NEXT BRANCH)
+*** NEW ideas
+**** Future models ideas
+***** look into predicting with a spatial correlation matrix (with nested days)
+***** smoothing of the residuals-lucas neas suggestion
+#+BEGIN_SRC sh
+resid~ LU+MET+Interactions+ s(x,y)
+#+END_SRC
+***** Take those smoothed surfaces from stage 3 and put them into stage 1 as another predictor, and if CV R2 goes up, use them?
+***** mod1 take the mean of the nonmissing aod's from the immediately surrounding cells, subtracted the aod from the cell with the monitor, and put that difference into the model to perhaps better capture the more slowly changing particle concentrations, and hence increasing spatial R2
+** alexei-black body radiation. black particles are going to observer and scatter roughly the same ammount vs other particles wont. it might be possible in NEW-England at least to use that information on how to use the diff on wave lenghts in aod for BC model.
 ** peripheral artery disease (Andrea )
 By reading this paper it came back to my mind that there is another orphan cardiovascular disease in air pollution research: peripheral artery disease. This is usually due to atherosclerosis and narrowing of the arteries in the limbs and can lead to severe outcomes such as amputation.
 It makes sense to be affected by air pollution, but last time I checked no one had published anything on this. With a large database and geospatial resolution, PAD would be an obvious one to look at.
     
+** MIT tracking project with petros
 ** Neuro outcomes and pm exposure
-** URBAN multi pollutant with jaime
-*** things to look at as exposures
--urban form
--wakability
--prox to hospitals
--socio economic disatvanteges measures
--urban classification
 ** Mortality and Ta 
-** Sulfate analysis-explore calibrating the data we have with Sulfate instead of PM2.5
-    :PROPERTIES:
-    :ID:       d458a94c-40a6-4b76-9ebe-020f7b9a3fa8
-    :END:
-**** get sulfate data from EPA
-antonella dosent have sulfate data, is it from EPA data website?
-- specification data from antonella
--also email choon min
-** Assign temperature to NAS
+** NAS temperature analyis
 *** DONE create exposure datasets
 *** test various previous temp-nas studies
     :PROPERTIES:
@@ -309,31 +305,18 @@ about this
 -the theory is to put all exousre variables (with temporal variation not SES etc) and it will give you for the specific outcome what the most important one is. its like running all these interactions for ll the exposuresi
 -the random forst is an attempty to make it more robust, and see which Variable (exposres in our case) is most important
 **** Check Mboost R package for regression trees
-** Italy PM models
-*** Diffrances then NE paper:
-- in in europe
-- mountanius regions in north mediteranian climate in south
--Submit to a Euro journal
--compare the model to the ESCAPE LUR models, show how we do much
-better
--compare in Brecsia- the town with and without smellter, talk to
-Brent about this0
-- check with Joel about F.forestierti mill data in lazio
-*** Bob Wright italian Grant
-*** Massimo meetings
-**** 10.10.2013
-ask about pop den reso  ltion
-*** grant reports,how do we publish so the grant doesent get annoyed, first author where, etc
-exposure paper- france -last or first
-exposure paper-massimo first/last
-** italy temp models
+*** things to look at as exposures
+-urban form
+-wakability
+-prox to hospitals
+-socio economic disatvanteges measures
+-urban classification
 ** France Pm models
 ** France temp models
 ** cmaq from EPA and compare components in models
 ** OMI sattelite for NO2 and O3 callibration models
 develop no2 and/or O3 sattelite models (look at omi sattelite)
 http://aura.gsfc.nasa.gov/instruments/omi.html
-** Israel temp models
 ** LAN project with Joel
 *** LAN in NEW-England
 **** Email DMSP regarding data purchuse
@@ -378,15 +361,9 @@ study of nursing home cases, dont move much good for 1x1 km data
 -calculate the residuals between our model and the BC model
 create moving averages of the 4,8,12 weeks and try that in the model> will capture only non traffic exposures
 when we get the 1x1km data ready go back to the icam/vcam reanalysis by marie-able and the stacey BC paper and see if that changes things
-** Diane gold LAN studies in jackson MI
-** Idan menashe- autism
-*** meeting <2013-10-27 Sun>
--BSF, should i be a CI or not?
--the BSF is with a group from drexler uni
--maybe consider an EHF ov birth outcomes and Autism
--there is a connection between MLT and Autism, could be used in future LAN studies
 * Grants
-** TODO EHF grant: birth weight outcomes (defects, Ultra sound measurements and Ta,PM2.5
+
+** SUBMITTED EHF grant: birth weight outcomes (defects, Ultra sound measurements and Ta,PM2.5
    :PROPERTIES:
    :ID:       39e8a4e3-a097-46c4-a3a5-8c35b9452187
    :END:
@@ -424,21 +401,17 @@ the grant can be submitted directly to the EHF anytime up to July 2014
 -Joel: Placental abruption , acute effect that can happen
 http://en.wikipedia.org/wiki/Placental_abruption
 ***** A3:look at interactions between PM and Ta exposures and birth outcomes
-** WAITING ISF grant
+** TODO Resubmit ISF grant
    :PROPERTIES:
    :ID:       2d51f244-9704-406f-87ae-9a02c28cfcaa
    :END:
 ** ESCAPE project with PM for horizon 2020
-** WAITING Young gif						    :WAITING:
+** TODO Resubmit Young GIF
    :PROPERTIES:
    :ID:       e363cfbc-1013-42d0-a32a-d25303f43814
    :END:
 alexandra schnider
-** WAITING Diane gold: sleep lan				    :WAITING:
-   :PROPERTIES:
-   :ID:       31c09f26-0ce2-475e-b3fa-f8c8771b5d64
-   :END:
-** WAITING Boris Haifa						    :WAITING:
+** K_TRACK WAITING Boris Haifa
    :PROPERTIES:
    :ID:       f6ccd685-fd83-402f-bbd8-82198406039a
    :END:
@@ -446,7 +419,7 @@ alexandra schnider
 -run a poisson regression where we regress counts by zipcode and day (like 10x10 NE) ~1 year lags of the pollutants, and a spline for date (See 10x10 code). this will be run togheter for 10 years
 -also to check if the association changed from year to year we will run these exact models by year (IE each year speratley in a seperate model) !note! remember to change the DF for the dats spline for 1 year
 !note! once can run the same model instead of yearly in 1 model with all year with interactions so that each pollutant interacts with a year variable, but you need a very large N`
-** WAITING Antonella whole USA 1x1km grant
+** SUBMITTED Antonella whole USA 1x1km grant
    :PROPERTIES:
    :ID:       5a8c67d0-bd9b-4eff-9d5b-8ae444153490
    :END:
@@ -454,26 +427,26 @@ alexandra schnider
 will look into it for next round (~june)
 maybe leveraging Open source application/stat programs (R,Octovo etc) for big data proccesing)
 bringing in Data set from differnet sources both spatilly and temporally differnt resolutions
-** WAITING Andrea padwan LAN-Prostate Italian SIR grant
+** SUBMITTED WAITING Andrea padwan LAN-Prostate Italian SIR grant
 ** R21 with Sara Adar
 ** R21 with Allan Mexico
-* Office/Budgets
-  :PROPERTIES:
-  :ID:       248dff94-3c3f-4b05-b9d3-4c25addf746b
-  :END:
-** Seed money
-account number 87347711
-** ACTIVE Grants
-*** CIG
-**** gen info
+** K_TRACK CIG
+*** gen info
 can be dynamic, that is i can move money from each budget section to another
-**** reports
+*** reports
 every 3 months we need to put out a reports
 you cant supress 200 hours of work (?a month)
 cant incl. friday/saturday
 no more then 9h a days
 teaching etc is > 'other activities'
 trips abroad goes under remarks 
+** K_TRACK Seed money
+account number 87347711
+
+* Office/Budgets
+  :PROPERTIES:
+  :ID:       248dff94-3c3f-4b05-b9d3-4c25addf746b
+  :END:
 ** budgeting students "manot"
 in 2014 1 "mana" is 514 NIS
 for a post-doc the $$ is between 4-20
@@ -485,7 +458,7 @@ other research sections starts with '8'
 to see how much is left you need to check in "מחקרים"
 *** Move budget that is unused
 check how to move unused budget to department/faculty to pay for other students ans somehow get the money back
-** Office Hardware
+** Office Hardware info
 *** IP
 Beast IP: 132.72.155.204
 NAS BGU:
@@ -494,8 +467,7 @@ NAS BGU:
 *** Phone
 *** bgu wifi network
 use id BGU-USERS\ikloog  
-** look into buying fridge/micro from CIG grant
-** maabadot budget
+** TODO maabadot budget
    DEADLINE: <2014-08-30 Sat>
 *** another scanner?
 *** fridge?
@@ -504,23 +476,22 @@ use id BGU-USERS\ikloog
 *** Speakers
 ***  מסך מחשב Dell UltraSharp P2815Q 28'' UltraHD 4Krrrrrrrrre1111111111222222222222222e2222222222222265^
 *** Proffesional camera 
-** TODO hire a student for 90 hours of work
+-buy DSLR?
+-buy projector?
+-buy LAN meters
+** DONE hire a student for 90 hours of work
    :PROPERTIES:
    :ID:       5ebfa8b5-7816-453a-8e53-59402db2b3df
    :END:
 ** TODO fill in sick days etc
-   DEADLINE: <2014-04-01 Tue +1m>
+   DEADLINE: <2014-07-01 Tue +1m>
+   - State "SUBMITTED"  from "NEXT"       [2014-07-29 Tue 10:55]
+   - State "SUBMITTED"  from "NEXT"       [2014-07-29 Tue 10:55]
+   - State "SUBMITTED"  from "NEXT"       [2014-07-29 Tue 10:55]
    :PROPERTIES:
    :ID:       6026376b-de51-4adf-a7a4-762887ceb426
+   :LAST_REPEAT: [2014-07-29 Tue 10:55]
    :END:
-** TODO finish lab budget
-   DEADLINE: <2014-07-31 Thu 10:00>
-   :PROPERTIES:
-   :ID:       1a33c229-6aa6-4064-9960-5a2a1ef21eb1
-   :END:
--buy DSLR?
--buy projector?
--buy LAN meters
 ** TODO Buy Laptop
    :PROPERTIES:
    :ID:       d8da2a30-f5f0-46d7-8a45-c80e1e72fc27
@@ -530,10 +501,7 @@ extra powercord
 docking station
 warrenty?
 Intel wifi card (strongly recommended for Linux)
-** TODO Buy Scanner
-   :PROPERTIES:
-   :ID:       c4dec477-9125-4343-9175-35cc0781ba72
-   :END:
+** TODO buy fridge and micro from seed money?
 ** TODO mechanical keyboard
    :PROPERTIES:
    :ID:       1822ad1f-279c-4192-9c1d-a5fddc899b1a
@@ -551,10 +519,6 @@ Intel wifi card (strongly recommended for Linux)
    :END:
  	576.00	576.00 ש"ח	 	703.889.26-CSC - US VISA FEE	21/05
  	576.00	 	 	: 25/05 סה"כ חיוב בתאריך
-** TODO refund nesiot for IGA
-   :PROPERTIES:
-   :ID:       a82d62dc-bdae-4556-9ac0-2375b1f53ea5
-   :END:
 * long term Misc
 ** GIS Trac k
     :PROPERTIES:
@@ -637,7 +601,6 @@ add some propaganda, Waze, python, work in high tech
 ** Mapi Maagal project 
 Zipcode proxy
 ** porgress with the virtual geography Library
-** MIT tracking project with petros
 ** List of reviwers
 *** jaime madrigano
 Madrigano, Jaime
