@@ -27834,7 +27834,13 @@ Some tasks need to be repeated again and again. Org mode helps to organize such 
         DEADLINE: <2005-10-01 Sat +1m>
 #+END_EXAMPLE
 
-the +1m is a repeater; the intended interpretation is that the task has a deadline on <2005-10-01> and repeats itself every (one) month starting from that time. You can use yearly, monthly, weekly, daily and hourly repeat cookies by using the y/w/m/d/h letters. If you need both a repeater and a special warning period in a deadline entry, the repeater should come first and the warning period last: DEADLINE: <2005-10-01 Sat +1m -3d>.  
+the +1m is a repeater; the intended interpretation is that the task has a deadline on <2005-10-01> and repeats itself every (one) month starting from that time. You can use yearly, monthly, weekly, daily and hourly repeat cookies by using the y/w/m/d/h letters. If you need both a repeater and a special warning period in a deadline entry, the repeater should come first and the warning period last:i
+
+#+BEGIN_EXAMPLE
+DEADLINE: <2005-10-01 Sat +1m -3d>.  
+#+END_EXAMPLE
+
+
 **** Babel (code blocks)
 ***** run ssh with command inside org
 use something like this
