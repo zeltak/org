@@ -12997,6 +12997,103 @@ use the -loc command line Switch
 #+BEGIN_SRC sh
 rofi -now -loc 8 -width 250 -lines 35 -fixed-num-lines    
 #+END_SRC
+**** stow
+***** base use
+create a dotfile folder or clone from a ready repo and move all your config files from across your $HOME dir there
+
+#+BEGIN_EXAMPLE
+~/dotfiles/
+    irssi/
+        .config
+        themes/
+    bash/
+        .bashrc
+        .bashrc_aliases
+    vim/
+        .vimrc
+        .vim/
+               bundle/
+               colors/
+#+END_EXAMPLE
+
+To install Bash configuration files, just do:
+
+#+BEGIN_SRC sh
+cd ~/dotfiles
+stow bash
+#+END_SRC
+
+If you would like to install Vim configuration files as well, do:
+
+#+BEGIN_SRC sh
+cd ~/dotfiles
+stow vim
+#+END_SRC
+
+GNU Stow will symbolically link ~/dotfiles/bash/ and ~/dotfiles/vim to you home directory, so that content of bash and vim will be exposed in $HOME directory.
+
+***** Removing/Restow a config package
+this follows the same logic by adding -D flag and specifying installed package:
+
+#+BEGIN_SRC sh
+stow -D bash
+stow -D vim
+#+END_SRC
+
+And -R flag to restow so, delete and install again, basically rescan package for any new files:
+
+#+BEGIN_SRC sh
+stow -R bash
+stow -R vim
+#+END_SRC
+***** adding after stowing
+just add the additional config file/folders and issue the relevant stow command again 
+***** per enviroment
+
+Clone your Git dotfiles repository to ~/dotfiles or create it and enter the directory.
+
+You need to organise per-environemnt directories for example:
+
+#+BEGIN_EXAMPLE
+~/dotfiles/
+    work/
+        .config/
+        .icewm/
+        .mutt/
+    server/
+        .tmux.conf
+    common/
+        .vimrc
+        .vim/
+               bundle/
+               colors/
+        .bashrc
+        .bashrc_aliases
+#+END_EXAMPLE
+
+This will allow you divide which packages/configuration you would like to install on which type of machines and simplify deployment. For example work would be Mutt configuration, IceWM configuration only installed on laptop/desktop, but TMux config on server. Some configs, of course, will be shared especially Vim or Bash.
+
+To install work configuration files on your laptop/desktop, just do:
+
+#+BEGIN_SRC sh
+cd ~/dotfiles
+stow work
+#+END_SRC
+
+But on server:
+
+#+BEGIN_SRC sh
+cd ~/dotfiles
+stow server
+#+END_SRC
+
+And add shared configuration:
+
+#+BEGIN_SRC sh
+cd ~/dotfiles
+stow common
+#+END_SRC
+ 
 ** graphics
 *** gimp
 
@@ -26191,50 +26288,59 @@ use 'M-g Tab' and then column number to switch to that column
 
 **** macros
 ****** Naming and Saving Keyboard Macros
-~C-x C-k n~
+?C-x C-k n?
 
 Give a command name (for the duration of the Emacs session) to the most recently defined keyboard macro (kmacro-name-last-macro). 
 
-~C-x C-k b~
+?C-x C-k b?
 
 Bind the most recently defined keyboard macro to a key sequence (for the duration of the session) (kmacro-bind-to-key). 
 
-~M-x insert-kbd-macro~
+?M-x insert-kbd-macro?
 
 Insert in the buffer a keyboard macro's definition, as Lisp code.      
 
 ****** basic macro recording
-
 The key strokes can include calling emacs commands or commands that execute any emacs lisp functions.
 To record keystrokes use:
+******* to start recording a macro and 
 
-?f3?
+?M-x start-kbd-macro?
 
-to start recording a macro and 
+to end. If you made a mistake, you can cancel  ?Ctrl+g? (keyboard-quit) and start over.
 
-?f4?
+******* to stop the macro
 
-to end. If you made a mistake, you can cancel Ctrl+g (keyboard-quit) and start over.
+?M-x end-kbd-macro?
 
-To run the keystrokes you've just recorded, call call-last-kbd-macro or
+******* To run the keystrokes you've just recorded, call call-last-kbd-macro or
 ?C-x e?
 
-to repeat the macro `X` times, you first press
+******* to repeat the macro `X` times, you first press
 ?C-u? `X` and then ?C-x e? 
 
 ****** Saving Your Keyboard Macro for Future Use			:Fav:
 
 If you want to use your keyboard macro for future use, you can save it. To save the macro: Call
 
-~name-last-kbd-macro~
+?M-x name-last-kbd-macro?
 
 and give it a name.
 
 then issue
 
-~Call insert-kbd-macro~
+?M-x insert-kbd-macro?
 
-This will insert the lisp code for a named kmacro at the cursor position. Copy and Paste the code into your emacs init file.
+look for the name you just gave and select it.This will insert the lisp code for the named macro at the cursor position.
+₆In example₆ 
+
+
+#+BEGIN_EXAMPLE
+(fset 'z-wrap-line-bash
+   [?V f4 ?b ?\M-x right])
+#+END_EXAMPLE
+
+Copy and Paste the code into your emacs init file.
 In any future emacs session, you can call your kmacro by name just like any emacs command. Once you've saved your macro with a name, you can also give it a keyboard shortcut, such as F8.
 
 ****** edit a macro while its running
@@ -27834,7 +27940,13 @@ Some tasks need to be repeated again and again. Org mode helps to organize such 
         DEADLINE: <2005-10-01 Sat +1m>
 #+END_EXAMPLE
 
-the +1m is a repeater; the intended interpretation is that the task has a deadline on <2005-10-01> and repeats itself every (one) month starting from that time. You can use yearly, monthly, weekly, daily and hourly repeat cookies by using the y/w/m/d/h letters. If you need both a repeater and a special warning period in a deadline entry, the repeater should come first and the warning period last: DEADLINE: <2005-10-01 Sat +1m -3d>.  
+the +1m is a repeater; the intended interpretation is that the task has a deadline on <2005-10-01> and repeats itself every (one) month starting from that time. You can use yearly, monthly, weekly, daily and hourly repeat cookies by using the y/w/m/d/h letters. If you need both a repeater and a special warning period in a deadline entry, the repeater should come first and the warning period last:i
+
+#+BEGIN_EXAMPLE
+DEADLINE: <2005-10-01 Sat +1m -3d>.  
+#+END_EXAMPLE
+
+
 **** Babel (code blocks)
 ***** run ssh with command inside org
 use something like this
@@ -38669,8 +38781,6 @@ then in the Dynamic DNS tab copy the direct link URL at the bottom and configure
 DOMAIN, the token part of the url you just copied, ₆In example₆ 
 
 zeltak.mooo.com,Q2liUVRmbFR1T201V3RVcWpqRDFralExOjExNjUyODgw
-
- 
  
 *** firewall
 
@@ -38689,13 +38799,12 @@ to be exposed to the Internet- that is one computer without a firewall
 outside/inside IP
  Example: allow www.zeltak .com (192.115.133.122) to acess the firewall
 
-*** git									:Fav:
+*** 'git' 								:Fav:
     :PROPERTIES:
     :ID:       7816c1c8-be9a-4fd5-8121-15c190885cd7
     :END:
-**** intro
+**** quick theoretical intro
 ***** The Three States
-
 Git has three main states that your files can reside in:
 
 'committed', 'modified', and 'staged'.
@@ -38717,9 +38826,7 @@ The basic Git workflow goes something like this:
 3. You do a commit, which takes the files as they are in the staging area and stores that
 snapshot permanently to your Git directory.
 
-
-[[file:/home/zeltak/Dropbox/Org/Tech/images/img20195oYk.jpg]]
-
+**** Basics
 ***** set Identity
 Your Identity:
 The first thing you should do when you install Git is to set your username and e-mail address.
@@ -38742,7 +38849,6 @@ github.token=29fd4f4450185d9e725a964645cbc756
 
 #+END_SRC
 
-**** Basics
 ***** start git repo							:Fav:
 ****** To start a new git repo:
 
@@ -38760,11 +38866,13 @@ git commit -m 'initial commit'
 
 ***** Remote Repos
 ****** To Clone remote repo
-
-In example
+checkout a repository:
 
 #+BEGIN_SRC sh
-git clone URL
+#create a working copy of a local repository by running the command
+git clone /path/to/repository
+#when using a remote server, your command will be
+git clone username@host:/path/to/repository
 #+END_SRC
 
 ****** get extended info on remote repo
@@ -38775,12 +38883,58 @@ git remote -v
 
 ****** push to remote
 
-git push [remote-name] [branch-name]
-
-In example 
+after you add and commit your changes are now in the HEAD of your local working copy. To send those changes to your remote repository, execute 
 
 #+BEGIN_SRC sh
+#git push [remote-name] [branch-name]
 git push origin master
+#+END_SRC
+
+Change `master` to whatever branch you want to push your changes to. 
+
+If you have not cloned an existing repository and want to connect your repository to a remote server, you need to add it with
+git remote add origin <server>
+Now you are able to push your changes to the selected remote server
+***** update, merge, replace
+****** update and merge
+to update your local repository to the newest commit, execute 
+
+#+BEGIN_SRC sh
+git pull
+#+END_SRC
+
+in your working directory to fetch and merge remote changes.
+to merge another branch into your active branch (e.g. master), use
+
+#+BEGIN_SRC sh
+git merge <branch>
+#+END_SRC
+
+in both cases git tries to auto-merge changes. Unfortunately, this is not always possible and results in conflicts. You are responsible to merge those conflicts manually by editing the files shown by git. After changing, you need to mark them as merged with
+
+#+begin_src sh
+git add <filename>
+#+end_src
+
+before merging changes, you can also preview them by using
+
+#+begin_src sh
+git diff <source_branch> <target_branch>
+#+end_src
+
+****** replace local changes
+In case you did something wrong (which for sure never happens ;) you can replace local changes using the command
+
+#+BEGIN_SRC sh
+git checkout -- <filename>
+#+END_SRC
+
+this replaces the changes in your working tree with the last content in HEAD. Changes already added to the index, as well as new files, will be kept.
+If you instead want to drop all your local changes and commits, fetch the latest history from the server and point your local master branch at it like this
+
+#+BEGIN_SRC sh
+git fetch origin
+git reset --hard origin/master
 #+END_SRC
 
 ***** Viewing the Commit History
@@ -38788,8 +38942,9 @@ After you have created several commits, or if you have cloned a repository with 
 back to see what has happened. The most basic and powerful tool to do this is the git log command:
 #+BEGIN_SRC sh
 git log
--------------------------------------------------
+#+END_SRC
 
+#+BEGIN_EXAMPLE
 commit 7b751d203bc72c00a1764184b71b09abb67c3842
 Author: zeltak <zeltak@gmail.com>
 Date:   Thu May 2 08:25:56 2013 -0400
@@ -38825,22 +38980,415 @@ Author: zeltak <zeltak@gmail.com>
 Date:   Tue Apr 9 17:20:53 2013 -0400
 
     first commit
+#+END_EXAMPLE
+***** general usability tips
+****** check git status
+#+NAME: 
+#+BEGIN_SRC sh
+git status
+#+END_SRC
+****** built-in git GUI
+gitk
+****** config options
+use colorful git output
+#+BEGIN_SRC sh
+git config color.ui true
+#+END_SRC
+show log on just one line per commit
+#+BEGIN_SRC sh
+git config format.pretty oneline
+#+END_SRC
+****** use interactive adding
+#+BEGIN_SRC sh
+git add -i
 #+END_SRC
 
-**** Remotes (extended)
-***** Intro
-Git allows the user to synchronize the local repository with other (remote) repositories.
+****** How do I make git use the editor of my choice for commit 
+issue: 
+#+NAME: 
+#+BEGIN_SRC sh
+git config --global core.editor "vim"
+#+END_SRC
+**** In Depth
+from https://www.atlassian.com/git/
+***** Git basics 
+****** git init
+The git init command creates a new Git repository.
 
-Remote repositories are repositories that are hosted on the Internet or network. Such remote repositories can be use to synchronize the changes of several Git repositories. A local Git repository can be connected to multiple remote repositories and you can synchronize your local repository with them via Git operations
+Executing git init creates a .git subdirectory in the project root, which contains all of the necessary metadata for the repo. Aside from the .git directory, an existing project remains unaltered (unlike SVN, Git doesn't require a .git folder in every subdirectory).
 
-Users with sufficient authorization can 'push' changes from their local repository to remote repositories. 
+Usage:
 
-They can also fetch or 'pull' changes from other repositories to their local Git repository.
+#+BEGIN_SRC sh
+git init
+#+END_SRC
+
+Transform the current directory into a Git repository. This adds a .git folder to the current directory and makes it possible to start recording revisions of the project.
+
+#+BEGIN_SRC sh
+git init <directory>
+#+END_SRC
+
+Create an empty Git repository in the specified directory. Running this command will create a new folder called <directory>  containing nothing but the .git subdirectory.
+
+#+BEGIN_SRC sh
+git init --bare <directory>
+#+END_SRC
+
+Initialize an empty Git repository, but omit the working directory. Shared repositories should always be created with the --bare flag (see discussion below). Conventionally, repositories initialized with the --bare flag end in .git. For example, the bare version of a repository called my-project should be stored in a directory called my-project.git.
+
+`Discussion`
+
+For most projects, git init only needs to be executed once to create a central repository—developers typically dont use git init to create their local repositories. Instead, they'll usually use git clone to copy an existing repository onto their local machine.
+
+`Bare Repositories`
+
+The
+'--bare'
+flag creates a repository that doesn’t have a working directory, making it impossible to edit files and commit changes in that repository. Central repositories should always be created as bare repositories because pushing branches to a non-bare repository has the potential to overwrite changes. Think of --bare as a way to mark a repository as a storage facility, opposed to a development environment. This means that for virtually all Git workflows, the central repository is bare, and developers local repositories are non-bare.
+
+₆Example₆ to create a bare repo 
+
+#+BEGIN_SRC sh
+ssh USER@SERVER 
+cd path/above/repo 
+git init --bare my-project.git
+#+END_SRC
+
+First, you SSH into the server that will contain your central repository. Then, you navigate to wherever you’d like to store the project. Finally, you use the --bare flag to create a central storage repository. Developers would then clone my-project.git to create a local copy on their development machine.
+
+****** git clone
+The git clone command copies an existing Git repository. 
+
+$Note$  that the .git extension is omitted from the cloned repository. This reflects the non-bare status of the local copy.
+
+As a convenience, cloning automatically creates a remote connection called 'origin' pointing back to the original repository. This makes it very easy to interact with a central repository.
+
+Usage:
+
+#+BEGIN_SRC sh
+git clone <repo>
+#+END_SRC
+
+Clone the repository located at <repo> onto the local machine. The original repository can be located on the local filesystem or on a remote machine accessible via HTTP or SSH.
+
+#+BEGIN_SRC sh
+git clone <repo> <directory>
+#+END_SRC
+
+Clone the repository located at <repo> into the folder called <directory> on the local machine.
+
+`Discussion`
+
+If a project has already been set up in a central repository, the git clone command is the most common way for users to obtain a development copy. Like git init, cloning is generally a one-time operation—once a developer has obtained a working copy, all version control operations and collaborations are managed through their local repository.
+
+Example
+
+The example below demonstrates how to obtain a local copy of a central repository stored on a server accessible at example.com using the SSH username john:
+
+#+BEGIN_SRC sh
+git clone ssh://john@example.com/path/to/my-project.git 
+cd my-project
+# Start working on the project
+#+END_SRC
+
+The first command initializes a new Git repository in the my-project folder on your local machine and populates it with the contents of the central repository. Then, you can cd into the project and start editing files, committing snapshots, and interacting with other repositories. 
+
+****** git config
+
+The git config command lets you configure your Git installation (or an individual repository) from the command line. This command can define everything from user info to preferences to the behavior of a repository. Several common configuration options are listed below.
+
+Usage:
+
+#+BEGIN_SRC sh
+git config user.name <name>
+#Define the author name to be used for all commits in the current repository. Typically, you’ll want to use the --global flag to set configuration options for the current user.
+
+git config --global user.name <name>
+#Define the author name to be used for all commits by the current user.
+
+git config --global user.email <email>
+#Define the author email to be used for all commits by the current user.
+
+git config --global alias.<alias-name> <git-command>
+#Create a shortcut for a Git command.
+
+git config --system core.editor <editor>
+#Define the text editor used by commands like git commit for all users on the current machine. The <editor> argument should be the command that launches the desired editor (e.g., vi).
+
+git config --global --edit
+#Open the global configuration file in a text editor for manual editing.
+#+END_SRC
+
+All configuration options are stored in plaintext files, so the git config command is really just a convenient command-line interface. Typically, you’ll only need to configure a Git installation the first time you start working on a new development machine, and for virtually all cases, you’ll want to use the --global flag.
+
+Git stores configuration options in three separate files, which lets you scope options to individual repositories, users, or the entire system:
+
+#+BEGIN_EXAMPLE
+- <repo>/.git/config – Repository-specific settings.
+- ~/.gitconfig – User-specific settings. This is where options set with the --global flag are stored.
+- $(prefix)/etc/gitconfig – System-wide settings.
+#+END_EXAMPLE
+
+When options in these files conflict, local settings override user settings, which override system-wide. If you open any of these files, you’ll see something like the following:
+
+#+BEGIN_EXAMPLE
+[user] 
+name = John Smith
+email = john@example.com
+[alias]
+st = status
+co = checkout
+br = branch
+up = rebase
+ci = commit
+[core]
+editor = vim
+#+END_EXAMPLE
+
+You can manually edit these values to the exact same effect as git config.
+
+****** git add
+
+The git add command adds a change in the working directory to the staging area. It tells Git that you want to include updates to a particular file in the next commit. However, git add doesn't really affect the repository in any significant way—changes are not actually recorded until you run git commit.
+
+In conjunction with these commands, you'll also need git status to view the state of the working directory and the staging area.
+
+Usage
+
+#+BEGIN_SRC sh
+git add <file>
+#+END_SRC
+Stage all changes in <file> for the next commit.
+
+#+BEGIN_SRC sh
+git add <directory>
+#+END_SRC
+Stage all changes in <directory> for the next commit.
 
 
-[[file:/home/zeltak/Dropbox/Org/Tech/images/img20195BBG.jpg]]
+#+NAME: 
+#+BEGIN_SRC sh
+git add -A
+#+END_SRC
+add all files in current di
 
-***** Adding Remote Repositories
+#+BEGIN_SRC sh
+git add -p
+#+END_SRC
+Begin an interactive staging session that lets you choose portions of a file to add to the next commit. This will present you with a chunk of changes and prompt you for a command. Use y to stage the chunk, n to ignore the chunk, s to split it into smaller chunks, e to manually edit the chunk, and q to exit.
+
+`Discussion`
+
+The git add and git commit commands compose the fundamental Git workflow. These are the two commands that every Git user needs to understand, regardless of their team’s collaboration model. They are the means to record versions of a project into the repository’s history.
+
+Developing a project revolves around the basic edit/stage/commit pattern. First, you edit your files in the working directory. When you’re ready to save a copy of the current state of the project, you stage changes with git add. After you’re happy with the staged snapshot, you commit it to the project history with git commit.
+
+****** git commit
+
+The git commit command commits the staged snapshot to the project history. Committed snapshots can be thought of as “safe” versions of a project—Git will never change them unless you explicity ask it to. Along with git add, this is one of the most important Git commands.
+
+While they share the same name, this command is nothing like svn commit. Snapshots are committed to the local repository, and this requires absolutely no interaction with other Git repositories.
+
+Usage
+
+#+BEGIN_SRC sh
+git commit
+#+END_SRC
+Commit the staged snapshot. This will launch a text editor prompting you for a commit message. After you’ve entered a message, save the file and close the editor to create the actual commit.
+
+
+#+BEGIN_SRC sh
+git commit -m "<message>"
+#+END_SRC
+Commit the staged snapshot, but instead of launching a text editor, use <message> as the commit message.
+
+#+BEGIN_SRC sh
+git commit -a
+#+END_SRC
+Commit a snapshot of all changes in the working directory. This only includes modifications to tracked files (those that have been added with git add at some point in their history).
+
+.₆In example₆ 
+
+#+BEGIN_SRC sh
+git add hello.py
+git commit
+#+END_SRC
+
+This will open a text editor (customizable via git config) asking for a commit message, along with a list of what’s being committed:
+
+#+BEGIN_SRC sh
+# Please enter the commit message for your changes. Lines starting
+# with '#' will be ignored, and an empty message aborts the commit.
+# On branch master
+# Changes to be committed:
+# (use "git reset HEAD ..." to unstage)
+#
+#modified: hello.py
+#
+#+END_SRC
+
+Git doesn't require commit messages to follow any specific formatting constraints, but the canonical format is to summarize the entire commit on the first line in less than 50 characters, leave a blank line, then a detailed explanation of what’s been changed. For example:
+
+Change the message displayed by hello.py
+
+#+BEGIN_EXAMPLE
+- Update the sayHello() function to output the user's name
+- Change the sayGoodbye() function to a friendlier message
+#+END_EXAMPLE
+
+Note that many developers also like to use present tense in their commit messages. This makes them read more like actions on the repository, which makes many of the history-rewriting operations more intuitive.
+***** Remotes (extended)
+******* git remote command
+
+The git remote command lets you create, view, and delete connections to other repositories. Remote connections are more like bookmarks rather than direct links into other repositories. Instead of providing real-time access to another repository, they serve as convenient names that can be used to reference a not-so-convenient URL.
+
+For example, the following diagram shows two remote connections from your repo into the central repo and another developer’s repo. Instead of referencing them by their full URLs, you can pass the origin and john shortcuts to other Git commands.
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-08-02 14:39:10
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-08-02_14:39:10.png]]
+Usage
+
+#+BEGIN_SRC sh
+git remote
+#+END_SRC
+List the remote connections you have to other repositories.
+
+#+BEGIN_SRC sh
+git remote -v
+#+END_SRC
+Same as the above command, but include the URL of each connection.
+
+#+BEGIN_SRC sh
+git remote add <name> <url>
+#+END_SRC
+Create a new connection to a remote repository. After adding a remote, you’ll be able to use <name> as a convenient shortcut for <url> in other Git commands.
+
+#+BEGIN_SRC sh
+git remote rm <name>
+#+END_SRC
+Remove the connection to the remote repository called <name>.
+
+#+BEGIN_SRC sh
+git remote rename <old-name> <new-name>
+#+END_SRC
+Rename a remote connection from <old-name> to <new-name>.
+
+`The origin Remote`
+
+When you clone a repository with git clone, it automatically creates a remote connection called origin pointing back to the cloned repository. This is useful for developers creating a local copy of a central repository, since it provides an easy way to pull upstream changes or publish local commits. This behavior is also why most Git-based projects call 'their central repository origin'
+
+`Repository URLs`
+
+Git supports many ways to reference a remote repository. Two of the easiest ways to access a remote repo are via the HTTP and the SSH protocols. HTTP is an easy way to allow anonymous, read-only access to a repository. For example:
+
+http://host/path/to/repo.git
+
+But, it’s generally not possible to push commits to an HTTP address (you wouldn’t want to allow anonymous pushes anyways). For read-write access, you should use SSH instead:
+
+#+BEGIN_SRC sh
+ssh://user@host/path/to/repo.git
+#+END_SRC
+You’ll need a valid SSH account on the host machine, but other than that, Git supports authenticated access via SSH out of the box.
+
+`Examples`
+
+In addition to origin, it’s often convenient to have a connection to your teammates’ repositories. For example, if your co-worker, John, maintained a publicly accessible repository on dev.example.com/john.git, you could add a connection as follows:
+
+#+BEGIN_SRC sh
+git remote add john http://dev.example.com/john.git
+#+END_SRC
+
+Having this kind of access to individual developers’ repositories makes it possible to collaborate outside of the central repository. This can be very useful for small teams working on a large project.
+******* git pull
+
+Merging upstream changes into your local repository is a common task in Git-based collaboration workflows. 
+
+$Note$ for working in groups where people commit differnt code versions look at git fetch followed by git merge, but git pull rolls this into a single command
+
+Usage:
+
+#+BEGIN_SRC sh
+git pull <remote>
+#+END_SRC
+Fetch the specified remote’s copy of the current branch and immediately merge it into the local copy. This is the same as git fetch <remote> followed by git merge origin/<current-branch>.
+
+#+BEGIN_SRC sh
+git pull --rebase <remote>
+#+END_SRC
+Same as the above command, but instead of using git merge to integrate the remote branch with the local one, use git rebase.
+
+`Pulling via Rebase`
+
+The --rebase option can be used to ensure a linear history by preventing unnecessary merge commits. Many developers prefer rebasing over merging, since it’s like saying, "I want to put my changes on top of what everybody else has done." In this sense, using git pull with the --rebase flag is even more like svn update than a plain git pull.
+
+In fact, pulling with --rebase is such a common workflow that there is a dedicated configuration option for it:
+
+#+BEGIN_SRC sh
+git config --global branch.autosetuprebase always
+#+END_SRC
+
+After running that command, all git pull commands will integrate via git rebase instead of git merge.
+
+The following example demonstrates how to synchronize with the central repository's master branch:
+
+#+BEGIN_SRC sh
+git checkout master
+git pull --rebase origin
+#+END_SRC
+
+This simply moves your local changes onto the top of what everybody else has already contributed.
+******* git push
+
+Pushing is how you transfer commits from your local repository to a remote repo. It's the counterpart to git fetch, but whereas fetching imports commits to local branches, pushing exports commits to remote branches. This has the potential to overwrite changes, so you need to be careful how you use it. These issues are discussed below.
+
+Usage
+
+#+BEGIN_SRC sh
+git push <remote> <branch>
+#+END_SRC
+Push the specified branch to <remote>, along with all of the necessary commits and internal objects. This creates a local branch in the destination repository. To prevent you from overwriting commits, Git won’t let you push when it results in a non-fast-forward merge in the destination repository.
+
+#+BEGIN_SRC sh
+git push <remote> --force
+#+END_SRC
+Same as the above command, but force the push even if it results in a non-fast-forward merge. Do not use the --force flag unless you’re absolutely sure you know what you’re doing.
+
+#+BEGIN_SRC sh
+git push <remote> --all
+#+END_SRC
+Push all of your local branches to the specified remote.
+
+#+BEGIN_SRC sh
+git push <remote> --tags
+#+END_SRC
+Tags are not automatically pushed when you push a branch or use the --all option. The --tags flag sends all of your local tags to the remote repository.
+
+`Force Pushing`
+
+Git prevents you from overwriting the central repository’s history by refusing push requests when they result in a non-fast-forward merge. So, if the remote history has diverged from your history, you need to pull the remote branch and merge it into your local one, then try pushing again. This is similar to how SVN makes you synchronize with the central repository via svn update before committing a changeset.
+
+The '--force flag' overrides this behavior and makes the remote repository’s branch match your local one, deleting any upstream changes that may have occurred since you last pulled. The only time you should ever need to force push is when you realize that the commits you just shared were not quite right and you fixed them with a git commit --amend or an interactive rebase. However, you must be absolutely certain that none of your teammates have pulled those commits before using the --force option.
+
+$Note Only Push to Bare Repositories$
+
+In addition, you should only push to repositories that have been created with the --bare flag. Since pushing messes with the remote branch structure, it’s important to never push to another developer’s repository. But because bare repos don’t have a working directory, it’s impossible to interrupt anybody’s developments.
+
+The following example describes one of the standard methods for publishing local contributions to the central repository. First, it makes sure your local master is up-to-date by fetching the central repository’s copy and rebasing your changes on top of them. The interactive rebase is also a good opportunity to clean up your commits before sharing them. Then, the git push command sends all of the commits on your local master to the central repository.
+
+#+BEGIN_SRC sh
+git checkout master
+git fetch origin master
+git rebase -i origin/master
+# Squash commits, fix up commit messages etc.
+git push origin master
+#+END_SRC
+
+Since we already made sure the local master was up-to-date, this should result in a fast-forward merge, and git push should not complain about any of the non-fast-forward issues discussed above.
+
+******* QUICK:Adding Remote Repositories
 To add a new remote, use the git remote add command:
 
 #+BEGIN_SRC sh
@@ -38859,45 +39407,29 @@ The command takes two arguments:
 remote name: origin
 repository URL: https://github.com/user/repo.git
 
-***** Fetching and Pulling from Your Remotes (update local copy)
+******* git fetch
 to get updated data from your remote projects, you can run:
 
-git fetch [remote-name]
-
-The command goes out to that remote project and pulls down all the data from that remote project that you *don't have yet*
-After you do this, you should have references to all the branches from that remote, which you can merge in or inspect at any time
-
-!A git pull is what you would do to bring your repository up to date with a remote repository.!
-!git fetch updates your local copy of a remote branch!
-
-***** Pushing to Your Remotes
-
-To push the changes you made back to the remote Server :
-
-
-`git push [remote-name] [branch-name]`
-
-If you want to push your master branch to your origin server (again, cloning generally sets up both of those names for you automatically), then you can run this to push your work back up to the server:
-
 #+BEGIN_SRC sh
-git push origin master
+git fetch [remote-name]
 #+END_SRC
 
-This command works only if you cloned from a server to which you have write access and if nobody has pushed in the meantime. If you and someone else clone at the same time and they push upstream and then you push upstream, your push will rightly be rejected. You'll have to pull down their work first and incorporate it into yours before you'll be allowed to push.
+The command goes out to that remote project and pulls down all the data from that remote project that you !don't have yet!
+After you do this, you should have references to all the branches from that remote, which you can merge in or inspect at any time
 
-***** updating URL of origin remote
+$A git pull is what you would do to bring your repository up to date with a remote repository$
+$git fetch updates your local copy of a remote branch$
 
+******* updating URL of origin remote
 A common mistake is cloning using the default (HTTPS) instead of SSH. You can correct this by going to your repository, clicking the ssh button left to the URL field and updating the URL of your origin remote like this:
 
 #+BEGIN_SRC sh
 git remote set-url origin git@github.com:username/repo.git 
 #+END_SRC
-
-***** use git to connect without a password
-
-Method 1 
-
-Since git 1.7.9 there is a neat mechanism in git to avoid having to type your password all the time for HTTP / HTTPS, called credential helpers. With git 1.7.9 or later, you can just do:
+******* use git to connect without a password
+******** using ssh keys
+just add the ssh keys for the relevant remote repo and push using your ssh keys
+******** using credentials
 
 #+BEGIN_SRC sh
 git config --global credential.helper cache
@@ -38908,8 +39440,7 @@ which tells git to keep your password cached in memory for (by default) 15 minut
 #+BEGIN_SRC sh
 git config credential.helper 'cache --timeout=3600'
 #+END_SRC
-
-Method 2 
+******** using netrc
 
 An alternative approach is to put your username and password in your ~/.netrc file, although, as with keeping the password in the remote URL, this means that your password will be stored on the disk in plain text and is thus less secure and not recommended. However, if you want to take this approach, add the following line to your ~/.netrc:
 
@@ -38924,8 +39455,130 @@ chmod 600 ~/.netrc
 #+END_SRC
 
 $NOTE: Note that on Windows, this file should be called _netrc, and you may need to define the %HOME% environment variable$
- 
-**** `github`
+
+***** git merge
+****** git merge command
+
+Merging is Git's way of putting a forked history back together again. The git merge command lets you take the independent lines of development created by git branch and integrate them into a single branch.
+
+Note that all of the commands presented below merge into the current branch. The current branch will be updated to reflect the merge, but the target branch will be completely unaffected. Again, this means that git merge is often used in conjunction with git checkout for selecting the current branch and git branch -d for deleting the obsolete target branch.
+
+Usage
+
+#+BEGIN_SRC sh
+git merge <branch>
+#+END_SRC
+Merge the specified branch into the current branch. Git will determine the merge algorithm automatically (discussed below).
+
+#+BEGIN_SRC sh
+git merge --no-ff <branch>
+#+END_SRC
+Merge the specified branch into the current branch, but always generate a merge commit (even if it was a fast-forward merge). This is useful for documenting all merges that occur in your repository.
+
+
+A 'fast-forward' merge can occur when there is a linear path from the current branch tip to the target branch. Instead of “actually” merging the branches, all Git has to do to integrate the histories is move (i.e., “fast forward”) the current branch tip up to the target branch tip. This effectively combines the histories, since all of the commits reachable from the target branch are now available through the current one. For example, a fast forward merge of some-feature into master would look something like the following:
+
+****** Resolving Conflicts
+
+If the two branches youre trying to merge both changed the same part of the same file, Git won't be able to figure out which version to use. When such a situation occurs, it stops right before the merge commit so that you can resolve the conflicts manually.
+
+The great part of Git's merging process is that it uses the familiar edit/stage/commit workflow to resolve merge conflicts. 
+
+When you encounter a merge conflict, running the 'git status' command shows you which files need to be resolved. For example, if both branches modified the same section of hello.py, you would see something like the following:
+
+# On branch master
+# Unmerged paths:
+# (use "git add/rm ..." as appropriate to mark resolution)
+#
+# both modified: hello.py
+#
+
+Then, you can go in and fix up the merge to your liking. When youre ready to finish the merge, all you have to do is run:
+
+#+BEGIN_SRC sh
+git add
+#+END_SRC
+
+on the conflicted file(s) to tell Git they're resolved. Then, you run a normal git commit to generate the merge commit. It’s the exact same process as committing an ordinary snapshot, which means it’s easy for normal developers to manage their own merges.
+
+Fast-Forward Merge
+
+#+BEGIN_SRC sh
+# Start a new feature
+git checkout -b new-feature master
+
+# Edit some files
+git add <file>
+git commit -m "Start a feature"
+
+# Edit some files
+git add <file>
+git commit -m "Finish a feature"
+
+# Merge in the new-feature branch
+git checkout master
+git merge new-feature
+git branch -d new-feature
+#+END_SRC
+     
+****** How to Solve a Merge Conflict
+When faced with a merge conflict, the first step is to understand what happened. E.g.: Did one of your colleagues edit the same file on the same lines as you/Did he delete a file that you modified/Did you both add a file with the same name?
+
+Git will tell you that you have "unmerged paths" (which is just another way of telling you that you have one or more conflicts) via "git status":
+
+#+BEGIN_SRC sh
+$ git status
+# On branch contact-form
+# You have unmerged paths.
+#   (fix conflicts and run "git commit")
+#
+# Unmerged paths:
+#   (use "git add <file>..." to mark resolution)
+#
+#       both modified:   contact.html
+#
+no changes added to commit (use "git add" and/or "git commit -a")
+#+END_SRC
+
+Let's take an in-depth look on how to solve the most common case, when two changes affected the same file on the same lines.
+Now is the time to have a look at the contents of the conflicted file.
+Git was nice enough to mark the problematic area in the file by enclosing it in "<<<<<<< HEAD" and ">>>>>>> [other/branch/name]".
+
+
+#+DOWNLOADED: file:///home/zeltak/ZH_tmp/conflict-markers.png @ 2014-05-14 10:15:14
+#+attr_html: :width 300px
+
+[[/home/zeltak/org/attach/images_2014/conflict-markers_2014-05-14_10:15:14.png]]
+
+
+The contents after the first marker originate from your current working branch. After the angle brackets, Git tells us where (from which branch) the changes came from. A line with "=======" separates the two conflicting changes.
+
+Our job is now to clean up these lines: when we are done, the file should look exactly as we want it to look. It can be necessary to consult the teammate who wrote the conflicting changes to decide which code is finally correct. Maybe its yours, maybe it's his - or maybe a mixture between the two.
+
+Opening the raw file in your editor and cleaning it up there is perfectly valid, but not very comfortable. Using a dedicated merge tool can make this job a great deal easier.
+
+You can configure your tool of choice using the "git config" command. Consult your tool's documentation for detailed instructions.
+Then, in case of a conflict, you can later invoke it by simply typing `git mergetool`.
+
+#+DOWNLOADED: file:///home/zeltak/ZH_tmp/merge-conflict-in-gui.jpg @ 2014-05-14 10:21:04
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/merge-conflict-in-gui_2014-05-14_10:21:04.jpg]]
+
+The left and right panes stand for the conflicting changes; a far more elegant visualization than "<<<<<<<" and ">>>>>>>". 
+You can now simply toggle which change shall be taken. The middle pane shows the resulting code; in good tools, you can even edit this further.
+
+Now, after cleaning up the file with the final code, all that is left is to save it.
+
+To give Git a hint that youre done with this file, you should quit the merge tool to continue. Behind the scenes, this told Git to execute a "git add" command on the (now formerly) conflicted file. This marks the conflict as solved. Should you decide not to use a merge tool and instead clean up the file in your editor, you'll have to mark the file as resolved by hand (by executing "git add <filename>").
+
+Finally, after solving all conflicts, a merge conflict situation needs to be concluded by a regular commit.
+
+****** How to Undo a Merge
+
+You should always keep in mind that you can return to the state before you started the merge at any time. This should give you the confidence that you can't break anything. On the command line, a simple "git merge --abort" will do this for you.
+
+In case you've made a mistake while resolving a conflict and realize this only after completing the merge, you can still easily undo it: just roll back to the commit before the merge happened with "git reset --hard " and start over again.
+**** github
 ***** inital setup
 1.Set Up SSH Keys
 
@@ -39026,11 +39679,8 @@ git config --global github.token
 
 $NOTE:If you ever change your GitHub password, a new token will be created and will need to be updated$
 
-***** `Add a new Repo in github`
-
+***** Add a new Repo in github
 on the github GUI page press the new button in the repo page
-
-[[file:/home/zeltak/Dropbox/Org/Tech/images/img20195OLM.jpg]]
 
 then on the Client (the local repo on your PC/laptop), issue this:
 
@@ -39060,15 +39710,8 @@ git push -u origin master
 
 ***** delete a repo github
 Go to the repo's admin page
-
- 
-[[~/Dropbox/Org/Tech/linux_files/Image_Mgjw91zmf8iKVrz95BP9ZQ_0001.png]]
-
-
 click "Delete this repository"
-
 Read the warnings and follow the prompts
-
 ***** upadte repo and push to GitHub
 this works as the usuall workflow, add, commit, push:
 
@@ -39078,33 +39721,7 @@ git commit -m "MESSAGE"
 git push origin    #pushes to origin (defined when you setup the git repo>IE the specific github repo for this local got dir
 #+END_SRC
 
-**** R and R studio
-***** git in R-studio
-in R:
-
-a)Execute the New Project command (from the Project menu)
-b)Choose to create a new project from an Existing Directory
-c)Select the appropriate directory and then click Create Project
-
-A new project will be created for the directory and RStudio's version control features will then be available for that directory.
-**** 'Force overwrite of local file with whats it origin repo'
-If you want to overwrite only one file:
-
-#+BEGIN_SRC sh
-git fetch
-git checkout origin/master <filepath>
-#+END_SRC
-
-If you want to overwrite all changed files:
-
-@this will overwrite ALL the repo@
-#+BEGIN_SRC sh
-git fetch
-git reset --hard origin/master
-#+END_SRC
-@this will overwrite ALL the repo@
-
-**** !Errors/bugs!
+**** !Issues!
 ***** fix conflict issues
 ****** Pull is not possible because you have unmerged files error
 Pull is not possible because you have unmerged files.
@@ -39144,77 +39761,23 @@ stash apply
 you may get a merge commit which is normal          
 
 use git diff to see the changes of the stuff you are going to commit
-**** git merge
-***** How a Merge Conflict Occurs
-In Git, "merging" is the act of integrating another branch into your current working branch. Youre taking changes from another context (thats what a branch effectively is: a context) and combine them with your current working files.
-
-A great thing about having Git as your version control system is that it makes merging extremely easy: in most cases, Git will figure out how to integrate new changes.
-
-However, theres a handful of situations where you might have to step in and tell Git what to do. Most notably, this is when changing the same file. Even in this case, Git will most likely be able to figure it out on its own. But if two people changed the same lines in that same file, or if one person decided to delete it while the other person decided to modify it, Git simply cannot know what is correct. Git will then mark the file as having a conflict - which you'll have to solve before you can continue your work.
-***** How to Solve a Merge Conflict
-When faced with a merge conflict, the first step is to understand what happened. E.g.: Did one of your colleagues edit the same file on the same lines as you/Did he delete a file that you modified/Did you both add a file with the same name?
-
-Git will tell you that you have "unmerged paths" (which is just another way of telling you that you have one or more conflicts) via "git status":
+***** 'Force overwrite of local file with whats it origin repo'
+If you want to overwrite only one file:
 
 #+BEGIN_SRC sh
-$ git status
-# On branch contact-form
-# You have unmerged paths.
-#   (fix conflicts and run "git commit")
-#
-# Unmerged paths:
-#   (use "git add <file>..." to mark resolution)
-#
-#       both modified:   contact.html
-#
-no changes added to commit (use "git add" and/or "git commit -a")
+git fetch
+git checkout origin/master <filepath>
 #+END_SRC
 
-Let's take an in-depth look on how to solve the most common case, when two changes affected the same file on the same lines.
-Now is the time to have a look at the contents of the conflicted file.
-Git was nice enough to mark the problematic area in the file by enclosing it in "<<<<<<< HEAD" and ">>>>>>> [other/branch/name]".
+If you want to overwrite all changed files:
 
-
-#+DOWNLOADED: file:///home/zeltak/ZH_tmp/conflict-markers.png @ 2014-05-14 10:15:14
-#+attr_html: :width 300px
- [[/home/zeltak/org/attach/images_2014/conflict-markers_2014-05-14_10:15:14.png]]
-
-
-The contents after the first marker originate from your current working branch. After the angle brackets, Git tells us where (from which branch) the changes came from. A line with "=======" separates the two conflicting changes.
-
-Our job is now to clean up these lines: when we are done, the file should look exactly as we want it to look. It can be necessary to consult the teammate who wrote the conflicting changes to decide which code is finally correct. Maybe its yours, maybe it's his - or maybe a mixture between the two.
-
-Opening the raw file in your editor and cleaning it up there is perfectly valid, but not very comfortable. Using a dedicated merge tool can make this job a great deal easier.
-
-You can configure your tool of choice using the "git config" command. Consult your tool's documentation for detailed instructions.
-Then, in case of a conflict, you can later invoke it by simply typing `git mergetool`.
-
-#+DOWNLOADED: file:///home/zeltak/ZH_tmp/merge-conflict-in-gui.jpg @ 2014-05-14 10:21:04
-#+attr_html: :width 300px
- [[/home/zeltak/org/attach/images_2014/merge-conflict-in-gui_2014-05-14_10:21:04.jpg]]
-
-The left and right panes stand for the conflicting changes; a far more elegant visualization than "<<<<<<<" and ">>>>>>>". 
-You can now simply toggle which change shall be taken. The middle pane shows the resulting code; in good tools, you can even edit this further.
-
-Now, after cleaning up the file with the final code, all that is left is to save it.
-
-To give Git a hint that youre done with this file, you should quit the merge tool to continue. Behind the scenes, this told Git to execute a "git add" command on the (now formerly) conflicted file. This marks the conflict as solved. Should you decide not to use a merge tool and instead clean up the file in your editor, you'll have to mark the file as resolved by hand (by executing "git add <filename>").
-
-Finally, after solving all conflicts, a merge conflict situation needs to be concluded by a regular commit.
-
-***** How to Undo a Merge
-
-You should always keep in mind that you can return to the state before you started the merge at any time. This should give you the confidence that you can't break anything. On the command line, a simple "git merge --abort" will do this for you.
-
-In case you've made a mistake while resolving a conflict and realize this only after completing the merge, you can still easily undo it: just roll back to the commit before the merge happened with "git reset --hard " and start over again.
-
-**** check git Status
-issue:
-
-#+NAME: 
+@this will overwrite ALL the repo@
 #+BEGIN_SRC sh
-git status
+git fetch
+git reset --hard origin/master
 #+END_SRC
+@this will overwrite ALL the repo@
+
 **** Manage dotfiles with git
 ***** Initial Setup
 create a dotfile folder and initiate a git dir
@@ -39227,6 +39790,8 @@ git init
 then move over files/folders you want to track with git. after moving each file symlink them back to the original location
 %Tip-best way i found to do this is with a FM, ₆In example₆ move and symlink back using gui FM like worker,DC etc%
 
+@update- i now use [[*stow][stow]] to do this@
+
 on your remote repo (₆In Example₆ github) start a new repository, add and commit current files in git repo and add that repo to the current git repo 
 
 #+begin_src sh
@@ -39235,15 +39800,15 @@ git commit -m "first commit"
 git remote add origin git@github.com:zeltak/dotfiles.git
 git push -u origin master
 #+end_src
-
 after this works, keep adding/symlinking all other relevant files/folder needed and pushing changes
-***** special excluded folder
-These folders should be backed up seperatly
+
+@These folders should be backed up seperatly@
 #+BEGIN_EXAMPLE
 .ssh
 .mozzila
 .kde4
 #+END_EXAMPLE
+
 ***** Cloning onto another machine
 Having done this, when you’re working with a new machine onto which you’d like to clone your configuration, you clone the repository from GitHub, and replace the existing versions of those files in your new machine home directory with symbolic links into your repository
 
@@ -39255,13 +39820,6 @@ Finally, if you come back to use this machine later after you’ve tweaked these
 
 #+BEGIN_SRC sh
 git pull
-#+END_SRC
-**** How do I make git use the editor of my choice for commit 
-issue: 
-
-#+NAME: 
-#+BEGIN_SRC sh
-git config --global core.editor "vim"
 #+END_SRC
 
 *** netcfg

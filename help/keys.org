@@ -2,120 +2,7 @@
 
 * Shortcuts
 
-| 'keycombo'                                     | 'key function'                                              |   |
-|------------------------------------------------+-------------------------------------------------------------+---|
-| @Structure@                                    |                                                             |   |
-| ?C-c C-x M?                                    | (org-cut-subtree)                                           |   |
-| ?C-c C-x M-w?                                  | (org-copy-subtree)                                          |   |
-| ?C-c C-x C-y?                                  | (org-paste-subtree)                                         |   |
-| ?M-S-<left>/<right>?                           | (org-promote/demote-subtre> demote all tree and subheading) |   |
-| ?M-S-Enter?                                    | Insert todo header                                          |   |
-| M-S-<up>/<down>                                | (org-move-tree up down)                                     |   |
-| C-c C-w                                        | (org-refile)                                                |   |
-| C-space                                        | to narrow refile (with ido enabled)                         |   |
-| C-c ^                                          | (org-sort) Sort same-level entries.                         |   |
-| ?F9-r? / ?C-x n s?                             | Narrow buffer to current subtree.                           |   |
-| ?F9-w? / ?C-x n w?                             | Widen buffer to remove narrowing.                           |   |
-| C-c *                                          | (org-toggle-heading)                                        |   |
-| Shift-TAB                                      | Return to full view                                         |   |
-| C-q TAB                                        | Normal TAB                                                  |   |
-| C-c C-q (or C-c C-c when on orgfile on header) | insert tag                                                  |   |
-| C-u C-u M-RET                                  | inserts a heading at the end of the parent subtree          |   |
-| C-c -                                          | in a region makes a list item for each line                 |   |
-| C-u C-c -                                      | creates a single item for the whole region                  |   |
-| C-c *                                          | turn item/line into headline                                |   |
-| C-c ^                                          | sort subtree/region/plain-list                              |   |
-| C-'                                            | cycle agenda files                                          |   |
-| A-ESC                                          | ido select buffer                                           |   |
-|------------------------------------------------+-------------------------------------------------------------+---|
-| @spares tree@                                  |                                                             |   |
-| C-c /                                          | start sparse tree                                           |   |
-| C-c C-c                                        | remove higlights in sparse                                  |   |
-| C-c / t                                        | show sparse by todo                                         |   |
-| C-c / m                                        | show sparse by tags                                         |   |
-| C-c a m                                        | (org-tags-view)                                             |   |
-| C-c a < s *SEARCHTERM                          | Search in headlines                                         |   |
-| ?M-p M-s?                                      | Search org using lgrep                                      |   |
-|------------------------------------------------+-------------------------------------------------------------+---|
-| @movment@                                      |                                                             |   |
-| ?C-x C-space?                                  | move to previous spot                                       |   |
-| ?F-10?                                         | 'Alt-tab' between buffer                                    |   |
-| ?M-p M-;?                                      | open org buffers                                            |   |
-| F1                                             | switch buffer left                                          |   |
-| F2                                             | switch buffer right                                         |   |
-| S-F1                                           | switch emacs buffer left                                    |   |
-| S-F2                                           | switch emacs buffer right                                   |   |
-| F-10                                           | Jump between 2 buffers                                      |   |
-|                                                |                                                             |   |
-|                                                |                                                             |   |
-|------------------------------------------------+-------------------------------------------------------------+---|
-| @Table@                                        |                                                             |   |
-| M-S-<down>                                     | insert row                                                  |   |
-| M-S-<up>                                       | KILL row                                                    |   |
-| C-c -                                          | insert horizontal line                                      |   |
-| C-c Pipe                                       | Convert the active region to table                          |   |
-| M-S-<left>                                     | (org-table-delete-column)  *UP/RIGHT for rows*              |   |
-| M-S-<right>                                    | (org-table-insert-column) *UP/RIGHT for rows*               |   |
-| C-c C-x C-w/M-w/C-y                            | cut/copy/paste rectangular region                           |   |
-| C-c ^                                          | (org-table-sort-lines)                                      |   |
-| C-u C-c =                                      | insert formula here/Edit formula                            |   |
-| $1                                             | colum 1                                                     |   |
-| @1                                             | row 1                                                       |   |
-| @9$2=vsum(@2..@7)                              | sum or vmean for mean                                       |   |
-| C-c }                                          | Toggle the display of row and column numbers for a table    |   |
-|                                                |                                                             |   |
-| @dired@                                        |                                                             |   |
-| ?M-1?                                          | dired-jump                                                  |   |
-|------------------------------------------------+-------------------------------------------------------------+---|
-| @Search@                                       |                                                             |   |
-| ?C-c C-j?                                      | Search headlines                                            |   |
-|------------------------------------------------+-------------------------------------------------------------+---|
-| @hyperlink@                                    |                                                             |   |
-| C-u C-c C-l                                    | insert relative link                                        |   |
-| C-c C-l                                        | insert link                                                 |   |
-| C-c C-l (while on link)                        | Edit the link and description parts of the link             |   |
-| C-c C-x C-v (alias='oi')                       | (org-toggle-inline-images)                                  |   |
-|------------------------------------------------+-------------------------------------------------------------+---|
-| @code blocks@                                  |                                                             |   |
-| C-c C-v d                                      | choose block                                                |   |
-| C-c '                                          | edit source code of block                                   |   |
-|------------------------------------------------+-------------------------------------------------------------+---|
-| @TODO/AGENDA@                                  |                                                             |   |
-| C-c .                                          | (org-time-stamp)                                            |   |
-| C-c !                                          | (org-time-stamp-inactive)-DONT create an agenda entry       |   |
-| C-u C-c . OR !                                 | Same as above but with TIME added                           |   |
-| C-c C-o (on Date link)                         | access the agenda for that day                              |   |
-| S- <right> OR <left>                           | org-timestamp-up/down for days                              |   |
-| S- <up> OR <down>                              | change cursor time (based on where cursor is                |   |
-| M-S-RET                                        | insert TODO                                                 |   |
-| @Drawers/Properties@                           |                                                             |   |
-| C-c C-x d                                      | `org-insert-drawer'                                         |   |
-| C-u C-c C-x d                                  | org-insert-property-drawer' !only when on headline!         |   |
-| C-c C-x C-a                                    | Archive                                                     |   |
-|                                                |                                                             |   |
-|------------------------------------------------+-------------------------------------------------------------+---|
-| @spelling/review@                              |                                                             |   |
-| F6 OR M-$                                      | Check word                                                  |   |
-| S-F6 OR :iss                                   | Check buffer or highlighted region                          |   |
-| F5                                             | Fly spell next                                              |   |
-|------------------------------------------------+-------------------------------------------------------------+---|
-| @Frequent commands@                            |                                                             |   |
-| z-edit-file-as-root                            | Edit files as root                                          |   |
-| rotate-windows                                 | switch between windows                                      |   |
-| toggle-window-split                            | switch split position                                       |   |
-| kill-other-buffers                             | Kill all other buffers                                      |   |
-| @plugins@                                      |                                                             |   |
-| comment line(s) NERD                           | ,ci                                                         |   |
-| duplicate and comment NERD                     | ,cc                                                         |   |
-| @editing@                                      |                                                             |   |
-| ?C-x C-q?                                      | make read only                                              |   |
-|                                                |                                                             |   |
-|------------------------------------------------+-------------------------------------------------------------+---|
-| @editing@                                      |                                                             |   |
-| C-S-Pgup                                       | move line up                                                |   |
-| C-S-Pgdown                                     | move line down                                              |   |
-|                                                |                                                             |   |
-|------------------------------------------------+-------------------------------------------------------------+---|
+
 
 * Methods of working
 ** '*'-F1 help
@@ -158,26 +45,30 @@ where the ::25 means line 25 in that file
 [[*black%20ice][black ice]]
 
 * org
-** Agenda
-| keys          | functions                | comment                              |
-|---------------+--------------------------+--------------------------------------|
-| F1 S          | search for keyword       |                                      |
-| F1 r          | org mode research agenda |                                      |
-| F1 h          | org goto                 | go to a heading                      |
-| F1 d d        | insert org timesamp      | with selection dialog                |
-| F1 d n        | insert org timesamp now  | NO selection dialog                  |
-| F1 d i        | insert date at point     |                                      |
-| F1 d l        | insert deadline          |                                      |
-| F1 d s        | insert schedule          |                                      |
-| F1 t          | add TODO                 | Create TODO from header (with dialog |
-| F1 a // C-c a | Org agenda               | Show agenda dialog                   |
-|               |                          |                                      |
-|               |                          |                                      |
-|               |                          |                                      |
+** Agenda (F1)
+| keys                | functions//tag                                    | comment                              |
+|---------------------+----------------------------------------------+--------------------------------------|
+| F1 S                | search for keyword                           |                                      |
+| F1 r                | org mode research agenda                     |                                      |
+| F1 h                | org goto                                     | go to a heading                      |
+| F1 d d              | insert org timesamp                          | with selection dialog                |
+| F1 d n              | insert org timesamp now                      | NO selection dialog                  |
+| F1 d i              | insert date at point                         |                                      |
+| F1 d l              | insert deadline                              |                                      |
+| F1 d s              | insert schedule                              |                                      |
+| F1 t                | add TODO                                     | Create TODO from header (with dialog |
+| F1 a // C-c a       | Org agenda                                   | Show agenda dialog                   |
+|                     |                                              |                                      |
+| S-<right> // <left> | org-timestamp-up/down for days               |                                      |
+| S- <up> // <down>   | change cursor time (based on where cursor is |                                      |
+| M-S-RET             | insert TODO                                  |                                      |
+|                     |                                              |                                      |
+|                     |                                              |                                      |
+
 
 ** Agenda buffer 
    
-| keys    | functions                                          | comment                                                               |
+| keys    | functions//tag                                     | comment                                                               |
 |---------+----------------------------------------------------+-----------------------------------------------------------------------|
 | Space   | org-agenda-show-and-scroll-up                      | Display the original location of the item in another window           |
 | TAB     | org-agenda-goto                                    | goto the original location of the item in another window              |
@@ -210,41 +101,32 @@ where the ::25 means line 25 in that file
 
 ** org1 (F9)
 
-| keys          | functions                          | comment                                         |
-|---------------+------------------------------------+-------------------------------------------------|
-| F9 x          | org-archive                        |                                                 |
-| F9 u          | outline up                         | move to upper level of outline                  |
-| F9 e // C-c e | org-export                         | open org export menu                            |
-| F9 t          | toggle inline Images               |                                                 |
-| F9 c          | org Columns                        | open column view in Org                         |
-| F9 q          | close column View                  |                                                 |
-| F9 b          | bibtex yank                        | paste a bibtex entry from killring              |
-| F9 B          | bibtex create                      | create a bibtex entry                           |
-| F9 s          | org-sort                           | all marked entries will be sorted (with dialog) |
-| F9 n          | narrow buffer                      | narrow to only header                           |
-| F9 w          | widen buffer                       |                                                 |
-| F9 d          | org-downlaod screenshot            | take a screenshot and insert to Org             |
-| F9 D          | org-download delete screenshotshot |                                                 |
-| F9 I          | org create and paste id            |                                                 |
-| F9 p // C-c c | org-capture                        | open org capture dialog                         |
-| F9 l          | org-store-link                     | store current header as link in clip            |
-| F9 i          | org-insert-link                    | paste the link stored in org clipboad           |
-|               |                                    |                                                 |
+| keys                    | functions//tag                                  | comment                                         |
+|-------------------------+-------------------------------------------------+-------------------------------------------------|
+| F9 x                    | org-archive                                     |                                                 |
+| F9 u                    | outline up                                      | move to upper level of outline                  |
+| F9 e // C-c e           | org-export                                      | open org export menu                            |
+| F9 t                    | toggle inline Images                            |                                                 |
+| F9 c                    | org Columns                                     | open column view in Org                         |
+| F9 q                    | close column View                               |                                                 |
+| F9 b                    | bibtex yank                                     | paste a bibtex entry from killring              |
+| F9 B                    | bibtex create                                   | create a bibtex entry                           |
+| F9 s                    | org-sort                                        | all marked entries will be sorted (with dialog) |
+| F9 r                    | org-refile                                      | refile org node                                 |
+| F9 n                    | narrow buffer                                   | narrow to only header                           |
+| F9 w                    | widen buffer                                    |                                                 |
+| F9 d                    | org-downlaod screenshot                         | take a screenshot and insert to Org             |
+| F9 D                    | org-download delete screenshotshot              |                                                 |
+| F9 I                    | org-id-get-create                               | org create and paste id                         |
+| F9 p // C-c c           | org-capture                                     | open org capture dialog                         |
+| F9 l                    | org-store-link                                  | store current header as link in clip            |
+| F9 i                    | org-insert-link                                 | paste the link stored in org clipboad           |
+| C-u C-c C-l             | insert relative link                            |                                                 |
+| C-c C-l (while on link) | Edit the link and description parts of the link |                                                 |
 
 ** org-id goto F9-F9
-
-  ;movies DL
-  (global-set-key (kbd "<f9> <f9> v")
-    (lambda ()
-      (interactive)
-        (org-id-goto "62b49339-cd19-4a3c-a6fd-70dd45be4670")))
-;  emacs
-  (global-set-key (kbd "<f9> <f9> e ")
-    (lambda ()
-      (interactive)
-        (org-id-goto "38a15adf-f505-4a54-b1d9-f76b22ce1147")))
-  
-| keys      | functions         | comment       |
+ 
+| keys      | functions//tag    | comment       |
 |-----------+-------------------+---------------|
 | F9 F9 e   | open emacs header | *in linux.org |
 | F9 F9 o   | open Org header   | *in linux.org |
@@ -259,67 +141,107 @@ where the ::25 means line 25 in that file
 |           |                   |               |
 
 ** Org2 (f10)
-| keys | functions | comment |
-|------+-----------+---------|
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
-|      |           |         |
+| keys             | functions//tag            | comment                             |
+|------------------+---------------------------+-------------------------------------|
+| F10 b s // C-c s | org-babel-execute-subtree | run babel code under current header |
+| F10 t d          | org-cut-subtree           |                                     |
+| F10 t y          | org-copy-subtree          |                                     |
+| F10 t p          | org-paste-subtree         |                                     |
+| F10 8            | org-toggle-heading        | create a heading from line          |
+| F10 h            | org-insert-heading        | insert new org header               |
+| F10              |                           |                                     |
+| F10              |                           |                                     |
+| F10              |                           |                                     |
+|                  |                           |                                     |
 
 ** Sparse tree
 
-| keys    | functions                      | comment |
-|---------+--------------------------------+---------|
-| C-c C-c | clear sparse tree highlighting |         |
-|         |                                |         |
-|         |                                |         |
-|         |                                |         |
-|         |                                |         |
-|         |                                |         |
-|         |                                |         |
-|         |                                |         |
-|         |                                |         |
+| keys    | functions//tag//tag | comment                        |
+|---------+-----------+--------------------------------|
+| C-c C-c |           | clear sparse tree highlighting |
+| C-c /   |           | start sparse tree              |
+| C-c C-c |           | remove higlights in sparse     |
+| C-c / t |           | show sparse by todo            |
+| C-c / m |           | show sparse by tags            |
+|         |           |                                |
+|         |           |                                |
+
+** Movement 
+
+| ?M-S-<left>/<right>?       | (org-promote/demote-subtre> demote all tree and subheading) |                           |
+| ?M-S-Enter?                | Insert todo header                                          |                           |
+| M-S-<up>/<down>            | (org-move-tree up down)                                     |                           |
+| C-space                    | to narrow refile (with ido enabled)                         |                           |
+
+
+
+** code blocks
+
+| keys      | functions//tag                 | comment |
+|-----------+---------------------------+---------|
+| C-c C-v d | choose block              |         |
+| C-c '     | edit source code of block |         |
+|-----------+---------------------------+---------|
+
+** Table
+
+| keys                | functions//tag//tag | comment                                                  |
+|---------------------+----------------+----------------------------------------------------------|
+| M-S-<down>          | org-table      | insert row                                               |
+| M-S-<up>            | org-table      | KILL row                                                 |
+| C-c -               | org-table      | insert horizontal line                                   |
+| C-c Pipe            | org-table      | Convert the active region to table                       |
+| M-S-<left>          | org-table      | (org-table-delete-column)  *UP/RIGHT for rows*           |
+| M-S-<right>         | org-table      | (org-table-insert-column) *UP/RIGHT for rows*            |
+| C-c C-x C-w/M-w/C-y | org-table      | cut/copy/paste rectangular region                        |
+| C-c ^               | org-table      | (org-table-sort-lines)                                   |
+| C-u C-c =           | org-table      | insert formula here/Edit formula                         |
+| $1                  | org-table      | colum 1                                                  |
+| @1                  | org-table      | row 1                                                    |
+| @9$2=vsum(@2..@7)   | org-table      | sum or vmean for mean                                    |
+| C-c }               | org-table      | Toggle the display of row and column numbers for a table |
+
 * Emacs
 ** Emacs Plugins (F2)
 
-| keys   | functions           | comment              |
-|--------+---------------------+----------------------|
-| F2 e   | Evil mode           | Enable/Disable       |
-| F2 y y | yas insert          | insert a yas snippet |
-| F2 y n | Yas new snippet     |                      |
-| F2 y r | reload all snippets |                      |
-| F2 y v | visit snippet file  |                      |
-|        |                     |                      |
-|        |                     |                      |
-|        |                     |                      |
-|        |                     |                      |
-|        |                     |                      |
+| keys   | functions//tag           | comment                    |
+|--------+---------------------+----------------------------|
+| F2 e   | Evil mode           | Enable/Disable             |
+| F2 y y | yas insert          | insert a yas snippet       |
+| F2 y n | Yas new snippet     |                            |
+| F2 y r | reload all snippets |                            |
+| F2 y v | visit snippet file  |                            |
+| ,ci    |                     | comment line(s) NERD       |
+| ,cc    |                     | duplicate and comment NERD |
+|        |                     |                            |
 
 
 ** Main (F3)
 
-| keys | functions                 | comment                             |
-|------+---------------------------+-------------------------------------|
-| F3 d | open dired                |                                     |
-| F3 j | dired-jump                | open dired in curent file directory |
-| F3 e | view mode                 | enable editing/redonly mode of file |
-| F3 s | start shell               |                                     |
-| F3 b | *create scratch buffer*   |                                     |
-| F3 r | Edit current file as root |                                     |
-| C +  | Increase text             |                                     |
-| C -  | Decrease text             |                                     |
-
+| keys   | functions//tag            | comment                             |
+|--------+---------------------------+-------------------------------------|
+| F3 d   | open dired                |                                     |
+| F3 j   | dired-jump                | open dired in curent file directory |
+| F3 r   | z-edit-file-as-root       | edit curent file as root            |
+| F3 e   | view mode                 | enable editing/redonly mode of file |
+| F3 s   | start shell               |                                     |
+| F3 b   | *create scratch buffer*   |                                     |
+| F3 r   | Edit current file as root |                                     |
+| F3 l   | linium mode               | show line numbers                   |
+| F3 ;   | comment region            | comment the marked region           |
+| F3 o   | jump to previous point    |                                     |
+| C +    | Increase text             |                                     |
+| C -    | Decrease text             |                                     |
+| F3 m s | start-kbd-macro           | start recording a macro             |
+| F3 m q | end-kbd-macro             | stop recording a macro              |
+| F3 m n | name-kbd-macro            | name recording a macro              |
+| F3 m i | insert-kbd-macro          | insert recording a macro            |
+|        |                           |                                     |
 
 
 
 ** Editing (F4)
-| keys       | functions                  | comment                           |
+| keys       | functions//tag                  | comment                           |
 |------------+----------------------------+-----------------------------------|
 | F4 c h     | lines to headers           | convert line to headers           |
 | F4 c b     | lines to checkboxes        | convert lines to checkboxes       |
@@ -343,7 +265,7 @@ where the ::25 means line 25 in that file
 
 
 ** Gnus (F5)
-| keys | functions  | comment |
+| keys | functions//tag  | comment |
 |------+------------+---------|
 | F5 g | start Gnus |         |
 |      |            |         |
@@ -359,7 +281,7 @@ where the ::25 means line 25 in that file
 ** window operations (f11)
 
 
-| keys    | functions                  | comment                            |
+| keys    | functions//tag                  | comment                            |
 |---------+----------------------------+------------------------------------|
 | F11 F11 | swith previous buffer      | "alt-tab" for buffers              |
 | F11 s   | save current buffer        |                                    |
@@ -377,18 +299,20 @@ where the ::25 means line 25 in that file
 
 ** windows/splits F12
 
-| F12 x   | delete window                  |   |
-| F12 z   | delete other window            |   |
-| F12 v   | split windows vertically       |   |
-| F12 l   | add split window to the right  |   |
-| F12 j   | add split window to the bottom |   |
-| F12 F12 | jump between split windows     |   |
+| keys    | functions//tag                      | comment |
+|---------+--------------------------------+---------|
+| F12 x   | delete window                  |         |
+| F12 z   | delete other window            |         |
+| F12 v   | split windows vertically       |         |
+| F12 l   | add split window to the right  |         |
+| F12 j   | add split window to the bottom |         |
+| F12 F12 | jump between split windows     |         |
 
 
 ** babbel
 
 
-| keys  | functions                | comment |
+| keys  | functions//tag                | comment |
 |-------+--------------------------+---------|
 | C-c ' | edit code in full editor |         |
 | C-c ' | edit code in full editor |         |
@@ -404,7 +328,7 @@ where the ::25 means line 25 in that file
 * packages
 ** bookmark+ (F8)
 
-| keys              | functions                           |                     |
+| keys              | functions//tag                           |                     |
 |-------------------+-------------------------------------+---------------------|
 | f8-f8             | Bookmark jump                       |                     |
 | f8 h              | helm-bookmarks                      | show helm bookmakrs |
@@ -433,7 +357,7 @@ where the ::25 means line 25 in that file
 ** EVIL mode
  
 
-| keys            | functions                                                           |   |
+| keys            | functions//tag                                                           |   |
 |-----------------+---------------------------------------------------------------------+---|
 | \-EMACS COMMAND | Launches a command in emacs mode (disables evil mode for 1 command) |   |
 | C-z             | switch to EMACS mode                                                |   |
@@ -460,7 +384,7 @@ where the ::25 means line 25 in that file
 |                 |                                                                     |   |
 
 ** ELPA
-| keys | functions                       | comment |
+| keys | functions//tag                       | comment |
 |------+---------------------------------+---------|
 | U x  | Upgrade and install all packges |         |
 | d    | delete (uninstall) Packages     |         |
@@ -475,58 +399,35 @@ where the ::25 means line 25 in that file
 
 ** Helm (F7)
 
-| keys         | functions                        |                      |
-|--------------+----------------------------------+----------------------|
-| M-p *//* M-n | go *up//down* in command history |                      |
-| *C-}// C-{*  | to narrow/enlarge helm window    |                      |
-|--------------+----------------------------------+----------------------|
-| helm views   |                                  |                      |
-|--------------+----------------------------------+----------------------|
-| f7 f7        | mini helm                        |                      |
-| f7 k         | helm killring                    |                      |
-| f7 f         | helm search                      |                      |
-| f7 r         | helm recent files                |                      |
-| f7 l         | helm locate                      |                      |
-| f7 h         | helm org headlines               | search org headlines |
-| f7 x         | helm M-x                         | helm m-x Menus       |
-| f7           |                                  |                      |
-| f7           |                                  |                      |
-|              |                                  |                      |
-|              |                                  |                      |
-|              |                                  |                      |
-|              |                                  |                      |
+| keys         | functions//tag                   |                            |
+|--------------+----------------------------------+----------------------------|
+| M-p *//* M-n | go *up//down* in command history |                            |
+| *C-}// C-{*  | to narrow/enlarge helm window    |                            |
+|--------------+----------------------------------+----------------------------|
+| helm views   |                                  |                            |
+|--------------+----------------------------------+----------------------------|
+| f7 f7        | mini helm                        |                            |
+| f7 k         | helm killring                    |                            |
+| f7 f         | helm search                      |                            |
+| f7 r         | helm recent files                |                            |
+| f7 l         | helm locate                      |                            |
+| f7 h         | helm org headlines               | search org headlines       |
+| f7 x         | helm M-x                         | helm m-x Menus             |
+| f7 b         | helm buffer lists                | show open buffer with Helm |
+|              |                                  |                            |
 
 ** Company
 
-| keys                 | functions                                               |   |
+| keys                 | functions//tag                                               |   |
 |----------------------+---------------------------------------------------------+---|
 | M-n//down M-p//up    | move next/back in completion                            |   |
 | M-(digit)            | to quickly complete with one of the first 10 candidates |   |
 | M-x company-complete | to initiate completion manually                         |   |
 | f1                   | display the documentation for the selected candidate    |   |
-|                      |                                                         |   |
-|----------------------+---------------------------------------------------------+---|
-|                      |                                                         |   |
-|----------------------+---------------------------------------------------------+---|
-|                      |                                                         |   |
-|                      |                                                         |   |
-|                      |                                                         |   |
-|                      |                                                         |   |
-|                      |                                                         |   |
-|                      |                                                         |   |
-|                      |                                                         |   |
-|                      |                                                         |   |
-|                      |                                                         |   |
-|                      |                                                         |   |
-|                      |                                                         |   |
-|                      |                                                         |   |
-|                      |                                                         |   |
-|                      |                                                         |   |
-|                      |                                                         |   |
 * File specific
 ** org food 
 
-| keys   | functions             | comment |
+| keys   | functions//tag             | comment |
 |--------+-----------------------+---------|
 | F1 c b | breakfest ideas       |         |
 | F1 c m | main cooking          |         |
@@ -542,7 +443,6 @@ where the ::25 means line 25 in that file
 |        |                       |         |
 |        |                       |         |
 |        |                       |         |
-
 
 
 
