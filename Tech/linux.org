@@ -29963,6 +29963,45 @@ Define the tasks you find useful and single letters for fast selection the most 
     `boss' and are _not_ marked with the TODO keyword DONE.
 #+END_EXAMPLE
 
+**** Org Methods of working
+***** '*'-F1 help
+to see all keycombo options type KEY followed by F1 to get a list
+***** images in org mode and naming scheme
+
+download the images manually and save them in the attach folders (new ones open every year), ₆In example₆ 
+file:/home/zeltak/org/attach/images_2013
+give it a name that would be unique:
+
+'filename' 'Nodename' 'number' 'date of download'
+
+₆In example₆ 
+
+food_shak_1_14092013.jpg
+
+then in org mode use ?C-c l? to insert a file link and choose the first one in the series (the ons starting with '1')
+then simply copy paste the links to desired locations changing the number to desired one
+finally toggle image display
+
+to assign a specific size, use the [[file:~/org/files/Tech/linux.org::*scale%20inline%20images%20in%20orgmode][attribute]] options:
+
+#+attr_html: :width 200px
+[[file:~/org/attach/images/gno_4_8722104799_04354338b1_z.jpg]]
+
+***** link to other org notes
+****** Links to org files (Internal) 
+******* link to org mode Headline
+stand on the section you want to link to and press ?C-c l? to store its location
+then use ?C-c C-l? to insert that save link (location when needed) 
+
+$Note-you can also specify it by filename::header name like this:$
+[[file:/home/zeltak/Dropbox/Org/Tech/linux.org::Term color theme (.colors)]]
+******* link to org mode Line Number
+one can use line numbers in file using ::n where 'n' is the line number but thats not recommend
+insert a link that looks like this:
+[[file:/PATH/TO/ORGFILE::25]]
+where the ::25 means line 25 in that file
+[[*black%20ice][black ice]]
+
 **** Templates
 ***** Base
 Easy Templates
@@ -43578,6 +43617,7 @@ $Note- its already built in wokrer$
 Then proceed to movie or TV processing
 **** Movies
 use 'tinymoviemanager' to process the files for xbmc
+
 
 * EOF settings
 Local variables:

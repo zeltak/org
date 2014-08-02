@@ -1,52 +1,9 @@
 #+TITLE: emacs_org_shortcuts
 
-* Shortcuts
-
-
-
-* Methods of working
-** '*'-F1 help
-to see all keycombo options type KEY followed by F1 to get a list
-** images in org mode and naming scheme
-
-download the images manually and save them in the attach folders (new ones open every year), ₆In example₆ 
-file:/home/zeltak/org/attach/images_2013
-give it a name that would be unique:
-
-'filename' 'Nodename' 'number' 'date of download'
-
-₆In example₆ 
-
-food_shak_1_14092013.jpg
-
-then in org mode use ?C-c l? to insert a file link and choose the first one in the series (the ons starting with '1')
-then simply copy paste the links to desired locations changing the number to desired one
-finally toggle image display
-
-to assign a specific size, use the [[file:~/org/files/Tech/linux.org::*scale%20inline%20images%20in%20orgmode][attribute]] options:
-
-#+attr_html: :width 200px
-[[file:~/org/attach/images/gno_4_8722104799_04354338b1_z.jpg]]
-
-
-** link to other org notes
-*** Links to org files (Internal) 
-**** link to org mode Headline
-stand on the section you want to link to and press ?C-c l? to store its location
-then use ?C-c C-l? to insert that save link (location when needed) 
-
-$Note-you can also specify it by filename::header name like this:$
-[[file:/home/zeltak/Dropbox/Org/Tech/linux.org::Term color theme (.colors)]]
-**** link to org mode Line Number
-one can use line numbers in file using ::n where 'n' is the line number but thats not recommend
-insert a link that looks like this:
-[[file:/PATH/TO/ORGFILE::25]]
-where the ::25 means line 25 in that file
-[[*black%20ice][black ice]]
 
 * org
 ** Agenda (F1)
-| keys                | functions//tag                                    | comment                              |
+| keys                | functions//tag                               | comment                              |
 |---------------------+----------------------------------------------+--------------------------------------|
 | F1 S                | search for keyword                           |                                      |
 | F1 r                | org mode research agenda                     |                                      |
@@ -157,27 +114,27 @@ where the ::25 means line 25 in that file
 ** Sparse tree
 
 | keys    | functions//tag//tag | comment                        |
-|---------+-----------+--------------------------------|
-| C-c C-c |           | clear sparse tree highlighting |
-| C-c /   |           | start sparse tree              |
-| C-c C-c |           | remove higlights in sparse     |
-| C-c / t |           | show sparse by todo            |
-| C-c / m |           | show sparse by tags            |
-|         |           |                                |
-|         |           |                                |
+|---------+---------------------+--------------------------------|
+| C-c C-c |                     | clear sparse tree highlighting |
+| C-c /   |                     | start sparse tree              |
+| C-c C-c |                     | remove higlights in sparse     |
+| C-c / t |                     | show sparse by todo            |
+| C-c / m |                     | show sparse by tags            |
+|         |                     |                                |
+|         |                     |                                |
 
 ** Movement 
 
-| ?M-S-<left>/<right>?       | (org-promote/demote-subtre> demote all tree and subheading) |                           |
-| ?M-S-Enter?                | Insert todo header                                          |                           |
-| M-S-<up>/<down>            | (org-move-tree up down)                                     |                           |
-| C-space                    | to narrow refile (with ido enabled)                         |                           |
+| ?M-S-<left>/<right>? | (org-promote/demote-subtre> demote all tree and subheading) |   |
+| ?M-S-Enter?          | Insert todo header                                          |   |
+| M-S-<up>/<down>      | (org-move-tree up down)                                     |   |
+| C-space              | to narrow refile (with ido enabled)                         |   |
 
 
 
 ** code blocks
 
-| keys      | functions//tag                 | comment |
+| keys      | functions//tag            | comment |
 |-----------+---------------------------+---------|
 | C-c C-v d | choose block              |         |
 | C-c '     | edit source code of block |         |
@@ -186,25 +143,25 @@ where the ::25 means line 25 in that file
 ** Table
 
 | keys                | functions//tag//tag | comment                                                  |
-|---------------------+----------------+----------------------------------------------------------|
-| M-S-<down>          | org-table      | insert row                                               |
-| M-S-<up>            | org-table      | KILL row                                                 |
-| C-c -               | org-table      | insert horizontal line                                   |
-| C-c Pipe            | org-table      | Convert the active region to table                       |
-| M-S-<left>          | org-table      | (org-table-delete-column)  *UP/RIGHT for rows*           |
-| M-S-<right>         | org-table      | (org-table-insert-column) *UP/RIGHT for rows*            |
-| C-c C-x C-w/M-w/C-y | org-table      | cut/copy/paste rectangular region                        |
-| C-c ^               | org-table      | (org-table-sort-lines)                                   |
-| C-u C-c =           | org-table      | insert formula here/Edit formula                         |
-| $1                  | org-table      | colum 1                                                  |
-| @1                  | org-table      | row 1                                                    |
-| @9$2=vsum(@2..@7)   | org-table      | sum or vmean for mean                                    |
-| C-c }               | org-table      | Toggle the display of row and column numbers for a table |
+|---------------------+---------------------+----------------------------------------------------------|
+| M-S-<down>          | org-table           | insert row                                               |
+| M-S-<up>            | org-table           | KILL row                                                 |
+| C-c -               | org-table           | insert horizontal line                                   |
+| C-c Pipe            | org-table           | Convert the active region to table                       |
+| M-S-<left>          | org-table           | (org-table-delete-column)  *UP/RIGHT for rows*           |
+| M-S-<right>         | org-table           | (org-table-insert-column) *UP/RIGHT for rows*            |
+| C-c C-x C-w/M-w/C-y | org-table           | cut/copy/paste rectangular region                        |
+| C-c ^               | org-table           | (org-table-sort-lines)                                   |
+| C-u C-c =           | org-table           | insert formula here/Edit formula                         |
+| $1                  | org-table           | colum 1                                                  |
+| @1                  | org-table           | row 1                                                    |
+| @9$2=vsum(@2..@7)   | org-table           | sum or vmean for mean                                    |
+| C-c }               | org-table           | Toggle the display of row and column numbers for a table |
 
 * Emacs
 ** Emacs Plugins (F2)
 
-| keys   | functions//tag           | comment                    |
+| keys   | functions//tag      | comment                    |
 |--------+---------------------+----------------------------|
 | F2 e   | Evil mode           | Enable/Disable             |
 | F2 y y | yas insert          | insert a yas snippet       |
@@ -241,7 +198,7 @@ where the ::25 means line 25 in that file
 
 
 ** Editing (F4)
-| keys       | functions//tag                  | comment                           |
+| keys       | functions//tag             | comment                           |
 |------------+----------------------------+-----------------------------------|
 | F4 c h     | lines to headers           | convert line to headers           |
 | F4 c b     | lines to checkboxes        | convert lines to checkboxes       |
@@ -265,23 +222,23 @@ where the ::25 means line 25 in that file
 
 
 ** Gnus (F5)
-| keys | functions//tag  | comment |
-|------+------------+---------|
-| F5 g | start Gnus |         |
-|      |            |         |
-|      |            |         |
-|      |            |         |
-|      |            |         |
-|      |            |         |
-|      |            |         |
-|      |            |         |
-|      |            |         |
-|      |            |         |
+| keys | functions//tag | comment |
+|------+----------------+---------|
+| F5 g | start Gnus     |         |
+|      |                |         |
+|      |                |         |
+|      |                |         |
+|      |                |         |
+|      |                |         |
+|      |                |         |
+|      |                |         |
+|      |                |         |
+|      |                |         |
 
 ** window operations (f11)
 
 
-| keys    | functions//tag                  | comment                            |
+| keys    | functions//tag             | comment                            |
 |---------+----------------------------+------------------------------------|
 | F11 F11 | swith previous buffer      | "alt-tab" for buffers              |
 | F11 s   | save current buffer        |                                    |
@@ -299,7 +256,7 @@ where the ::25 means line 25 in that file
 
 ** windows/splits F12
 
-| keys    | functions//tag                      | comment |
+| keys    | functions//tag                 | comment |
 |---------+--------------------------------+---------|
 | F12 x   | delete window                  |         |
 | F12 z   | delete other window            |         |
@@ -312,7 +269,7 @@ where the ::25 means line 25 in that file
 ** babbel
 
 
-| keys  | functions//tag                | comment |
+| keys  | functions//tag           | comment |
 |-------+--------------------------+---------|
 | C-c ' | edit code in full editor |         |
 | C-c ' | edit code in full editor |         |
@@ -328,7 +285,7 @@ where the ::25 means line 25 in that file
 * packages
 ** bookmark+ (F8)
 
-| keys              | functions//tag                           |                     |
+| keys              | functions//tag                      |                     |
 |-------------------+-------------------------------------+---------------------|
 | f8-f8             | Bookmark jump                       |                     |
 | f8 h              | helm-bookmarks                      | show helm bookmakrs |
@@ -357,7 +314,7 @@ where the ::25 means line 25 in that file
 ** EVIL mode
  
 
-| keys            | functions//tag                                                           |   |
+| keys            | functions//tag                                                      |   |
 |-----------------+---------------------------------------------------------------------+---|
 | \-EMACS COMMAND | Launches a command in emacs mode (disables evil mode for 1 command) |   |
 | C-z             | switch to EMACS mode                                                |   |
@@ -384,7 +341,7 @@ where the ::25 means line 25 in that file
 |                 |                                                                     |   |
 
 ** ELPA
-| keys | functions//tag                       | comment |
+| keys | functions//tag                  | comment |
 |------+---------------------------------+---------|
 | U x  | Upgrade and install all packges |         |
 | d    | delete (uninstall) Packages     |         |
@@ -418,7 +375,7 @@ where the ::25 means line 25 in that file
 
 ** Company
 
-| keys                 | functions//tag                                               |   |
+| keys                 | functions//tag                                          |   |
 |----------------------+---------------------------------------------------------+---|
 | M-n//down M-p//up    | move next/back in completion                            |   |
 | M-(digit)            | to quickly complete with one of the first 10 candidates |   |
@@ -427,7 +384,7 @@ where the ::25 means line 25 in that file
 * File specific
 ** org food 
 
-| keys   | functions//tag             | comment |
+| keys   | functions//tag        | comment |
 |--------+-----------------------+---------|
 | F1 c b | breakfest ideas       |         |
 | F1 c m | main cooking          |         |
