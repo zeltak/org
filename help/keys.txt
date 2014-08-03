@@ -1,3 +1,4 @@
+
 1 org
 ═════
 
@@ -7,9 +8,9 @@
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    keys                 functions//tag                                comment                              
   ─────────────────────────────────────────────────────────────────────────────────────────────────────────
-   F1 S                 search for keyword                                                                 
-   F1 r                 org mode research agenda                                                           
-   F1 h                 org goto                                      go to a heading                      
+   F1 S                                                               search for keyword                   
+   F1 r                                                               org mode research agenda             
+   F1 h                 org-goto                                      go to a heading                      
    F1 d d               insert org timesamp                           with selection dialog                
    F1 d n               insert org timesamp now                       NO selection dialog                  
    F1 d i               insert date at point                                                               
@@ -29,36 +30,40 @@
 1.2 Agenda buffer
 ─────────────────
 
-  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   keys     functions//tag                                      comment                                                               
-  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-   Space    org-agenda-show-and-scroll-up                       Display the original location of the item in another window           
-   TAB      org-agenda-goto                                     goto the original location of the item in another window              
-   RETURN   org-agenda-switch-to                                org-agenda-switch-to                                                  
-   F        org-agenda-follow-mode                              show and follow tasks in other window                                 
-   A        back to agenda dialog                               go back to select another view                                        
-   v        change gui view                                     only in calender view                                                 
-  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-   f // b   date forward // backward                                                                                                  
-   .        go to today                                                                                                               
-   j        goto date                                                                                                                 
-   */*      filter by tag1                                                                                                            
-  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-   t        org-agenda-todo                                     change todo State                                                     
-   C-k      delte entry                                         delete from within agenda buffer                                      
-   C-c C-w  org-agenda-refile                                   refile from agenda buffer                                             
-   :        org-agenda-set-tags                                 set tags                                                              
-   ,        org-agenda-priority                                 set priority                                                          
-   - // +   org-agenda-priority-down // org-agenda-priority-up                                                                        
-   C-c C-s  org-agenda-schedule                                                                                                       
-   C-c C-d  org-agenda-deadline                                                                                                       
-  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-   m        org-agenda-bulk-mark                                mark in bulk mode                                                     
-   B        org-agenda-bulk-action                              initiate bulk action (will have dialog)                               
-  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-   q        org-agenda-bulk-action                              quit buffer                                                           
-   x        org-agenda-exit                                     Exit agenda, remove the agenda buffer and all buffers loaded by Emacs 
-  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   Keys     function                                            comment                                                                tag            
+  ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   Space    org-agenda-show-and-scroll-up                       Display the original location of the item in another window            agenda, buffer 
+   TAB      org-agenda-goto                                     goto the original location of the item in another window               agenda, buffer 
+   RETURN   org-agenda-switch-to                                org-agenda-switch-to                                                   agenda, buffer 
+   F        org-agenda-follow-mode                              show and follow tasks in other window                                  agenda, buffer 
+   A        back to agenda dialog                               go back to select another view                                         agenda, buffer 
+   v        change gui view                                     only in calender view                                                  agenda, buffer 
+   ——–      ————————————————–                                   ———————————————————————                                                               
+   f // b                                                       date forward // backward                                                              
+   .                                                            go to today                                                                           
+   j                                                            goto date                                                                             
+   */*                                                          filter by tag1                                                                        
+   ——–      ————————————————–                                   ———————————————————————                                                               
+   t        org-agenda-todo                                     change todo State                                                                     
+   C-k      delte entry                                         delete from within agenda buffer                                                      
+   C-c C-w  org-agenda-refile                                   refile from agenda buffer                                                             
+   :        org-agenda-set-tags                                 set tags                                                                              
+   ,        org-agenda-priority                                 set priority                                                                          
+   - // +   org-agenda-priority-down // org-agenda-priority-up                                                                                        
+   C-c C-s  org-agenda-schedule                                                                                                                       
+   C-c C-d  org-agenda-deadline                                                                                                                       
+   ——–      ————————————————–                                   ———————————————————————                                                               
+   m        org-agenda-bulk-mark                                mark in bulk mode                                                                     
+   B        org-agenda-bulk-action                              initiate bulk action (will have dialog)                                               
+   ——–      ————————————————–                                   ———————————————————————                                                               
+   q        org-agenda-bulk-action                              quit buffer                                                                           
+   x        org-agenda-exit                                     Exit agenda, remove the agenda buffer and all buffers loaded by Emacs                 
+                                                                                                                                                    
+                                                                                                                                                    
+                                                                                                                                                    
+                                                                                                                                                    
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
 1.3 org1 (F9)
@@ -170,23 +175,30 @@
 1.9 Table
 ─────────
 
-  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   keys                 functions//tag//tag  comment                                                  
-  ────────────────────────────────────────────────────────────────────────────────────────────────────
-   M-S-<down>           org-table            insert row                                               
-   M-S-<up>             org-table            KILL row                                                 
-   C-c -                org-table            insert horizontal line                                   
-   C-c Pipe             org-table            Convert the active region to table                       
-   M-S-<left>           org-table            (org-table-delete-column)  *UP/RIGHT for rows*           
-   M-S-<right>          org-table            (org-table-insert-column) *UP/RIGHT for rows*            
-   C-c C-x C-w/M-w/C-y  org-table            cut/copy/paste rectangular region                        
-   C-c ^                org-table            (org-table-sort-lines)                                   
-   C-u C-c =            org-table            insert formula here/Edit formula                         
-   $1                   org-table            colum 1                                                  
-   @1                   org-table            row 1                                                    
-   @9$2=vsum(@2..@7)    org-table            sum or vmean for mean                                    
-   C-c }                org-table            Toggle the display of row and column numbers for a table 
-  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   keys                  comment                                                   functions//tag//tag            tags      
+  ──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+   M-<left>              move column left                                          (org-table-move-column-left)   org-table 
+   M-<right>             move column right                                         (org-table-move-column-right)  org-table 
+   M-S-<left>            delete column                                             (org-table-delete-column)      org-table 
+   M-S-<right>           insert column right                                       (org-table-insert-column)      org-table 
+   M-<up>                move row down                                             (org-table-move-row-up)        org-table 
+   M-<down>              move row up                                               (org-table-move-row-down)      org-table 
+   M-S-<down>            insert row                                                (org-table-insert-row)         org-table 
+   M-S-<up>              KILL row                                                  (org-table-kill-row)           org-table 
+   C-c -                 insert horizontal line                                    (org-table-insert-hline)       org-table 
+   C-c Pipe              Convert the active region to table                                                       org-table 
+   F10 y                 copy cell                                                 org-table-copy-region          org-table 
+   F10 d                 cut cell                                                  org-table-cut-region           org-table 
+   F10 p                 paste cell                                                org-table-paste-rectangle      org-table 
+                                                                                                                  org-table 
+   C-c ^                 sort lines                                                (org-table-sort-lines)         org-table 
+   F10 t f // C-u C-c =  insert formula here/Edit formula                                                         org-table 
+   $1                    colum 1                                                                                  org-table 
+   @1                    row 1                                                                                    org-table 
+   @9$2=vsum(@2..@7)     sum or vmean for mean                                                                    org-table 
+   C-c }                 Toggle the display of row and column numbers for a table                                 org-table 
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 
 2 Emacs
