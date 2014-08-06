@@ -1,5 +1,5 @@
-#+TITLE: emacs_org_shortcuts
-
+#+TITLE: 
+#+OPTIONS: toc:nil 
 
 * org
 ** Agenda (F1)
@@ -27,31 +27,31 @@
 ** Agenda buffer 
    
 
-|---------+-----------------------------------------------------------------------+----------------------------------------------------+----------------|
-| Keys    | comment                                                               | function                                           | tag            |
-|---------+-----------------------------------------------------------------------+----------------------------------------------------+----------------|
-| Space   | Display the original location of the item in another window           | org-agenda-show-and-scroll-up                      | agenda, buffer |
-| TAB     | goto the original location of the item in another window              | org-agenda-goto                                    | agenda, buffer |
-| RETURN  | org-agenda-switch-to                                                  | org-agenda-switch-to                               | agenda, buffer |
-| F       | show and follow tasks in other window                                 | org-agenda-follow-mode                             | agenda, buffer |
-| A       | go back to select another view                                        | back to agenda dialog                              | agenda, buffer |
-| v       | only in calender view                                                 | change gui view                                    | agenda, buffer |
-| f // b  | date forward // backward                                              |                                                    | agenda, buffer |
-| .       | go to today                                                           |                                                    | agenda, buffer |
-| j       | goto date                                                             | tagtagtag                                          | agenda, buffer |
-| */*     | filter by tag1                                                        |                                                    | agenda, buffer |
-| t       | change todo State                                                     | org,F9org,F9org,F9org-agenda-todo                  | agenda, buffer |
-| C-k     | delete from within agenda buffer                                      | delte entry                                        | agenda, buffer |
-| C-c C-w | refile from agenda buffer                                             | org-agenda-refile                                  | agenda, buffer |
-| :       | set tags                                                              | org-agenda-set-tags                                | agenda, buffer |
-| ,       | set priority                                                          | org-agenda-priority                                | agenda, buffer |
-| - // +  | set pri up//down                                                      | org-agenda-priority-down // org-agenda-priority-up | agenda, buffer |
-| m       | mark in bulk mode                                                     | org-agenda-bulk-mark                               | agenda, buffer |
-| B       | initiate bulk action (will have dialog)                               | org-agenda-bulk-action                             | agenda, buffer |
-| q       | quit buffer                                                           | org-agenda-bulk-action                             | agenda, buffer |
-| x       | Exit agenda, remove the agenda buffer and all buffers loaded by Emacs | org-agenda-exit                                    | agenda, buffer |
-|         |                                                                       |                                                    | agenda, buffer |
-|---------+-----------------------------------------------------------------------+----------------------------------------------------+----------------|
+|---------+----------------------------------------------+----------------------------------------------------+----------------|
+| Keys    | comment                                      | function                                           | tag            |
+|---------+----------------------------------------------+----------------------------------------------------+----------------|
+| Space   | Display original location in another window  | org-agenda-show-and-scroll-up                      | agenda, buffer |
+| TAB     | goto the original location in another window | org-agenda-goto                                    | agenda, buffer |
+| RETURN  | org-agenda-switch-to                         | org-agenda-switch-to                               | agenda, buffer |
+| F       | show and follow tasks in other window        | org-agenda-follow-mode                             | agenda, buffer |
+| A       | go back to select another view               | back to agenda dialog                              | agenda, buffer |
+| v       | only in calender view                        | change gui view                                    | agenda, buffer |
+| f // b  | date forward // backward                     |                                                    | agenda, buffer |
+| .       | go to today                                  |                                                    | agenda, buffer |
+| j       | goto date                                    |                                                    | agenda, buffer |
+| */*     | filter by tag1                               |                                                    | agenda, buffer |
+| t       | change todo State                            |                                                    | agenda, buffer |
+| C-k     | delete from within agenda buffer             | delte entry                                        | agenda, buffer |
+| C-c C-w | refile from agenda buffer                    | org-agenda-refile                                  | agenda, buffer |
+| :       | set tags                                     | org-agenda-set-tags                                | agenda, buffer |
+| ,       | set priority                                 | org-agenda-priority                                | agenda, buffer |
+| - // +  | set pri up//down                             | org-agenda-priority-down // org-agenda-priority-up | agenda, buffer |
+| m       | mark in bulk mode                            | org-agenda-bulk-mark                               | agenda, buffer |
+| B       | initiate bulk action (will have dialog)      | org-agenda-bulk-action                             | agenda, buffer |
+| q       | quit buffer                                  | org-agenda-bulk-action                             | agenda, buffer |
+| x       | Exit agenda, remove all agenda buffers       | org-agenda-exit                                    | agenda, buffer |
+|         |                                              |                                                    | agenda, buffer |
+|---------+----------------------------------------------+----------------------------------------------------+----------------|
 
 
 ** org1 (F9)
@@ -401,9 +401,3 @@
 
 
 
-
-
-* EOF settings
-Local variables:
-buffer-read-only: t
-End:

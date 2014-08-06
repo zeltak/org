@@ -780,18 +780,22 @@ speed and overwrite the file /etc/pacman.d/mirrorlist
  # reflector --help
 
 ***** installing packages
+To install a single package or list of packages (including dependencies), issue the following command:
 
-*Installing packages
-*
- To install a single package or list of packages (including
-dependencies), issue the following command:
- # pacman -S package name1 package name2
- Sometimes there are multiple versions of a package in different
-repositories (e.g. extra and testing). Specify which one to install:
- # pacman -S extra/package name
- /*Note:Donot*/**refresh the package list when installing packages
-(i.e.pacman -Sy package name); this can lead to dependency issues
- *TIP:* Packages are cached in /var/cache/pacman/pkg
+#+BEGIN_SRC sh
+pacman -S package name1 package name2
+#+END_SRC
+
+Sometimes there are multiple versions of a package in different repositories (e.g. extra and testing). Specify which one to install:
+
+#+BEGIN_SRC sh
+pacman -S extra/package name
+#+END_SRC
+
+$Note$: Do not refresh the package list when installing packages
+(i.e.pacman -Sy package name);
+this can lead to dependency issues
+%Tip% Packages are cached in /var/cache/pacman/pkg
 
 ***** removing packages
 ****** Remove a single packages
@@ -809,8 +813,7 @@ remove a single package which are not required by any other installed package:
 Pacman -Rs package name
 #+END_SRC
 
-Pacman saves important configuration files when removing certain applications and names them with the extension:
-.pacsave. 
+Pacman saves important configuration files when removing certain applications and names them with the extension .pacsave. 
 
 To delete these backup files use the -n option:
 
@@ -827,30 +830,12 @@ pacman -Rdd package name
 #+END_SRC
 
 ***** upgrading packages
+@Before upgrading@:
+a visit to the[[http://archlinux.org/][Arch Linux home page]]is always warranted. Often when updates require user intervention, an appropriate post on[[http://archlinux.org][http://archlinux.org]]will be made. Normally there will be forum posts describing the very same issue shortly after the update becomes available across the mirrors, detailing the solutions to any problems. pacman can update all packages on the system with just one command. This could take quite a while depending on how up-to-date the system is. This command can synchronize the repository databases/and/update the system's packages:
 
-*Upgrading packages
-*
- *Before upgrading*, a visit to the[[http://archlinux.org/][Arch Linux
-home page]]is always warranted. Often when updates require user
-intervention, an appropriate post
-on[[http://archlinux.org][http://archlinux.org]]will be made. Normally
-there will be forum posts describing the very same issue shortly after
-the update becomes available across the mirrors, detailing the solutions
-to any problems.
- pacman can update all packages on the system with just one command.
-This could take quite a while depending on how up-to-date the system is.
-This command can synchronize the repository databases/and/update the
-system's packages:
- # pacman -Syu
- *NOTE:*When performing a system update (pacman -Syu), for example,*it
-is essential that users read all information output by pacman and use
-common sense.*
- When the actual update is performed, be sure to read the messages
-printed out by pacman. Packagers often describe the changes and the
-expected problems, and direct the users to the appropriate wiki page or
-resource. Finally,*always read all information output by pacman!*
- *Tip:*Remember that the pacman's output is logged
-in/var/log/pacman.log.
+pacman -Syu
+$NOTE$ When performing a system update (pacman -Syu), for example,it is essential that users read all information output by pacman and use common sense. When the actual update is performed, be sure to read the messages printed out by pacman. Packagers often describe the changes and the expected problems, and direct the users to the appropriate wiki page or resource. Finally,*always read all information output by pacman!*
+%Tip% Remember that the pacman's output is logged in/var/log/pacman.log.
 
 ***** querying package databases
 ****** Basic
@@ -884,13 +869,6 @@ issue a comand like this:
 #+BEGIN_SRC sh
 pacman -Qqs "ttf-"
 #+END_SRC
-
-****** Find only local packages with git in them
-
-issue:
-
-pacman -Qqs '\-git'
-
 ****** listed those not from repositories
 
 issue:
@@ -903,13 +881,14 @@ To retrieve a list of the files installed by a package:
 
 pacman -Ql package
 
-****** query the database to know which package a file in the file
-system belongs to.
+****** query the database to know which package a file in the file system belongs to
 
 One can also query the database to know which package a file in the file
 system belongs to.
 
+#+BEGIN_SRC sh
 pacman -Qo /path/to/a/file
+#+END_SRC
 
 ***** orphand files
 Orphand files:
@@ -1028,7 +1007,9 @@ packages:
 use the following command when your disk space is low and the pacman
 cache is large:
 
+#+BEGIN_SRC sh
 sudo pacman -Scc
+#+END_SRC
 
 ***** pacman lock
 
@@ -1093,13 +1074,12 @@ thogh), build it and install it
  [[#P222XjJVziR.8bLaYUB1hg][slurpy]]
 
 ***** fix outdated packages (validty error)
+find outdated versions?
+if you get an error on the validity of the package:
+download the pkgbuild and in the editor change the pkgver
+then run makepkg -g >> PKGBUILD to update the md5sums and PKGBUILD
 
-*find outdated versions?
-*if you get an error on the validity of the package:
- download the pkgbuild and in the editor change the pkgver
- then run makepkg -g >> PKGBUILD to update the md5sums and PKGBUILD
- [[nixx_files/image.png]]
- then install as usuall the new updated PKGBUILD
+then install as usuall the new updated PKGBUILD
 
 ***** errors
 
@@ -1116,20 +1096,9 @@ dependencies, use -R normally*
 *pacman -Uf path/to/build/package
 
 ***** aur helpers
-
-***** slurpy
-
-*Slurpy*
- a tool to search AUR from command line
- install through AUR , packge slurpy then
- slurpy -s SEARCHTERM
-
-***** yaourt
-
+****** yaourt
 yaourt --aur -Syu
-
 **** makepkg
-
 ***** change # proccesors
 
 if you HAVE multi cpu's change this in makepkg.conf:
@@ -1139,16 +1108,9 @@ number so for my x200 dual core laptop it would be MAKEFLAGS="-j3"
  *Note:* you cannot share your build packages with others, that dont
 have quad core in the above example
 
-***** errors
-
-ERROR: Integrity checks are missing
- makepkg -g >> PKGBUILD && makepkg
-
 **** uninstaling
 ***** uninstal kde or gnome quicly
-
 issue this:
-
 pacman -Rscn kdelibs gnome
 **** errors
 ***** error: failed to commit transaction (invalid or corrupted package (PGP signature))
@@ -27946,7 +27908,6 @@ the +1m is a repeater; the intended interpretation is that the task has a deadli
 DEADLINE: <2005-10-01 Sat +1m -3d>.  
 #+END_EXAMPLE
 
-
 **** Babel (code blocks)
 ***** run ssh with command inside org
 use something like this
@@ -28569,6 +28530,14 @@ Then use this in an Org file:
 
 This way, if Google decides to change it's url structure, all you have
 to do is redefine your link type, instead of all email links.
+
+**** export
+***** export options
+The table of contents is normally inserted directly before the first headline of the file. The depth of the table is by default the same as the number of headline levels, but you can choose a smaller number, or turn off the table of contents entirely, by configuring the variable org-export-with-toc, or on a per-file basis with a line like
+#+BEGIN_EXAMPLE
+#+OPTIONS: toc:2          (only to two levels in TOC)
+#+OPTIONS: toc:nil        (no default TOC at all)
+#+END_EXAMPLE
 
 **** refile
 ****** base 
@@ -29665,6 +29634,23 @@ Yank subtree from kill ring. This does modify the level of the subtree to make s
 use M-Left/right for singe header or M-S-Left/Right for the whole tree and subtree
 
 **** tables
+***** convert region to table
+
+#+BEGIN_EXample
+C-c |     (org-table-create-or-convert-from-region)
+#+END_EXample
+
+Convert the active region to table.
+
+If every line contains at least one 'TAB' character, the function assumes that the material is tab separated.
+If every line contains a 'comma', comma-separated values (CSV) are assumed.
+If not, lines are split at whitespace into fields.
+
+You can use a prefix argument to force a specific separator:
+C-u forces CSV
+C-u C-u forces TAB
+A numeric argument N indicates that at least N consecutive spaces or alternatively a TAB will be the separator. 
+
 ***** specify a max column width
 To set the width of a column, one field anywhere in the column may contain just the string <N> where N is an integer specifying the width of the column in characters. The next re-align will then set the width of this column to this value.
 IE
@@ -33412,7 +33398,7 @@ job (not the PID) number.
 **** systemctl
 The main command used to introspect and control systemd is systemctl. Some of its uses are examining the system state and managing the system and services. Note: systemadm is the official graphical frontend for systemctl. It is provided by the systemd-ui-git package from the AUR.
 
-Analyzing the system state
+***** Analyzing the system state
 List running units:
 
 #+BEGIN_SRC sh
@@ -33420,82 +33406,97 @@ systemctl
 #+END_SRC
  or to list all units:
 
- $ systemctl list-units
+#+BEGIN_SRC sh
+systemctl list-units
+#+END_SRC
 
  List failed units:
 
- $ systemctl --failed
+#+BEGIN_SRC sh
+systemctl --failed
+#+END_SRC
 
  The available unit files can be seen in /usr/lib/systemd/system/ and
 /etc/systemd/system/ (the latter takes precedence). You can see list
 installed unit files by:
 
- $ systemctl list-unit-files
+#+BEGIN_SRC sh
+systemctl list-unit-files
+#+END_SRC
 
- Using units
- Units can be, for example, services (.service), mount points (.mount),
-devices (.device) or sockets (.socket).
- When using systemctl, you generally have to specify the complete name
-of the unit file, including its suffix, for example sshd.socket. There
-are however a few shortforms when specifying the unit in the following
-systemctl commands:
+***** Using units
+Units can be, for example, services (.service), mount points (.mount), devices (.device) or sockets (.socket). When using systemctl, you generally have to specify the complete name of the unit file, including its suffix, for example sshd.socket. There are however a few shortforms when specifying the unit in the following systemctl commands:
 
-If you don't specify the suffix, systemctl will assume .service. For
-example, netcfg and netcfg.service are treated equivalent.
- Mount points will automatically be translated into the appropriate
-.mount unit. For example, specifying /home is equivalent to home.mount.
- Similiar to mount points, devices are automatically translated into the
-appropriate .device unit, therefore specifying /dev/sda2 is equivalent
-to dev-sda2.device.
+If you don't specify the suffix, systemctl will assume .service. For example, netcfg and netcfg.service are treated equivalent. Mount points will automatically be translated into the appropriate .mount unit. For example, specifying /home is equivalent to home.mount. Similiar to mount points, devices are automatically translated into the appropriate .device unit, therefore specifying /dev/sda2 is equivalent to dev-sda2.device.
 
- Activate a unit immediately:
+Activate a unit immediately:
 
- # systemctl start <unit>
+#+BEGIN_SRC sh
+systemctl start <unit>
+#+END_SRC
 
- Deactivate a unit immediately:
 
- # systemctl stop <unit>
+Deactivate a unit immediately:
 
- Restart a unit:
+#+BEGIN_SRC sh
+systemctl stop <unit>
+#+END_SRC
 
- # systemctl restart <unit>
+Restart a unit:
 
- Ask a unit to reload its configuration:
+#+BEGIN_SRC sh
+systemctl restart <unit>
+#+END_SRC
 
- # systemctl reload <unit>
+Ask a unit to reload its configuration:
 
- Show the status of a unit, including whether it is running or not:
+#+BEGIN_SRC sh
+systemctl reload <unit>
+#+END_SRC
 
- $ systemctl status <unit>
+Show the status of a unit, including whether it is running or not:
 
- Check whether a unit is already enabled or not:
+#+BEGIN_SRC sh
+systemctl status <unit>
+#+END_SRC
 
- $ systemctl is-enabled <unit>
+Check whether a unit is already enabled or not:
 
- Enable a unit to be started on bootup:
+#+BEGIN_SRC sh
+systemctl is-enabled <unit>
+#+END_SRC
 
- # systemctl enable <unit>
+Enable a unit to be started on bootup:
 
- Note: If services do not have an Install section, it usually means they
-are called automatically by other services. But if you need to install
-them manually, use the following command, replacing foo with the name of
-the service.
+#+BEGIN_SRC sh
+systemctl enable <unit>
+#+END_SRC
+
+Show the manual page associated with a unit (this has to be supported
+by the unit file):
+
+#+BEGIN_SRC sh
+systemctl help <unit>
+#+END_SRC
+
+Reload systemd, scanning for new or changed units:
+#+BEGIN_SRC sh
+ systemctl daemon-reload
+#+END_SRC
+
+
+***** If services do not have an Install section:
+it usually means they are called automatically by other services. But if you need to install them manually, use the following command, replacing foo with the name of the service.
 
 # ln -s /usr/lib/systemd/system/foo.service
 /etc/systemd/system/graphical.target.wants/
 
- Disable a unit to not start during bootup:
+***** Disable a unit to not start during bootup:
 
- # systemctl disable <unit>
+#+BEGIN_SRC sh
+systemctl disable <unit>
+#+END_SRC
 
- Show the manual page associated with a unit (this has to be supported
-by the unit file):
-
- $ systemctl help <unit>
-
- Reload systemd, scanning for new or changed units:
-
- # systemctl daemon-reload
 
 **** journalctl (logs)
 ***** basics
@@ -33623,7 +33624,7 @@ and stop/start emacs again via systemd
 
 to search for ntp for example:
 
- pacman -Ql ntp | grep .service
+pacman -Ql ntp | grep .service
 
 **** timedatectl
 for more info look here
@@ -33647,13 +33648,6 @@ timedatectl set-time "2012-10-30 18:17:16"
 #+begin_src sh
 sudo timedatectl set-timezone  Asia/Jerusalem
 #+end_src
-
-to list all time zones
-
-#+NAME: 
-#+BEGIN_SRC sh
-timedatectl set-timezone  Asia/Jerusalem
-#+END_SRC
 
 **** suspend/sleep/power
 
