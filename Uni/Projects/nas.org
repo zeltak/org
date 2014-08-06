@@ -261,3 +261,54 @@ the second part of the scipt creates daily lpm per lpmid (for relevant NAS cases
 and is outputted here:
 file:/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P044_NAS_MAIAC/3.Work/2.Gather_data/FN008_LPM/allyearslpm.csv
 
+* NAS 6.8.2014 update- Anna
+** location of files
+the latest 10x10 km dataset is indeed from 2012 and is located here:
+
+#+BEGIN_EXAMPLE
+S:\ENVEPI\Airs\nas\NAS_PM_EXPOSURE\final_nas_poll_lpm
+#+END_EXAMPLE
+
+since the 10x10 km model hasent been updated since 2012 this is the latest model.
+by the way, why are they using the 10x10km model and not the new 1x1km model, is that for a specific reason (compatibality?)
+
+also i see there is a 1x1km folder in the
+#+BEGIN_EXAMPLE
+S:\ENVEPI\Airs\nas\NAS_PM_EXPOSURE\
+#+END_EXAMPLE
+folder. did you discuss this with steve? We should discuss this as well.
+
+** code 
+
+this is how we define the lags: 
+
+#+BEGIN_EXAMPLE
+lag0 - is the same day exposure, IE the 24h mean exposure on the day of the visit (from midnight to midnight)
+lag1- is the mean 24h exposure the day before the visit 
+..and so on
+the moving averages are calculated as follows:
+ma1 is the mean of lag0 and lag1
+ma3 is the mean of lag0-- lag2)
+...and so on..
+#+END_EXAMPLE
+
+the code used is this
+
+file:/media/NAS/Uni/org/files/Uni/Projects/code/P006.NAS/cn002_assign_exposure.sas
+
+*** variable codebook
+this is what we used and its also in the code as well:
+
+#+BEGIN_EXAMPLE
+pmnew= lag0
+pmnewma1= mean of lag0-lag1
+pmnewma3= mean of lag0-lag2
+pmnewma4= mean of lag0-lag3
+pmnewma5= mean of lag0-lag4
+pmnewma6= mean of lag0-lag5
+pmnewma7= mean of lag0-lag6
+pmnewmaweek= mean of lag0-lag7
+...and so on.
+#+END_EXAMPLE
+
+please note that there are corresponding clomate variables (temperature and humidity) that have the same moving averages and can be used if anyone needs them. this are from NCDC monitoring stations (and not from the 1x1km temperature model we have).

@@ -399,7 +399,7 @@ run;
   class kess  MRN EDU_GROUP fips byob ;
     model  bwcat (event= "1")= IQRtncdcmabirth  pmnewmabirth age_centered age_centered_sq cig_preg cig_pre med_income p_ospace gender prev_400
   hyper lungd diab diab_other prevpret kess  
-  MRN edu_group   parity elev   byob      /s dist=binary link=logit or cl ;
+  MRN edu_group   parity elev   byob      /s dist=binary link=logit or cl  ;
    random intercept / subject=FIPS ;
 ods output  ParameterEstimates =  x2.pt270 ;
 run;
@@ -419,3 +419,11 @@ data t1;
 set bww.lr;
 where BIRTHW < 2500;
 run; 
+ proc glimmix data=x1.Bw_nocesPM  ;
+  class kess  MRN EDU_GROUP fips byob ;
+    model  bwcat (event= "1")= IQRfintempmabirth pmnewmabirth age_centered age_centered_sq cig_preg cig_pre med_income p_ospace gender prev_400
+  hyper lungd diab diab_other prevpret kess  
+  MRN edu_group   parity elev   byob      /s dist=binary link=logit or cl ;
+   random intercept / subject=FIPS ;
+ods output  ParameterEstimates =  pt270 ;
+run;
