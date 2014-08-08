@@ -39128,6 +39128,18 @@ cd my-project
 The first command initializes a new Git repository in the my-project folder on your local machine and populates it with the contents of the central repository. Then, you can cd into the project and start editing files, committing snapshots, and interacting with other repositories. 
 
 ****** git config
+the location of git config files:
+
+#+BEGIN_SRC sh
+<repo>/.git/config 
+#Repository-specific settings.
+
+~/.gitconfig
+#User-specific settings. This is where options set with the --global flag are stored.
+
+$(prefix)/etc/gitconfig
+#System-wide settings.
+#+END_SRC
 
 The git config command lets you configure your Git installation (or an individual repository) from the command line. This command can define everything from user info to preferences to the behavior of a repository. Several common configuration options are listed below.
 
