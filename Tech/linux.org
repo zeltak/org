@@ -38739,7 +38739,7 @@ use this command:
  PROMPT= urxvt -e zsh -f
 
 ** `networking`
-*** dyndns
+*** dynamic dns
 **** ddclient
 
 *Update IP addresses at dynamic DNS services Using ddclient
@@ -39128,7 +39128,25 @@ cd my-project
 The first command initializes a new Git repository in the my-project folder on your local machine and populates it with the contents of the central repository. Then, you can cd into the project and start editing files, committing snapshots, and interacting with other repositories. 
 
 ****** git config
+******* the location of git config files:
 
+#+BEGIN_SRC sh
+<repo>/.git/config 
+#Repository-specific settings.
+
+~/.gitconfig
+#User-specific settings. This is where options set with the --global flag are stored.
+
+$(prefix)/etc/gitconfig
+#System-wide settings.
+#+END_SRC
+
+******* configure editor
+#+BEGIN_SRC sh
+git config --global core.editor emacs
+#+END_SRC
+
+******* example commnads
 The git config command lets you configure your Git installation (or an individual repository) from the command line. This command can define everything from user info to preferences to the behavior of a repository. Several common configuration options are listed below.
 
 Usage:
@@ -39755,13 +39773,7 @@ git push origin    #pushes to origin (defined when you setup the git repo>IE the
 #+END_SRC
 
 **** !Issues!
-***** fix conflict issues
-****** Pull is not possible because you have unmerged files error
-Pull is not possible because you have unmerged files.
-Please, fix them up in the work tree, and then use git add/rm <file>
-
-there are 2 related issues that you need to fix:
-******* address conflicts using a merge tool
+***** address conflicts using a merge tool
 to fix this you should use the git merge tool. also its recommended to spcify a diff tool with the -t option so you would run it like this:
 
 #+BEGIN_SRC sh
@@ -39770,13 +39782,24 @@ git mergetool -t meld
 
 this will open the diff tool with 3 panes
 
-'base/local/remote'
+| base | local | remote |
+
 
 in 'meld' the middle pane is the combined final file. the right pane is the file you are trying to 'pull' from the remote server (₆In example₆ github) while the left pane is the current state of local file.
 
+%Tip- in the meld app you will see on the right red marks that show where the conflicts are. make sure to go one by one and resolve the conflicts until its blue% 
+
 you can copy/merger parts or all of the remote file (right pane), or the same for the left etc until you have the changes you want (in meld you can click on the arrows). meld has "merge from right" "merge from left" options.
 when you are finish save and quit
-******* address deleted files
+
+then for a specific file (the local file we worked in in the middle pane in meld (₆In example₆ "FILE):
+#+BEGIN_SRC sh
+git add FILE.org
+git commit -m "MESSAGE"
+git push
+ #+END_SRC
+
+***** address deleted files
 you may also get deleted files on remote issues like this:
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2014-02-16 15:08:23
@@ -39785,15 +39808,20 @@ you may also get deleted files on remote issues like this:
  [[~/org/attach/images_2013//screenshot_2014-02-16_15:08:23.png]]
 
 choose which files you want to keep and which versions (remote or local etc)
-******* stash 
-you need to apply stash finally                                                                     
+
+***** stash 
+you may need at some stage to stash:
+@read about it before executing@                                                                 
+
+#+BEGIN_SRC sh
 git stash                                                                  
 git pull                                                                   
 stash apply   
+#+END_SRC
 
 you may get a merge commit which is normal          
-
 use git diff to see the changes of the stuff you are going to commit
+
 ***** 'Force overwrite of local file with whats it origin repo'
 If you want to overwrite only one file:
 
@@ -39810,6 +39838,157 @@ git fetch
 git reset --hard origin/master
 #+END_SRC
 @this will overwrite ALL the repo@
+
+***** Resolving a merge conflict from the command line
+
+This is the most common type of conflict. It happens when two branches have changed the same part of the same file, and then those branches are merged together. For example, if you make a change on a particular line in a file, and your colleague working in a repository makes a change on the exact same line, a merge conflict occurs. Git has trouble understanding which change should be used, so it asks you to help out.
+
+When this sort of conflict occurs, Git writes a special block into the file that contains the contents of both versions where the conflict occurred. To complete this type of merge, use your text editor to resolve the conflict, then add the file and commit it to complete the merge.
+
+For this example, suppose youre working in branch-a, and have made some changes to a file called planets.md. Meanwhile, your friend on the other side of the world has made a different change to the same line. If you try to merge your friend's branch into yours, there will be a merge conflict. Running
+
+#+begin_src shell
+git status
+#+end_src
+
+tells you about the conflict:
+
+#+BEGIN_SRC sh
+git status
+# # On branch branch-b
+# # You have unmerged paths.
+# #   (fix conflicts and run "git commit")
+# #
+# # Unmerged paths:
+# #   (use "git add ..." to mark resolution)
+# #
+# # both modified:      planets.md
+# #
+# no changes added to commit (use "git add" and/or "git commit -a")
+
+#+END_SRC
+
+Both of you have modified planets.md. When you open the file in your text editor, you'll see both changes:
+
+#+BEGIN_SRC sh
+vim planets.md
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+the number of planets are
+<<<<<<< HEAD
+nine
+=======
+eight
+>>>>>>> branch-a
+#+END_EXAMPLE
+
+In 'branch-a', you wrote the word "nine," but your friend wrote "eight." Git automatically adds conflict markers to the affected areas. A conflict-marked area begins with <<<<<<< and ends with >>>>>>>. These are also known as the conflict markers. The two conflicting blocks themselves are divided by a =======.
+
+You have several options here. You can either keep your changes, take your friend's changes, or make a brand new change. Whatever you do, you need to make sure to resolve the conflict such that the file makes sense, and everyone is happy.
+
+In this case, youll put in a whole new version of the line that reflects what happened. The goal is to get the file to look exactly how you want it. You'll delete the conflict markers, and just type out a new change:
+
+#+BEGIN_EXAMPLE
+the number of planets are
+nine, or eight, depending on who you ask.
+#+END_EXAMPLE
+
+That's it! You can now
+git add this file
+commit the change with a new commit message, and be on your way.
+
+***** Resolving a removed file conflict
+Removed file conflicts occur when one person edits a file, and another person deletes that file in their branch. Git does not know if you want to keep the file with the new edits, or delete the file and forget about those edits. This example will show how to resolve this both ways.
+****** Keeping the edited file
+
+First, you'll resolve the conflict by keeping the new changes. Suppose that you added a line to your README.md in branch-b, but someone else has deleted the file entirely in branch-c. Git declares the following conflict:
+
+#+BEGIN_SRC sh
+# CONFLICT (modify/delete): README.md deleted in HEAD and modified in branch-b. Version branch-b of README.md left in tree.
+# Automatic merge failed; fix conflicts and then commit the result.
+
+git status
+
+# # On branch branch-c
+# # You have unmerged paths.
+# #   (fix conflicts and run "git commit")
+# #
+# # Unmerged paths:
+# #   (use "git add/rm ..." as appropriate to mark resolution)
+# #
+# # deleted by us:      README.md
+# #
+# no changes added to commit (use "git add" and/or "git commit -a")
+
+#+END_SRC
+
+You can resolve this by adding the file back, and committing it once more:
+
+#+BEGIN_SRC sh
+git add README.md
+
+git commit
+# [branch-c 9bc3b01] Merge branch 'branch-b' into branch-c
+
+git show | head
+# commit 9bc3b0130fe0178359d51243b5b882076a12f554
+# Merge: 4c80a63 7e8b679
+# Author: tekkub :bear:  
+# Date:   Sat Jun 1 18:39:40 2013 -0700
+
+#     Merge branch 'branch-b' into branch-c
+>
+#     Conflicts:
+#         README.md
+#+END_SRC
+
+****** Resolving by removing the file
+Now, you'll resolve that conflict the opposite way: by leaving the file deleted. Again, with a merge conflict, Git declares:
+
+#+BEGIN_SRC sh
+# CONFLICT (modify/delete): README.md deleted in HEAD and modified in branch-c. Version branch-c of README.md left in tree.
+# Automatic merge failed; fix conflicts and then commit the result.
+
+git status
+# # On branch branch-d
+# # You have unmerged paths.
+# #   (fix conflicts and run "git commit")
+# #
+# # Unmerged paths:
+# #   (use "git add/rm ..." as appropriate to mark resolution)
+# #
+# #   deleted by us:      README.md
+# #
+# no changes added to commit (use "git add" and/or "git commit -a")
+#+END_SRC
+
+Now, you want to remove the file, so do that with the git rm command:
+
+#+BEGIN_SRC sh
+git rm README.md
+# README.md: needs merge
+# rm 'README.md'
+#+END_SRC
+
+Looks good, so commit it with the default message:
+
+#+BEGIN_SRC sh
+git commit
+# [branch-d 6f89e49] Merge branch 'branch-c' into branch-d
+
+git show | head
+# commit 6f89e49189ba3a2b7440fc434f351cb041b3999e
+# Merge: 211261b fcc1093
+# Author: tekkub :bear:  
+# Date:   Sat Jun 1 18:43:01 2013 -0700
+
+#     Merge branch 'branch-c' into branch-d
+>
+#     Conflicts:
+#         README.md
+
+#+END_SRC
 
 **** Manage dotfiles with git
 ***** Initial Setup

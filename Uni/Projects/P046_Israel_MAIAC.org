@@ -801,6 +801,10 @@ f:\Uni\Projects\P020\_Temprature\_NE\_MIA\3.Work\2.Gather\_data\FN006\_NDVI\_yea
 
 f:\Uni\Projects\P020\_Temprature\_NE\_MIA\3.Work\2.Gather\_data\FN007\_Key\_tables\NDVI\_fullgrid.dbf
 
+*** creat ndvi ID
+for NDVI we loaded a full year, create the ndviid by joining X,Y of ndvi in GIS
+then on first year run only  we created a unique grid and export that to DBF
+this is then added to the full LU-rid ID's dataset
 ** 6.models preperation
 *** create road density
 road density rasters were created based on a road polyline layer for israel:
