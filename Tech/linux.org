@@ -2712,9 +2712,6 @@ and then restart:
 #+BEGIN_SRC sh
 sudo shutdown -r 0
 #+END_SRC
-
-
-
 *** Team viewer on debian 64bit
 
 On newer 64-bit DEB-systems with Multiarch-support (Debian 7) teamviewer_linux_x64.deb cannot be installed because the package ia32-libs is not available anymore on these systems. In this case you can use teamviewer_linux.deb instead.
@@ -2725,6 +2722,24 @@ In case you get the error “wrong architecture i386” you have to execute the 
     apt-get update
 
 For further information: http://wiki.debian.org/Multiarch/HOWTO 
+***  install source code pro debian
+Download the archive from here. You can do it also using wget: Open a terminal (ctrl-alt-t or press the win key and type "terminal") and type
+
+wget http://downloads.sourceforge.net/project/sourcecodepro.adobe/SourceCodePro_FontsOnly-1.017.zip
+Unzip the archive (you can use Nautilus for that, or use the following command).
+
+unzip SourceCodePro_FontsOnly-1.017.zip
+Create a directory in your home directory called ".fonts" (either go to home in Nautilus and create a new folder, or type the following from the terminal)
+
+mkdir -p ~/.fonts
+If you already have that directory, don't worry.
+
+Move the Open Type fonts (*.otf) to the newly created .fonts directory. In command line, that would be
+
+cp SourceCodePro_FontsOnly-1.017/OTF/*.otf ~/.fonts/
+If you haven't done it yet, open a terminal, and type
+
+fc-cache -f -v
 ** gnome
 *** Gnome 3
 **** Enable the logout option 

@@ -3,6 +3,8 @@
 #+TAGS:  first(f) 
 #+STARTUP: overview  inlineimages eval: (org-columns)
 #+PRIORITIES: A
+#+OPTIONS: toc:nil 
+
 
 * @Ongoing@
 ** PAUSED PM2.5 1kmx1km NEMIA					    :ucurent:
@@ -547,13 +549,157 @@ M.   +972-52-4058888
 *** Knn0 ignore missing data (missings in dataset)
 ** try our R package biocLite
 source("http://bioconductor.org/biocLite.R")
-biocLite("interactiveDisplay") 
+biocLite("interactiveDisplay")
 ** TODO Refund visa usa
    :PROPERTIES:
    :ID:       ce9334cf-9b37-417a-a675-24b29aea13ee
    :END:
  	576.00	576.00 ש"ח	 	703.889.26-CSC - US VISA FEE	21/05
  	576.00	 	 	: 25/05 סה"כ חיוב בתאריך
+** Joel talk qian
+*** send letter (in email)
+*** can we meet friday 29.7 or Tuesday morning the 2.9
+*** Bill ridway
+calman filter?
+common filter geochem
+*** Qian
+**** What is the original paper in which you described the methodology of creating those datasets?
+
+#+BEGIN_EXAMPLE
+Kloog, I., A.A. Chudnovsky, A.C. Just, F. Nordio, P. Koutrakis, B.A. Coull, A. Lyapustin, Y. Wang, and J. Schwartz (2014). A new hybrid spatio-temporal model for estimating daily multi-year PM2.5 concentrations across northeastern USA using high resolution aerosol optical depth data Atmos. Env, 95, 581-590
+http://dx.doi.org/10.1016/j.atmosenv.2014.07.014
+#+END_EXAMPLE
+
+**** Ways of comparing R-square, including how you “assign” AOD-derived estimation from regular grid points to monitoring site. I was looking for the nearest grid point for each monitoring site (I think this is the key difference). Is this the method you were using?
+
+We also used the nearest AOD point per day to each monitor station. We used 2 techniques:
+***** python method (old) 
+Initially we used a GIS based method to subset the data into only data points within 1.5 km from a PM monitor station. Then we did daily spatial joins (using a python script) to assign in each day for each monitor the closest AOD point at that specific date. This resulted in a new database (per year) that looked like this:
+
+| Date | PM_ID | PM25 | AOD | AOD_ID |
+|    1 | x1    |   11 | 0.3 | y1     |
+|    2 | x1    |   12 | 0.2 | y2     |
+|      |       |      |     |        |
+ 
+***** R KNN method
+With the 1x1km data we switched to using a R function we created, see here:
+
+#+BEGIN_SRC R
+# function to assign closest
+# merge data by day to the closest of K nearest neighbors (with a distance constraint)
+# could be better (not require merge for left join afterwards)
+# see: http://stackoverflow.com/a/12450918
+nearestbyday <- function(matrix1, matrix2, dt1, dt2, dt1varname, dt2varname, 
+                         closestname = "closestmet", varstoget = "avewsp", 
+                         knearest = 5, maxdistance = NA){
+  require(FNN)
+  knearest <- min(knearest, nrow(matrix2))
+  knnname <- paste0(closestname, "knn")
+  nobsname <- paste0(closestname, "nobs")
+  # calculate nearest neighbors using package FNN
+  knn_store <- get.knnx(matrix2, matrix1, k = knearest)
+  # restrict by distance
+  if(!is.na(maxdistance)){
+    knn_store[["nn.dist"]][knn_store[["nn.dist"]] > maxdistance] <- NA
+    knn_store[["nn.index"]] <- knn_store[["nn.index"]] * (knn_store[["nn.dist"]] * 0 + 1)
+  }
+  # store the indices for nearest neighbors in a long DT
+  knn_out <- data.table(matrix(knn_store[["nn.index"]])) 
+  knn_out[, dt1varname := rep(rownames(matrix1), knearest), with = F]
+  knn_out[, closestname := as.character(row.names(matrix2[knn_out[, V1],])), with = F]
+  knn_out[, V1 := NULL]
+  knn_out[, knnname := rep(1:knearest, each = nrow(matrix1)), with = F]
+  # drop points not within maxdistance
+  knn_out <- knn_out[!is.na(get(closestname))]
+  # use setkeyv to pass a column by name
+  setkeyv(knn_out, closestname)
+  setnames(dt2, dt2varname, closestname)
+  # if not character - coerce
+  if(class(dt2[,closestname,with = F][[1]]) != "character"){
+    dt2[, closestname := as.character(closestname), with = F]
+  }
+  setkeyv(dt2, closestname)
+  # lengthen dt2 with every possible site each day might match
+  # after dropping missing observations
+  dt2long <- dt2[!is.na(get(varstoget))][knn_out, allow.cartesian = T]
+  # store the number of valid observations
+  dt2long[, nobsname := .N, by=c(dt1varname,"day"), with = F]
+  setkeyv(dt2long, cols = c(dt1varname, "day", knnname))
+  # join to itself (set1 and day are keys) and take first record for fast selection
+  closestvar <- dt2long[unique(dt2long[,c(dt1varname, "day"), with = F]), mult = "first"]
+  gc()# clear memory
+  # put the name back in dt2
+  setnames(dt2, closestname, dt2varname)
+  # inspect our result
+  print(tables(silent = T)[NAME == "closestvar"])
+  # return it silently
+  invisible(closestvar)
+}
+
+
+makepointsmatrix <- function(datatable, xvar, yvar, idvar) {
+  dtnames <- names(datatable)
+  unique.dt <- unique(datatable[,c(xvar,yvar, idvar), with = F])
+  out.m <- as.matrix(unique.dt[,c(xvar,yvar), with = F])
+  dimnames(out.m)[[1]] <- unique.dt[,idvar, with = F][[1]]
+  invisible(out.m)
+}
+
+#+END_SRC
+
+we then use a script that goes through the days and assigns for each station in each day again the closet AOD point. 
+here is the R script:
+
+#+BEGIN_SRC R
+
+###################
+#start with mod1
+###################
+# import monitor data and spatial merge with nearestbyday()
+source("/home/zeltak/org/files/Uni/Projects/code/P31/code_snips/nearestbyday.r")
+
+#create PM matrix
+pm.m <- makepointsmatrix(pm2003, "Long_PM", "Lat_PM", "SiteCode")
+
+#create aod matrix
+m2g<-copy(am2.lu.nd.pb.met)
+m2g[, guidc := as.character(guid)]
+names(m2g)
+#need to sort
+setkey(m2g, guidc)
+mod2.m <- makepointsmatrix(m2g[m2g[,unique(guidc)], list(long_aod, lat_aod, guidc), mult = "first"], "long_aod", "lat_aod", "guidc")
+
+# use the nearestbyday() function
+###########
+closestaod <- nearestbyday(pm.m, mod2.m, 
+                           pm2003, m2g [, list(day, guidc, aod,NDVI,pbl,WDSP,visib,ah_gm3,tempc,guid)], 
+                           "SiteCode", "guidc", "closestaod", "aod", knearest = 5, maxdistance = 1500)
+# this has AOD even when there is no pm; it gets dropped on the merge
+
+
+
+setkey(pm2003,SiteCode,day)
+setkey(closestaod,SiteCode,day)
+mod1 <- merge(pm2003, closestaod, all.x = T)
+#head(mod1)
+mod1 <- mod1[aod != "NA"]
+#+END_SRC
+
+Let me know if its similar to your methods. If not and you would like to use one of the above methods i would be happy to help you set it up.
+
+**** What is the way of using road density (they are raster file format with grid width maybe about 50 meters) did you interpolate raster values or just find the exact raster cell in which monitoring site lies. I guess the general question is---what is the general method of assigning value to each monitoring site if it is raster data file?
+What we did was aggregate/disaggregate all LU/MET/Etc variables to the 1x1km Level from the study grid that we created based on the AOD data centroid. we used the Lat/Long to create the unique grid id (we call it guid in the scripts) and then calculate all the LU/MET terms for these 1x1km using several methods such as weighted averages for population density etc. specifacly if i recall for road density we create a raster of line density from the all lanes (A1,A2,A3) across MIA using in GIS:
+#+BEGIN_EXAMPLE
+spatial analysit>density>Line density
+#+END_EXAMPLE
+This results in a Raster file with the "traffic density" (tden)
+
+
+**** In your paper “Assessing temporally and spatially resolved PM2.5 exposures for epidemiological studies using satellite aerosol optical depth measurements”, you mentioned that you were finding the nearest weather station and assign meteorological data from that station to the monitoring site--- is this the same method you were using when creating 1-km estimation? 
+yes that is the same methods we used in the last 1x1km paper. that data should also be on the server (NCDC and EPA met data)
+
+
+	
 * long term Misc
 ** GIS Trac k
     :PROPERTIES:
