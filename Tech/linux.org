@@ -37286,6 +37286,9 @@ wget -e robots=off --wait 1 -x --user=xxx --password=xxx -m -k http://domain.to.
 ***** download all links to a specific file type
 
 wget -r -np -l 1 -A zip http://site.com/download/
+wget -r -A '*.pdf' url/path
+wget -r -A '*.mp3' url/path/dir/ 
+
 
  Options meaning:
  -r, --recursive specify recursive download.
