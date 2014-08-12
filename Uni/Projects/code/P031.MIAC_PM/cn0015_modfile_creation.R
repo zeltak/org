@@ -57,7 +57,7 @@ pm[,c("Date","POC","State","CountyFIPS","CountyName"):=NULL]
 
 lu<- fread ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/full_LU.csv")
 poplu<- fread ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/pop_lu.csv")
-stack <- fread("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Data/USA/EPA/NEI05_stacks/midatlneweng_nei05stacks.csv" )
+stack <- fread("/media/NAS/Uni/Data/USA/EPA/NEI05_stacks/midatlneweng_nei05stacks.csv" )
 setnames(stack,"guid_", "guid")
 lc <- fread("/media/NAS/Uni/Projects/P031_MIAC_PM/0.raw/midatlantic_newengland/1km_landcover.csv" )
 ems <- fread("/media/NAS/Uni/Projects/P031_MIAC_PM/0.raw/midatlantic_newengland/LU_emis_EPA.csv" )
