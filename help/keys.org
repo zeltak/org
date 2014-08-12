@@ -56,29 +56,29 @@
 
 ** org1 (F9)
 
-| keys                    | comment                                         | function                                        | tag    |
-|-------------------------+-------------------------------------------------+-------------------------------------------------+--------|
-| F9 x                    | archive header                                  | org-archive                                     | org,F9 |
-| F9 u                    | move to upper level of outline                  | outline up                                      | org,F9 |
-| F9 e // C-c e           | open org export menu                            | org-export                                      | org,F9 |
-| F9 t                    | toggle inline images on/off                     | toggle inline Images                            | org,F9 |
-| F9 c                    | open column view in Org                         | org Columns                                     | org,F9 |
-| F9 q                    | close column view                               | close column View                               | org,F9 |
-| F9 b                    | paste a bibtex entry from killring              | bibtex yank                                     | org,F9 |
-| F9 B                    | create a bibtex entry                           | bibtex create                                   | org,F9 |
-| F9 s                    | all marked entries will be sorted (with dialog) | org-sort                                        | org,F9 |
-| F9 r                    | refile org node                                 | org-refile                                      | org,F9 |
-| F9 n                    | narrow to only header                           | narrow buffer                                   | org,F9 |
-| F9 w                    | widen buffer                                    | widen buffer                                    | org,F9 |
-| F9 d                    | take a screenshot and insert to Org             | org-downlaod screenshot                         | org,F9 |
-| F9 D                    | delete screenshot                               | org-download delete screenshotshot              | org,F9 |
-| F9 I                    | org create and paste id                         | org-id-get-create                               | org,F9 |
-| F9 p // C-c c           | open org capture dialog                         | org-capture                                     | org,F9 |
-| F9 l                    | store current header as link in clip            | org-store-link                                  | org,F9 |
-| F9 i                    | paste the link stored in org clipboad           | org-insert-link                                 | org,F9 |
-| C-u C-c C-l             | insert relative link                            |                                                 | org,F9 |
-| C-c C-l (while on link) | Edit link and discription                       |                                                 | org,F9 |
-|-------------------------+-------------------------------------------------+-------------------------------------------------+--------|
+| keys                    | comment                                         | function                           | tag    |
+|-------------------------+-------------------------------------------------+------------------------------------+--------|
+| F9 x                    | archive header                                  | org-archive                        | org,F9 |
+| F9 u                    | move to upper level of outline                  | outline up                         | org,F9 |
+| F9 e // C-c e           | open org export menu                            | org-export                         | org,F9 |
+| F9 t                    | toggle inline images on/off                     | toggle inline Images               | org,F9 |
+| F9 c                    | open column view in Org                         | org Columns                        | org,F9 |
+| F9 q                    | close column view                               | close column View                  | org,F9 |
+| F9 b                    | paste a bibtex entry from killring              | bibtex yank                        | org,F9 |
+| F9 B                    | create a bibtex entry                           | bibtex create                      | org,F9 |
+| F9 s                    | all marked entries will be sorted (with dialog) | org-sort                           | org,F9 |
+| F9 r                    | refile org node                                 | org-refile                         | org,F9 |
+| F9 n                    | narrow to only header                           | narrow buffer                      | org,F9 |
+| F9 w                    | widen buffer                                    | widen buffer                       | org,F9 |
+| F9 d                    | take a screenshot and insert to Org             | org-downlaod screenshot            | org,F9 |
+| F9 D                    | delete screenshot                               | org-download delete screenshotshot | org,F9 |
+| F9 I                    | org create and paste id                         | org-id-get-create                  | org,F9 |
+| F9 p // C-c c           | open org capture dialog                         | org-capture                        | org,F9 |
+| F9 l                    | store current header as link in clip            | org-store-link                     | org,F9 |
+| F9 i                    | paste the link stored in org clipboad           | org-insert-link                    | org,F9 |
+| C-u C-c C-l             | insert relative link                            |                                    | org,F9 |
+| C-c C-l (while on link) | Edit link and discription                       |                                    | org,F9 |
+|-------------------------+-------------------------------------------------+------------------------------------+--------|
 
 
 ** org-id goto F9-F9
@@ -105,11 +105,11 @@
 | keys             | comment                             | function                  | tag     |
 |------------------+-------------------------------------+---------------------------+---------|
 | F10 b s // C-c s | run babel code under current header | org-babel-execute-subtree | org,F10 |
-| F10 s d         | cut org subtree                     | org-cut-subtree           | org,F10 |
+| F10 s d          | cut org subtree                     | org-cut-subtree           | org,F10 |
 | F10 s y          | copy irg subtree                    | org-copy-subtree          | org,F10 |
-| F10 s p         | paste irf subtree                   | org-paste-subtree         | org,F10 |
-| F10 8           | create a heading from line          | org-toggle-heading        | org,F10 |
-| F10 h           | insert new org header               | org-insert-heading        | org,F10 |
+| F10 s p          | paste irf subtree                   | org-paste-subtree         | org,F10 |
+| F10 8            | create a heading from line          | org-toggle-heading        | org,F10 |
+| F10 h            | insert new org header               | org-insert-heading        | org,F10 |
 |------------------+-------------------------------------+---------------------------+---------|
 
 ** Sparse tree
@@ -231,6 +231,8 @@
 | F4 f       | Flyspell                   | check next word                   | F4,Edit |
 | F4 ;       | copy and comment-paste     | copy line and paste commented     | F4,Edit |
 | F4 u       | Fix all non unicode text   |                                   | F4,Edit |
+| F4 6 u     | upcase region              |                                   | F4,Edit |
+| F4 6 l     | downcase region            |                                   | F4,Edit |
 | F4 k       | browse kill ring           |                                   | F4,Edit |
 | F4 B       | Flush Blank lines          | *may not work*                    | F4,Edit |
 | C-S PgUp   | Move line up               |                                   | F4,Edit |
