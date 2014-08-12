@@ -16,13 +16,44 @@ wget -r -A '*.mp3' url/path/dir/
 ** sync//backup project
 *** backends > files
 **** for all text file-git
-***** create a central bare repo (or use github)
-push/commit/pull to that from every machine/mobile
-***** what to sync 
+***** what is currently synced
       -dotfiles (including my linux scripts under bin/scripts)
-      -org files (including my work scripts)
+      -org files(including my work scripts)
       -.emacs.d special directory
-***** script       
+***** create a central bare repo (or use github)
+****** using github as a central repo
+-create a repo (named zorg) on github
+-cuurently this repo is private
+****** daily workflow for work/lapop
+******* for work
+every morning when i get to work:
+run the ugs.sh script
+
+file:/home/zeltak/bin/ugs.sh
+
+@do not use laptop during the day to edit@
+all editing should be done on work PC
+
+before leaving work run the same script
+
+file:/home/zeltak/bin/ugs.sh
+
+******* for laptop
+once i get home run this script
+
+file:/home/zeltak/bin/lgs.sh
+
+then before i leave home in the morning run the same script again
+
+file:/home/zeltak/bin/lgs.sh
+
+******* mobile (android phone/tablet)
+******** read only access (sgit)
+I use sgit for android to pull my hole git repo (zorg) and have a copy of it on my mobile device
+
+******** Mobile org 
+i used that for agenda notes to have a more accesable way to quick read notes from there
+
 **** images/attachments
 **** browser realated
 user chrome/firefox built in sync mechanisms
