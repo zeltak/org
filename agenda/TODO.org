@@ -72,7 +72,11 @@ server ip: 132.72.154.204
 ask to open port to push Rsync from outside
 
 
+****** rsync to push data from laptop to synology nas
 
+       #+BEGIN_SRC sh
+rsync -aRPz --delete -e ssh /home/zeltak/dotfiles/  root@132.72.152.204:/volume1/rsync/    
+       #+END_SRC
 ** cleanup bin and scripts
 ** find out how to create org table with manual breaks
 ** fix i3 tray and revise i3 config for laptop   
