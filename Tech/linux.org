@@ -25189,6 +25189,7 @@ copy the current line. Similar for cut. Super!
  I've been using this for a few years. For deletting or cutting a few
 lines, this is more convenient than having to set mark first.
 ***** Abbreviating Text
+****** start 
 Emacs can abbreviate text for you to be expanded automatically. To setup abbreviations, do this:
 place the following into your "~/.emacs" file:
 
@@ -25213,6 +25214,12 @@ type "~/.abbrev_defs" when prompted for a name
 repeat steps 3 & 4 for each new abbreviation you create later on
 
 now type the abbreviation followed by any punctuation and Emacs will expand that bad boy
+****** set abbriv location and name
+this can be done in the init file or if defined your custom file:/home/zeltak/.emacs.d/custom.el
+
+#+BEGIN_SRC emacs-lisp :results none
+'(abbrev-file-name "~/.emacs.d/zabbrv")
+#+END_SRC
 
 ***** Delete all lines starting with common letter (flush lines)
 'flush-lines'             delete lines containing matches
@@ -29090,6 +29097,49 @@ where the ::25 means line 25 in that file
 ;use RET or TAB to follow a link?
  (setq org-return-follows-link t)
  ;(setq org-tab-follows-link t)
+***** Custom links
+****** Tag Searches
+For another use case, the following code defines links which search your headlines for specific tags.
+#+BEGIN_SRC emacs-lisp :results none
+(org-add-link-type
+ "tag"
+ (defun endless/follow-tag-link (tag)
+   "Display a list of TODO headlines with tag TAG.
+With prefix argument, also display headlines without a TODO keyword."
+   (org-tags-view (null current-prefix-arg) tag)))
+#+END_SRC
+
+Then, merely write your links as
+
+#+BEGIN_EXAMPLE
+[[tag:work+phonenumber-boss][NAMEOFLINK]]
+#+END_EXAMPLE
+
+The syntax allowed, described here:
+
+http://orgmode.org/manual/Matching-tags-and-properties.html#Match-syntax
+
+is the same used for the org-tags-view command.
+
+****** Grep links
+try this code
+
+#+BEGIN_SRC emacs-lisp :results none
+org-add-link-type
+ "grep"
+ (defun endless/follow-grep-link (regexp)
+   "Run `rgrep' with REGEXP as argument."
+   (grep-compute-defaults)
+   (rgrep regexp "*" (expand-file-name "./"))))
+#+END_SRC
+
+Then, when you click on something like the following link in an org-mode buffer, you'll be taken to a list of results.
+
+#+BEGIN_SRC emacs-lisp :results none
+** TODO Refactor [[grep:OldClassName][OldClassName]] into NewClassName
+#+END_SRC
+
+
 **** local buffer settings
 ***** Summary of in-buffer settings
 http://orgmode.org/manual/In_002dbuffer-settings.html

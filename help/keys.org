@@ -101,16 +101,18 @@
 ** Org2 (f10)
 
 
-|------------------+-------------------------------------+---------------------------+---------|
-| keys             | comment                             | function                  | tag     |
-|------------------+-------------------------------------+---------------------------+---------|
-| F10 b s // C-c s | run babel code under current header | org-babel-execute-subtree | org,F10 |
-| F10 s d          | cut org subtree                     | org-cut-subtree           | org,F10 |
-| F10 s y          | copy irg subtree                    | org-copy-subtree          | org,F10 |
-| F10 s p          | paste irf subtree                   | org-paste-subtree         | org,F10 |
-| F10 8            | create a heading from line          | org-toggle-heading        | org,F10 |
-| F10 h            | insert new org header               | org-insert-heading        | org,F10 |
-|------------------+-------------------------------------+---------------------------+---------|
+|------------------+-------------------------------------+---------------------------+--------------------|
+| keys             | comment                             | function                  | tag                |
+|------------------+-------------------------------------+---------------------------+--------------------|
+| F10 b s // C-c s | run babel code under current header | org-babel-execute-subtree | org,F10            |
+| F10 s d          | cut org subtree                     | org-cut-subtree           | org,F10            |
+| F10 s y          | copy irg subtree                    | org-copy-subtree          | org,F10            |
+| F10 s p          | paste irf subtree                   | org-paste-subtree         | org,F10            |
+| F10 8            | create a heading from line          | org-toggle-heading        | org,F10            |
+| F10 h            | insert new org header               | org-insert-heading        | org,F10            |
+| F10 m p          | org pull                            | org-mobile-pull           | org,org-mobile,F10 |
+| F10 m s          | org push                            | org-mobile-push           | org,org-mobile,F10 |
+|------------------+-------------------------------------+---------------------------+--------------------|
 
 ** Sparse tree
 
