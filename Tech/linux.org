@@ -15825,11 +15825,8 @@ sp-sc "STREAM URL" 3908 8908 &
  vlc "[[http://localhost:8908]]"
 
 *** pentadacytl
-
 **** quick keys
-
 go to the insert ares > gi
-
 **** open link in succesion in background
 
 g;b
@@ -15854,7 +15851,6 @@ add a line in your .pentadactlyrc and add a command:
  map tt <End>
 
 **** quickmarks
-
 ***** add a bunch of sites to one quickmark
 
 to add a bunch of sites to one quickmark issue the following command:
@@ -15879,14 +15875,10 @@ URLs.
  set passkeys+='google\.com/reader':jkvnpbumoAXNOVPJK?gehtl<Return>
 
 **** abbriviations
-
 ***** input mode abbriviations
-
  use the follwing in your pentarc
- to expand them enetr the abbrivition and press ctrl+]
-
+to expand them enetr the abbrivition and press ctrl+]
 **** Tabs
-
 ***** get the bookmark menu to open in a new tab
 
 issue this in the penta CLI:
@@ -15910,7 +15902,6 @@ use:
  :unpintab
 
 **** Hints
-
 ***** use hints in penta menus
 
 MOW : Multi-line Output Widget (or Window)
@@ -15933,7 +15924,6 @@ opinion, powerful capability. Others include:
  :pageinfo
 
 ***** map keys to get up/down movment in hints mode
-
 you can add this do you pentarc
  map -m hints j -ex normal! j
  map -m hints k -ex normal! k
@@ -15944,13 +15934,16 @@ you can add this do you pentarc
  i usually just used the first 2 lines
 
 ***** allow letters to be used as hints
-
 use this in the pentarc
- set hintkeys=fdsaghjklwertyuiovbcnm
- For more Vimium-like highlighting:
- highlight -a Hint text-transform: uppercase; padding: 0 2px 0 1px;
+#+BEGIN_EXAMPLE
+set hintkeys=fdsaghjklwertyuiovbcnm
+#+END_EXAMPLE
+
+For more Vimium-like highlighting:
+
+highlight -a Hint text-transform: uppercase; padding: 0 2px 0 1px;
 background-color: yellow; font: bold 11px "Droid Sans Mono";
- highlight -a HintElem background-color: transparent;r
+highlight -a HintElem background-color: transparent;r
 
 **** keymaps
 
@@ -16027,6 +16020,71 @@ the spaces:
 Dropbox/multisync/penta/.pentadactylrc
  its advisable to manually sync the .pentadactyl dir since auto sync
  could casue issues
+
+**** reload config
+use the ':rehash' command
+**** Gui elements
+***** list of elements
+
+use in penta 
+:help 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-08-16 08:47:27
+#+attr_html: :width 300px
+
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-08-16_08:47:27.png]]
+
+***** hide elemetns
+put the elements you want to hide ($Note$ the '-' sign) like this
+#+BEGIN_EXAMPLE
+set guioptions-=br
+#+END_EXAMPLE
+***** show elemetns
+put here elements to show like this $Note$ the '+' sign 
+#+BEGIN_EXAMPLE
+set guioptions+=nrBT
+#+END_EXAMPLE
+
+***** color themes
+To install this color scheme, copy it into your ~/.pentadactyl/colors folder, creating it if it doesn't exist:
+#+BEGIN_SRC sh
+$ mkdir -p ~/.pentadactyl/colors
+$ cp solarized-*.penta ~/.pentadactyl/colors/.
+#+END_SRC
+
+Then change your default theme by adding the following to your ~/.pentadactylrc
+
+#+BEGIN_EXAMPLE
+colorscheme solarized-light
+#+END_EXAMPLE
+
+**** Mapping javascript
+So yesterday I decided to also look into the rest of the flags that could be used for mapping new keys. One of them is -js which allows you to execute some snippets of javascript or a javascript function you defined at the commandline or in your .pentadactylrc.
+
+I chose to do both since I wanted to test my simple function and had been meaning to make this for a while.
+
+I read a significant amount of RSS feeds and often if I open a story in a new tab it is with the intent to share the link with others. This becomes annoying when sites like Slashdot, Ars Technica and other websites I frequent use tracking scripts that add things like '?utm_source=rss&utm_content=..." which make the URL far too long and unruly. In the past Ive used O (Shift-o), entered text-edit mode (^t)
+then visual mode (v) used F (Shift-f) and '?' to delete the tracking information. This morning I created this function at the commandline and later put it in my pentarc
+
+#+BEGIN_EXAMPLE
+    javascript <<EOF
+    function utm_trimmer (url) {
+        var utm = url.indexOf('?utm');
+        if ( utm > 0 ) {
+             url = url.substring(0, utm);
+             dactyl.clipboardWrite(url, true);
+        }
+    }
+    EOF
+#+END_EXAMPLE
+
+Admittedly it's simplistic but it does the job (so far). With that done I then added one extra line to my pentarc:
+
+#+BEGIN_EXAMPLE
+map -g user <Leader>y -js utm_trimmer(buffer.URL)
+#+END_EXAMPLE
+
+and now I just press \y (because I currently have mapleader set to '\') and it runs the function which takes away the tracking section and copies the URL to my clipboard.
 
 *** sabnzbd
 
@@ -25192,34 +25250,30 @@ lines, this is more convenient than having to set mark first.
 ****** start 
 Emacs can abbreviate text for you to be expanded automatically. To setup abbreviations, do this:
 place the following into your "~/.emacs" file:
+Also, if you want abbreviations to be saved whenever you save files (C-x s) or quit emacs, add the following to your .emacs:
 
-#+BEGIN_SRC emacs-lisp
-(setq-default abbrev-mode t)
-(cond ((file-exists-p "~/PATHTO/.abbrev_defs")
-       (read-abbrev-file "~/PATHTO/.abbrev_defs")))
-(setq save-abbrevs t)
+#+BEGIN_SRC emacs-lisp :results none
+(setq save-abbrevs t)              ;; save abbrevs when files are saved
+                                     ;; you will be asked before the abbreviations are saved
 #+END_SRC
 
-save the file and re-load it
+Restoring Abbrevs- Turning on abbrev mode will read your abbrev file. To turn on abbrev-mode globally in your init file:
 
-type the abbreviation you want to use (IE .se)
+#+BEGIN_SRC emacs-lisp :results none
+(setq-default abbrev-mode t)
+#+END_SRC
 
-followed by "C-x a i g" to create a global abbreviation ("C-x a i l" for local abbreviations)
 
-type the definition of the abbreviation you want expanded- IE what you want the expanded text to look like
-
-type "M-x write-abbrev-file"
-type "~/.abbrev_defs" when prompted for a name 
-
-repeat steps 3 & 4 for each new abbreviation you create later on
-
-now type the abbreviation followed by any punctuation and Emacs will expand that bad boy
 ****** set abbriv location and name
 this can be done in the init file or if defined your custom file:/home/zeltak/.emacs.d/custom.el
 
 #+BEGIN_SRC emacs-lisp :results none
-'(abbrev-file-name "~/.emacs.d/zabbrv")
+(setq abbrev-file-name "/home/zeltak/.emacs.d/abbrv/personal_abbrv.txt")
 #+END_SRC
+
+****** list current abbriviations
+To display a list of the current abbreviations Emacs uses, enter the command
+`list-abbrevs`       
 
 ***** Delete all lines starting with common letter (flush lines)
 'flush-lines'             delete lines containing matches
@@ -26051,6 +26105,30 @@ use this function (stick it in your config file)
  
  I have this set to <f7>:
  (global-set-key (kbd "<f7>") 'minimap-toggle)
+
+***** TODO Toggle-Map
+The following keymap toggles some options which tend to be useful throughout a session.
+
+#+BEGIN_SRC emacs-lisp :results none
+(define-prefix-command 'endless/toggle-map)
+;; The manual recommends C-c for user keys, but C-x t is
+;; always free, whereas C-c t is used by some modes.
+(define-key ctl-x-map "t" 'endless/toggle-map)
+(define-key endless/toggle-map "c" 'column-number-mode)
+(define-key endless/toggle-map "d" 'toggle-debug-on-error)
+(define-key endless/toggle-map "e" 'toggle-debug-on-error)
+(define-key endless/toggle-map "f" 'auto-fill-mode)
+(define-key endless/toggle-map "l" 'toggle-truncate-lines)
+(define-key endless/toggle-map "q" 'toggle-debug-on-quit)
+(define-key endless/toggle-map "t" 'endless/toggle-theme)
+;;; Generalized version of `read-only-mode'.
+(define-key endless/toggle-map "r" 'dired-toggle-read-only)
+(autoload 'dired-toggle-read-only "dired" nil t)
+#+END_SRC
+
+There are eight keys being defined there, most of which aren't even used every day, but I know I'll never forget a single one. That is the beauty of mnemonics.
+
+Doesnt "Emacs, toggle column" just roll off your tongue as you're typing C-x t c? I feel like I'm commanding the strands of reality, but that could just be my D&D past taking the better of me.
 
 **** look and feel
 ***** fonts
