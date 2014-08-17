@@ -8,16 +8,16 @@
 The easiest way to download all pdf or mp3 files from given url:
 
 wget -r -A '*.pdf' url/path
-wget -r -A '*.mp3' url/path/dir/ 
+wget -r -A '*.mp3'url/path/dir/ 
 ** sync//backup project
 *** Uni IP's
 
-| Machine      |             IP | Ports open                                                      | Comments |
-|--------------+----------------+-----------------------------------------------------------------+----------|
-| Linux PC     | 132.72.155.204 | github,                                                         |          |
-| Synology NAS | 132.72.152.204 | github, ssh (22), btsync (UDP/TCP 9999 ,UDP/TCP 8888, UDP 3000) |          |
-| Linux Laptop | 132.72.154.204 | github                                                          |          |
-|              |                |                                                                 |          |
+| Machine      |             IP | Ports open                                                                       | Comments |
+|--------------+----------------+----------------------------------------------------------------------------------+----------|
+| Linux PC     | 132.72.155.204 | github,                                                                          |          |
+| Synology NAS | 132.72.152.204 | FTP into machine,github, ssh (22), btsync (UDP/TCP 9999 ,UDP/TCP 8888, UDP 3000) |          |
+| Linux Laptop | 132.72.154.204 | github                                                                           |          |
+|              |                |                                                                                  |          |
 
 *** backends > files
 **** for all textfile-git

@@ -28632,11 +28632,20 @@ This way, if Google decides to change it's url structure, all you have
 to do is redefine your link type, instead of all email links.
 
 **** export
-***** export options
+***** export in file options
 The table of contents is normally inserted directly before the first headline of the file. The depth of the table is by default the same as the number of headline levels, but you can choose a smaller number, or turn off the table of contents entirely, by configuring the variable org-export-with-toc, or on a per-file basis with a line like
 #+BEGIN_EXAMPLE
 #+OPTIONS: toc:2          (only to two levels in TOC)
 #+OPTIONS: toc:nil        (no default TOC at all)
+#+END_EXAMPLE
+***** Publishing
+****** publish to text 
+@may be broken in org >8@
+choose:
+#+BEGIN_EXAMPLE
+org-publish-org-to-ascii
+org-publish-org-to-latin1
+org-publish-org-to-utf8
 #+END_EXAMPLE
 
 **** refile
@@ -38803,7 +38812,9 @@ use with either of following:
 
 ** Zsh
 *** zsh config file locations
+
 Put all the PATH variables in a .zshenv file:
+
 file:/home/zeltak/.zshenv
 
 *** make Zsh the default shell
@@ -38830,7 +38841,7 @@ if using a the Florian "Bluewind" zshrc and this line is there
 *** reload settings after zshrc changes
 
 just issue:
- source ~/.zshrc
+source ~/.zshrc
 
 *** save a history file
 
