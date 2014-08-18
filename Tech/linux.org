@@ -19836,7 +19836,38 @@ install a zathura backend :
 zathura-pdf-mupdf or zathura-pdf-poppler
 
 *** keepass
+**** keepass plugin directory
+***** on arch
+file:/usr/share/keepass/
+***** on debian
 
+#+BEGIN_EXAMPLE
+/usr/lib/keepass2 or /usr/lib/keepass2/plugins
+#+END_EXAMPLE
+
+**** debian specific
+***** plugin errors (incompatible with the current KeePass version)
+Under Debian/Ubuntu/Mint, I installed the keepass2 package. After installing KeeFox, I get the following error:
+
+#+BEGIN_EXAMPLE
+The following plugin is incompatible with the current KeePass version:
+/usr/lib/keepass2/KeePassRPC.plgx
+#+END_EXAMPLE
+
+Have a look at the plugin's website for an appropriate version.
+
+You need to install the mono compiler and a library so that KeePass can compile the plugin.
+
+#+BEGIN_SRC sh
+sudo apt-get install mono-dmcs libmono-system-management4.0-cil
+#+END_SRC
+
+%Tip-Alternatively, you can install all of the mono packages%
+
+#+BEGIN_SRC sh
+sudo apt-get install mono-complete
+#+END_SRC
+      
 **** auto type
 
 you can define a auto type manualy
