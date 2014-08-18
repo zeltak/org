@@ -27753,6 +27753,8 @@ the agenda folder is defined in the org config:
 
 **** BASE
 ***** Manual
+To read the on-line documentation try:
+?M-x org-info ?
 ***** Install
 ****** Downloading Org as an archive					:Fav:
 
@@ -28640,14 +28642,32 @@ The table of contents is normally inserted directly before the first headline of
 #+END_EXAMPLE
 ***** Publishing
 ****** publish to text 
-@may be broken in org >8@
 choose:
 #+BEGIN_EXAMPLE
-org-publish-org-to-ascii
-org-publish-org-to-latin1
-org-publish-org-to-utf8
+org-ascii-publish-to-ascii
+org-ascii-publish-to-utf8
 #+END_EXAMPLE
 
+****** example config file for 2 different publishing options:
+#+BEGIN_SRC emacs-lisp :results none
+     (setq org-publish-project-alist
+           '(
+              ("Help_files"
+              :base-directory "~/org/files/help/"
+              :publishing-directory "~/org/files/export/"
+              :section-numbers nil
+              :table-of-contents nil
+              :publishing-function org-ascii-publish-to-ascii
+                     )
+              ("econf"
+              :base-directory "~/org/files/help/"
+              :publishing-directory "~/org/files/export/"
+              :section-numbers nil
+              :table-of-contents nil
+              :publishing-function org-html-publish-to-html
+                     )
+))
+#+END_SRC
 **** refile
 ****** base 
 To refile tasks in org you need to tell it where you want to refile things.
