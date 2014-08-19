@@ -33976,6 +33976,12 @@ FSArchiver is able to detect the filesystems which are installed on all the disk
 fsarchiver probe simple
 #+END_SRC
 
+*** Clonezilla
+**** bad blocks erros
+its possible to overcome bad block erros if using clonezilla
+if you do get them while cloning:
+enter expert mode, and check the option "-rescue" in the relevant screen
+if not succesful its recommended to try ddrescue or gddrescue (Gui) as a last resort.
 ** admin
 *** sudo
 **** adding user to sudo list
