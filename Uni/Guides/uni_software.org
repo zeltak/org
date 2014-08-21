@@ -2617,3 +2617,55 @@ Make Teamviewer remember position, scaling, full screen
 #+DOWNLOADED: /home/zeltak/ZH_tmp/zotero_keybaord.png @ 2014-03-13 14:34:38
 #+attr_html: :width 300px
  [[/home/zeltak/org/attach/images_2014/zotero_keybaord_2014-03-13_14:34:38.png]]
+** create documents with sphinx and RST 
+This is what i used to genertae the pdfs for the Qgis course
+*** installing depenenceis
+to build pdf/html you need these 2:
+
+http://docutils.sourceforge.net/rst.html
+
+http://sphinx-doc.org/
+
+plus the dependencies in the tutorial installs
+
+to make sure you have all avilable install these (tested on debian)
+
+#+NAME: 
+#+BEGIN_SRC sh
+sudo apt-get install rst2pdf                                                              
+sudo pip install sphinx_bootstrap_theme     
+sudo apt-get install python-sphinx                                                        
+#+END_SRC
+
+then proceed onwards to clone and install qgis-tutor full project
+*** install project
+
+#+BEGIN_SRC sh
+git clone https://github.com/spatialthoughts/qgis-tutorials.git
+cd qgis-tutorials
+pip install -r requirements.txt
+#+END_SRC
+
+*** Build html/pdf
+**** base command
+
+     #+NAME: 
+     #+BEGIN_SRC sh
+#for html
+make html
+#for pdf
+make pdf
+     #+END_SRC 
+
+**** edit files
+images should be located at:
+
+file:/media/NAS/Uni/Courses/Qgis/qgis-tutorials/source/static/common/bgu.png
+
+the file that insert the cover page for each file is this:
+
+file:/media/NAS/Uni/Courses/Qgis/qgis-tutorials/source/_templates/pdf_coverpage_en.tmpl
+
+the file to edit author name etc is here:
+
+file:/media/NAS/Uni/Courses/Qgis/qgis-tutorials/source/conf.py
