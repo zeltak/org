@@ -10125,8 +10125,8 @@ press shift f6
 dunst is able to get different colors for a message via notify-send. In order to do that you have to add a hint via the -h option. The progress value can be set with a hint, too.
 
 #+BEGIN_SRC sh
-notify-send -h string:fgcolor:#ff4444
-notify-send -h string:bgcolor:#4444ff -h string:fgcolor:#ff4444
+notify-send -h string:fgcolor:"#ff4444"
+notify-send -h string:bgcolor:"#4444ff" -h string:fgcolor:"#ff4444"
 notify-send -h int:value:42 "Working ..."
 #+END_SRC
 
@@ -29285,6 +29285,7 @@ TODO Refactor [[grep:OldClassName][OldClassName]] into NewClassName
 #+END_EXAMPLE
 
 [[*Bittorrent-sync%20(btsync)][*Bittorrent-sync (btsync)]]* CLI Admin
+* Admin
 ** General Guides
 *** A-Z Index of the Linux BASH
 
@@ -35780,6 +35781,21 @@ Finally, after solving all conflicts, a merge conflict situation needs to be con
 You should always keep in mind that you can return to the state before you started the merge at any time. This should give you the confidence that you can't break anything. On the command line, a simple "git merge --abort" will do this for you.
 
 In case you've made a mistake while resolving a conflict and realize this only after completing the merge, you can still easily undo it: just roll back to the commit before the merge happened with "git reset --hard " and start over again.
+***** git submodules
+****** remove a submodel completely
+To remove a submodule you need to:
+
+#+BEGIN_EXAMPLE
+Delete the relevant section from the .gitmodules file.
+Stage the .gitmodules changes git add .gitmodules
+Delete the relevant section from .git/config.
+Run git rm --cached path_to_submodule (no trailing slash).
+Run rm -rf .git/modules/path_to_submodule
+Commit git commit -m "Removed submodule <name>"
+Delete the now untracked submodule files
+rm -rf path_to_submodule
+#+END_EXAMPLE
+       
 **** github
 ***** inital setup
 1.Set Up SSH Keys
@@ -38839,6 +38855,15 @@ details. the best way is to install a gui xrandr app that ouptuts a script you
 can then use in your .xinitrc
 
 %Tip% arandr is a good gui frontend%
+
+*** Xsel (x-clipboard)
+**** worker
+#+BEGIN_SRC sh
+#for just the path
+echo -n {p}  | xsel -i ;
+#for path and file
+
+#+END_SRC
 
 * linux hardware tips
 ** x200

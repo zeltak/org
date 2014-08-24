@@ -822,3 +822,19 @@ alias android-disconnect="sudo umount -u /media/YOURMOUNTPOINT"
 #+END_EXAMPLE
 
 Note: if you want not be asked for password when using sudo, please refer to USB Storage Devices#Mounting USB devices
+*** jmtpfs @this worked last time@
+jmtpfs is a FUSE and libmtp based filesystem for accessing MTP (Media Transfer Protocol) devices. It was specifically designed for exchanging files between Linux systems and newer Android devices that support MTP but not USB Mass Storage. jmtpfs is available as jmtpfs in the AUR.
+create a mount point like file:~/mtp
+
+then use this commands to mount your device:
+
+#+BEGIN_SRC sh
+jmtpfs ~/mtp
+#+END_SRC
+
+And this command to unmount it:
+
+#+BEGIN_SRC sh
+fusermount -u ~/mtp
+#+END_SRC
+
