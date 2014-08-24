@@ -22597,36 +22597,33 @@ brackets. The correct line should have been:
 
 delete the file named default in ~/.local/share/yeganesh
 
-*** notify-osd (notify-send)-growl like notifications
+*** notify-send 
+**** CLI options
 
-**** output text to notify-osd
+     #+BEGIN_SRC sh
+-u, --urgency=LEVEL               Specifies the urgency level (low, normal, critical).
+-t, --expire-time=TIME            Specifies the timeout in milliseconds at which to expire the notification.
+-a, --app-name=APP_NAME           Specifies the app name for the icon
+-i, --icon=ICON[,ICON...]         Specifies an icon filename or stock icon to display.
+-c, --category=TYPE[,TYPE...]     Specifies the notification category.
+-h, --hint=TYPE:NAME:VALUE        Specifies basic extra data to pass. Valid types are int, double, string and byte.
+-v, --version                     Version of the package.
+     #+END_SRC
 
-echo "this is a test" | xargs -0 notify-send
- or with icons
- notify-send -u critical -i "/home/zeltak/MLT/programs/Gmail
-Checker/gmail error.png" 'Boss !!' 'Am done with the execution'
- notify-send syslog "`tail /var/log/syslog`"q
- notify-send -u critical -i "/home/zeltak/MLT/programs/Gmail
-Checker/gmail error.png" 'Worker' 'Copied full path to clipboared'
+**** define specifc timeout
 
-**** change position of bubble
+$Note-time is given in mileseconds, ₆In example₆ 2000 is 2 seconds etc $
+ 
+#+BEGIN_SRC sh
+notify-send --expire-time=2000 --hint=int:transient:1  "test" "bla"  
+#+END_SRC
 
-The GUI doesn't come with the option to change the position, but you can
-change it from the terminal:
- gconftool-2 -s /apps/notify-osd/gravity --type=int [number]
- where is [number] can be:
- 1 - top-right corner
- 2 - middle-right
- 3 - bottom-right corner
- 4 - bottom-left corner
- 5 - middle-left
- 6 - top-left corner
+**** change color of BK/FG
+use the -h option
 
-**** notifyconf
-
-resultsv2you can install notifyconf to set manuall configuration of
-notify-osd
- [[/home/zeltak/org/attach/images/2011-03-20-10-18-34-scrot.png]]
+#+BEGIN_SRC sh
+notify-send -h string:bgcolor:"#ffffff" -h string:fgcolor:"#000000" "woot"        
+#+END_SRC
 
 *** testdisk/photorec (recover deleted images)
 
