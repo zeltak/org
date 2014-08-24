@@ -98,10 +98,130 @@ raid shortcuts
 rsync buttons
 git buttons
 syncthing buttons
+***** TODO post mailing list:
+      :PROPERTIES:
+      :ID:       c777b834-116f-4830-b3b6-191a19381325
+      :END:
+change colors of items per condition
+that is change lister BG when in filter mode, not focused etc
+*** fix MLT sync
 *** Emacs
 jabref-ebib etc
 bbdb
 gnus
+**** dp 
+Hi List,
+
+I've written the "eierlegende Wollmilchsau" of wrap-in-block functions
+(i.e. the 'all-inclusive mother of all wrap-in-block functions').
+
+To check it out, you need to
+jjk 1. Clone or fork the git repo (https://github.com/tj64/org-dp)
+ 2. (add-to-list 'load-path "/path/to/org-dp/") and
+ 3. (require 'org-dp-lib') in your init file
+
+`org-dp-wrap-in-block' works on/with all kinds of Org blocks, and can be
+called interactively or non-interactively.
+
+It
+
+ - inserts a new block when called on an empty line without arguments
+
+ - wraps sexp or region or '+/- X lines from point' into a newly created
+   block
+
+ - when called with point inside a block, it either
+
+   + unwraps the blocks content, i.e. deletes the surrounding block or
+
+   + replaces the surrounding block with a different block
+
+It takes full account of affiliated keywords. In case of src-blocks,
+it puts src-block parameters on the block's headline, but with
+`org-dp-toggle-headers' its easy to toggle between parameters
+
+,----
+|   #+begin_src R :noweb yes
+`----
+
+and headers
+
+,----
+| #+header: :noweb yes
+| #+begin_src R
+`----
+
+This function takes into account so many options that combinatorics hits
+you badly when trying to test all of them. Everything I tried works now
+with the current version, but its not unlikely that daily usage will
+discover some bugs or untreated corner cases. Please report them with
+backtrace.
+
+The good news is that besides its complexity, its not one
+mega-convoluted monolithic function for a single task only. Instead I
+outfactored the core functionality into the 'org-dp.el' library
+("Declarative Programming with Org Elements") which offers potentially
+massive time (and headache) savings when programming with Org Elements
+on the local level.
+
+'org-dp' acts on the internal representation of Org elements, and due to
+the total uniformity of this representation it is possible to do diverse
+actions on diverse elements in a very uniform way, thus the 3 functions
+
+ - `org-dp-create'
+
+ - `org-dp-rewire'
+
+ - `org-dp-prompt'
+
+should be all you need for all kinds of programming
+tasks. `org-dp-wrap-in-block' is one example of how to program with
+org-dp, `org-dp-toggle-headers' is another one.
+
+Hope that this is useful.
+
+PS
+
+For the sake of completeness, here the docstring of
+`org-dp-wrap-in-block':
+
+,----[ C-h f org-dp-wrap-in-block RET ]
+| org-dp-wrap-in-block is an interactive Lisp function in              |
+| `org-dp-lib.el'.                                                     |
+|                                                                      |
+| It is bound to C-c w w.                                              |
+|                                                                      |
+| (org-dp-wrap-in-block &optional LINES USER-INFO)                     |
+|                                                                      |
+| Wrap sexp-at-point or region in Org block.                           |
+|                                                                      |
+| A region instead of the sexp-at-point is wrapped if either           |
+|                                                                      |
+| - optional arg LINES is an (positive or negative) integer or         |
+|                                                                      |
+| - the region is active                                               |
+|                                                                      |
+| In the first case the region is determined by moving +/- LINES       |
+| forward/backward from point using `forward-line', in the second      |
+| case the active region is used.                                      |
+|                                                                      |
+| If point is already inside of a block, modify it or unwrap its       |
+| content/value instead of wrapping it in another block, except if     |
+| explicitly asked for by user.                                        |
+|                                                                      |
+| If USER-INFO is given, it should be a list in the format returned by |
+| `org-dp-prompt', i.e.                                                |
+|                                                                      |
+| (elem-type contents replace affiliated args)                         |
+|                                                                      |
+| Look up that function's docstring for more information about the     |
+| list's elements. A non-nil USER-INFO suppresses calls to             |
+| `org-dp-prompt' and is used instead of its return value.             |
+|                                                                                                                                           |
+
+
+
+
 *** clean out downloads and zh_tmp
 * Linux
 ** Org

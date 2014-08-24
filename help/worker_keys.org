@@ -36,18 +36,71 @@
 
 
 
-* operations
-** 
-
-|-----+----------------------------+-------------|
-| key | folder                     | tag         |
-|-----+----------------------------+-------------|
-| ,p  | send path to clipboared    | system,clip |
-| ,f  | send path+file to clipboad | system,clip |
-| ,f  | send path+file to clipboad | system,clip |
-| ,f  | send path+file to clipboad | system,clip |
-|     |                            |             |
-|-----+----------------------------+-------------|
-
+* Buttons
+|-------+-------------------------------------------------+---------------|
+| key   | folder                                          | tag           |
+|-------+-------------------------------------------------+---------------|
+| ,p    | send path to clipboared                         | system,clip   |
+| ,f    | send path+file to clipboad                      | system,clip   |
+| ,f    | send path+file to clipboad                      | system,clip   |
+| ,f    | send path+file to clipboad                      | system,clip   |
+|-------+-------------------------------------------------+---------------|
+| ,d    | sort by date                                    | sort          |
+| ,s    | sort by size                                    | sort          |
+| ,n    | sort by name                                    | sort          |
+| ,t    | sort by time                                    | sort          |
+|-------+-------------------------------------------------+---------------|
+| F12-w | open extra worker                               | system,worker |
+| F12-r | open root worker                                | system,worker |
+| F12-q | quit worker                                     | system,worker |
+|-------+-------------------------------------------------+---------------|
+| S-F5  | Root Copy                                       | system,copy   |
+| F12-5 | copy same folder and rename                     | system,copy   |
+| F12-% | copy structure of selected files (only folders) | system,copy   |
+| --    | copy structure of ALL files (only folders)      | system,copy   |
+| S-F6  | Root Move                                       | system,copy   |
+| S-F7  | Root makedir                                    | system,copy   |
+| F127  | makedir -p                                      | system,copy   |
+| S-F8  | Root Delete                                     | system,edit   |
+|-------+-------------------------------------------------+---------------|
+| S-F4  | Root Edit                                       | system,edit   |
+| F12-4 | create new text file                            | system,edit   |
+| F12-$ | open file in vim command line                   | system,edit   |
+|-------+-------------------------------------------------+---------------|
+| F12-2 | rename extension                                | system,edit   |
+| F12-k | krename file                                    | system,edit   |
+| F12-l | krename recursive                               | system,edit   |
+|-------+-------------------------------------------------+---------------|
+| \-`   | V mount manager                                 | system,mount  |
+|-------+-------------------------------------------------+---------------|
+| ''    | clear all filter                                | filter        |
+| 'p    | filter pdf                                      | filter        |
+| 'm    | filter audio                                    | filter        |
+| 'z    | filter zip (archives)                           | filter        |
+| 'v    | filter video                                    | filter        |
+| 'd    | filter docs                                     | filter        |
+| 's    | select by                                       | select        |
+| C-a   | select all                                      | select        |
+| C-S-a | deselect all                                    | select        |
+| 'i    | invert selection                                | select        |
+|-------+-------------------------------------------------+---------------|
+| ;s    | create symlink                                  | system,edit   |
+| ;x    | make executable                                 | system,edit   |
+|-------+-------------------------------------------------+---------------|
+| /==/  | other panel equal to current                    | system        |
+| /=-/  | swap panels                                     | system        |
+| /=s/  | dir size current dir                            | system        |
+| /=S/  | dir size all directories in view                | system        |
+| /=b/  | switch bank                                     | system        |
+| /=m/  | worker menu                                     | system        |
+| /=./  | show hidden files                               | system        |
+| /=l/  | toggle list view                                | system        |
+| /=i/  | toggle image view                               | system        |
+| /=t/  | show info (text) view                           | system        |
+|-------+-------------------------------------------------+---------------|
+| \-F1  | bookmarks                                       | navigate      |
+| \-F2  | history                                         | navigate      |
+|       |                                                 |               |
+|-------+-------------------------------------------------+---------------|
 
 
