@@ -2722,7 +2722,7 @@ In case you get the error “wrong architecture i386” you have to execute the 
     apt-get update
 
 For further information: http://wiki.debian.org/Multiarch/HOWTO 
-***  install source code pro debian
+*** install source code pro debian
 Download the archive from here. You can do it also using wget: Open a terminal (ctrl-alt-t or press the win key and type "terminal") and type
 
 wget http://downloads.sourceforge.net/project/sourcecodepro.adobe/SourceCodePro_FontsOnly-1.017.zip
@@ -38576,6 +38576,32 @@ To login (from unix shell) use -h only if needed.
  mysql> drop table [table name];
  Show all data in a table.
  mysql> SELECT * FROM [table name];
+*** create AP on laptop
+**** using arch bash script
+https://github.com/oblique/create_ap
+and here:
+https://wiki.archlinux.org/index.php/Software_access_point
+
+Dependencies:
+
+#+BEGIN_EXAMPLE
+bash (to run this script)
+util-linux (for getopt)
+hostapd
+iproute2
+iw
+haveged (optiona 
+#+END_EXAMPLE
+
+Example:
+
+#+BEGIN_SRC sh
+#No passphrase (open network):
+create_ap wlan0 eth0 MyAccessPoint
+#WPA + WPA2 passphrase:
+create_ap wlan0 eth0 MyAccessPoint MyPassPhrase
+#+END_SRC
+
 ** X system
 *** X11
 **** keyboard
