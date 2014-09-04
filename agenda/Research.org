@@ -724,33 +724,51 @@ This results in a Raster file with the "traffic density" (tden)
 yes that is the same methods we used in the last 1x1km paper. that data should also be on the server (NCDC and EPA met data)
 
 ** Joel HSPH meeting 28.8.2014
-*** TODO Future models ideas
+*** NEXT Future models ideas
     :PROPERTIES:
     :ID:       ac4983ec-5425-4d68-8451-a44507f56427
     :END:
-**** TODO supplementing AOD by space and time
+**** TODO IDEAs
+     :PROPERTIES:
+     :ID: a0658698-7ca9-4cea-8967-ba138950eb22
+     :END:
+comparing the wrf model in paris
+use calman filte to merge 1x1km to 3x3km
+take interactions with wind 
+random slope for each slopes for each wind direction
+use wind speed to choose the best 9 grid cell 
+aod 
+reanalysis data set for wind direction
+LPM- rule if you habe a spline it should stop in distance X etc (₆In example₆ for A1 1500km).
+
+**** NEXT supplementing AOD by space and time
      :PROPERTIES:
      :ID:       bd374907-316e-4494-bbb1-f877ef09e627
      :END:
 space: perhaps taking aod from n (~ 9) adjacent cells
 time: take from prev/next day if no AOD avilable today
 also we can maybe weight nearby cells by missingness/distance
-**** TODO calculate for each day the corr between monitor and surronding AOD point in a X defined distance and take the highest correlation:
+
+**** NEXT calculate for each day the corr between monitor and surronding AOD point in a X defined distance and take the highest correlation:
      :PROPERTIES:
      :ID:       4a7af949-7755-4087-87d4-d711815d260c
      :END:
 modis isn't fixed and we are getting the centroid of the grid
 it may be that the closest AOD point does not neccesarly correlate the best in a given point/day due to:
 there maybe LU/temporal variables that are not centroid specific 
-**** TODO mod1 take the mean of the nonmissing aod's from the immediately surrounding cells, subtracted the aod from the cell with the monitor, and put that difference into the model to perhaps better capture the more slowly changing particle concentrations, and hence increasing spatial R2
+**** NEXT mod1 take the mean of the nonmissing aod's from the immediately surrounding cells, subtracted the aod from the cell with the monitor, and put that difference into the model to perhaps better capture the more slowly changing particle concentrations, and hence increasing spatial R2
      :PROPERTIES:
      :ID:       a8e68a89-c132-4585-ad01-9dbf368438b5
      :END:
-**** TODO Try removing (in mod1&2) aodid gridcells that have very few passable days (<100) :newdata:
+
+
+**** NEXT Try removing (in mod1&2) aodid gridcells that have very few passable days (<100) :newdata:
      :PROPERTIES:
      :ID:       31731f52-2f71-4a2c-80e8-31e664617df3
      :END:
 since they may have ground conditions that are weird
+
+
 **** TODO incorperating 3x3 data into our analysis:
      :PROPERTIES:
      :ID:       2e709bb8-d4e6-49e1-8b00-a652211e8258
@@ -782,21 +800,27 @@ resid~ LU+MET+Interactions+ s(x,y)
      :PROPERTIES:
      :ID:       e7798cf3-03ab-4c67-be81-1dba135623ec
      :END:
-*** TODO Italy model to start next week:
+
+
+
+*** NEXT Italy model to start next week:
     :PROPERTIES:
     :ID:       3e73bb71-536d-4f5b-a5af-b906e52ea9a2
     :END:
 **** im a little worried the data is using the old MAIAC algoryhtm...maybe issues
 **** after talking to kees- should we aim to incorperate swiss run in italy run or run it seperatly?
-*** TODO using the MA BW as a testbed for the regression tree multi exposure analysis
+*** NEXT using the MA BW as a testbed for the regression tree multi exposure analysis
     :PROPERTIES:
     :ID:       86515e7e-b004-4dc3-bdae-b90b71367da5
     :END:
-*** TODO hows brents student doing with the decomposing local pm project
     :PROPERTIES:
+*** NEXT hows brents student doing with the decomposing local pm project
+    :PROPERTIES:
+    :ID:       e24b49c3-099b-45eb-bad0-448e537d1c7a
+    :END:
     :ID:       dc81b632-626e-47ce-966a-1e83032f4a5c
     :END:
-*** TODO As part of multi exposure project. do you think there is any interest in putting effort to the following:
+*** NEXT As part of multi exposure project. do you think there is any interest in putting effort to the following:
     :PROPERTIES:
     :ID:       03c79a3e-10b4-4295-b91f-d0c4f38e9497
     :END:
@@ -804,34 +828,43 @@ resid~ LU+MET+Interactions+ s(x,y)
      :PROPERTIES:
      :ID:       8ceddf90-649a-4cdd-90f6-60a6f9a45e6a
      :END:
+N02-eurpoe issue more disel
+O3 
+Is worth having models
+
+o3 And light at night
 **** TODO noise pollution models- based on traffic counts/density, blding geometries, Z's etc
      :PROPERTIES:
      :ID:       38669433-5d87-421f-b319-316c56443cb1
      :END:
+
 **** TODO LAN models based on sattelite data, traffic etc
      :PROPERTIES:
      :ID:       b9336baf-a7d3-475a-840e-ad3f16818f28
      :END:
-*** TODO mee-hyees model state?
+
+
+*** NEXT mee-hyees model state?
     :PROPERTIES:
     :ID:       c988c85d-302d-4c74-b91a-f17b2ebacaca
     :END:
-*** TODO Israel model state
+*** NEXT Israel model state
     :PROPERTIES:
     :ID:       5a60a1e6-64cc-4ae7-9c11-6a4e9d5f51fb
     :END:
 we are waiting for new MAIAC improvement, also have 3x3 as fall back
 strange enough we ger great pm10 correlations with a similar model as in NE (~0.86)
 but horrible PM25 correlations (~0.60). I think this is partly because of the MAIAC data
-*** TODO $$ for travel from Haifa project and EHF (if granted). we may be able to do a little trick to maybe get ronnie a ticket..ill talk to boris.
+PICKS UP SEND - maybe thats why PM 10 is better
+*** NEXT $$ for travel from Haifa project and EHF (if granted). we may be able to do a little trick to maybe get ronnie a ticket..ill talk to boris.
     :PROPERTIES:
     :ID:       cdbb4e4c-7016-4e70-9dfd-c0be81ef8a45
     :END:
-*** TODO still have BW paper in EHP, DVT is under review
+*** NEXT still have BW paper in EHP, DVT is under review
     :PROPERTIES:
     :ID:       edc6bba0-ce72-4048-9764-ef729f874a05
     :END:
-*** TODO will start in following week to work on france temperature paper taking over from francesco
+*** NEXT will start in following week to work on france temperature paper taking over from francesco
     :PROPERTIES:
     :ID:       661912dc-74af-472a-ad07-f57affd87b96
     :END:
@@ -839,24 +872,49 @@ but horrible PM25 correlations (~0.60). I think this is partly because of the MA
 **** how will we diffrantiate it from NE paper:
 -completely different geographic region with med climate in south ,alpine in east and north-european in north
 -focus perhaps on paris and spatial variation across the city
+map urban heat island
+seasoanlity
 -we used regression calibration (ask fran) in stage 1
 -Submit to a Euro journal
 -compare the model to avilable models in europe.
-*** TODO BSF grant-
+- epi people still using monitors
+
+*** NEXT BSF grant
     :PROPERTIES:
     :ID:       46751f92-a1d4-4d1c-a1f2-5565da630550
     :END:
-*** TODO Now that steve is gone: how will data management work:
+
+- propensity score analysis of TA and PM 
+- create a propensity  score regressing epxo vs all variables get a predictive modelt
+- advanimcg epi in israel taking acasuel moel appraoch coming up with estimates wich are not just casuel and advance methods
+- 
+
+
+*** smoking and particle exposure 
+block group level data in block groups and exposre 
+
+*** NEXT Now that steve is gone: how will data management work:
     :PROPERTIES:
     :ID:       30bff99f-676c-431d-90ec-6be58842e591
     :END:
+
 1.calculating and assigning exposure
 2.keep new datasets and iterations in sync and update?
 3.is steve still working part time on this?
-*** TODO alexei-black body radiation. black particles are going to observer and scatter roughly the same ammount vs other particles wont. it might be possible in NEW-England at least to use that information on how to use the diff on wave lenghts in aod for BC model.
+
+arrange a skype call with steve and Anna 
+
+*** light at night in goeorgis we have mortality data 
+*** NEXT alexei-black body radiation. black particles are going to observer and scatter roughly the same ammount vs other particles wont. it might be possible in NEW-England at least to use that information on how to use the diff on wave lenghts in aod for BC model.
     :PROPERTIES:
     :ID:       2a65cb66-1218-4ad7-8467-d80dc3d84cf1
     :END:
+arange a skype call with alexie
+*** francesca 
+tmin tmax
+use 4 measuremtns per day and use aqua and terra
+talk to brent of a method to to a sophisticated way to impute t from aqua and terra
+
 * long term Misc
 ** GIS Trac k
     :PROPERTIES:

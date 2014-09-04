@@ -838,3 +838,46 @@ And this command to unmount it:
 fusermount -u ~/mtp
 #+END_SRC
 
+** fireTV
+*** root fire TV
+In order for the Fire TV to accept sideloaded apps, you must enable ADB Debugging. You may turn it back off once you’re done sideloading apps.
+
+Download towelroot (tr.apk) by clicking the big red icon at towelroot.com
+Download SuperSU apk from evozi.com
+Sideload both APKs onto your Fire TV:
+-adb connect IPADRESS
+-adb install /PATH/TO/APK
+₆In example₆ 
+#+BEGIN_SRC sh
+sudo adb connect 10.0.0.102       
+adb install /home/zeltak/ZH_tmp/firetv/tr.apk    
+#+END_SRC
+
+Launch towelroot from your Fire TV application menu.
+Press the select button on your remote to click the “make it ra1n” button in the towelroot app and wait for the Fire TV to reboot. With the new version of towelroot, the Fire TV does not need to restart.
+Launch SuperSU
+Update the SU binary if asked. Select the “normal” update method when asked.
+
+Verify you have root access:
+#+BEGIN_SRC sh
+adb shell su 
+#+END_SRC
+
+You should see SuperSU ask you to grant ADB root access. Choose Grant.
+
+It is recommended that you sideload and install BusyBox to ensure compatibility with future apps you install.
+Download BusyBox using the evozi APK Downloader.
+Launch BusyBox
+Grant it root permission
+Use the remotes back button to close the white information popup.
+Select the “Install Busybox” tab and select “Install” to install Busybox
+*** disable auto updates
+Connect to your Fire TV via ADB
+At the command line type: adb shell and hit enter
+Then type: su and hit enter
+(If this is the first time you’ve ever requested super user (su) from ADB, you will need to select “Grant” on a popup which will appear on your Fire TV. If the popup times out, you may safely repeat this step. Alternately, you can go into the settings of the SuperSU and set the app to grant su by default. In which case you will not need/get a popup on the Fire TV.)
+Then type: pm disable com.amazon.dcp and hit enter
+You should see the message: “Package com.amazon.dcp new state: disabled”
+(If you instead see the word “Killed”, it means you have not gained super user (su) and need to go back and repeat step 3.)
+Then type: exit and hit enter
+Lastly, type: exit and hit enter again
