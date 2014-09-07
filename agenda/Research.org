@@ -96,10 +96,28 @@ in the discussion compare our model to the liu paper and the seattle's group pap
 -why do we correlate 24h and not by overpass
 - better regions
 -go over PM25 and see if it looks
+*** good PM10 yet bad PM25
+PICKS UP Salt/Sand - maybe thats why PM 10 is better
+ 
 *** improvment
 run by season
 ask california group whats the raw pm-aod correlations
 create yearly nox etc variables 
+** TODO France temperature paper
+   :PROPERTIES:
+   :ID:       661912dc-74af-472a-ad07-f57affd87b96
+   :END:
+**** TODO arrange a skype call with Fran about this
+**** how will we diffrantiate it from NE paper:
+-completely different geographic region with med climate in south ,alpine in east and north-european in north
+-focus perhaps on paris and spatial variation across the city
+map urban heat island
+seasoanlity
+-we used regression calibration (ask fran) in stage 1
+-Submit to a Euro journal
+-compare the model to avilable models in europe.
+- epi people still using monitors
+
 ** SUBMITTED DVT admissions and PM
    :PROPERTIES:
    :ID:       2668bdf2-f4de-40cd-b57f-101a88076ba7
@@ -193,7 +211,13 @@ ask about pop den reso  ltion
 exposure paper- france -last or first
 exposure paper-massimo first/last
 ** italy temperature models
+*** Ideas
+tmin tmax
+use 4 measuremtns per day and use aqua and terra
+talk to brent of a method to to a sophisticated way to impute t from aqua and terra
 ** Israel temperature models
+*** comparing the wrf model in israel to our model as part of the methods paper
+
 ** Sulfate analysis-explore calibrating the data we have with Sulfate instead of PM2.5
     :PROPERTIES:
     :ID:       d458a94c-40a6-4b76-9ebe-020f7b9a3fa8
@@ -250,52 +274,6 @@ angstorm component for dust Storm
 *** check spatial need for health studies for these exposures 
 *** WRF tel aviv shai
 *** deeep blue with meeytar 
-* Future Research Ideas
-** PM model (NEXT BRANCH)
-*** NEW ideas
-**** Future models ideas
-***** supplementing AOD by space and time
-space: perhaps taking aod from 9 adjacent cells
-time: take from prev/next day if no AOD avilable today
-also we can maybe weight nearby cells by missingness/distance
-***** calculate for each day the corr between monitor and surronding AOD point in a X distance and take the highest correlation:
-it may be that the closest AOD point does not neccesarly correlate the best in a given point/day due to:
-modis isn't fixed and we are getting the centroid of the grid
-there maybe LU/temporal variables that are not centroid specific 
-***** Try removing (in mod1&2) aodid gridcells that have very few passable days (<100) :newdata:
-since they may have ground conditions that are weird
-***** incorperate 3x3 data to supplument 1x1 data
-***** cover less densly populated areas across USA with 3x3 data 
-***** look into predicting with a spatial correlation matrix (with nested days)
-***** check correlations in specific monitors to see if some prefrom a lot worse and try to charetarise these
-      
-***** smoothing of the residuals-lucas neas suggestion
-#+BEGIN_SRC sh
-resid~ LU+MET+Interactions+ s(x,y)
-#+END_SRC
-***** Take those smoothed surfaces from stage 3 and put them into stage 1 as another predictor, and if CV R2 goes up, use them?
-***** mod1 take the mean of the nonmissing aod's from the immediately surrounding cells, subtracted the aod from the cell with the monitor, and put that difference into the model to perhaps better capture the more slowly changing particle concentrations, and hence increasing spatial R2
-***** Use aeronet - maybe as a super-monitor (weighted?) Use other satellite data
-***** -look into auto correlation between the random slops of stage one: there is a R function (ACF? auto correlation function)
-      
-** alexei-black body radiation. black particles are going to observer and scatter roughly the same ammount vs other particles wont. it might be possible in NEW-England at least to use that information on how to use the diff on wave lenghts in aod for BC model.
-** peripheral artery disease (Andrea )
-By reading this paper it came back to my mind that there is another orphan cardiovascular disease in air pollution research: peripheral artery disease. This is usually due to atherosclerosis and narrowing of the arteries in the limbs and can lead to severe outcomes such as amputation.
-It makes sense to be affected by air pollution, but last time I checked no one had published anything on this. With a large database and geospatial resolution, PAD would be an obvious one to look at.
-    
-** MIT tracking project with petros
-** Neuro outcomes and pm exposure
-** Mortality and Ta 
-** NAS temperature analyis
-*** DONE create exposure datasets
-*** test various previous temp-nas studies
-    :PROPERTIES:
-    :ID:       f208d9f9-92c5-4a17-9fb0-bea044ab1681
-    :END:
-Re-run previous studies with NAS and TEMP using a central monitor and
-see wheather this improves things. if not its also ok to write a paper
-about this
--try using the same models used in the paper with our NAS data
 ** Multi Pollutant project-living in the modern environment (with Jamie)
 *** meeting with jamie
 **** 15.7.2013 prepare MA datasets of temp,PM,NDVI,SES stuff and other perhaps to prepare to the regression tree
@@ -322,11 +300,18 @@ about this
 -socio economic disatvanteges measures
 -urban classification
 *** meeting with Allan and Jamie
+*** TODO prepare <2014-09-30 Tue> 
 **** TODO prepare exposure dataset
      :PROPERTIES:
      :ID:       c0cce914-5714-42e1-b7e5-607aed9e0407
      :END:
 prepare for the MA birth from 2003-2008:
+PM
+Ta
+SES
+NDVI/Ospace
+
+
 ***** Temperature 
 ***** Wakability
 ***** SES variables
@@ -336,6 +321,106 @@ prepare for the MA birth from 2003-2008:
      :PROPERTIES:
      :ID:       ad417cd8-7eba-4697-81ce-ffcbc88ec479
      :END:
+
+     
+* Future Research Ideas
+** PM model (NEXT BRANCH)
+*** NEW ideas
+**** Future models ideas
+***** TODO supplementing AOD by space and time
+     :PROPERTIES:
+     :ID:       bd374907-316e-4494-bbb1-f877ef09e627
+     :END:
+space: perhaps taking aod from n (~ 9) adjacent cells
+time: take from prev/next day if no AOD avilable today
+also we can maybe weight nearby cells by missingness/distance
+
+***** TODO use calman filter to merge 1x1km to 3x3km
+we can supplment 1k data with 3k data where we preform lousy and dont do so well
+***** look at interactions with wind 
+random slope for each slopes for each wind direction
+use wind speed to choose the best 9 grid cell aod 
+reanalysis data set for wind direction
+***** LPM- rule if you habe a spline it should stop in distance X etc (₆In example₆ for A1 1500km).
+***** supplementing AOD by space and time
+space: perhaps taking aod from 9 adjacent cells
+time: take from prev/next day if no AOD avilable today
+also we can maybe weight nearby cells by missingness/distance
+***** Try removing (in mod1&2) aodid gridcells that have very few passable days (<100) :newdata:
+     :PROPERTIES:
+     :ID:       31731f52-2f71-4a2c-80e8-31e664617df3
+     :END:
+since they may have ground conditions that are weird
+
+***** NEXT calculate for each day the corr between monitor and surronding AOD point in a X defined distance and take the highest correlation:
+     :PROPERTIES:
+     :ID:       4a7af949-7755-4087-87d4-d711815d260c
+     :END:
+modis isn't fixed and we are getting the centroid of the grid
+it may be that the closest AOD point does not neccesarly correlate the best in a given point/day due to:
+there maybe LU/temporal variables that are not centroid specific 
+
+***** cover less densly populated areas across USA with 3x3 data 
+***** smoothing of the residuals-lucas neas suggestion
+#+BEGIN_SRC sh
+resid~ LU+MET+Interactions+ s(x,y)
+#+END_SRC
+***** Take those smoothed surfaces from stage 3 and put them into stage 1 as another predictor, and if CV R2 goes up, use them?
+***** Use aeronet - maybe as a super-monitor (weighted?) Use other satellite data
+      :PROPERTIES:
+      :ID:       5ce7437b-68c9-4227-928e-5e222f7cb922
+      :END:
+***** penelized spline/n.s for dist to point emission
+      :PROPERTIES:
+      :ID:       e7798cf3-03ab-4c67-be81-1dba135623ec
+      :END:
+
+
+** Future exposure models 
+   :PROPERTIES:
+   :ID:       03c79a3e-10b4-4295-b91f-d0c4f38e9497
+   :END:
+**** TODO Order of importance 
+N02-eurpoe issue more disel
+O3-Is worth having models
+light at night
+**** TODO noise pollution models- based on traffic counts/density, blding geometries, Z's etc
+**** TODO LAN models based on sattelite data, traffic etc
+     :PROPERTIES:
+     :ID:       b9336baf-a7d3-475a-840e-ad3f16818f28
+     :END:
+
+     
+** Black body radiation
+black particles are going to observer and scatter roughly the same ammount vs other particles wont. it might be possible in NEW-England at least to use that information on how to use the diff on wave lenghts in aod for BC model.
+    :PROPERTIES:
+    :ID:       2a65cb66-1218-4ad7-8467-d80dc3d84cf1
+    :END:
+arange a skype call with alexie
+** light at night in Georgia- W/Joel
+Joel has mortality data
+   
+
+** smoking and particle exposure 
+block group level data in block groups and exposre 
+
+** peripheral artery disease (Andrea )
+By reading this paper it came back to my mind that there is another orphan cardiovascular disease in air pollution research: peripheral artery disease. This is usually due to atherosclerosis and narrowing of the arteries in the limbs and can lead to severe outcomes such as amputation.
+It makes sense to be affected by air pollution, but last time I checked no one had published anything on this. With a large database and geospatial resolution, PAD would be an obvious one to look at.
+    
+** MIT tracking project with petros
+** Neuro outcomes and pm exposure
+** Mortality and Ta 
+** NAS temperature analyis
+*** DONE create exposure datasets
+*** test various previous temp-nas studies
+    :PROPERTIES:
+    :ID:       f208d9f9-92c5-4a17-9fb0-bea044ab1681
+    :END:
+Re-run previous studies with NAS and TEMP using a central monitor and
+see wheather this improves things. if not its also ok to write a paper
+about this
+-try using the same models used in the paper with our NAS data
 ** France Pm models
 ** France temp models
 ** OMI sattelite for NO2 and O3 callibration models
@@ -437,7 +522,7 @@ http://en.wikipedia.org/wiki/Placental_abruption
    :ID:       e363cfbc-1013-42d0-a32a-d25303f43814
    :END:
 alexandra schnider
-** K_TRACK WAITING Boris Haifa
+** K_TRACK Boris Haifa
    :PROPERTIES:
    :ID:       f6ccd685-fd83-402f-bbd8-82198406039a
    :END:
@@ -468,6 +553,15 @@ teaching etc is > 'other activities'
 trips abroad goes under remarks 
 ** K_TRACK Seed money
 account number 87347711
+
+** NEXT BSF grant
+    :PROPERTIES:
+    :ID:       46751f92-a1d4-4d1c-a1f2-5565da630550
+    :END:
+- propensity score analysis of TA and PM 
+- create a propensity  score regressing epxo vs all variables get a predictive modelt
+- advanimcg epi in israel taking acasuel moel appraoch coming up with estimates wich are not just casuel and advance methods
+
 
 * Office/Budgets
   :PROPERTIES:
@@ -571,8 +665,6 @@ M.   +972-52-4058888
    :PROPERTIES:
    :ID:       6c1e9592-8c50-41e4-b187-c42884527820
    :END:
-** Allan
-*** Knn0 ignore missing data (missings in dataset)
 ** try our R package biocLite
 source("http://bioconductor.org/biocLite.R")
 biocLite("interactiveDisplay")
@@ -582,338 +674,6 @@ biocLite("interactiveDisplay")
    :END:
  	576.00	576.00 ש"ח	 	703.889.26-CSC - US VISA FEE	21/05
  	576.00	 	 	: 25/05 סה"כ חיוב בתאריך
-** Joel talk qian
-*** send letter (in email)
-*** can we meet friday 29.7 or Tuesday morning the 2.9
-*** Bill ridway
-calman filter?
-common filter geochem
-*** Qian
-**** What is the original paper in which you described the methodology of creating those datasets?
-
-#+BEGIN_EXAMPLE
-Kloog, I., A.A. Chudnovsky, A.C. Just, F. Nordio, P. Koutrakis, B.A. Coull, A. Lyapustin, Y. Wang, and J. Schwartz (2014). A new hybrid spatio-temporal model for estimating daily multi-year PM2.5 concentrations across northeastern USA using high resolution aerosol optical depth data Atmos. Env, 95, 581-590
-http://dx.doi.org/10.1016/j.atmosenv.2014.07.014
-#+END_EXAMPLE
-
-**** Ways of comparing R-square, including how you “assign” AOD-derived estimation from regular grid points to monitoring site. I was looking for the nearest grid point for each monitoring site (I think this is the key difference). Is this the method you were using?
-
-We also used the nearest AOD point per day to each monitor station. We used 2 techniques:
-***** python method (old) 
-Initially we used a GIS based method to subset the data into only data points within 1.5 km from a PM monitor station. Then we did daily spatial joins (using a python script) to assign in each day for each monitor the closest AOD point at that specific date. This resulted in a new database (per year) that looked like this:
-
-| Date | PM_ID | PM25 | AOD | AOD_ID |
-|    1 | x1    |   11 | 0.3 | y1     |
-|    2 | x1    |   12 | 0.2 | y2     |
-|      |       |      |     |        |
- 
-***** R KNN method
-With the 1x1km data we switched to using a R function we created, see here:
-
-#+BEGIN_SRC R
-# function to assign closest
-# merge data by day to the closest of K nearest neighbors (with a distance constraint)
-# could be better (not require merge for left join afterwards)
-# see: http://stackoverflow.com/a/12450918
-nearestbyday <- function(matrix1, matrix2, dt1, dt2, dt1varname, dt2varname, 
-                         closestname = "closestmet", varstoget = "avewsp", 
-                         knearest = 5, maxdistance = NA){
-  require(FNN)
-  knearest <- min(knearest, nrow(matrix2))
-  knnname <- paste0(closestname, "knn")
-  nobsname <- paste0(closestname, "nobs")
-  # calculate nearest neighbors using package FNN
-  knn_store <- get.knnx(matrix2, matrix1, k = knearest)
-  # restrict by distance
-  if(!is.na(maxdistance)){
-    knn_store[["nn.dist"]][knn_store[["nn.dist"]] > maxdistance] <- NA
-    knn_store[["nn.index"]] <- knn_store[["nn.index"]] * (knn_store[["nn.dist"]] * 0 + 1)
-  }
-  # store the indices for nearest neighbors in a long DT
-  knn_out <- data.table(matrix(knn_store[["nn.index"]])) 
-  knn_out[, dt1varname := rep(rownames(matrix1), knearest), with = F]
-  knn_out[, closestname := as.character(row.names(matrix2[knn_out[, V1],])), with = F]
-  knn_out[, V1 := NULL]
-  knn_out[, knnname := rep(1:knearest, each = nrow(matrix1)), with = F]
-  # drop points not within maxdistance
-  knn_out <- knn_out[!is.na(get(closestname))]
-  # use setkeyv to pass a column by name
-  setkeyv(knn_out, closestname)
-  setnames(dt2, dt2varname, closestname)
-  # if not character - coerce
-  if(class(dt2[,closestname,with = F][[1]]) != "character"){
-    dt2[, closestname := as.character(closestname), with = F]
-  }
-  setkeyv(dt2, closestname)
-  # lengthen dt2 with every possible site each day might match
-  # after dropping missing observations
-  dt2long <- dt2[!is.na(get(varstoget))][knn_out, allow.cartesian = T]
-  # store the number of valid observations
-  dt2long[, nobsname := .N, by=c(dt1varname,"day"), with = F]
-  setkeyv(dt2long, cols = c(dt1varname, "day", knnname))
-  # join to itself (set1 and day are keys) and take first record for fast selection
-  closestvar <- dt2long[unique(dt2long[,c(dt1varname, "day"), with = F]), mult = "first"]
-  gc()# clear memory
-  # put the name back in dt2
-  setnames(dt2, closestname, dt2varname)
-  # inspect our result
-  print(tables(silent = T)[NAME == "closestvar"])
-  # return it silently
-  invisible(closestvar)
-}
-
-
-makepointsmatrix <- function(datatable, xvar, yvar, idvar) {
-  dtnames <- names(datatable)
-  unique.dt <- unique(datatable[,c(xvar,yvar, idvar), with = F])
-  out.m <- as.matrix(unique.dt[,c(xvar,yvar), with = F])
-  dimnames(out.m)[[1]] <- unique.dt[,idvar, with = F][[1]]
-  invisible(out.m)
-}
-
-#+END_SRC
-
-we then use a script that goes through the days and assigns for each station in each day again the closet AOD point. 
-here is the R script:
-
-#+BEGIN_SRC R
-
-###################
-#start with mod1
-###################
-# import monitor data and spatial merge with nearestbyday()
-source("/home/zeltak/org/files/Uni/Projects/code/P31/code_snips/nearestbyday.r")
-
-#create PM matrix
-pm.m <- makepointsmatrix(pm2003, "Long_PM", "Lat_PM", "SiteCode")
-
-#create aod matrix
-m2g<-copy(am2.lu.nd.pb.met)
-m2g[, guidc := as.character(guid)]
-names(m2g)
-#need to sort
-setkey(m2g, guidc)
-mod2.m <- makepointsmatrix(m2g[m2g[,unique(guidc)], list(long_aod, lat_aod, guidc), mult = "first"], "long_aod", "lat_aod", "guidc")
-
-# use the nearestbyday() function
-###########
-closestaod <- nearestbyday(pm.m, mod2.m, 
-                           pm2003, m2g [, list(day, guidc, aod,NDVI,pbl,WDSP,visib,ah_gm3,tempc,guid)], 
-                           "SiteCode", "guidc", "closestaod", "aod", knearest = 5, maxdistance = 1500)
-# this has AOD even when there is no pm; it gets dropped on the merge
-
-
-
-setkey(pm2003,SiteCode,day)
-setkey(closestaod,SiteCode,day)
-mod1 <- merge(pm2003, closestaod, all.x = T)
-#head(mod1)
-mod1 <- mod1[aod != "NA"]
-#+END_SRC
-
-Let me know if its similar to your methods. If not and you would like to use one of the above methods i would be happy to help you set it up.
-
-**** What is the way of using road density (they are raster file format with grid width maybe about 50 meters) did you interpolate raster values or just find the exact raster cell in which monitoring site lies. I guess the general question is---what is the general method of assigning value to each monitoring site if it is raster data file?
-What we did was aggregate/disaggregate all LU/MET/Etc variables to the 1x1km Level from the study grid that we created based on the AOD data centroid. we used the Lat/Long to create the unique grid id (we call it guid in the scripts) and then calculate all the LU/MET terms for these 1x1km using several methods such as weighted averages for population density etc. specifacly if i recall for road density we create a raster of line density from the all lanes (A1,A2,A3) across MIA using in GIS:
-#+BEGIN_EXAMPLE
-spatial analysit>density>Line density
-#+END_EXAMPLE
-This results in a Raster file with the "traffic density" (tden)
-
-**** In your paper “Assessing temporally and spatially resolved PM2.5 exposures for epidemiological studies using satellite aerosol optical depth measurements”, you mentioned that you were finding the nearest weather station and assign meteorological data from that station to the monitoring site--- is this the same method you were using when creating 1-km estimation? 
-yes that is the same methods we used in the last 1x1km paper. that data should also be on the server (NCDC and EPA met data)
-
-** Joel HSPH meeting 28.8.2014
-*** NEXT Future models ideas
-    :PROPERTIES:
-    :ID:       ac4983ec-5425-4d68-8451-a44507f56427
-    :END:
-**** TODO IDEAs
-     :PROPERTIES:
-     :ID: a0658698-7ca9-4cea-8967-ba138950eb22
-     :END:
-comparing the wrf model in paris
-use calman filte to merge 1x1km to 3x3km
-take interactions with wind 
-random slope for each slopes for each wind direction
-use wind speed to choose the best 9 grid cell 
-aod 
-reanalysis data set for wind direction
-LPM- rule if you habe a spline it should stop in distance X etc (₆In example₆ for A1 1500km).
-
-**** NEXT supplementing AOD by space and time
-     :PROPERTIES:
-     :ID:       bd374907-316e-4494-bbb1-f877ef09e627
-     :END:
-space: perhaps taking aod from n (~ 9) adjacent cells
-time: take from prev/next day if no AOD avilable today
-also we can maybe weight nearby cells by missingness/distance
-
-**** NEXT calculate for each day the corr between monitor and surronding AOD point in a X defined distance and take the highest correlation:
-     :PROPERTIES:
-     :ID:       4a7af949-7755-4087-87d4-d711815d260c
-     :END:
-modis isn't fixed and we are getting the centroid of the grid
-it may be that the closest AOD point does not neccesarly correlate the best in a given point/day due to:
-there maybe LU/temporal variables that are not centroid specific 
-**** NEXT mod1 take the mean of the nonmissing aod's from the immediately surrounding cells, subtracted the aod from the cell with the monitor, and put that difference into the model to perhaps better capture the more slowly changing particle concentrations, and hence increasing spatial R2
-     :PROPERTIES:
-     :ID:       a8e68a89-c132-4585-ad01-9dbf368438b5
-     :END:
-
-
-**** NEXT Try removing (in mod1&2) aodid gridcells that have very few passable days (<100) :newdata:
-     :PROPERTIES:
-     :ID:       31731f52-2f71-4a2c-80e8-31e664617df3
-     :END:
-since they may have ground conditions that are weird
-
-
-**** TODO incorperating 3x3 data into our analysis:
-     :PROPERTIES:
-     :ID:       2e709bb8-d4e6-49e1-8b00-a652211e8258
-     :END:
--to supplument 1x1 data in areas where our maiac 1x1 correlation isn't that great 
-in areas with low population density when we are covering the entire USA and don't need that fine spatial resolution- this will be much more computational efficient.
-**** TODO analyze and check correlations per specific monitors to see if some prefrom a lot worse and try to charetarise these
-     :PROPERTIES:
-     :ID:       2635917e-8a84-4864-80d5-bc6479ff1465
-     :END:
-**** TODO smoothing of the residuals-lucas neas suggestion and putting them back into mod1 as another predictor?
-     :PROPERTIES:
-     :ID:       88ad2689-9d79-42cc-adf6-5363a157097c
-     :END:
-#+BEGIN_SRC sh
-resid~ LU+MET+Interactions+ s(x,y)
-#+END_SRC
-**** TODO Use aeronet - maybe as a super-monitor (weighted?) Use other satellite data
-     :PROPERTIES:
-     :ID:       5ce7437b-68c9-4227-928e-5e222f7cb922
-     :END:
-**** TODO look into predicting with a spatial correlation matrix (with nested days)
-     :PROPERTIES:
-     :ID:       fb4f4c6e-b6f0-49a7-93e5-1502985691fc
-     :END:
-**** look into auto correlation between the random slops of stage one: there is a R function (ACF? auto correlation function)
-     
-**** NEXT penelized spline/n.s for dist to point emission
-     :PROPERTIES:
-     :ID:       e7798cf3-03ab-4c67-be81-1dba135623ec
-     :END:
-
-
-
-*** NEXT Italy model to start next week:
-    :PROPERTIES:
-    :ID:       3e73bb71-536d-4f5b-a5af-b906e52ea9a2
-    :END:
-**** im a little worried the data is using the old MAIAC algoryhtm...maybe issues
-**** after talking to kees- should we aim to incorperate swiss run in italy run or run it seperatly?
-*** NEXT using the MA BW as a testbed for the regression tree multi exposure analysis
-    :PROPERTIES:
-    :ID:       86515e7e-b004-4dc3-bdae-b90b71367da5
-    :END:
-    :PROPERTIES:
-*** NEXT hows brents student doing with the decomposing local pm project
-    :PROPERTIES:
-    :ID:       e24b49c3-099b-45eb-bad0-448e537d1c7a
-    :END:
-    :ID:       dc81b632-626e-47ce-966a-1e83032f4a5c
-    :END:
-*** NEXT As part of multi exposure project. do you think there is any interest in putting effort to the following:
-    :PROPERTIES:
-    :ID:       03c79a3e-10b4-4295-b91f-d0c4f38e9497
-    :END:
-**** TODO -no2/so2 models- will still be coarse resolution- like hyoung joo papers
-     :PROPERTIES:
-     :ID:       8ceddf90-649a-4cdd-90f6-60a6f9a45e6a
-     :END:
-N02-eurpoe issue more disel
-O3 
-Is worth having models
-
-o3 And light at night
-**** TODO noise pollution models- based on traffic counts/density, blding geometries, Z's etc
-     :PROPERTIES:
-     :ID:       38669433-5d87-421f-b319-316c56443cb1
-     :END:
-
-**** TODO LAN models based on sattelite data, traffic etc
-     :PROPERTIES:
-     :ID:       b9336baf-a7d3-475a-840e-ad3f16818f28
-     :END:
-
-
-*** NEXT mee-hyees model state?
-    :PROPERTIES:
-    :ID:       c988c85d-302d-4c74-b91a-f17b2ebacaca
-    :END:
-*** NEXT Israel model state
-    :PROPERTIES:
-    :ID:       5a60a1e6-64cc-4ae7-9c11-6a4e9d5f51fb
-    :END:
-we are waiting for new MAIAC improvement, also have 3x3 as fall back
-strange enough we ger great pm10 correlations with a similar model as in NE (~0.86)
-but horrible PM25 correlations (~0.60). I think this is partly because of the MAIAC data
-PICKS UP SEND - maybe thats why PM 10 is better
-*** NEXT $$ for travel from Haifa project and EHF (if granted). we may be able to do a little trick to maybe get ronnie a ticket..ill talk to boris.
-    :PROPERTIES:
-    :ID:       cdbb4e4c-7016-4e70-9dfd-c0be81ef8a45
-    :END:
-*** NEXT still have BW paper in EHP, DVT is under review
-    :PROPERTIES:
-    :ID:       edc6bba0-ce72-4048-9764-ef729f874a05
-    :END:
-*** NEXT will start in following week to work on france temperature paper taking over from francesco
-    :PROPERTIES:
-    :ID:       661912dc-74af-472a-ad07-f57affd87b96
-    :END:
-**** talk to fran about this 
-**** how will we diffrantiate it from NE paper:
--completely different geographic region with med climate in south ,alpine in east and north-european in north
--focus perhaps on paris and spatial variation across the city
-map urban heat island
-seasoanlity
--we used regression calibration (ask fran) in stage 1
--Submit to a Euro journal
--compare the model to avilable models in europe.
-- epi people still using monitors
-
-*** NEXT BSF grant
-    :PROPERTIES:
-    :ID:       46751f92-a1d4-4d1c-a1f2-5565da630550
-    :END:
-
-- propensity score analysis of TA and PM 
-- create a propensity  score regressing epxo vs all variables get a predictive modelt
-- advanimcg epi in israel taking acasuel moel appraoch coming up with estimates wich are not just casuel and advance methods
-- 
-
-
-*** smoking and particle exposure 
-block group level data in block groups and exposre 
-
-*** NEXT Now that steve is gone: how will data management work:
-    :PROPERTIES:
-    :ID:       30bff99f-676c-431d-90ec-6be58842e591
-    :END:
-
-1.calculating and assigning exposure
-2.keep new datasets and iterations in sync and update?
-3.is steve still working part time on this?
-
-arrange a skype call with steve and Anna 
-
-*** light at night in goeorgis we have mortality data 
-*** NEXT alexei-black body radiation. black particles are going to observer and scatter roughly the same ammount vs other particles wont. it might be possible in NEW-England at least to use that information on how to use the diff on wave lenghts in aod for BC model.
-    :PROPERTIES:
-    :ID:       2a65cb66-1218-4ad7-8467-d80dc3d84cf1
-    :END:
-arange a skype call with alexie
-*** francesca 
-tmin tmax
-use 4 measuremtns per day and use aqua and terra
-talk to brent of a method to to a sophisticated way to impute t from aqua and terra
 
 * long term Misc
 ** GIS Trac k
