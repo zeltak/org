@@ -15323,7 +15323,6 @@ keyboard shortcuts work, put this entry in the list:
  +5. The sites in your exclusion list will now be blocked.
 
 *** firefox
-
 **** tips
 
 *Disable Firefox Resizing
@@ -15386,6 +15385,20 @@ favicon file name. Next, hit the big button labeled "Generate Plugin".
 website hosting server to make the search plugin work. Scroll down the
 webpage, and make sure you follow each step as they have it.
 
+**** bugs
+***** Firefox hangs w/memory leak (example on ynet.co.il) 
+
+Click the Adblock Plus icon and choose Filter Preferences.
+Click the Custom Filters tab.
+If you don't have any filter categories there, click the Add Filter Group button and create one.
+If filters aren't displayed on the right side, right-click any filter category and choose Show/Hide Filters.
+Click the Add Filter button and add the following filter:
+
+#+BEGIN_EXAMPLE
+||ynet.co.il/*generator-article-*.js 
+#+END_EXAMPLE
+
+That solved the problem when i tested. If it doesn't work for you, or it breaks site functionality, click the Adblock Plus icon and choose Disable on ynet.co.il. You will then of course see ads on the site.
 **** remove lock after crash
 
 Sometimes when you try to start Firefox, it warns you that Firefox is
