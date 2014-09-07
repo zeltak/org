@@ -23444,10 +23444,122 @@ For two nodes two sync a repository, the following must be true on each node:
 2.The repository has been added on both nodes, with the same ID (Edit > Add Node).
 3.The other node must have been checked under "Share With Nodes" in the repository configuration.
 
-** virtualizations
-*** virtualbox
-**** vbox on arch
-***** install
+*** unsion
+**** Synchronizing org files with Unison
+This describes how to synchronize org files using the 
+[[http://www.cis.upenn.edu/~bcpierce/unison/][Unisonfile synchronizer]],
+as well as how to configure it to use an external tool to merge conflicting
+edits.
+
+also see:
+http://orgmode.org/worg/org-tutorials/unison-sync.html
+
+***** Prerequisites
+
+You should have Unison up and running. Binaries can be found 
+[[http://www.cis.upenn.edu/~bcpierce/unison/download.html][here]] and the
+documentation is 
+[[http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html][here]].
+
+***** Synchronization
+
+Unison is a file synchronizer, thus it may be used to synchronize org files. To
+configure Unison, on uses a /profile/ which states where the things to
+synchronize are as well as some options. Assuming I want to synchronize the
+files in ~/Users/schmitta/dir1~ and ~/Users/schmitta/dir2~, the profile would
+look like this
+
+#+BEGIN_EXAMPLE
+root = /Users/schmitta/dir1
+root = /Users/schmitta/dir2
+#+END_EXAMPLE
+
+In most cases Unison will be used with a remote machine. The local machine is
+called the /client/ and the remote one the /server/. For such remote
+synchronization, the ~unison~ binary must be installed in the server as
+well. The simplest way to connect to the machine is using ssh. One should check
+that unison can be found there by doing ~ssh address@hidden unison -version~. If
+~unison~ cannot be found in the path, one may set the ~servercmd~ option as
+indicated in the next example.
+
+(Please see the 
+[[http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#roots][manual
+ section on roots]] for further details.)
+
+#+BEGIN_EXAMPLE
+root = /Users/schmitta/dir1
+root = ssh://address@hidden/relative/path/to/dir2
+
+servercmd = /usr/bin/unison
+#+END_EXAMPLE
+
+***** Merging
+
+As Unison works on the level of files, it will trigger a /conflict/ if both
+files have changed since the last synchronization. In that case one can only
+choose which file to keep, which is not satisfying. Unison offers the
+possibility to use external tools to merge the files. There is an 
+[[http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#merge][extensive
+manual section]] regarding this, we'll just describe how to use emacs and ediff 
+to
+do it.
+
+For better merging, we will ask unison to keep the last synchronized version of
+every org file on the client; this way we can use ediff with ancestor. These
+~currentbackup~ files may live alongside the synchronized files (with names of
+the form ~.bak.version.name~, which is configurable) or in a central location.
+
+Here is the modified configuration file.
+
+#+BEGIN_EXAMPLE
+root = /Users/schmitta/dir1
+root = ssh://address@hidden/relative/path/to/dir2
+
+servercmd = /usr/bin/unison
+
+backupcurrent = Name *.org
+backuplocation = local
+maxbackups = 0
+
+merge = Name *.org -> emacsclient -c --eval '(ediff-merge-files-with-ancestor 
+"CURRENT1" "CURRENT2" "CURRENTARCH" nil "NEW")'
+
+#+END_EXAMPLE
+
+The ~backupcurrent~ option tells unison to keep a backup of the last
+synchronized version of ever file with an ~org~ extension. The location of the
+backup should be local (alongside the file). Finally, no other backup should be
+created.
+
+Next follows the merge command. For every org file in conflict, use the command
+that launches a new emacs frame calling the ediff with ancestor function. The
+~CURRENT1~, ~CURRENT2~, and ~CURRENTARCH~ strings are  replaced with the file
+from the first root, the file from the second root, and the last synchronized
+version. The ~NEW~ file is where Unison expects the file to be saved (which will
+be done by the ediff session).
+
+Thus, when an org file has been modified on both hosts, an ediff session will be
+launched in a new frame. Closing the frame will make Unison commit the merge (it
+waits until the command has finished).
+
+If one does not want to use backups, it's possible to use the simpler ediff
+(without ancestor) command as follows.
+
+#+BEGIN_EXAMPLE
+root = /Users/schmitta/dir1
+root = ssh://address@hidden/relative/path/to/dir2
+
+servercmd = /usr/bin/unison
+
+merge = Name *.org -> emacsclient -c --eval '(ediff-merge-files "CURRENT1" 
+"CURRENT2" nil "NEW")'
+
+#+END_EXAMPLE
+
+***** virtualizations
+****** virtualbox
+******* vbox on arch
+******** install
 install from community repo
 
 #+begin_src sh
@@ -23461,7 +23573,7 @@ then load the module
 modprobe vboxdrv
 #+END_SRC
 
-**** virtual machine cloning
+******* virtual machine cloning
 
 *Virtual Machine Cloning
 *
@@ -23481,7 +23593,7 @@ simply giving them access to your .vdi file (VirtualBox VM instance) and
 configuration settings. In addition, once you set up a pristine
 environment you can clone it and always have it stored as a backup
 incase you mess something up with the VM you are currently working with.
-**** move a virtual machine
+******* move a virtual machine
 
 `VirtualBox v4.0.0 and later`
 
@@ -23495,14 +23607,14 @@ If you want the original and the copy to be registered at the same time on the s
 
 If you are running on a Windows host then be wary of moving VMs to removable storage. Windows has a nasty habit of changing the drive letters of removable drives, which will invalidate the VM path stored when you used Machine|Add.
  
-**** launch vm from cli
+******* launch vm from cli
 
 *Launch a VirtualBox virtual machine from the command line
 *VBoxManage startvm "name"
  foe example
  VBoxManage startvm "Xp Stable"
 
-**** install-upgrade
+******* install-upgrade
 
 *Reinstalling virtual box after kernel upgrade
 *
@@ -23512,7 +23624,7 @@ If you are running on a Windows host then be wary of moving VMs to removable sto
 *you are having trouble accessing USB devices in a guest, make sure that
 you are a member of the vboxusers system group.
 
-**** errors
+******* errors
 
 *The VirtualBox kernel driver is not accessible to the current user
 error
@@ -23571,7 +23683,7 @@ resolution:
  Save, exit the editor, and log out. You should now have a large virtual
 machine
 
-***** virtualbox cant operate in vmx root mode
+******** virtualbox cant operate in vmx root mode
 
  Failed to start the virtual machine Xp Testing ATD (about to die
 Edition).
@@ -23584,16 +23696,16 @@ kernel extension, recompile your kernel and reboot
  or
  sudo apt-get remove qemu-kvm
 
-**** Virtualbox on windowz
+******* Virtualbox on windowz
 
-***** mount a windows share drive in a linux guest
+******** mount a windows share drive in a linux guest
 
 You should remove the spaces between mount, ., and vboxsf. If that still
 doesn't work, this should work:
  mount -t vboxsf win share /mnt/share
  Make sure the name of the folder and the share are not equal, otherwise
 you get a protocol error
-**** expand a virtualbox hardrive
+******* expand a virtualbox hardrive
 in the CLI issue the following:
 
 #+BEGIN_SRC sh
@@ -23604,9 +23716,9 @@ note: the new size is in MB
 
 then use gparted live to enlarge the drive for the OS to see it
 
-*** vmware
+****** vmware
 
-**** tips
+******* tips
 
 *Installing vmware from scratch or after Linux Kernel Upgrade
 *
@@ -23623,7 +23735,7 @@ then use gparted live to enlarge the drive for the OS to see it
  
  and press enter to all Questions, that's it!
 
-**** import from virtualbox
+******* import from virtualbox
 
 issue this :
  VBoxManage clonehd /home/zeltak/.VirtualBox/VDI/Xp Uni.vdi
@@ -23633,9 +23745,9 @@ needed) to the vmdk folder
  edit with editor to fit new machine
  open the vmx file from vm workstation
 
-**** Vmware7 on arch
+******* Vmware7 on arch
 
-***** VMware Workstation or VMware Player
+******** VMware Workstation or VMware Player
 
 *To install Workstation or Player on a Linux host using a bundle:*
  1. Download
@@ -23695,7 +23807,7 @@ the service is started automatically on boot.
  11. Now, open your VMware Workstation (vmware in the console) to
 configure & use!
 
-***** uninstall
+******** uninstall
 
 Uninstallation
  Check the product name
@@ -23705,14 +23817,14 @@ Uninstallation
  Manually included parts in /etc/rc.d have to be deleted manually. Don't
 forget to remove vmware from the /etc/rc.conf DAEMONS array.
 
-***** recompile after kernel change arch
+******** recompile after kernel change arch
 
 issue this after every kernel change:
  sudo vmware-modconfig --console --install-all
 
-*** Android
+****** Android
 
-**** Enable market place
+******* Enable market place
 
 [[http://tech-droid.blogspot.com/2009/11/android-market-on-emulator.html][download]]
 or use your already dl copy (see zeltak backup files) the new Android
@@ -23729,9 +23841,9 @@ for some resaon)
 Manager, and you should see your new AndEmu listed along with your other
 Android virtual machines. Click Start to run it.
  [[~/Dropbox/Org/Tech/linux_files/image186.png]]
-*** Teamviewer
-**** Bugs
-***** fix wierd issues on debian with VPN in BGU
+****** Teamviewer
+******* Bugs
+******** fix wierd issues on debian with VPN in BGU
 
 @note-on arch make aure latest version of `snx` package is installed thorugh AUR@
 
@@ -23776,18 +23888,18 @@ x11vnc -display :0
 #+END_SRC
 then connect with vinagre or any VNC viwer and start TV through GUI
 
-** Editors
-*** 'Emacs'
-    :PROPERTIES:
-    :ID:       38a15adf-f505-4a54-b1d9-f76b22ce1147
-    :END:
-**** 0.BASICS
-***** help
-****** describe Variables
+***** Editors
+****** 'Emacs'
+       :PROPERTIES:
+       :ID:       38a15adf-f505-4a54-b1d9-f76b22ce1147
+       :END:
+******* 0.BASICS
+******** help
+********* describe Variables
 use C-h v to descrive variables like auto-mode-alist 
-****** describe key
+********* describe key
 C-h k
-****** describe Functions
+********* describe Functions
 to get info on a specific function
 
 c-h f FUNCTIONNAME
@@ -23803,7 +23915,7 @@ Tool Bar mode if ARG is omitted or nil.
 
 so here if its 1 (positive) it works and if -1 (negative) its disabled
 
-***** Using Emacs In A Text Terminal
+******** Using Emacs In A Text Terminal
 
 Emacs in a Text Terminal.
  to start Emacs
@@ -23814,7 +23926,7 @@ Emacs in a Text Terminal.
  n a text terminal, you can invoke the textual menu by pressing
 Alt+`. (or, pressing the Esc key followed by the backtick ` key.)
 
-***** saving/closing emacs
+******** saving/closing emacs
 
 Save
  To save file, press Ctrl+x, then Ctrl+s.
@@ -23827,7 +23939,7 @@ save.
 then press g. This will cancel the sequence of keys you may have pressed
 by mistake.
 
-***** WINDOWS
+******** WINDOWS
 
 [[macsen_files/Image_zDZxTWFufFIlOlbuHLNYuw_0001.png]]
  * WINDOWS
@@ -23851,12 +23963,12 @@ by mistake.
  them have to do with windows, files, buffers, and related things.
  These commands are two, three or four characters long.
 
-***** change window Size
+******** change window Size
 use the enlarge-window and shrink-window command
 you may want to bind these 
-***** movment
-****** keybinds
-******* 1. Emacs Line Navigation
+******** movment
+********* keybinds
+********** 1. Emacs Line Navigation
 
 Following four navigation can be done line by line.
 
@@ -23878,7 +23990,7 @@ following two options.
 -  C-e : go to the end of the current line.
 
 
-******* 2. Emacs Screen Navigation
+********** 2. Emacs Screen Navigation
 
 Following three navigation can be done in relation to text shown in the
 screen.
@@ -23890,7 +24002,7 @@ screen.
 
 You can also use Page Up, Page Down for screen navigation.
 
-******* 3. Emacs Special Navigation
+********** 3. Emacs Special Navigation
 
 Following are couple of special navigation that are used to go to the
 start or end of buffer.
@@ -23898,21 +24010,21 @@ start or end of buffer.
 -  M-< : Go to the start of file
 -  M-> : Go to the end of file
 
-******* 4. Emacs Word Navigation
+********** 4. Emacs Word Navigation
 
 Following are two word navigation keys.
 
 -  M-f : navigate a word *f*orward.
 -  M-b : navigate a word *b*ackward.
 
-******* 5. Emacs Paragraph Navigation
+********** 5. Emacs Paragraph Navigation
 
 -  M-a : Go to the beginning of the current paragraph. By pressing M-a
    again and again move to the previous paragraph beginnings.
 -  M-e : Go to the end of the current paragraph. By pressing M-e again
    and again move to the next paragraph end, and again.
 
-******* 6. Emacs Search Navigation
+********** 6. Emacs Search Navigation
 
 When you want to search by giving the plain text,
 
@@ -23929,22 +24041,22 @@ When you want to search using regular expression,
 -  C-M-r : Do a *r*everse search. All other explanation are like
    Ctrl+Meta+s
 
-******* 7. Emacs Navigation from Command Line
+********** 7. Emacs Navigation from Command Line
 
 Emacs +N filename: Go to the Nth line of the file after opening it.
 
-***** important binds
+******** important binds
 
 kill the buffer (C-x k)
  open file (C-x C-f)
-***** launching emacs 
-****** launching emacs as a SHell
+******** launching emacs 
+********* launching emacs as a SHell
 #+BEGIN_SRC sh
 emacs -f eshell
 #+END_SRC
 
-**** Debug
-***** How to startup emacs without loading any customization
+******* Debug
+******** How to startup emacs without loading any customization
 
 How to startup emacs without loading any customization?
 To run emacs without loading your personal init file, start emacs like this:
@@ -23955,7 +24067,21 @@ To not load any site-wide startup file, start emacs with emacs -Q. The site-wide
 distribution, such as from Carbon emacs, Aquamacs, ErgoEmacs. Starting
 emacs with "-Q" is like running a bare bone GNU Emacs.
 
-***** debugging your config file
+******** debugging your config file
+********* Binary search
+The secret to finding a problem in your init file is not a secret: binary search.
+Use comment-region to comment out half your init file, then 3/4, 7/8,... It is very quick to identify the problem. comment-region also uncomments: C-h f comment-region RET.
+********* show a stack trace
+You'll need to provide more information to be sure. Try setting
+
+#+BEGIN_SRC emacs-lisp :results none
+(setq debug-on-error t)
+#+END_SRC
+
+which will give you a stack trace showing what function is complaining about the string being nil.
+My guess is that buffer-file-name is returning nil, and that's where the problem lies (not all buffers have file names). Check out the debugging section of An Introduction To Programming in Emacs Lisp, or the debugging section of the Emacs Lisp manual.
+
+********* Check parens
 to see whats wrong in your start up files and if emacs give you startup error messages, go over all your init files (base init.el and all
 sourced files) and issue this command:
 
@@ -23965,13 +24091,13 @@ M-x check-parens
 
 it will check extra parenthesis and quotes and let you know where andwhat is wrong
 
-****** debug erros in code
+********* debug erros in code
 type ~M-x toggle-debug-on-error RET~, reproduce the problem/error you have to get the debug info 
 
 you can then M-x goto-char RET to get to the to-the-charachter-of-the-invalid-read 
 
-**** .emacs
-***** Org mode file as a emacs config
+******* .emacs
+******** Org mode file as a emacs config
 
 For a simple example of usage, follow these 5 steps:
 
@@ -24030,7 +24156,7 @@ The curent config can be found here:
 
 Re-start Emacs to load the customizations.
  
-***** reload a orgmode emacs config
+******** reload a orgmode emacs config
 
 use:
 
@@ -24038,14 +24164,14 @@ use:
 
 to re-evaluate the whole thing 
  
-***** define system defaults
-****** default web browser
+******** define system defaults
+********* default web browser
 #+BEGIN_SRC emacs-lisp
 (setq browse-url-browser-function (quote browse-url-generic))
 (setq browse-url-generic-program "dwb")
 #+END_SRC
 
-***** Where is emacs's init file located?
+******** Where is emacs's init file located?
 Where is emacs's init file located?
  That depends on whether if you have the environment variable named
 "HOME". ("HOME" should not be confused with a default Windows
@@ -24066,7 +24192,7 @@ starts with error, then you know it's loaded.
  Or, you can put the following code in your init file:
  (set-background-color "pink"
 
-***** Split Your .emacs into Multiple Files
+******** Split Your .emacs into Multiple Files
 
 Split Your .emacs into Multiple Files
  Go to your ".emacs". If the file has more than 2 hundred lines, then
@@ -24093,7 +24219,7 @@ without much effort. You may edit your init files once a month.
 Gradually over the years, you may have multiple emacs init files, all
 manageable and reasonably organized.
 
-***** Aliases
+******** Aliases
 In emacs, you can use alias to shorten commands. For example, make frequently used commands just 1 or 2 letters.
 
 For example, here's my aliases:
@@ -24114,7 +24240,7 @@ For example, here's my aliases:
 (defalias 'eis 'elisp-index-search)
 (defalias 'lf 'load-file)
 
-***** Basic (emacs init file)
+******** Basic (emacs init file)
 
 Your init file contains personal EmacsLisp code that you want to execute
 when you start Emacs.
@@ -24127,9 +24253,9 @@ not have one and want to create it, then just open it for editing in
 Emacs:
  C-x C-f ~/.emacs RET
 
-***** backups
+******** backups
 
-****** How to disable emacs's automatic backup
+********* How to disable emacs's automatic backup
 
 
 
@@ -24157,7 +24283,7 @@ today, the file's creation date will become today. Note: unixes
 doesn't matter. (ctime is not creation date.) Windows and OS X do record
 file creation date.).
 
-****** How to set emacs so that all backups are placed into one backup
+********* How to set emacs so that all backups are placed into one backup
 folder
 
 How to set emacs so that all backups are placed into one backup folder
@@ -24196,7 +24322,7 @@ use long file names or many nested dirs, this scheme will reach file
 name length limit quickly. (Mac and Windows allow 255 chars for file
 name.)
 
-***** How to disable emacs's automatic backup
+******** How to disable emacs's automatic backup
 How to disable emacs's automatic backup?
 
 Use this code:
@@ -24221,7 +24347,7 @@ today, the file's creation date will become today. Note: unixes
 doesn't matter. (ctime is not creation date.) Windows and OS X do record
 file creation date.).
 
-***** How to avoid restarting emacs when adding code to emacs init file
+******** How to avoid restarting emacs when adding code to emacs init file
 
 How to avoid restarting emacs when adding code to emacs init file?
  Many ways.
@@ -24229,7 +24355,7 @@ How to avoid restarting emacs when adding code to emacs init file?
  2.Call eval-buffer to evaluate all code.
  3.Call load-file. Or, in dired, press L on the file name.
 
-***** turn on CUA mode by default
+******** turn on CUA mode by default
 
 Turn on the CUA mode. Put the following in your emacs init file:
  (cua-mode 1)
@@ -24240,7 +24366,7 @@ Turn on the CUA mode. Put the following in your emacs init file:
  Text selection can be done by holding down the  Shift key and
 press a arrow key.
 
-***** Defining Alias to Increase Productivity
+******** Defining Alias to Increase Productivity
 
 In emacs, you can define your own keyboard shortcuts such as F6 for
 frequently used commands. But if you use emacs extensively, you may have
@@ -24259,7 +24385,7 @@ command names 1 or 2 letters short.
  (defalias 'ocaml-mode 'tuareg-mode)
  (defalias 'math-symbol-input-mode 'xmsi-mode)
 
-***** Turn a Minor Mode on/off/toggle
+******** Turn a Minor Mode on/off/toggle
 
 When setting a variable that takes {true, false}, use {t, nil}, like
 this:
@@ -24278,7 +24404,7 @@ But there's auto-fill-mode but no "global-auto-fill-mode". The best
 thing is to call describe-function and or describe-variable to see their
 inline docs.
 
-***** save history between sessions
+******** save history between sessions
 
 With savehist-mode, you can save your minibuffer history (ie. the
 commands you gave). It's the simple alternative to more complex
@@ -24303,7 +24429,7 @@ home-directory. This makes it a bit easier to back up things and keep my
 ~/ clean. For historical reasons, I still have my ~/.emacs, but I could
 use ~/.emacs.d/init.el instead
 
-***** configure minor modes
+******** configure minor modes
 
 As a rule, minor-modes can be enabled given positive argument or
 disabled with a negative argument. Should the argument be omitted, the
@@ -24314,7 +24440,7 @@ the scroll bars, menu-bar and tool-bar, respectively.
  (menu-bar-mode -1)
  (tool-bar-mode -1)
 
-***** debug slowdowns
+******** debug slowdowns
 
 this only workd for emacs >=24
  M-x profile-start
@@ -24324,8 +24450,8 @@ defaults to CPU info
  M-x profile-report
  this will show you which modes/functions etc take the most CPU
 
-***** library loading
-****** require
+******** library loading
+********* require
 allows the authors of addons to write sevral files , chain them togheter into one packge. the use requires only to use 1 files to get all the sub files.
 If you look in a package documentation there will be a line that says (provide 'PACKAGENAME).
 that's the counterpart to:
@@ -24340,11 +24466,11 @@ and example would be the org-mode plugin. there are hundreds of sub packages but
 
 $note$ there isnt usually a mode inside the name so it wont be org-mode but rather 'org in the require command
 
-****** autoload
+********* autoload
 as opposed to require autoload only loads the needed packages on-demand and thus speeds up the emacs inital loading
 
-***** OS/Host name based configuring 
-****** Get system type and system name 
+******** OS/Host name based configuring 
+********* Get system type and system name 
 
 *Get system type and system namey*
 
@@ -24369,7 +24495,7 @@ The following defuns show how you can know wich system type and name you have in
 #+END_SRC
 
 Those previous commands are interactive, so you can just type M-x insert-system-name or M-x insert-system-type to test them.
-****** Single dot emacs file and per-computer configuration
+********* Single dot emacs file and per-computer configuration
 
 *Configuration depending on the system type*
 
@@ -24407,7 +24533,7 @@ In order to include system-type based configurations, you can define functions t
 
 Once you have these functions, you can put the system-dependent configuration:
 
-****** Configuration depending on the system name
+********* Configuration depending on the system name
  
 Now, you also want to put machine-dependent configuration, so you can define functions like this to detect in which machine you are currently located:
 
@@ -24425,7 +24551,7 @@ And then you just need to use the previous function in the specific configuratio
 (setq user-mail-address "my.name@workplace.com")
 )
 
-***** Remove welcome screen/splash from emacs
+******** Remove welcome screen/splash from emacs
 add to init.el/.emcas file:
 
 #+BEGIN_SRC emacs-lisp
@@ -24433,8 +24559,8 @@ add to init.el/.emcas file:
 (setq inhibit-splash-screen t)
 #+END_SRC
 
-***** Define default apps
-****** Browser
+******** Define default apps
+********* Browser
 Emacs 23.2 doesn't directly support chrome, but it does support a "generic" browser, and something like this should work:
 #+BEGIN_SRC 
 (setq browse-url-browser-function 'browse-url-generic
@@ -24446,15 +24572,15 @@ if it's Windows or Mac, you can try:
 (setq browse-url-browser-function 'browse-url-default-macosx-browser)
 #+END_SRC
 
-**** backup,saving etc
-***** 'save as'								:Fav:
+******* backup,saving etc
+******** 'save as'							:Fav:
 use:
 ?C-x? write-file 
 @Warning:ido may interfere with this@
 
 
-***** backup
-****** how to backup
+******** backup
+********* how to backup
 By default, Emacs auto-saves a buffer with changes in it to the same directory as the file opened in the buffer, but adds a character such as # or ~ to the beginning or end.
 This auto-savin can be turned off with:
 
@@ -24469,16 +24595,16 @@ Also, I turned up the rate at which Emacs auto-saves the files.
 (setq auto-save-interval 20) ; twenty keystrokes
 (setq auto-save-timeout 10) ; ten idle seconds
 
-***** recents
-****** How to open recently opened file in emacs
+******** recents
+********* How to open recently opened file in emacs
 
 Call recentf-mode to turn it on. Then, call recentf-open-files to list
 and open recently opened file. You can give it a single key keyboard
 shortcut
  To turn it on for future sessions, put this in your emacs init file:
  (recentf-mode 1) ; keep a list of recently opened files
-**** bookmarks
-***** intro
+******* bookmarks
+******** intro
 
 Bookmark Basics
  Bookmark+ builds on vanilla Emacs bookmarks. If you are familiar with
@@ -24588,14 +24714,14 @@ whose default value is 't', which means count all of a sequence of
 modifications together as one modification, as far as
 'bookmark-save-flag' is concerned.
 
-***** basics
+******** basics
 
 Emacs can remember a list of visited files.
  C-x r m Add current buffer to bookmarks.
  C-x r b Open a buffer from bookmarks.
  C-x r l List bookmarks.
 
-***** bookmark a remote folder
+******** bookmark a remote folder
 
 connect to a remote file:
  To connect to 'myhost' as 'myuser' via SSH and open the file
@@ -24605,12 +24731,12 @@ connect to a remote file:
 
  after that just add it as a normal bookmark
 
-***** bookmak a folder
+******** bookmak a folder
 
 if you set a bookmark while you're in a dired buffer it saves the
 directory location
 
-***** BKM+ commands
+******** BKM+ commands
 
 When you jump to a bookmark, you can use completion to specify the
 bookmark name. 'bookmark-jump' and 'bookmark-jump-other-window', bound
@@ -24619,7 +24745,7 @@ to
  and
  'C-x 4 j j',
 
-***** sort in +
+******** sort in +
 
 You can use `s s'... (repeat hitting the 's' key) to cycle among the
 various sort orders possible, updating the display accordingly. By
@@ -24648,7 +24774,7 @@ or `?' for more info.
  `s t' -- Sort tagged (`t') before untagged
  `s v' -- Sort by visit frequency
 
-***** bookmark tagging
+******** bookmark tagging
 
 *Bookmark Tags*
  -------------
@@ -24684,9 +24810,9 @@ AND)
  T u ~ +- Unmark bookmarks not having any tags in a set (NOT OR)
  T u ~ *- Unmark bookmarks not having all tags in a set (NOT AND)
 
-**** buffers,windows,frames
+******* buffers,windows,frames
 
-***** what is a window and a frame?
+******** what is a window and a frame?
 
 *Windows and frames*
  Emacs is designed for convenient editing of many files at a time. This
@@ -24702,7 +24828,7 @@ in the sense of the modern desktop paradigm) which contains a title bar,
 menu bar and one or more 'windows' (in Emacs terminology. i.e., the
 above definition of 'window').
 
-***** ibuffer
+******** ibuffer
 
 In ibuffer, the key sequence * u S D will save all unsaved files and
 close them. This is particularly useful after you've done a
@@ -24715,7 +24841,7 @@ this:
  With the above, the key for list-buffers Ctrl+x Ctrl+b will also be
 set to ibuffer.
 
-***** switch between 2 last buffers
+******** switch between 2 last buffers
 
 The function to toggle between the two most recently used buffers is
 easy enough:
@@ -24729,13 +24855,13 @@ easy enough:
  (switch-to-buffer buf)
  (throw 'done t)))))
 
-***** completion frame
+******** completion frame
 
 press ESC 3 times:
  ESC ESC ESC
 
-**** !Bugs/errors!
-***** `get rid of unreadable characters (unicode etc)` 			:Fav:
+******* !Bugs/errors!
+******** `get rid of unreadable characters (unicode etc)`		:Fav:
 
 How do I search for, delete, or replace unprintable (eight-bit or control) characters
 (see also http://www.gnu.org/software/emacs/emacs-faq.text)
@@ -24754,13 +24880,13 @@ then enter y or ! (!no return!) to clear place/all
 
 -Regexp for the unprintable chars: `[^\t\n\r\f -~]'
 
-***** emacs ignores the org config file at startup (econf.org for me)
+******** emacs ignores the org config file at startup (econf.org for me)
 close all emacs session and delete the .el file (including # and links) corresponding to your conf.org
 In example in my case its econf.el which corresponds to my org config file econf.org
 restart emacs and things should be back to normal
 
-**** commands
-***** basics
+******* commands
+******** basics
 
 To run a command by name, type Alt+x followed by the command name.
  ShortcutCommand NameDescription
@@ -24777,7 +24903,7 @@ calls.
  F1 kdescribe-keyFind the command name of a key
  F1 fdescribe-functionFind the key of a command
 
-***** basic examples
+******** basic examples
 Example of Useful Commands
  In emacs, a selection of text is called "region". Many commands acts on
 the selected text. Here are some examples of commands that act on the
@@ -24797,9 +24923,9 @@ cursor point to end of file.)
  The above are just some examples. There are 2.5k commands in emacs by
 default.
 
-****** editing text
+********* editing text
 
-******* deleting
+********** deleting
 
 <DEL> Delete the character just before the cursor
  C-d  Delete the next character after the cursor
@@ -24808,7 +24934,7 @@ default.
  C-k Kill from the cursor position to end of line
  M-k Kill to the end of the current sentence
 
-******* Enriched Mode
+********** Enriched Mode
 
 Enriched mode is a buffer-local minor mode (see Minor Modes). When you
 visit a file that has been saved in the 'text/enriched' format, Emacs
@@ -24827,7 +24953,7 @@ buffer using the 'text/enriched' format; any formatting properties that
 have been added to the buffer remain in the buffer, but they are not
 saved to disk.
 
-******* Align text
+********** Align text
 
 Align Text
  Emacs has several commands that's helpful for alignment. One of the
@@ -24841,7 +24967,7 @@ then call align-regexp then give "=". Then you get:
  jenny = 8
  mary = 7
 
-***** deleting
+******** deleting
 
 <DEL> Delete the character just before the cursor
 C-d  Delete the next character after the cursor
@@ -24850,7 +24976,7 @@ C-d  Delete the next character after the cursor
  C-k Kill from the cursor position to end of line
  M-k Kill to the end of the current sentence
 
-***** Enriched Mode
+******** Enriched Mode
 
 Enriched mode is a buffer-local minor mode (see Minor Modes). When you
 visit a file that has been saved in the text/enriched format,
@@ -24869,7 +24995,7 @@ buffer using the text/enriched format; any formatting properties
 that have been added to the buffer remain in the buffer, but they are
 not saved to disk.
 
-***** Align text
+******** Align text
 
 Align Text
  Emacs has several commands that's helpful for alignment. One of the
@@ -24882,11 +25008,11 @@ then call align-regexp  you get:
  tom = 5
  jenny = 8
  mary = 7
-**** Console emacs
-***** How do I get to the menu in Emacs in console mode
+******* Console emacs
+******** How do I get to the menu in Emacs in console mode
 M-x menu-bar-open, which is usually bound to ?F10? (or ?C-F10?). This works with and without menu-bar-mode (which just shows the names of the menus at the top of the screen).
-**** config/Elisp
-***** issue commands based on hostname in emacs config
+******* config/Elisp
+******** issue commands based on hostname in emacs config
 you can config emacs so that some specific commands (such as paths, themes anything really) run on a specific machine while others run on another machine. this can be done based on hostname. 
 here is an example of defining a path for a org-mode plugin based on which machine emacs is run
 
@@ -24914,7 +25040,7 @@ you can also add more then one command with the 'progn' command, ₆In example�
 )
 #+END_SRC
 
-***** True and False
+******** True and False
 In elisp, the symbol nil is false, anything else is considered true. So, 0 is true, and empty string "" is also true. Also, nil is equivalent to the empty list (), so () is also false.
 
 ; all the following are false. They all evaluate to nil
@@ -24922,7 +25048,7 @@ In elisp, the symbol nil is false, anything else is considered true. So, 0 is tr
 (if () "yes" "no") ;  "no"
 (if '() "yes" "no") ;  "no"
 (if (list) "yes" "no") ;  "no", because (list) eval to a empty list, same as ()
-***** setq
+******** setq
 *Setq* - '/setq means the variable is not evaluated
 
 setq is just like set with a quoted first arg:
@@ -24932,13 +25058,13 @@ setq is just like set with a quoted first arg:
 is just like
 
 (setq foo '(bar baz))
-***** load path/add to list
+******** load path/add to list
 to manually load functions/plugins to the emacs load path so you can require them use the add to list command
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/evil")
 #+END_SRC
 
-***** Require
+******** Require
 when you need to load feautres that are not in stock emacs installion default you need to require it
 so as opposed to lets say !winner-mode! which is stock emacs !evil! is a plugin so you need to require it on startup:
 (require 'evil)
@@ -24946,7 +25072,7 @@ so as opposed to lets say !winner-mode! which is stock emacs !evil! is a plugin 
 after you require the feature you can define options (make use of the c-h f to describe the specific option) as you would for other emacs native commands:
 
 (setq evil-want-fine-undo t)
-***** describe Functions
+******** describe Functions
 to get info on a specific function
 
 c-h f FUNCTIONNAME
@@ -24966,7 +25092,7 @@ so here if its 1 (positive) it works and if -1 (negative) its disabled
 (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
 #+END_SRC
        
-***** printing
+******** printing
 to print something in the botom bar use the message command
 #+BEGIN_SRC emacs-lisp
 ; printing
@@ -24975,7 +25101,7 @@ to print something in the botom bar use the message command
 
 will preint the word hi in bottom bar
 
-***** functions
+******** functions
 
 Basic function definition is of the form:
 
@@ -25010,14 +25136,14 @@ The (interactive "x") form takes a single-letter code to indicate how the comman
 (interactive "s"), prompt user for a string as argument.
 (interactive "r"), for commands that takes 2 arguments, the beginning and ending positions of the current region. This form is typically used for commands that act on a text selection.
 
-***** auto mode list
+******** auto mode list
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'auto-mode-alist '("\\.\\(org\\|org_archive\\|txt\\)$" . org-mode))
 #+END_SRC
 to open specific file types in specific modes use auto-mode-alist, Ie to open all *.org files in org
 You can use C-h v to descrive auto-mode-alist fully
 
-***** Hooks
+******** Hooks
 
 %Tip most major modes will have a hook name Ie markdown-mode-hool, which can be used to assign hooks%
 #+BEGIN_SRC emacs-lisp
@@ -25026,8 +25152,8 @@ You can use C-h v to descrive auto-mode-alist fully
           (lambda ()      
             (flyspell-mode)))
 #+END_SRC
-**** Functions
-***** simple food template Function
+******* Functions
+******** simple food template Function
 here is an anotated version
 #+BEGIN_SRC emacs-lisp :results none
 ;name of the functiom
@@ -25076,9 +25202,9 @@ here is an anotated version
 
 #+END_SRC
 
-**** copy,cut,paste
+******* copy,cut,paste
 
-***** kill-rectangle  replace-rectangle
+******** kill-rectangle  replace-rectangle
 
 kill-rectangleCtrl+xrk*Delete selected column of text.*
  replace-rectangleCtrl+xrt*Replace text in a selected
@@ -25093,7 +25219,7 @@ used kill-rectangle).
 The yank-rectangle is useful when you want to move a column of text. Try
 to swap the "x" and "o" blocks in the above sample text.
 
-***** CUA mode select block
+******** CUA mode select block
 
 
 
@@ -25108,19 +25234,19 @@ Ctrl+x, Copy Ctrl+c, Paste Ctrl+v}.
 
 To cancel selection, press Ctrl+Enter again.
 
-**** Editing
-***** commenting
-******  comment region
+******* Editing
+******** commenting
+*********  comment region
 
 Comment Region :
  M-x comment-region,
  to uncomment:
  uncomment-region
  one can bind these keys
-****** comment/uncomment SECTION
+********* comment/uncomment SECTION
 use
 M-; (comment-dwim)
-***** Copy Filename to the Clipboard
+******** Copy Filename to the Clipboard
 Sometimes I need to copy the name of the currently visited file to the clipboard. Emacs does not have a built-in command for that, but cooking one is pretty straightforward:
 
 #+BEGIN_SRC emacs-lisp  
@@ -25137,14 +25263,14 @@ Sometimes I need to copy the name of the currently visited file to the clipboard
 
 Evaluate the new bit of code in Emacs (maybe by using C-M-x somewhere in the body of the function definition) and invoke the command with M-x copy-file-name-to-clipboard.
 
-***** Single Key to Delete Whole Line
+******** Single Key to Delete Whole Line
 
 To delete a whole line, call kill-whole-line Ctrl+ Shift+ Backspace. You can give it the same key as kill-line, to replace it. ( Emacs Keybinding Syntax Examples) You can also set the Cut command (kill-ring-save Alt+w) to cut the whole line when there's no selection. See: Emacs: How to Copy/Cut Current Line.
 
-***** repeat last command
+******** repeat last command
 Sometimes youll want to quickly repeat an Emacs command several times and more often than not it wont have a convenient keybinding you can use to do this. Enter C-x z (repeat) - it simply repeats the most recently executed command. And the best part? After youve pressed C-x z once you can continue repeating the last command simply by pressing z. Vi(m) users will probably note that this is quite similar to the . command there.
 
-***** manipulate cases
+******** manipulate cases
 One operation that we have to do fairly often when editing text is manipulating the case of words. The most popular case manipulations are probably capitalize, convert to lowercase and convert to uppercase. Emacs naturally has built-in commands for all of those.
 
 Pressing M-c runs the command capitalize-word, which will capitalize the next word and move the cursor after it. Pressing M-- M-c will capitalize the previous word without moving the cursor.
@@ -25153,18 +25279,18 @@ Pressing M-l runs the command downcase-word, which will lowercase the next word 
 
 Pressing M-u runs the command upcase-word, which will uppercase the next word and move the cursor after it. Pressing M-- M-u will uppercase the previous word without moving the cursor.
 
-***** White space
-****** start whitespace mode
+******** White space
+********* start whitespace mode
 to visually see all whitespaces in emacs issue the command:
 
 'whitespace-mode'
-****** Deleting Whitespace
-****** Just one space-make sure there is only 1 space between words
+********* Deleting Whitespace
+********* Just one space-make sure there is only 1 space between words
 To make sure two words are separated by just one space, 
 
 use M-SPC ('just-one-space' command)
 
-****** Remove whitespace at the end of the document
+********* Remove whitespace at the end of the document
 To remove whitespace at the end of a document, use any of the following:
 
 C-x C-o (delete-blank-lines) at the end of the buffer (`M->).
@@ -25182,10 +25308,10 @@ However, be aware that if require-final-newline is non-nil, then a (single) newl
           (delete-blank-lines))))
 
 #+END_SRC
-****** Delete extra blank lines between paragraphs
+********* Delete extra blank lines between paragraphs
 C-x C-o (delete-blank-lines) also deletes any extra blank lines between two paragraphs, leaving just one blank line.
  
-***** Edit Files as Root
+******** Edit Files as Root
 
 One area where Emacs traditionally falls short by default is editing
 files that require =root= permissions. Since most Emacs users just use a
@@ -25260,7 +25386,7 @@ alias(I generally alias =e= to =emacsclient -t=):
     alias E="SUDO_EDITOR=\"emacsclient -t -a emacs\" sudoedit"
 #+END_EXAMPLE
 
-***** copy/cut/paste the current line
+******** copy/cut/paste the current line
 
 at i often find the need to copy the current line too. Usually, this
 meas moving the cursor to beginning of line, mark, move to end of line,
@@ -25295,8 +25421,8 @@ copy the current line. Similar for cut. Super!
  (global-set-key (kbd "<f4>") 'yank) ; paste.
  I've been using this for a few years. For deletting or cutting a few
 lines, this is more convenient than having to set mark first.
-***** Abbreviating Text
-****** start 
+******** Abbreviating Text
+********* start 
 Emacs can abbreviate text for you to be expanded automatically. To setup abbreviations, do this:
 place the following into your "~/.emacs" file:
 Also, if you want abbreviations to be saved whenever you save files (C-x s) or quit emacs, add the following to your .emacs:
@@ -25313,18 +25439,18 @@ Restoring Abbrevs- Turning on abbrev mode will read your abbrev file. To turn on
 #+END_SRC
 
 
-****** set abbriv location and name
+********* set abbriv location and name
 this can be done in the init file or if defined your custom file:/home/zeltak/.emacs.d/custom.el
 
 #+BEGIN_SRC emacs-lisp :results none
 (setq abbrev-file-name "/home/zeltak/.emacs.d/abbrv/personal_abbrv.txt")
 #+END_SRC
 
-****** list current abbriviations
+********* list current abbriviations
 To display a list of the current abbreviations Emacs uses, enter the command
 `list-abbrevs`       
 
-***** Delete all lines starting with common letter (flush lines)
+******** Delete all lines starting with common letter (flush lines)
 'flush-lines'             delete lines containing matches
 
 In Example
@@ -25334,8 +25460,8 @@ flush-lines
 m: 
 
 will delete all lines starting with 'm:'
-***** Change/edit Case
-****** Case Conversion
+******** Change/edit Case
+********* Case Conversion
 Emacs has commands for converting either a single word or any arbitrary range of text to upper case or to lower case.
 
 M-l Convert following word to lower case (downcase-word). 
@@ -25348,7 +25474,7 @@ C-x C-l Convert region to lower case (downcase-region).
 
 C-x C-u Convert region to upper case (upcase-region). 
 
-****** Capitalizing words and regions
+********* Capitalizing words and regions
 
 In Emacs, to capitalize a word, position your cursor directly before the
 word and type  M-c  .
@@ -25370,7 +25496,7 @@ the region you want to capitalize and enter:
 
 M-x capitalize-region
 
-****** Making words and regions all uppercase
+********* Making words and regions all uppercase
 
 To make all the letters in a word uppercase, position your cursor before
 the word and type  M-u .
@@ -25390,7 +25516,7 @@ M-x upcase-region
 *Note:* By default, this command is disabled, but when you try to use
 it, Emacs will give you the option of turning it on.
 
-****** Making words and regions all lowercase
+********* Making words and regions all lowercase
 
 To make all the letters in a word lowercase, position your cursor before
 the word and type  M-l  (the letter l).
@@ -25410,8 +25536,8 @@ M-x downcase-region
 *Note:* By default, this command is disabled, but when you try to use
 it, Emacs will give you the option of turning it on.
 
-**** Regex in emacs
-***** Regular Expression Syntax
+******* Regex in emacs
+******** Regular Expression Syntax
 
 Here is the syntax used by Emacs for regular expressions. Any character
 matches itself, except for the list below.
@@ -25505,7 +25631,7 @@ units, accented letters, kanjis. See
 [[http://www.emacswiki.org/emacs/EmacsSyntaxTable][EmacsSyntaxTable]]
 for details.
 
-***** Idiosyncrasies of Emacs Regular Expressions
+******** Idiosyncrasies of Emacs Regular Expressions
 
 -  In a interactive search involving a regexp, a space character stands
    for one or more whitespace characters (tabs are whitespace
@@ -25557,7 +25683,7 @@ for details.
                             (replace-match "\\1,"))
 #+END_EXAMPLE
 
-***** Some Regexp Examples
+******** Some Regexp Examples
 
 #+BEGIN_EXAMPLE
      [-+[:digit:]]                     digit or + or - sign
@@ -25573,7 +25699,7 @@ for details.
      <tag[^> C-q C-j ]*>\(.*?\)</tag>  html tag
 #+END_EXAMPLE
 
-***** Some Emacs Commands that Use Regular Expressions
+******** Some Emacs Commands that Use Regular Expressions
 
 #+BEGIN_EXAMPLE
      C-M-s                   incremental forward search matching regexp
@@ -25613,7 +25739,7 @@ See also:
 [[http://www.emacswiki.org/emacs/AlignCommands][AlignCommands]],
 [[http://www.emacswiki.org/emacs/OccurBuffer][OccurBuffer]],
 [[http://www.emacswiki.org/emacs/DiredPower][DiredPower]]
-***** using regex for fontlock
+******** using regex for fontlock
 for normal regex
 #+BEGIN_SRC emacs-lisp :results none
 (font-lock-add-keywords
@@ -25658,9 +25784,9 @@ ledermaus | the final ! is once again a simple atom, so is replaced the same way
 ledermaus | exactly.                                                                                                            
 #+END_EXAMPLE
 
-**** ELISP
-***** hooks
-****** add a hook
+******* ELISP
+******** hooks
+********* add a hook
 a simple hook EXAMPLE
 
 #+BEGIN_SRC emacs-lisp
@@ -25672,7 +25798,7 @@ a simple hook EXAMPLE
 
 where the hook executes one org mode starts and the exe is turning on auto-complete-mode
 
-***** require, load, load-file, autoload
+******** require, load, load-file, autoload
 Emacs lisp's module system is a primitive system, centered on loading file, with some slightly high level things such as its features, autoload, require. However, nothing is strict or enforced by elisp.
 
 | Function Name   | Purpose                   | Tech Detail                         | Comment                             |
@@ -25692,13 +25818,13 @@ Emacs lisp's module system is a primitive system, centered on loading file, with
 |                 |                           |                                     |                                     |
 |-----------------+---------------------------+-------------------------------------+-------------------------------------|
 
-**** Emacs on MS windows
-***** how to launch emacs in windows (with no command prompt)
+******* Emacs on MS windows
+******** how to launch emacs in windows (with no command prompt)
 Note that GNU Emacs for Windows comes with two executables to start Emacs:
 "emacs.exe" and "runemacs.exe"
 The former keeps a DOS-Prompt window in the background, while the latter does not, so when if you choose that distribution and want to create a shortcut, be sure to launch "runemacs.exe".
 
-***** how to install and use custom config
+******** how to install and use custom config
 the best way i found was to install the emacs speaks statistics
 http://ess.r-project.org/
 
@@ -25708,8 +25834,8 @@ then in windows simple clone your git repo with your emacs config to
 
 ~/.emacs.d (full path on windows is file:/c:\Users\ekloog\.emacs.d
 
-**** emacs Server (deamon mode)
-***** Emacs as systemd service						:Fav:
+******* emacs Server (deamon mode)
+******** Emacs as systemd service					:Fav:
 
 Its simple enough to run the emacs daemon with systemd, create the following file
 
@@ -25745,7 +25871,7 @@ systemctl start emacs@USER
 systemctl start emacs@zeltak
 #+END_SRC
 
-***** start server (daemon mode)
+******** start server (daemon mode)
 simply start emacs as:
 
 #+BEGIN_SRC sh
@@ -25760,7 +25886,7 @@ emacsclient
 emacsclient -t
 #+END_SRC
 
-***** kill server
+******** kill server
 
 In example  
 
@@ -25768,7 +25894,7 @@ In example
 emacsclient -e "(kill-emacs)
 #+END_SRC
  
-***** different window name per emacs client 				:Fav:
+******** different window name per emacs client				:Fav:
 
 #+BEGIN_SRC sh
 emacsclient -c -e '(x-change-window-property "WM_CLASS" "Client_NAME_NEEDED" nil nil nil t)' 
@@ -25776,13 +25902,13 @@ emacsclient -c -e '(x-change-window-property "WM_CLASS" "Client_NAME_NEEDED" nil
 
 $Note-you only need to change the Client_NAME_NEEDED part$:
 
-**** gnus
-***** terms
+******* gnus
+******** terms
 article-one information piece-email,article etc terms
 backend-a way to get article, mailbox , rss, news backends
 gnus has its own .el file but you can use an org mode config file and stick the config there
 
-***** keybinds
+******** keybinds
 |---------+------------------------|
 | keybind | Info                   |
 |---------+------------------------|
@@ -25792,8 +25918,8 @@ gnus has its own .el file but you can use an org mode config file and stick the 
 |         |                        |
 |         |                        |
 |         |                        |
-***** Setup
-****** base setup
+******** Setup
+********* base setup
 first thing you would config in gnus is your main source
 
 #+BEGIN_SRC emacs-lisp
@@ -25801,19 +25927,19 @@ first thing you would config in gnus is your main source
 #+END_SRC
 
 this shows the gmane mailing list gateway as main source
-****** Subscribe to a group
+********* Subscribe to a group
 issue U and then enter gmane.TAB to use completion
-***** Errors 
-****** gnus hangs at startup
+******** Errors 
+********* gnus hangs at startup
 if gnus hanges, one possibility is this: if you just commented out a previous setup for Gmail and replaced it with one for  
 an NNTP server, Gnus will now be confused and stuck trying to get those previously-subscribed Gmail IMAP folders. just delete .newsrc and try again
-**** images
+******* images
 
-***** turn on image mode
+******** turn on image mode
 
 *M-x* iimage-mode
 
-***** images in org-mode
+******** images in org-mode
 
 Depending on exactly what you want to achieve, you might try one the the
 following ideas:
@@ -25847,14 +25973,14 @@ opening the file. For example:
 call it from the eval local variable (which is cleaner, but forces you
 to have the function definition somewhere else, away from your file)
 
-**** keybinds
-***** What keys can be defined
+******* keybinds
+******** What keys can be defined
 What type of keys can i define?
 Single Key.  F8,  Menu,  Page , Keypad 1
 Single Key Sequence.  F9 8, F9  Page 
 Key Combination.  Ctrl+8, Ctrl+Alt+8
 Sequence of single/combo keys.  Alt+7 8, Alt+7 Ctrl+i
-***** Emacs Keybinding Syntax Examples
+******** Emacs Keybinding Syntax Examples
 
 This page shows sample syntax for defining keys in emacs. (For general
 guide on defining keys, see: Emacs: How to Define Keyboard Shortcuts.)
@@ -25919,7 +26045,7 @@ A shortcut can be created without any modifier keys.
 (global-set-key (kbd "(") 'beep)
 (global-set-key (kbd "") 'beep)
 
-***** intro
+******** intro
 
 *What type of keys can i define?*
  Single Key. ( F8,  Menu,  Page , Keypad 1 )
@@ -25944,7 +26070,7 @@ then show the command that key press is bound to.
  To see a list of ALL current keybindings, call describe-bindings F1
 b.
 
-***** simple chain command example
+******** simple chain command example
 
 use this
  global-set-key (kbd "C-c a") (lambda () (interactive) (cmd-1 ...) (cmd2
@@ -25953,7 +26079,7 @@ use this
  (global-set-key (kbd "S-<f8>") (lambda () (interactive) (save-buffer)
 (kill-buffer) ))
 
-***** How to change/add keys to a major mode
+******** How to change/add keys to a major mode
 
 *How to change/add keys to a major mode?*
  Use a hook for the mode. A hook will load your code whenever that mode
@@ -25969,7 +26095,7 @@ is activated. Here's a usable example:
  )
  )
 
-***** Rebinding Key Choices
+******** Rebinding Key Choices
 
 Keys to Avoid
  Emacs has its quirks. The following keys you should not redefine:
@@ -26007,14 +26133,14 @@ keyboard's Opt or Cmd key.
 See:[[http://ergoemacs.org/emacs/emacs_hyper_super_keys.html][Emacs: How
 to define Super  Hyper Keys]].
 
-***** map move windows
+******** map move windows
 
 (global-set-key [M-left] 'windmove-left) ; move to left windnow
  (global-set-key [M-right] 'windmove-right) ; move to right window
  (global-set-key [M-up] 'windmove-up) ; move to upper window
  (global-set-key [M-down] 'windmove-down) ; move to downer window
 
-***** Smart window switch
+******** Smart window switch
 
 Smart window switch
  The traditional window switch with C-x o can be cumbersome to use in
@@ -26026,7 +26152,7 @@ fille
  (when (fboundp 'windmove-default-keybindings)
  (windmove-default-keybindings)
 
-***** Standard Copy Paste Keys (CUA)
+******** Standard Copy Paste Keys (CUA)
 
 Standard Copy Paste Keys
 
@@ -26046,7 +26172,7 @@ shortcuts called CUA mode:
 
  [[macsen_files/emacs_cua_mode_menu.png]]
 
-***** CUA mode keys
+******** CUA mode keys
 
 Basic Keyboard Shortcuts
  Open, Save, Close
@@ -26085,7 +26211,7 @@ to jump to the previous occurrence.
  To exit search and leave the cursor at the place before search started,
 press Ctrl+g.
 
-***** How to unset a keybinding
+******** How to unset a keybinding
 How to unset a keybinding?
 To unset a keybinding, use global-unset-key. For example, you have
 defined a keystroke for undo, and wants to kick the habit of the hitting
@@ -26095,7 +26221,7 @@ the default shortcut for undo:
 (global-unset-key (kbd "C- "))
 #+END_SRC
 
-***** Use function keys for custom keyboard shortcuts
+******** Use function keys for custom keyboard shortcuts
 You can define keyboard shortcuts that are sequences of keys. 
 
 This is how Emacs can have keyboard shortcuts like C-c C-c. The function keys are great for this, because (a) they often dont have assigned functions (or have ones that you dont mind losing), and (b) you dont have to press two or more keys to start your shortcut sequence, like you would do with C-c.
@@ -26112,7 +26238,7 @@ If you want to rebind something that was previously bound to a non-prefix map, y
 
 (global-unset-key (kbd "<f9>"))
 
-***** add a mode specific keybind
+******** add a mode specific keybind
 you use this code:
 #+BEGIN_SRC emacs-lisp
 (define-key text-mode-map (kbd "<f8>") 'delete-trailing-whitespace)
@@ -26135,7 +26261,7 @@ or you can also use hooks:
 )
 #+END_SRC
 
-***** define a function to toggle on/off and bindkey
+******** define a function to toggle on/off and bindkey
 
 use this function (stick it in your config file)
 
@@ -26155,7 +26281,7 @@ use this function (stick it in your config file)
  I have this set to <f7>:
  (global-set-key (kbd "<f7>") 'minimap-toggle)
 
-***** TODO Toggle-Map
+******** TODO Toggle-Map
 The following keymap toggles some options which tend to be useful throughout a session.
 
 #+BEGIN_SRC emacs-lisp :results none
@@ -26179,9 +26305,9 @@ There are eight keys being defined there, most of which aren't even used every d
 
 Doesnt "Emacs, toggle column" just roll off your tongue as you're typing C-x t c? I feel like I'm commanding the strands of reality, but that could just be my D&D past taking the better of me.
 
-**** look and feel
-***** fonts
-***** Face Attributes
+******* look and feel
+******** fonts
+******** Face Attributes
 
 [[file:/home/zeltak/Dropbox/Org/Tech/images/img23472PYP.jpg]]
 
@@ -26283,15 +26409,15 @@ Face attributes determine the visual appearance of a face. The following
 table lists all the face attributes, their possible values, and their`
 effects.
 
-***** themes
-****** change theme
+******** themes
+********* change theme
 
 use:
  M-x load-theme
  RET
  choose theme (you can use tab to list all available themes)
 
-****** load a theme
+********* load a theme
 
 To choose a new theme just do a M-x load-theme (tab completion is
 available for the names of the available themes). At this point you can
@@ -26302,7 +26428,7 @@ like this:
  (load-theme 'theme-name t)
  If you'd like to return to the default-theme just do a M-x
 disable-theme.
-****** How to Set a Theme Depending on Mode
+********* How to Set a Theme Depending on Mode
 Here's how you can set background color depending on the file name extension.
 
 #+BEGIN_SRC sh
@@ -26326,8 +26452,8 @@ You can modify the code to set themes instead of just background
 for more info look here:
 
 http://ergoemacs.org/emacs/emacs_set_theme_on_mode.html
-***** menus
-****** create custom menus
+******** menus
+********* create custom menus
 the best way is to use easy menu:
 
 http://www.emacswiki.org/emacs/EasyMenu
@@ -26365,8 +26491,8 @@ One way to determine PATH is to use C-h k and click on a menu item close to wher
 which is an interactive autoloaded Lisp function in `tetris'.
 #+END_SRC
 
-**** movment
-***** basic 
+******* movment
+******** basic 
 The following commands are useful for viewing screenfuls:
  C-vMove forward one screenful
  M-vMove backward one screenful
@@ -26388,17 +26514,17 @@ The following commands are useful for viewing screenfuls:
  
  move to popup buffer window > pgup
  quit popup window > q
-***** jump to last posiiton						:Fav:
+******** jump to last posiiton						:Fav:
 
 use ?C-x C-space? to jump to last position
 
 %Tip% if using Evil one can use also ?C-o?
 
-***** go to specific column
+******** go to specific column
 use 'M-g Tab' and then column number to switch to that column
 
-**** macros
-****** Naming and Saving Keyboard Macros
+******* macros
+********* Naming and Saving Keyboard Macros
 ?C-x C-k n?
 
 Give a command name (for the duration of the Emacs session) to the most recently defined keyboard macro (kmacro-name-last-macro). 
@@ -26411,26 +26537,26 @@ Bind the most recently defined keyboard macro to a key sequence (for the duratio
 
 Insert in the buffer a keyboard macro's definition, as Lisp code.      
 
-****** basic macro recording
+********* basic macro recording
 The key strokes can include calling emacs commands or commands that execute any emacs lisp functions.
 To record keystrokes use:
-******* to start recording a macro and 
+********** to start recording a macro and 
 
 ?M-x start-kbd-macro?
 
 to end. If you made a mistake, you can cancel  ?Ctrl+g? (keyboard-quit) and start over.
 
-******* to stop the macro
+********** to stop the macro
 
 ?M-x end-kbd-macro?
 
-******* To run the keystrokes you've just recorded, call call-last-kbd-macro or
+********** To run the keystrokes you've just recorded, call call-last-kbd-macro or
 ?C-x e?
 
-******* to repeat the macro `X` times, you first press
+********** to repeat the macro `X` times, you first press
 ?C-u? `X` and then ?C-x e? 
 
-****** Saving Your Keyboard Macro for Future Use			:Fav:
+********* Saving Your Keyboard Macro for Future Use			:Fav:
 
 If you want to use your keyboard macro for future use, you can save it. To save the macro: Call
 
@@ -26454,12 +26580,12 @@ look for the name you just gave and select it.This will insert the lisp code for
 Copy and Paste the code into your emacs init file.
 In any future emacs session, you can call your kmacro by name just like any emacs command. Once you've saved your macro with a name, you can also give it a keyboard shortcut, such as F8.
 
-****** edit a macro while its running
+********* edit a macro while its running
 when your recored a macro press ~c-x q~ while its running to specify a stop in the macro
 when you run that macro and it stops emacs will present a menu and you can enter 'recursive editing' to enter text 
-**** minor modes
+******* minor modes
 
-****** define in .emacs
+********* define in .emacs
 
 minor mode examples are blink-cursor-mode and column-number-mode
  As a rule, minor-modes can be enabled given positive argument or
@@ -26471,9 +26597,9 @@ the scroll bars, menu-bar and tool-bar, respectively.
  (menu-bar-mode -1)
  (tool-bar-mode -1)
 
-**** opening local/remote/root files
+******* opening local/remote/root files
 
-****** open as root
+********* open as root
 
 To prompt for the root password before opening /etc/hosts with root
 permissions:
@@ -26485,14 +26611,14 @@ permissions:
  enter password and then continue with PATH
  /etc/hosts
 
-****** open a remote file
+********* open a remote file
 
 To connect to 'myhost' as 'myuser' via SSH and open the file
 ~/example.txt:
 
  C-x C-f /ssh:myuser@myhost:~/example.txt
-**** !packages/plugins!
-***** load .el files manually
+******* !packages/plugins!
+******** load .el files manually
 use the `load-file` option 
 
 in detail:
@@ -26501,8 +26627,8 @@ if you downloaded a simple emacs package on the web named xyz.el: To use the pac
 use |M-x| load-file then give the file path.
 
 Now, emacs is aware of the package. To activate, call the command in the package. For example, if the file name is 'xyz.el', then the command to activate it is typically xyz or xyz-mode.
-***** El-get
-****** install it
+******** El-get
+********* install it
 just add this in your config:
 #+BEGIN_SRC emacs-lisp :results none
 (add-to-list 'load-path "~/.emacs.d/el-get/el-get")
@@ -26520,7 +26646,7 @@ just add this in your config:
 #+END_SRC
 That is technically all you need in order to get things up and running.
 
-****** add non elpa packages from git
+********* add non elpa packages from git
 If I find a new package I want, whether it's on github, elpa, or otherwise, I first check if the package info already exists in el-get's huge list of recipes, or I write it up myself. As an example, install an elpa package is as simple as:
 
 #+BEGIN_SRC emacs-lisp
@@ -26542,8 +26668,8 @@ How about a git repository? In that case it's just:
 #+BEGIN_SRC emacs-lisp :results none
 
 #+END_SRC
-***** general
-****** Emacs 24 Package System
+******** general
+********* Emacs 24 Package System
 
 
 
@@ -26633,10 +26759,10 @@ be loaded at start-up.
 
 Call describe-function or describe-variable for details.
 
-****** update ELPA packages 						:Fav:
+********* update ELPA packages						:Fav:
 every time you do a elpa install (list packages) it checks for undated plugins
 you can manually update with 'U'  followed by 'x' to update all
-****** Automatically Loading Files from within emacs
+********* Automatically Loading Files from within emacs
 
 If you want emacs to load the file when it starts, put the file in the dir ~/.emacs.d/, then put the following in your emacs init file:
 #+BEGIN_SRC emacs-lisp
@@ -26653,7 +26779,7 @@ Auto-Activation of Mode When Opening File
 This is usually setup by the package, but not always. Here's the basics:
  ;; setup files ending in ".js" to open in js2-mode
  (add-to-list 'auto-mode-alist'("\\.js\\'" . js2-mode))c
-****** disable elpa check on startup
+********* disable elpa check on startup
 add this to config
 #+BEGIN_SRC emacs-lisp :results none
 ;; package init not needed, since it is done anyway in emacs 24 after reading the init
@@ -26661,13 +26787,13 @@ add this to config
 
 (setq package-enable-at-startup nil)
 #+END_SRC 
-***** plugins
-****** Elpa
-******* to uprade all packages
+******** plugins
+********* Elpa
+********** to uprade all packages
 issue this:
 M-x package-list-packages <RET> U x y <RET>
-****** Company
-******* intro
+********* Company
+********** intro
 
 Once installed, enable company-mode with M-x company-mode
 
@@ -26694,12 +26820,12 @@ For more information, type M-x describe-function RET company-mode.
 
 To customize other aspects of its behavior, type M-x customize-group RET company.
 	
-******* add/remove backnends
+********** add/remove backnends
 
 To see or change the list of enabled back-ends, type M-x customize-variable RET company-backends. Also see its description for information on writing a back-end.
 For information on specific back-ends, also check out the comments inside the respective files.
 
-****** stripe-buffer mode
+********* stripe-buffer mode
 Use different background colors for even and odd lines. With the help of library hl-line-mode yet another color can be used for the current line.
 
 add this to your .emacs:
@@ -26714,10 +26840,10 @@ add this to your .emacs:
 ;add to org mode tables
 (add-hook 'org-mode-hook 'turn-on-stripe-table-mode)
 #+END_SRC****** iDO mode
-******* jump to dired from ido
+********** jump to dired from ido
 use C-j to jump into dired mode when within ido
-****** Projectile
-******* ignore file
+********* Projectile
+********** ignore file
 Currently git, mercurial and bazaar repos are considered projects by default. If you want to mark a folder manually as a project just create an empty *.projectile* file in it
 
 add this to relevant .el file:
@@ -26738,7 +26864,7 @@ tmp
 *.rb
 *.yml
 
-******* helm integration
+********** helm integration
 Projectile can be integrated with Helm via helm-c-source-projectile source (available in helm-projectile.el). There is also an example function for calling Helm with the Projectile file source. You can call it like this:
 
 M-x helm-projectile
@@ -26746,15 +26872,15 @@ M-x helm-projectile
 or even better - bind it to a keybinding like this:
 
 (global-set-key (kbd "C-c h") 'helm-projectile)
-******* model
-****** workgroups
+********** model
+********* workgroups
 create and save a winodws state (not buffers/session)
 -first issue wg-create-workgroup, give it a name (*not sure why this step is needed*)
 -then when you have you buffers etc setup issue wg-save
 
-****** minimap
+********* minimap
 
-******* define a function to toggle on/off and bindkey
+********** define a function to toggle on/off and bindkey
 
 use this function (stick it in your config file)
  (defun minimap-toggle ()
@@ -26771,8 +26897,8 @@ use this function (stick it in your config file)
  I have this set to <f7>:
  (global-set-key (kbd "<f7>") 'minimap-toggle)
 
-****** YASnippet
-******* install and configure Yasnippet
+********* YASnippet
+********** install and configure Yasnippet
 The best way to install is through the emacs package manager, if not you need to initialize yas/root-directory. 
 
 #+BEGIN_SRC emacs-lisp
@@ -26786,7 +26912,7 @@ The best way to install is through the emacs package manager, if not you need to
 
 !note!-the yas-snippet-dirs option is used to specify where the directories are located.
 
-******* Quickly finding snippets
+********** Quickly finding snippets
 
 There are some ways you can quickly find a snippet file:
 
@@ -26801,7 +26927,7 @@ M-x yas-visit-snippet-file
 
 Prompts you for possible snippet expansions like yas-insert-snippet, but instead of expanding it, takes you directly to the snippet definition's file, if it exists.
 
-******* Define custom Templates
+********** Define custom Templates
 
 make sure the in you yas config ([[*install%20and%20configure%20Yasnippet][config]])  the local location for the user snippets are correct (inlcuding top folder)
 then create files like these there
@@ -26817,7 +26943,7 @@ test$2
 etc
 #+END_SRC
 
-******* Expand Whole hyphenated-word as Input
+********** Expand Whole hyphenated-word as Input
 
 in YASNippet, you can define your own templates. For example:
  bsnp
@@ -26838,7 +26964,7 @@ only part of the word as input. For example, you want:
 to take input word including hyphen.
  (setq yas/key-syntaxes '("w " "w ." "\^")) ; default is'("w" "w "
 "w ." "\^") as of 2011-07-29
-******* escape special characters
+********** escape special characters
 Arbitrary text can be included as the content of a template. They are usually interpreted as plain text, except
 
 #+BEGIN_EXAMPLE
@@ -26847,7 +26973,7 @@ $ and ==.
 You need to use \` to escape them: \$ and \.  
 #+END_EXAMPLE
 The \` itself may also needed to be escaped as \\ sometimes.
-******* Tab stop fields
+********** Tab stop fields
 for more info look here:
 http://capitaomorte.github.io/yasnippet/snippet-development.html
 
@@ -26861,7 +26987,7 @@ Here is a typical example:
 </div>
 #+END_SRC
 
-******* using yasnippets with R
+********** using yasnippets with R
 
 since R uses $ in syntax, You need to use backslash to escape the $:
 ₆In example₆ 
@@ -26876,9 +27002,9 @@ or
 ${1:DATA}\$${2:VAR}
 #+END_SRC
 
-****** evil
-****** undotree
-******* save undo history and persist between session
+********* evil
+********* undotree
+********** save undo history and persist between session
 make sure you have latest emacs/undotree plugin and then add this to your rc
 
 #+BEGIN_SRC emacs-lisp :results none
@@ -26890,7 +27016,7 @@ make sure you have latest emacs/undotree plugin and then add this to your rc
       `((".*" . ,(concat user-emacs-directory "undo"))))
 #+END_SRC
 
-****** bm.el
+********* bm.el
 
 BM.EL
  bm.el provides a visible, buffer local bookmark, and the ability to
@@ -26934,8 +27060,8 @@ in all buffers respectively. If you read the commentary of the elisp
 package, you'd see options to make the bookmarks persistent, annotate
 them, controlling the size of the bookmarks file etc.
 
-****** auto Complete
-******* add dictnionary per mode/file type
+********* auto Complete
+********** add dictnionary per mode/file type
 
 You can use other dictionaries for every major-modes and extensions. A dictionary will be loaded from a directory specified with ac-dictionary-directories which is !where the dict folder of AC is installed!, IE
 
@@ -26956,7 +27082,7 @@ and
 You can edit the dictionary files and make a new one. In addition, you can add a new dictionary file to a directory that has same configuration.
 
 As same as user defined dictionary, after editing and adding dictionary, you should do M-x ac-clear-dictionary-cache to apply changes.
-******* add dictnionary for all modes
+********** add dictnionary for all modes
 you can add words into a config file to appear in all buffer/files in the autocomplete suggestions with code like this in your .emacs file
 #+BEGIN_SRC emacs-lisp
 (setq ac-user-dictionary '(
@@ -26966,10 +27092,10 @@ you can add words into a config file to appear in all buffer/files in the autoco
 #+END_SRC
 
 where each word is in a seperate line within ""
-****** ido
-******* TIPS
+********* ido
+********** TIPS
 to avoid deleting folders from the path one by one you can use C-e to edit the path ido-find-file is currently in.
-******* use ido for own completions
+********** use ido for own completions
 you can use ido-completing-read for your own cmds. It's bundled with emacs 24 at least:
 
 `(ido-completing-read "Replace this:" youList )`
@@ -26988,7 +27114,7 @@ In example
 
 #+END_SRC
 
-****** multiple-cursors
+********* multiple-cursors
 When you have an active region that spans multiple lines, the following will add a cursor to each line:
 
 (global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
@@ -26999,39 +27125,39 @@ When you want to add multiple cursors not based on continuous lines, but based o
 (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
 (global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this) 
 
-****** Bookmark+
-******* bookmark to a specifc position in a file
+********* Bookmark+
+********** bookmark to a specifc position in a file
 stand in the line/position in the file you want to bookmark and then issue 
 ?C-x p m? and enter the name desired 
-******* important keys
+********** important keys
 mark file  ?m?
 rename  ?r? (will prompt for name followd by location, press ENTER to ignore changed location)
 sort by name ?s-n?
-******* create a sequence bookmark (multiple bookmarks launched from 1)
+********** create a sequence bookmark (multiple bookmarks launched from 1)
 mark current bookmarks in bk+ with 'm' then use the menu item 'new sequence bookmark from marked' to create a special bookmark that launches all marked bookmakred in succsion. give it a name and your finished
-******* higlighting
+********** higlighting
 to higlight a bookmark first bookmark the position you want (C-x pm)
 then issue ( C-x p h ) to bring the higlight menu
  
-******* bookmark a Region
+********** bookmark a Region
 You can bookmark a region of text, not just a position.When you jump to a bookmark that records a region, the region is
 activated. to do this select a region and them add the bookmark as ususal.
-******* bookmark multiple files at once (using dired)
+********** bookmark multiple files at once (using dired)
 start a dired+ session
 mark the files you want with 'm'
 add then as bookmarks with M-b
-******* tags
-******** ask for tag each time you save a bookmark
+********** tags
+*********** ask for tag each time you save a bookmark
 add this to your config
 #+BEGIN_SRC emacs-lisp :results none
 ;ask for tags when saving a bookmark
 (setq bmkp-prompt-for-tags-flag t)
 #+END_SRC
-******** tagging in list view
+*********** tagging in list view
 see the hotkeys in config for personal tagging keys
 $Note-when tagging one needs to enter tag> ENTER then ENTER again with an empty prompt to save the tag$ 
-****** Hippie
-******* add own expansion
+********* Hippie
+********** add own expansion
 If hippie-expand fails to find any satisfactory expansion, you may want to add a new one by using function `inverse-add-global-abbrev. The following should probably be the last function in `hippie-expand-try-functions-list:
 #+BEGIN_SRC sh
 
@@ -27042,14 +27168,14 @@ If hippie-expand fails to find any satisfactory expansion, you may want to add a
 	  (he-reset-string)))
 
 #+END_SRC
-****** Auctex
-******* make auctex load on startup when installed through elmpa
+********* Auctex
+********** make auctex load on startup when installed through elmpa
 Instead of loading nonexistent auctex.el do
 #+BEGIN_SRC emacs-lisp :results none
 (require 'tex)
 #+END_SRC
-****** Helm
-******* Helm locate
+********* Helm
+********** Helm locate
 First be sure you have locate installed on your system. Most GNU/Linux distros come with locate included, you update or create the database with updatedb command. 
 
 `Search files`
@@ -27065,18 +27191,18 @@ Example:
 Pattern: emacs -b -e -n 12
 
 You can also launch helm-locate from helm-find-files, just do C-x C-f. (With a prefix arg it will let you choose a local DB file)
-******* find in files (C-x f)
+********** find in files (C-x f)
 use:
 `helm-for-files`
-******* helm org integration
-******** searh only org headers (top level) with helm
+********** helm org integration
+*********** searh only org headers (top level) with helm
 use:
 
 'Helm-org-headline'
-******* helm colors
+********** helm colors
 helm-colors
-******* config
-********  Helm commands
+********** config
+***********  Helm commands
 helm-mini is a Helm command to switch buffers or open recent files. For me this is the most useful Helm command and I use it all the time instead of other buffer switchers like iswitchb or ido-switch-buffer. The source code:
 
 #+BEGIN_SRC emacs-lisp :results none
@@ -27094,7 +27220,7 @@ We can see that it calls helm-other-buffer with 3 sources, first a list of open 
 Helm sources
 
 Sources like helm-source-recentf configure what the source will contain 
-****** google-contacts
+********* google-contacts
 
 http://julien.danjou.info/projects/emacs-packages#google-contacts
 
@@ -27136,8 +27262,8 @@ You can integrate directly Google Contacts into message-mode;
 #+END_SRC
 Then you can use TAB to go to complete e-mail addresses in the header fields.
 
-**** registers
-***** basics
+******* registers
+******** basics
 
 In emacs, we have a special clipboard with multiple places to store
 things, each named by a single number or letter. We call these places
@@ -27151,14 +27277,14 @@ C-x r s 2, and to insert the contents of that register later, you'd do
 C-x r i 2. It's a really useful thing to add to your emacs muscle
 memory.
 
-***** launch a file through registers (vim like marks)
+******** launch a file through registers (vim like marks)
 
 use emacs registers to store files which I use often. I would store
 '~/.emacs' in a register:
  (set-register ?e (cons 'file "~/.emacs"))
  and open it with *C-x r j e*
 
-***** viewing register contents
+******** viewing register contents
 
 viewing register contents
  One obvious problem with registers is that for most people it's very
@@ -27174,16 +27300,16 @@ the other ones:
  (require 'list-register)
  (global-set-key (kbd "C-x r v") 'list-register)
 
-***** set marks in registry
+******** set marks in registry
 
 Save current mark to register "l":
  C-x r <space> l
  Move to mark saved in register "l":
  C-x r j l
 
-**** review/spelling
-***** Spelling
-****** How to have spell-checker turned on all the time (flyspell)
+******* review/spelling
+******** Spelling
+********* How to have spell-checker turned on all the time (flyspell)
 How to have spell-checker turned on?
 
 Call flyspell-mode or flyspell-buffer. To have it always on, put the
@@ -27194,19 +27320,19 @@ following in your emacs init file:
 
 This is under the menu --Tools --Spell Checking---.
 
-****** spell check word/buffer
+********* spell check word/buffer
 To check a single work use M-$.
 
 You can start checking the whole buffer with
 
 'M-x ispell-buffer'
-****** Spell check word/buffer/selection
+********* Spell check word/buffer/selection
 
 to spell check a word use 'ispell-word' default is 'M-$' (> Meta-Shift-4)
 
 to spell check a selection use a 
 
-****** ispell keybinds when checking
+********* ispell keybinds when checking
 
 'SPC'- Skip this word--continue to consider it incorrect, but don't change it here.
 
@@ -27248,7 +27374,7 @@ C-l
 C-z
     This key has its normal command meaning (suspend Emacs or iconify this frame).
     
-***** convert html to org using pandoc
+******** convert html to org using pandoc
 
 *Org-mode:*
  pandoc -s -S README -o example27.org
@@ -27258,21 +27384,21 @@ C-z
  **Warning** if you get an error open the html file in an editor and
 save it with utf-8 encoding
 
-**** save
-***** save as 
+******* save
+******** save as 
 use:
 | bind | Actiopn |
 | C-x  | C-w     |
 |      |         |
 
 as the gui save may have issues
-***** save marked region
+******** save marked region
 'write-region' 
 will save the current marked region start end filename &optional append visit lockname mustbenew
 This function writes the region delimited by start and end in the current buffer into the file specified by filename.  
-**** Search Text, FindReplace Text
-***** regex
-****** escape characters
+******* Search Text, FindReplace Text
+******** regex
+********* escape characters
 
 Escape Regex Chars
  All these commands uses regex to search. So, if you simply want to
@@ -27281,7 +27407,7 @@ characters, you need to escape them. Here some commonly used regex
 characters that you'll need to replace:
  [[macsen_files/Image_uAzmRVDZTNs1blt9dZ9E2g_0001.png]]
 
-***** search
+******** search
 
 
 
@@ -27299,10 +27425,10 @@ To search for the word that is under cursor, type Ctrl+sCtrl+w.
 This can save you some typing. Also, Ctrl+s twice will search your
 last searched word.
 
-***** search for current word
+******** search for current word
 typing C-s (for isearch) followed by C-w which searches for the current word
 
-***** find and replace
+******** find and replace
 How to findreplace?
 
 Press Alt+% (query-replace). Then, emacs will prompt you for the
@@ -27321,7 +27447,7 @@ Emacs]].
  [[macsen_files/emacs_menu_replace.png]]
  Replace commands are under the menu Edit  Replace
 
-***** append a character at end/start of each line			:Fav:
+******** append a character at end/start of each line			:Fav:
 Use 'replace-regexp' for this purpose, with the '$' regexp metacharacter that matches end-of-line or '^' for start of line.
 
 IE: Go to the start of the buffer, and then do M-x replace-regexp, and answer $ then ~yourtext~ to the two prompts.
@@ -27329,12 +27455,12 @@ IE: Go to the start of the buffer, and then do M-x replace-regexp, and answer $ 
 Or, in emacs-speak:
 M-x replace-regexp RET $ RET ~yourtext~ RET
  
-***** insert text at specific column position
+******** insert text at specific column position
       you can write a macro that use M-g TAB 
 
 M-g TAB allows you to go to a specific column. You could write a macro using C-x ( then type all the keysequence you want using a tool like M-g TAB, even a regexp search, then stop recording the macro by pressing C-x ) then execute your macro by C-x e repeat your macro by C-x z zzzzz
  
-***** How to findreplace for all files in a dir
+******** How to findreplace for all files in a dir
 
 
 
@@ -27357,18 +27483,18 @@ For a detailed step-by-step tutorial,
 see[[http://ergoemacs.org/emacs/find_replace_inter.html][Interactive
 FindReplace String Patterns on Multiple Files]].
 
-***** How to search the last searched string
+******** How to search the last searched string
 
 How to search the last searched string?
  Type Ctrl+s Ctrl+s to search the same word searched last time.
 
-***** How to search the string under cursor without typing it
+******** How to search the string under cursor without typing it
 
 How to search the string under cursor without typing it?
  Type Ctrl+s Ctrl+w to search the word under the cursor. You can
 type Ctrl+w multiple times to expand the word selection.
 
-***** How to highlight all occurrences of word in a files
+******** How to highlight all occurrences of word in a files
 
 
 
@@ -27377,16 +27503,16 @@ How to highlight all occurrences of word in a file?
 Call highlight-phrase, highlight-regexp,
 highlight-lines-matching-regexp.
 
-**** setting (lisp)
-***** setting common variables at once (setq)
+******* setting (lisp)
+******** setting common variables at once (setq)
 
 setq can set multiple variables at once. For example, in my .emacs file
 on OS X I have:
  (setq mac-command-modifier 'meta
  mac-option-modifier 'super)
  
-**** text tricks
-***** How to add a prefix to every line? (such as # or //
+******* text tricks
+******** How to add a prefix to every line? (such as # or //
 
 How to add a prefix to every line? (such as # or //)
  Mark Ctrl+Space the beginning of first line and move cursor to the
@@ -27395,14 +27521,14 @@ then type what you want to insert. This command can be used to insert a
 vertical column of string across mulitple lines at any column position,
 not just at the beginning of lines.
 
-***** How to delete the first few n chars of every line
+******** How to delete the first few n chars of every line
 
 Mark Ctrl+Space the beginning of first line and move cursor to the
 last line, and move it to the right n chars. Then type Ctrl+x r k
 (kill-rectangle). This command can be used to delete any rectangular
 block of text, not just at the beginning of lines.
 
-***** Working with Lines
+******** Working with Lines
 
 
 
@@ -27461,8 +27587,8 @@ field is 1, not 0.)
 This will sort the line by the 2nd column, and the fields are compared
 as strings.
 
-***** sorting
-****** sorting lines
+******** sorting
+********* sorting lines
 How to sort lines?
 mark (V in evil mode) the region you want and issue sort-lines
 
@@ -27471,11 +27597,11 @@ you can call reverse-region to reverse order in region by lines.
 To sort lines by a specific column, use 'sort-fields' or sort-numeric-fields. ("fields" are separated by space or tabs. First
 field is 1, not 0.)
 
-***** How to delete trailing white spaces in source code?
+******** How to delete trailing white spaces in source code?
 
 How to delete trailing white spaces in source code?
 Call delete-trailing-whitespace does it to the whole buffer.
-***** year increment
+******** year increment
 
 1.Put your code you need to be copied in a buffer called "code-fragment"
 
@@ -27495,18 +27621,18 @@ Call delete-trailing-whitespace does it to the whole buffer.
                                           (int-to-string (+ year n))
                                           s))))))
 #+END_SRC
-***** create a horizonatl/vertical list
+******** create a horizonatl/vertical list
 Press and hold Enter to create several empty lines.
 Now, select those empty lines.
 Call ~rectangle-number-line~
 it'll insert verticak numbers.
 Now to create horizontal numbers, just select the region, and call ~fill-region~, to compact them.
-**** view
-***** How to make spaces and tabs visible?
+******* view
+******** How to make spaces and tabs visible?
 
 Call whitespace-mode, available in emacs 23.
 
-***** colors
+******** colors
 
 Colors
  To view the many colors and their hexadecimal values in RGB model, type
@@ -27515,7 +27641,7 @@ HTML.
  emacs showing colors
  [[macsen_files/Image_smb9wkhN26y70CiVCOfIXQ_0001.png]]
 
-***** Displaying Line Numbers and Column Number
+******** Displaying Line Numbers and Column Number
 
 How to show line numbers?
  You can have line numbers displayed in the left vertical margin. To
@@ -27530,7 +27656,7 @@ beginning of line.
  To always have it on, put the following code in your emacs init file.
  (column-number-mode 1)
 
-***** How to have lines soft wrapped at word boundary
+******** How to have lines soft wrapped at word boundary
 
 
 
@@ -27546,7 +27672,7 @@ permanently, use:
 
  (global-visual-line-mode 1) ; 1 for on, 0 for off.
 
-***** How to set the spacing between lines
+******** How to set the spacing between lines
 
 How to set the spacing between lines?
  Put the following elisp code in your emacs init file for easy toggle.
@@ -27563,15 +27689,15 @@ height."
 novels.
  Note that the spacing height between lines also depends on font
 
-***** wrap
-****** disable wrap
+******** wrap
+********* disable wrap
 
 How to make lines NOT wrap?
  Use the menu Options  Truncate Long Lines in this Buffer.
  Or
  call toggle-truncate-lines.
 
-****** How to have lines soft wrapped at word boundary
+********* How to have lines soft wrapped at word boundary
 
 
 
@@ -27587,8 +27713,8 @@ permanently, use:
 
  (global-visual-line-mode 1) ; 1 for on, 0 for off.
 
-**** Read Only 
-***** to make current file 'read only'
+******* Read Only 
+******** to make current file 'read only'
 issue:
 ?C-x C-q?
 
@@ -27597,7 +27723,7 @@ M-x `read-only-mode`
 or
 
 M-x `toggle-read-only`
-***** to mark a file permanently 'read only'
+******** to mark a file permanently 'read only'
 add this as the 'last' line of the file!
 
 #+BEGIN_SRC emacs-lisp :results none
@@ -27606,7 +27732,7 @@ buffer-read-only: t
 End:
 #+END_SRC
 
-***** read only by filename extension
+******** read only by filename extension
 another way is to set emacs to open some file read only by filename extension
 
 ₆In example₆:
@@ -27614,12 +27740,12 @@ another way is to set emacs to open some file read only by filename extension
 #+BEGIN_SRC sh
 add-to-list 'auto-mode-alist '("\\.txt\\'" . read-only-mode))﻿ 
 #+END_SRC
-***** Read only hook for orgmode (using viewer-mode)
+******** Read only hook for orgmode (using viewer-mode)
 add this to your config
 #+BEGIN_SRC emacs-lisp :results none
 (add-hook 'org-mode-hook (lambda () (view-mode 1)))
 #+END_SRC
-***** make portion of buffer readonly
+******** make portion of buffer readonly
 you can make a portion of a buffer read-only using text properties. The code below defines two new commands make-region-read-only and make-region-read-write that affect the region between point and mark. Put the code in your .emacs file to make the commands available via Meta-x
 
 #+BEGIN_SRC emacs-lisp :results none
@@ -27634,13 +27760,13 @@ you can make a portion of a buffer read-only using text properties. The code bel
     (put-text-property start end 'read-only nil)))
 #+END_SRC 
 
-*** 'org-mode'
-    :PROPERTIES:
-    :ID:       be4759e1-2951-4c91-a155-056bc2a16d9f
-    :END:
-**** `Mobile org`
-***** Setup in emacs
-****** Setting up the staging area on the PC (Server)
+****** 'org-mode'
+       :PROPERTIES:
+       :ID:       be4759e1-2951-4c91-a155-056bc2a16d9f
+       :END:
+******* `Mobile org`
+******** Setup in emacs
+********* Setting up the staging area on the PC (Server)
 The easiest way to create that directory is to use a free Dropbox.com account. When MobileOrg first connects to your Dropbox, it will create a directory MobileOrg inside the Dropbox. After the directory has been created, tell Emacs about it:
 
 #+BEGIN_SRC emacs-lisp 
@@ -27668,7 +27794,7 @@ in your emacs config check the relevant agenda section, In Example
 (setq org-agenda-files '("~/org/files/agenda/"))
 #+END_SRC
 
-****** Pushing to MobileOrg
+********* Pushing to MobileOrg
 
 This operation:
 
@@ -27696,7 +27822,7 @@ The push operation also creates a special Org file file:agendas.org with all cus
 Finally, Org writes the file file:index.org, containing links to all other files.
 MobileOrg first reads this file from the server, and then downloads all agendas and Org files listed in it. To speed up the download, MobileOrg will only read files whose checksums have changed.
 
-****** Pulling from MobileOrg
+********* Pulling from MobileOrg
 
 When MobileOrg synchronizes with the server, it not only pulls the Org files for viewing. It also appends captured entries and pointers to flagged and changed entries to the file mobileorg.org on the server. Org has a pull operation that integrates this information into an inbox file and operates on the pointers to flagged entries. Here is how it works:
 
@@ -27713,7 +27839,7 @@ and appends them to the file pointed to by the variable `org-mobile-inbox-for-pu
 Pressing ? in that special agenda will display the full flagging note in another window and also push it onto the kill ring. So you could use ? z C-y C-c C-c to store that flagging note as a normal note in the entry. Pressing ? twice in succession will offer to remove the :FLAGGED: tag along with the recorded flagging note (which is stored in a property). In this way you indicate that the intended processing for this flagged entry is finished. 
 
 If you are not able to process all flagged entries directly, you can always return to this agenda view2 using C-c a ?.
-****** Automated push/pull
+********* Automated push/pull
 use this in your init file:
 
 The code below will check if an org file that was saved is in the mobile agenda list and if it is the case it will set an idle timer to schedule a sync 30 seconds in the future. This will make it possible to do a chain of edits in several file, resulting in Emacs running push only once after it has been idle for the specified number of seconds.
@@ -27742,14 +27868,14 @@ The code below will check if an org file that was saved is in the mobile agenda 
 
 #+END_SRC
 
-***** Setup android
-****** Initial Setup
+******** Setup android
+********* Initial Setup
 1.make sure you finished the previous emacs setup on the pc
 !Important NOTE If you are a Windows user, you will need to have md5sum.exe or sha1sum.exe in your system path before org-mobile-push will succeed!
 %TIP:you can use MobileOrg from Locale or Tasker by looking under their Plugins sections. These will be available immediately after MobileOrg is installed%
 %If this file does not exist when you try to sync, MobileOrg will attempt to create it%
 
-****** setup backend and initial sync
+********* setup backend and initial sync
 When you first start MobileOrg you will be presented with a setup Wizard. You can use this wizard to set up any of the basic Synchronizer, but dropbox works best and is easy to setup.
 @WARNING:make sure you have the dropbox app installed on your android system before this@
 
@@ -27758,7 +27884,7 @@ the files that were pushed form emacs-orgmode should appear on the phone.
 
 %Tip-Notes are appended to the end of the mobileorg.org file%
 
-****** Setting up Android Calendar Integration
+********* Setting up Android Calendar Integration
 MobileOrg can synchronize your TODO items that have a DEADLINE or SCHEDULE element to your Android calendar. This also allows you to synchronize your org tasks into your Google Calendar.
 Set up
 
@@ -27766,8 +27892,8 @@ First, create a calendar in Google calendar that will hold these entries. You ca
 Visit the calendar settings section of the MobileOrg preferences
 
 Choose the calendar you want to sync with. It is recommended you clear your database after setting this to make sure all of your org files are pulled to the device. MobileOrg will examine org files as they are synced to the device and any new or updated items will be added to the Calendar
-***** Using Mobileorg
-****** Where do captures go after a sync?
+******** Using Mobileorg
+********* Where do captures go after a sync?
 Notes are appended to the end of the file:mobileorg.org file on your 'dropbox/WebDAV/etc' server. 
 
 If this file does not exist when you try to sync, MobileOrg will attempt to create it.
@@ -27792,7 +27918,7 @@ org-mobile-inbox-for-pull
 
 4.!Note! that the changes you made to existing outline nodes will simply be automatically applied by the org-mobile-pull function. Those changes will only appear in from-mobile.org if they could not be applied (e.g., if the target Org-file changed so much that the context can no longer be located)
 
-****** 'sync notes'
+********* 'sync notes'
 just add the notes you want to be synced to your agenda folder (copy manually)
 the agenda folder is defined in the org config:
 #+BEGIN_SRC sh
@@ -27800,12 +27926,12 @@ the agenda folder is defined in the org config:
 (setq org-agenda-files '("~/org/files/agenda/"))
 #+END_SRC
 
-**** BASE
-***** Manual
+******* BASE
+******** Manual
 To read the on-line documentation try:
 ?M-x org-info ?
-***** Install
-****** Downloading Org as an archive					:Fav:
+******** Install
+********* Downloading Org as an archive					:Fav:
 
 You can download Org latest release from [[http://orgmode.org/][Org's website]] and simply extract them to where you want, in my case
 
@@ -27824,7 +27950,7 @@ your load-path:
 (add-to-list 'load-path "~/path/to/orgdir/contrib/lisp" t)
 #+END_SRC
 
-****** Using Emacs packaging system
+********* Using Emacs packaging system
 
 Recent Emacs distributions include a packaging system which lets you
 install Elisp libraries. You can install Org with M-x package-install
@@ -27834,7 +27960,7 @@ account, initialize the package system with =(package-initialize)= in
 your .emacs before setting any Org option. If you want to use Org's
 package repository, check out the [[http://orgmode.org/elpa.html][Org ELPA page]].
 
-****** Using Org's git repository
+********* Using Org's git repository
        
 
 You can clone Org's repository and install Org like this:
@@ -27858,7 +27984,7 @@ compilation/installation options.
 For more detailed explanations on Org's build system, please check the
 Org Build System page on
 [[http://orgmode.org/worg/dev/org-build-system.html][Worg]].
-***** `Update org from Git`
+******** `Update org from Git`
 
 #+BEGIN_EXAMPLE
 cd ~/.emacs.d/src/
@@ -27866,7 +27992,7 @@ git pull
 make autoloads
 #+END_EXAMPLE
 
-***** Basic setup
+******** Basic setup
 Here are a few things about basic setup that many people change.
 
 org-directory
@@ -27878,8 +28004,8 @@ When visiting an Org file, in what folding state do I first want to see it? Many
 org-archive-location
 When archiving an entry, where will it go?
 
-**** archiving
-***** base
+******* archiving
+******** base
 use the following lines in your config to define where the archives go
 #+BEGIN_SRC sh
 (setq org-archive-location (concat org-directory "archive/%s_archive::"))
@@ -27889,9 +28015,9 @@ then to archive issue:
 C-c C-x C-a     (org-archive-subtree-default)
 
 Archive the current entry using the command specified in the variable org-archive-default-command
-**** agenda and TODO
-***** Agenda
-****** sample custom agenda command
+******* agenda and TODO
+******** Agenda
+********* sample custom agenda command
 #+BEGIN_SRC emacs-lisp :results none
 (setq org-agenda-custom-commands 
       '(("c" "Desk Work" tags-todo "computer" ;; (1) (2) (3) (4)
@@ -27913,7 +28039,7 @@ The first line in this custom command contains:
 (6) the agenda display will sort the todos first by priority (highest priority last), then by estimated effort (highest effort first)—regardless or your global org-agenda-sorting-strategy.
 (7) specifies that this agenda view should be exported as HTML to "~/computer.html" when the agenda export function is called (C-c a e)        
 #+END_EXAMPLE
-****** comprehensive options
+********* comprehensive options
 #+BEGIN_SRC emacs-lisp :results none
 (setq org-agenda-custom-commands
            '(("x" agenda)
@@ -27956,7 +28082,7 @@ Note that the *-tree agenda views need to be called from an Org buffer as they o
 
 #+END_EXAMPLE
 
-****** block
+********* block
 
 Another possibility is the construction of agenda views that comprise the results of several commands, each of which creates a block in the agenda buffer. The available commands include agenda for the daily or weekly agenda (as created with C-c a a), alltodo for the global TODO list (as constructed with C-c a t), and the matching commands discussed above: todo, tags, and tags-todo. Here are two examples:
 
@@ -27991,7 +28117,7 @@ another example
         ;; ...other commands here
         ))
 #+END_SRC
-****** define multiple critera (₆In example₆ todos)
+********* define multiple critera (₆In example₆ todos)
 use a pipe between the items:
 #+BEGIN_SRC emacs-lisp :results none
 ("r" "research" todo "TODO|NEXT" 
@@ -28000,12 +28126,12 @@ use a pipe between the items:
           (org-agenda-sorting-strategy 
           '(priority-down effort-down)
 #+END_SRC
-****** sorting methods
+********* sorting methods
 #+BEGIN_SRC emacs-lisp :results none
 (priority-down effort-down todo-state-down) 
 #+END_SRC 
-***** Todo
-****** PULL TODO from a set of files/ALL
+******** Todo
+********* PULL TODO from a set of files/ALL
 you can define where to pull TODO to the agenda view
 
 For agenda files locations, add each location within " " to the org-agenda-file config:
@@ -28026,7 +28152,7 @@ To do a recursive todo search in ALL org file you can use the following code
 ))
 #+END_SRC
 
-****** adding custom TODO states in org per file/buffer
+********* adding custom TODO states in org per file/buffer
 you can do this globally in your config:
 
 #+BEGIN_SRC emacs-lisp :results none
@@ -28044,7 +28170,7 @@ and you can do this locally per file/buffer:
 
 Define the TODO states you find useful and single letters for fast selection. Customize the variable org-todo-keywords or simply do this right in the file with putting this on the top part of the file
 
-****** Repeated tasks
+********* Repeated tasks
 
 Some tasks need to be repeated again and again. Org mode helps to organize such tasks using a so-called repeater in a DEADLINE, SCHEDULED, or plain timestamp. In the following example
 
@@ -28059,24 +28185,24 @@ the +1m is a repeater; the intended interpretation is that the task has a deadli
 DEADLINE: <2005-10-01 Sat +1m -3d>.  
 #+END_EXAMPLE
 
-**** Babel (code blocks)
-***** run ssh with command inside org
+******* Babel (code blocks)
+******** run ssh with command inside org
 use something like this
 #+begin_src sh :dir /ssh:zeltak@192.168.0.2:
 ls -la
     #+end_src
-***** "tangling"
+******** "tangling"
 'tangling' is the proccess of creating pure source code files by extracting code from source blocks in the current buffer. 
 During “tangling” of code blocks their bodies are expanded using org-babel-expand-src-block which can expand both variable and “noweb” style references. In order to tangle a code block it must have a :tangle header argument (see [[*header%20arguments][header arguments]] )
-***** disable confirmation checks for certain languages
+******** disable confirmation checks for certain languages
 for example for lisp
 #+BEGIN_SRC emacs-lisp :results none
 (defun my-org-confirm-babel-evaluate (lang body)
     (not (string= lang "emacs-lisp")))  ; don't ask for lisp
 (setq org-confirm-babel-evaluate 'my-org-confirm-babel-evaluate)
 #+END_SRC
-***** header arguments
-****** intro
+******** header arguments
+********* intro
 http://orgmode.org/manual/Specific-header-arguments.html#Specific-header-arguments
 
 Many aspects of the evaluation and export of code blocks are controlled through header arguments. These can be specified globally, at the file level, at the outline subtree level, and at the individual code block level. The following describes some of the header arguments. 
@@ -28092,7 +28218,7 @@ The structure of code blocks is as follows:
 
 Where <name> is a string used to name the code block, <language> specifies the language of the code block (e.g. emacs-lisp, shell, R, python, etc...), <switches> can be used to control export of the code block, <header arguments> can be used to control many aspects of code block behavior as demonstrated below, and <body> contains the actual source code. 
 
-****** 'Common examples'
+********* 'Common examples'
 
 `silence results` (no output)
 #+BEGIN_EXAMPLE
@@ -28110,8 +28236,8 @@ Where <name> is a string used to name the code block, <language> specifies the l
 :results verbatim 
 #+END_EXAMPLE
 
-****** :results 
-******* info
+********* :results 
+********** info
 There are four classes of `:results` header argument. Only one option per class may be supplied per code block.
 
 v `collection` header arguments specify how the results should be collected from the code block
@@ -28122,14 +28248,14 @@ v `collection` header arguments specify how the results should be collected from
 
 `handling` header arguments specify how the results of evaluating the code block should be handled. 
 
-******* Collection
+********** Collection
 The following options are mutually exclusive, and specify how the results should be collected from the code block.
 
 `value` This is the default. The result is the value of the last statement in the code block. This header argument places the evaluation in functional mode. Note that in some languages, e.g., Python, use of this result type requires that a return statement be included in the body of the source code block. E.g., :results value.
 
 `output` The result is the collection of everything printed to STDOUT during the execution of the code block. This header argument places the evaluation in scripting mode. E.g., :results output. 
 
-******* Type
+********** Type
 
 The following options are mutually exclusive and specify what type of results the code block will return. By default, results are inserted as either a table or scalar depending on their value.
 
@@ -28141,7 +28267,7 @@ The following options are mutually exclusive and specify what type of results th
 
 `file` The results will be interpreted as the path to a file, and will be inserted into the Org mode buffer as a file link. E.g., :results value file. 
 
-******* Format
+********** Format
 The following options are mutually exclusive and specify what type of results the code block will return. By default, results are inserted according to the type as specified above.
 
 `raw` The results are interpreted as raw Org mode code and are inserted directly into the buffer. If the results look like a table they will be aligned as such by Org mode. E.g., :results value raw.
@@ -28158,7 +28284,7 @@ The following options are mutually exclusive and specify what type of results th
 
 `drawer` The result is wrapped in a RESULTS drawer. This can be useful for inserting raw or org syntax results in such a way that their extent is known and they can be automatically removed or replaced. 
 
-******* Handling
+********** Handling
 
 The following results options indicate what happens with the results once they are collected.
 
@@ -28172,7 +28298,7 @@ The following results options indicate what happens with the results once they a
 
 `prepend` If there are pre-existing results of the code block then the new results will be prepended to the existing results. Otherwise the new results will be inserted as with replace
 
-****** :Session
+********* :Session
 
 #+BEGIN_EXAMPLE
 :session
@@ -28186,9 +28312,9 @@ A string passed to the :session header argument will give the 'session a name'.
 
 This makes it possible to run concurrent sessions for each interpreted language.
 
-****** :shebang
+********* :shebang
 Setting the :shebang header argument to a string value (e.g., :shebang "#!/bin/bash") causes the string to be inserted as the first line of any tangled file holding the code block, and the file permissions of the tangled file are set to make it executable.
-****** :eval
+********* :eval
 The :eval header argument can be used to limit the evaluation of specific code blocks. The :eval header argument can be useful for protecting against the evaluation of dangerous code blocks or to ensure that evaluation will require a query regardless of the value of the org-confirm-babel-evaluate variable. The possible values of :eval and their effects are shown below.
 
 never or no
@@ -28201,11 +28327,11 @@ query-export
     Evaluation of the code block during export will require a query. 
 
 If this header argument is not set then evaluation is determined by the value of the org-confirm-babel-evaluate variable see Code evaluation security.
-****** :file
+********* :file
 The header argument :file is used to specify an external file in which to save code block results. After code block evaluation an Org mode style [[file:]] link (see Link format) to the file will be inserted into the Org mode buffer. Some languages including R, gnuplot, dot, and ditaa provide special handling of the :file header argument automatically wrapping the code block body in the boilerplate code required to save output to the specified file. This is often useful for saving graphical output of a code block to the specified file.
 
 The argument to :file should be either a string specifying the path to a file, or a list of two strings in which case the first element of the list should be the path to a file and the second a description for the link.
-****** :dir and remote execution
+********* :dir and remote execution
 While the :file header argument can be used to specify the path to the output file, :dir specifies the default directory during code block execution. If it is absent, then the directory associated with the current buffer is used. In other words, supplying :dir path temporarily has the same effect as changing the current directory with M-x cd path RET, and then not supplying :dir. Under the surface, :dir simply sets the value of the Emacs variable default-directory.
 
 When using :dir, you should supply a relative path for file output (e.g., :file myfile.jpg or :file results/myfile.jpg) in which case that path will be interpreted relative to the default directory.
@@ -28230,14 +28356,14 @@ Most of this functionality follows immediately from the fact that :dir sets the 
 `Further points`
 If :dir is used in conjunction with :session, although it will determine the starting directory for a new session as expected, no attempt is currently made to alter the directory associated with an existing session.
 :dir should typically not be used to create files during export with :exports results or :exports both. The reason is that, in order to retain portability of exported material between machines, during export links inserted into the buffer will not be expanded against default directory. Therefore, if default-directory is altered using :dir, it is probable that the file will be created in a location to which the link does not point.
-****** :exports
+********* :exports
 The :exports header argument specifies what should be included in HTML or LaTeX exports of the Org mode file.
 
     code The default. The body of code is included into the exported file. E.g., :exports code.
     results The result of evaluating the code is included in the exported file. E.g., :exports results.
     both Both the code and results are included in the exported file. E.g., :exports both.
     none Nothing is included in the exported file. E.g., :exports none.
-****** :comments
+********* :comments
 
 By default code blocks are tangled to source-code files without any insertion of comments beyond those which may already exist in the body of the code block. The :comments header argument can be set as follows to control the insertion of extra comments into the tangled code file.
 
@@ -28247,7 +28373,7 @@ yes A synonym for “link” to maintain backwards compatibility.
 org Include text from the Org mode file as a comment. The text is picked from the leading context of the tangled code and is limited by the nearest headline or source block as the case may be.
 both Turns on both the “link” and “org” comment options.
 noweb Turns on the “link” comment option, and additionally wraps expanded noweb references in the code block body in link comments.
-****** :cache
+********* :cache
 
 The :cache header argument controls the use of in-buffer caching of the results of evaluating code blocks. It can be used to avoid re-evaluating unchanged code blocks. Note that the :cache header argument will not attempt to cache results when the :session header argument is used, because the results of the code block execution may be stored in the session outside of the Org mode buffer. The :cache header argument can have one of two values: yes or no.
 
@@ -28255,14 +28381,14 @@ The :cache header argument controls the use of in-buffer caching of the results 
     yes Every time the code block is run a SHA1 hash of the code and arguments passed to the block will be generated. This hash is packed into the #+RESULTS: line and will be checked on subsequent executions of the code block. If the code block has not changed since the last time it was evaluated, it will not be re-evaluated. 
 
 Code block caches notice if the value of a variable argument to the code block has changed. If this is the case, the cache is invalidated and the code block is re-run. In the following example, caller will not be re-run unless the results of random have changed since it was last run.
-***** batch proccess code blokcs
+******** batch proccess code blokcs
 for a subtree/buffer
 #+BEGIN_SRC emacs-lisp :results none
 org-babel-execute-buffer
 ;and for subtrees 
 org-babel-execute-subtree
 #+END_SRC
-***** auto display images after eval
+******** auto display images after eval
 Try (org-redisplay-inline-images). Note "re".
 
 #+BEGIN_SRC <lang> :post (org-redisplay-inline-images)
@@ -28270,8 +28396,8 @@ Try (org-redisplay-inline-images). Note "re".
 #+END_SRC
 #+RESULTS:
  
-**** bugs
-***** files opend are slow- disable line mode
+******* bugs
+******** files opend are slow- disable line mode
 
 line modes cause org mode to get really slow
  I disable linum for some or all .org files only
@@ -28279,8 +28405,8 @@ line modes cause org mode to get really slow
  (defun my-org-mode-hook ()
  (linum-mode 0))
  (add-hook 'org-mode-hook 'my-org-mode-hook)
-**** Bugs/fixes
-***** error in mobile-org-push: org-id-add-location: Wrong type argument: hash-table-p
+******* Bugs/fixes
+******** error in mobile-org-push: org-id-add-location: Wrong type argument: hash-table-p
 if you get this error:
 org-id-add-location: Wrong type argument: hash-table-p
 
@@ -28289,7 +28415,7 @@ remove
 file:~/.emacs.d/.org-id-locations
 
 and restart emacs
-***** !capture mode wipes target!
+******** !capture mode wipes target!
 this was casued by aggresive saving behivour:
 #+BEGIN_SRC emacs-lisp :results none
 (setq auto-save-visited-file-name t)
@@ -28305,7 +28431,7 @@ this was casued by aggresive saving behivour:
 #+END_SRC
 
 
-***** org mode very slow on large file
+******** org mode very slow on large file
 if Org is very slow on big file (even 100k) the casue may linium-mode (show line modes)
 to fix this disable linium mode in org with the following hook
 
@@ -28318,8 +28444,8 @@ to fix this disable linium mode in org with the following hook
 
 
 #+END_SRC
-**** capture
-***** launch org capture from command line (for quick WM binds)
+******* capture
+******** launch org capture from command line (for quick WM binds)
 1.add this code in your .emacs
 
 #+BEGIN_SRC emacs-lisp
@@ -28351,7 +28477,7 @@ frame"
 /usr/bin/emacsclient -n -e '(make-capture-frame)'
 #+end_src
  
-***** default keybinds
+******** default keybinds
 
 C-c c     (org-capture)
 Call the command org-capture. Note that this keybinding is global and not active by default: you need to install it. If you have templates defined see Capture templates, it will offer these templates for selection or use a new Org outline node as the default template. It will insert the template into the target file and switch to an indirect buffer narrowed to this new node. You may then insert the information you want.
@@ -28378,8 +28504,8 @@ Visit the last stored capture item in its buffer.
 You can also jump to the bookmark org-capture-last-stored, which will automatically be created unless you set org-capture-bookmark to nil.
 
 To insert the capture at point in an Org buffer, call org-capture with a C-0 prefix argument.
-***** Templates
-****** base
+******** Templates
+********* base
 see the help file below for full details. in short:
 
 #+BEGIN_SRC emacs-lisp
@@ -28391,8 +28517,8 @@ see the help file below for full details. in short:
 
 #+END_SRC
 
-****** Detailed info on Capture templates
-******* BASE example
+********* Detailed info on Capture templates
+********** BASE example
 #+BEGIN_EXAMPLE
 ("KEYS" "DISCRIPTION" TYPE (TARGET)
 "*  %^{Description} %^g Added: %U" )
@@ -28404,7 +28530,7 @@ example:
 ("x" "todo_nix" entry (file+headline "~/org/files/agenda/TODO.org" "Linux")
 #+END_SRC
 
-******* keys 
+********** keys 
 that willselect the template, as a string, characters only, for example "a" for a template to be selected with a single key, or "bt" for selection with two keys. When using several keys, keys using the same prefix key must be sequential in the list and preceded by a 2-element entry explaining the prefix key, for example
 
 #+BEGIN_EAMPLE
@@ -28412,11 +28538,11 @@ that willselect the template, as a string, characters only, for example "a" for 
 #+END_EXAPLE
 If you donot define a template for the C key, this key will be used to open the customize buffer for this complex variable.
 
-******* description
+********** description
 
 A short sring describing the template, which will be shown during selection.
 
-******* type
+********** type
 
 The type f entry, a symbol. Valid values are:
 
@@ -28435,7 +28561,7 @@ a new lin in the first table at the target location. Where exactly the line will
 `plain`
 Text to b inserted as it is. 
 
-******* Target
+********** Target
 
 Specification of where the captured item should be placed. In Org mode files, targets usually define a node. $Entries will become children of this node$. Other types will be added to the table or list in the body of this node. Most target specifications contain a file name. If that file name is the empty string, it defaults to org-default-notes-file. A file can also be given as a variable, function, or Emacs Lisp form.
 
@@ -28471,9 +28597,9 @@ Valid values are:
 (function function-finding-location)
     Most general way, write your own function to find both file and location. 
 
-******* template
+********** template
 The template for creating the capture item. If you leave this empty, an appropriate default template will be used. Otherwise this is a string with escape codes, which will be replaced depending on time and context of the capture call. The string with escapes may be loaded from a template file, using the special syntax (file "path/to/template"). See below for more details. 
-******* Template expansion 
+********** Template expansion 
 
 In the template itself, special '%-escapes'
 allow dynamic insertion of content.If you need one of these sequences literally, escape the '%' with a backslash. The templates are expanded in the order given here:
@@ -28562,7 +28688,7 @@ For specific link types, the following keywords can be used
 | info                            | %:file %:node                                          |
 | calendar                        | %:date                                                 |
 
-******* properties 
+********** properties 
 
 The rest of the entry is a property list of additional options. Recognized properties are:
 
@@ -28600,7 +28726,7 @@ Specification of the location in the table where the new line should be inserted
 
 :kill-buffer
 If the target file was not yet visited when capture was invoked, kill the buffer again after capture is completed.
-******* add tags
+********** add tags
 add as text between 2 :, ₆In example₆ 
 
 #+BEGIN_EXAMPLE
@@ -28608,7 +28734,7 @@ add as text between 2 :, ₆In example₆
  "*  %x :Pre_Release: " )
 #+END_EXAMPLE
 
-***** capture from gmail
+******** capture from gmail
 
     :PROPERTIES:
     :ID:       b3621ce9-0ea5-4d5b-8016-9fcf837b72f5
@@ -28682,22 +28808,22 @@ Then use this in an Org file:
 This way, if Google decides to change it's url structure, all you have
 to do is redefine your link type, instead of all email links.
 
-**** export
-***** export in file options
+******* export
+******** export in file options
 The table of contents is normally inserted directly before the first headline of the file. The depth of the table is by default the same as the number of headline levels, but you can choose a smaller number, or turn off the table of contents entirely, by configuring the variable org-export-with-toc, or on a per-file basis with a line like
 #+BEGIN_EXAMPLE
 #+OPTIONS: toc:2          (only to two levels in TOC)
 #+OPTIONS: toc:nil        (no default TOC at all)
 #+END_EXAMPLE
-***** Publishing
-****** publish to text 
+******** Publishing
+********* publish to text 
 choose:
 #+BEGIN_EXAMPLE
 org-ascii-publish-to-ascii
 org-ascii-publish-to-utf8
 #+END_EXAMPLE
 
-****** example config file for 2 different publishing options:
+********* example config file for 2 different publishing options:
 #+BEGIN_SRC emacs-lisp :results none
      (setq org-publish-project-alist
            '(
@@ -28717,14 +28843,14 @@ org-ascii-publish-to-utf8
                      )
 ))
 #+END_SRC
-**** refile
-****** base 
+******* refile
+********* base 
 To refile tasks in org you need to tell it where you want to refile things.
 
 you can define which files are used for refiling, IE any file in org-agenda-files,the current file etc that contribute to the list of valid refile targets.
 
 I've recently moved to using IDO to complete targets directly. I find this to be faster than my previous complete in steps setup. At first I didn't like IDO but after reviewing the documentation again and learning about C-SPC to limit target searches I find it is much better than my previous complete-in-steps setup. Now when I want to refile something I do C-c C-w to start the refile process, then type something to get some matching targets, then C-SPC to restrict the matches to the current list, then continue searching with some other text to find the target I need. C-j also selects the current completion as the final target. I like this a lot. I show full outline paths in the targets so I can have the same heading in multiple subtrees or projects and still tell them apart while refiling.
-****** Refile with iDO
+********* Refile with iDO
 When I want to refile something I do
 ?C-c C-w?
 to start the refile process, then type something to get some matching targets, then
@@ -28732,8 +28858,8 @@ to start the refile process, then type something to get some matching targets, t
 to restrict the matches to the current list, then continue searching with some other text to find the target I need.
 ?C-j? also selects the current completion as the final target. I like this a lot. I show full outline paths in the targets so I can have the same heading in multiple subtrees or projects and still tell them apart while refiling.
 
-**** Code blocks 
-***** higlighted code blocks inside org-mode
+******* Code blocks 
+******** higlighted code blocks inside org-mode
 make sure you have this in your config:
 
 (setq org-src-fontify-natively t)
@@ -28750,7 +28876,7 @@ Then in your block specify the specific language to highlight , IE for emacs
 
 one can use any language such as R,sh (for bash) etc..
 
-***** run code in org file
+******** run code in org file
 
 #+BEGIN_SRC sh
 
@@ -28767,14 +28893,14 @@ stand and the code an issue C-c C-c
 | config      |
 | config.save |
 | error.log   |
-***** run code with no results (silence code)
+******** run code with no results (silence code)
 to eval code in org with no output (silent) use ':results none' in your code block In example 
 
 #+BEGIN_SRC emacs-lisp :results none
 (global-set-key (kbd "M-p M-y") 'helm-show-kill-ring)
 #+END_SRC
 
-***** ORG choose template
+******** ORG choose template
 
 you can use 
 
@@ -28802,7 +28928,7 @@ The following function prompts for a language (defaulting to the closest one it 
 (previous-line 1)))
 #+END_SRC
 
-**** completions
+******* completions
 
 *Completion*
 Emacs would not be Emacs without completion, and Org mode uses it whenever it makes sense. If you prefer an iswitchb- or ido-like interface for some of the completion prompts, you can specify your preference by setting at most one of the variables org-completion-use-iswitchb org-completion-use-ido.
@@ -28824,10 +28950,10 @@ keyword is already complete, pressing M-<TAB> again will insert example settings
 In the line after #+STARTUP: , complete startup keywords, i.e., valid keys for this line.
 Elsewhere, complete dictionary words using Ispell.
 
-**** contrib/extensions
-***** org-download
-****** configuring
-******* Installing
+******* contrib/extensions
+******** org-download
+********* configuring
+********** Installing
 you can get org-download from:
 https://github.com/abo-abo/org-download
 
@@ -28836,7 +28962,7 @@ and then add it  to your init file:
 #+BEGIN_SRC emacs-lisp :results none
 (load-file "~/.emacs.d/src/extra/org-download/org-download.el")
 #+END_SRC
-******* configure download directory 
+********** configure download directory 
 the location of where org-download stores your files is set as a buffer-local variable that defaults to nil.
 
 You can set it either with customize-group>org-download
@@ -28854,7 +28980,7 @@ Or in the org-mode hook:
 #+END_SRC
 $Note dont have a trailing / at the end$ 
 
-******* configure level of folders images are stored
+********** configure level of folders images are stored
 the level of folders for saved images is set as a buffer-local variable that defaults to nil.
 
 'org-download-heading-lvl'
@@ -28870,15 +28996,15 @@ r can also set it on a per file basis:
 #+BEGIN_SRC sh
 # -*- mode: Org; org-download-heading-lvl: nil; -*-
 #+END_SRC
-******* configure weather to add image size attributes alongside info
+********** configure weather to add image size attributes alongside info
 You can set it either with customize-group>org-download
 and configure the
 org-download-image-width
-****** org-download commands
-******* org-download-image
+********* org-download commands
+********** org-download-image
 This will ask you for an URL and will downlaod the image into the current buffer-local
-******* org-download-delete
-******* org-download-yank (add images from dired)
+********** org-download-delete
+********** org-download-yank (add images from dired)
 org-download-yank is used to add images from local files.
 
 Now you can just issue
@@ -28886,8 +29012,8 @@ Now you can just issue
 On an image in a dired buffer and issue 
 'org-download-yank' 
 in an Org buffer to paste that imagee
-**** conversions 
-***** nc2org
+******* conversions 
+******** nc2org
 
 1. export to html from NC using following options:
 
@@ -28920,12 +29046,12 @@ is open:
  ./FOLDERNAME/
  this should enable image support
 
-***** convert html to Org using pandoc
+******** convert html to Org using pandoc
 *Org-mode:*
  pandoc -s -S FILE.html -o FILE.org
  
-**** convert formats to .org
-***** convert using calibre to org
+******* convert formats to .org
+******** convert using calibre to org
 
 Basically, Calibre -> htmlz -> unzip -> pandoc:
 
@@ -28939,7 +29065,7 @@ After that I usually have to global convert [[image/foo.png]] to
 [[file:image/foo.png]] and add inlineimages to a start-up option on the
 file.
  
-**** convert html to Org using pandoc
+******* convert html to Org using pandoc
 
 *Org-mode:*
  pandoc -s -S README -o example27.org
@@ -28949,9 +29075,9 @@ file.
  **Warning** if you get an error open the html file in an editor and
 save it with utf-8 encoding
 
-**** dates
+******* dates
 
-***** keybinds
+******** keybinds
 
 C-c .
  org-time-stamp
@@ -28968,8 +29094,8 @@ twice
 agenda
  entry.
 
-**** Functions
-***** get rid of blank Lines
+******* Functions
+******** get rid of blank Lines
 
 #+BEGIN_SRC emacs-lisp :results none
 (defun flush-blank-lines ()
@@ -28983,8 +29109,8 @@ agenda
          (flush-lines "^ *$" min max t))))
 #+END_SRC 
 
-***** Archived functions
-****** Recursive find text
+******** Archived functions
+********* Recursive find text
 #+BEGIN_SRC emacs-lisp
 ;; recursively find txt in .org files in provided directory
 ;; to use press C-a s and type in search term (can use regex as well)
@@ -29019,9 +29145,9 @@ If FILEXT is provided, return files with extension FILEXT instead."
 
 
 #+END_SRC
-**** images
-***** functions to insert images
-******* Automatic screenshot insertion- Suggested by Russell Adams
+******* images
+******** functions to insert images
+********** Automatic screenshot insertion- Suggested by Russell Adams
 Automatic screenshot insertion- Suggested by Russell Adams
 #+BEGIN_SRC emacs-lisp
 (defun my-org-screenshot ()
@@ -29039,7 +29165,7 @@ same directory as the org-buffer and insert a link to this file."
   (org-display-inline-images))
 #+END_SRC
 
-******* Automatic screen shot- BETTER method
+********** Automatic screen shot- BETTER method
 #+BEGIN_SRC emacs-lisp 
    (defun paste-clipboard-to-file (&optional filename temp-dir)
      "Take a screenshot using the crosshairs and saveit to FILENAME,if it is given or to a temp file in the TEMP-DIR
@@ -29055,7 +29181,7 @@ same directory as the org-buffer and insert a link to this file."
    (global-set-key (kbd "C-c p") 'paste-clipboard-to-file)
 #+END_SRC
 
-***** get images to appear inline
+******** get images to appear inline
 make sure you have this in your config:
 
 ;;iimage in org (display images in org files)
@@ -29073,13 +29199,13 @@ finally you can have this code:
 
 at the start of your org file
 
-***** toggle inline inmage refresh 
+******** toggle inline inmage refresh 
 use :
 
 M-x org-redisplay-inline-images
 
 to redisplay images
-***** scale inline images in orgmode
+******** scale inline images in orgmode
 You can use `org-image-actual-width' in your org config
 choose one of the below 4 options:
 
@@ -29115,12 +29241,12 @@ $note: and example for an image inline with attributes$
 #+attr_html: :width 500px
 [[file:~/org/attach/images/gno_4_8722104799_04354338b1_z.jpg]]
 
-***** define exported image size
+******** define exported image size
 add this in the line before the image link
 
 #+ATTR_HTML: width="10px"
  
-***** Replace previous PATHS to show as org
+******** Replace previous PATHS to show as org
 
 to replace exported html files with image linked to them do the following
 
@@ -29142,9 +29268,9 @@ to
 
 file:1.images/gis10052003p2.png
 
-**** Latex
-***** writing
-****** super/sub script
+******* Latex
+******** writing
+********* super/sub script
 Just like in LaTeX, ‘^’ and ‘_’ are used to indicate super- and subscripts.
 If you write a text where the underscore is often used in a different context, Org's convention to always interpret these as subscripts can get in your way.
 Configure the variable 'org-use-sub-superscripts' to change this convention ₆In example₆ 
@@ -29153,11 +29279,11 @@ org-use-sub-superscripts nil        ;; don't use `_' for subscript
 #+END_SRC 
 
 When setting this variable to {}, ‘a_b’ will not be interpreted as a subscript, but ‘a_{b}’ will.
-****** Special symbols
+********* Special symbols
 You can use LaTeX-like syntax to insert special symbols like ‘\alpha’ to indicate the Greek letter, or ‘\to’ to indicate an arrow. Completion for these symbols is available, just type ‘\’ and maybe a few letters, and press M-<TAB> to see possible completions. Unlike LaTeX code, Org mode allows these symbols to be present without surrounding math delimiters, for example:
 
 'Angles are written as Greek letters \alpha, \beta and \gamma '
-******  LaTeX fragments
+*********  LaTeX fragments
 LaTeX fragments don't need any special marking at all. The following snippets will be identified as LaTeX source code:
 
 Environments of any kind. The only requirement is that the \begin and \end statements appear on a new line, at the beginning of the line or after whitespaces only.
@@ -29174,8 +29300,8 @@ For example:
      either $$ a=+\sqrt{2} $$ or \[ a=-\sqrt{2} \].
 #+END_EXAMPLE
 
-***** bibtex
-****** org bibtex commands
+******** bibtex
+********* org bibtex commands
 http://orgmode.org/worg/org-api/org-bibtex-api.html
 
 'org-bibtex-export-to-kill-ring' Export current headline to kill ring as bibtex entry.
@@ -29187,14 +29313,14 @@ http://orgmode.org/worg/org-api/org-bibtex-api.html
 'org-bibtex-create' (&optional arg nonew) Create a new entry at the given level. With a prefix arg, query for optional fields as well. If nonew is t, add data to the headline of the entry at point.
 
 'org-bibtex-create-in-current-entry' (&optional arg) Add bibliographical data to the current entry. With a prefix arg, query for optional fields.
-**** links
-***** Base
+******* links
+******** Base
 Org will recognize plain URL-like links and activate them as clickable links. The general link format, however, looks like this:
 #+BEGIN_SRC 
 [[link][description]]       or alternatively           [[link]]
 #+END_SRC
 If you place the cursor at the beginning or just behind the end of the displayed text and press <BACKSPACE>, you will remove the (invisible) bracket at that location. This makes the link incomplete and the internals are again displayed as plain text.
-***** keybinds
+******** keybinds
 
 | C-c C-l                                | insert link                                     |
 | C-u C-c C-l                            | insert link RELATIVE PATH                       |
@@ -29203,7 +29329,7 @@ If you place the cursor at the beginning or just behind the end of the displayed
 | C-u C-c C-o                            | open link in EMACS                              |
 | C-c %                                  | mark position on org                            |
 | C-C &                                  | go back to marked position                      |
-***** External Links
+******** External Links
 external linksstart with a short identifying string followed by a colon. There can be no space after the colon. The following list shows some examples for each link type.
 
 #+BEGIN_EXAMPLE
@@ -29234,8 +29360,8 @@ external linksstart with a short identifying string followed by a colon. There c
      elisp:(find-file-other-frame "Elisp.org") Elisp form to evaluate
 #+END_EXAMPLE
 
-***** Links to org files (Internal) 
-****** link to org mode Headline
+******** Links to org files (Internal) 
+********* link to org mode Headline
 -stand on the section you want to link to and press C-c l to store its location
 then use C-c C-l to insert that save link (location when needed) 
 
@@ -29243,18 +29369,18 @@ then use C-c C-l to insert that save link (location when needed)
 
 [[file:/home/zeltak/Dropbox/Org/Tech/linux.org::Term color theme (.colors)]]
 
-****** link to org mode Line Number
+********* link to org mode Line Number
 one can use line numbers in file using ::n where 'n' is the line number but thats not recommend
 insert a link that looks like this:
 [[file:/PATH/TO/ORGFILE::25]]
 where the ::25 means line 25 in that file
 [[*black%20ice][black ice]]
-***** Configure tab key or Enter key to follow links
+******** Configure tab key or Enter key to follow links
 ;use RET or TAB to follow a link?
  (setq org-return-follows-link t)
  ;(setq org-tab-follows-link t)
-***** Custom links
-****** Tag Searches
+******** Custom links
+********* Tag Searches
 For another use case, the following code defines links which search your headlines for specific tags.
 #+BEGIN_SRC emacs-lisp :results none
 (org-add-link-type
@@ -29277,7 +29403,7 @@ http://orgmode.org/manual/Matching-tags-and-properties.html#Match-syntax
 
 is the same used for the org-tags-view command.
 
-****** Grep links
+********* Grep links
 try this code
 
 #+BEGIN_SRC emacs-lisp :results none

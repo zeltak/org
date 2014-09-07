@@ -1,0 +1,54 @@
+#+TITLE: Linking exposure models to subjects
+
+
+** PM models
+*** steve method-Updated 17/7/2014
+Linking study subjects to PM2.5 predictions from model using 1 km resolution satellite AOD data
+**** Model background
+The model was developed by Itai Kloog, Joel Schwartz, Brent Coull et al.  See Kloog et al publications for details and contact them with questions about the model
+
+History:
+10 km resolution model March 2000 – Dec 2011
+10 km resolution model developed for New England
+10 km resolution model extended to Mid Atlantic (VA through ME) refinements made
+10 km resolution model refinements developed for Mid Atlantic applied to New England
+
+1 km resolution model 2003 – 2011
+1 km resolution model developed for northeast (NJ, Eastern NY through ME)
+	\\DROBO\Shared_Data\EAST_USA_MAIAC\mod3predictions
+1 km resolution model modified to reduce number of missing predictions (May 2014)
+\\DROBO\Shared_Data\MAIAC_05_2014
+
+Future tasks
+1 km resolution model 2000- 2002 (waiting on NASA)
+1 km resolution model for southeast US (Mie Hye)
+1 km resolution model for rest of mid-Atlantic (VA through ME)
+Other?
+
+**** 1 km model daily predictions 2003-2011 for northeast
+Predictions were made at points where AOD data were provided which are a nominal 1 km grid and are identified with a unique identifier created by HSPH: guid.
+
+Itai’s predictions included some duplicates.  Steve Melly used SAS Proc Means to remove duplicates.
+
+Some AOD points are missing predictions.  The pattern of missing predictions varies from year to year.  Because the pattern of missingness changed over time we linked predictions to points one year at a time.  We identified the nearest AOD point within 5 km with complete predictions to each address for each year.  
+
+**** Local PM (LPM)
+Stage 4 of the model uses residuals from stage 1 through 3 of the model at the PM2.5 monitoring sites and spatial data at a small scale (e.g. 50 – 200 m).  The variables used in Stage 4 have changed with each version of the model.  In the past variables calculated for a 200 m grid were used.  At this time Joel Schwartz recommends using address specific variables.  A big change in this version of the model is that daily meteorological variables were included so that LPM varies over both space and time.  
+
+Step by step instructions
+-Make sure all spatial datasets are in USA_Contiguous_Albers_Equal_Area_Conic_USGS_version-Run spatial join between study addresses and AOD points with complete predictions for each year
+Pm25guid_5_22_14.gdb/mod3best_xxNMnodupsumfc
+See Pm25_1km_6_12_14.tbx/nearestguidbyyr
+
+-export results of spatial joins to csv files
+-Use SAS to import csv files; link points to predictions at nearest AOD point with complete data within 5 km 
+see vivalinktopredictions_03_11_5_28_14.sas
+use predictions from Mod3best_xxnmsum.sas7bdat
+
+-Use model builder models to calculate LPM variables for each address including nearest PBL and nearest weather station;  export results to csv or table; merge all variables together
+Stn = weather station id
+pblid
+-Use R to calculate LPM
+mod4_xx_6_6_14.r
+mod4_xxxx_st_m_d_yy (predictions, residuals, weather, spatial variables for monitors)
+Will need merge to PBL for monitors both weather data and PBL for subjects’ addresses

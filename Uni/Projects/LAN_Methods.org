@@ -1,0 +1,24 @@
+#+TITLE: LAN methods
+
+
+** Lights at Night (LAN) Protocol/ Procedeures Francine Laden group
+
+Lights at Night (LAN) Protocol/ Procedeures - May 2014 
+
+1. Satellite images of LAN “average visible, stable lights, and cloud free coverage” were downloaded from http://ngdc.noaa.gov/eog/dmsp/downloadV4composites.html
+2. Files were unzipped and brought into Y://BuiltEnvironment/BE_Data/Geographic_data/LAN/LAN_Raw   
+Eg. File name: “F101992.v4b_web.stable_lights.avg_vis.tif”
+3. ESRI GRID: All these raster files were then converted to ESRI grid rasters by using the “Raster to other format” tool in the Conversion tools toolbox -> to raster-> to raster to other format. Specify the input raster, output file path and the raster format as “GRID”. These new raster formats are saved in Y://BuiltEnvironment/ BE_Data/Geographic_data/LAN /LAN_GRID
+4. CLIP TO USA:  To clip down rasters to just the USA go to Data Management tools -> Raster-> Raster Processing-> Clip. Choose the countries shape file “ESRI04USDTL_ST.shp” in BuiltEnvironment as the output extent. Choose input raster from LAN_GRID folder and save new clipped files in Y://BuiltEnvironment/ BE_Data/Geographic_data/LAN /LAN_USA
+5. FOCAL STATS:  Run focal stats in toolbox Spatial analyst tools -> Neighborhood -> focal statistics
+Choose input raster and create file path to 
+Y://BuiltEnvironment/ BE_Data/Geographic_data/LAN /LAN_USA_focal
+Change neighborhood to “circle” radius= 3, unit =“cell” statistics type = “mean”
+6. A toolbox was created in  in Y://BuiltEnvironment/BE_Data/nhs_data/ nhs_DataProcessing labeled “LAN”. model “LAN_point” was used to extract values from rasters in Y://BuiltEnvironment/ BE_Data/Geographic_data/LAN /LAN_USA and outputs were saved in Y://BuiltEnvironment/BE_DATA/nhs_data/LightsatNight/LAN_point and LAN_point_DBFs
+and model builder  “LAN_focal” was used to extract values from rasters in Y://BuiltEnvironment/ BE_Data/Geographic_data/LAN /LAN_USA_focal and outputs were saved in Y://BuiltEnvironment/BE_DATA/nhs_data/LAN/LightsatNight/LAN_focal and LAN_focal_DBFs
+DBF files are ready to be used in SAS
+
+$Note$ 
+These models were run for both NHS1 and NHS2 years 1992-2010 (2011-2012 Nurse’s addresses are not geocoded yet, but LAN data is available)
+note that several years have multiple satellites, so those years should be averaged or compared in SAS
+for more info on the LAN satellite data look at the word doc “Version 4 DMSP Readme”
