@@ -5,6 +5,7 @@ library(reshape2)
 library(foreign)
 library(Hmisc)
 library(mgcv)
+library(FNN)
 #library(rgdal)
 
 # import monitor data and spatial merge with nearestbyday()
@@ -30,7 +31,6 @@ gestpred<-loc[,c("byob","birthw","lbw","sex","plur","bdob","kess","tden","age_ce
 "edu_group","MRN","ges_calc","uniqueid_y","sinetime","costime"                
                                   ),with=FALSE]
 
-gestpred<-gestpred[1:1000,]
 
 
 
@@ -85,10 +85,6 @@ allbestpred <-allbestpred [,c(1,2,9),with=FALSE]
 
 
 
-
-
-
-
 # find the closest aodid
 gestlong.m <- makepointsmatrix(gestlong, xvar="longutm", yvar="latutm", idvar= "id")
 allbestpred.m <- makepointsmatrix(allbestpred, xvar="x_aod_utm", yvar="y_aod_utm", idvar= "aodid")
@@ -113,8 +109,7 @@ gestlong[, length(unique(closestbestpred))]
 # compute summaries
 setkey(gestlong,id,day)
 
-####this is where we calculate the exposure per period for each participent--maayan your lucky only need to run this part
-##best pred is the exposure-maayab this is SO2
+####this is where we calculate the exposure per period for each participent-
 #pmperg-exposure all pregnancy
 gestlongsummary <- gestlong[, list(pmpreg = mean(bestpred), 
                                    pmlast90 = mean(tail(.SD[,bestpred], 90)),

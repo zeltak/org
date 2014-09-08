@@ -7238,6 +7238,10 @@ fread(data, select=c("A","D"))    # less typing, easier to read
 fread(data, select=c(1,4))        # same using column numbers
 #+end_src
 
+**** force column type when importing
+#+BEGIN_SRC R
+loc<-fread("/media/NAS/Uni/Projects/P011.BirthW_NE/3.1.11.4.Work/3.Analysis/2.R_analysis/bw_diab37.csv",colClasses=c(FIPS="character",tract="character"))
+#+END_SRC
 *** Merge/Join
 **** Normal join
 #+begin_src R
