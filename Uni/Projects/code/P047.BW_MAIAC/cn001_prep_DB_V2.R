@@ -10,15 +10,13 @@ library(mgcv)
 
 #######################################
 # for 1x1 grid
+#subset below 2003 dates
 #######################################
 
 loc<-fread("/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN003_BW_data/bwfull.csv",colClasses=c(FIPS="character",tract="character"))
-l=seq(names(loc));names(l)=names(loc);
-l
-str(loc$FIPS)
-head(loc,n=3)
+loc <- loc[byob >= "2003"]
 locxy<-loc[,c("lat","long","uniqueid_y"),with=FALSE]
-write.csv(locxy,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN007_Key_tables/locxy.csv")
+write.csv(locxy,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN007_Key_tables/locxy0308.csv")
 
 
 #######################################

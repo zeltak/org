@@ -15,8 +15,8 @@ library(gdata)
 #######################################
 #######################################
 #import all grid cells 200m Landuse 
-MIA<-fread("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/0.raw/gis/l200/MIA.csv")
-NE<-fread("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/0.raw/gis/l200/NE.csv")
+MIA<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/0.raw/gis/l200/MIA.csv")
+NE<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/0.raw/gis/l200/NE.csv")
 
 l=seq(names(MIA));names(l)=names(MIA);l
 l=seq(names(NE));names(l)=names(NE);l
@@ -40,15 +40,15 @@ setnames(flu,"x_alb","x_alb_LPMgrid")
 setnames(flu,"y_alb","y_alb_LPMgrid")
 flu$lpmid<-paste(flu$x_alb_LPMgrid,flu$y_alb_LPMgrid,sep="")
 ###############################################
-saveRDS(flu,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200.rds")
+saveRDS(flu,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200.rds")
 
 ###### export X,Y (x_alb and y_alb)
 fluCP<-flu[,c(7,8,9),with=FALSE]
-write.dbf(fluCP,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_XY.dbf")
+write.dbf(fluCP,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_XY.dbf")
 
 ######### Reimport after GIS join of above XY to LU-met IDs
 
-test<-fread("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/LPM_GRID_IDS.csv")
+test<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/LPM_GRID_IDS.csv")
 setnames(test,"x_alb","x_alb_LPMgrid")
 setnames(test,"y_alb","y_alb_LPMgrid")
 test$lpmid<-paste(test$x_alb_LPMgrid,test$y_alb_LPMgrid,sep="")
@@ -62,6 +62,6 @@ test2[,y_alb_LPMgrid.y :=NULL]
 setnames(test2,"x_alb_LPMgrid.x","x_alb_LPMgrid")
 setnames(test2,"y_alb_LPMgrid.x","y_alb_LPMgrid")
 
-saveRDS(test2,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
-write.dbf(test2,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.dbf")
+saveRDS(test2,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
+write.dbf(test2,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.dbf")
 

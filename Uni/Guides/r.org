@@ -7378,7 +7378,7 @@ add5 <- add4[daystart <= day & dayend > day, ]
 add5 <- met[Date == "2000-12-27"]
 #+end_src
 **** susbet by year
-#+begin_src R
+#+begin_src 
 dat2013 <- clippedaod[yr == "2013"]
 #+end_src
 **** subset to remove NAs
