@@ -225,7 +225,11 @@ describe(bd$birthw[bd$kotck == 4])
   
 
 
+### SES correlations
 
+cor(bd$ta270,bd$med_income)
+cor(bd$ta270,bd$myredu)
+cor(bd$ta270,bd$mother_race)
 
 
 
