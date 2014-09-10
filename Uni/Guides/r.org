@@ -7306,6 +7306,18 @@ dat[, day:=as.Date(strptime(DATE, "%m/%d/%y"))]
 mpmg[bimon := (m + 1) %/% 2]
 #+end_src
 
+**** Create seasons
+
+#+BEGIN_SRC R
+#Seasons
+library(car)
+mod1d$month <- as.numeric(format(mod1d$date, "%m"))
+#1-winter, 2-spring,3-summer,4-autum
+mod1d$season<-recode(mod1d$month,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")
+#1-winter, 2-summer
+mod1d$seasonSW<-as.character(recode(mod1d$month,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;12=1"))
+#+END_SRC
+     
 *** delete columns data.table
 Either of the following will remove column foo from the data.table df3:
 

@@ -196,6 +196,24 @@ describe(bd$ges_calc)
 describe(bd$elev)
 describe(bd$parity)
 
+#season
+
+#Seasons
+library(car)
+bd$month <- as.numeric(format(bd$day, "%m"))
+#1-winter, 2-spring,3-summer,4-autum
+bd$season<-recode(bd$month,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")
+
+Hmisc::describe(as.factor(bd$season))
+describe(bd$birthw[bd$season == 1])
+describe(bd$birthw[bd$season == 2])
+describe(bd$birthw[bd$season == 3])
+describe(bd$birthw[bd$season == 4])
+
+
+
+
+
 Hmisc::describe(as.factor(bd$diab_other))
 describe(bd$birthw[bd$diab_other == 1])
 
