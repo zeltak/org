@@ -38,20 +38,24 @@ gestpred<-loc[,c("byob","birthw","lbw","sex","plur","bdob","kess","tden","age_ce
 #create unique location
 # lengthen out to each day of pregnancy
 setnames(gestpred, c("bdob", "byob","uniqueid_y"), c("birthdate", "birthyear","id"))
-gestpred[, birthdate := as.Date(strptime(birthdate, format = "%m/%d/%Y"))]
+gestpred[, birthdate := as.Date(strptime(birthdate, format = "%m/%d/%y"))]
 # new variable for start of gestation using the best gestational age (in weeks)
 gestpred[, pregstart := birthdate - 7*ges_calc]
 
-#subset to current expo year range
-gestpred <- gestpred[birthyear >= 2003 , ]
+#subset to current expo year range (all pregnancies that start after first day of exposure)
+gestpred <- gestpred[pregstart >= as.Date("2003-01-01") , ]
 
 # lengthen this out so that each day is one row
 # from pregstart to day before you were born (birthdate - 1)
-gestlong <- ddply(gestpred, .(id), function(x){
-  data.frame(day = seq(x$pregstart, (x$birthdate - 1), by = "day"), id = x$id)
-})
-gestlong <- merge(gestlong, gestpred, by = "id")
-gestlong <- data.table(gestlong)
+# gestlong <- ddply(gestpred[1:100,], .(id), function(x){
+#   data.frame(day = seq(x$pregstart, (x$birthdate - 1), by = "day"), id = x$id)
+# })
+
+# trying a data.table way to do this
+gestlong <- gestpred[,list(day = seq(.SD$pregstart, .SD$birthdate - 1, by = "day")),by=id]
+setkey(gestlong,id)
+xgestlong <- merge(gestlong, gestpred, by = "id")
+
 
 ##Descriptives
 # check that everyone has a number of rows that makes sense for their gestational age

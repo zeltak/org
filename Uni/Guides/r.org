@@ -2579,6 +2579,46 @@ mod3grid <- data.table(expand.grid(guid = basegrid[, unique(guid)], day = days_2
 #+end_src
 
 where guid is the id variable to expand from dataset basegrid and days_2006 is the date range
+*** Padding a Time Series 
+#+BEGIN_SRC R
+raw.data <- read.delim("timefill.csv", header=T, sep=",")
+
+# Convert the time column to a date column.
+# Accessing a column is done by using the '$' sign
+# like so: raw.data$time.
+raw.data$time <- as.Date(raw.data$time)
+
+# sort the data by time. The [*,] selects all rows that 
+# match the specified condition - in this case an order function
+# applied to the time column.
+sorted.data <- raw.data[order(raw.data$time),]
+
+# Find the length of the dataset
+data.length <- length(sorted.data$time)
+
+# Find min and max. Because the data is sorted, this will be 
+# the first and last element.
+time.min <- sorted.data$time[1]
+time.max <- sorted.data$time[data.length]
+
+# generate a time sequence with 1 month intervals to fill in
+# missing dates
+all.dates <- seq(time.min, time.max, by="month")
+
+# Convert all dates to a data frame. Note that we're putting 
+# the new dates into a column called "time" just like the 
+# original column. This will allow us to merge the data.
+all.dates.frame <- data.frame(list(time=all.dates))
+
+# Merge the two datasets: the full dates and original data
+merged.data <- merge(all.dates.frame, sorted.data, all=T)
+
+# The above merge set the new observations to NA.
+# To replace those with a 0, we must first find all the rows
+# and then assign 0 to them.
+merged.data$observations[which(is.na(merged.data$observations))] <- 0
+#+END_SRC
+ 
 *** adding days to date
 #+begin_src R
 as.Date("2001-01-01") + 45
