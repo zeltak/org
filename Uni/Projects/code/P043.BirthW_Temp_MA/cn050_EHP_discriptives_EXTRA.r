@@ -28,7 +28,18 @@ paper_table$object <- c("beta", "se", "LCI", "HCI", "tstat", "sig", "OR", "PH")
 
 ## Import
 bd<-fread("/media/NAS/Uni/Projects/P043_BirthW_Temp_MA/3.1.11.4.Work/3.Analysis/2.R_analysis/bw_nocesv2.csv")
-names(bd)
+
+bd <- as.data.table(read.dbf("/media/NAS/Uni/Projects/P043_BirthW_Temp_MA/3.1.11.4.Work/3.Analysis/2.R_analysis/OUTDATA.dbf") )
+
+
+#for all births
+bd<-fread("/media/NAS/Uni/Projects/P043_BirthW_Temp_MA/3.1.11.4.Work/3.Analysis/2.R_analysis/bw_22up.csv")
+# bd[, day:=as.Date(strptime(bdob, "%m/%d/%y"))]
+# bd$yr <- as.numeric(format(bd$day, "%Y"))
+# describe(bd$yr)
+# 
+# 
+
 dim(bd)
 #  [1] "bthctyn"              "bthctyc"              "sex"                  "plur"                 "bthord"               "byob"                
 #   [7] "bmob"                 "bdayob"               "bdob"                 "myob"                 "mmob"                 "mbpstt"              
@@ -118,20 +129,29 @@ setnames(bd,"medgrrenttr00","mgrossrent")
 
 
 ## dates
-bd[, day:=as.Date(strptime(date, "%d/%m/%y"))]
+bd[, day:=as.Date(strptime(byob, "%m/%d/%y"))]
 bd$rfpisga[bd$rfpisga== 9] <- NA
 bd$rfpisga[bd$rfpisga== 2] <- 0
 
 ###recoding
 #finer race
-bd<- bd[mother_race  == 1 , mrn.n  := 1] #white
-bd<- bd[mother_race  == 5 , mrn.n  := 2] #hispanic
-bd<- bd[mother_race  == 2 , mrn.n  := 3] #black
-bd<- bd[mother_race  == 3 , mrn.n  := 4] #asian
-bd<- bd[mother_race  == 4 , mrn.n  := 5] #other
-bd<- bd[mother_race  == 8 , mrn.n  := 5] #other
-bd<- bd[mother_race  == 9 , mrn.n  := 5] #other
+# bd<- bd[mother_race  == 1 , mrn.n  := 1] #white
+# bd<- bd[mother_race  == 5 , mrn.n  := 2] #hispanic
+# bd<- bd[mother_race  == 2 , mrn.n  := 3] #black
+# bd<- bd[mother_race  == 3 , mrn.n  := 4] #asian
+# bd<- bd[mother_race  == 4 , mrn.n  := 5] #other
+# bd<- bd[mother_race  == 8 , mrn.n  := 5] #other
+# bd<- bd[mother_race  == 9 , mrn.n  := 5] #other
 #ptbirth
+
+bd<- bd[mrace  == 1 , mrn.n  := 1] #white
+bd<- bd[mrace  == 5 , mrn.n  := 2] #hispanic
+bd<- bd[mrace  == 2 , mrn.n  := 3] #black
+bd<- bd[mrace  == 3 , mrn.n  := 4] #asian
+bd<- bd[mrace  == 4 , mrn.n  := 5] #other
+bd<- bd[mrace  == 8 , mrn.n  := 5] #other
+bd<- bd[mrace  == 9 , mrn.n  := 5] #other
+
 
 
 #delete bad data
@@ -170,7 +190,7 @@ library(pastecs)
 # describe(bd$pm270)
 # describe(bd$sinetime)
 # describe(bd$costime) 
-# describe(bd$age_centered)
+#describe(bd$age)
 # describe(bd$age_centered_sq)
 Hmisc::describe(bd$birthw)
 describe(bd$cig_pre)
@@ -178,8 +198,11 @@ describe(bd$cig_preg)
 describe(bd$tden)
 describe(bd$med_income)
 describe(bd$p_ospace)  
+describe(bd$elev) 
 describe(bd$cig_pre)
-describe(bd$gender)  
+describe(bd$gender) 
+describe(bd$birthw[bd$gender == 1])
+describe(bd$birthw[bd$gender == 2])
 describe(bd$prev_400)
 describe(bd$diab)
 describe(bd$hyper) 
@@ -189,9 +212,37 @@ describe(bd$prevpret)
 stat.desc(bd$kess)  
 describe(bd$mrn.n)
 Hmisc::describe(as.factor(bd$edu_group))
+describe(bd$birthw[bd$edu_group == 1])
+describe(bd$birthw[bd$edu_group == 2])
+describe(bd$birthw[bd$edu_group == 3])
+describe(bd$birthw[bd$edu_group == 4])
+describe(bd$birthw[bd$edu_group == 5])
 describe(bd$byob)     
 describe(bd$parity)
 Hmisc::describe(as.factor((bd$mrn.n))
+describe(bd$birthw[bd$mrn.n == 1])
+describe(bd$birthw[bd$mrn.n == 2])
+describe(bd$birthw[bd$mrn.n == 3])
+describe(bd$birthw[bd$mrn.n == 4])
+describe(bd$birthw[bd$mrn.n == 5])
+
+
+#age
+bd<- bd[age  <= 20 , ageg  := 1] 
+bd<- bd[age  >= 20 & age < 29 , ageg  := 2] 
+bd<- bd[age  >= 29 & age < 34 , ageg  := 3] 
+bd<- bd[age  >= 34 & age < 39 , ageg  := 4] 
+bd<- bd[age  >= 39 , ageg  := 5] 
+
+Hmisc::describe(as.factor((bd$ageg))
+describe(bd$birthw[bd$ageg == 1])
+describe(bd$birthw[bd$ageg == 2])
+describe(bd$birthw[bd$ageg == 3])
+describe(bd$birthw[bd$ageg == 4])
+describe(bd$birthw[bd$ageg == 5])
+
+
+
 describe(bd$ges_calc)
 describe(bd$elev)
 describe(bd$parity)
@@ -200,6 +251,10 @@ describe(bd$parity)
 
 #Seasons
 library(car)
+bd[, day:=as.Date(strptime(bdob, "%Y-%m-%d"))]
+# bd$yr <- as.numeric(format(bd$day, "%Y"))
+# describe(bd$yr)
+
 bd$month <- as.numeric(format(bd$day, "%m"))
 #1-winter, 2-spring,3-summer,4-autum
 bd$season<-recode(bd$month,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")

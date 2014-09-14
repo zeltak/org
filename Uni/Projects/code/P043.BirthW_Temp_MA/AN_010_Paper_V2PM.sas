@@ -1,11 +1,15 @@
 /*birth weight analysis*/
 
-libname bwr 'z:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.5.Results\RN_001_results_paper\' ;
-libname bww 'z:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\2.Gather_data\FN010_bwdatasets\' ;
-libname x1 'z:\Uni\Projects\P011.BirthW_NE\3.1.11.4.Work\3.Analysis\4.sas analysis\' ;
-libname x2 'Z:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\3.Analysis\3.SAS_analysis\results_w_PM' ;
+libname bwr 'z:\Projects\P043_BirthW_Temp_MA\3.1.11.5.Results\RN_001_results_paper\' ;
+libname bww 'z:\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\2.Gather_data\FN010_bwdatasets\' ;
+libname x1 'z:\Projects\P011.BirthW_NE\3.1.11.4.Work\3.Analysis\4.sas analysis\' ;
+libname x2 'z:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\3.Analysis\3.SAS_analysis\results_w_PM' ;
 
-
+PROC EXPORT DATA= bww.Lr
+            OUTFILE= "OUTDATA.dbf" 
+			            DBMS=DBF REPLACE;
+						RUN;
+						 
 
 
 
