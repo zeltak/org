@@ -19997,6 +19997,7 @@ com.sun.java.swing.plaf.motif.MotifLookAndFeel
 com.sun.java.swing.plaf.windows.WindowsLookAndFeel
 com.jgoodies.plaf.plastic.Plastic3DLookAndFeel
 #+END_EXAMPLE
+
 ***** location of prefrence file
 file:/home/zeltak/jabref.xml
 ***** priorities
@@ -20022,7 +20023,7 @@ which would give one tab named "General" containing the fields url, keywords, do
 1)add the ref using internal search
 2)manually copy pdf to root pdf folder
 3)attach it to the entry
-use the cleanup in tools to auto rename image7_2014-03-13_09:58:02.pngt
+use the cleanup in tools to auto rename 
 **** Export filters
 ***** use a plugin to create the filter via gui
 one can use a java based gui (cross platform) to create basic export options via a gui:
@@ -20051,6 +20052,26 @@ there is an option how exported entries are sorted there
  [[/home/zeltak/org/attach/images_2014/screenshot_2014-07-22_11:01:46.png]]
 
 I usually use the option "export in current table sort order". Then I sort them e.g. by year. 
+**** citing
+***** How can I use BibTeX to cite a web page
+
+A simple way of doing it in BibTeX is with a @misc entry:
+
+#+BEGIN_EXAMPLE
+@misc{WinNT,
+  title = {{MS Windows NT} Kernel Description},
+  howpublished = {\url{http://web.archive.org/web/20080207010024/http://www.808multimedia.com/winnt/kernel.htm}},
+  note = {Accessed: 2010-09-30}
+}
+#+END_EXAMPLE
+
+You should also perhaps include an author if you know it. And remember to load a package such as hyperref or url.
+
+**** dates
+***** use month
+month
+The month in which the work was published or, for an unpublished work, in which it was written. You should use the standard three-letter abbreviation (jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec).
+
 ** System
 *** java
 

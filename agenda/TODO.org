@@ -88,7 +88,9 @@ rsync -aRPz --delete -e ssh /home/zeltak/dotfiles/  root@132.72.152.204:/volume1
 ** find out how to create org table with manual breaks
 ** fix i3 tray and revise i3 config for laptop   
 ** a way to auto exce a command on specific file save emacs
-for sxhkd issue the kill command when saved   
+for sxhkd issue the kill command when saved
+** jabref
+*** change timestamp of papers to date 
 ** trip configs needed
 *** Worker
 ***** rest
@@ -102,9 +104,7 @@ syncthing buttons
       :PROPERTIES:
       :ID:       c777b834-116f-4830-b3b6-191a19381325
       :END:
-change colors of items per condition
-that is change lister BG when in filter mode, not focused etc
-*** fix MLT sync
+change colors of items per condition- that is change lister BG when in filter mode, not focused etc
 *** Emacs
 jabref-ebib etc
 bbdb
@@ -223,20 +223,9 @@ For the sake of completeness, here the docstring of
 
 
 *** clean out downloads and zh_tmp
-** clerck
+** clerk
 *** t and ti options don't start to play now
 *** ratings , what is the new system  
-* Allan
-** k nearest
-knearest=100 is roughly 5.7 km's
-100/pi= 32
-sqrt(32)=5.7
-** cartesean join
-is a join of every row of one table to every row in another table
-there is a single command to do it in R
-
-
-
 * Linux
 ** Org
 *** TODO Chain babel blocks, ₆In example₆ launch multiple blocks togheter 
@@ -619,29 +608,29 @@ remove starts, update zfav etc/tmpfiles
   -copy comments to that field
   -create a demnu entry to my mpd script to rate the current playing song
   - get switches for beet import for multiple scenarios (₆In example₆ single:)
-  ** worker
-  *** Disable auto select
-  *** double command keys have a bug/issue
+** worker
+*** Disable auto select
+*** double command keys have a bug/issue
   im trying to assign keys for various commands (like sort by name etc). the problem (and this may be a bug) is that if you assign the second part of the double command to a alpha character (a, b etc) and try to use it in the lister view (left or right) the command breaks and goes into filtering mode.
-  *** filter by date
+*** filter by date
   i tried looking for documentation on the set filter command but only found general filtering commands. is there a way to filter views by date (modified time etc) that could be very useful. 
-  *** DONE colored tabs
+*** DONE colored tabs
   option to color tab by name/location/other
-  *** DONE copy to clip/paste from clip?
-  *** NEXT Filter indicator
+*** DONE copy to clip/paste from clip?
+*** NEXT Filter indicator
       :PROPERTIES:
       :ID:       0c51d716-e089-4b64-bda8-d0ee9c9bd81c
       :END:
   i know there is a star but can i request an option make the listview or modtime/name bar different colored when filtered
   perhaps clearer syntax ₆In example₆ (N)
-  *** DONE Toggle sort mode
+*** DONE Toggle sort mode
   is there a way toggle a sort mode, so that the same button pressed once would sort asecding and then second press descinding? if not is there a way to maybe script this
-  *** tmep pnames
+*** tmep pnames
 
 
 
 
-  ** cvim
+** cvim
   visual mode, act start visual block/line option
   VIUSAL clues to some command like : copied link to clip (yy) etc
   `extensiuon to mark in numbers tabs?`
@@ -649,10 +638,10 @@ remove starts, update zfav etc/tmpfiles
   add retsart chrome
   add reload all tabs
   keybind to quickly enable/disable cvim
-  ** Rasi
-  *** ask about replay gain:
+** Rasi
+*** ask about replay gain:
   it lowers voulme for all tracks alot, without replay gain most track have higher colume output
-  ** btsync
+** btsync
   WebGUI can be accessed at http://localhost:8888
 
     Running btsync system instance (will use dedicated btsync:btsync account):
@@ -725,15 +714,15 @@ remove starts, update zfav etc/tmpfiles
 
 
 
-  ** kroner
-  ** TRY
+** kroner
+** TRY
   recoll 
   git-annex
 
-  * Home
-  ** el al frequent flyer
-  ** diet
-  *** Low cal veggies
+* Home
+** el al frequent flyer
+** diet
+*** Low cal veggies
   cauliflour
   zucchini
   mushrooms
@@ -751,15 +740,15 @@ remove starts, update zfav etc/tmpfiles
   garlic-same flavour no calories
   onions
   chili
-  *** other food to try
+*** other food to try
   beans
   qinoa
-  *** low cal fruits
+*** low cal fruits
   apples
   citrus
-  *** snacks?
+*** snacks?
   low calorie candies? werters original etc
-  ** TODO austrian citizenship
+** TODO austrian citizenship
      :PROPERTIES:
      :ID:       538d140d-e984-4740-85e7-0eba8264b45f
      :END:
@@ -769,19 +758,19 @@ remove starts, update zfav etc/tmpfiles
 
 
 
-  ** New House 
-  *** appliances
+** New House 
+*** appliances
   for ovens check telescopic rails
-  **** traklin hasmal:
+**** traklin hasmal:
   Shadi 0547877918
   stove-electrolux 6747- 1690
   7100 watt
   oven delongi 432- 2150
   dish beko advanced model- 2350
-  **** Avi sofer
+**** Avi sofer
   itzik: 0508626418
   Bosch oven > 2560
-  **** Alon Galsale
+**** Alon Galsale
   Cooper stove bmr641 > 1500
   cooper bte64 > 1779
   dish Normandy BMR641 > 
@@ -795,52 +784,44 @@ remove starts, update zfav etc/tmpfiles
   beko 1001 white 
   5
 
-  *** TODO Masger for soragim
+*** TODO Masger for soragim
       :PROPERTIES:
       :ID:       9323c1aa-99ed-4150-a20c-73ca30981e42
       :END:
   nisim: 052-3923940
-  *** home paint color is 016
-  ** freedns
+*** home paint color is 016
+** freedns
   zeltak.mooo.com
-  ** Gnus
+** Gnus
   Gnus can connect to the gmail server in two ways: by POP3, or by IMAP. Each protocol behaves in a different way, so you can select the one which better suits your needs. Furthermore, as a third solution you can download your mail with an external program like fetchmail and let Gnus handle it locally.
 
   This page describes how to configure Gnus to read and send mails from your gmail account, and should also explain how to do in Gnus what you’re able to do through the web interface.
 
-  ** GARDEN
-  *** place to order stuff for garden
+** GARDEN
+*** place to order stuff for garden
   קמחי ובניו חומרי בניין
 
    כתובת הפלס 9 עמק שרה באר שבע הגדל מפה שעות פעילות
   יום א' - יום ה'	17:30 - 07:00
   יום שישי	13:30 - 07:00
-  *** renting equipment
+*** renting equipment
   http://www.brener.co.il/
 
   ברנר שמעון - מחירון 2014
   ציוד להשכרה, חשמל ובנזין לבנין ולתעשיה
   באר שבע, רח. מורדי הגיטאות 70, טל. בעבודה: 08-6277737 נייד שמעון: 050-5284031 
   נייד משה: 050-5408724 * טלפון חינם: 1-800-200-330 * פקס: 08-6278249
-  *** שתילי בזיליקום תאי אפשר לקנות ברוב המשתלות שמחזיקות צמחי תבלין, לפעמים תחת השם מלכת סיאם.
-  *** Pini
-  **** deck one layer is off
-  **** spary Vs knima
-  **** make water source much closer to trees (extend it)
-  **** ceramics all around
-  ** Pikod haoref
+*** שתילי בזיליקום תאי אפשר לקנות ברוב המשתלות שמחזיקות צמחי תבלין, לפעמים תחת השם מלכת סיאם.
+*** Pini
+**** deck one layer is off
+**** spary Vs knima
+**** make water source much closer to trees (extend it)
+**** ceramics all around
+** Pikod haoref
   הנך משוייך לאזור התרעה: באר שבע 286 (45 שניו
-
-
-
-
-
-
-
-
-  ** mom ows me
+** mom ows me
   NIS 377
-  ** add to uni
+** add to uni
   outdoor comes indoor
   studies indoor are done but expensive and short period
   this 
@@ -851,9 +832,3 @@ remove starts, update zfav etc/tmpfiles
   [[grep:beets][beets]]
 
 * Switch from priority to next
-* flight
-1:36	1	[+] הצג מסלול	מקומות שמורים 	
-	16:30	17:22	0:52	ללא החלפה	[+] הצג מסלול	מקומות שמורים 	
-	16:35	18:11	1:36	1	[+] הצג מסלול	מקומות שמורים 	
-	17:35	19:11	1:36	1	[+] הצג מסלול	מקומות שמורים 	
-	18:35	20:11	1:36	

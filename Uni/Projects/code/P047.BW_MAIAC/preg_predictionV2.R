@@ -47,7 +47,8 @@ gestpred <- gestpred[pregstart >= as.Date("2003-01-01") , ]
 
 # lengthen this out so that each day is one row
 # from pregstart to day before you were born (birthdate - 1)
-# gestlong <- ddply(gestpred[1:100,], .(id), function(x){
+#this only works for small datasets. for much bigger ones we use data.table bellow
+# gestlong <- ddply(gestpred, .(id), function(x){
 #   data.frame(day = seq(x$pregstart, (x$birthdate - 1), by = "day"), id = x$id)
 # })
 

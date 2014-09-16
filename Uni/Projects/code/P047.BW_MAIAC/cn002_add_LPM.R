@@ -14,15 +14,13 @@ library(gdata)
 
 cases<-fread("/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN007_Key_tables/locxy0308_guid_lpmid.csv")
 
+############### devide to sets
 #create full TS
 days_2003<-seq.Date(from = as.Date("2003-01-01"), to = as.Date("2003-12-31"), 1)
 #create date range
 test3.se <- data.table(expand.grid(lpmid = cases[, unique(lpmid)], day = days_2003))
-
 setkey(test3.se,lpmid)
 setkey(cases,lpmid)
-
-############### devide to sets
 
 #we allow cartesian since there is some site codes sharing a lpmid and thus need to expand the base lpmid-date file
 #to check correctnes issue:
