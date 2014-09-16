@@ -21,21 +21,13 @@ days_2003<-seq.Date(from = as.Date("2003-01-01"), to = as.Date("2003-12-31"), 1)
 test3.se <- data.table(expand.grid(lpmid = cases[, unique(lpmid)], day = days_2003))
 setkey(test3.se,lpmid)
 setkey(cases,lpmid)
-
-#we allow cartesian since there is some site codes sharing a lpmid and thus need to expand the base lpmid-date file
-#to check correctnes issue:
-#length(test2[,unique(SiteCode)])*365
-
+#make sure to allow cartesian
 test4.se<- merge(test3.se,cases,allow.cartesian=TRUE)
-
-
-test4.se$m <- as.numeric(format(test4.se$day, "%m"))
-
 
 
 ##########################################################################3
 #met
-met <- fread ("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
+met <- fread ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
 #convert date from 01JAN2000 format
 met <- met [, day:=as.Date(strptime(date, "%d%b%Y"))]
 met[, c := as.numeric(format(day, "%Y")) ]
@@ -49,29 +41,9 @@ met <- met[tempc != 9999.9]
 met2003<- met[c==2003]
 
 
-###NDVI
-ndvi <-  as.data.table(read.dbf("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Data/USA/NDVI/MODIS MIA_NE/ndvi2003.dbf"))
-#str(ndvi)
-#create ndviID
-ndvi[, ndviid := paste(X,Y,sep="")]
-setnames(ndvi,"month","m")
-setnames(ndvi,"X","long_ndvi")
-setnames(ndvi,"Y","lat_ndvi")
-#names(ndvi)
-ndvi <- ndvi[, c("date","xx","yy") :=NULL]
-ndvi <- ndvi[NDVI < 1]
-#join NDVI to LPM
-setkey(ndvi, m, ndviid)
-setkey(test4.se, m, ndviid)
-test4.se.ndv <- merge(test4.se, ndvi, all.x = T)
-#summary(am2.lu.nd$NDVI)
-test4.se.ndv [, c("long_ndvi.y", "lat_ndvi.y") := NULL]
-test4.se.ndv [, c("long_ndvi.x", "lat_ndvi.x") := NULL]
-
-
 ###PBL
-pbl <-  as.data.table(read.dbf("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Data/USA/HPBL/P2003.dbf"))
-#str(pbl)
+pbl <-  as.data.table(read.dbf("/media/NAS/Uni/Data/USA/HPBL/P2003.dbf"))
+str(pbl)
 pbl[, day := paste(V2,V3,V1,sep="/")]
 pbl <- pbl [, day:=as.Date(strptime(day, "%m/%d/%Y"))]
 pbl[, c("V1", "V2", "V3", "y1", "x1") := NULL]
@@ -79,21 +51,37 @@ pbl[, c("V1", "V2", "V3", "y1", "x1") := NULL]
 #join pbl
 #str(test4.se.ndv)
 #fix pbl levels
-test4.se.ndv[, pblid:= as.factor(pblid)]
+test4.se[, pblid:= as.factor(pblid)]
 #Join PBL
 setkey(pbl , day, pblid)
-setkey(test4.se.ndv, day, pblid)
-test4.se.ndv.pb <- merge(test4.se.ndv, pbl, all.x = T)
-test4.se.ndv.pb [, c("Long_pbl.x", "Lat_pbl.x") := NULL]
-test4.se.ndv.pb [, c("Long_pbl.y", "Lat_pbl.y") := NULL]
+setkey(test4.se, day, pblid)
+test4.se.pb <- merge(test4.se, pbl, all.x = T)
+test4.se.pb [, c("Long_pbl.x", "Lat_pbl.x") := NULL]
+test4.se.pb [, c("Long_pbl.y", "Lat_pbl.y") := NULL]
 
 
 ###met
 #str(met2003)
 #str(am2.lu.nd.pb)
 setkey(met2003 , day, stn)
-setkey(test4.se.ndv.pb, day, stn)
-test4.se.ndv.pb.met <- merge(test4.se.ndv.pb, met2003 , all.x = T)
-test4.se.ndv.pb.met[, c("date", "lat_met.y","long_met.y","c","TEMP") := NULL]
+setkey(test4.se.pb, day, stn)
+test4.se.pb.met <- merge(test4.se.pb, met2003 , all.x = T)
+test4.se.pb.met[, c("date", "lat_met.y","long_met.y","c","TEMP") := NULL]
 
-saveRDS(test4.se.ndv.pb.met,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2003.rds")
+#read 2003 RDS
+m3<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2003_st.rds")
+#here's the formula used to calculate lpm
+m4.formula<-as.formula(resm3~s(tden,popden)+s(pcturban)+s(elev)+s(dist_pemis)+s(dist_A1)+s(tden,pbl)+s(pbl)+s(tden,WDSP)+s(tden,tempc)+ah_gm3+s(tden,visib))
+bp.model.ps<-gam(m4.formula ,data = m3)
+summary(bp.model.ps)#0.118
+
+
+#make sure var names and units are the same as in the NE pm model 
+summary(m3)
+summary(test4.se.pb.met)
+
+
+par(mfrow=c(2,2)) 
+plot(bp.model.ps, main = "2003 model")
+
+test4.se.pb.met$lpm <- predict(bp.model.ps,test4.se.pb.met)

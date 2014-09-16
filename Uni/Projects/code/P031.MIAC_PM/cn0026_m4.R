@@ -20,9 +20,9 @@ m4.formula<-as.formula(resm3~s(tden,popden)+s(pcturban)+s(elev)+s(dist_pemis)+s(
 #2003
 ####################################3
 
-mod1table<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2003_p3.rds.rds")
+mod1table<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2003_p3.rds.rds")
 ###############################
-mod1<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2003w_p.m3.rds")
+mod1<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2003w_p.m3.rds")
 
 
 
@@ -73,7 +73,7 @@ mod1table$r2003[31]<- sqrt(mean(dat$spatresid^2))
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #>>ADD LOCAL PM STAGE
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-luf<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2003.rds")
+luf<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2003.rds")
 #shorten mod1
 l=seq(names(mod1));names(l)=names(mod1);l
 mod1_2003<-mod1
@@ -91,7 +91,7 @@ setnames(mod1d_all_st,"guid.x","guid")
 mod1d_all_st$resm3<-mod1d_all_st$PM25-mod1d_all_st$predicted.m3
 names(mod1d_all_st)
 
-saveRDS(mod1d_all_st,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2003_st.rds")
+saveRDS(mod1d_all_st,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2003_st.rds")
 
 #The GAM model
 #normal
@@ -136,16 +136,16 @@ dat$spatresid<-dat$barpm-dat$barpred
 mod1table$r2003[40]<- sqrt(mean(dat$spatresid^2))
 
 ####################
-saveRDS(mod1table,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2003_p4.rds")
+saveRDS(mod1table,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2003_p4.rds")
 
 
 ####################################3
 #2004
 ####################################3
 
-mod1table<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2004_p3.rds.rds")
+mod1table<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2004_p3.rds.rds")
 ###############################
-mod1<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2004w_p.m3.rds")
+mod1<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2004w_p.m3.rds")
 
 
 
@@ -196,7 +196,7 @@ mod1table$r2004[31]<- sqrt(mean(dat$spatresid^2))
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #>>ADD LOCAL PM STAGE
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-luf<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2004.rds")
+luf<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2004.rds")
 #shorten mod1
 l=seq(names(mod1));names(l)=names(mod1);l
 mod1_2004<-mod1
@@ -214,7 +214,7 @@ setnames(mod1d_all_st,"guid.x","guid")
 mod1d_all_st$resm3<-mod1d_all_st$PM25-mod1d_all_st$predicted.m3
 names(mod1d_all_st)
 
-saveRDS(mod1d_all_st,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2004_st.rds")
+saveRDS(mod1d_all_st,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2004_st.rds")
 
 #The GAM model
 #normal
@@ -259,7 +259,7 @@ dat$spatresid<-dat$barpm-dat$barpred
 mod1table$r2004[40]<- sqrt(mean(dat$spatresid^2))
 
 ####################
-saveRDS(mod1table,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2004_p4.rds")
+saveRDS(mod1table,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2004_p4.rds")
 
 
 
@@ -267,9 +267,9 @@ saveRDS(mod1table,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3
 #2005
 ####################################3
 
-mod1table<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2005_p3.rds.rds")
+mod1table<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2005_p3.rds.rds")
 ###############################
-mod1<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2005w_p.m3.rds")
+mod1<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2005w_p.m3.rds")
 
 
 
@@ -320,7 +320,7 @@ mod1table$r2005[31]<- sqrt(mean(dat$spatresid^2))
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #>>ADD LOCAL PM STAGE
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-luf<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2005.rds")
+luf<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2005.rds")
 #shorten mod1
 l=seq(names(mod1));names(l)=names(mod1);l
 mod1_2005<-mod1
@@ -338,7 +338,7 @@ setnames(mod1d_all_st,"guid.x","guid")
 mod1d_all_st$resm3<-mod1d_all_st$PM25-mod1d_all_st$predicted.m3
 names(mod1d_all_st)
 
-saveRDS(mod1d_all_st,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2005_st.rds")
+saveRDS(mod1d_all_st,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2005_st.rds")
 
 #The GAM model
 #normal
@@ -383,7 +383,7 @@ dat$spatresid<-dat$barpm-dat$barpred
 mod1table$r2005[40]<- sqrt(mean(dat$spatresid^2))
 
 ####################
-saveRDS(mod1table,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2005_p4.rds")
+saveRDS(mod1table,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2005_p4.rds")
 
 
 
@@ -391,9 +391,9 @@ saveRDS(mod1table,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3
 #2006
 ####################################3
 
-mod1table<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2006_p3.rds.rds")
+mod1table<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2006_p3.rds.rds")
 ###############################
-mod1<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2006w_p.m3.rds")
+mod1<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2006w_p.m3.rds")
 
 
 
@@ -444,7 +444,7 @@ mod1table$r2006[31]<- sqrt(mean(dat$spatresid^2))
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #>>ADD LOCAL PM STAGE
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-luf<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2006.rds")
+luf<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2006.rds")
 #shorten mod1
 l=seq(names(mod1));names(l)=names(mod1);l
 mod1_2006<-mod1
@@ -462,7 +462,7 @@ setnames(mod1d_all_st,"guid.x","guid")
 mod1d_all_st$resm3<-mod1d_all_st$PM25-mod1d_all_st$predicted.m3
 names(mod1d_all_st)
 
-saveRDS(mod1d_all_st,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2006_st.rds")
+saveRDS(mod1d_all_st,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2006_st.rds")
 
 #The GAM model
 #normal
@@ -507,16 +507,16 @@ dat$spatresid<-dat$barpm-dat$barpred
 mod1table$r2006[40]<- sqrt(mean(dat$spatresid^2))
 
 ####################
-saveRDS(mod1table,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2006_p4.rds")
+saveRDS(mod1table,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2006_p4.rds")
 
 
 ####################################3
 #2007
 ####################################3
 
-mod1table<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2007_p3.rds.rds")
+mod1table<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2007_p3.rds.rds")
 ###############################
-mod1<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2007w_p.m3.rds")
+mod1<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2007w_p.m3.rds")
 
 
 
@@ -567,7 +567,7 @@ mod1table$r2007[31]<- sqrt(mean(dat$spatresid^2))
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #>>ADD LOCAL PM STAGE
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-luf<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2007.rds")
+luf<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2007.rds")
 #shorten mod1
 l=seq(names(mod1));names(l)=names(mod1);l
 mod1_2007<-mod1
@@ -585,7 +585,7 @@ setnames(mod1d_all_st,"guid.x","guid")
 mod1d_all_st$resm3<-mod1d_all_st$PM25-mod1d_all_st$predicted.m3
 names(mod1d_all_st)
 
-saveRDS(mod1d_all_st,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2007_st.rds")
+saveRDS(mod1d_all_st,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2007_st.rds")
 
 #The GAM model
 #normal
@@ -630,7 +630,7 @@ dat$spatresid<-dat$barpm-dat$barpred
 mod1table$r2007[40]<- sqrt(mean(dat$spatresid^2))
 
 ####################
-saveRDS(mod1table,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2007_p4.rds")
+saveRDS(mod1table,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2007_p4.rds")
 
 
 
@@ -638,9 +638,9 @@ saveRDS(mod1table,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3
 #2008
 ####################################3
 
-mod1table<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2008_p3.rds.rds")
+mod1table<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2008_p3.rds.rds")
 ###############################
-mod1<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2008w_p.m3.rds")
+mod1<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2008w_p.m3.rds")
 
 
 
@@ -691,7 +691,7 @@ mod1table$r2008[31]<- sqrt(mean(dat$spatresid^2))
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #>>ADD LOCAL PM STAGE
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-luf<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2008.rds")
+luf<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2008.rds")
 #shorten mod1
 l=seq(names(mod1));names(l)=names(mod1);l
 mod1_2008<-mod1
@@ -709,7 +709,7 @@ setnames(mod1d_all_st,"guid.x","guid")
 mod1d_all_st$resm3<-mod1d_all_st$PM25-mod1d_all_st$predicted.m3
 names(mod1d_all_st)
 
-saveRDS(mod1d_all_st,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2008_st.rds")
+saveRDS(mod1d_all_st,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2008_st.rds")
 
 #The GAM model
 #normal
@@ -754,7 +754,7 @@ dat$spatresid<-dat$barpm-dat$barpred
 mod1table$r2008[40]<- sqrt(mean(dat$spatresid^2))
 
 ####################
-saveRDS(mod1table,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2008_p4.rds")
+saveRDS(mod1table,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2008_p4.rds")
 
 
 
@@ -762,9 +762,9 @@ saveRDS(mod1table,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3
 #2009
 ####################################3
 
-mod1table<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2009_p3.rds.rds")
+mod1table<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2009_p3.rds.rds")
 ###############################
-mod1<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2009w_p.m3.rds")
+mod1<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2009w_p.m3.rds")
 
 
 
@@ -815,7 +815,7 @@ mod1table$r2009[31]<- sqrt(mean(dat$spatresid^2))
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #>>ADD LOCAL PM STAGE
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-luf<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2009.rds")
+luf<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2009.rds")
 #shorten mod1
 l=seq(names(mod1));names(l)=names(mod1);l
 mod1_2009<-mod1
@@ -833,7 +833,7 @@ setnames(mod1d_all_st,"guid.x","guid")
 mod1d_all_st$resm3<-mod1d_all_st$PM25-mod1d_all_st$predicted.m3
 names(mod1d_all_st)
 
-saveRDS(mod1d_all_st,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2009_st.rds")
+saveRDS(mod1d_all_st,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2009_st.rds")
 
 #The GAM model
 #normal
@@ -878,7 +878,7 @@ dat$spatresid<-dat$barpm-dat$barpred
 mod1table$r2009[40]<- sqrt(mean(dat$spatresid^2))
 
 ####################
-saveRDS(mod1table,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2009_p4.rds")
+saveRDS(mod1table,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2009_p4.rds")
 
 
 
@@ -886,9 +886,9 @@ saveRDS(mod1table,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3
 #2010
 ####################################3
 
-mod1table<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2010_p3.rds.rds")
+mod1table<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2010_p3.rds.rds")
 ###############################
-mod1<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2010w_p.m3.rds")
+mod1<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2010w_p.m3.rds")
 
 
 
@@ -939,7 +939,7 @@ mod1table$r2010[31]<- sqrt(mean(dat$spatresid^2))
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #>>ADD LOCAL PM STAGE
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-luf<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2010.rds")
+luf<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2010.rds")
 #shorten mod1
 l=seq(names(mod1));names(l)=names(mod1);l
 mod1_2010<-mod1
@@ -957,7 +957,7 @@ setnames(mod1d_all_st,"guid.x","guid")
 mod1d_all_st$resm3<-mod1d_all_st$PM25-mod1d_all_st$predicted.m3
 names(mod1d_all_st)
 
-saveRDS(mod1d_all_st,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2010_st.rds")
+saveRDS(mod1d_all_st,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2010_st.rds")
 
 #The GAM model
 #normal
@@ -1002,16 +1002,16 @@ dat$spatresid<-dat$barpm-dat$barpred
 mod1table$r2010[40]<- sqrt(mean(dat$spatresid^2))
 
 ####################
-saveRDS(mod1table,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2010_p4.rds")
+saveRDS(mod1table,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2010_p4.rds")
 
 
 ####################################3
 #2011
 ####################################3
 
-mod1table<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2011_p3.rds.rds")
+mod1table<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2011_p3.rds.rds")
 ###############################
-mod1<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2011w_p.m3.rds")
+mod1<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2011w_p.m3.rds")
 
 
 
@@ -1062,7 +1062,7 @@ mod1table$r2011[31]<- sqrt(mean(dat$spatresid^2))
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 #>>ADD LOCAL PM STAGE
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-luf<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2011.rds")
+luf<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2011.rds")
 #shorten mod1
 l=seq(names(mod1));names(l)=names(mod1);l
 mod1_2011<-mod1
@@ -1080,7 +1080,7 @@ setnames(mod1d_all_st,"guid.x","guid")
 mod1d_all_st$resm3<-mod1d_all_st$PM25-mod1d_all_st$predicted.m3
 names(mod1d_all_st)
 
-saveRDS(mod1d_all_st,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2011_st.rds")
+saveRDS(mod1d_all_st,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2011_st.rds")
 
 #The GAM model
 #normal
@@ -1125,7 +1125,7 @@ dat$spatresid<-dat$barpm-dat$barpred
 mod1table$r2011[40]<- sqrt(mean(dat$spatresid^2))
 
 ####################
-saveRDS(mod1table,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2011_p4.rds")
+saveRDS(mod1table,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2011_p4.rds")
 
 
 
