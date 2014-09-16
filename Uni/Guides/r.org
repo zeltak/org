@@ -7202,12 +7202,6 @@ pmbyc<- mod1pm25 %.% group_by(c,season) %.% do(function(df){summary(lm(m1.formul
 $Note-results will output by order of first the second by statment$  
 ₆In example₆ in above example the first 4 results will be for 2002 and then each season, then 2003 and each 4 seasons etc..
 
-** closestbyday  (allan KNN function)
-*** k nearest
-knearest=100 is roughly 5.7 km's
-100/pi= 32
-sqrt(32)=5.7
-
 * data.table
 *** basics
 **** into
@@ -7341,14 +7335,6 @@ gestpred <- merge(gestpred,
 mod1 <- merge(mod1, filterpm25[, list(day,mon,filterpm25)], all.x= T, by = c("day", "mon"))
 #+end_src
  
-**** cartesean join						  :CANCELLED:
-a cartesean join is a join of every row of one table to every row in another table
-under data.table it looks like this:
-
-#+BEGIN_SRC R
-test4.se<- merge(test3.se,cases,allow.cartesian=TRUE)
-#+END_SRC
-
 *** Dates
 **** extract dates in data.table
 #+begin_src r
