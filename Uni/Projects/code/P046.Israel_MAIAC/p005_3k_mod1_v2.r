@@ -155,7 +155,7 @@ aod.m <- makepointsmatrix(allbestpred, "x_aod_ITM", "y_aod_ITM", "aodid")
 ########### join aqua to PM25
 closestaod <- nearestbyday(pm.m, aod.m, 
                               PM25, allbestpred [, list(day, aodid, aod)], 
-                              "stn", "aodid", "closestaod", "aod", knearest = 5, maxdistance = 3000)
+                              "stn", "aodid", "closestaod", "aod", knearest = 10)
 # this has aod even when there is no pm; it gets dropped on the merge
 
 
@@ -182,7 +182,23 @@ summary(lm(PM25~predicted,data=PM25.m1))
 
 
 
-out.m1 = lmer(m1t.formula ,data =  PM25.m1,na.action = na.exclude)
-PM25.m1$predicted <- predict(out.m1)
-summary(lm(PM25~predicted,data=PM25.m1))
+out.m1 = lmer(m1t.formula ,data =  PM25.m1, aod)^2, 2),by=stn]
+
+
+
+PM25.m1[!is.na(PM25) & !is.na(aod), list(r2 = round(cor(PM25, aod)^2, 2),.N),by=stn]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

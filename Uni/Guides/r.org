@@ -618,7 +618,7 @@ sapply(pkg, require, character.only = TRUE)
 }
  
 # usage
-packages <- c("ggplot2", "plyr", "reshape2", "RColorBrewer", "scales", "grid")
+packages <- c("ggplot2", "plyr","lme4", "FNN","data.table","reshape","reshape2","sqldf","sp","gtools","doBy","Hmisc","gdata","car")
 
 ipak(packages)
 #+end_src
@@ -6124,6 +6124,11 @@ penalized spline, with GCV choosing the df:
 bp.model.gamm<-gamm(log(bp1sys)~ sex + as.facto1r(race) + smokpkyr +
 bmi+ as.factor(booze) + *s(age,bs='cr')*+ ser.chol,
 random=list(locode=~1), family=gaussian(), data=hanesna)
+#+END_SRC
+**** plot gam output
+#+BEGIN_SRC R
+par(mfrow=c(2,2)) 
+plot(bp.model.ps, main = "2003 model")
 #+END_SRC
 **** penelized Vs natural
 fx=false is for penelized splines

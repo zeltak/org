@@ -1,4 +1,3 @@
-#Prediction
 library(data.table)
 library(plyr)
 library(reshape2)
@@ -6,7 +5,7 @@ library(foreign)
 library(Hmisc)
 library(mgcv)
 library(FNN)
-#library(rgdal)
+
 
 # import monitor data and spatial merge with nearestbyday()
 source("/home/zeltak/org/files/Uni/Projects/code/P031.MIAC_PM/code_snips/nearestbyday.r")
@@ -20,20 +19,30 @@ loc<-fread("/media/NAS/Uni/Projects/P011.BirthW_NE/3.1.11.4.Work/3.Analysis/2.R_
 l=seq(names(loc));names(l)=names(loc);
 l
 str(loc$FIPS)
-head(loc,n=3)
-locxy<-loc[,c("lat","long","uniqueid_y"),with=FALSE]
-write.csv(locxy,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN007_Key_tables/locxy.csv")
+loc[,guid:=NULL]
+# head(loc,n=3)
+# locxy<-loc[,c("lat","long","uniqueid_y"),with=FALSE]
+# write.csv(locxy,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN007_Key_tables/locxy.csv")
+# 
+
+xyguid<-fread("/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN007_Key_tables/locxy0308_guid_lpmid.csv")
+l=seq(names(xyguid));names(l)=names(xyguid);
+l
+xyguid<-xyguid[,c(4,7),with=FALSE]
+
+
+setkey(xyguid,uniqueid_y)
+setkey(loc,uniqueid_y)
+#make sure to allow cartesian
+loc.g <- merge(loc,xyguid)
+setnames(loc.g ,"guid.y","guid")
 
 
 #subset data
-gestpred<-loc[,c("byob","birthw","lbw","sex","plur","bdob","kess","tden","age_centered","age_centered_sq","FIPS",
+gestpred<-loc.g[,c("byob","birthw","lbw","sex","plur","bdob","kess","tden","age_centered","age_centered_sq","FIPS",
 "cig_preg", "cig_pre", "med_income", "p_ospace", "gender","pcturban","adtmean","dist_A1", "dist_pemis","prev_400","diab",  "hyper" ,"lungd", "diab_other", "prevpret",
-"edu_group","MRN","ges_calc","uniqueid_y","sinetime","costime"                
+"edu_group","MRN","ges_calc","uniqueid_y","sinetime","costime","guid"                
                                   ),with=FALSE]
-
-
-
-
 
 #create unique location
 # lengthen out to each day of pregnancy
@@ -45,26 +54,11 @@ gestpred[, pregstart := birthdate - 7*ges_calc]
 #subset to current expo year range (all pregnancies that start after first day of exposure)
 gestpred <- gestpred[pregstart >= as.Date("2003-01-01") , ]
 
-# lengthen this out so that each day is one row
-# from pregstart to day before you were born (birthdate - 1)
-#this only works for small datasets. for much bigger ones we use data.table bellow
-# gestlong <- ddply(gestpred, .(id), function(x){
-#   data.frame(day = seq(x$pregstart, (x$birthdate - 1), by = "day"), id = x$id)
-# })
-
 # trying a data.table way to do this
 gestlong <- gestpred[,list(day = seq(.SD$pregstart, .SD$birthdate - 1, by = "day")),by=id]
 setkey(gestlong,id)
 xgestlong <- merge(gestlong, gestpred, by = "id")
 
-
-##Descriptives
-# check that everyone has a number of rows that makes sense for their gestational age
-#describe(gestlong[, .N/7 - gestage_comb,by="id"][,V1])
-# making predictions on 
-#nrow(gestlong) # site-day combinations
-# from what time period
-#range(gestlong$day)
 
 
 
@@ -87,41 +81,54 @@ dim(allbestpred)
 allbestpred <-allbestpred [,c(1,2,9),with=FALSE]
 
 
-
+setkey(xgestlong,guid,day)
+setkey(allbestpred ,guid, day)
+#make sure to allow cartesian
+gxgestlong <- merge(xgestlong,allbestpred,all.x=TRUE)
+summary(gxgestlong$bestpred)
 
 
 # find the closest aodid
-gestlong.m <- makepointsmatrix(gestlong, xvar="longutm", yvar="latutm", idvar= "id")
-allbestpred.m <- makepointsmatrix(allbestpred, xvar="x_aod_utm", yvar="y_aod_utm", idvar= "aodid")
-# use the nearestbyday() function
-###########
-nearestbestpred <- nearestbyday(gestlong.m, allbestpred.m, 
-                          gestlong, allbestpred, 
-                          "id", "aodid", "closestbestpred", "bestpred", knearest = 1, maxdistance = 1000)#was 9 and 1100
-nearestbestpred[, c("closestbestpredknn", "closestbestprednobs", "closestbestpredmean") := NULL]
-nearestbestpred[, id := as.numeric(id)]
-nearestbestpred[, day := as.Date(day)]
+# gestlong.m <- makepointsmatrix(gestlong, xvar="longutm", yvar="latutm", idvar= "id")
+# allbestpred.m <- makepointsmatrix(allbestpred, xvar="x_aod_utm", yvar="y_aod_utm", idvar= "aodid")
+# # use the nearestbyday() function
+# ###########
+# nearestbestpred <- nearestbyday(gestlong.m, allbestpred.m, 
+#                           gestlong, allbestpred, 
+#                           "id", "aodid", "closestbestpred", "bestpred", knearest = 1, maxdistance = 1000)#was 9 and 1100
+# nearestbestpred[, c("closestbestpredknn", "closestbestprednobs", "closestbestpredmean") := NULL]
+# nearestbestpred[, id := as.numeric(id)]
+# nearestbestpred[, day := as.Date(day)]
+# 
+# setkey(gestlong,id,day)
+# setkey(nearestbestpred,id,day)
+# gestlong <- merge(gestlong, nearestbestpred, all.x = T)
+# head(gestlong, 2)
+# describe(gestlong$bestpred)
+# # are there negative predictions
+# describe(gestlong$bestpred<0)
+# # how many unique AODIDs?
+# gestlong[, length(unique(closestbestpred))]
+# # compute summaries
+# setkey(gestlong,id,day)
 
-setkey(gestlong,id,day)
-setkey(nearestbestpred,id,day)
-gestlong <- merge(gestlong, nearestbestpred, all.x = T)
-head(gestlong, 2)
-describe(gestlong$bestpred)
-# are there negative predictions
-describe(gestlong$bestpred<0)
-# how many unique AODIDs?
-gestlong[, length(unique(closestbestpred))]
-# compute summaries
-setkey(gestlong,id,day)
+
+
+
+
+
+
+
+
 
 ####this is where we calculate the exposure per period for each participent-
 #pmperg-exposure all pregnancy
-gestlongsummary <- gestlong[, list(pmpreg = mean(bestpred), 
+gestlongsummary <- gxgestlong[, list(pmpreg = mean(bestpred), 
                                    pmlast90 = mean(tail(.SD[,bestpred], 90)),
                                    pmlast30 = mean(tail(.SD[,bestpred], 30)),
                                    pm1stT = mean(head(.SD[,bestpred], 90)),
-                                   #pmweek12to24 = mean(.SD[84:168,bestpred]),# just an example, make sure key is set above
-                                   aodid = closestbestpred[1]),by=id]
+                                   pmweek12to24 = mean(.SD[84:168,bestpred]),# just an example, make sure key is set above
+                                   guid = guid[1]),by=id]
 
 # remove variables from previous runs through
 gestpred[, names(gestlongsummary)[!names(gestlongsummary) %in% "folio"] := NULL]
@@ -150,31 +157,7 @@ P4 +
 rm(MxC_Map_df); rm(P4)
 file.remove("ggmapTemp.png")
 
-# merge in the closest monitor value
-# find the closest aodid
-#gestlong.m <- makepointsmatrix(gestlong, xvar="longutm", yvar="latutm", idvar= "folio")
-pm.m <- makepointsmatrix(pm, xvar="pm_x", yvar="pm_y", idvar= "mon")
-# use the nearestbyday() function
-###########
-nearestmon <- nearestbyday(gestlong.m, pm.m, 
-                                gestlong, pm[, list(day,mon,daymean)], 
-                                "folio", "mon", "closestmon", "daymean", knearest = 12)#was 9 and 1100
-nearestmon[, c("closestmonknn", "closestmonnobs", "closestmonmean") := NULL]
-nearestmon[, folio := as.numeric(folio)]
-setkey(gestlong,folio,day)
-setkey(nearestmon,folio,day)
-gestlong <- merge(gestlong, nearestmon, all.x = T)
 
-gestlongsummary <- gestlong[, list(monpreg = mean(daymean), 
-                                   monlast90 = mean(tail(.SD[,daymean], 90)),
-                                   monlast30 = mean(tail(.SD[,daymean], 30)),
-                                   mon1stT = mean(head(.SD[,daymean], 90))),by=folio]
-
-# remove variables from previous runs through
-# then merge
-setkey(gestpred,folio)
-setkey(gestlong,folio)
-gestpred <- merge(gestpred, gestlongsummary)
 
 # merge in other covariates
 if(!exists("gestpred.premerge")){gestpred.premerge <- copy(gestpred)}
