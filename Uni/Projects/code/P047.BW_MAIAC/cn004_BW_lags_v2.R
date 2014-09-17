@@ -8,85 +8,73 @@ library(FNN)
 library(ggplot2)
 
 
-
-# import monitor data and spatial merge with nearestbyday()
-source("/home/zeltak/org/files/Uni/Projects/code/P031.MIAC_PM/code_snips/nearestbyday.r")
-
-
-#######################################
+######################################
 # prediction for enrollment locations
 #######################################
-
-loc<-fread("/media/NAS/Uni/Projects/P011.BirthW_NE/3.1.11.4.Work/3.Analysis/2.R_analysis/bw_diab37.csv",colClasses=c(FIPS="character",tract="character"))
-l=seq(names(loc));names(l)=names(loc);
+bwfull <- read.dbf("/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN003_BW_data/bwall.dbf")
+bwfull<-as.data.table(bwfull)
+l=seq(names(bwfull));names(l)=names(bwfull);
 l
-str(loc$FIPS)
-loc[,guid:=NULL]
-# head(loc,n=3)
-# locxy<-loc[,c("lat","long","uniqueid_y"),with=FALSE]
-# write.csv(locxy,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN007_Key_tables/locxy.csv")
-# 
+str(bwfull$FIPS)
+
 
 xyguid<-fread("/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN007_Key_tables/locxy0308_guid_lpmid.csv")
-l=seq(names(xyguid));names(l)=names(xyguid);
-l
+# l=seq(names(xyguid));names(l)=names(xyguid);
+# l
 xyguid<-xyguid[,c(4,7),with=FALSE]
 
-
 setkey(xyguid,uniqueid_y)
-setkey(loc,uniqueid_y)
+setkey(bwfull,uniqueid_y)
 #make sure to allow cartesian
-loc.g <- merge(loc,xyguid)
-setnames(loc.g ,"guid.y","guid")
+bwfull.g <- merge(bwfull,xyguid)
 
 
-#subset data
-gestpred<-loc.g[,c("byob","birthw","lbw","sex","plur","bdob","kess","tden","age_centered","age_centered_sq","FIPS",
-"cig_preg", "cig_pre", "med_income", "p_ospace", "gender","pcturban","adtmean","dist_A1", "dist_pemis","prev_400","diab",  "hyper" ,"lungd", "diab_other", "prevpret",
-"edu_group","MRN","ges_calc","uniqueid_y","sinetime","costime","guid"                
-                                  ),with=FALSE]
+#subset data (short dataset)
+bwfull.s<-bwfull.g[,c("bdob","byob","birthw","ges_calc","uniqueid_y","guid"),with=FALSE]
 
 #create unique location
 # lengthen out to each day of pregnancy
-setnames(gestpred, c("bdob", "byob","uniqueid_y"), c("birthdate", "birthyear","id"))
-gestpred[, birthdate := as.Date(strptime(birthdate, format = "%m/%d/%y"))]
+setnames(bwfull.s, c("bdob", "byob","uniqueid_y"), c("birthdate", "birthyear","id"))
+bwfull.s[, birthdate := as.Date(strptime(birthdate, format = "%Y-%m-%d"))]
 # new variable for start of gestation using the best gestational age (in weeks)
-gestpred[, pregstart := birthdate - 7*ges_calc]
+bwfull.s[, pregstart := birthdate - 7*ges_calc]
 
 #subset to current expo year range (all pregnancies that start after first day of exposure)
-gestpred <- gestpred[pregstart >= as.Date("2003-01-01") , ]
+bwfull.s <- bwfull.s[pregstart >= as.Date("2003-01-01") , ]
 
-# trying a data.table way to do this
-gestlong <- gestpred[,list(day = seq(.SD$pregstart, .SD$birthdate - 1, by = "day")),by=id]
+# create every single day of pregnancy for each pregnancy
+gestlong <- bwfull.s[,list(day = seq(.SD$pregstart, .SD$birthdate, by = "day")),by=id]
+
 setkey(gestlong,id)
-xgestlong <- merge(gestlong, gestpred, by = "id")
-
+gestlong <- merge(gestlong, bwfull.s, by = "id")
 
 
 
 ######## import pollution sets
 
-
-path.data<-"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/"
-
-# assemble all predictions from the yearly bestpred here:
-#loadRDS
-allbestpredlist <- list()
-for(i in 2003:2008){
-  allbestpredlist[[paste0("year_", i)]] <- readRDS(paste0(path.data, "mod3best_", i, ".rds"))
-  print(i)
-} 
-allbestpred <- rbindlist(allbestpredlist)
-rm(allbestpredlist)
-dim(allbestpred)
-
-allbestpred <-allbestpred [,c(1,2,9),with=FALSE]
+p2003<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM03.csv")
+p2003 <- p2003[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
+p2004<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM03.csv")
+p2004 <- p2004[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
+p2005<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM03.csv")
+p2005 <- p2005[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
+p2006<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM03.csv")
+p2006 <- p2006[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
+p2007<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM03.csv")
+p2007 <- p2007[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
+p2008<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM03.csv")
+p2008 <- p2008[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
 
 
-setkey(xgestlong,guid,day)
+allbestpred <- rbind(p2003,p2004,p2005,p2006,p2007,p2008)
+allbestpred <-allbestpred [,c(1,2,7),with=FALSE]
+allbestpred$guid<-as.numeric(allbestpred$guid)
+
+
+setkey(gestlong,guid,day)
 setkey(allbestpred ,guid, day)
 #make sure to allow cartesian
-gxgestlong <- merge(xgestlong,allbestpred,all.x=TRUE)
+gestlong.pm <- merge(gestlong,allbestpred,all.x=TRUE)
 summary(gxgestlong$bestpred)
 
 
@@ -118,11 +106,16 @@ summary(gxgestlong$bestpred)
 ####this is where we calculate the exposure per period for each participent-
 #pmperg-exposure all pregnancy
 gestlongsummary <- gxgestlong[, list(pmpreg = mean(bestpred), 
-                                   pmlast90 = mean(tail(.SD[,bestpred], 90)),
+                                   pm3rdT = mean(tail(.SD[,bestpred], 90)),
                                    pmlast30 = mean(tail(.SD[,bestpred], 30)),
                                    pm1stT = mean(head(.SD[,bestpred], 90)),
-                                   pmweek12to24 = mean(.SD[84:168,bestpred]),# just an example, make sure key is set above
+                                   pmweek12to24 = mean(.SD[84:168,bestpred]),
+                                   pm2ndT = mean(.SD[91:175,bestpred]),
+                                   pmf20w = mean(.SD[1:140,bestpred]),
                                    guid = guid[1]),by=id]
+
+#As far as the lags, I met with Emily yesterday, and if we proceed, we are thinking 0-12.99 weeks (1st trimester), 13 weeks-24.99 weeks (2nd trimester), 25 weeks-delivery (3rd trimester), and LMP-20 weeks (which is often considered a relevant exposure window for the outcome of gestational hypertension).
+
 
 saveRDS(gestlongsummary,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN008_Fin_data/bw_pm1k.rds")
 summary(gestlongsummary)
@@ -150,16 +143,16 @@ ggplot(bw.o1, aes(pmpreg)) + geom_histogram()
 
 
 # merge in other covariates
-gestpred <- merge(gestpred, participants[etapa == "00", list(folio, peso_h, talla_h, fecha_naci_M)])
+bwfull.s <- merge(bwfull.s, participants[etapa == "00", list(folio, peso_h, talla_h, fecha_naci_M)])
 
 # some pre-processing
 # construct seasonality terms
-gestpred[, jday := as.numeric(format(birthdate, "%j"))]
-gestpred[, costime := cos(2*pi*jday/365.25)]
-gestpred[, sintime := sin(2*pi*jday/365.25)]
-gestpred[, female := sex - 1]
+bwfull.s[, jday := as.numeric(format(birthdate, "%j"))]
+bwfull.s[, costime := cos(2*pi*jday/365.25)]
+bwfull.s[, sintime := sin(2*pi*jday/365.25)]
+bwfull.s[, female := sex - 1]
 # simple regression
-summary(lm(Fenton_Z_score ~ pmpreg + sintime + costime, data=gestpred))
+summary(lm(Fenton_Z_score ~ pmpreg + sintime + costime, data=bwfull.s))
 summary(lm(peso_h ~ monpreg + gestage_comb + female + costime + sintime, data=gestpred[gestage_comb >= 37,]))
 
 # add random intercept for aodid

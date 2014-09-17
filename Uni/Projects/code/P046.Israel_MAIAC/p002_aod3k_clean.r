@@ -81,4 +81,3 @@ write.dbf(grid,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/F
 #for MAIAC
 clipgrid<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/ILclipgrid.csv")
 
-q

@@ -75,13 +75,15 @@ m4.formula<-as.formula(resm3~s(tden,popden)+s(pcturban)+s(elev)+s(dist_pemis)+s(
 bp.model.ps<-gam(m4.formula ,data = m3)
 summary(bp.model.ps)#0.118
 
+make sure var names and units are the same as in the NE pm model 
+# summary(m3)
+# summary(test4.se.pb.met)
 
-#make sure var names and units are the same as in the NE pm model 
-summary(m3)
-summary(test4.se.pb.met)
+#keep only needed
+l=seq(names(test4.se.pb.met));names(l)=names(test4.se.pb.met);
+l
+f1<-test4.se.pb.met[,c(1,4,11,14:19,33,34,36,39,40),with=FALSE]
+f2<-f1[1:30000000,]
 
 
-par(mfrow=c(2,2)) 
-plot(bp.model.ps, main = "2003 model")
-
-test4.se.pb.met$lpm <- predict(bp.model.ps,test4.se.pb.met)
+lpm <- predict(bp.model.ps,f2)

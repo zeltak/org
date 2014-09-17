@@ -58,6 +58,8 @@ source("/home/zeltak/org/files/Uni/Projects/code/P031.MIAC_PM/code_snips/nearest
 pm.m <- makepointsmatrix(pm10, "x_stn_ITM", "y_stn_ITM", "stn")
 
 #create aod terra matrix
+allbestpred[,c("x_aod_ITM.x","y_aod_ITM.x","x_aod_ITM.y","y_aod_ITM.y"):=NULL]
+
 itm<-read.csv("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/Archive/pwITM.csv")
 itm<-as.data.table(itm)
 setkey(allbestpred , aodid)
@@ -67,10 +69,11 @@ allbestpred$aodid<-as.character(allbestpred$aodid)
 aod.m <- makepointsmatrix(allbestpred, "x_aod_ITM", "y_aod_ITM", "aodid")
 
 
+
 ########### join aqua to pm10
 closestaod <- nearestbyday(pm.m, aod.m, 
                               pm10, allbestpred [, list(day, aodid, aod)], 
-                              "stn", "aodid", "closestaod", "aod", knearest = 5, maxdistance = 4200)
+                              "stn", "aodid", "closestaod", "aod", knearest = 40)
 # this has aod even when there is no pm; it gets dropped on the merge
 
 
@@ -95,6 +98,18 @@ out.m1 = lm(m1t.formula ,data =  pm10.m1,na.action = na.exclude)
 pm10.m1$predicted <- predict(out.m1)
 summary(lm(PM10~predicted,data=pm10.m1))
 
+
+
+pm10r2<-pm10.m1[!is.na(PM10) & !is.na(aod), list(r2 = round(cor(PM10, aod)^2, 2),.N),by=stn]
+setkey(pm10r2,r2)
+pm10r2
+
+#join XY
+
+setkey(pm10r2,stn)
+setkey(fullxy,stn)
+x1<-merge(pm10r2,fullxy)
+write.csv(x1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/Archive/r2xyp10.csv")
 
 
 
@@ -155,7 +170,7 @@ aod.m <- makepointsmatrix(allbestpred, "x_aod_ITM", "y_aod_ITM", "aodid")
 ########### join aqua to PM25
 closestaod <- nearestbyday(pm.m, aod.m, 
                               PM25, allbestpred [, list(day, aodid, aod)], 
-                              "stn", "aodid", "closestaod", "aod", knearest = 10)
+                              "stn", "aodid", "closestaod", "aod", knearest = 40)
 # this has aod even when there is no pm; it gets dropped on the merge
 
 
@@ -186,14 +201,15 @@ out.m1 = lmer(m1t.formula ,data =  PM25.m1, aod)^2, 2),by=stn]
 
 
 
-PM25.m1[!is.na(PM25) & !is.na(aod), list(r2 = round(cor(PM25, aod)^2, 2),.N),by=stn]
+pm25r2<-PM25.m1[!is.na(PM25) & !is.na(aod), list(r2 = round(cor(PM25, aod)^2, 2),.N),by=stn]
+setkey(pm25r2,r2)
 
+#join XY
 
-
-
-
-
-
+setkey(pm25r2,stn)
+setkey(fullxy,stn)
+x1<-merge(pm25r2,fullxy)
+write.csv(x1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/Archive/r2xy.csv")
 
 
 
