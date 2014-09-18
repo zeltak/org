@@ -42,6 +42,7 @@ bwfull.s[, pregstart := birthdate - 7*ges_calc]
 #subset to current expo year range (all pregnancies that start after first day of exposure)
 bwfull.s <- bwfull.s[pregstart >= as.Date("2003-01-01") , ]
 
+
 # create every single day of pregnancy for each pregnancy
 gestlong <- bwfull.s[,list(day = seq(.SD$pregstart, .SD$birthdate, by = "day")),by=id]
 
@@ -52,78 +53,54 @@ gestlong <- merge(gestlong, bwfull.s, by = "id")
 
 ######## import pollution sets
 
-p2003<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM03.csv")
-p2003 <- p2003[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
-p2004<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM03.csv")
-p2004 <- p2004[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
-p2005<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM03.csv")
-p2005 <- p2005[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
-p2006<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM03.csv")
-p2006 <- p2006[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
-p2007<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM03.csv")
-p2007 <- p2007[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
-p2008<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM03.csv")
-p2008 <- p2008[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
+p2003<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM03.csv",select=c(1,2,3))
+#p2003 <- p2003[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
+p2004<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM04.csv",select=c(1,2,3))
+#p2004 <- p2004[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
+p2005<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM05.csv",select=c(1,2,3))
+p2006<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM06.csv",select=c(1,2,3))
+#p2006 <- p2006[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
+p2007<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM07.csv",select=c(1,2,3))
+#p2007 <- p2007[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
+p2008<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM08.csv",select=c(1,2,3))
+#p2008 <- p2008[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
 
 
 allbestpred <- rbind(p2003,p2004,p2005,p2006,p2007,p2008)
-allbestpred <-allbestpred [,c(1,2,7),with=FALSE]
 allbestpred$guid<-as.numeric(allbestpred$guid)
+#common dates
+allbestpred[, day := as.Date(strptime(day, format = "%Y-%m-%d"))]
+
+
+gestlong$day<-gestlong$birthdate
 
 
 setkey(gestlong,guid,day)
 setkey(allbestpred ,guid, day)
 #make sure to allow cartesian
 gestlong.pm <- merge(gestlong,allbestpred,all.x=TRUE)
-summary(gxgestlong$bestpred)
-
-
-# find the closest aodid
-# gestlong.m <- makepointsmatrix(gestlong, xvar="longutm", yvar="latutm", idvar= "id")
-# allbestpred.m <- makepointsmatrix(allbestpred, xvar="x_aod_utm", yvar="y_aod_utm", idvar= "aodid")
-# # use the nearestbyday() function
-# ###########
-# nearestbestpred <- nearestbyday(gestlong.m, allbestpred.m, 
-#                           gestlong, allbestpred, 
-#                           "id", "aodid", "closestbestpred", "bestpred", knearest = 1, maxdistance = 1000)#was 9 and 1100
-# nearestbestpred[, c("closestbestpredknn", "closestbestprednobs", "closestbestpredmean") := NULL]
-# nearestbestpred[, id := as.numeric(id)]
-# nearestbestpred[, day := as.Date(day)]
-# 
-# setkey(gestlong,id,day)
-# setkey(nearestbestpred,id,day)
-# gestlong <- merge(gestlong, nearestbestpred, all.x = T)
-# head(gestlong, 2)
-# describe(gestlong$bestpred)
-# # are there negative predictions
-# describe(gestlong$bestpred<0)
-# # how many unique AODIDs?
-# gestlong[, length(unique(closestbestpred))]
-# # compute summaries
-# setkey(gestlong,id,day)
-
+summary(gestlong.pm$predpm25)
 
 ####this is where we calculate the exposure per period for each participent-
 #pmperg-exposure all pregnancy
-gestlongsummary <- gxgestlong[, list(pmpreg = mean(bestpred), 
-                                   pm3rdT = mean(tail(.SD[,bestpred], 90)),
-                                   pmlast30 = mean(tail(.SD[,bestpred], 30)),
-                                   pm1stT = mean(head(.SD[,bestpred], 90)),
-                                   pmweek12to24 = mean(.SD[84:168,bestpred]),
-                                   pm2ndT = mean(.SD[91:175,bestpred]),
-                                   pmf20w = mean(.SD[1:140,bestpred]),
+gestlong.pm.lags <- gestlong.pm[, list(pmpreg = mean(predpm25), 
+                                   pm3rdT = mean(tail(.SD[,predpm25], 90)),
+                                   pmlast30 = mean(tail(.SD[,predpm25], 30)),
+                                   pm1stT = mean(head(.SD[,predpm25], 90)),
+                                   pmweek12to24 = mean(.SD[84:168,predpm25]),
+                                   pm2ndT = mean(.SD[91:175,predpm25]),
+                                   pmf20w = mean(.SD[1:140,predpm25]),
                                    guid = guid[1]),by=id]
 
 #As far as the lags, I met with Emily yesterday, and if we proceed, we are thinking 0-12.99 weeks (1st trimester), 13 weeks-24.99 weeks (2nd trimester), 25 weeks-delivery (3rd trimester), and LMP-20 weeks (which is often considered a relevant exposure window for the outcome of gestational hypertension).
 
+saveRDS(gestlong.pm.lags,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN008_Fin_data/bw_pm1knodup.rds")
+summary(gestlong.pm.lags)
 
-saveRDS(gestlongsummary,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN008_Fin_data/bw_pm1k.rds")
-summary(gestlongsummary)
-
-# remove variables from previous runs through
-setkey(gxgestlong,id)
-setkey(gestlongsummary,id)
-bw.o1 <- merge(gxgestlong, gestlongsummary)
+# join back
+setkey(gestlong.pm,id)
+setkey(gestlong.pm.lags,id)
+bw.o1 <- merge(gestlong.pm, gestlong.pm.lags)
 describe(bw.o1$pmpreg)
 # histogram
 ggplot(bw.o1, aes(pmpreg)) + geom_histogram()
