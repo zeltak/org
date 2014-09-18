@@ -15,8 +15,6 @@ bwfull <- read.dbf("/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN003_BW
 bwfull<-as.data.table(bwfull)
 l=seq(names(bwfull));names(l)=names(bwfull);
 l
-str(bwfull$FIPS)
-
 
 xyguid<-fread("/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN007_Key_tables/locxy0308_guid_lpmid.csv")
 # l=seq(names(xyguid));names(l)=names(xyguid);
@@ -42,9 +40,12 @@ bwfull.s[, pregstart := birthdate - 7*ges_calc]
 #subset to current expo year range (all pregnancies that start after first day of exposure)
 bwfull.s <- bwfull.s[pregstart >= as.Date("2003-01-01") , ]
 
+bwfull.s[,ges_calc:=as.integer(ges_calc)]
+bwfull.s[,birthw:=as.integer(birthw)]
 
 # create every single day of pregnancy for each pregnancy
-gestlong <- bwfull.s[,list(day = seq(.SD$pregstart, .SD$birthdate, by = "day")),by=id]
+gestlong <- bwfull.s[,list(day = seq(.SD$pregstart, .SD$birthdate -1, by = "day")),by=id]
+
 
 setkey(gestlong,id)
 gestlong <- merge(gestlong, bwfull.s, by = "id")
@@ -54,24 +55,18 @@ gestlong <- merge(gestlong, bwfull.s, by = "id")
 ######## import pollution sets
 
 p2003<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM03.csv",select=c(1,2,3))
-#p2003 <- p2003[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
 p2004<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM04.csv",select=c(1,2,3))
-#p2004 <- p2004[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
 p2005<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM05.csv",select=c(1,2,3))
 p2006<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM06.csv",select=c(1,2,3))
-#p2006 <- p2006[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
 p2007<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM07.csv",select=c(1,2,3))
-#p2007 <- p2007[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
 p2008<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM08.csv",select=c(1,2,3))
-#p2008 <- p2008[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
-
-
 allbestpred <- rbind(p2003,p2004,p2005,p2006,p2007,p2008)
+rm(p2003,p2004,p2005,p2006,p2007,p2008)
+gc()
+
 allbestpred$guid<-as.numeric(allbestpred$guid)
 #common dates
 allbestpred[, day := as.Date(strptime(day, format = "%Y-%m-%d"))]
-
-
 gestlong$day<-gestlong$birthdate
 
 
@@ -94,14 +89,16 @@ gestlong.pm.lags <- gestlong.pm[, list(pmpreg = mean(predpm25),
 
 #As far as the lags, I met with Emily yesterday, and if we proceed, we are thinking 0-12.99 weeks (1st trimester), 13 weeks-24.99 weeks (2nd trimester), 25 weeks-delivery (3rd trimester), and LMP-20 weeks (which is often considered a relevant exposure window for the outcome of gestational hypertension).
 
+head(bw.o1,n=3)
+
 saveRDS(gestlong.pm.lags,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN008_Fin_data/bw_pm1knodup.rds")
 summary(gestlong.pm.lags)
 
 # join back
-setkey(gestlong.pm,id)
+setkey(bwfull.s ,id)
 setkey(gestlong.pm.lags,id)
-bw.o1 <- merge(gestlong.pm, gestlong.pm.lags)
-describe(bw.o1$pmpreg)
+bw.o1 <- merge(bwfull.s , gestlong.pm.lags)
+head(bw.o1,n=3)
 # histogram
 ggplot(bw.o1, aes(pmpreg)) + geom_histogram()
 

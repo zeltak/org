@@ -871,13 +871,19 @@ variable names are included in the header at the top of the file.
 
 *** importing from SAS
 
-note:
- install the package*sas7bdat*
- then issue:
- read.sas7bdat("/PATH/TO/SASFILE.sas7bdat")
- *example:*
- sas<-
-read.sas7bdat("c:/Users/ekloog/Documents/$Doc/3.PostDoc/3.1.Projetcs/3.1.1.NE\_PM\_MODELS/3.1.1.4.Work/2.Gather\_data/FN005\_MET\_full\_dataset/metc2009.sas7bdat")
+#+BEGIN_SRC R
+#in SAS
+# save SAS dataset in trasport format
+libname out xport 'c:/mydata.xpt';
+data out.mydata;
+set sasuser.mydata;
+run;
+
+# in R
+library(Hmisc)
+mydata <- sasxport.get("c:/mydata.xpt")
+# character variables are converted to R factors 
+#+END_SRC
 
 *** import from text delimted
 
@@ -1511,12 +1517,13 @@ to clear the workspace:
 
 rm(list = ls(all = TRUE))
 
-*** remove specific object
-
+*** remove specific object (rm)
 to remove a specific object use:
- rm(object)
- IE:
- rm(grid\_2003)
+#+BEGIN_SRC R
+rm(object)
+#or for multi
+rm(p2003,p2004,p2005,p2006,p2007,p2008)
+#+END_SRC
 
 *** list the objects in the current workspace
 
@@ -7321,9 +7328,16 @@ zclippedaod <- merge(clippedaod, clipgrid[,list(aodid,x_aod_ITM, y_aod_ITM)], al
 #+end_src
 this will keep only 3 variables from the clipgrid dataset
 **** Complex merge and renaming multiple variables
+***** example 1
+
+#+BEGIN_SRC R
+xgestlong <- merge(gestlong, gestlong_cli[,list(birthyear_clin=birthdate, id)], by = "id")
+#+END_SRC
+
+***** example 2
+
 #+begin_src R
 #complex merge and renaming
-
 gestpred <- merge(gestpred,
                   participants[etapa == "2T", list(folio,
                                                    SES_scored, #SES
