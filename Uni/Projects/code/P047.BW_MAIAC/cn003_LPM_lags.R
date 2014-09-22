@@ -14,16 +14,6 @@ library(gdata)
 
 cases<-fread("/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN007_Key_tables/locxy0308_guid_lpmid.csv")
 
-############### devide to sets
-#create full TS
-days_2003<-seq.Date(from = as.Date("2003-01-01"), to = as.Date("2003-12-31"), 1)
-#create date range
-test3.se <- data.table(expand.grid(lpmid = cases[, unique(lpmid)], day = days_2003))
-setkey(test3.se,lpmid)
-setkey(cases,lpmid)
-#make sure to allow cartesian
-test4.se<- merge(test3.se,cases,allow.cartesian=TRUE)
-
 
 ##########################################################################3
 #met
@@ -37,8 +27,26 @@ met <- met[WDSP != 999.9]
 met <- met[visib != 999.9]
 met <- met[dewp != 9999.9]
 met <- met[tempc != 9999.9]
-#xtract year met
-met2003<- met[c==2003]
+met <- met[c >= 2003 & c <= 2008 ]
+#group by station and year
+table_temp<-as.data.table(ddply(na.omit(met[,c("tempc","stn"),with=F]),.(stn),nrow))
+#calc full time series
+365*4+366*2 #=2192
+x<-table_temp[V1 >= 2192]
+x
+
+
+############### devide to sets
+#create full TS
+days_2003<-seq.Date(from = as.Date("2003-01-01"), to = as.Date("2003-12-31"), 1)
+#create date range
+test3.se <- data.table(expand.grid(lpmid = cases[, unique(lpmid)], day = days_2003))
+setkey(test3.se,lpmid)
+setkey(cases,lpmid)
+#make sure to allow cartesian
+test4.se<- merge(test3.se,cases,allow.cartesian=TRUE)
+
+
 
 
 ###PBL
@@ -61,8 +69,8 @@ test4.se.pb [, c("Long_pbl.y", "Lat_pbl.y") := NULL]
 
 
 ###met
-#str(met2003)
-#str(am2.lu.nd.pb)
+#xtract year met
+met2003<- met[c==2003]
 setkey(met2003 , day, stn)
 setkey(test4.se.pb, day, stn)
 test4.se.pb.met <- merge(test4.se.pb, met2003 , all.x = T)
@@ -73,9 +81,8 @@ m3<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_mod
 #here's the formula used to calculate lpm
 m4.formula<-as.formula(resm3~s(tden,popden)+s(pcturban)+s(elev)+s(dist_pemis)+s(dist_A1)+s(tden,pbl)+s(pbl)+s(tden,WDSP)+s(tden,tempc)+ah_gm3+s(tden,visib))
 bp.model.ps<-gam(m4.formula ,data = m3)
-summary(bp.model.ps)#0.118
 
-make sure var names and units are the same as in the NE pm model 
+#make sure var names and units are the same as in the NE pm model 
 # summary(m3)
 # summary(test4.se.pb.met)
 
@@ -83,7 +90,9 @@ make sure var names and units are the same as in the NE pm model
 l=seq(names(test4.se.pb.met));names(l)=names(test4.se.pb.met);
 l
 f1<-test4.se.pb.met[,c(1,4,11,14:19,33,34,36,39,40),with=FALSE]
-f2<-f1[1:30000000,]
 
+lpm <- predict(bp.model.ps,f1)
+f1$lpm<-lpm
+saveRDS(f1,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN008_Fin_data/lpm2003.rds")
+summary(f1$lpm)
 
-lpm <- predict(bp.model.ps,f2)

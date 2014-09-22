@@ -77,13 +77,13 @@ for i=2:size(LST2,1)
         LST = [LST ; LST2{i,1}];
     else
         name = num2str(LST2{i-1,1}{1,1});
-        writetable(LST,['/media/NAS/Uni/Data/Israel/MODIS_LST_IL/out/' name],'Delimiter','tab');
+        %writetable(LST,['/media/NAS/Uni/Data/Israel/MODIS_LST_IL/out/' name],'Delimiter','tab');
         save(['/media/NAS/Uni/Data/Israel/MODIS_LST_IL/out/' name],'LST');
         LST = [];
     end
 end
 name = num2str(LST2{i,1}{1,1});
-writetable(LST,['/media/NAS/Uni/Data/Israel/MODIS_LST_IL/out/' name],'Delimiter','tab');
+%writetable(LST,['/media/NAS/Uni/Data/Israel/MODIS_LST_IL/out/' name],'Delimiter','tab');
 save(['/media/NAS/Uni/Data/Israel/MODIS_LST_IL/out/' name],'LST');
 
 %save('LST.mat','LST2');

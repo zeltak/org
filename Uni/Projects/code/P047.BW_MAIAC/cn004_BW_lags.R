@@ -37,10 +37,11 @@ bwfull.s[, pregstart_cli := birthdate - 7*clinega]
 
 #subset to current expo year range (all pregnancies that start after first day of exposure)
 bwfull.s <- bwfull.s[pregstart >= as.Date("2003-01-01") , ]
+bwfull.s.clin <- bwfull.s[pregstart_cli >= as.Date("2003-01-01") , ]
 
 # create every single day of pregnancy for each pregnancy
 gestlong <- bwfull.s[,list(day = seq(.SD$pregstart, .SD$birthdate -1, by = "day")),by=id]
-gestlong.clin <- bwfull.s[,list(day = seq(.SD$pregstart_cli, .SD$birthdate -1, by = "day")),by=id]
+gestlong.clin <- bwfull.s.clin[,list(day = seq(.SD$pregstart_cli, .SD$birthdate -1, by = "day")),by=id]
  
 setkey(bwfull.s,id)
 setkey(gestlong,id)
@@ -107,14 +108,14 @@ summary(gestlong.pm.clin$predpm25)
 #pmperg-exposure all pregnancy
 #As far as the lags, I met with Emily yesterday, and if we proceed, we are thinking 0-12.99 weeks (1st trimester), 13 weeks-24.99 weeks (2nd trimester), 25 weeks-delivery (3rd trimester), and LMP-20 weeks (which is often considered a relevant exposure window for the outcome of gestational hypertension).
 
-gestlong.pm.lags.clin <- gestlong.pm.clin[, list(pmpreg = mean(predpm25), 
-                                   pm3rdT = mean(tail(.SD[,predpm25], 90)),
-                                   pmlast30 = mean(tail(.SD[,predpm25], 30)),
-                                   pm1stT = mean(head(.SD[,predpm25], 90)),
-                                   pmweek12to24 = mean(.SD[84:168,predpm25]),
-                                   pm2ndT = mean(.SD[91:175,predpm25]),
-                                   pmf20w = mean(.SD[1:140,predpm25]),
-                                   guid = guid[1]),by=id]
+gestlong.pm.lags.clin <- gestlong.pm.clin[, list(pmpreg.clin = mean(predpm25), 
+                                   pm3rdT.clin = mean(tail(.SD[,predpm25], 90)),
+                                   pmlast30.clin = mean(tail(.SD[,predpm25], 30)),
+                                   pm1stT.clin = mean(head(.SD[,predpm25], 90)),
+                                   pmweek12to24.clin = mean(.SD[84:168,predpm25]),
+                                   pm2ndT.clin = mean(.SD[91:175,predpm25]),
+                                   pmf20w.clin = mean(.SD[1:140,predpm25]),
+                                   guid.clin = guid[1]),by=id]
 
 
 saveRDS(gestlong.pm.lags.clin,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN008_Fin_data/bw_pm1knodup_clin.rds")
