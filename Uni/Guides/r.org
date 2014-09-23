@@ -7156,6 +7156,12 @@ m1.formula <- as.formula(PM25 ~ aod+tempc+WDSP+NDVI+dist_PE+pcturb_1km+logroad+n
 all.vars(testformula)
 #+END_SRC
 
+** create sine and cosine
+#+BEGIN_SRC R
+bwfull.s[, costime := cos(2*pi*jday/365.25)]
+bwfull.s[, sintime := sin(2*pi*jday/365.25)]
+#+END_SRC
+
 * Packages specific
 ** Hemisc
 *** mtable

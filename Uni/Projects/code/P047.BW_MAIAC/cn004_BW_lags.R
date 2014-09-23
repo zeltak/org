@@ -48,9 +48,9 @@ setkey(gestlong,id)
 gestlong <- merge(gestlong, bwfull.s, by = "id")
 
 
-setkey(bwfull.s,id)
+setkey(bwfull.s.clin,id)
 setkey(gestlong.clin,id)
-gestlong.clin <- merge(gestlong.clin, bwfull.s, by = "id")
+gestlong.clin <- merge(gestlong.clin, bwfull.s.clin, by = "id")
 
 
 ######## import pollution sets
@@ -93,6 +93,7 @@ gestlong.pm.lags <- gestlong.pm[, list(pmpreg = mean(predpm25),
 
 saveRDS(gestlong.pm.lags,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN008_Fin_data/bw_pm1knodup.rds")
 summary(gestlong.pm.lags)
+write.csv(gestlong.pm.lags,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN008_Fin_data/bw_pm1knodup.csv")
 
 
 
@@ -119,66 +120,11 @@ gestlong.pm.lags.clin <- gestlong.pm.clin[, list(pmpreg.clin = mean(predpm25),
 
 
 saveRDS(gestlong.pm.lags.clin,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN008_Fin_data/bw_pm1knodup_clin.rds")
-summary(gestlong.pm.lags)
+summary(gestlong.pm.lags.clin)
+write.csv(gestlong.pm.lags.clin,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN008_Fin_data/bw_pm1knodup_clin.csv")
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-# join back
-setkey(bwfull.s ,id)
-setkey(gestlong.pm.lags,id)
-bw.o1 <- merge(bwfull.s , gestlong.pm.lags)
-head(bw.o1,n=3)
-# histogram
-ggplot(bw.o1, aes(pmpreg)) + geom_histogram()
-
-# show this with ggmap
-# library(ggmap)
-# MxC_Map_df <- get_map(location = 'massachusetts', maptype = "hybrid", zoom = 9)
-# str(MxC_Map_df)
-# P4 <- ggmap(MxC_Map_df, darken = c(0.5, "white"))
-# P4 + 
-#   geom_point(data = bw.o1 ,
-#              aes(-longdd, latdd, color = pmpreg, size = pmpreg)) + 
-#   theme_bw(10) + 
-#   ggtitle("Predictions over pregnancy")
-
-
-
-
-# merge in other covariates
-bwfull.s <- merge(bwfull.s, participants[etapa == "00", list(folio, peso_h, talla_h, fecha_naci_M)])
-
-# some pre-processing
-# construct seasonality terms
-bwfull.s[, jday := as.numeric(format(birthdate, "%j"))]
-bwfull.s[, costime := cos(2*pi*jday/365.25)]
-bwfull.s[, sintime := sin(2*pi*jday/365.25)]
-bwfull.s[, female := sex - 1]
-# simple regression
-summary(lm(Fenton_Z_score ~ pmpreg + sintime + costime, data=bwfull.s))
-summary(lm(peso_h ~ monpreg + gestage_comb + female + costime + sintime, data=gestpred[gestage_comb >= 37,]))
-
-# add random intercept for aodid
-summary(lmer(Fenton_Z_score ~ pmpreg + (1|aodid), data=gestpred))
-summary(lmer(peso_h ~ pmpreg + gestage_comb + female + costime + sintime + (1|aodid), data=gestpred[gestage_comb >= 37,]))
-summary(lmer(peso_h ~ pmlast90 + gestage_comb + female + costime + sintime + (1|aodid), data=gestpred[gestage_comb >= 37,]))
-ggplot(gestpred, aes(pmpreg, Fenton_Z_score)) + geom_point() + geom_smooth()
-ggplot(gestpred, aes(pmpreg, gestage_comb)) + geom_point() + geom_smooth()
-ggplot(gestpred, aes(pmpreg, peso_h)) + geom_point() + geom_smooth()
-
-# bring in land use terms
-gestpred <- merge(gestpred,aodidlur[,list(aodid,elev,rden,rden_OSM)], all.x = T, by="aodid")
-describe(gestpred[, list(elev,rden)])
 

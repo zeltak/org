@@ -34901,6 +34901,24 @@ sed -e 's/source regexp/replacement/' for replacing the first matching
 string in the line, add g at the end (s/s1/s2/g) for replacing all
 matching strings.
 
+*** awk 
+**** find and replace awk
+     #+NAME: 
+     #+BEGIN_SRC sh
+awk '{gsub(/,,/,",")}; 1'  Fintmpc_2003.csv > tmp2003.csv
+     #+END_SRC
+this will replace ,, to ,
+
+some more example
+
+#+NAME: 
+#+BEGIN_SRC sh
+ # substitute (find and replace) "foo" with "bar" on each line
+ awk '{sub(/foo/,"bar")}; 1'           # replace only 1st instance
+ gawk '{$0=gensub(/foo/,"bar",4)}; 1'  # replace only 4th instance
+ awk '{gsub(/foo/,"bar")}; 1'          # replace ALL instances in a line
+#+END_SRC
+
 *** regexp
 
 **** basics

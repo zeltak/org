@@ -70,22 +70,29 @@ PROC EXPORT DATA= aod.Mod3best_10nmnodup
 							 RUN; 
 
 
-PROC EXPORT DATA= aod.Mod3best_03nmsum
-            OUTFILE= "Z:\Projects\P031_MIAC_PM\3.Work\2.Gather_data\FN40_steve_clean\finalprPM03.csv" 
-			            DBMS=CSV REPLACE;
-						     PUTNAMES=YES;
-							 RUN; 
-
-
-PROC EXPORT DATA= aod.Mod3best_05nmsum
-            OUTFILE= "Z:\Projects\P031_MIAC_PM\3.Work\2.Gather_data\FN40_steve_clean\finalprPM05.csv" 
-			            DBMS=CSV REPLACE;
-						     PUTNAMES=YES;
-							 RUN; 
-
-
-PROC EXPORT DATA= aod.Mod3best_11nmsum
+PROC EXPORT DATA= aod.Mod3best_11nmnodup
             OUTFILE= "Z:\Projects\P031_MIAC_PM\3.Work\2.Gather_data\FN40_steve_clean\finalprPM11.csv" 
 			            DBMS=CSV REPLACE;
 						     PUTNAMES=YES;
-							 RUN; 
+							 RUN;
+
+
+/*PROC EXPORT DATA= aod.Mod3best_03nmsum*/
+/*            OUTFILE= "Z:\Projects\P031_MIAC_PM\3.Work\2.Gather_data\FN40_steve_clean\finalprPM03.csv" */
+/*			            DBMS=CSV REPLACE;*/
+/*						     PUTNAMES=YES;*/
+/*							 RUN; */
+/**/
+/**/
+/*PROC EXPORT DATA= aod.Mod3best_05nmsum*/
+/*            OUTFILE= "Z:\Projects\P031_MIAC_PM\3.Work\2.Gather_data\FN40_steve_clean\finalprPM05.csv" */
+/*			            DBMS=CSV REPLACE;*/
+/*						     PUTNAMES=YES;*/
+/*							 RUN; */
+/**/
+/**/
+/*PROC EXPORT DATA= aod.Mod3best_11nmsum*/
+/*            OUTFILE= "Z:\Projects\P031_MIAC_PM\3.Work\2.Gather_data\FN40_steve_clean\finalprPM11.csv" */
+/*			            DBMS=CSV REPLACE;*/
+/*						     PUTNAMES=YES;*/
+/*							 RUN; */
