@@ -79,9 +79,12 @@ test4.se.pb.met[, c("date", "lat_met.y","long_met.y","c","TEMP") := NULL]
 #read 2003 RDS
 m3<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod4_2003_st.rds")
 #here's the formula used to calculate lpm
-m4.formula<-as.formula(resm3~s(tden,popden)+s(pcturban)+s(elev)+s(dist_pemis)+s(dist_A1)+s(tden,pbl)+s(pbl)+s(tden,WDSP)+s(tden,tempc)+ah_gm3+s(tden,visib))
-bp.model.ps<-gam(m4.formula ,data = m3)
+#m4.formula<-as.formula(resm3~s(tden,popden)+s(pcturban)+s(elev)+s(dist_pemis)+s(dist_A1)+s(tden,pbl)+s(pbl)+s(tden,WDSP)+s(tden,tempc)+ah_gm3+s(tden,visib))
+m4.formula<-as.formula(resm3~s(tden)+s(popden)+s(pcturban)+s(elev)+s(dist_pemis)+s(dist_A1)+s(tden,pbl)+s(pbl)+ah_gm3+WDSP+visib)
 
+bp.model.ps<-gam(m4.formula ,data = m3)
+bp.model.ps<-bam(m4.formula ,data = m3)
+summary(bp.model.ps)
 #make sure var names and units are the same as in the NE pm model 
 # summary(m3)
 # summary(test4.se.pb.met)
@@ -96,3 +99,6 @@ f1$lpm<-lpm
 saveRDS(f1,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN008_Fin_data/lpm2003.rds")
 summary(f1$lpm)
 
+
+
+xlpm <- predict(bp.model.ps,f1)
