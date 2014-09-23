@@ -7467,6 +7467,8 @@ See Here:
 add5 <- add4[daystart <= day & dayend > day, ]
 #example 2
 add5 <- met[Date == "2000-12-27"]
+#example 3
+tss6<-allbestpred[day >= "2006-01-01" & day < "2007-01-01"]
 #+end_src
 **** susbet by year
 #+begin_src 
@@ -7578,7 +7580,7 @@ mod1[day >= as.Date("2007-01-01") & day < as.Date("2008-01-01")]
 #+begin_src R
 tryu<-try2[,unique(guid)]
 #+end_src
-*** dupicate a data.table
+*** duplicate a data.table
 make sure to use copy other wise it will change var names in both tables
 
 #+begin_src R

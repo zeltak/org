@@ -63,6 +63,8 @@ p2007<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_ste
 p2008<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN40_steve_clean/finalprPM08.csv",select=c(1,2,3))
 allbestpred <- rbind(p2003,p2004,p2005,p2006,p2007,p2008)
 rm(p2003,p2004,p2005,p2006,p2007,p2008)
+
+
 gc()
 allbestpred$guid<-as.numeric(allbestpred$guid)
 #common dates

@@ -20,7 +20,7 @@ str(fullbw$FIPS)
 
 #subset data
 fullbw.s<-fullbw[,c("byob","birthw","lbw","sex","plur","bdob","kess","tden","age_centered","age_centered_sq","FIPS",
-"cig_preg", "cig_pre", "med_income", "p_ospace", "gender","pcturban","adtmean","dist_A1", "dist_pemis","prev_400","diab",  "hyper" ,"lungd", "diab_other", "prevpret","edu_group","MRN","ges_calc","uniqueid_y","sinetime","costime","clinega"),with=FALSE]
+"cig_preg", "cig_pre", "med_income", "p_ospace", "gender","pcturban","adtmean","dist_A1", "dist_pemis","prev_400","diab",  "hyper" ,"lungd", "diab_other", "prevpret","edu_group","MRN","ges_calc","uniqueid_y","sinetime","costime"),with=FALSE]
 
 
 setnames(fullbw.s, c("bdob", "byob","uniqueid_y"), c("birthdate", "birthyear","id"))
@@ -114,24 +114,6 @@ setnames(tempdb, "guid","tempid")
 
 
 
-#import Ta id
-#import ndvi id
-temp.id<-fread("/media/NAS/Uni/Projects/P032_multiple_expo_jaime/3.Work/P007_key_tables/caseid_tempid.csv")
-setnames(temp.id, "uniqueid_y","id")
-temp.id$x<- temp.id$glong*10000
-temp.id$y<- temp.id$glat*10000
-temp.id[, guid := paste(x,y,sep="")]
-
-#merge id
-setkey(bwfull.pmc.ndv, id)
-setkey(temp.id ,id)
-bwfull.pmc.ndv <- merge(bwfull.pmc.ndv, temp.id[,list(id,guid)])
-setnames(bwfull.pmc.ndv, "guid.y","tempid")
-
-
-
-
-
 
 ###############################
 #STEP 3
@@ -143,94 +125,98 @@ setnames(bwfull.pmc.ndv, "guid.y","tempid")
 
 
 #subset data
-bwfull.g<-bwfull.pmc.ndv[,c("birthyear","birthw","birthdate","ges_calc","id","clinega","tempid"),with=FALSE]
+bwfull.g<-fullbw[,c("byob","birthw","bdob","ges_calc","uniqueid_y","clinega"),with=FALSE]
 #convert ges_calc to numeric
 bwfull.g[,ges_calc:=as.numeric(ges_calc)]
+bwfull.g[,clinega:=as.numeric(clinega)]
 #get rid of impossible gestational ages other wise the expanding part later wont work
 bwfull.s<- bwfull.g[ges_calc > 12 & ges_calc < 48,  ]
  
 #create unique location
 # lengthen out to each day of pregnancy
+setnames(bwfull.s, c("bdob", "byob","uniqueid_y"), c("birthdate", "birthyear","id"))
+bwfull.s[, birthdate := as.Date(strptime(birthdate, format = "%m/%d/%y"))]
 # new variable for start of gestation using the best gestational age (in weeks)
 bwfull.s[, pregstart := birthdate - 7*ges_calc]
+bwfull.s[, pregstart_cli := birthdate - 7*clinega]
 
 #subset to current expo year range (all pregnancies that start after first day of exposure)
 bwfull.s <- bwfull.s[pregstart >= as.Date("2003-01-01") , ]
-
+bwfull.s.clin <- bwfull.s[pregstart_cli >= as.Date("2003-01-01") , ]
 
 # create every single day of pregnancy for each pregnancy
 gestlong <- bwfull.s[,list(day = seq(.SD$pregstart, .SD$birthdate -1, by = "day")),by=id]
-
+gestlong.clin <- bwfull.s.clin[,list(day = seq(.SD$pregstart_cli, .SD$birthdate -1, by = "day")),by=id]
  
 setkey(bwfull.s,id)
 setkey(gestlong,id)
 gestlong <- merge(gestlong, bwfull.s, by = "id")
 
 
+setkey(bwfull.s.clin,id)
+setkey(gestlong.clin,id)
+gestlong.clin <- merge(gestlong.clin, bwfull.s.clin, by = "id")
+
+
+#import Ta id
+#import ndvi id
+temp.id<-fread("/media/NAS/Uni/Projects/P032_multiple_expo_jaime/3.Work/P007_key_tables/caseid_tempid.csv")
+setnames(temp.id, "uniqueid_y","id")
+temp.id$x<- temp.id$glong*10000
+temp.id$y<- temp.id$glat*10000
+temp.id[, tempid := paste(x,y,sep="")]
+
+#merge id
+setkey(gestlong, id)
+setkey(temp.id ,id)
+gestlong.tid <- merge(gestlong, temp.id[,list(id,tempid)])
+
+
+#merge id
+setkey(gestlong.clin, id)
+setkey(temp.id ,id)
+gestlong.tid.clin <- merge(gestlong.clin, temp.id[,list(id,tempid)])
 
 
 
 ####merge ges_calc dataset
 
-setkey(gestlong,guid,day)
-setkey(allbestpred ,guid, day)
-#make sure to allow cartesian
-gestlong.pm <- merge(gestlong,allbestpred,all.x=TRUE)
-summary(gestlong.pm$predpm25)
+setkey(gestlong.tid,tempid,day)
+setkey(tempdb ,tempid, day)
+gestlong.tempc <- merge(gestlong.tid,tempdb,all.x=TRUE)
+head(gestlong.tempc)
+gestlong.tempc[, c("x", "y","glong","glat") := NULL]
+
 
 ####this is where we calculate the exposure per period for each participent-
 #pmperg-exposure all pregnancy
 #As far as the lags, I met with Emily yesterday, and if we proceed, we are thinking 0-12.99 weeks (1st trimester), 13 weeks-24.99 weeks (2nd trimester), 25 weeks-delivery (3rd trimester), and LMP-20 weeks (which is often considered a relevant exposure window for the outcome of gestational hypertension).
 
-gestlong.pm.lags <- gestlong.pm[, list(pmpreg = mean(predpm25), 
-                                   pm3rdT = mean(tail(.SD[,predpm25], 90)),
-                                   pmlast30 = mean(tail(.SD[,predpm25], 30)),
-                                   pm1stT = mean(head(.SD[,predpm25], 90)),
-                                   pmweek12to24 = mean(.SD[84:168,predpm25]),
-                                   pm2ndT = mean(.SD[91:175,predpm25]),
-                                   pmf20w = mean(.SD[1:140,predpm25]),
-                                   guid = guid[1]),by=id]
+gestlong.tempc.lags <- gestlong.tempc[, list(pmpreg = mean(fintemp), 
+                                   temp3rdT = mean(tail(.SD[,fintemp], 90)),
+                                   templast30 = mean(tail(.SD[,fintemp], 30)),
+                                   temp1stT = mean(head(.SD[,fintemp], 90)),
+                                   tempweek12to24 = mean(.SD[84:168,fintemp]),
+                                   temp2ndT = mean(.SD[91:175,fintemp]),
+                                   tempf20w = mean(.SD[1:140,fintemp]),
+                                   tempid = tempid[1]),by=id]
 
 
-saveRDS(gestlong.pm.lags,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN008_Fin_data/bw_pm1knodup.rds")
-summary(gestlong.pm.lags)
-write.csv(gestlong.pm.lags,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN008_Fin_data/bw_pm1knodup.csv")
+saveRDS(gestlong.tempc.lags,"/media/NAS/Uni/Projects/P032_multiple_expo_jaime/3.Work/FN001_datastes/temp_lags.rds")
+summary(gestlong.tempc.lags)
 
 
+##add to main data temp data
 
-####merge ges_clinical dataset
-
-setkey(gestlong.clin,guid,day)
-setkey(allbestpred ,guid, day)
-#make sure to allow cartesian
-gestlong.pm.clin <- merge(gestlong.clin,allbestpred,all.x=TRUE)
-summary(gestlong.pm.clin$predpm25)
-
-####this is where we calculate the exposure per period for each participent-
-#pmperg-exposure all pregnancy
-#As far as the lags, I met with Emily yesterday, and if we proceed, we are thinking 0-12.99 weeks (1st trimester), 13 weeks-24.99 weeks (2nd trimester), 25 weeks-delivery (3rd trimester), and LMP-20 weeks (which is often considered a relevant exposure window for the outcome of gestational hypertension).
-
-gestlong.pm.lags.clin <- gestlong.pm.clin[, list(pmpreg.clin = mean(predpm25), 
-                                   pm3rdT.clin = mean(tail(.SD[,predpm25], 90)),
-                                   pmlast30.clin = mean(tail(.SD[,predpm25], 30)),
-                                   pm1stT.clin = mean(head(.SD[,predpm25], 90)),
-                                   pmweek12to24.clin = mean(.SD[84:168,predpm25]),
-                                   pm2ndT.clin = mean(.SD[91:175,predpm25]),
-                                   pmf20w.clin = mean(.SD[1:140,predpm25]),
-                                   guid.clin = guid[1]),by=id]
+setkey(bwfull.pmc.ndv, id)
+setkey(gestlong.tempc.lags, id)
+bwfull.ptv<-merge(bwfull.pmc.ndv,gestlong.tempc.lags)
+names(bwfull.ptv)
+#discard clinical for now
+bwfull.ptv[, 44:51:= NULL]
+#clean again for uneeded data
+bwfull.ptv[, c(3,43):= NULL]
 
 
-saveRDS(gestlong.pm.lags.clin,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN008_Fin_data/bw_pm1knodup_clin.rds")
-summary(gestlong.pm.lags.clin)
-write.csv(gestlong.pm.lags.clin,"/media/NAS/Uni/Projects/P047_BW_MAIAC/2.Gather_data/FN008_Fin_data/bw_pm1knodup_clin.csv")
-
-
-
-
-
-
-
-
-
-
+saveRDS(bwfull.ptv,"/media/NAS/Uni/Projects/P032_multiple_expo_jaime/3.Work/Archive/tmpsav.rds")
 
