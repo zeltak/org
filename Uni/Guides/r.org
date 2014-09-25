@@ -1464,7 +1464,19 @@ detach(v)
 #+END_SRC
 
 
- 
+*** local data frame
+**** base
+Local data frame is simply a wrapper for a data frame that prints nicely
+tbl_df creates a “local data frame”
+
+#+BEGIN_SRC R
+# convert to local data frame
+flights <- tbl_df(hflights)
+
+# printing only shows 10 rows and as many columns as can fit on your screen
+flights
+#+END_SRC
+
 ** Object Modes
 *** check which class a VARIABLE is
 
@@ -7192,7 +7204,108 @@ df <- arrange(df, date, mh)
 #+end_src
 
 ** dplyr
-*** Run models by a grouping varialbles
+*** subset data
+**** filter command basics   
+Base R approach to filtering forces you to repeat the data frame’s name
+dplyr approach is simpler to write and read
+Command structure (for all dplyr verbs):
+first argument is a data frame
+return value is a data frame
+nothing is modified in place
+$Note$ dplyr generally does not preserve row names
+**** simple subset ("filter")
+#+BEGIN_SRC R
+# dplyr approach
+# note: you can use comma or ampersand to represent AND condition
+filter(flights, Month==1, DayofMonth==1)
+#+END_SRC
+**** using and/OR
+#+BEGIN_SRC R
+# use pipe for OR condition
+filter(flights, UniqueCarrier=="AA" | UniqueCarrier=="UA")
+#+END_SRC
+**** using with %in% (select values to keep by matching in vector/dataset) 
+#+BEGIN_SRC R
+# you can also use %in% operator
+filter(flights, UniqueCarrier %in% c("AA", "UA"))
+#+END_SRC
+
+**** select: Pick columns by name
+Base R approach is awkward to type and to read
+    dplyr approach uses similar syntax to filter
+    Like a SELECT in SQL
+use colon to select multiple contiguous columns, and use `contains` to match columns by name
+$Note$  `starts_with`, `ends_with`, and `matches` (for regular expressions) can also be used to match columns by name
+
+**** select columns
+$Note$ the first word is for the DF
+#+BEGIN_SRC R
+# dplyr approach
+#select(DF, VAR1, VAR2, VAR3)
+select(flights, DepTime, ArrTime, FlightNum)
+#+END_SRC
+**** advanced select columns
+you can select a range using the : symbol
+#+BEGIN_SRC R
+# use colon to select multiple contiguous columns, and use `contains` to match columns by name
+# note: `starts_with`, `ends_with`, and `matches` (for regular expressions) can also be used to match columns by name
+select(flights, Year:DayofMonth, contains("Taxi"), contains("Delay"))
+#+END_SRC
+**** select columns by range
+#+BEGIN_SRC R
+#select(DF, colXname:colYname)
+select(flights, Year:DayofMonth)
+#+END_SRC
+*** Chaining
+**** intro
+$Note- this is not dplyr sepcific$
+Usual way to perform multiple operations in one line is by nesting
+Can write commands in a natural order by using the %>% infix operator (which can be pronounced as “then”)
+Chaining increases readability significantly when there are many commands
+Operator is automatically imported from the magrittr package
+Can be used to replace nesting in R commands outside of dplyr
+
+**** base example
+#+BEGIN_SRC R
+# chaining method
+flights %>%
+    select(UniqueCarrier, DepDelay) %>%y
+    filter(DepDelay >60)
+#+END_SRC
+this will select the DF 'flight'
+then ( %>%) select columns
+then ( %>%) filter deepelay >60 
+
+-another example
+
+#+BEGIN_SRC R
+# chaining method
+(x1-x2)^2 %>% sum() %>% sqrt()
+#+END_SRC
+
+*** sort							  :CANCELLED:
+**** base sort 
+#+BEGIN_SRC R
+# dplyr approach
+flights %>%
+    select(UniqueCarrier, DepDelay) %>%
+    arrange(DepDelay)
+#+END_SRC
+select from 'fight' DF 
+from columns UniqueCarrier, DepDelay
+then sort by DepD
+
+for descending:
+
+#+BEGIN_SRC R
+# use `desc` for descending
+flights %>%
+    select(UniqueCarrier, DepDelay) %>%
+    arrange(desc(DepDelay))
+#+END_SRC
+ 
+*** Run modles using dplyer   
+**** Run models by a grouping varialbles
 #+begin_src R
 library(dplyr)
 
@@ -7212,13 +7325,25 @@ seas2007[["4-autum"]][8]
 
 
 #+end_src
-*** run models with 2 grouping variables
+**** run models with 2 grouping variables
 #+begin_src r
 pmbyc<- mod1pm25 %.% group_by(c,season) %.% do(function(df){summary(lm(m1.formula,data=df))})
 #+end_src
 
 $Note-results will output by order of first the second by statment$  
 ₆In example₆ in above example the first 4 results will be for 2002 and then each season, then 2003 and each 4 seasons etc..
+
+*** mutate (Add new variables)
+**** base
+$Note- you don't have to select columns as in the below example$  
+#+BEGIN_SRC R
+# dplyr approach (prints the new variable but does not store it)
+flights %>%
+    select(Distance, AirTime) %>%
+    mutate(Speed = Distance/AirTime*60)
+# Alternativly to store the new variable
+flights <- flights %>% mutate(Speed = Distance/AirTime*60)
+#+END_SRC
 
 ** closestbyday  (allan KNN function)
 *** k nearest

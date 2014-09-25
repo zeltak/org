@@ -19980,6 +19980,22 @@ and copy to plugin dir:
 6)go to keefox options>keepass, and fill in the correct
 apps/plugin/mono paths
 
+***** keefox wont save FF authentication (authorise every time Firefox starts up )
+
+you can fix this by removing the keypairs directory.
+file:/home/zeltak/.config/.mono
+
+***** debug keepassRPC
+
+If the above tips dont help, you can run KeePass from the command line / terminal with some extra parameters to enable some debug logging which may be useful to diagnose the problem (if you don't understand the output, you can post it for others to help with).
+
+The following are the most useful:
+
+--debug : This puts KeePass into debug mode. Sometimes this provides useful information but often it just outputs a generic and meaningless message.
+
+--saveplgxcr : This makes KeePass output detailed information about why it was unable to build the plugin. KeePass will tell you where to find the file with the output.
+
+--KPRPCDebug= : Output KeePassRPC plugin debug information to a location of your choosing. E.g.: --KPRPCDebug=c:\temp\kprpc-debug.log
 
 *** Jabref
 **** prefrences
