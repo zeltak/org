@@ -7203,147 +7203,6 @@ use arrange
 df <- arrange(df, date, mh)
 #+end_src
 
-** dplyr
-*** subset data
-**** filter command basics   
-Base R approach to filtering forces you to repeat the data frame’s name
-dplyr approach is simpler to write and read
-Command structure (for all dplyr verbs):
-first argument is a data frame
-return value is a data frame
-nothing is modified in place
-$Note$ dplyr generally does not preserve row names
-**** simple subset ("filter")
-#+BEGIN_SRC R
-# dplyr approach
-# note: you can use comma or ampersand to represent AND condition
-filter(flights, Month==1, DayofMonth==1)
-#+END_SRC
-**** using and/OR
-#+BEGIN_SRC R
-# use pipe for OR condition
-filter(flights, UniqueCarrier=="AA" | UniqueCarrier=="UA")
-#+END_SRC
-**** using with %in% (select values to keep by matching in vector/dataset) 
-#+BEGIN_SRC R
-# you can also use %in% operator
-filter(flights, UniqueCarrier %in% c("AA", "UA"))
-#+END_SRC
-
-**** select: Pick columns by name
-Base R approach is awkward to type and to read
-    dplyr approach uses similar syntax to filter
-    Like a SELECT in SQL
-use colon to select multiple contiguous columns, and use `contains` to match columns by name
-$Note$  `starts_with`, `ends_with`, and `matches` (for regular expressions) can also be used to match columns by name
-
-**** select columns
-$Note$ the first word is for the DF
-#+BEGIN_SRC R
-# dplyr approach
-#select(DF, VAR1, VAR2, VAR3)
-select(flights, DepTime, ArrTime, FlightNum)
-#+END_SRC
-**** advanced select columns
-you can select a range using the : symbol
-#+BEGIN_SRC R
-# use colon to select multiple contiguous columns, and use `contains` to match columns by name
-# note: `starts_with`, `ends_with`, and `matches` (for regular expressions) can also be used to match columns by name
-select(flights, Year:DayofMonth, contains("Taxi"), contains("Delay"))
-#+END_SRC
-**** select columns by range
-#+BEGIN_SRC R
-#select(DF, colXname:colYname)
-select(flights, Year:DayofMonth)
-#+END_SRC
-*** Chaining
-**** intro
-$Note- this is not dplyr sepcific$
-Usual way to perform multiple operations in one line is by nesting
-Can write commands in a natural order by using the %>% infix operator (which can be pronounced as “then”)
-Chaining increases readability significantly when there are many commands
-Operator is automatically imported from the magrittr package
-Can be used to replace nesting in R commands outside of dplyr
-
-**** base example
-#+BEGIN_SRC R
-# chaining method
-flights %>%
-    select(UniqueCarrier, DepDelay) %>%y
-    filter(DepDelay >60)
-#+END_SRC
-this will select the DF 'flight'
-then ( %>%) select columns
-then ( %>%) filter deepelay >60 
-
--another example
-
-#+BEGIN_SRC R
-# chaining method
-(x1-x2)^2 %>% sum() %>% sqrt()
-#+END_SRC
-
-*** sort							  :CANCELLED:
-**** base sort 
-#+BEGIN_SRC R
-# dplyr approach
-flights %>%
-    select(UniqueCarrier, DepDelay) %>%
-    arrange(DepDelay)
-#+END_SRC
-select from 'fight' DF 
-from columns UniqueCarrier, DepDelay
-then sort by DepD
-
-for descending:
-
-#+BEGIN_SRC R
-# use `desc` for descending
-flights %>%
-    select(UniqueCarrier, DepDelay) %>%
-    arrange(desc(DepDelay))
-#+END_SRC
- 
-*** Run modles using dplyer   
-**** Run models by a grouping varialbles
-#+begin_src R
-library(dplyr)
-
-#####example 1 
-#base model for stage 1
-m1.formula <- as.formula(PM10~ aod+ (1+aod|day))
-t1<- mod1 %.% group_by(c) %.% do(function(df){lmer(m1.formula,data=df)})
-
-####example 2 with summary and rename
-#2007
-seas2007<- mod1PM25_2007 %.% group_by(season) %.% do(function(df){summary(lm(m1.formula,data=df))})
-names(seas2007)<-c("1-winter", "2-spring","3-summer","4-autum")
-seas2007[["1-winter"]][8]
-seas2007[["2-spring"]][8]
-seas2007[["3-summer"]][8]
-seas2007[["4-autum"]][8]
-
-
-#+end_src
-**** run models with 2 grouping variables
-#+begin_src r
-pmbyc<- mod1pm25 %.% group_by(c,season) %.% do(function(df){summary(lm(m1.formula,data=df))})
-#+end_src
-
-$Note-results will output by order of first the second by statment$  
-₆In example₆ in above example the first 4 results will be for 2002 and then each season, then 2003 and each 4 seasons etc..
-
-*** mutate (Add new variables)
-**** base
-$Note- you don't have to select columns as in the below example$  
-#+BEGIN_SRC R
-# dplyr approach (prints the new variable but does not store it)
-flights %>%
-    select(Distance, AirTime) %>%
-    mutate(Speed = Distance/AirTime*60)
-# Alternativly to store the new variable
-flights <- flights %>% mutate(Speed = Distance/AirTime*60)
-#+END_SRC
 
 ** closestbyday  (allan KNN function)
 *** k nearest
@@ -8643,3 +8502,600 @@ both
 #+END_EXAMPLE
 
 and the output file in the ':tangle' part
+
+* dplyr
+** glimpse (dplyr str alternative)
+#+BEGIN_SRC R
+# dplyr approach: better formatting, and adapts to your screen width
+glimpse(flights)
+#+END_SRC
+
+** subset data
+*** filter command basics   
+Base R approach to filtering forces you to repeat the data frame’s name
+dplyr approach is simpler to write and read
+Command structure (for all dplyr verbs):
+first argument is a data frame
+return value is a data frame
+nothing is modified in place
+$Note$ dplyr generally does not preserve row names
+*** simple subset ("filter")
+#+BEGIN_SRC R
+# dplyr approach
+# note: you can use comma or ampersand to represent AND condition
+filter(flights, Month==1, DayofMonth==1)
+#+END_SRC
+*** using and/OR
+#+BEGIN_SRC R
+# use pipe for OR condition
+filter(flights, UniqueCarrier=="AA" | UniqueCarrier=="UA")
+#+END_SRC
+*** using with %in% (select values to keep by matching in vector/dataset) 
+#+BEGIN_SRC R
+# you can also use %in% operator
+filter(flights, UniqueCarrier %in% c("AA", "UA"))
+#+END_SRC
+
+*** select: Pick columns by name
+Base R approach is awkward to type and to read
+    dplyr approach uses similar syntax to filter
+    Like a SELECT in SQL
+use colon to select multiple contiguous columns, and use `contains` to match columns by name
+$Note$  `starts_with`, `ends_with`, and `matches` (for regular expressions) can also be used to match columns by name
+
+*** select columns
+$Note$ the first word is for the DF
+#+BEGIN_SRC R
+# dplyr approach
+#select(DF, VAR1, VAR2, VAR3)
+select(flights, DepTime, ArrTime, FlightNum)
+#+END_SRC
+*** advanced select columns
+you can select a range using the : symbol
+#+BEGIN_SRC R
+# use colon to select multiple contiguous columns, and use `contains` to match columns by name
+# note: `starts_with`, `ends_with`, and `matches` (for regular expressions) can also be used to match columns by name
+select(flights, Year:DayofMonth, contains("Taxi"), contains("Delay"))
+#+END_SRC
+*** select columns by range
+#+BEGIN_SRC R
+#select(DF, colXname:colYname)
+select(flights, Year:DayofMonth)
+#+END_SRC
+** Chaining
+*** intro
+$Note- this is not dplyr sepcific$
+Usual way to perform multiple operations in one line is by nesting
+Can write commands in a natural order by using the %>% infix operator (which can be pronounced as “then”)
+Chaining increases readability significantly when there are many commands
+Operator is automatically imported from the magrittr package
+Can be used to replace nesting in R commands outside of dplyr
+
+*** base example
+#+BEGIN_SRC R
+# chaining method
+flights %>%
+    select(UniqueCarrier, DepDelay) %>%y
+    filter(DepDelay >60)
+#+END_SRC
+this will select the DF 'flight'
+then ( %>%) select columns
+then ( %>%) filter deepelay >60 
+
+-another example
+
+#+BEGIN_SRC R
+# chaining method
+(x1-x2)^2 %>% sum() %>% sqrt()
+#+END_SRC
+
+** sort								  :CANCELLED:
+*** base sort 
+#+BEGIN_SRC R
+# dplyr approach
+flights %>%
+    select(UniqueCarrier, DepDelay) %>%
+    arrange(DepDelay)
+#+END_SRC
+select from 'fight' DF 
+from columns UniqueCarrier, DepDelay
+then sort by DepD
+
+for descending:
+
+#+BEGIN_SRC R
+# use `desc` for descending
+flights %>%
+    select(UniqueCarrier, DepDelay) %>%
+    arrange(desc(DepDelay))
+#+END_SRC
+ 
+** mutate (Add new variables)
+*** base
+$Note- you don't have to select columns as in the below example$  
+#+BEGIN_SRC R
+# dplyr approach (prints the new variable but does not store it)
+flights %>%
+    select(Distance, AirTime) %>%
+    mutate(Speed = Distance/AirTime*60)
+# Alternativly to store the new variable
+flights <- flights %>% mutate(Speed = Distance/AirTime*60)
+#+END_SRC
+
+** aggregate
+*** base
+summarise: Reduce variables to values
+
+Primarily useful with data that has been grouped by one or more variables
+group_by creates the groups that will be operated on
+summarise uses the provided aggregation function to summarise each group
+
+*** simple summary 
+#+BEGIN_SRC R
+# dplyr approach: create a table grouped by Dest, and then summarise each group by taking the mean of ArrDelay
+flights %>%
+    group_by(Dest) %>%
+    summarise(avg_delay = mean(ArrDelay, na.rm=TRUE))
+#+END_SRC
+
+select from DF 'flights'
+then group by summary variable 'Dest'
+then run the process creating a mean of 'ArrDelay' by 'Dest' into a variable called avg_delay
+*** summary by 2 grouped variables
+#+BEGIN_SRC R
+flights %>%
+  group_by(Dest,Month) %>%
+  summarise(avg_delay = mean(ArrDelay, na.rm=TRUE))
+#+END_SRC
+
+*** summarise each command (summary for 2 or more variable at the same time)
+summarise_each allows you to apply the same summary function to multiple columns at once
+$Note$ mutate_each is also available
+
+#+BEGIN_SRC R
+#for each carrier, calculate the percentage of flights cancelled or diverted
+flights %>%
+    group_by(UniqueCarrier) %>%
+    summarise_each(funs(mean), Cancelled, Diverted)
+#+END_SRC
+
+here we get the mean of the 2 variables canceled and diverted (by Uniquecarrier)
+#+BEGIN_EXAMPLE
+## Source: local data frame [15 x 3]
+## 
+##    UniqueCarrier Cancelled Diverted
+## 1             AA  0.018496 0.001850
+## 2             AS  0.000000 0.002740
+## 3             B6  0.025899 0.005755
+## 4             CO  0.006783 0.002627
+## 5             DL  0.015903 0.003029
+## 6             EV  0.034483 0.003176
+## 7             F9  0.007160 0.000000
+## 8             FL  0.009818 0.003273
+## 9             MQ  0.029045 0.001936
+## 10            OO  0.013947 0.003487
+## 11            UA  0.016409 0.002413
+## 12            US  0.011269 0.001470
+## 13            WN  0.015504 0.002294
+## 14            XE  0.015496 0.003450
+#+END_EXAMPLE
+
+A more complex example
+
+#+BEGIN_SRC R
+flights %>%
+    group_by(UniqueCarrier) %>%
+    summarise_each(funs(min(., na.rm=TRUE), max(., na.rm=TRUE)), matches("Delay"))
+#+END_SRC
+here we get min and max summary that matches ANY variable that has delay in it
+$Note- here because there are NA's you have to tell it to remove NAs$ 
+the '.' is a placeholder for the data your placing in 
+
+#+BEGIN_EXAMPLE
+## Source: local data frame [15 x 5]
+## 
+##    UniqueCarrier ArrDelay_min DepDelay_min ArrDelay_max DepDelay_max
+## 1             AA          -39          -15          978          970
+## 2             AS          -43          -15          183          172
+## 3             B6          -44          -14          335          310
+## 4             CO          -55          -18          957          981
+## 5             DL          -32          -17          701          730
+## 6             EV          -40          -18          469          479
+## 7             F9          -24          -15          277          275
+## 8             FL          -30          -14          500          507
+## 9             MQ          -38          -23          918          931
+## 10            OO          -57          -33          380          360
+## 11            UA          -47          -11          861          869
+## 12            US          -42          -17          433          425
+## 13            WN          -44          -10          499          548
+## 14            XE          -70          -19          634          628
+## 15            YV          -32          -11           72           54
+#+END_EXAMPLE
+*** counts the number of rows in a group: n()
+Helper function n() counts the number of rows in a group
+#+BEGIN_SRC R
+# for each day of the year, count the total number of flights and sort in descending order
+flights %>%
+    group_by(Month, DayofMonth) %>%
+    summarise(flight_count = n()) %>%
+    arrange(desc(flight_count))
+#+END_SRC
+
+this gives you the number(using n() ) of obsv per group criteria
+
+#+BEGIN_EXAMPLE
+## Source: local data frame [365 x 3]
+## Groups: Month
+## 
+##    Month DayofMonth flight_count
+## 1      8          4          706
+## 2      8         11          706
+## 3      8         12          706
+## 4      8          5          705
+## 5      8          3          704
+## 6      8         10          704
+## 7      1          3          702
+## 8      7          7          702
+## 9      7         14          702
+## 10     7         28          701
+## ..   ...        ...          ...
+#+END_EXAMPLE
+
+%Tip% you can use 'tally' as a simpler coding alternative
+#+BEGIN_SRC R
+# rewrite more simply with the `tally` function
+flights %>%
+    group_by(Month, DayofMonth) %>%
+    tally(sort = TRUE)
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+## Source: local data frame [365 x 3]
+## Groups: Month
+## 
+##    Month DayofMonth   n
+## 1      8          4 706
+## 2      8         11 706
+## 3      8         12 706
+## 4      8          5 705
+## 5      8          3 704
+## 6      8         10 704
+## 7      1          3 702
+## 8      7          7 702
+## 9      7         14 702
+## 10     7         28 701
+## ..   ...        ... ...
+#+END_EXAMPLE
+
+*** counting and including distinct (unique) counts: n_distinct
+Helper function n_distinct(vector) counts the number of unique items in that vector
+#+BEGIN_SRC R
+# for each destination, count the total number of flights and the number of distinct planes that flew there
+flights %>%
+    group_by(Dest) %>%
+    summarise(flight_count = n(), plane_count = n_distinct(TailNum))
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+## Source: local data frame [116 x 3]
+## 
+##    Dest flight_count plane_count
+## 1   ABQ         2812         716
+## 2   AEX          724         215
+## 3   AGS            1           1
+## 4   AMA         1297         158
+## 5   ANC          125          38
+## 6   ASE          125          60
+## 7   ATL         7886         983
+## 8   AUS         5022        1015
+## 9   AVL          350         142
+## 10  BFL          504          70
+## ..  ...          ...         ...
+#+END_EXAMPLE
+
+*** grouping without summary 
+Grouping can sometimes be useful without summarising
+
+#+BEGIN_SRC R
+# for each destination, show the number of cancelled and not cancelled flights
+flights %>%
+    group_by(Dest) %>%
+    select(Cancelled) %>%
+    table() %>%
+    head()
+#+END_SRC
+
+
+#+BEGIN_EXAMPLE
+##      Cancelled
+## Dest     0  1
+##   ABQ 2787 25
+##   AEX  712 12
+##   AGS    1  0
+##   AMA 1265 32
+##   ANC  125  0
+##   ASE  120  5
+#+END_EXAMPLE
+** Window Functions
+*** intro
+Aggregation function (like mean) takes n inputs and returns 1 value
+Window function takes n inputs and returns n values
+Includes ranking and ordering functions (like min_rank), offset functions (lead and lag), and cumulative aggregates (like cummean).
+*** Group rank and order example
+for each carrier, calculate which two days of the year they had their longest departure delays
+$Note-  smallest (not largest) value is ranked as 1, so you have to use `desc` to rank by largest value$
+
+#+BEGIN_SRC R
+flights %>%
+    group_by(UniqueCarrier) %>%
+    select(Month, DayofMonth, DepDelay) %>%
+    filter(min_rank(desc(DepDelay)) <= 2) %>%
+    arrange(UniqueCarrier, desc(DepDelay))
+#+END_SRC
+we grouped by carrier then select the columns we want to show 
+then we filter the rows by minimum rank of depdelay (descending)
+
+#+BEGIN_EXAMPLE
+## Source: local data frame [30 x 4]
+## Groups: UniqueCarrier
+## 
+##    UniqueCarrier Month DayofMonth DepDelay
+## 1             AA    12         12      970
+## 2             AA    11         19      677
+## 3             AS     2         28      172
+## 4             AS     7          6      138
+## 5             B6    10         29      310
+## 6             B6     8         19      283
+## 7             CO     8          1      981
+## 8             CO     1         20      780
+## 9             DL    10         25      730
+## 10            DL     4          5      497
+## 11            EV     6         25      479
+## 12            EV     1          5      465
+## 13            F9     5         12      275
+## 14            F9     5         20      240
+## 15            FL     2         19      507
+## 16            FL     3         14      493
+## 17            MQ    11          8      931
+## 18            MQ     6          9      814
+## 19            OO     2         27      360
+## 20            OO     4          4      343
+## 21            UA     6         21      869
+## 22            UA     9         18      588
+## 23            US     4         19      425
+## 24            US     8         26      277
+## 25            WN     4          8      548
+## 26            WN     9         29      503
+## 27            XE    12         29      628
+## 28            XE    12         29      511
+## 29            YV     4         22       54
+## 30            YV     4         30       46
+#+END_EXAMPLE
+
+$Note- you can simplify the code with the top_n command$ 
+#+BEGIN_SRC R
+flights %>%
+    group_by(UniqueCarrier) %>%
+    select(Month, DayofMonth, DepDelay) %>%
+    top_n(2) %>%
+    arrange(UniqueCarrier, desc(DepDelay))
+#+END_SRC
+
+*** example of creating a variable (mutate) with a lag function
+#+BEGIN_SRC R
+# for each month, calculate the number of flights and the change from the previous month
+flights %>%
+    group_by(Month) %>%
+    summarise(flight_count = n()) %>%
+    mutate(change = flight_count - lag(flight_count))
+#+END_SRC
+
+here we create a summarise variable called 'flight_count' (by month) then
+create a variable 'change' based on the diff between 'flight_count' and the lag of 'flight_count (change from prev month)
+%Tip lag- earlier value // lead next value %
+
+#+BEGIN_EXAMPLE
+## Source: local data frame [12 x 3]
+## 
+##    Month flight_count change
+## 1      1        18910     NA
+## 2      2        17128  -1782
+## 3      3        19470   2342
+## 4      4        18593   -877
+## 5      5        19172    579
+## 6      6        19600    428
+## 7      7        20548    948
+## 8      8        20176   -372
+## 9      9        18065  -2111
+## 10    10        18696    631
+## 11    11        18021   -675
+## 12    12        19117   1096
+#+END_EXAMPLE
+
+simplify with tally
+
+#+BEGIN_SRC R
+# rewrite more simply with the `tally` function
+flights %>%
+    group_by(Month) %>%
+    tally() %>%
+    mutate(change = n - lag(n))
+#+END_SRC
+** sampling
+*** randomly sample a fixed number of rows, without replacement (sample_N)
+#+BEGIN_SRC R
+# randomly sample a fixed number of rows, without replacement
+flights %>% sample_n(5)
+#+END_SRC
+
+*** randomly sample a fraction of rows, with replacement (sample_frac)
+#+BEGIN_SRC R
+# randomly sample a fraction of rows, with replacement
+flights %>% sample_frac(0.25, replace=TRUE)
+#+END_SRC
+
+** do()
+*** base
+As well as the specialised operations described above, dplyr also provides the generic do() function which applies any R function to each group of the data.
+
+do() also has an automatic progress bar. It appears if the computation takes longer than 5 seconds and lets you know (approximately) how much longer the job will take to complete.
+
+$Note the use of the '.' pronoun to refer to the data in the current group.$
+
+#+BEGIN_SRC R
+library(dplyr)
+models <- mtcars %>% group_by(cyl) %>% do(lm = lm(mpg ~ wt, data = .))
+models %>% summarise(rsq = summary(lm)$r.squared)
+#+END_SRC
+
+*** Run lmer models using dplyer do()
+**** Run models by a grouping varialbles
+#+begin_src R
+library(dplyr)
+
+#####example 1 
+#base model for stage 1
+m1.formula <- as.formula(PM10~ aod+ (1+aod|day))
+t1<- mod1 %>% group_by(c) %>% do(function(df){lmer(m1.formula,data=df)})
+
+####example 2 with summary and rename
+seas2007<- mod1PM25_2007 %>% group_by(season) %>% do(function(df){summary(lm(m1.formula,data=df))})
+names(seas2007)<-c("1-winter", "2-spring","3-summer","4-autum")
+seas2007[["1-winter"]][8]
+seas2007[["2-spring"]][8]
+seas2007[["3-summer"]][8]
+seas2007[["4-autum"]][8]
+
+
+#+end_src
+**** run models with 2 grouping variables
+#+begin_src r
+pmbyc<- mod1pm25 %>%
+group_by(c,season) %>%
+do(function(df){summary(lm(m1.formula,data=df))})
+#+end_src
+
+$Note-results will output by order of first the second by statment$  
+₆In example₆ in above example the first 4 results will be for 2002 and then each season, then 2003 and each 4 seasons etc..
+** Connecting to Databases
+*** base
+dplyr can connect to a database as if the data was loaded into a data frame
+Use the same syntax for local data frames and databases
+Only generates SELECT statements
+Currently supports SQLite, PostgreSQL/Redshift, MySQL/MariaDB, BigQuery, MonetDB
+Example below is based upon an SQLite database containing the hflights data
+
+#+BEGIN_SRC R
+# connect to an SQLite database containing the hflights data
+my_db <- src_sqlite("my_db.sqlite3")
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+## Loading required package: RSQLite
+## Loading required package: DBI
+## Loading required package: RSQLite.extfuns
+#+END_EXAMPLE
+
+#+BEGIN_SRC R
+# connect to the "hflights" table in that database
+flights_tbl <- tbl(my_db, "hflights")
+
+# example query with our data frame
+flights %>%
+    select(UniqueCarrier, DepDelay) %>%
+    arrange(desc(DepDelay))
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+## Source: local data frame [227,496 x 2]
+## 
+##    UniqueCarrier DepDelay
+## 1             CO      981
+## 2             AA      970
+## 3             MQ      931
+## 4             UA      869
+## 5             MQ      814
+## 6             MQ      803
+## 7             CO      780
+## 8             CO      758
+## 9             DL      730
+## 10            MQ      691
+## ..           ...      ...
+#+END_EXAMPLE
+
+#+BEGIN_SRC R
+# identical query using the database
+flights_tbl %>%
+    select(UniqueCarrier, DepDelay) %>%
+    arrange(desc(DepDelay))
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+## Source: sqlite 3.7.17 [my_db.sqlite3]
+## From: hflights [227,496 x 2]
+## Arrange: desc(DepDelay) 
+## 
+##    UniqueCarrier DepDelay
+## 1             CO      981
+## 2             AA      970
+## 3             MQ      931
+## 4             UA      869
+## 5             MQ      814
+## 6             MQ      803
+## 7             CO      780
+## 8             CO      758
+## 9             DL      730
+## 10            MQ      691
+## ..           ...      ...
+
+#+END_EXAMPLE
+
+You can write the SQL commands yourself
+dplyr can tell you the SQL it plans to run and the query execution plan
+
+#+BEGIN_SRC R
+# send SQL commands to the database
+tbl(my_db, sql("SELECT * FROM hflights LIMIT 100"))
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+## Source: sqlite 3.7.17 [my_db.sqlite3]
+## From: <derived table> [?? x 21]
+## 
+##    Year Month DayofMonth DayOfWeek DepTime ArrTime UniqueCarrier FlightNum
+## 1  2011     1          1         6    1400    1500            AA       428
+## 2  2011     1          2         7    1401    1501            AA       428
+## 3  2011     1          3         1    1352    1502            AA       428
+## 4  2011     1          4         2    1403    1513            AA       428
+## 5  2011     1          5         3    1405    1507            AA       428
+## 6  2011     1          6         4    1359    1503            AA       428
+## 7  2011     1          7         5    1359    1509            AA       428
+## 8  2011     1          8         6    1355    1454            AA       428
+## 9  2011     1          9         7    1443    1554            AA       428
+## 10 2011     1         10         1    1443    1553            AA       428
+## ..  ...   ...        ...       ...     ...     ...           ...       ...
+## Variables not shown: TailNum (chr), ActualElapsedTime (int), AirTime
+##   (int), ArrDelay (int), DepDelay (int), Origin (chr), Dest (chr),
+##   Distance (int), TaxiIn (int), TaxiOut (int), Cancelled (int),
+##   CancellationCode (chr), Diverted (int)
+#+END_EXAMPLE
+
+#+BEGIN_SRC R
+# ask dplyr for the SQL commands
+flights_tbl %>%
+    select(UniqueCarrier, DepDelay) %>%
+    arrange(desc(DepDelay)) %>%
+    explain()
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+## <SQL>
+## SELECT "UniqueCarrier" AS "UniqueCarrier", "DepDelay" AS "DepDelay"
+## FROM "hflights"
+## ORDER BY "DepDelay" DESC
+## 
+## <PLAN>
+##   selectid order from                             detail
+## 1        0     0    0 SCAN TABLE hflights (~227496 rows)
+## 2        0     0    0       USE TEMP B-TREE FOR ORDER BY
+#+END_EXAMPLE
