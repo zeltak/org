@@ -21305,50 +21305,25 @@ speed.
  $ sudo make uninstall
 
 *** peazip
-
 **** cli commands
-
-*The full list of strings accepted as quick link to PeaZip functions
-when passed as first parameter is:
-*
- -add2archive: add to a new archive and open PeaZip GUI to set archive's
-type and options;
- -add2pea: add to a new .pea archive;
- -add2crypt: add to a new encrypted .pea archive;
- -add2split: raw split a single input file;
- -add2wipe: securely delete selected file(s);
- -add2compare: byte to byte compare two files;
- -add27z: add to a new .7z archive;
- -add27zmail: add to a new .7z archive and attach it to a mail
-(requires compatible mail client) *
- -add2separate7z: add each input to a separate new .7z archive;
- -add2sfx7z: add to a new self extracting 7z archive (.exe);
- -add2sfx7zmail: add to a new self extracting archive and
-attach it to a mail (requires compatible mail client) *
- -add2zip: add to a new .zip archive;
- -add2zipmail: add to a new .zip archive and attach it to a
-mail (requires compatible mail client) *
- -add2separatezip: add each input to a separate new .zip
-archive;
- -ext2browse: open (and browse if applicable) the archive(s) in
-PeaZip GUI;
- -ext2browsepath: browse the selected folder (or its path, if a
-file is selected) in PeaZip
- -ext2here: extract archive(s) here;
- -ext2folder: extract archive(s) here, each in a new folder
-named after the archive;
- -ext2full: extract archive(s), allowing to specify i/o
-options, password and keyfile;
- -ext2to: extract archive(s) to specified folder;
- -ext2tofolder: extract archive(s) to specified folder, each in
-a new folder named after the archive;
- -ext2list: list archive(s) content, to quickly look what is in
-the archive;
- -ext2test: test archive(s) content;
- -ext2main: extract archives from main applications "Archive
-extraction" interface;
- -ext2commandprompt: open the command prompt in the selected
-folder (or in its path, if a file is selected)
+***** adding
+    -add2archive: add to a new archive and open PeaZip GUI to set archive’s type and options;
+          -add2archive-add as -add2archive, but add to existing archive (if found)
+          -add2archive-update as previous, but update older files only
+    -add27z: add to a new .7z archive;
+    -add2separate7z: add each input to a separate new .7z archive;
+    -add2zip: add to a new .zip archive;
+    -add2separatezip: add each input to a separate new .zip archive;
+***** extracting    
+    -ext2here: extract archive(s) here;
+    -ext2folder: extract archive(s) here, each in a new folder named after the archive;
+    -ext2full: extract archive(s), allowing to specify i/o options, password and keyfile;
+    -ext2to: extract archive(s) to specified folder;
+    -ext2tofolder: extract archive(s) to specified folder, each in a new folder named after the archive;
+    -ext2list: list archive(s) content, to quickly look what is in the archive;
+    -ext2test: test archive(s) content;
+    -ext2main: extract archives from main applications "Archive extraction" interface;
+    -ext2commandprompt: open the command prompt in the selected folder (or in its path, if a file is selected)
 
 *** krename
 
@@ -29468,6 +29443,16 @@ TODO Refactor [[grep:OldClassName][OldClassName]] into NewClassName
 #+END_EXAMPLE
 
 [[*Bittorrent-sync%20(btsync)][*Bittorrent-sync (btsync)]]* CLI Admin
+******* view
+******** TODO make subfolders folded(hidden) by default
+use this
+
+#+BEGIN_EXAMPLE
+:PROPERTIES:
+:VISIBILITY: folded
+:END:
+#+END_EXAMPLE
+
 * Admin
 ** General Guides
 *** A-Z Index of the Linux BASH
