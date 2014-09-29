@@ -33,7 +33,7 @@ run;
 
 
 PROC IMPORT OUT= bwid_guid
-            DATAFILE= "z:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\2.Gather_data\FN007_keytables\births_guid_stn.dbf" 
+            DATAFILE= "z:\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\2.Gather_data\FN007_keytables\births_guid_stn.dbf" 
 			            DBMS=DBF   REPLACE;
 						     GETDELETED=NO;
 							 RUN; 
@@ -72,7 +72,7 @@ proc sort data=data34;
 by guid date;
 run;
 
-libname exp 'z:\Uni\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\2.Gather_data\FN002_BW_exposure\' ;
+libname exp 'z:\Projects\P043_BirthW_Temp_MA\3.1.11.4.Work\2.Gather_data\FN002_BW_exposure\' ;
 
 
 
