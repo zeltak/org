@@ -2779,6 +2779,126 @@ replace all instances of
 title_scale="medium"
 with
 title_scale="small" 
+**** top bar
+***** Show date in top bar
+
+By default GNOME displays only the weekday and time in the top bar. This can be changed with the following command. Changes take effect immediately.
+
+#+BEGIN_SRC sh
+gsettings set org.gnome.desktop.interface clock-show-date true
+#+END_SRC
+
+**** logging out
+***** Eliminate delay when logging out
+
+The following tweak removes the confirmation dialog and sixty second delay for logging out.
+
+This dialog normally appears when you log out with the status menu. This tweak affects the Power Off dialog as well. This is not a system-wide change; it affects only the user who enters this command. The change takes effect immediately after entering the command:
+
+#+BEGIN_SRC sh
+gsettings set org.gnome.SessionManager logout-prompt 'false'
+#+END_SRC
+
+**** shell
+***** Restarting the shell
+After appearance tweaks you are often asked to restart the GNOME shell. You could log out and log back in, but it is simpler and faster to issue the following keyboard command. Restart the shell by pressing Alt + F2 then r then Enter 
+
+***** restart shell from console (CLI)
+ Sometimes shell extensions freeze the GNOME Shell. In this case a possible strategy is to switch to another terminal via Ctrl+Alt+F2 through Ctrl+Alt+F6, log in, and restart gnome-shell with:
+
+# pkill -HUP gnome-shell
+
+**** windows
+***** Reduce title bar height
+Reduce title bar height
+
+global - edit:
+file:/usr/share/themes/Adwaita/metacity-1/metacity-theme-3.xml
+search for title_vertical_pad and reduce its value to a minimum of 0.
+user-only- copy:
+file:/usr/share/themes/Adwaita/metacity-1/metacity-theme-3.xml
+to
+file:/home/$USER/.local/share/themes/Adwaita/metacity-1/metacity-theme-3.xml
+search for title_vertical_pad and reduce its value to a minimum of 0.
+Then restart the GNOME shell.
+
+To restore the original values, install the package gnome-themes-standard from the official repositories or remove /home/$USER/.local/share/themes/Adwaita/metacity-1/metacity-theme-3.xml.
+ 
+***** Hide titlebar when maximized
+
+To hide titlebar when windows are maximised, open file:
+file:/usr/share/themes/Adwaita/metacity-1/metacity-theme-3.xml
+
+search for the following tag and change its properties, children and the properties of its children tags as follows:
+
+#+BEGIN_EXAMPLE
+<frame_geometry name="max" has_title="false"
+                           hide_buttons="true"
+                           parent="normal"
+                           rounded_top_left="false"
+                           rounded_top_right="false">
+    <distance name="left_width" value="0" />
+    <distance name="right_width" value="0" />
+    <distance name="left_titlebar_edge" value="0"/>
+    <distance name="right_titlebar_edge" value="0"/>
+    <distance name="title_vertical_pad" value="0"/>
+    <border name="title_border" left="0" right="0" top="0" bottom="0"/>
+    <border name="button_border" left="0" right="0" top="0" bottom="0"/>
+    <distance name="bottom_height" value="0" />
+</frame_geometry>
+#+END_EXAMPLE
+
+Once the file has been saved, restart GNOME shell by pressing Alt + F2 and then typing r. After this tweak, you may find it difficult to un-maximize a window when there is no titlebar to grab.
+
+With suitable keybindings, you should be able to use Alt + F5, Alt + F10 or Alt + Space to remedy the situation.
+
+To prevent metacity-theme-3.xml from being overwritten each time package gnome-themes-standard is upgraded, add its name to /etc/pacman.conf with NoUpgrade:
+
+/etc/pacman.conf
+
+... previous lines ...
+
+# Pacman will not upgrade packages listed in IgnorePkg and members of IgnoreGroup
+# IgnorePkg   =
+# IgnoreGroup =
+
+NoUpgrade = usr/share/themes/Adwaita/metacity-1/metacity-theme-3.xml    # Do not add a leading slash to the path
+
+... more lines ...
+
+To restore original Adwaita theme values, install the gnome-themes-standard package. 
+**** dconf
+***** search dconf
+      #+NAME: 
+      #+BEGIN_SRC sh
+dconf dump / | grep SEARCH-TERM      
+      #+END_SRC
+
+**** keybinds
+***** map change workspaces
+
+#+BEGIN_EXAMPLE
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Super>1']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 "['<Super>2']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 "['<Super>3']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 "['<Super>4']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-5 "['<Super>5']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-6 "['<Super>6']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-7 "['<Super>7']"
+
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-1 "['<Super><shift>1']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-2 "['<Super><shift>2']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-3 "['<Super><shift>3']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-4 "['<Super><shift>4']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-5 "['<Super><shift>5']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-6 "['<Super><shift>6']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-7 "['<Super><shift>7']"
+
+gsettings set org.gnome.desktop.wm.keybindings close "['<Super>k']"     
+      #+END_EXAMPLE
+
+***** map grave key
+Certain hotkeys cannot be changed directly via the System Settings panel. In order to change these keys, use dconf-editor. An example of particular note is the hotkey Alt-Above_Tab. On US keyboards, this is Alt-`: is a hotkey often used in the Emacs editor. It can be changed by opening dconf-editor and modifying the switch-group key found in org.gnome.desktop.wm.keybindings. 
 *** general
 **** enable key shortcuts on menus
 
