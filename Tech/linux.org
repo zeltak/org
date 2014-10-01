@@ -20154,12 +20154,12 @@ General:url;keywords;doi;pdf
 Abstract:abstract;annote
 
 which would give one tab named "General" containing the fields url, keywords, doi and pdf, and another tab named "Abstract" containing the fields abstract and annote.
-**** Workflow
-***** attach PDF
-****** if the pdf is accesible through open access or Uni subscriptions:
+**** attach PDF 
+to attache a pdf you would use the new 'file' system rather the deprecated 'pdf' entry
+***** if the pdf is accesible through open access or Uni subscriptions:
 1)add the ref using internal search
 2)use the local copy panel to download the pdf 
-****** if no physical PDF is avilable
+***** if no physical PDF is avilable
 1)add the ref using internal search
 2)manually copy pdf to root pdf folder
 3)attach it to the entry
@@ -20217,6 +20217,11 @@ The month in which the work was published or, for an unpublished work, in which 
 mark needed entries
 right click and choose 'set/clear/rename fields'
 choose the field to rename and the value 
+**** sync config
+1.make sure under preferences>general  that 'laod and save preferences.... from memory stick' is chekced
+2.this will create a file under file://home/zeltak/jabref.xml
+3. use git to 'sync' the xml file
+
 ** System
 *** java
 
