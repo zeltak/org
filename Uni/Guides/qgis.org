@@ -1,0 +1,149 @@
+#+TITLE: arcgis
+
+* General
+** tips and glossary
+**** gllosary
+
+*Geocoding*
+ a GIS layer that translates addresses to coordinates
+
+**** xy longitude and latitude
+
+*X*Longitude (shown as a vertical line) is the angular distance, in
+degrees, minutes, and seconds, of a point east or west of the Prime
+(Greenwich) Meridian. Lines of longitude are often referred to as
+meridians.
+ *Y-*Latitude (shown as a horizontal line) is the angular distance, in
+degrees, minutes, and seconds of a point north or south of the Equator.
+Lines of latitude are often referred to as parallels.
+
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_VC2z3xSSNWreaVdlPj4SnQ_0002.png]]
+
+**** projections and coordinate systems
+***** 1)projections and coordinate systems
+
+*Projections and Coordinate Systems
+**Types of coordinate systems*
+ There are two common types of coordinate systems used in GIS:
+ *1)GCS:*
+ A global or spherical coordinate system such as latitude--longitude.
+ These are often referred to as geographic coordinate systems *(GCS)
+*is often obtained in Decimal degrees such as x: -70.05 y: 42.15*
+*GCS is used for large areas and worldwide*
+*
+ you will see in GIS when an layer is using GCS that the units are in
+decimal degrees
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_guoO7G6AekzekVC-HwsUpw_0001.png]]
+ *
+ 2)PCS:*
+ A Pojected coordinate system *(PC*S) is based on GCS.
+ it has bigger numbers sometimes such as :
+ it involves a map projection such as transverse Mercator, Albers equal
+area, or Robinson, all of which (along with numerous other map
+projection models) provide various mechanisms to project maps of the
+earth's spherical surface onto a two-dimensional Cartesian coordinate
+plane. Projected coordinate systems are sometimes referred to as map
+projections.
+ PCS is used for states, countries etc.
+ you will see in GIS when an layer is using PCS that the units are in
+meters/km etc..
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_guoO7G6AekzekVC-HwsUpw_0002.png]]
+
+***** 2)order of using: define first and then reproject
+
+when dealing with projections you have to keep this in mind:
+ 1)*FIRST* you need to define the coordinante if missing (GCS). this is
+common when getting x,y cords in db files or rasters etc..
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_xyUw0VyI5kOAsxCgL18WFQ_0001.jpg]]
+ 2)*then*you can reporoject to any PGS system such as UTM etc.
+
+***** 3)converting between projections
+
+converting between different PCS is an important part in order to get
+all the layers to be projected similalrly
+ after you decide which projection to use and type (UTM,NAD etc..) you
+use the reproject tool:
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_vJ2w1YCvUqi0gimOxa673g_0001.png]]
+ then deifne the layer to be projected (to the one you decide to use)
+and the output file
+ NOTE: in some cases you will need to use a transformation
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_vJ2w1YCvUqi0gimOxa673g_0002.png]]
+ the file should now be reprojected
+
+***** fix a offsetted coord system
+
+[[~/Documents/My Dropbox/Org/Uni/Guides/ARCGIS_files/attach/steve_melly_cord_fix_adjusted.xlsx][Attachment #01
+(steve\_melly\_cord\_fix\_adjusted.xlsx)]]
+ if you have a layer/shapefile that moved a bit from the true location
+you can use the following method to get it approximately back in place
+ *In example:*
+ bellow the grey raster is the original location and the green raster is
+the raster that has been shifted to the left and bottom by a bit
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_Ti3nWWTfjaLk2sgmgWgkBA_0006.png]] to
+[[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_Ti3nWWTfjaLk2sgmgWgkBA_0007.png]]
+ *to solve this:*
+ use a correct layer/file to base your correction on. open the layer
+properties and extract the info such as cell size and
+e[[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_Ti3nWWTfjaLk2sgmgWgkBA_0008.png]]xtent:
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_Ti3nWWTfjaLk2sgmgWgkBA_0009.png]]
+ and
+ then take a sample point/grid in the shifted layer:
+ [[~/Dropbox/Org/Uni/Guides/ARCGIS_files/img/Image_Ti3nWWTfjaLk2sgmgWgkBA_0010.png]]
+ and mark down the X,Y of that point
+ then using a math application (like excel) start calculating the
+differences *(see attachment)*
+ for *X1*use the Left extent of the original layer plus the cell size
+divided by 2:
+ -108.90066788+0.012048575/2
+ for *Y1* use the Bottom extent of the original layer plus the cell size
+divided by 2:
+ 29.9993652723+0.012048575/2
+ for *X2* and *Y2* take the X,Y of the sample point
+ We then calcualte the diff between X2 and X1 and devide it by the cell
+size of the original layer (0.012048575)
+ the rest are other calculation that can be seen in the attached file
+***** Israel projection
+http://tx.technion.ac.il/~zvikabh/software/ITM/
+
+%Tip (the above link also has an online calulator from DD to ITM)%
+
+The standard coordinate grid in Israel is called `Israel Transverse Mercator` (ITM), and is sometimes informally referred to as the "new Israel grid" (רשת ישראל חדשה). This grid appears in detailed maps of Israel. Nonetheless, the older and less accurate Israel Cassini Soldner (ICS) grid or "old Israel grid" (רשת ישראל ישנה) is also still used in many places. For example, despite the official adoption of ITM in 1994, the ICS grid is still displayed more prominently in Israeli hiking maps (מפות סימון שבילים) and is consequently more commonly used by hikers.
+
+The ITM grid is a transverse Mercator projection, meaning that the surface of the earth is projected onto a cylinder whose axis of symmetry is parallel to the equator. This provides an accurate projection along a longitudinal slice of the earth, with the inaccuracy increasing as one moves away from this axis. Thus, for example, the Universal Transverse Mercator (UTM) grid divides the earth into 60 longitudinal slices, each projected separately. Since Israel is a narrow country, whose span from east to west barely exceeds 100 kilometers, a single projection is sufficient for accurately representing the entire area. 
+
+** install 
+*** install on debian
+
+Packages for Debian Wheezy, Jessie and Unstable for i386 and amd64 are available at:
+
+#+BEGIN_EXAMPLE
+Wheezy (7.x):
+
+deb     http://qgis.org/debian wheezy main
+deb-src http://qgis.org/debian wheezy main
+
+Jessie (8.x; testing, not yet released):
+
+deb     http://qgis.org/debian jessie main
+deb-src http://qgis.org/debian jessie main
+
+Unstable:
+
+deb     http://qgis.org/debian sid main
+deb-src http://qgis.org/debian sid main
+#+END_EXAMPLE
+
+To add the the http://qgis.org repository public key to your apt keyring, type:
+
+#+BEGIN_SRC sh
+gpg --recv-key DD45F6C3
+gpg --export --armor DD45F6C3 | sudo apt-key add -
+#+END_SRC
+
+Then add the lines for one of the repositories to your /etc/apt/sources.list file (see below to choose the appropriate one) and type:
+
+#+BEGIN_SRC sh
+sudo apt-get update
+sudo apt-get install qgis python-qgis qgis-plugin-grass
+#+END_SRC
+

@@ -8622,6 +8622,24 @@ flights %>%
 flights <- flights %>% mutate(Speed = Distance/AirTime*60)
 #+END_SRC
 
+*** create a new variable based in conditions
+**** using dplyr extra
+$Note$ you need to install the package first:
+%Tip% for debian install libcurl4-gnutls-dev beforehand
+#+BEGIN_SRC R
+library(devtools);
+install_github(repo="dplyrExtras", username="skranz")
+#+END_SRC
+
+then issues this
+
+#+BEGIN_SRC R
+mutate_if(bwfull.ptvl,birthyear==2003|birthyear==2004,yearb=2004)
+#+END_SRC
+where for DT bwfull.ptvl, for years 2003 and 2004 rows the variable yearb will get 2004
+
+
+
 ** aggregate
 *** base
 summarise: Reduce variables to values
@@ -9099,3 +9117,11 @@ flights_tbl %>%
 ## 1        0     0    0 SCAN TABLE hflights (~227496 rows)
 ## 2        0     0    0       USE TEMP B-TREE FOR ORDER BY
 #+END_EXAMPLE
+** Joins
+*** Type of Joins
+The package offers four different joins:
+
+inner_join (similar to merge with all.x=F and all.y=F)
+left_join (similar to merge with all.x=T and all.y=F)
+semi_join (not really an equivalent in merge() unless y only includes join fields)
+anti_join (no equivalent in merge(), this is all x without a match in y)
