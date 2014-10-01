@@ -20155,7 +20155,15 @@ Abstract:abstract;annote
 
 which would give one tab named "General" containing the fields url, keywords, doi and pdf, and another tab named "Abstract" containing the fields abstract and annote.
 **** attach PDF 
+***** file vs pdf menu
 to attache a pdf you would use the new 'file' system rather the deprecated 'pdf' entry
+***** to use auto attach:
+In JabRef there are two places where one sets base directory to search the PDF
+files. One is under Options-> Preferences. This settings was correct in my
+case but at another place it was wrong. Other place for setting the base
+directory is under File menu. "File->Date Base Properties". Here
+if the base directory is wrong, JabRef is unable to search files based on
+bibtex field.
 ***** if the pdf is accesible through open access or Uni subscriptions:
 1)add the ref using internal search
 2)use the local copy panel to download the pdf 
