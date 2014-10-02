@@ -372,10 +372,6 @@ random slope for each slopes for each wind direction
 use wind speed to choose the best 9 grid cell aod 
 reanalysis data set for wind direction
 ***** LPM- rule if you habe a spline it should stop in distance X etc (₆In example₆ for A1 1500km).
-***** supplementing AOD by space and time
-space: perhaps taking aod from 9 adjacent cells
-time: take from prev/next day if no AOD avilable today
-also we can maybe weight nearby cells by missingness/distance
 ***** Try removing (in mod1&2) aodid gridcells that have very few passable days (<100) :newdata:
      :PROPERTIES:
      :ID:       31731f52-2f71-4a2c-80e8-31e664617df3
@@ -763,6 +759,18 @@ http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_t
 ask about weather to reapply or new submission
 02-5885426
 prev isf for me # 714/14 
+** TODO call joel 2.10.2014
+*** Brent 
+-how is joey antonelli project going?
+*** Joel
+**** data fusion in North America
+combining the 3k and 1k data which have different algorithms and hence different errors
+***** TODO use calman filter to merge 1x1km to 3x3km, 10k
+****** we can supplment 1k data with 3k data where we preform lousy and dont do so well
+****** different resolution for different areas in the USA based on pop density/avilable health data
+***** EHP paper now waiting for final editor
+***** DVT paper, working on revisions
+
 * long term Misc
 ** GIS Trac k
     :PROPERTIES:

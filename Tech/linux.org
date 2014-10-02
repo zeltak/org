@@ -20230,6 +20230,37 @@ choose the field to rename and the value
 2.this will create a file under file://home/zeltak/jabref.xml
 3. use git to 'sync' the xml file
 
+**** groups
+***** search by multiple fields
+
+create a dynamic group and use a free-form search expression
+
+In order to search specific fields only and/or include logical operators in the search expression, a special syntax is available in which these can be specified. E.g. to search for entries whose author is "Miller", enter (in any but incremental search mode):
+
+author = miller
+
+Both the field specification and the search term support regular expressions. If the search term contains spaces, enclose it in quotes. Do not use spaces in the field specification! E.g. to search for entries about image processing, type:
+
+title|keywords = "image processing"
+
+You can use "and", "or", "not", and braces as intuitively expected:
+
+(author = miller or title|keywords = "image processing") and not author = brown
+
+The "=" sign is actually a shorthand for "contains". Searching for an exact match is possible using "matches" or "==". Using "!=" tests if the search term is not contained in the field (equivalent to "not ... contains ..."). The selection of field types to search (required, optional, all) is always overruled by the field specification in the search expression. To search for entries of a certain type, a pseudo field called "entrytype" is available:
+
+entrytype = thesis
+
+This finds entries whose type (as displayed in the "Entrytype" column) contains the word "thesis" (which would be "phdthesis" and "mastersthesis"). Another pseudo field "bibtexkey" allows to search for citation keys, e.g.
+
+bibtexkey = miller2005   
+**** cleanup
+***** find and delete duplicates
+go to the search menu> find duplicates
+***** clean keywords
+select the keywords you want and right click> manage keywords
+***** cleanup entries/rename pdf
+this tool (under tools>cleanup entries)
 ** System
 *** java
 
