@@ -1,6 +1,6 @@
 #+TITLE: Research 
 #+TODO: TODO(t) NEXT(n) | SUBMITTED(s) K_TRACK(k) PAUSED(p) DONE(d) 
-#+TAGS:  first(f) 
+#+TAGS:  first(f) read_only(r) 
 #+STARTUP: overview  inlineimages eval: (org-columns)
 #+PRIORITIES: A
 #+OPTIONS: toc:nil 
@@ -759,17 +759,50 @@ http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_t
 ask about weather to reapply or new submission
 02-5885426
 prev isf for me # 714/14 
+** TODO talk to tal- mexico and italy and ISF
+   :PROPERTIES:
+   :ID:       bfbf14cb-b6b8-47eb-8479-22d44e684b3b
+   :END:
 ** TODO call joel 2.10.2014
+:PROPERTIES:
+:ID:       942c598a-5d2c-47d8-ad63-fe8c555accb4
+:END:
 *** Brent 
 -how is joey antonelli project going?
 *** Joel
 **** data fusion in North America
 combining the 3k and 1k data which have different algorithms and hence different errors
 ***** TODO use calman filter to merge 1x1km to 3x3km, 10k
+      :PROPERTIES:
+      :ID:       51e638d4-a837-4689-b3cd-56d46777b576
+      :END:
 ****** we can supplment 1k data with 3k data where we preform lousy and dont do so well
 ****** different resolution for different areas in the USA based on pop density/avilable health data
 ***** EHP paper now waiting for final editor
 ***** DVT paper, working on revisions
+***** Italy and mex travel plans
+when does he leave italy, could we meet on the friday be
+***** EHF grant back, need a revision, will send when ready
+***** talk:
+latent variable model 
+trying to estimate latent value
+smooth surface of 10x10 
+autocorrelation over time to interpolate missing data 
+brents idea:
+we need to fill missingness by interpolate to any given grid and that interpolation where we have monitors will be a predictor
+R package by lauren hunn
+-geoschem combine with aod qian 
+***** TODO get the 3x3 data ready by next week
+      :PROPERTIES:
+      :ID:       76abcd76-3824-49b2-a755-23929a98eaf2
+      :END:
+***** sattelite humidity
+lowest level
+
+
+
+
+
 
 * long term Misc
 ** GIS Trac k
@@ -881,7 +914,11 @@ Department of Preventive Medicine
 this seminar will bring togheter all the things they learned over the BA and make use of these skills for a basic reasearch project
 also allows one to experience what is learned in MA 
 
+
+
 * EOF settings
+#+BEGIN_EXAMPLE
 Local variables:
 buffer-read-only: t
 End:
+#+END_EXAMPLE
