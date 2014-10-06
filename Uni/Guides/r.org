@@ -1,4 +1,3 @@
-
 #+TITLE: R Guide
 
 * TODO LEARN
@@ -7173,6 +7172,101 @@ all.vars(testformula)
 bwfull.s[, costime := cos(2*pi*jday/365.25)]
 bwfull.s[, sintime := sin(2*pi*jday/365.25)]
 #+END_SRC
+
+** HDF4 under R
+*** dependencies
+make sure your system has the hdf4 and gdal dependencies installed:
+under debian:
+
+#+BEGIN_SRC sh
+sudo apt-get install libhdf4-0 gdal
+#+END_SRC
+
+*** look at the hdf info
+
+$Note- you will need to cd into the directory that holds the hdf files$ 
+
+you can use the gdalinfo command to get info on HDF files
+
+#+BEGIN_SRC sh
+gdalinfo MAIACAOT.h00v00.20013050915.hdf 
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+Driver: HDF4/Hierarchical Data Format Release 4
+Files: MAIACAOT.h00v00.20013050915.hdf
+Size is 512, 512
+Coordinate System is `'
+Metadata:
+  HDFEOSVersion=HDFEOS_V2.12
+Subdatasets:
+  SUBDATASET_1_NAME=HDF4_EOS:EOS_GRID:"MAIACAOT.h00v00.20013050915.hdf":grid1km:Optical_Depth_Land
+  SUBDATASET_1_DESC=[400x400] Optical_Depth_Land grid1km (16-bit integer)
+  SUBDATASET_2_NAME=HDF4_EOS:EOS_GRID:"MAIACAOT.h00v00.20013050915.hdf":grid1km:Angstrom_Para
+  SUBDATASET_2_DESC=[400x400] Angstrom_Para grid1km (16-bit integer)
+  SUBDATASET_3_NAME=HDF4_EOS:EOS_GRID:"MAIACAOT.h00v00.20013050915.hdf":grid1km:Column_WV
+  SUBDATASET_3_DESC=[400x400] Column_WV grid1km (16-bit integer)
+  SUBDATASET_4_NAME=HDF4_EOS:EOS_GRID:"MAIACAOT.h00v00.20013050915.hdf":grid1km:AOT_QA
+  SUBDATASET_4_DESC=[400x400] AOT_QA grid1km (8-bit unsigned integer)
+Corner Coordinates:
+Upper Left  (    0.0,    0.0)
+Lower Left  (    0.0,  512.0)
+Upper Right (  512.0,    0.0)
+Lower Right (  512.0,  512.0)
+Center      (  256.0,  256.0)
+#+END_EXAMPLE
+
+also you can look at specific hdf data subsets
+
+#+NAME: 
+#+BEGIN_SRC sh
+gdalinfo HDF4_EOS:EOS_GRID:"MAIACAOT.h00v00.20013050915.hdf":grid1km:Optical_Depth_Land 
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+Driver: HDF4Image/HDF4 Dataset
+Files: MAIACAOT.h00v00.20013050915.hdf
+Size is 400, 400
+Coordinate System is:
+PROJCS["unnamed",
+    GEOGCS["Unknown datum based upon the custom spheroid",
+        DATUM["Not specified (based on custom spheroid)",
+            SPHEROID["Custom spheroid",6371007.181,0]],
+        PRIMEM["Greenwich",0],
+        UNIT["degree",0.0174532925199433]],
+    PROJECTION["Sinusoidal"],
+    PARAMETER["longitude_of_center",0],
+    PARAMETER["false_easting",0],
+    PARAMETER["false_northing",0],
+    UNIT["Meter",1]]
+Origin = (3200000.000000000000000,3700000.000000000000000)
+Pixel Size = (1000.000000000000000,-1000.000000000000000)
+Metadata:
+  add_offset=0
+  HDFEOSVersion=HDFEOS_V2.12
+  long_name=AOT at 0.47 micron for land
+  scale_factor=0.001
+  unit=None
+  valid_range=-100, 5000
+  _FillValue=-28672
+Corner Coordinates:
+Upper Left  ( 3200000.000, 3700000.000) ( 34d25'18.38"E, 33d16'29.50"N)
+Lower Left  ( 3200000.000, 3300000.000) ( 33d 7'23.45"E, 29d40'39.29"N)
+Upper Right ( 3600000.000, 3700000.000) ( 38d43'28.18"E, 33d16'29.50"N)
+Lower Right ( 3600000.000, 3300000.000) ( 37d15'48.88"E, 29d40'39.29"N)
+Center      ( 3400000.000, 3500000.000) ( 35d51' 8.35"E, 31d28'34.39"N)
+Band 1 Block=400x400 Type=Int16, ColorInterp=Gray
+  Description = AOT at 0.47 micron for land
+  NoData Value=-28672
+  Offset: 0,   Scale:0.001
+#+END_EXAMPLE
+
+*** convert hdf to Rdata
+
+#+BEGIN_SRC sh
+gdal_translate -of R HDF4_EOS:EOS_GRID:"MAIACAOT.h00v00.20013050915.hdf":grid1km:Optical_Depth_Land testout.RData            
+#+END_SRC
+
 
 * Packages specific
 ** Hemisc

@@ -287,7 +287,9 @@ confounding, since it is difficult to distinguish whether coffee
 consumption or exercise causes the outcome of interest. If this happens,
 one can stratify the data or use conditional logistic regression to
 adjust for the confounding.   
-** Exposure error 
+** Environmental Epi
+*** exposure 
+**** Exposure error 
 three types of exposure measurement error in longitudinal studies of air pollution and health, such as those cited above:
 1.The first error is derived from the difference between the daily personal exposures of each individual and the daily community-average personal exposure.
 2.The second error stems from the difference between the daily community average personal exposure and the true ambient concentration.
@@ -297,3 +299,20 @@ The first and third types of errors are of the Berkson type. Since Berkson measu
 The second type of error is termed classical and will bias the relative risk.
 Upward bias can occur in rare settings where the ratio of the amount of measurement error in PM to the measurement error in the other pollutants is high and the correlations amongthe pollutants are extreme. Hence, the authors concluded that observed PM health risk estimates were likely not biased away from 0 by measurement error.
 The second type of error will be influenced by pollution from indoor sources and by the difference between the ambient concentration and the ambient exposure (the ambient component of personal exposure). Since indoor-generated sources are generally uncorrelated with the ambient concentrations, the indoor-generated component of personal exposure will not affect the relative risk due to ambient pollution.  
+**** scales of Human exposure
+Human exposures can be decomposed to three components: regional, urban background, and microscale.
+
+The impact of the regional sources is uniform across the study area.
+
+The urban background represents the collective emissions of sources within the study area.
+Exposures to these emissions depend on the distribution of local sources, their geographic location and the prevailing meteorological conditions. Although these exposures vary by space, their changes are very smooth. 
+
+Finally, the microscale exposures are directly related to nearby sources located within a few hundred meters. These exposures exhibit pronounced spatial variability.
+
+In our study we use two exposure metrics: the first, is the distance of the subject residence from the closest roadway, which can be used as a surrogate of microscale exposures to nearby traffic, and
+
+the second is the PM2.5 exposure at outside the subject residence. This encompasses exposures associated with both nearby traffic and urban background.  Therefore, gradients of the two exposure metrics amongst the cohort subjects will represent differences of the impact of nearby traffic sources, and nearby sources plus urban background. Note that the urban background reflects traffic emissions as well as those from other sources such as home heating, air port and seaport, and a host of small sources.
+
+The above definitions assume that exposures were estimated mostly during the same time period. otherwise, gradients in the two exposure metrics could also reflect temporal trends in emissions of local and/or distant sources. In conclusion, distance from the nearest roadway and pm25 mass estimates are two different exposure metrics where the former represents s a fraction of the latter.
+
+ 
