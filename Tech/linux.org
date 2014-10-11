@@ -4249,9 +4249,46 @@ i3-msg "workspace 1; append_layout /home/michael/.i3/workspace-1.json"
 exec --no-startup-id "i3-msg 'workspace 1; append_layout /home/michael/.i3/workspace-1.json'"
 #+END_SRC
 
-*** bugs errors 
+*** bugs/errors/debugging 
 ***** extra/double workspaces being created
 this is probably due to whitespaces. issue a whitespace checker in your editor and make sure there are no whitespaces in your config  
+
+***** debug with a coredump
+prepare i3 for debugging
+look here http://i3wm.org/docs/debugging-release-version.html
+and follow steps 3,4,5
+
+$Note-this is usually used when i3 cant start X$ 
+
+`detailed notes on above steps`:
+
+'step 3'
+
+$Note$ if you cant login to X you will need to run the `ulimit -c unlimited` command manually from Console
+
+you can define where to store the core dumps
+
+sysctl -w kernel.core_pattern=/tmp/core.%e.%p      
+
+'step 4'
+if you use the arch community version from repos you can skip step 4
+
+'step 5'
+
+start i3 from console with start X, this will create the coredump file
+then you can from X (gnome , kde etc) issue this from a terminal 
+
+#+BEGIN_SRC sh
+gdb $(which i3) core.i3.3849
+#+END_SRC
+
+Then, generate a backtrace using:
+
+#+BEGIN_SRC sh
+backtrace full
+#+END_SRC
+
+pastebin the results and send as bug report
 
 *** Focus follows mouse
 By default, window focus follows your mouse movements. However, if you have a setup where your mouse usually is in your way (like a touchpad on your laptop which you do not want to disable completely), you might want to disable focus follows mouse and control focus only by using your keyboard. The mouse will still be useful inside the currently active window (for example to click on links in your browser window). focus follows mouse <yes|no>
@@ -18889,6 +18926,88 @@ convert:
 
 #+END_EXAMPLE
  
+***** play plug-in
+****** config in beets
+#+BEGIN_SRC ruby
+play:
+   command: /home/zeltak/bin/beets_playplugin.sh
+   relative_to: /home/zeltak/music/
+#+END_SRC
+
+****** general
+The play plugin allows you to pass the results of a query to a music player in the form of an m3u playlist.
+Use it by invoking the beet play command with a `query`.
+The command will create a temporary m3u file and open it using an appropriate application
+$Note-for MPD users you don't want the m3u but use the script in the mpd integration section below to auto add to mpd $ 
+You can query albums instead of tracks using the -a option.      
+examples:
+
+#+BEGIN_EXAMPLE
+beet play heavy horses
+#if using the custom field and lastimport plugin
+beet play play_count:60..70  
+#+END_EXAMPLE
+
+****** use with MPD 
+to use with mpd use the following script that the play plug-in calls upon.
+first in the beets config set it up (see above header)
+than save this script in the above path you defined
+
+#+BEGIN_EXAMPLE
+#!/bin/sh
+#
+# Make sure you set your relative_to path in beets' config.
+# For example:
+#
+#   play:
+#     relative_to: /mnt/media/music/
+#     command: mpc-beets-play.sh
+#
+
+test $# -ne 1 && echo "$0 takes 1 argument" && exit 1
+test ! -e "$1" && echo "Argument ($1) needs to be a file" && exit 2
+
+mpc clear
+cat $1 | mpc add
+mpc play
+#+END_EXAMPLE
+
+***** lastimport plug-in
+https://github.com/rafi/beets-lastimport
+
+Clone somewhere and configure beets:
+
+#+BEGIN_EXAMPLE
+pluginpath:
+  - /usr/lib/python2.7/site-packages/beetsplug
+  - /home/rafi/code/python/beetsplug
+plugins: lastimport
+lastimport:
+  per_page: 500
+  retry_limit: 3
+lastfm:
+  user: yourname
+  api_key: secret
+types:
+  play_count: int
+  rating: float
+#+END_EXAMPLE
+
+Get your own API key from Last.fm
+
+http://www.last.fm/api/account/create
+
+and don't forgot to change the user name in beets configuration
+%Tip- the API key is the first one not he lower one that starts with secrert is% 
+
+then simply run 'beet lastimport' and wait for the plugin to request tracks from last.fm and try to match them to beets' database.
+
+To see more information, run with verbose mode:
+
+#+BEGIN_SRC sh
+beet -v lastimport
+#+END_SRC
+
 **** Queries
 ***** Queries Intro
 
@@ -23646,8 +23765,18 @@ To start the assistant without opening the webapp, you can run the command "git 
 **** basic sync:
 For two nodes two sync a repository, the following must be true on each node:
 
-1.The other node has been added to the config (Edit > Add Node).
-2.The repository has been added on both nodes, with the same ID (Edit > Add Node).
+1.The other node has been added to the config (Edit > Add Node)
+$Note$ to add the key ID
+2.The repository has been added on both nodes, with the same ID (Edit > Add Node):
+
+#+BEGIN_EXAMPLE
+Repository ID
+sync
+Short identifier for the repository. Must be the same on all cluster nodes.
+Repository Path
+/home/zeltak/Sync
+#+END_EXAMPLE
+
 3.The other node must have been checked under "Share With Nodes" in the repository configuration.
 
 **** install on arch linux
@@ -24100,6 +24229,14 @@ sudo teamviewer --daemon stop
 sudo teamviewer --daemon start
 #+END_SRC
 $Note- this maybe done with systemd in future debian releases when systemd takes over$
+
+$Note$ you can skip VNC and try this if it works:
+
+
+#+NAME: 
+#+BEGIN_SRC sh
+DISPLAY=:0 teamviwer
+#+END_SRC
 
 with VNC connect to debian machine:
 issue:
