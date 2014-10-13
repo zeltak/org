@@ -37326,6 +37326,12 @@ $Note$ name=case sensitive, iname=case dosent matter
 #+BEGIN_SRC sh
 find . '(' -iname '*.nfo' -o -iname '*.jpg'  -o -iname '*.JPEG'    -o -iname '*.png'  -o -iname '*.PNG'  -o -iname '*.jpeg'  -o -iname '*.JPEG'  -o -iname '*.log'  -o -iname '*.m3u'  -o -iname '*.accurip' -iname '*.nfo' -o -iname '*.tbn' -o -iname '*.txt' ')' -exec rm {} \;
 #+END_SRC
+**** find and delete a specific file type
+#+BEGIN_SRC bash
+find /home/zeltak/music/  -name "*.ratings" -exec rm {} \;
+#+END_SRC
+
+here we delete all text files that have a .rating extension
 **** delete all non music files form music collection
 
 *
