@@ -1546,7 +1546,8 @@ cursor in termite etc)
 *** R under arch
 **** lme compalining errors
 install gcc-fortran
-*** power
+
+* power
 **** Suspending to RAM
 
 if the command :
@@ -4021,6 +4022,14 @@ export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswi
 %Tip-this should go inside the .bashrc/.zshrc% 
 
 ** i3
+** commands
+*** chaining commands
+Commands can be chained by using ; (a semicolon). So, to move a window to a specific workspace and immediately switch to that workspace, you can configure the following keybinding:
+Example:
+#+BEGIN_SRC sh
+bindsym $mod+x move container to workspace 3; workspace 3
+#+END_SRC
+    
 *** i3-msg
 **** use msg to focus on app
 
@@ -4199,7 +4208,7 @@ Compares the i3-internal container ID, which you can get via the IPC
 interface. Handy for scripting.
 
 *** layouts
-***** define  a workspace layout by default
+***** define a workspace layout by default
 add this ';layout tabbed' command to the WS switch command in your i3 config
 
 @Warning:make sure there is no SPACE betwee the TAGname and the ; ie > TAG;@  
@@ -36003,7 +36012,6 @@ accessed in the last two minutes
  ...
 
 **** grep
-
 ***** quick commands
 
 to grep recursivly use this:
@@ -36095,6 +36103,12 @@ this is a comprehensive command:
 '(ass|com|divx|DIVX|css|gif|js|BUP|IFO|VOB|ogv|ogm|ogg|mp3|wmv|AVI|WMV|MKV|MOV|MPEG|xml|mkv|flv|sfv|xls|qpw|exe|oldversion|SRT|avi|mpg|mp4|nfo|jpg|tbn|sub|db|md5|iso|txt|rar|ogm|ogg|srt|mov|mpeg|mpg|mp4)'
 /home/zeltak/BK/raid TV.txt > /home/zeltak/ZH tmp/raid tv.txt
 
+***** extract part of piped output
+****** extract a part that starts with X
+#+NAME: extract only word starting with percent part 
+       #+BEGIN_SRC sh
+acpi | grep -o "\w*%\w*"
+       #+END_SRC 
 **** locate
 
 *Locate
@@ -38459,6 +38473,14 @@ some more example
  awk '{gsub(/foo/,"bar")}; 1'          # replace ALL instances in a line
 #+END_SRC
 
+**** pipe an CLI output and extract part of the output
+***** extract the last fiels
+use the $NF option (last field)
+
+#+NAME: 
+#+BEGIN_SRC sh
+acpi | awk '{print $NF}'
+#+END_SRC
 *** regexp
 
 **** basics
