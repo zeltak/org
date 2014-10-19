@@ -1546,7 +1546,8 @@ cursor in termite etc)
 *** R under arch
 **** lme compalining errors
 install gcc-fortran
-*** power
+
+* power
 **** Suspending to RAM
 
 if the command :
@@ -4021,6 +4022,14 @@ export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswi
 %Tip-this should go inside the .bashrc/.zshrc% 
 
 ** i3
+** commands
+*** chaining commands
+Commands can be chained by using ; (a semicolon). So, to move a window to a specific workspace and immediately switch to that workspace, you can configure the following keybinding:
+Example:
+#+BEGIN_SRC sh
+bindsym $mod+x move container to workspace 3; workspace 3
+#+END_SRC
+    
 *** i3-msg
 **** use msg to focus on app
 
@@ -4199,7 +4208,7 @@ Compares the i3-internal container ID, which you can get via the IPC
 interface. Handy for scripting.
 
 *** layouts
-***** define  a workspace layout by default
+***** define a workspace layout by default
 add this ';layout tabbed' command to the WS switch command in your i3 config
 
 @Warning:make sure there is no SPACE betwee the TAGname and the ; ie > TAG;@  
@@ -4216,9 +4225,79 @@ bindsym $mod+w workspace            7:SSH
 
 #+END_SRC
 
-*** bugs errors 
+***** saving/restoring layouts
+****** saving a layout
+You can save the layout of either a single workspace or an entire output (e.g. LVDS1). Of course, you can repeat this step multiple times if you want to save/restore multiple workspaces/outputs.
+
+'i3-save-tree' is a tool to save the layout. It will print a JSON representation of i3’s internal layout data structures to stdout. Typically, you may want to take a quick look at the output, then save it to a file and tweak it a little bit:
+
+#+NAME: 
+#+BEGIN_SRC sh
+i3-save-tree --workspace=7:SSH  > ~/.i3/workspace-7.json
+#+END_SRC
+
+$Note-The output of i3-save-tree is @NOT@ useful until you manually modify it$:
+you need to tell i3 how to match/distinguish windows (for example based on their WM_CLASS, title, etc.). By default, all the different window properties are included in the output, but commented out. This is partly to avoid relying on heuristics and partly to make you aware how i3 works so that you can easily solve layout restoring problems.
+
+****** restore (append) layout
+The append_layout command is used to load a layout file into i3. It accepts a path (relative to i3’s current working directory or absolute) to a JSON file.
+
+#+BEGIN_EXAMPLE
+Syntax:
+append_layout <path>
+#+END_EXAMPLE
+
+Examples:
+
+#+BEGIN_SRC sh
+# From a terminal or script:
+i3-msg "workspace 1; append_layout /home/michael/.i3/workspace-1.json"
+# In your i3 configuration file, you can autostart i3-msg like this:
+# (Note that those lines will quickly become long, so typically you would store
+#  them in a script with proper indentation.)
+exec --no-startup-id "i3-msg 'workspace 1; append_layout /home/michael/.i3/workspace-1.json'"
+#+END_SRC
+
+*** bugs/errors/debugging 
 ***** extra/double workspaces being created
 this is probably due to whitespaces. issue a whitespace checker in your editor and make sure there are no whitespaces in your config  
+
+***** debug with a coredump
+prepare i3 for debugging
+look here http://i3wm.org/docs/debugging-release-version.html
+and follow steps 3,4,5
+
+$Note-this is usually used when i3 cant start X$ 
+
+`detailed notes on above steps`:
+
+'step 3'
+
+$Note$ if you cant login to X you will need to run the `ulimit -c unlimited` command manually from Console
+
+you can define where to store the core dumps
+
+sysctl -w kernel.core_pattern=/tmp/core.%e.%p      
+
+'step 4'
+if you use the arch community version from repos you can skip step 4
+
+'step 5'
+
+start i3 from console with start X, this will create the coredump file
+then you can from X (gnome , kde etc) issue this from a terminal 
+
+#+BEGIN_SRC sh
+gdb $(which i3) core.i3.3849
+#+END_SRC
+
+Then, generate a backtrace using:
+
+#+BEGIN_SRC sh
+backtrace full
+#+END_SRC
+
+pastebin the results and send as bug report
 
 *** Focus follows mouse
 By default, window focus follows your mouse movements. However, if you have a setup where your mouse usually is in your way (like a touchpad on your laptop which you do not want to disable completely), you might want to disable focus follows mouse and control focus only by using your keyboard. The mouse will still be useful inside the currently active window (for example to click on links in your browser window). focus follows mouse <yes|no>
@@ -8873,9 +8952,6 @@ delete the full history file will be placed in
 $XDG DATA HOME/clipbored/clips
 
 **** conky
-
-***** scripts
-
 ***** conky weather forecast python script
 
 *Conky Weather Forecast Python Script
@@ -9176,17 +9252,6 @@ in Conky:
 --requestCalendarNames="itai kloog;Ykloog" -t
 /home/zeltak/.conky/conkyGoogleCalendar.config}
 
-***** attachments
-
-***** conky objects.pdf
-
-[[~/Dropbox/Org/Tech/linux_files/attach/conky%20objects.pdf][Attachment #08 (conky
-objects.pdf)]]
-
-***** conky settings
-
-[[~/Dropbox/Org/Tech/linux_files/attach/conky.html][Attachment #09 (conky.html)]]
-
 ***** moc plugin
 
 mocp provides straightforward CLI options to grep song metadata,
@@ -9200,9 +9265,6 @@ mocp info into conky is as simple as:
  $alignc${exec mocp -Q %artist} - ${exec mocp -Q %song}
 
 ***** power
-
-*power usage script
-*
  I wrote up a power usage script for conky. I put it in the pastebin
 here http://crunchbanglinux.org/pastebin/23. copy the script, name it
 what you want and put in your scripts directory. Make sure you make it
@@ -9273,23 +9335,23 @@ str(amperes drawn))
  os.remove(path)
 
 ***** placement
-
 *How to make the correct placement*
  To place the conky widgets can be a bit tricky, but this tip should
 help.
  In your .conkyrc XXX you should have these settings:
+#+BEGIN_EXAMPLE
  maximum width 130
  gap x 10
  gap y 30
  maximum width is the the width of the widget
  gap x is the distance from the right edge of your screen
  gap y is the distance from the top edge of your screen
- The height of the widget is calculated automatically based on the
+#+END_EXAMPLE
+The height of the widget is calculated automatically based on the
 content of your .conkyrc XXX
- The command xwininfo could be usefull, but the geometry string from
+The command xwininfo could be usefull, but the geometry string from
 these outputs and the gap  settings does not always match. *alignment
-*
- Text alignment on screen, {top,bottom,middle} {left,right,middle} or
+Text alignment on screen, {top,bottom,middle} {left,right,middle} or
 none. Can also be abbreviated with first chars of position, ie. tr for
 top right.
  Run multiple conky sessions
@@ -9321,7 +9383,6 @@ when you log in, this is the script that makes it all happen.
  (sleep 2s && /home/zeltak/scripts/conky start) &
 
 ***** design
-
 *add a line :
 *
  ${hr 1} for thin
@@ -9423,7 +9484,6 @@ when you log in, this is the script that makes it all happen.
  # Launch Conky # conky & (sleep 2s && conky start) &
 
 ***** mpd support
-
 Add this to the config file
  mpd host localhost
  mpd port 6660
@@ -17229,7 +17289,6 @@ output has
  album it is for the whole album
 
 **** mpc
-
 ***** add song after the current playing song (mpc insert)
 
 issue the insert command:
@@ -17270,6 +17329,10 @@ connection in your mpd.conf file
 MPD HOST=localhost mpc listall | grep -Ev '.flac' >
 /home/zeltak/Downloads/nonFLAC.txt
 
+***** add X rated songs with stickers
+#+BEGIN_SRC sh
+mpc clear && mpc sticker / find rating | grep -E "|rating=4|rating=5" | awk -F ':' '{print $1}' | shuf -n 11 | mpc add &&  mpc play      
+#+END_SRC
 **** errors
 ***** see verbose output when mpd is broken
 sudo mpd --verbose --no-daemon --stdout
@@ -17818,6 +17881,15 @@ server
  restart mpd
  sudo /etc/init.d/mpd restart
  rating should appear in gmpc
+**** mpdscribble (lastfm stats)
+install mpdscribble from AUR
+
+https://aur.archlinux.org/packages/mpdscribble/
+
+create a config file here
+file:/home/zeltak/.mpdscribble
+
+and start it with mpdscribble
 *** Cantata
 **** Manual
 See file:/home/zeltak/org/attach/files_2013/Cantata_Readme.txt 
@@ -18872,6 +18944,88 @@ convert:
 
 #+END_EXAMPLE
  
+***** play plug-in
+****** config in beets
+#+BEGIN_SRC ruby
+play:
+   command: /home/zeltak/bin/beets_playplugin.sh
+   relative_to: /home/zeltak/music/
+#+END_SRC
+
+****** general
+The play plugin allows you to pass the results of a query to a music player in the form of an m3u playlist.
+Use it by invoking the beet play command with a `query`.
+The command will create a temporary m3u file and open it using an appropriate application
+$Note-for MPD users you don't want the m3u but use the script in the mpd integration section below to auto add to mpd $ 
+You can query albums instead of tracks using the -a option.      
+examples:
+
+#+BEGIN_EXAMPLE
+beet play heavy horses
+#if using the custom field and lastimport plugin
+beet play play_count:60..70  
+#+END_EXAMPLE
+
+****** use with MPD 
+to use with mpd use the following script that the play plug-in calls upon.
+first in the beets config set it up (see above header)
+than save this script in the above path you defined
+
+#+BEGIN_EXAMPLE
+#!/bin/sh
+#
+# Make sure you set your relative_to path in beets' config.
+# For example:
+#
+#   play:
+#     relative_to: /mnt/media/music/
+#     command: mpc-beets-play.sh
+#
+
+test $# -ne 1 && echo "$0 takes 1 argument" && exit 1
+test ! -e "$1" && echo "Argument ($1) needs to be a file" && exit 2
+
+mpc clear
+cat $1 | mpc add
+mpc play
+#+END_EXAMPLE
+
+***** lastimport plug-in
+https://github.com/rafi/beets-lastimport
+
+Clone somewhere and configure beets:
+
+#+BEGIN_EXAMPLE
+pluginpath:
+  - /usr/lib/python2.7/site-packages/beetsplug
+  - /home/rafi/code/python/beetsplug
+plugins: lastimport
+lastimport:
+  per_page: 500
+  retry_limit: 3
+lastfm:
+  user: yourname
+  api_key: secret
+types:
+  play_count: int
+  rating: float
+#+END_EXAMPLE
+
+Get your own API key from Last.fm
+
+http://www.last.fm/api/account/create
+
+and don't forgot to change the user name in beets configuration
+%Tip- the API key is the first one not he lower one that starts with secrert is% 
+
+then simply run 'beet lastimport' and wait for the plugin to request tracks from last.fm and try to match them to beets' database.
+
+To see more information, run with verbose mode:
+
+#+BEGIN_SRC sh
+beet -v lastimport
+#+END_SRC
+
 **** Queries
 ***** Queries Intro
 
@@ -19948,27 +20102,6 @@ just worked.
  Sure, this is not free (as in free speech) software, nor is it native
 Linux, but waiting for a real free solution this is still a better
 compromise than dual-booting or buying software that doesn't work.
-
-*** sublime text
-
-**** search and replace
-
-***** keyboard shortcuts
-
-- ctrl+enter: replace all
- - alt+enter: find all
- - enter: find next
- - shift+enter: find prev
-
-***** replace on mulitple documents
-
-To open the search panel for multiple files, press *Ctrl + Shift + F*.
- You can use the keyboard to control the search panel and some search
-actions:
- Toggle Regular Expressions Alt + R
- Toggle Case Sensitivity Alt + C
- Toggle Exact matches Alt + W
- Find Next Enter
 
 *** Zathua
 **** blank screen/cant open pdf
@@ -21493,6 +21626,26 @@ speed.
     -ext2main: extract archives from main applications "Archive extraction" interface;
     -ext2commandprompt: open the command prompt in the selected folder (or in its path, if a file is selected)
 
+*** gpaste
+**** install on arch with applet support
+edit the PKGBuild to add the --enable-aplet option
+
+#+BEGIN_EXAMPLE
+build () {
+    cd "$srcdir/$pkgname-$pkgver"
+
+    ./configure --sysconfdir=/etc       \
+                --libexecdir=/usr/lib \
+                --enable-applet
+    make
+#+END_EXAMPLE
+    
+**** use rofi to pipe gpaste
+     #+BEGIN_SRC sh
+menu=$(gpaste | rofi -dmenu -p "clipboard")
+selection=$(echo "$menu" | cut -d ':' -f1)
+gpaste select $selection     
+     #+END_SRC
 *** krename
 
 **** TV Operations
@@ -23630,9 +23783,34 @@ To start the assistant without opening the webapp, you can run the command "git 
 **** basic sync:
 For two nodes two sync a repository, the following must be true on each node:
 
-1.The other node has been added to the config (Edit > Add Node).
-2.The repository has been added on both nodes, with the same ID (Edit > Add Node).
+1.The other node has been added to the config (Edit > Add Node)
+$Note$ to add the key ID
+2.The repository has been added on both nodes, with the same ID (Edit > Add Node):
+
+#+BEGIN_EXAMPLE
+Repository ID
+sync
+Short identifier for the repository. Must be the same on all cluster nodes.
+Repository Path
+/home/zeltak/Sync
+#+END_EXAMPLE
+
 3.The other node must have been checked under "Share With Nodes" in the repository configuration.
+
+**** install on arch linux
+install through community or git (on aur)
+then use regular systemd syntax to operate
+
+#+NAME: 
+#+BEGIN_SRC sh
+sudo systemctl enable syncthing@zeltak    
+sudo systemctl start syncthing@zeltak    
+sudo systemctl stop syncthing@zeltak    
+#+END_SRC
+
+then use the webgui to use at:
+
+http://localhost:8080/
 
 *** unsion
 **** Synchronizing org files with Unison
@@ -24070,6 +24248,14 @@ sudo teamviewer --daemon start
 #+END_SRC
 $Note- this maybe done with systemd in future debian releases when systemd takes over$
 
+$Note$ you can skip VNC and try this if it works:
+
+
+#+NAME: 
+#+BEGIN_SRC sh
+DISPLAY=:0 teamviwer
+#+END_SRC
+
 with VNC connect to debian machine:
 issue:
 #+NAME: 
@@ -24078,8 +24264,8 @@ x11vnc -display :0
 #+END_SRC
 then connect with vinagre or any VNC viwer and start TV through GUI
 
-***** Editors
-****** 'Emacs'
+** Editors
+*** 'Emacs'
        :PROPERTIES:
        :ID:       38a15adf-f505-4a54-b1d9-f76b22ce1147
        :END:
@@ -25501,6 +25687,11 @@ However, be aware that if require-final-newline is non-nil, then a (single) newl
 ********* Delete extra blank lines between paragraphs
 C-x C-o (delete-blank-lines) also deletes any extra blank lines between two paragraphs, leaving just one blank line.
  
+********* Delete white space in web formatted pages
+to solve your problem, first select the text in question and do M-x delete-blank-lines 
+then select it again and do :s/^ *//                                                           
+this leaves both empty lines and leading whitespace are gone                                          
+
 ******** Edit Files as Root
 
 One area where Emacs traditionally falls short by default is editing
@@ -27950,7 +28141,38 @@ you can make a portion of a buffer read-only using text properties. The code bel
     (put-text-property start end 'read-only nil)))
 #+END_SRC 
 
-****** 'org-mode'
+******** `orgmode read only`
+to make some org-sections read-only
+
+$Note- you !MUST! tag the header :read_only: other wise it wont work$ 
+use the following functions on the header (again after you tag it as read only)
+
+#+BEGIN_SRC emacs-lisp :results none
+(defun org-mark-readonly ()
+(interactive)
+(org-map-entries
+(lambda ()
+(let* ((element (org-element-at-point))
+(begin (org-element-property :begin element))
+(end (org-element-property :end element)))
+(add-text-properties begin (- end 1) '(read-only t
+font-lock-face '(:background "#FFE3E3")))))
+"read_only")
+(message "Made readonly!"))
+(defun org-remove-readonly ()
+(interactive)
+(org-map-entries
+(lambda ()
+(let* ((element (org-element-at-point))
+(begin (org-element-property :begin element))
+(end (org-element-property :end element))
+(inhibit-read-only t))
+(remove-text-properties begin (- end 1) '(read-only t font-lock-face '(:background "yellow")))))
+"read_only"))
+(add-hook 'org-mode-hook 'org-mark-readonly)
+#+END_SRC
+
+*** 'org-mode'
        :PROPERTIES:
        :ID:       be4759e1-2951-4c91-a155-056bc2a16d9f
        :END:
@@ -28177,7 +28399,7 @@ Org Build System page on
 ******** `Update org from Git`
 
 #+BEGIN_EXAMPLE
-cd ~/.emacs.d/src/
+cd ~/.emacs.d/src/org-mode/
 git pull 
 make autoloads
 #+END_EXAMPLE
@@ -29621,6 +29843,3141 @@ use this
 :END:
 #+END_EXAMPLE
 
+*** sublime text
+
+**** search and replace
+
+***** keyboard shortcuts
+
+- ctrl+enter: replace all
+ - alt+enter: find all
+ - enter: find next
+ - shift+enter: find prev
+
+***** replace on mulitple documents
+
+To open the search panel for multiple files, press *Ctrl + Shift + F*.
+ You can use the keyboard to control the search panel and some search
+actions:
+ Toggle Regular Expressions Alt + R
+ Toggle Case Sensitivity Alt + C
+ Toggle Exact matches Alt + W
+ Find Next Enter
+
+*** vim
+    
+**** $intro/help
+
+***** help
+
+you can use the :help command anytime to take a look at any vim/plugin
+function
+ also use
+ :h
+ for shorter access
+ to navigate in help
+ [[~/Dropbox/Org/Tech/linux_files/2011-05-15-23-08-11-scrot.png]]
+
+***** config file locations
+
+[[~/Dropbox/Org/Tech/linux_files/2011-05-13-22-03-53-scrot.png]]
+
+***** show history of commands
+
+to show the history of commands issue:
+ q:
+ (in normal mode)
+
+***** vim cheatsheet p2
+
+\-BK-q > close doc (:bufferdelete)
+ \-BK-d > close doc with no save(:bufferdelete!)
+ \-BK-d-d-d > close ALL docs no save
+ \-p > MRU
+ \-\-w > easy motion
+ c-J > ulti snips move forward
+ c- c-  > TComment
+ \-\-u > gundo
+ \-y > yankring
+ """" Exit insert mode methods.
+ :imap ` <Esc>
+ :imap jj <Esc>
+ """" Copy & Paste etc
+ "paste from system clip (both normal and visual)
+ nmap ggp "+p
+ vmap ggy "+p
+ vmap ggy "+yy
+ nmap ggy "+yy
+ vmap ggw "+yw
+ nmap ggw "+yw
+ ggd duplicate a word
+ ggb duplicate a section below
+ \-\-/ > clear higlight search
+ w!! > write file as sudo if forgot ti use sudo
+
+***** create personal help file
+
+[[~/Dropbox/Org/Tech/linux_files/attach/template.help.txt][Attachment #21
+(template.help.txt)]]
+ create personal help file
+ User help files should have extension .txt . That first line should
+start with the name of the file itself, with the .txt extension, and
+between stars.
+ see attached for a template file
+ 1.create a simple help file and append the name of the file between 2
+'*' in the first line IE:
+ *MYHELPFILE*
+ 2.then put inside the help file all the text needed
+ 3.save the text file in ~/.vim/doc/
+ 4.then issue in vim:
+
+ :helptags ~/.vim/doc
+
+ and then to access that file issue:
+
+ :help MYHELPFILE
+
+ example file:
+ *shorts.txt*
+ \-BK-q > close doc (:bufferdelete)
+ \-BK-d > close doc with no save(:bufferdelete!)
+ \-BK-d-d-d > close ALL docs no save
+ TIPS:
+ Use *stars* to create a point to which the user can jump, then bars
+used like |stars| will jump to it. Or if you define options, have a
+header like *'option'* just above the definition, then 'option' will
+jump to it (but you would of course need to patch the C code to create a
+new option). You can jump to tags in existing helpfiles the same way,
+ e.g. |help.txt|, |bars|, 'compatible'.
+
+***** current vimrc
+
+[[~/Dropbox/Org/Tech/linux_files/attach/.vimrc][Attachment #22 (.vimrc)]]
+ updated 1/8/2012
+
+**** .Vimrc
+
+***** options and set (see what option defer from default values)
+
+typing the command options will bring the vim options screen
+ :options
+ to set see what option defer from default values use the set command:
+ :set
+ [[~/Dropbox/Org/Tech/linux_files/2011-05-13-22-14-37-scrot.png]]
+
+***** verbose mode (check which option was set and from where)
+
+if you issue a command in verbose mode:
+ :verbose set wildmode
+ it will let you know who used it last
+ [[~/Dropbox/Org/Tech/linux_files/2011-05-13-22-11-00-scrot.png]]
+
+***** wild menu
+
+When 'wildmenu' is on, command-line completion operates in an enhanced
+mode. On pressing 'wildchar' (usually <Tab>) to invoke completion, the
+possible matches are shown just above the command line, with the first
+match highlighted (overwriting the status line, if there is one).
+ to use it add this to vimrc:
+ wildmenu-on
+ *NOTE:* When 'wildmode' is used, "wildmenu" mode is used where "full"
+is specified. "longest" and "list" do not start "wildmenu" mode.
+
+***** ctrl-c/v copy/paste
+
+STRING) = "doublecmd"
+  OB APP ROLE(UTF8 STRadd this part to your vimrc to get normal
+copy/paste
+ source $VIMRUNTIME/mswin.vim
+ also issue this to retain y for yanking:
+
+:set selectmode=
+
+ 'selectmode' 'slm'string(default "")
+ global
+ {not in Vi}
+ This is a comma separated list of words, which specifies when to
+start
+ Select mode instead of Visual mode, when a selection is started.
+ Possible values:
+ mousewhen using the mouse
+ keywhen using shifted special keys
+ cmdwhen using "v", "V" or CTRL-V
+ See |Select-mode|.
+ The 'selectmode' option is set by the |:behave| command.
+
+***** location of vimrc file
+
+its called  vimrc and its in the user home folder (root)
+ IE:
+ *c:\Users\ekloog\ vimrc*
+ There is no ~/.vim directory on Windows: there, it's ~/vimfiles (and,
+ just like ~/.vim on Unix, it does not exist by default). its also under
+the home dir
+ IE:
+ *c:\Users\ekloog\vimfiles\*
+
+***** Disable backups
+
+disable the backup for vim by adding this to .vimrc
+ :set nobackup
+ The other, and better, option is to set a dedicated backup directory
+ :set backupdir=~/.backup,.,/tmp
+ Now all of the backup files get created in a single .backup directory.
+This isn't a perfect solution. Files with identical names (index.html)
+will get overwritten, but I've never once used a vim backup file, so
+this is still better than nothing.
+ best solution:
+ Tip: Its also neat to state all backup location for all system (see
+below) vim will go one by one until it finds one that exists and use
+that
+ set backupdir=~/.vim-tmp,~/tmp,/var/tmp,$HOME/Local\ Settings/Temp
+ **Warning** make sure no other backup lines are in you vimrc when using
+above options
+
+***** disable swap file
+
+Try :set noswapfile, or without the ":" in your vimrc file
+
+***** debug vimrc
+
+use the :finish command. the command will end vim reading from the rc at
+the finish placment
+ so one could go section by section and see when the error goes away
+ """zeltak vim config 1.2013
+ """""""""""""""""""""""""""""""""STARTUP COMMANDS
+ "For patogen
+ execute pathogen#infect()
+ call pathogen#helptags()
+ syntax on "syntax higlighting .
+ filetype plugin indent on " Automatically detect file types
+ set nocompatible
+ :finish
+ set mouse=a " automatically enable mouse usage
+ set history=1000 " Store a ton of history (default is 20)
+ set hidden " allow buffer switching without saving
+ let MRU Max Entries = 40
+ vim will read only until set noncompatible in this case
+ **Warning** dont put the :finish command inside a code block!!! (if
+then etc areas)
+
+**** buffers
+
+***** show all buffers
+
+issue the ball command
+
+:ball
+
+***** close a buffer
+
+This deletes the buffer (which translates to close the file)
+
+:bd
+
+ Force close a buffer (no save)
+
+:bd!
+
+**** cut/paste
+
+***** cut from here to end of line
+
+cut from here to end of line:
+ d$
+
+***** keys
+
+*Cutting and copying from visual selections
+*
+ Once you have a highlighted selection, you probably want to do
+something with it. Some of the more useful commands you can give when an
+area of text is highlighted:
+ d Cut (delete) the highlighted text and put it into the clipboard.
+ y Copy (or yank, which is vim-ese for "copy") the highlighted text
+into the clipboard.
+ c Cut the highlighted text into the clipboard. This is just like d,
+except it leaves the editor in insert mode.
+ *Cutting and copying from non-visual selections*
+ If you know exactly what you want to copy or cut, you can do it without
+entering visual mode. This saves time.
+ d{motion} Cut the text moved over by {motion} to the clipboard. For
+instance, dw would cut a word and dfS would cut from the cursor up to
+and including the next capital S on the current line of text.
+ y{motion} Copy the text moved over by {motion}.
+ c{motion} Cut the text moved over by {motion} and leave the editor
+in insert mode.
+ dd Cut the current line.
+ yy Copy the current line.
+ cc Cut the current line and leave the editor in insert mode.
+ D Cut from the cursor to the end of the current line.
+ Y Yank the whole line, just like yy. (Yes, it's inconsistent! You
+can use y$ to do what you would expect Y to do.)
+ C Cut from the cursor to the end of the current line and leave the
+editor in insert mode.
+ x Cut the current character. (This is sort of like a command-mode
+backspace.)
+ s Cut the current character and leave the editor in insert mode.
+ *Pasting
+*
+ Pasting is easy. Put the cursor where you want the pasted text and type
+p
+
+***** Pasting large amounts of text into Vim
+
+Every Vim user likes to enable auto-indenting of source code, so Vim can
+intelligently position you cursor on the next line as you type. This has
+one big ugly consequence however: when you paste text into your
+terminal-based Vim with a right mouse click, Vim cannot know it is
+coming from a paste. To Vim, it looks like text entered by someone who
+can type incredibly fast :) Since Vim thinks this is regular key
+strokes, it applies all auto-indenting and auto-expansion of defined
+abbreviations to the input, resulting in often cascading indents of
+paragraphs.
+ There is an easy option to prevent this, however. You can temporarily
+switch to "paste mode", simply by setting the following option:
+ set pastetoggle=<F2>
+ Then, when in insert mode, ready to paste, if you press <F2>, Vim will
+switch to paste mode, disabling all kinds of smartness and just pasting
+a whole buffer of text. Then, you can disable paste mode again with
+another press of <F2>. Nice and simple. Compare paste mode disabled vs
+enabled:
+
+***** yank words not the whole line
+
+do that:
+ either with a count (y4e, for example)
+ or
+ using visual mode (press v, move the cursor around, y to yank
+
+***** disallow 1 character to move to registers
+
+put this in .vimrc
+ "make cut,yank etc only work for more than 1 character
+ nnoremap x " x
+ and
+ create this file:
+/home/zeltak/Dropbox/multisync/vim/.vim/after/plugin/x not single.vim
+ and out the same line there
+ nnoremap x " x
+
+**** gui
+
+***** colors
+
+***** cursor under terminals
+
+First make sure your terminal is configured to show a blining cursor.
+ then add these lines to the vimrc:
+ "color of cursor in terminals
+ if &term =~ "xterm\\|rxvt"
+ :silent !echo -ne "\033]12;green\007"
+ let &t SI = "\033]12;red\007"
+ let &t EI = "\033]12;green\007"
+ autocmd VimLeave * :!echo -ne "\033]12;green\007"
+ endif
+ you can change colors to what is needed
+
+***** cursor under X11 (Gvim)
+
+Using gvim with the defaults, the cursor shape is a block when in n-v-c
+modes (normal mode, or visual selection mode, or command mode while
+entering a colon command), and the shape changes to a vertical bar when
+in i (insert) mode. The color and blink rates do not change.
+ Here is an example for gvim showing how to customize the cursor
+properties:
+ highlight Cursor guifg=white guibg=black
+ highlight iCursor guifg=white guibg=steelblue
+ set guicursor=n-v-c:block-Cursor
+ set guicursor+=i:ver100-iCursor
+ set guicursor+=n-v-c:blinkon0
+ set guicursor+=i:blinkwait10
+ Line 1 defines the color highlighting used for n-v-c modes (set in line
+3),
+ and line 2 defines a different color for insert mode (set in line 4).
+ Line 4 also sets the cursor shape to a 100% sized vertical bar for
+insert mode (the default is ver25, a 25% vertical bar).
+ Line 5 disables blinking (blinkon value 0) for n-v-c modes
+ line 6 increases the default blink rate for insert mode.
+
+***** status bar
+
+color of status line
+ hi StatusLine
+ color of speller
+ hi*SpellBad*
+
+**** editing
+
+***** basic text insertion
+
+[[~/Dropbox/Org/Tech/linux_files/2011-05-15-11-33-12-scrot.png]]
+
+***** quick edits
+
+*r+letter replace letter*
+ IE:
+ rs will replace letter*x to*s
+ R-Does that for multiple characters
+ *cw- chnage word*
+ IE:
+ cw will delete *word x
+*for multiple words use:
+ c3w
+
+***** join line
+
+use J to join lines
+ J will *join following line x to current line Y
+*J2 will *join* *following*2 lines x to current line Y
+ you can also use gJ to append line with spaces
+
+***** append prefix text to lines/blocks
+
+*prefix*
+ Go to the first foo, press Ctrl-V to enter visual block mode and press
+"down" (usually j key) until all the lines with "foo" are marked.
+ Then press I to insert at the beginning (of the block).
+ after you press ESC The inserted characters will be inserted in each
+line at the left of the marked block.
+ *Append*
+ To insert at the end, press again Ctrl-V, move up/down to mark all
+affected lines and then press "end" to extend the selection until the
+end of the lines.
+ Now you can press A to append at the end of all the lines, just like
+previously with I.
+ The visual selection can also be done with normal movement commands. So
+to comment a whole block in C you could move to the opening brace and
+type <Ctrl-V>%I//<Esc>.
+ *
+ notes:*
+ ust an addition: if Ctrl-V does not start visual block mode in Vim on
+Windows, one should use Ctrl-Q instead.
+ 
+ 
+ A variation of then answer is to mark visual block with shift+V
+thenalter the block in ex mode: :'<,'>s/\^/prexix text/
+:'<,'>s/$/suffix text/ Note than "'<,'>" is printed automatically by
+vim when you press ":" 
+ 
+ To uncomments use visual block (mark with Ctrl+V). One the column with
+comment sign "//" is marked press "d" to remove the comments. dont
+forget about C++ comments (/**/) too :)
+
+***** raise number by 1
+
+stand and a number and press:
+ ctrl+a
+ the number should increase by 1
+ it is good to combine that with a macro
+
+***** Remove empty lines
+
+issue this to remove all empty lines from a document:
+
+:g/\^$/d
+
+***** text aligment
+
+[[~/Dropbox/Org/Tech/linux_files/2011-05-15-21-08-13-scrot.png]]
+
+***** Breaking lines
+
+*25.1*Breaking lines
+ Vim has a number of functions that make dealing with text easier. By
+default,
+ the editor does not perform automatic line breaks. In other words, you
+have
+ to press <Enter> yourself. This is useful when you are writing programs
+where
+ you want to decide where the line ends. It is not so good when you are
+ creating documentation and want the text to be at most 70 character
+wide.
+ If you set the 'textwidth' option, Vim automatically inserts line
+breaks.
+ Suppose, for example, that you want a very narrow column of only 30
+ characters. You need to execute the following command:
+
+:set textwidth=30
+
+ 
+ 
+ Note:
+ The 'wrap' option makes Vim display lines with a line break, but
+this
+ doesn't insert a line break in the file.
+ 
+ usually you want the text width to be at least 100 or more
+
+**** erros
+
+***** marks and other menus disapper quickly
+
+make sure this line is commented out or missing from your vimrc:
+ set lazyredraw
+
+***** E21: Cannot make changes, 'Modifiable' is off
+
+if you get this error:
+ E21: Cannot make changes, 'Modifiable' is off
+ :set modifiable
+ Pasted from
+<[[https://mail.google.com/mail/u/0/?ui=2&view=bsp&ver=ohhl4rw8mbn4][https://mail.google.com/mail/u/0/?ui=2&view=bsp&ver=ohhl4rw8mbn4]]>
+
+**** folding
+
+***** basic
+
+in visual mode: select a few lines of text using the movement keys, and
+type zf
+ *if you wanted to create a fold from lines 20 through 101, you could
+just use :20,101 fold and press Enter*
+ [[~/Dropbox/Org/Tech/linux_files/2011-05-15-20-31-01-scrot.png]]
+ [[~/Dropbox/Org/Tech/linux_files/2011-01-04-21-00-03-scrot.jpg]]
+
+***** make folds stick between sessions
+
+to see to it that Vim saves and restores folds when a file is closed and
+re-opened, add these two lines to your ~/.vimrc:
+ au BufWinLeave ?* mkview 1
+ au BufWinEnter ?* silent loadview 1
+ Now, each time you close a file, its fold state will be saved and
+reloaded when you reopen the file in Vim.
+
+***** use markers to signal fold inside text
+
+MARKER*fold-marker*
+ Vim also offers a marker method, where folds are set by visible text
+markers rather than invisible manual marks. To set this mode, run :set
+foldmethod=marker. Then, when you set a fold, you'll see a marker with
+three braces at the beginning and end of the fold, like this:
+ 
+ #{{{Folded section name
+ Folded text goes here...
+ #}}}
+ The braces are set off by comment characters, depending on the type of
+file. So, if you're working with an HTML file, you'll see <!--{{{-->,
+and if you're editing a Python script, you'll see #{{{. You can also
+insert fold markers manually if you want, and Vim will recognize them as
+well. Vim will also delete the markers with the zd command, whether they
+were set manually or not.
+
+**** gvim
+
+***** set gui options (.gvimrc)
+
+There's usually nothing of vital importance in gvimrc; it's mainly used
+for configuring user preferences and whatnot.
+ example:
+ set guioptions=emrT
+ where:
+ e shoes the tab line
+ m indicates the menu bar is present
+ t-shows the tearoff menu
+ T-shos the toolbar
+ If you want either the menu or the toolbar to be hidden all the time,
+add one of the following lines to your vimrc file. To remove the menu
+completely:
+ :set guioptions-=m
+ To remove the toolbar completely:
+ :set guioptions-=T
+ Other parts of the GUI can be modified with the setguioptions command.
+To find out what you can modify, look in :help 'guioptions'.
+
+***** Toggle menu and toolbar
+
+Toggle menu and toolbar
+ If you are used to working with Vim in the console mode, you are used
+to having no menus and toolbars at the top of the window. Gvim, however,
+provides both a menu and toolbar by default in the GUI.
+ Many users believe that extra room for text is more important than the
+menu and the toolbar. However, some scripts add useful functionality in
+the menu, and it is therefore important to have the menus. The solution
+for this could be toggling whether the menu and toolbar is shown.
+ The following code maps the key combination Ctrl-F2 to toggle the menu
+and toolbar in Gvim. You can add it to your vimrc file if you want this
+functionality.
+ map <silent> <C-F2> :if &guioptions =~# 'T' <Bar>
+ \set guioptions-=T <Bar>
+ \set guioptions-=m <bar>
+ \else <Bar>
+ \set guioptions+=T <Bar>
+ \set guioptions+=m <Bar>
+ \endif<CR>
+ Now, whenever you don't need the menu and toolbar, you can just press
+Ctrl-F2 and you will get the full space for your text.
+
+***** Creating Menus and Toolbar Buttons
+
+Creating Menus and Toolbar Buttons
+ You want to add your own commands to Gvim's menus, or toolbar, for
+quick access.
+ For example, you've written a function that automatically writes
+bestselling novels for you, but you're not willing to use it if you have
+to type its name every time; you want to invoke it by selecting a menu
+option.
+ Solution
+ Use *:set amenu* menu command to map a menu item to a command. This is
+the GUI equivalent of :map.
+ For example,
+ :amenu Help.Op&ions :help options<cr> adds a new item called Options to
+the Help menu, which invokes :help options. The ampersand (&) signifies
+that the character it prefixes can be used as a keyboard shortcut, so in
+this case <Alt>+h+t selects this command.
+ Discussion
+ You're not restricted to adding items to existing menus; you can create
+a new top-level menu simply by specifying a name not currently in use.
+For example:
+
+:amenu <silent>&Vim.vim\.org :!xdg-open http://www.vim.org/<cr>
+
+ will create a new top-level menu called Vim with the shortcut key V. It
+will contain one entry named vim.org (we escape the . because otherwise
+it would create a vim entry which in turn contain an org item). When
+invoked it will open the Vim website on systems adhering to the Free
+Desktop Specification. The <silent> prefix prevents the command from
+being echoed on the command-line.
+ If you want to add a dashed separator line between menu items use a
+menu item named -SEP- and an empty command, e.g. :amenu Help.-SEP- :.
+ To control where a top-level menu appears relative to its neighbours
+you need to prefix amenu with a numeric priority: the lower the number
+the further right the menu's position. For example, :5amenu First.first
+:echo 'first'<cr> creates a top-level menu named First that appears
+before all of the others.
+ The same approach can be used to position menu items. For example,
+:amenu 9999.1 Help.first :echo 'first'<cr> adds a first item to the Help
+menu, which appears before the other items.
+ You can also use :amenu to add a new toolbar icon:
+ :amenu icon=image-path Toolbar.item-name
+ command
+ For example:
+
+:amenu icon=options.png ToolBar.OptionsHelp :help<cr>
+
+ If the image-path consists only of a filename, as above, Vim prepends
+$VIMRUNTIME/bitmaps/ to it.
+
+***** How to Add an Icon to the Vim Toolbar
+
+*1*.*Create the icon*
+
+First, create the icon.In the example below I use Gimp.Start
+Gimp.From File menu press New.Create an 18x18 pixels bitmap.Draw the
+icon.In my example I draw "B->U" (from "Betacode" to "Unicode") as
+shown in the image.[[~/Dropbox/Org/Tech/linux_files/vim-b2u.png]]
+
+The bitmap created with Gimp
+
+You must save the icon (or "button") with the extension bmp in Gimp.The
+image used in Vim must be a bitmap.
+
+ *Study your VIMHOME*
+
+Under GNU/Linux, in your home there is a directory called .vim (the name
+ starts with a dot).This is the VIMHOME.If there is no such directory
+ you should create it.Under Windows you should look for a directory
+called vimfiles.See my L^{A}T_{E}X
+[[http://www.ub-filosofie.ro/%7Esolcan/wt/gwltx.pdf][Guide]], section
+1.2.1.3.2 for vimfiles and other specific problems of the use of Vim
+under Windows.You need three directories from VIMHOME: bitmaps, plugin
+and
+ scripts.The bitmaps and plugin are standard Vim folders.Do not change
+ their names!The folder scripts is a custom folder.I have put the
+bitmap created according to the
+above[[http://www.ub-filosofie.ro/%7Esolcan/wt/gnu/v/vim-toolbar-icon.html#icon][]]escription
+in the bitmaps folder.I have named it b2u.bmp; you should remember the
+name of the image.In the scripts folder I have put a
+s[[http://www.ub-filosofie.ro/%7Esolcan/wt/gnu/a/agvim.html][script for
+converting Betacode into Unicode]]In the example below, I am going to
+use this vim script.
+
+ Modify the Vim toolbar
+ F
+
+or the addition of the b2u.bmp image to the Vim toolbar we have to
+ write a vim script and place it into the plugin folder in VIMHOME.I
+ hace named my plugin zToolBar.vim; the extension is important, but you
+ may choose any basename you like.The content of the script is shown in
+the "Vim script" figure.
+ [[~/Dropbox/Org/Tech/linux_files/vim-b2u-plugin.png]]V
+
+i
+ m scriptI
+
+n the first line 1.190 indicates a position on the toolbar.In
+ToolBar.b2u "b2u" is the name of the image (without the bmp
+extension).The last
+ item on the first line is a short description of the action associated
+ with the icon (or button, as you want to call it) on the toolbar.In
+the second line, ToolBar.b2u follows the same logic as on in the first
+line.The last part,<Esc>:source
+~/.vim/scripts/beta2unicode.vim<CR>starts with a change of the Vim mode
+to the command line mode.The
+ command is to "source" (to interpret and execute) the script.The
+ VIMHOME here is ~/.vim/.The folder in the VIMHOME is scripts| and
+\verb|beta2unicode.vim is the name of the script.<CR> is the equivalent
+of pressing the Enter key.The button on the toolbar is working in the
+insert mode of Vim.In the
+ "Betacode" figure we see how we write a word in the betacode
+transcription.
+ [[~/Dropbox/Org/Tech/linux_files/vim-b2u-logoj.png]]
+ B
+
+etacodeW
+
+hen you press the newly created button the text is converted from
+Betacode to Unicode.
+ [[~/Dropbox/Org/Tech/linux_files/vim-b2u-logos.png]]
+ U
+
+nicodeN
+
+ow we can copy and paste the Greek text in another file.
+ Pasted from
+<h[[http://www.ub-filosofie.ro/%7Esolcan/wt/gnu/v/vim-toolbar-icon.html][http://www.ub-filosofie.ro/~solcan/wt/gnu/v/vim-toolbar-icon.html<]]
+
+[[http://www.ub-filosofie.ro/%7Esolcan/wt/gnu/v/vim-toolbar-icon.html][/A>]]
+
+***** set default font
+
+In gvim, you can change the font using the Edit menu, Select Font. An
+alternative is to enter the command:
+ :set guifont=*
+ which will pop on the selection menu
+ then after selecting the one you like visually either edit your .vimrc
+and add these lines:
+ if has('gui running')
+ set guifont=Monaco\ 11
+ endif
+ *NOTE: make sure to escape (\) the size*
+ or edit .gvimrc and just add this line
+ set guifont=Monaco\ 11
+
+***** maximize gvim winows on windows
+
+use this:
+ au GUIEnter * simalt ~x "maximize gui on windows machines
+ in your .gvimrc or .gvimrc.local (for spf13)
+
+**** macro
+
+***** basic macro
+
+first press q*X* (to start recoreding a macro saved as *X*)
+ this could be any letter such as qi,qw etc..
+ then record your sequences and then press 'q' again to finish recording
+the macro
+ this can be combined with all the vim keys in example:
+ [[~/Dropbox/Org/Tech/linux_files/2011-05-15-21-41-05-scrot.png]]
+
+***** copy text from one buffer to another repetadly
+
+first press qX (to start recoreding a macro saved as X)
+ then use: ggyG to select all text in that buffer
+ then enter :bn to switch to the next buffer
+ then G to go to the end of that buffer and press p for pasting
+ the whole command in succesion looks like this:
+
+qiggyG:bn<CR>Gpq
+
+*Note: that should work fine if you only have two buffers*
+
+**** marks
+
+***** add a mark
+
+To set a mark, type *m* followed by *a* letter.
+ For example, *ma* sets mark *a* at the current position (line and
+column). If you set mark *a*, any mark in the current file that was
+previously identified as *a* is removed. If you set mark *A*, any
+previous mark *A* (in any file) is removed.
+
+***** intro
+
+A mark allows you to record your current position so you can return to
+it later. There is no visible indication of where marks are set.
+ Each file has a set of marks identified by lowercase letters (a-z). In
+addition there is a global set of marks identified by uppercase letters
+(A-Z) that identify a position within a particular file. For example,
+you may be editing ten files. Each file could have mark a, but only one
+file can have mark A.
+ Because of their limitations, uppercase marks may at first glance seem
+less versatile than their lowercase counterpart, but this feature allows
+them to be used as a quick sort of "file bookmark." For example, open
+your .vimrc, press mV, and close Vim. The next time you want to edit
+your .vimrc, just press 'V to open it. This assumes that you have kept
+the default 'viminfo' behavior, so that uppercase marks are all
+remembered in the viminfo-file between Vim sessions.
+ As well as the letter marks, there are various special marks.
+ The marks for recently-edited files are saved (provided the 'viminfo'
+option has the 'parameter), so marks from previous sessions can be used
+when editing in the future. :help 'viminfo'
+
+***** usefull default marks
+
+jump to last mark used use *'*0
+ to quicky jump between 2 previous marks*:**`*`*
+*jump to last edited line*: `*.
+ zeltaks config: show marks \m
+
+***** :marks (see current marks)
+
+issuing :marks
+ you'll see marks for ., [, ], ", ', and a few others. Those marks are
+present whether you've set any marks manually or not. The [ and ] marks
+indicate the last changed or copied ("yanked") text. The [ mark is the
+first character of the text that's been changed or yanked, the ] is the
+last character of that text. Note that these marks don't work until you
+actually make a change in the file.
+ The . mark will take you to the last position a change was made. So, '.
+will take you to the line where the last change was made in your file,
+and `. will take you to the cursor position where the last change was
+made.
+ If you make a jump within a file -- that is, if you use a movement or
+search command to move within the file -- the ` character will return
+you to the position you started from. For example, using the G movement
+command you can jump to the bottom of the file. If you want to return to
+the last cursor position, use `` and you'll be moved back to the last
+location of the cursor before using G. We'll discuss jumps in more
+detail a bit later.
+ The " mark is set to the last position of the cursor when you exited
+the previous Vim session, if you have Vim configured to save your
+session information using a viminfo file. We'll cover that in just a bit
+too.
+ Finally, if your session information is being saved, you can also use
+numbered marks to return to the last position the cursor was at when you
+closed a file. Using numbered marks, `0 will move the cursor to the last
+position it was at when you closed a file. `1 will move the cursor to
+the last position it was at when you closed the file the time before
+last, and so forth.
+ If you just want to know where a specific mark is in the file, you can
+use :marks markname to display just those marks. To see marks a and B,
+for instance, you'd just use :marks aB. This is pretty useful when you
+have 10 or 20 marks set.
+
+***** Deleting marks
+
+If you delete a line containing a mark, the mark is also deleted.
+ If you wipeout a buffer (command :bw), all marks for the buffer are
+deleted.
+ The :delmarks command (abbreviated as :delm) may be used to delete
+specified marks.
+ *Command Description*
+ :delmarks a delete mark a
+ :delmarks a-d delete marks a, b, c, d
+ :delmarks abxy delete marks a, b, x, y
+ :delmarks aA delete marks a, A
+ :delmarks! delete all lowercase marks for the current buffer (a-z)
+
+***** Special marks
+
+Vim has some special marks which it sets automatically. Here are some of
+the most useful:
+ [[~/Dropbox/Org/Tech/linux_files/Image_iyp3uIGkW7BTr.jpg]]
+
+***** deleting using marks
+
+Marks are useful for more than just moving about a file -- though that
+feature alone is very useful. Marks can also be used to specify a range
+for commands. Normally, if you want to delete a few lines, you can use
+line numbers to specify the line, like so:
+ :22,55 d
+ That will delete lines 22 through 55. But it's much easier to remember
+marks than line names most of the time. If you have line 22 marked as g
+and 55 marked as k, you could substitute :'g,'k d and remove those lines
+without having to go back and confirm the line numbers. This works with
+other commands too, so you could just as easily write those lines to a
+file using :'g,'k w filename or use the range for a substitution command
+like this:
+ :'g,'k s/foo/bar/g
+
+***** Using marks
+
+To jump to a mark enter an apostrophe (') or backtick (`) followed by a
+letter.
+ Using an apostrophe jumps to the beginning of the line holding the
+mark, while a backtick jumps to the line and column of the mark.
+ Using a lowercase letter (for example `a) will only work if that mark
+exists in the current buffer. Using an uppercase letter (for example `A)
+will jump to the file and the position holding the mark (you do not need
+to open the file prior to jumping to the mark).
+ Each file can have mark a -- use a lowercase mark to jump within a
+file.
+ There is only one file mark A -- use an uppercase mark to jump between
+files.
+ [[~/Dropbox/Org/Tech/linux_files/Image_uZGBxybMzQgoeJVCpFt08Q_0001.jpg]]
+ Commands like d'a operate "linewise" and include the start and end
+lines.
+ Commands like d`a operate "characterwise" and include the start but not
+the end character.
+ It is possible to navigate between lowercase marks:
+ [[~/Dropbox/Org/Tech/linux_files/Image_uZGBxybMzQgoeJVCpFt08Q_0002.jpg]]
+ The above commands take a count. For example, 5]` jumps to the fifth
+mark after the cursor.
+
+***** Vim mark quick reference
+
+*mx*tells Vim to add a mark called x.
+ *`x* tells Vim to return to the line and column for mark x.
+ *'x*tells Vim to return to the beginning of the line where mark x is
+set.
+ *`.*moves the cursor to the line and column where the last edit was
+made.
+ *'.* moves the cursor to the line where the last edit was made.
+ *'"* moves the cursor to the last position of the cursor when you
+exited the previous session.
+ *:marks*shows all marks set.
+ *:marks x* shows the mark named x.
+ *:jumps*shows the jumplist.
+ *Ctrl-o* moves the cursor to the last jump.
+ *Ctrl-i* moves the cursor to the previous jump.
+ *H* moves the cursor to the top of the screen or viewport.
+ *M* moves the cursor to the middle of the screen or viewport.
+ *L*moves the cursor to the bottom of the screen or viewport.
+
+***** delete ALL marks
+
+To delete them:
+
+ :delmarks A-Z0-9
+
+***** where are marks stored
+
+~/.viminfo contains histories and marks, if you don't want them any
+more, you can delete this file. Vim will recreate it next time.
+
+**** mapping
+
+***** names for keys
+
+Note: its not possible to map Shigt-Ctrl-LETTER
+ These names for keys are used in the documentation. They can also be
+used
+ with the ":map" command (insert the key name by pressing CTRL-K and
+then the
+ key you want the name for).
+ notationmeaning equivalentdecimal value(s)
+ <Nul>zeroCTRL-@ 0 (stored as 10) *<Nul>*
+ <BS>backspaceCTRL-H 8*backspace*
+ <Tab>tabCTRL-I 9*tab* *Tab*
+ *linefeed*
+ <NL>linefeedCTRL-J 10 (used for <Nul>)
+ <FF>formfeedCTRL-L 12*formfeed*
+ <CR>carriage returnCTRL-M 13*carriage-return*
+ <Return>same as <CR>*<Return>*
+ <Enter>same as <CR>*<Enter>*
+ <Esc>escapeCTRL-[ 27*escape* *<Esc>*
+ <Space>space 32*space*
+ <lt>less-than< 60*<lt>*
+ <Bslash>backslash\ 92*backslash* *<Bslash>*
+ <Bar>vertical bar|124*<Bar>*
+ <Del>delete127
+ <CSI>command sequence intro ALT-Esc 155*<CSI>*
+ <xCSI>CSI when typed in the GUI*<xCSI>*
+ <EOL>end-of-line (can be <CR>, <LF> or <CR><LF>,
+ depends on system and 'fileformat')*<EOL>*
+ <Up>cursor-up*cursor-up* *cursor up*
+ <Down>cursor-down*cursor-down* *cursor down*
+ <Left>cursor-left*cursor-left* *cursor left*
+ <Right>cursor-right*cursor-right* *cursor right*
+ <S-Up>shift-cursor-up
+ <S-Down>shift-cursor-down
+ <S-Left>shift-cursor-left
+ <S-Right>shift-cursor-right
+ <C-Left>control-cursor-left
+ <C-Right>control-cursor-right
+ <F1> - <F12>function keys 1 to 12*function key*
+*function-key*
+ <S-F1> - <S-F12> shift-function keys 1 to 12*<S-F1>*
+ <Help>help key
+ <Undo>undo key
+ <Insert>insert key
+ <Home>home*home*
+ <End>end*end*
+ <PageUp>page-up*page up* *page-up*
+ <PageDown>page-down*page down* *page-down*
+ <kHome>keypad home (upper left)*keypad-home*
+ <kEnd>keypad end (lower left)*keypad-end*
+ <kPageUp>keypad page-up (upper right)*keypad-page-up*
+ <kPageDown>keypad page-down (lower right)*keypad-page-down*
+ <kPlus>keypad +*keypad-plus*
+ <kMinus>keypad -*keypad-minus*
+ <kMultiply>keypad **keypad-multiply*
+ <kDivide>keypad /*keypad-divide*
+ <kEnter>keypad Enter*keypad-enter*
+ <kPoint>keypad Decimal point*keypad-point*
+ <k0> - <k9>keypad 0 to 9*keypad-0* *keypad-9*
+ <S-...>shift-key*shift* *<S-*
+ <C-...>control-key*control* *ctrl* *<C-*
+ <M-...>alt-key or meta-key*meta* *alt* *<M-*
+ <A-...>same as <M-...>*<A-*
+
+***** Setting a mapping
+
+To set a mapping while in Vim, enter command mode and use the map
+command. Here's a quick example:
+ :map <F10> <Esc>:tabnew<CR>
+ The syntax is pretty simple. First you tell Vim that you're setting a
+mapping. Then, tell Vim the key that will be bound to the action --- in
+this case, F10. Finally, spell out the action that Vim will perform when
+you use F10. This is pretty easy, because you're basically just listing
+the same keystrokes that you'd use if you were doing it manually.
+ In this example, we tell Vim to enter command mode (Esc:) and run the
+tabnew command, followed by the carriage return to return us to normal
+mode. (<CR> is the same as <Enter>, just faster to type.) Now, when you
+type F10 in normal mode, visual mode, or operator-pending mode, Vim will
+open a new tab.
+ Every now and again, it might be useful to set a mapping on the fly ---
+but the odds are, if it's worth doing once, it's worth setting the
+mapping permanently. To do this, just open your .vimrc and insert the
+mapping there, like so:
+ map <F10> <Esc>:tabnew<CR>
+ Type :map with no arguments, and Vim will list the defined mappings.
+ The other mapping commands, :imap and :o map, can also be used without
+arguments to show what characters are mapped for those modes --- the
+:map command only shows keys mapped for modes set with :map.
+
+***** Types of mappings
+
+Types of mappings
+ Vim actually recognizes different types of mappings, depending on what
+mode the editor is in. For example, you might have a mapping for F2 in
+insert mode that enters an HTML tag or a line of C code, and a different
+mapping for F2 that toggles the syntax mode on when you're in normal
+mode.
+ Vim provides several different types of map commands, including:
+ map maps keys in *normal, visual, and operator-pending*mode.
+ cmap handles *command-line* mappings.
+ imap handles *insert-only* mappings.
+ map! maps keys in Vim's *command and insert* modes.
+ nmap maps keys in *normal mode* only.
+ omap maps keys in *operator-pending mode* only.
+ vmap maps keys in *visual mode* only.
+ So, use imap if you want to set a mapping that works in Vim's insert
+mode, cmap for mappings to work in command (last line) mode, omap to map
+keys to function after an operator has been used in normal mode, and so
+on.
+ For use in maps
+ <CR> : carriage Return for maps
+ <Esc> : Escape
+ <Leader> : normally \ change with :let mapleader = ","
+ <Bar> : | pipe
+
+***** map a chain
+
+use something like this:
+ nnoremap <C-w>d *:bd*<CR>
+ where
+ C-w-is the item activating the "chain"
+ d-is the command after the chain press
+ *:bd* is the command itslef
+
+***** view all current maps
+
+to view all current maps simply issue:
+ :map
+
+***** <leader> key
+
+the leader key by fefault means:
+ backslash (\)
+ you can change with
+ :let mapleader = ","
+
+***** bind keys to change a color scheme
+
+nnoremap <Leader><F11> :colorscheme buttercream<CR>
+ nnoremap <Leader><F12> :colorscheme ir black<CR>
+
+**** operation
+
+***** commands
+
+Default internal commands start with lower case letter
+ all plugin commands/custom commands start with Upper case
+ IE in Nerdree issusing:
+ :bookmarks
+ would result in an Error so this shoudl be used:
+ :Bookmarks
+
+***** single instance mode
+
+for *simple single instance* mode, launch with the follwoing argument:
+ --remote-tab-silent
+ to make it persistant do the following
+ *Under linux:*
+ for the command line launch add this to your bashrc/zshrc:
+ alias gvim="gvim --remote-tab-silent" || gvim
+ for graphical applications (such as krusader, etc) use this for the
+launch command per file type:
+ gvim --remote-tab-silent
+ *Under windows:
+*
+ for graphical applications (such as total commander, etc) use the same
+as in linux for the launch command per file type:*
+*gvim --remote-tab-silent*
+*
+
+***** Tab completion for Vim
+
+By default, Vim will autocomplete words if you use:
+ *Ctrl-p* and *Ctrl-n
+*Ctrl-p searches forward and Ctrl-n searches backward
+ For instance, if you've typed in writebackupVersionControl once,
+there's no need to type it again -- just type in "writeb" and press
+Ctrl-p. Vim will either autocomplete the word, or if "writeb" matches
+multiple words, Vim will give you a dropdown with all of your options.
+ That's great -- but some folks are used to using the Tab key for
+autocompletion. The SuperTab script lets you do that, and a little more.
+ Just copy the script to your ~/.vim/plugins directory and fire up Vim.
+You'll still be able to use Ctrl-p and Ctrl-n, but you can now use Tab
+
+***** History
+
+To see vims command mode history enter:
+
+:history
+
+ another way and faster way is to enter the first letter and press up:
+
+:set li<up>
+ :set lines=75
+
+ *Don't forget* to check history option and set it to big enough value
+in your vimrc
+ :set history=1000
+ the history is saved in the .viminfo file at $HOME/.viminfo
+
+***** force sudo
+
+" For when you forget to sudo.. Really Write the file.
+ cmap w!! w !sudo tee % >/dev/null
+
+***** vim "syntax"
+
+***** Escape characters
+
+escape metacharcters ([ etc)
+ *., *, \, [, ], \^, $*are metacharacters
+ *+, ?, |, {, }, (, )* must be escaped to use their special function
+ *\/*is */* (use backslash + forward slash to search for forward slash)
+ *Example:
+*
+ to change the [8] to [9] in the below example:
+ ICAM restable$ciw[8] <-ICAM restable$L CI[8]+ICAM restable$H CI[8]
+ use:
+
+ :s/\[8\]/\[9\]/gc
+ Tip:
+
+ And then lose your mind in a sea of backslashes. You don't need to. /
+is the default pattern separator for search & replace, but you can use
+almost anything. The first character after :s is taken as the separator,
+so this much-simpler version works just as well:
+
+ :s!/usr/local/!/opt/alt/!
+
+ The next time you find yourself counting backslashes to fix a E486:
+Pattern not found error, remember you have an easy alternative.
+
+***** run an external command (bash etc)
+
+If you run :shell or just :sh while you're in the editor, Vim (or Gvim,
+if you're partial to Vim's GUI) will place you in an interactive shell.
+You can run whatever commands you want, and resume your Vim session by
+exiting the shell.
+ As most other *nix applications, you can also pause Vim with Ctrl-z,
+which will drop you back to the shell. When you're finished, you can
+resume Vim with fg. (This is a feature of the shell, not a Vim feature.)
+ Vim also allows you to execute a command directly from the editor,
+without needing to drop to a shell, by using *bang (!)* followed by the
+command to be run. For instance, if you're editing a file in Vim and
+want to find out how many words are in the file, run
+
+:! wc %
+
+ This tells Vim to run the file (%) through the wc utility and report
+the results. Vim will display the command output at the bottom of the
+editing window until you press Enter. Note that this command runs the
+file through the command, and not the contents of the buffer -- so if
+you haven't saved recently, it won't report your most recent word count.
+ Bang works best with non-interactive commands. You wouldn't want to run
+top or another interactive command using :! command , but you could drop
+to a shell and run such a command with :sh or Ctrl-z.
+
+***** Reading command output
+
+Reading command output
+ Most Vim users are already familiar with using the read command, which
+inserts text from a specified file into the current buffer, like so:
+ :r textfile
+ This is handy, but many users aren't aware that you can also read in
+the output of shell applications. For example, if you wanted to include
+a list of files from a specific directory, you could include them using
+this read command:
+ :r ! ls -1 /home/user/directory
+ This tells Vim to execute the command ls -1 /home/user/directory and
+then redirect the output of that command into the buffer. You could also
+use this feature to read the text from a Web page into the file that
+you're editing, using a text-mode browser such as w3m. It's pretty
+simple to grab a page using w3m and dump it right into your editing
+session without leaving Vim:
+ :r ! w3m
+[[http://en.wikipedia.org/wiki/Vi][http://en.wikipedia.org/wiki/Vi]]
+-dump
+ The -dump option tells w3m to simply spit out the Web page as plain
+text and exit.
+ It's also possible to execute multiple commands to process your text
+before reading it into Vim. A simple example would be to list the
+directory contents, then pipe the output to the sort command to sort the
+filenames in reverse order, before inserting the text into the current
+buffer:
+ :r ! ls -1 /home/user/directory | sort -r
+ The read command can also come in handy if you're prepping an incident
+report from server logs. Let's say you wanted to include all of the
+errors in an Apache log that include a specific string. You could grep
+the log and insert the input into your Vim session:
+ :r ! grep string /var/log/apache2/site-error.log
+ Vim makes it easy to redirect the output of most standard *nix
+utilities into a file, and to pipe text from the file it's editing into
+standard *nix utilities.
+
+**** movment
+
+***** basic movment
+
+[[~/Dropbox/Org/Tech/linux_files/2010-12-28-13-43-39-scrot.jpg]]
+ Example:
+ fs will move to the next letter*s*
+ the 'g' key is used as "go" so g$ will go to the end of the line
+ gm goes to the middle of the line
+ M-moves mid screen
+ H/L move up/down screen
+ zt- moves the *current line* to top screen
+ zb-moves the *current line* to bottom screen
+
+***** go to line number
+
+NUMBER+G go to NUM line
+ *115G* will go to line to*115*
+
+***** quick select/move/operate
+
+you can quickly move/operate by using an operator:
+ [[~/Dropbox/Org/Tech/linux_files/2011-05-15-11-50-51-scrot.png]]
+ IE:
+ d}-will delete all the paragraph from where you are
+
+***** Global command
+
+Global command
+ :g/one\|two/ : list lines containing "one" or "two"
+ :g/\^\s*$/d : delete all blank lines
+ :g/green/d : delete all lines containing "green"
+ :v/green/d : delete all lines not containing "green"
+ :g/one/,/two/d : not line based
+ :v/./.,/./-1join : compress empty lines
+ Between lines with marks a and b (inclusive), append each line starting
+with "Error" to a file:
+ :'a,'b g/\^Error/ .w >> errors.txt
+ Delete all lines containing "green" but not "red" or "pink". Command
+:g/\^/ matches every line; the current line is copied into variable x;
+if any part of x matches (case sensitive) "green" and not "red" and not
+"pink", the line is deleted. Replace # with ? for case insensitive.
+ :g/\^/let x=getline('.') | if x=~#'green' && x!~#'red' && x!~#'pink' |
+d | endif
+
+***** Move efficiently through the file
+
+[[~/Dropbox/Org/Tech/linux_files/2010-12-28-13-52-30-scrot.jpg]]
+
+***** move lines/paragraph
+
+to move between line use:
+ ( or )
+ to move between paragraph use:
+ { or }
+ [[~/Dropbox/Org/Tech/linux_files/2011-05-15-11-47-19-scrot.png]]
+
+***** jump to previous location
+
+use command:
+ *Ctrl-o*
+
+**** plugins
+
+***** installing
+
+***** manuall install plugins
+
+When you download scripts, they typically come in one of the three
+formats:
+ 1)As a single .vim script file- just copy it to the plugin dir in the
+.vim folder
+ 2)As a compressed (typically Zip) file that typically contains one or
+more .vim files (both global and file-type dependent) and
+documentation.- uncompress and copy to the plugin dir in the .vin folder
+ 3)As a vimball, which is an automatic Vim script installation written
+in Vim. you need to read each vimball instructions to instakk
+
+***** pathogen
+
+***** install pathogen
+
+issue
+
+ mkdir -p ~/.vim/autoload ~/.vim/bundle; \
+ curl -Sso ~/.vim/autoload/pathogen.vim \
+
+[[https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim][https://raw.github.com/tpope/vim-pathogen/master/autoload/pathogen.vim]]
+
+ If you're using Windows, change all occurrences of ~/.vim to
+~\vimfiles.
+ then add this to vimrc:
+ execute pathogen#infect()
+ Now any plugins you wish to install can be extracted to a subdirectory
+under ~/.vim/bundle, and they will be added to the 'runtimepath'.
+Observe:
+
+ cd ~/.vim/bundle
+ git clone git://github.com/tpope/vim-sensible.git
+
+ Now sensible.vim is installed.
+
+***** non git installs
+
+ 1)any plugins (zips, tared etc) you wish to install can be extracted to
+a subdirectory under ~/.vim/bundle, and they will be added to the
+'runtimepath'
+ 2)for *.vim packages* you create a sub-folder below the *'bundle'
+folder, then create the relevant plugin/autoload folder* and copy the
+.vim file
+ 3)vimballs:
+ :e name.vba
+ :!mkdir ~/.vim/bundle/name
+ :UseVimball ~/.vim/bundle/name
+
+***** remove a plugin
+
+removing a plugin is as simple as *deleting that directory*.
+
+***** update
+
+go into the specific plugin folder and issue:
+
+ git pull origin master
+
+***** BufExplorer
+
+***** command-T
+
+***** intro
+
+Bring up the Command-T match window by typing:
+ <Leader>t
+ This mapping is set up automatically for you, provided you do not
+already have
+ a mapping for <Leader>t or |:CommandT|. You can also bring up the match
+window
+ by issuing the command:
+ For the most efficient file navigation within a project it's
+recommended that
+ you |:cd| into the root directory of your project when starting to work
+on it.
+ If you wish to open a file from outside of the project folder you can
+pass in
+ an optional path argument (relative or absolute) to |:CommandT|:
+ :CommandT ../path/to/other/files
+
+***** opening files
+
+The following mappings are active when either the prompt or the match
+listing
+ has focus:
+ <CR> open the selected file
+ <C-CR> open the selected file in a new split window
+ <C-s> open the selected file in a new split window
+ <C-v> open the selected file in a new vertical split window
+ <C-t> open the selected file in a new tab
+ <C-j> select next file in the match listing
+ <C-n> select next file in the match listing
+ <Down> select next file in the match listing
+ <C-k> select previous file in the match listing
+ <C-p> select previous file in the match listing
+ <Up> select previous file in the match listing
+ <C-c> cancel (dismisses match listing)
+
+***** currently installed plugins
+
+*ShowMarks* provides a visual representation of the location marks.
+ *Surround.vim* is all about "surroundings": parentheses, brackets,
+quotes, XML tags, and more. The plugin provides mappings to easily
+delete, change and add such surroundings in pairs. While it works under
+Vim 6, much of the functionality requires Vim 7.
+ *repeat.vim*: Use the repeat command (.) with supported plugins
+ *
+ SuperTab continued*. : Do all your insert-mode completion with Tab.
+ *CSApprox :* Make gvim-only colorschemes work transparently in
+terminal vim
+ *NERDTREE
+*
+
+***** fuzzy finder
+
+***** open types
+
+<CR>(|g:fuf keyOpen|)- opens in a previous window.
+ <C-j> (|g:fuf keyOpenSplit|) - opens in a split window.
+ <C-k> (|g:fuf keyOpenVsplit|)- opens in a vertical-split
+window.
+ <C-l> (|g:fuf keyOpenTabpage|) - opens in a new tab page.
+
+***** NERD Tree
+
+M-bring up Merdtree plugins menu
+ B- open bm
+ Press o to open the file in a new buffer or open/close directory.
+ Press t to open the file in a new tab.
+ Press i to open the file in a new horizontal split.
+ Press s to open the file in a new vertical split.
+ Press p to go to parent directory.
+ Press r to refresh the current director
+
+***** sessionman
+
+creates a submenu under the file menu in gvim
+
+***** tcomment
+
+[[http://www.vim.org/scripts/script.php?script_id=1173][http://www.vim.org/scripts/script.php?script id=1173]]
+ use 'gc' to mark comments
+ [[~/Dropbox/Org/Tech/linux_files/2011-05-15-22-39-52-scrot.png]]
+ gcc- toggles comennt on single line
+
+***** Ctrl-P
+
+its best to cd to a specfic dir before launching to greatly speed things
+upload
+
+**** Saving
+
+***** basics
+
+to save a file, you would normally first leave insert mode by hitting
+the Esc key one or more times.
+ Then you type the following (and press Enter):
+ :w
+ You can save your file (if modified) and exit Vim at the same time
+with:
+ :x
+ You can save all modified buffers (all open files) with:
+ :wa
+ For a tweak, you can set Vim to automatically save the current buffer
+when you hit Esc twice. This can be done by simply adding the following
+line to your vimrc:
+ map <Esc><Esc> :w<CR>
+ Assumed that I'm editing hello.txt.
+ :w world.txt will write hello.txt's content to the file world.txt while
+keeping hello.txt as the opened buffer in vim.
+ :sav world.txt will first write hello.txt's content to the file
+world.txt, then close buffer hello.txt, finally open world.txt as the
+current buffer.
+
+***** save as filename without exiting
+
+save as filename without exiting:
+ :w *filename*save as filename without exiting
+
+***** save as root
+
+
+
+Basic command, yet extremely useful.
+ :w !sudo tee %
+ I often forget to sudo before editing a file I don't have write
+permissions on. When I come to save that file and get a permission
+error, I just issue that vim command in order to save the file without
+the need to save it to a temp file and then copy it back again.
+
+***** windows ctrl-s saving
+
+Another thing that causes my fingers to grow weary is saving. The
+typical sequence is: press escape, then :w enter. I save all the time
+because I'm paranoid and I miss CTRL-S which is so much easier on the
+hands.
+ map <C-S> <ESC>:w<CR>
+ imap <C-S> <ESC>:w<CR>
+ **Warning** if Ctrl-S freezes your terminal, type Ctrl-Q to get it
+going again.
+
+***** Save a file you edited in vim without the needed permissions
+
+use this command:
+
+ :w !sudo tee %
+
+**** registers
+
+***** intro
+
+Most editors have a single clipboard. vim has many more; clipboards in
+vim are called registers. You can list all the currently defined
+registers and their contents by typing
+ :reg
+ Typically, you'll be using the lowercase letter registers; the others
+are used for various internal vim purposes and are only occasionally
+helpful.
+
+***** yank and paste to/from a specific registry
+
+[[~/Dropbox/Org/Tech/linux_files/2011-05-15-21-11-35-scrot.png]]
+ For example, to copy the current line into register k, you could type
+ "kyy
+ That line would stay in register k until you specifically copied
+something else into register k.
+ You would then use
+ "kp
+ to paste the text from register k.
+
+***** register zero ("0)
+
+the zero register holds the last yank command (and not any d,x etc you
+may have done after yanking)
+ this is good to make sure your yanked line would be pasted
+ [[~/Dropbox/Org/Tech/linux_files/2011-05-15-21-28-32-scrot.png]]
+
+***** X11 copy paste
+
+[[~/Dropbox/Org/Tech/linux_files/2011-05-15-21-31-57-scrot.png]]
+ to use copy:
+ "+y
+ to use cut:
+ "+yx
+ to paste
+ "+gP
+
+***** register for local clipboard "plus" (+)
+
+the plus (+) registry is the one that uses the system clipboards
+ To paste from they keyboard we type
+ "+p
+ To copy, for example an entire line, into the system clipboard we type
+ "+yy
+ To delete the current line and store it in the system clipboard we type
+"+dd
+ We can also use registers with visual mode. If we wanted to copy the
+line underneath the cursor we would type
+ V"+y
+ We could copy the next three lines into the system clipboard by typing
+ Vjj"+y
+ *To sum it up*, to use the system clipboard to copy and paste in vim
+simply do what you would usually do in vim, then prepend "+ to your y
+(yank) or p (paste) command.
+
+**** search and replace
+
+***** search
+
+***** Basic search commands
+
+[[~/Dropbox/Org/Tech/linux_files/2011-05-15-12-02-13-scrot.png]]
+
+***** get rid of the highlighting after search
+
+in .vimrc
+ a function to toggle highlight search, so I could turn it off and on
+with a simple quick keystroke. Here's the function that I put in my
+.vimrc:
+ function ToggleHLSearch()
+ if &hls
+ set nohls
+ else
+ set hls
+ endif
+ endfunction
+ Then, I added this to the mapping section:
+ nmap <silent> <C-n> <Esc>:call ToggleHLSearch()<CR>.
+ In this example, <silent> isn't a key --- it's to tell Vim not to print
+a message when it runs the command. Then, the key shortcut that is
+mapped to the action, and the action that will be called.
+
+***** use search to delete/yank sections
+
+*example:
+*
+ d/SEARCHTERM/e (then pres enter)
+ IE:
+ [[~/Dropbox/Org/Tech/linux_files/2011-05-15-12-10-40-scrot.png]]
+ [[~/Dropbox/Org/Tech/linux_files/2011-05-15-12-12-05-scrot.png]]
+
+***** replace
+
+***** Basic replace
+
+*Basic syntax:
+*:[range]s[ubstitute]/{pattern}/{string}/[flags] [count]
+ Replace *First:*
+ :%s/SEACRHED/REPLACED/ (then pres enter)
+ [[~/Dropbox/Org/Tech/linux_files/2011-05-15-12-12-39-scrot.png]]
+ Example:
+ Replace *ALL:*
+ :%s/SEACRHED/REPLACED/g (then press enter)
+
+***** range
+
+[[~/Dropbox/Org/Tech/linux_files/2011-05-15-12-22-04-scrot.png]]
+
+ Search ranges work with lines, not characters. They are a way to
+specify one or more lines, separated by commas or joined by semi-colons.
+ Here's how to specify a line:
+
+. " current line
+ +5 " Five lines down
+ -3 " Three lines back
+ 1 " line 1 of buffer
+ 42 " line 42 of buffer
+ $ " last line of buffer
+ % " all lines in buffer, i.e. 1,$
+ 't " position of mark t
+ /pattern/ " next line where pattern matches
+ ?pattern? " previous line where pattern matches
+
+If you're feeling clever, you can chain searches with a semi-colon.
+Suppose you want to specify a range covering the content of the first
+subsection of the next section.
+
+/h1/;/h2/+,/h2/-
+
+This says:
+
+-  
+
+   First find the nexth1
+
+-  From there, find the firsth2
+-  Go one line further on -- that's the start of the range.
+-  The end of the range is the line before the nexth2.
+
+***** Flags
+
+[[~/Dropbox/Org/Tech/linux_files/Image_oVR4zHcDewUyCx1HOn16sg_0001.png]]
+ flags cone after the replace string
+ IE:
+
+ :%s/SEACRHED/REPLACED/c
+
+ the c flag above confirms each replace:
+
+replace with foo (y/n/a/q/l/\^E/\^Y)?
+
+ The "y" and "n" are self-explanatory, but what about the rest? To tell
+Vim to go ahead and replace all instances of the matched string, answer
+with a. If you realize that you don't really want to make the changes,
+you can tell Vim to quit the operation using q. To tell Vim to make the
+current change and then stop, use l, for last.
+ \^E and \^Y allow you to scroll the text using Ctrl-e and Ctrl-y.
+
+***** count
+
+The optional count at the end is rarely used and only works if you don't
+provide a range at the beginning. It will perform the substitution only
+over the next number of lines. This example replaces all occurrences of
+"bacon" within the next 10 lines only.
+ :s/bacon/lettuce/g10
+
+***** replace text
+
+*Basic search and replace
+*
+ The :substitute command searches for a text pattern, and replaces it
+with a text string. There are many options, but these are what you
+probably want:
+ :%s/foo/bar/g
+ : Find each occurrence of 'foo', and replace it with 'bar'.
+ :%s/foo/bar/gc
+ Change each 'foo' to 'bar', but ask for confirmation first.
+ :%s/\<foo\>/bar/gc
+ Change only whole words exactly matching 'foo' to 'bar'; ask for
+confirmation.
+ :%s/foo/bar/gci
+ Change each 'foo' (case insensitive) to 'bar'; ask for
+confirmation.
+ :%s/foo/bar/gcI
+ Change each 'foo' (case sensitive) to 'bar'; ask for confirmation.
+ The g flag means global -- each occurrence in the line is changed,
+rather than just the first.
+ *Substitute on Lines*
+
+To only substitute between certain lines:
+
+:/n/,/n/s/one/two/g
+
+For example, to replace instances of 'one' with 'two' between lines 3&4,
+one would execute:
+
+:3,4s/one/two/g
+ *Search range*
+ (here, the word between is inclusive of the start and end lines):
+ :s/foo/bar/g changes each 'foo' to 'bar' in the current line.
+ :%s/foo/bar/g changes each 'foo' to 'bar' in all lines.
+ :5,12s/foo/bar/g changes each 'foo' to 'bar' for all lines between
+line 5 and line 12.
+ :'a,'bs/foo/bar/g changes each 'foo' to 'bar' for all lines between
+marks a and b.
+ :.,$s/foo/bar/g changes each 'foo' to 'bar' for all lines between
+the current line (.) and the last line ($).
+ :.,+2s/foo/bar/g changes each 'foo' to 'bar' for the current line
+(.) and the two next lines (+2).
+ :%s is equivalent to :1,$s
+ When searching:
+ ., *, \, [, ], \^, and $ are metacharacters.
+ +, ?, |, {, }, (, and ) must be escaped to use their special
+function.
+ \/ is / (use backslash + forward slash to search for forward slash)
+ \t is tab, \s is whitespace
+ \n is newline, \r is CR (carriage return = Ctrl-M = \^M)
+ \{#\} is used for repetition. /foo.\{2\} will match foo and the two
+following characters. The \ is not required on the closing } so
+/foo.\{2} will do the same thing.
+ \(foo\) makes a backreference to foo. Parenthesis without escapes
+are literally matched. Here the \ is required for the closing \).
+ When replacing:
+ \r is newline, \n is a null byte (0x00).
+ \& is ampersand (& is the text that matches the search pattern).
+ \1 inserts the text of the first backreference. \2 inserts the
+second backreference, and so on.
+ You can use other delimiters with substitute:
+
+:s#[[http://www.example.com/index.html#http://example.com/#][http://www.example.com/index.html#http://example.com/#]]
+ Save typing by using \zs and \ze to set the start and end of a pattern.
+For example, instead of:
+
+***** Escape characters
+
+escape metacharcters ([ etc)
+ *., *, \, [, ], \^, $*are metacharacters
+ *+, ?, |, {, }, (, )* must be escaped to use their special function
+ *\/*is */* (use backslash + forward slash to search for forward slash)
+ *Example:
+*
+ to change the [8] to [9] in the below example:
+ ICAM restable$ciw[8] <-ICAM restable$L CI[8]+ICAM restable$H CI[8]
+ use:
+
+ :s/\[8\]/\[9\]/gc
+ Tip:
+
+ And then lose your mind in a sea of backslashes. You don't need to. /
+is the default pattern separator for search & replace, but you can use
+almost anything. The first character after :s is taken as the separator,
+so this much-simpler version works just as well:
+
+ :s!/usr/local/!/opt/alt/!
+
+ The next time you find yourself counting backslashes to fix a E486:
+Pattern not found error, remember you have an easy alternative.
+
+***** Search and execute (global)
+
+***** basics
+
+You can use Vim's powerful global command, or g for short, to execute a
+command on all lines that match a pattern. It takes a form similar to
+search and replace:
+ :[range]g[lobal]/{pattern}/[cmd]
+ [[~/Dropbox/Org/Tech/linux_files/2011-05-15-12-35-29-scrot.png]]
+ Unlike search, the default range is the whole buffer.
+ print the line number and content of all lines that match a pattern:
+use p to print, as we did before.
+ :g/bacon/p
+ you can use *'v'* instead of *'g'* to seach for *non matching*
+
+***** common commands
+
+The commands you'll use most often are # to show the matches with line
+numbers, y to yank (or copy) the matching lines, and d to delete them.
+Here are a few examples:
+ :g/params[:foo]/# " show lines and line numbers where params[:foo]
+occurs
+ :g/\^$/d " delete all blank lines
+ :g/pattern/+ y " yank the line after the line matching pattern
+
+***** ranges
+
+Here are some examples with ranges:
+
+:.,+10g/foo/d
+
+" delete lines matching foo from current line to ten lines down
+ :.,'f+2g/foo/# " show numbers of lines matching foo from current line
+to two lines after mark f
+ :.,/bar/g/foo/d " delete lines matching foo from current line to next
+line matching bar
+
+***** prefixing your command with normal
+
+The commands you can execute aren't restricted to deleting and yanking.
+You can also execute normal-mode commands by prefixing your command with
+normal.
+ :g/re/normal {command}
+ For example, this adds a new line before each line that contains bacon:
+ :g/bacon/normal O<new line of text>
+
+***** norm command
+
+norm will take a string of text as an argument and process that string
+as though you were pressing the keys in vim yourself, starting in Normal
+mode.
+ Combined with the[[#24AkQYSbxebAEU4xmgEYkg][g command]] , you can do
+some neat things. For example to search for all lines that start with a
+number, and then add a semi-colon to the end of just those lines:
+
+:g/\^\d/norm A;
+
+ Note that you need to use i, A, o, or some other way of getting into
+Insert mode if you want to add text.
+ One of my favorites (I think I read this on some other site one day) is
+to find every line containing some text and move those lines to the end
+of the text file. Sort of an ad-hoc partial way of sorting a file:
+
+:g/some text/norm ddGp
+
+ All the vim movement commands work too, so to find every line that has
+a ", move to the end of the line, move 3 characters back to the left and
+add a ~:
+
+:g/"/norm $hhhi~
+
+ You can move between lines or add lines to the file too, which makes
+things interesting. What if you start with this text file:
+ 1
+ 2
+ 3
+ 4
+ 5
+ And you do this:
+
+:g/\d/norm o999
+
+ Happily this does not blow up into infinite recursion, because vim
+always makes two passes through the file (one to mark the lines to
+operate on; a second to actually operate on them); you end up with
+ 1
+ 999
+ 2
+ 999
+ 3
+ 999
+ 4
+ 999
+ 5
+ 999
+
+***** delete lines with a commin string
+
+This is amazingly powerful and short
+
+:g/20/d
+
+ It simply says find any line with a 20 in it and run the ex command to
+delete the line. It has a sick counterpart in
+
+:v/20/d
+
+ (think if it a grep -v) which runs the ex command to delete any line
+that does not have a 20 in it.
+ This maps basically to your g + norm as
+
+:g/20/norm dd
+
+***** regex
+
+***** intro in regex in vim
+
+[[~/Dropbox/Org/Tech/linux_files/2011-05-15-12-47-35-scrot.png]]
+ Even thought the default in vim is /m you want to use */v* (Very magic)
+ you have to "turn it on" each time (using */*\v)
+ where / starts the search and \v starts the "very magic mode"
+ for example:
+ [[~/Dropbox/Org/Tech/linux_files/2011-05-15-12-50-49-scrot.png]]
+
+***** example to change all colors in worker
+
+if you have something like this:
+ color = 245,121;
+ color = 215,221;
+ and you want to change all line with color= XXX,YYY to color = 135,132
+issue this:
+
+s/color = [0-9]\{3},[0-9]\{3}/color = 135,132/g
+
+ where {3} is the number of digits
+ if some line have color = 245,22 (where the second number is not 3
+digits) you need to use this:
+
+%s/color = [0-9]\+,[0-9]\+/color = 135,132/gc
+
+ where *\{3}* is changed to *\+* which will match 1 digit or longer
+numbers
+
+***** delete all lines with extensions
+
+use this line
+
+:g/\..\{2,4}$/d
+
+where the regex is just matching any line that ends with '.' followed
+by 2 to 4 characters
+
+***** replace special characters ('/' '\'')
+
+use this command (notice the , instead of the /) :
+ for the '\' use > '\\'
+ for the '/' just use '/'
+ for one line:
+
+:s,\\,/,g
+
+ and for all the file
+
+:%s,\\,/,g
+
+***** replace all brackets and whats inside them
+
+use this command
+
+:s/([\^()]*)//g
+
+ or globally:
+
+:%s/([\^()]*)//g
+
+***** Search and replace in a visual selection (lines) 
+
+You can visually select text, then operate on the selection.
+ Press v to select a range of text, or V to select whole lines, or
+Ctrl-V (Ctrl-Q if you use Ctrl-V to paste) to select a block.
+ After starting the selection, move the cursor with any normal-mode
+movement commands (such as j to move down, or w to move by a word, or /
+to search).
+ When text is visually selected, press : to enter a command. The command
+line will automatically enter the range:
+
+:'<,'>
+
+ You can enter a command such as s/red/green/g to replace each red with
+green in all lines of the last visual selection. The command will appear
+as:
+
+:'<,'>s/red/green/g
+
+ To repeat an Ex command over a previously selected block, use the :
+history. That is, press : then <Up>, then edit a previous command.
+
+***** Search and replace in a visual selection (blocks)
+same as with line but add the %V as below
+#+BEGIN_SRC sh
+:s/\%Vus/az/g
+#+END_SRC
+
+***** key shortcut to quick replace selected visual mode
+
+Try execute the following or put in into your .vimrc
+ vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
+ By pressing ctrl + r in the visual mode you will be prompted to enter
+text to replace with. Press enter and then confirm each change you agree
+with 'y' or decline with 'n'.
+
+***** replace only inside a visual block
+
+You need to add *\%V* to your pattern.
+ mark a block (ctrl-v to enter visual block) and the issue and use
+ : s/*\%V*CURRENT TEXT*\%V*/REPLACEMENT TEXT/g
+ ie:
+
+: s/\%V80\%V/81/g
+
+***** How to add text to the beginning of every line
+
+In vim to add text to the beginning of every line is easy.
+
+:%s/\^/TEXTTOADD/
+
+ Be careful with the texttoadd because you might have to escape certain
+characters.
+
+***** How can I add * to the end of each line in Vim?
+
+issue:
+ :%s/$/TEXTTOADD/g
+ example:
+
+:%s/$/*/g
+
+ a * will be added to the end of the line
+
+***** Remove unwanted empty lines
+
+
+
+Use either of the following commands to delete all empty lines:
+
+:g/\^$/d
+ or
+ :v/./d
+
+If you want to delete all lines that are empty or that contain only
+whitespace characters (spaces, tabs), use either
+ of:
+
+:g/\^\s*$/d
+ or
+ :v/\S/d
+
+In the second command, v operates on lines that do /not/ match, and \S
+matches anything that is /not/ a whitespace, and d deletes the flagged
+lines (all lines that have no characters, or that have only whitespace
+characters).
+ Pasted from
+<[[http://vim.wikia.com/wiki/Remove_unwanted_empty_lines][http://vim.wikia.com/wiki/Remove unwanted empty lines]]>
+
+***** How can I add * to the end of each line in Vim?
+
+How can I add * to the end of each line in Vim?
+
+:%s/$/\*/g
+
+ should work. So should
+
+:%s/$/*/g
+
+ *Even shorter than the :search command:
+*
+
+:%norm A*
+
+ This is what it means:
+ % = for every line
+ norm = type the following commands
+ A* = append '*' to the end of current line
+
+***** Find and replace whole words in vim
+
+Find and replace whole words in vim:
+ You can use*\<*to match the beginning of a word and*\>* to match the
+end:
+
+:%s/\<word\>/newword/g
+
+ For case-sensitive replace.. you can use "\C"
+
+:%s/\<word\>\C/newword/g
+
+ It replaces only "word" with newword leaving others like Word,WORD...
+ unreplaced.
+
+***** increment by year and copy
+
+to multiply a section and increment the number by 1:
+
+$|for i in range(1,12) |-19,.copy $ | exec
+printf('-19,.s/20%02d/20%02d/g', (i - 1), i) | endfor
+
+ *where:
+*
+ (1,12) is the number of multipliers (here 12)
+
+**** sessions
+
+***** built in vim
+
+You want something like
+ :mksession ~/mysession.vim
+ Then later you can just source that vim file and you'll have your old
+session back.
+ a better way would be to use the sessionman.vim plugin
+
+***** session.vim
+
+To persist your current editing session you can execute the
+*:SaveSession* command. If you don't provide a name for the session
+'default' is used. You're free to use whatever characters you like in
+session names.
+ When you want to restore your session simply execute *:OpenSession*.
+Again the name 'default' is used if you don't provide one. When a
+session is active, has been changed and you quit Vim you'll be prompted
+whether you want to save the open session before quitting Vim.
+ When you start Vim without editing any files and the 'default' session
+exists, you'll be prompted whether you want to restore the default
+session,
+ The session scripts created by this plug-in are stored in the directory
+~/.vim/sessions (on UNIX) or ~\vimfiles\sessions (on Windows) but you
+can change the location by setting
+g:session directory[[https://a248.e.akamai.net/camo.github.com/be95bf40ab1227d7d166121fbb7b40a7facc0ed2/687474703a2f2f70657465726f6464696e672e636f6d2f636f64652f76696d2f73657373696f6e2f6175746f6f70656e2e706e67][]]
+
+***** sessionman.vim
+
+to list all session use:
+ :SessionList
+ i map this to a key:
+ map <leader>s :SessionList<CR>
+ to save a session issue:
+ :SessionSave
+ and enter the session name
+
+**** spell checker
+
+***** use
+
+You'll need to be in command mode and switch to last line mode, then run
+this:
+ :set spell spelllang=en us
+ to turn spell checking off if you're working with code or something
+like that. Use the nospell directive to turn this off:
+ :set nospell
+ To move to a misspelled word, use:
+ *]s*
+ and *
+ [s*
+ The ]s command will move the cursor to the next misspelled word, the [s
+command will move the cursor back through the buffer to previous
+misspelled words.
+ Once the cursor is on the word, use
+ *z=
+*and Vim will suggest a list of alternatives that it thinks may be
+correct
+ Use the
+ *zg*
+ command and Vim will add it to its dictionary.
+
+You can also mark words as incorrect using*zw
+*If you don't want to keep telling Vim explicitly every time you restart
+to turn on spelling, just add the following to your .vimrc
+ *:set spell spelllang=en us
+*
+ Substitute the appropriate region, of course.
+
+**** spliting
+
+***** positions/spliting
+
+*ctrl-W -split key
+*
+ [[~/Dropbox/Org/Tech/linux_files/2011-05-14-22-43-44-scrot.png]]
+
+**** tabs
+
+create a new tab:
+ *:tabnew*
+ command while in normal mode. This will open a new tab with an empty
+buffer.
+ If you want to edit a file in the new tab, you can run
+ *:tabnew filename*
+ and Vim will load the file in the new tab.
+ Another way to do this is to open more than one file at startup using
+the -p option. If you want to open three files in separate tabs, you'd
+use this syntax:
+ *vim -p file1 file2 file3*
+ This will start a Vim session with file1 in the first tab, file2 in the
+second tab, and file3 in the third.
+ The default maximum is 10 tabs, but you can change this by setting the
+tabpagemax option in your .vimrc, like so:
+ *set tabpagemax=15*
+ You can edit the remaining files by using the *:nex*t or *:last*
+command to move to the files that are not displayed in a tab
+ 
+
+The *:tabf*command allows you to search for a file in
+ your current path and open it in a new tab. For instance, if you want
+to
+ open a file called inventory.txt that's in your current path, you
+could
+ run:
+ *:tabf inven*
+*
+
+ That will search for a file that matches the string inven and any
+number of characters after it
+ The *:tabn* command will do autocompletion of file names in your path,
+so you can just type the first few characters of a filename and hit Tab
+to find the right file.
+ You can switch between tabs using *:tabn* and *:tabp
+*
+ If you have a lot of tabs open, you can use :*tabfirst*, or just
+*:tabfir*, to jump to the first tab, and :tablast to jump to the last
+tab that's open.
+
+***** commands
+
+create a new tab:
+ *:tabnew*
+ command while in normal mode. This will open a new tab with an empty
+buffer.
+ If you want to edit a file in the new tab, you can run
+ *:tabnew filename*
+ and Vim will load the file in the new tab.
+ Another way to do this is to open more than one file at startup using
+the -p option. If you want to open three files in separate tabs, you'd
+use this syntax:
+ *vim -p file1 file2 file3*
+ This will start a Vim session with file1 in the first tab, file2 in the
+second tab, and file3 in the third.
+ The default maximum is 10 tabs, but you can change this by setting the
+tabpagemax option in your .vimrc, like so:
+ *set tabpagemax=15*
+ You can edit the remaining files by using the *:nex*t or *:last*
+command to move to the files that are not displayed in a tab
+ 
+
+The *:tabf*command allows you to search for a file in
+ your current path and open it in a new tab. For instance, if you want
+to
+ open a file called inventory.txt that's in your current path, you
+could
+ run:
+ *:tabf inven*
+*
+
+ That will search for a file that matches the string inven and any
+number of characters after it
+ The *:tabn* command will do autocompletion of file names in your path,
+so you can just type the first few characters of a filename and hit Tab
+to find the right file.
+ You can switch between tabs using *:tabn* and *:tabp
+*
+ If you have a lot of tabs open, you can use :*tabfirst*, or just
+*:tabfir*, to jump to the first tab, and :tablast to jump to the last
+tab that's open.
+
+***** execute a command on all tabs
+
+to execute a command of your choice on all tabs issue:
+ :tabdo COMMAND
+ IE
+ :tabdo w
+ (saves all opend tabs)
+
+***** Rearranging tabs
+
+
+
+If you're really meticulous and want to position tabs just so in Vim,
+you can move the tabs to a specific spot in the tab order using
+ *:tabm n* , where n is the position number that you want to use.
+ If you don't give the :tabm command an argument, then the current tab
+will be moved to the last spot.Vim starts tab numbering from 0, so if
+you have six tabs open, you'll have tab 0 through tab 5. So, if you're
+in the first tab and want to
+ move it to the fourth position, you'd run :tab 3.
+ Note that you can still use
+[[http://www.linux.com/article.pl?sid=06/05/04/1544258][viewports]]
+normally within tabbed windows, and tabs are useful for doing a quick
+ edit in a file when you have a main Vim window set up with a couple of
+ viewports arranged just right.
+
+***** Running commands in tabs (tabdo)
+
+Let's say you're editing six or seven files in Vim and realize that you
+need to replace a variable name with a new one. Using the *:tabdo*
+command, you can run a search and replace through all of the tabs at
+once rather than changing each file individually. For instance, if you
+want to replace foo with bar, you'd run this:
+ :tabdo %s/foo/bar/g
+ That will run through each open tab and run the search and replace
+command (%s/foo/bar/g) in each one.
+
+***** saving all tabs
+
+The command wa (short for wall) will write all changed buffers. You can
+also use :tabdo w, which is definitely exactly what you want, and
+generalizes nicely.
+
+***** shortcuts
+
+Speaking of setting options, if you don't like the existing shortcuts
+for the tab commands, you can add your own. For instance, if you want to
+make it easy to open a new tab, you might insert this into your .vimrc:
+ imap ,t <Esc>:tabnew<CR>
+ This tells Vim to set up a keymap for ,t in insert mode, to run Esc to
+put Vim into normal mode, then :tabnew and a carriage return to run the
+command. You can set up mappings for all of the tab commands that you
+use regularly
+
+***** showtabline
+
+By default, the tab labels are shown at the top of the Vim window only
+when tabs are open. If you want to see the tab bar all the time, you can
+modify the showtabline option in your .vimrc. To set this to display all
+of the time, use:
+ *set showtabline=2*
+ If you want to turn it off altogether, use 0 instead of 2.
+
+***** symbols on tab bar
+
+> curret tab
+ + modified tab
+
+**** Tips
+
+***** commet out a block of text
+
+Press ctrl+v to enter visual block mode
+ use the j/k keys to select (or up/down if there not mapped to something
+else)
+ after selecting press shift+I to enter insert mode
+ enter your comment (IE # or " etc...)
+ press Esc
+ this should comment the whole block
+ anoher option is to use a plugin like NERDCommenter
+
+***** forgot to sudo before editing a file that requires root
+privileges
+
+hen you forgot to sudo before editing a file that requires root
+privileges (typically /etc/hosts). This lets you use w!! to do that
+after you opened the file already:
+ cmap w!! w !sudo tee % >/dev/null
+
+***** launch vim options
+
+to launch vim with multiple buffer open :
+ vim -o file1 file2 file3
+ (openes split horizontal)
+ vim -O file1 file2 file3
+ (openes split Vertical)
+ vim -t file1 file2 file3
+ (openes in tabs)
+
+***** selection
+
+select all:
+ ggVG
+
+***** vimdiff
+
+to use vim as a diff tool launch vim like this:
+ vimdiff /home/zeltak/BK/ranger/commands.py
+/home/zeltak/.config/ranger/commands.py
+
+***** auto source vimrc after changes
+
+I would like Vim to automatically source the vimrc each time I save it.
+This can be achieved with the following autocommand:
+ " Source the vimrc file after saving it
+ augroup reload vimrc " {
+ autocmd!
+ autocmd BufWritePost $MYVIMRC source $MYVIMRC
+ augroup END " }
+
+**** Views
+
+***** split windows
+
+:sp splits windows
+ :3sp splits window to 3 and so on
+
+***** Vim viewport
+
+:sp will split the Vim window horizontally. Can be written out entirely
+as :split .
+ :vsp will split the Vim window vertically. Can be written out as
+:vsplit .
+ Ctrl-w Ctrl-w moves between Vim viewports.
+ Ctrl-w j moves one viewport down.
+ Ctrl-w k moves one viewport up.
+ Ctrl-w h moves one viewport to the left.
+ Ctrl-w l moves one viewport to the right.
+ Ctrl-w = tells Vim to resize viewports to be of equal size.
+ Ctrl-w - reduce active viewport by one line.
+ Ctrl-w + increase active viewport by one line.
+ Ctrl-w q will close the active window.
+ Ctrl-w r will rotate windows to the right.
+ Ctrl-w R will rotate windows to the left.
+
+**** vim server
+
+***** [[class=][Open files in existing Gvim in multiple (new) tabs]]
+
+If vim is compiled with the clientserver option, you can do it. Start
+your vim instance with the following flag:
+ $ gvim --servername GVIM # GVIM is the server name. It can be anything.
+ To open more tabs in this instance, you can run the command:
+ $ gvim --servername GVIM --remote-tab file1 file2 file3 ...
+ The clientserver feature in vim is very handy. It's not limited to
+opening files; it can be used to send any command to vim using the
+command-line. For example, to close a vim instance remotely, you can
+use:
+ $ gvim --servername GVIM --remote-send '<Esc>:wqa<CR>'
+
+***** vim server
+
+to start vim in server mode issue:
+ vim --servername NAMEOFSERVER OPTIONAL EDITED FILE
+ IE
+ vim --servername myvim /home/zeltak/ZH tmp/pre-002.TXT
+ then to add files to the server (that sessions) issue:
+ gvim --remote FILE TO ADD
+
+**** modes
+
+***** viusal mode
+
+***** Types of visual mode and keys
+
+v-visuall mode characters
+ V-visual mode lines
+ ctrl+v- block visual mode
+
+***** quick select visual with operators
+
+you can quickly select visuall chunks with v followed by an operator:
+ [[~/Dropbox/Org/Tech/linux_files/Image_Hgx6Fb9kuwiJa5Cz26QeFg_0001.png]]
+ IE:
+ *v*}-will visuall select all the paragraph from where you are
+
+***** use the 'o' option to toggle which end is active
+
+use the 'o' option to toggle which end is active
+ IE:
+ press v then o
+
+***** read only mode
+
+open a file with "vim -R":
+
+vim -R FILE
+
+ To open a file from inside vim in a separate tab in readonly mode:
+
+:tab sview /path/to/file
+
+**** repeats
+
+***** repeat last command
+
+. repeats last action
+
+***** Repeat Last Command Line
+
+To repeat the last command-line given in ex mode, you can simply enter
+a count followed by\
+ @:
+ 
+
+This Tip becomes super useful with something like the following:
+
+:%s/\<pig\>/cow/gie|:update|:next
+
+ This facilitates the modification of a series of files.Note you need
+the 'e' of the gie
+
+-  g=do as many times as occurs in line
+-  i=ignore case
+-  e=don't break command if no search string found
+
+**** diff
+
+***** launch diff
+
+use:
+
+ gvimdiff FILE1 FILE2
+
+ OR
+
+ vimdiff FILE1 FILE2
+
+***** turn diff on off
+
+use:
+ :diffon
+ or
+ :diffoff
+
+**** sort
+
+***** sort remove duplicate lines
+
+The following command will sort all lines and remove duplicates (keeping
+unique lines):
+
+ :sort u
+
+If you need more control, here are some alternatives. There are two
+versions, the first leaves only the last line, the second leaves only
+the first line.
+
+ g/\^\(.*\)$\n\1$/d
+ g/\%(\^\1$\n\)\@<=\(.*\)$/d
+
+ Breakdown of the second version:
+ g//d <-- Delete the lines matching the regexp
+ \@<= <-- If the bit following matches, make sure the bit preceding this
+symbol directly precedes the match
+ \(.*\)$ <-- Match the line into subst register 1
+ \%( ) <--- Group without placing in a subst register.
+ \^\1$\n <--- Match subst register 1 followed by end of line and the new
+line between the 2 lines
+ In this simple format (matching the whole line), it's not going to make
+much difference, but it will start to matter if you want to do stuff
+like match the first word only.
+ This does a uniq on the first word in the line, and deletes all but the
+first line:
+ g/\%(\^\1\>.*$\n\)\@<=\(\k\+\).*$/d
+
+**** completions
+
+***** complete path file names
+
+**** windows/linux/Sync
+
+***** ignore specific commands in the rc based on linux or windows
+envrionments
+
+stick this in the relevant rc file (vim,gvim etc)
+ *if has('win32') || has('win64')
+ COMMAND
+ endif*
+ *for linux use this:*
+ *
+ if has('unix')
+ COMMAND
+ endif
+*
+ *example:*
+ if has('win32') || has('win64')
+ au GUIEnter * simalt ~x "maximize gui on windows machine
+ endif
+
+***** sync vim between Pc's
+
+I synchronize .vimrc and .vim using Dropbox, but many other forms are
+possible, such as Ubuntuone, Sugarsync or any other cloud service you
+might have. And even a GIT/SVN/Mercurial/whatever repository based
+storage that you update from time to time.
+ Put all your vimrc and vimfiles in a centralized place:
+ For the rc file use something like this (the plain text configuration
+file):
+ c:\Users\ekloog\Documents\My Dropbox\multisync\vim\.vimrc
+ for the vim plugins etc (the directory containing the plugins etc):*
+*
+ c:\Users\ekloog\Documents\My Dropbox\multisync\vim\.vim\
+ 
+ Then in every machine, I have the ~/.vimrc ( vimrc in windows) with a
+single line, referencing the configuration stored in the dropbox folder.
+I could directly link the file, but sometimes you may want to add a
+couple more of lines specific to a machine. The content of the ~/.vimrc
+file is just:
+ source c:\Users\ekloog\Documents\My Dropbox\multisync\vim\.vimrc
+ # Additional stuff specific to the machine here...
+ This will include the vimrc stored in my Dropbox folder.
+ Then, I just create a symbolic link to the vimfiles folder
+ 1) using the normal symlink tools in linux
+
+ ln -s PATH1 PATH2
+
+ or if using windows use the app Link Shell Extension and then pick the
+source first:
+ [[~/Dropbox/Org/Tech/linux_files/Image_K0rxuP9BIhJThh0jn3Lf0w_0001.png]]
+ and then the drop area later
+ [[~/Dropbox/Org/Tech/linux_files/Image_K0rxuP9BIhJThh0jn3Lf0w_0002.png]]
+
+**** Plugins
+
+***** load a command/bind after a plugin to make it override plugins
+
+creat a text file with .vim extension here:
+ /home/zeltak/.vim/after/plugin/FILENAME.vim
+ Note: if after and plugin folders dont exist create them
+ then in the .vim file put the command you need
+ In example:
+ nnoremap x " x
+
+***** Basic installing plugins/scripts
+
+***** intro
+
+runtimepath: For Unix systems, this is usally the "$HOME/.vim"
+directory.
+ Depending on the type of the runtime file, you have to place it under a
+specific directory under the above runtime
+ directory. The names of the directories are listed below:
+ colors/ - color scheme files
+ compiler/ - compiler files
+ doc/ - documentation
+ ftplugin/ - filetype plugins
+ indent/ - indent scripts
+ keymap/ - key mapping files
+ lang/ - menu translations
+ plugin/ - plugin scripts
+ syntax/ - syntax files
+ tutor/ - files for vimtutor
+
+***** 1)Single vim file
+
+1) If the script you want to install is just a Vim script file, then
+normally all it takes to install it is to copy it to the VIMHOME/plugin
+directory or VIMHOME/ftplugin if it is a file-type-dependent script.
+
+***** 2)compressed file
+
+2)If the script comes in a compressed file instead, it can be hard to
+tell how to install it. Typically, you will simply have to place the
+file in your VIMHOME and then uncompress it there. This normally places
+the files in the right folders according to how Vim wants them. In any
+case, there might be a README or INSTALL file where you can read how to
+install the script.
+
+***** 3)vimballs (Vba)
+
+The third and last way to install Vim scripts is by using the vimball
+installation system an installation system created for Vim 7 and newer.
+This system takes a range of files and combines them into a single Vim
+script archive with the extention .vba a vimball.
+ Before you start using vimballs, you will need to have the vimball
+script installed. This adds the functionality for reading and installing
+vimballs. As with most other scripts for Vim, you will be able to find
+the script on the online Vim community site.
+ The latest version of the vimball script can always be found here:
+http://www.vim.org/scripts/script.php?script id=1502
+ When you have the vimball script installed, you are ready to use
+vimballs for installing other Vim scripts.
+ Let's say that you have a vimball called myscript.vba and want to
+install it.
+ You simply open the vimball in Vim through the cli:
+ vim /PATH/TO/vimball.vba
+ Vim will now tell you how to install the script. This is normally done
+by executing the following command:
+ :source %
+ This installs the script in the first place found in the runtimepath
+option in Vim.
+ If you want to install the script elsewhere, you can do so by using the
+following command instead:
+ :UseVimball PATH
+ You need to replace PATH with the path to where you want Vim to install
+the script. Please note that some scripts only work when they are
+installed in the correct place.
+ Sometimes, you do not want to install a script unless you know what it
+contains. If this is the case, then the vimball script has a command
+that will give you a list of the files that you will get installed if
+you decide to install the vimball. To get the list of files in the
+vimball, execute the following command after you have opened the vimball
+in Vim:
+ :VimballList
+ If the files and directories listed are the ones you expected, then you
+are ready to install the file, and can then use either the :source or
+the :UseVimball commands to install it.
+
+***** Uninstalling Scripts/plugins
+
+Uninstalling Scripts
+ There is normally no automatic way of uninstalling scripts after they
+are installed, and you will have to go through the files, one by one,
+and uninstall them manually. Having said that, the Vimball script does
+in fact have an uninstall mechanism.
+ If you remember the name of the vimball you used to install a Vim
+script, then you can later use this very same vimball name to uninstall
+the script. You just have to execute the following command in Vim:
+ :RmVimball VIMBALLNAME
+ Replace the VIMBALLNAME with the name of the vimball you used to
+install the script. If the script was not installed in the default place
+(if installed with :UseVimball), then you can add the installation path
+as a second argument to the command, and thereby tell the vimball script
+where to find the files it should remove.
+ :RmVimball VIMBALLNAME PATH
+ In order to be able to bind a vimball name to the files it needs to
+delete, the script will create a file called .VimballRecord in your
+VIMHOME. Note that if you remove this file, you will not be able to
+uninstall any of the vimballs you have previously installed unless you
+do it manually.
+
+***** Vundle
+
+***** install
+
+ make sure after every bundle install to add the name of the plugin to
+the vimrc IE:
+ Bundle 'gmarik/vundle'
+ Bundle 'UltiSnips'
+ Bundle 'SupetTab'
+
+***** use
+
+To install a plugin run:
+
+:BundleInstall
+
+ BundleInstall allows to install scripts by name:
+
+:BundleInstall SCRIPTNAME.vim
+
+ installs and activates SCRIPTNAME.vim. You can use Tab to auto-complete
+known script names
+ UPDATE SCRIPTS
+ 
+ run:
+
+:BundleInstall!
+
+" NOTE: bang(!)
+ installs or updates configured scripts. press *u* after updates
+complete to see the changelog of all updated bundles.
+ SEARCHING
+ run:
+
+:BundleSearch foo
+
+ lists bundles matching 'foo' in new a new split window,
+ie:"VimFootnotes" "foo.vim" etc. Also
+
+:BundleSearch! foo
+
+ refreshes script list before performing actual search.
+ LISTING BUNDLES
+ To quickly pull list of installed bundles use:
+
+:BundleList
+
+ CLEANING UP
+ run:
+
+:BundleClean
+
+ confirms removal of unused script-dirs from `.vim/bundle/`.
+ 
+
+***** NERDCommenter
+
+<Leader>cc |NERDComComment| Comments out the current line or text
+selected in visual mode.
+ 
+ <Leader>cn |NERDComNestedComment| Same as |NERDComComment| but forces
+nesting.
+ <Leader>c<space> |NERDComToggleComment| Toggles the comment state of
+the selected line(s). If the topmost selected
+ line is commented, all selected lines are uncommented and vice versa.
+ <Leader>ci |NERDComInvertComment| Toggles the comment state of the
+selected line(s) individually. Each selected
+ line that is commented is uncommented and vice versa.
+ <Leader>cy |NERDComYankComment| Same as |NERDComComment| except that
+the commented line(s) are yanked
+ before commenting.
+ <Leader>c$ |NERDComEOLComment| Comments the current line from the
+cursor to the end of line.
+ <Leader>cu |NERDComUncommentLine| Uncomments any commented lines in the
+block (only one level if nested)
+
+***** NERDTree
+
+***** change to a specific directory when vim/NerdT starts
+
+put
+
+the following code in vimrc :
+
+cd /PATH/YOUWANT/NERDTREETOSTART/
+
+***** Ctrlp
+
+***** basics keys
+
+
+
+:CtrlP
+
+or
+
+:CtrlP
+
+*[starting-directory]* to invoke CtrlP in find file mode.
+ 
+
+:CtrlPBuffer
+
+or
+
+:CtrlPMRU
+
+to invoke CtrlP in find buffer or find MRU file mode.
+ 
+
+:CtrlPMixed
+
+to search in Files, Buffers and MRU files at the same time.
+ *Once CtrlP is open:*
+ Press *<c-f>* and *<c-b>* to cycle between modes.
+ Press *<c-d>* to switch to filename only search instead of full
+path.
+ Press *<c-r>* to switch to regexp mode.
+ Press *<F5>* to purge the cache for the current directory and get
+new files.
+ Use *<c-n>*, *<c-p>* to select the next/previous string in the
+prompt's history.
+ Use *<c-y>* to create a new file and its parent directories.
+ Use *<c-z>* to mark/unmark multiple files and <c-o> to open them.
+
+***** Yankring
+
+***** info
+
+[[http://www.vim.org/scripts/script.php?script_id=1234][http://www.vim.org/scripts/script.php?script id=1234]]
+ Visual mode is used to support counts, pasting multiple times and
+reversing the order of pasted elements.Ring now uses a
+ 
+
+***** lustyjuggler
+
+***** ultisnips
+
+***** create a new snippet file
+
+under a file (with a relevant extension, *.xml, *.r etc) issue:
+
+:UltiSnipsEdit
+
+***** create new snipts
+
+in a snipet file enter *snip* and press tab:
+ snippet Tab trigger "Description" !b
+ TEXT
+ YOU
+ WANT
+ endsnippet
+ where:
+ snippet-end and stop of the snippets
+ Tab trigger- the letter/pharse that triggers it with TAB
+ "Description"- just shown when u show all snipets commans
+ TEXT-The actual snippet
+
+***** tab stops
+
+[[~/Dropbox/Org/Tech/linux_files/Image_xxgFX0JtRyY43Ok5fwmXcg_0001.png]]
+ *$1* the start of a tab stop
+ another*1$* a Mirror
+ *2$* next tabstop etc
+ example:
+ snippet sbase "SAS base command" b
+ data *$1*;
+ set *$2*;
+ *$3*;
+ run;
+ endsnippet
+
+***** using with supertab
+
+since the tab completion has priority over ultisnip use ctrl-j instead
+of tab to jump between tabstops
+
+***** escape $ characters
+
+you have to escape the *$* via *\$
+*
+ Example:
+ Data$Var
+ use:
+ $1*\$*$2
+
+***** Showmarks
+
+***** config
+
+The following options can be used to customize the behavior
+ " of ShowMarks. Simply include them in your vimrc file with
+ " the desired settings.
+ "
+ " showmarks enable (Default: 1)
+ " Defines whether ShowMarks is enabled by default.
+ " Example: let g:showmarks enable=0
+ " showmarks include (Default:
+"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789.'`\^<>[]{}()\"")
+ " Defines all marks, in precedence order (only the highest
+ " precence will show on lines having more than one mark).
+ " Can be buffer-specific (set b:showmarks include)
+ " showmarks ignore type (Default: "hq")
+ " Defines the buffer types to be ignored.
+ " Valid types are:
+ " h - Help p - preview
+ " q - quickfix r - readonly
+ " m - non-modifiable
+ " showmarks textlower (Default: ">")
+ " Defines how the mark is to be displayed.
+ " A maximum of two characters can be displayed. To include
+ " the mark in the text use a tab(\t) character. A single
+ " character will display as the mark with the character
+ " suffixed (same as "\t<character>")
+ " Examples:
+ " To display the mark with a > suffixed:
+ " let g:showmarks textlower="\t>"
+ " or
+ " let g:showmarks textlower=">"
+ " To display the mark with a ( prefixed:
+ " let g:showmarks textlower="(\t"
+ " To display two > characters:
+ " let g:showmarks textlower=">>"
+ " showmarks textupper (Default: ">")
+ " Same as above but for the marks A-Z.
+ " Example: let g:showmarks textupper="**"
+ " showmarks textother (Default: ">")
+ " Same as above but for all other marks.
+ " Example: let g:showmarks textother="--"
+ " showmarks hlline lower (Default: 0)
+ " showmarks hlline upper (Default: 0)
+ " showmarks hlline other (Default: 0)
+ " Defines whether the entire line for a particular mark
+ " should be highlighted.
+ " Example: let g:showmarks hlline lower=1
+ "
+ " Setting Highlighting Colours
+ " ShowMarks uses the following highlighting groups:
+ " ShowMarksHLl - For marks a-z
+ " ShowMarksHLu - For marks A-Z
+ " ShowMarksHLo - For all other marks
+ " ShowMarksHLm - For multiple marks on the same line.
+ " (Highest precendece mark is shown)
+ "
+
+***** important vimc values
+
+To only show the marks you have set yourself, i.e. the "normal marks",
+add this to your .vimrc file:
+ let showmarks include =
+"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+***** SPF13-VIM
+
+***** install on windows
+
+look here
+[[http://vim.spf13.com/#install][http://vim.spf13.com/#install]] and see
+if any new requeriments are needed. if not make sure to install git and
+curl as instructed.
+ make sure the giit and curl executables are defined in the PATH of
+wiindows (you need to reboot after adding then). the PATH should look
+like this:
+ [[~/Dropbox/Org/Tech/linux_files/Image_PWDUrHNKt4V03mw9wwbpBA_0001.png]]
+ and have this at the end:
+ C:\Program Files (x86)\Mendeley
+Desktop\wordPlugin;....................;*c:\Program Files
+(x86)\Git\cmd\;c:\Program Files (x86)\Git\*;
+ then launch the bootstrap.sh script in the terminal (not double
+clickcing!!)
+ look to see if you get errors, if not it should open vim and install
+the bundles.
+ after that spf13 should be ready to use
+ in windows the .vimrc.local etc files are locate here (make sure they
+have the dot infront of them)
+ *c:\Users\ekloog\.vimrc.local
+*
+
+***** window/linux sync
+
+make sure that the base install of spf13 is the same on both machines
+and versions as as close as possible (of vim.gvim etc)
+ the .local files .vimrc.local etc should be *manually synced* between
+the 2 computers but make sure to manually have a windows section and
+linux section that are commented in each OS
+
+***** restart.vim
+
+Commands:
+ :Restart
+ If modified buffer(s) exist, gVim won't restart.
+ If you want to quit anyway, add bang(:Restart!).
+
+***** MRU.vim
+
+[[https://github.com/vim-scripts/mru.vim/][https://github.com/vim-scripts/mru.vim/]]
+ *1. View the Most Recently Used Files in Vi / Vim Editor*
+ :MRU Note: :MRU (upper-case) works. :mru (lower-case) doesn't work.
+
+:MRU will show "most recently used" files ordered by the recent usage
+from top to bottom as shown below. To open a file press ENTER while the
+cursor in that file name.
+
+[[~/Dropbox/Org/Tech/linux_files/vim-editor-mru-list.PNG]]
+ *2. How to Increase MRU List Count? (Increase the Number of Files
+Stored)*
+
+By default MRU list stores only the last 10 used files. Add the
+following line to your ~/.vimrc to increase this limit as shown below.
+
+$ cat ~/.vimrc
+ let MRU Max Entries = 20
+ *3. Opening Files from MRU List in a New Tab*
+ Pressing enter on an MRU entry will open the file in the same window by
+default. It will open in new window if the file opened in the current
+window is not yet saved.
+ To open the file from the MRU entry in a new Tab , press 't' when
+the cursor is on a file name in MRU window.
+ :tabn will take you to the next tab
+ :tabp will take you to the previous tab
+
+***** vim-buffergator
+
+:BuffergatorToggle
+ Open the buffer catalog if it is closed, or close
+it if
+ it is already open.
+
+***** Mark
+
+useful to highlight several words each in a different color
+ [[~/Dropbox/Org/Tech/linux_files/Image_jX6GI54rnL5KM68iZ7rlxw_0001.png]]
+ *HIGHLIGHTING
+*
+ <Leader>mMark the word under the cursor, similar to the star
+ command. The next free highlight group is used.
+ If already on a mark: Clear the mark, like
+ <Leader>n.
+ {Visual}<Leader>mMark or unmark the visual selection.
+ <Leader>rManually input a regular expression to mark.
+ {Visual}<Leader>rDitto, based on the visual selection.
+ <Leader>nClear the mark under the cursor.
+ If not on a mark: Disable all marks, similar to
+ :nohlsearch.
+ :Mark {pattern}Mark or unmark {pattern}.
+ :MarkDisable all marks, similar to :nohlsearch. Marks
+ will automatically re-enable when a mark is added or
+ removed, or a search for marks is performed.
+ :MarkClearClear all marks. In contrast to disabling marks, the
+ actual mark information is cleared, the next mark will
+ use the first highlight group. This cannot be undone.
+
+***** intro
+
+defaults (mapped differently in my config)
+ <Leader>mMark the word under the cursor, similar to the star
+ command. The next free highlight group is used.
+ If already on a mark: Clear the mark, like
+ <Leader>n.
+ 
+ 
+ <Leader>n Clear the mark, like
+
+***** kept and restore marks across Vim sessions
+
+Mark persistence
+ The marks can be kept and restored across Vim sessions, using the
+viminfo file.
+ For this to work, the "!" flag must be part of the 'viminfo' setting
+(In your vimcrc file) :
+ set viminfo+=! " Save and restore global variables.
+ :MarkLoadRestore the marks from the previous Vim session. All
+current marks are discarded.
+ :MarkSaveSave the currently defined marks (or clear the persisted
+marks if no marks are currently defined) for
+ use in a future Vim session.
+
+***** backup.vim : Numbered Backups
+
+backup.vim : Numbered Backups
+ description
+ Holds numered backups inside a seperate directory.
+ Automaticly purges old backups. Standart is to hold the last 10
+versions.
+ install details
+ Copy to plugin directory and set the following global variables:
+ g:backup directory name of backup directory local to edited file
+ used for non VMS only. Since non VMS operating-
+ systems don't know about version we would get
+ ugly directory listings. So all backups are
+ moved into a hidden directory.
+ g:backup purge count of backups to hold - purge older once.
+
+**** text helpers (abb/templates)
+
+***** Templates (skeleton)
+
+***** template files
+
+**skeleton* *template*
+ *
+ To read a skeleton (template) file when opening a new file put an
+example like below in vimrc
+ :autocmd BufNewFile *.c0r ~/vim/skeleton.c
+ :autocmd BufNewFile *.h0r ~/vim/skeleton.h
+ :autocmd BufNewFile *.java0r ~/vim/skeleton.java
+ IE to get the bash script ready when you edit a new .sh file:
+ """"""skeleton files (templates)
+ autocmd BufNewFile *.sh 0r ~/vim/skeleton.sh
+
+***** Abbreviations
+
+***** Command abbriveations (cabbrev)
+
+replace a built-in command using :cabbrev to automatically replace the
+existing command when it is typed or create new ones:
+ For example, you may want to change the behavior of a built-in command
+like :e. Or, you may make a common typo, like using :w1 instead of :w!.
+ for example:
+ :cabbrev w /home/user/work/subfolder/
+ and then hit :e w to launch it
+
+***** text abbriveations
+
+Abbreviations are useful for a number of situations. there are 2 types:
+ *ab*normal abbriviation
+ *iab* abbriviation when in insert mode
+ For example, if you are prone to certain typos --- like typing "helllo"
+instead of "hello" --- just set an abbreviation in your .vimrc like
+this:
+ ab helllo hello
+ If you'd like the abbreviation to work in insert mode only, use iab
+instead.
+ Like mappings, abbreviations can be unset during your session. To
+remove a single abbreviation, use :una abbrv . To clear all
+abbreviations, use :abc.
+ If you go at it a little at a time, eventually you'll have a set of
+mappings and abbreviations tuned for your work that help make Vim even
+more efficient than it is to begin with.
+ to not abbriviate a line press Ctrl+v after the last abrriviation
+character
+ here are some examples for text expansions abbreviations:
+ auto expand adress from typing *557*
+ iab *557* 557 VFW parkway,Chestnut Hill, Boston, MA 02467
+ paste 2 lines:
+ iab bw Best wishes <CR>Itai Kloog
+
+**** display
+
+***** fix incorrect syntax
+
+If Vim chooses an incorrect syntax command file, you can specify the
+ correct one by entering the command:
+ :set syn=syntax-type
+ IE:
+ :set syn=R
+
+**** formatting
+
+***** Quickly align the columns properly
+
+Quickly align the columns properly so that the result is nicely
+formatted data.
+ 1. Select data using visual mode (press Esc v)
+ 2. Select data
+ 3. Type
+ !column -t
+
+**** bugs/errors
+
+***** vim keeps saving backup files
+
+these lines can casue the issue:
+ au BufWinLeave *.* silent! mkview "make vim save view (state) (folds,
+cursor, etc)
+ au BufWinEnter *.* silent! loadview "make vim load view (state) (folds,
+cursor, etc)
+
+*** General Regex
+
+**** delete/select lines
+
+rexeg command to delete line starting with "ns":
+ \^ns.*$
+ To delete empty lines:
+ \^\s*$
+ 
 * Admin
 ** General Guides
 *** A-Z Index of the Linux BASH
@@ -31394,7 +34751,6 @@ sudo e2fsck -f /dev/md127
 restore all your data/settings on a new partition
 
 *** rsync
-
 **** Basics: syncing two folders for daily backup
 
 Syncing Two Folders for Daily Backup
@@ -31540,18 +34896,32 @@ advantage of any trust relationships you already have established using
 SSH client keys.
 
 **** excluding files or folders
+Excluding files or folders
+To exclude the sources directory we simply add the '--exclude' option:
 
-*Excluding files or folders
-*
- To exclude the sources directory we simply add the '--exclude' option:
  --exclude 'sources'
+
  For example, a local rsync:
 
  rsync -a --exclude cache/ a/ b/
 
- It really is that simple -- that exclude rule will match a directory
-named "*cache*" anywhere in your tree.
+It really is that simple -- that exclude rule will match a directory named "*cache*" anywhere in your tree.
 
+%Tip- exclude all git directiroes%
+
+
+#+NAME: 
+#+BEGIN_SRC sh
+# use this: --exclude='.git/' , example
+rsync -aRPz --delete -e ssh --exclude='.git/'  /home/zeltak/.emacs.d/  root@132.72.152.204:/volume1/rsync/       #&> /dev/null
+#+END_SRC 
+
+**** follow symlinks as folders
+use the -L flag:
+
+#+BEGIN_SRC sh
+rsync -aRPz --delete -L --exclude='.git/' -e ssh /home/zeltak/org/  admin@10.0.0.2:/share/MD0_DATA/Rsync/ #&> /dev/null
+#+END_SRC
 **** Add a log file to the rsync command
 
 *Add log file
@@ -31588,7 +34958,6 @@ this command:
 /media/raid/Music/Backup Zmusic
 
 **** advanced commands
-
 *** fscheck
 
 **** cancel fscheck
@@ -32651,7 +36020,6 @@ accessed in the last two minutes
  ...
 
 **** grep
-
 ***** quick commands
 
 to grep recursivly use this:
@@ -32743,6 +36111,12 @@ this is a comprehensive command:
 '(ass|com|divx|DIVX|css|gif|js|BUP|IFO|VOB|ogv|ogm|ogg|mp3|wmv|AVI|WMV|MKV|MOV|MPEG|xml|mkv|flv|sfv|xls|qpw|exe|oldversion|SRT|avi|mpg|mp4|nfo|jpg|tbn|sub|db|md5|iso|txt|rar|ogm|ogg|srt|mov|mpeg|mpg|mp4)'
 /home/zeltak/BK/raid TV.txt > /home/zeltak/ZH tmp/raid tv.txt
 
+***** extract part of piped output
+****** extract a part that starts with X
+#+NAME: extract only word starting with percent part 
+       #+BEGIN_SRC sh
+acpi | grep -o "\w*%\w*"
+       #+END_SRC 
 **** locate
 
 *Locate
@@ -33974,6 +37348,12 @@ $Note$ name=case sensitive, iname=case dosent matter
 #+BEGIN_SRC sh
 find . '(' -iname '*.nfo' -o -iname '*.jpg'  -o -iname '*.JPEG'    -o -iname '*.png'  -o -iname '*.PNG'  -o -iname '*.jpeg'  -o -iname '*.JPEG'  -o -iname '*.log'  -o -iname '*.m3u'  -o -iname '*.accurip' -iname '*.nfo' -o -iname '*.tbn' -o -iname '*.txt' ')' -exec rm {} \;
 #+END_SRC
+**** find and delete a specific file type
+#+BEGIN_SRC bash
+find /home/zeltak/music/  -name "*.ratings" -exec rm {} \;
+#+END_SRC
+
+here we delete all text files that have a .rating extension
 **** delete all non music files form music collection
 
 *
@@ -35101,6 +38481,14 @@ some more example
  awk '{gsub(/foo/,"bar")}; 1'          # replace ALL instances in a line
 #+END_SRC
 
+**** pipe an CLI output and extract part of the output
+***** extract the last fiels
+use the $NF option (last field)
+
+#+NAME: 
+#+BEGIN_SRC sh
+acpi | awk '{print $NF}'
+#+END_SRC
 *** regexp
 
 **** basics

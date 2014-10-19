@@ -70,27 +70,24 @@ user chrome/firefox built in sync mechanisms
 **** family photos 
 **** daily backups
 ***** rsync 
-****** TODO ask amit tzifnagt for access to server to push rsync over ssh
-       :PROPERTIES:
-       :ID:       13de7e55-11ab-41c6-aa29-e30d8ff5cbc7
-       :END:
- phone: 79449
-server ip: 132.72.154.204
-ask to open port to push Rsync from outside
-
-
 ****** rsync to push data from laptop to synology nas
 
        #+BEGIN_SRC sh
 rsync -aRPz --delete -e ssh /home/zeltak/dotfiles/  root@132.72.152.204:/volume1/rsync/    
        #+END_SRC
+****** TODO rsync to push data from laptop to QNAP nas
+       :PROPERTIES:
+       :ID:       d4f672c5-6ced-4670-ae67-4e785f17ea79
+       :END:
+use this script created in ~bin:
+file:/home/zeltak/bin/lrs
+
 ** cleanup bin and scripts
 ** find out how to create org table with manual breaks
 ** fix i3 tray and revise i3 config for laptop   
 ** a way to auto exce a command on specific file save emacs
 for sxhkd issue the kill command when saved
-** jabref
-*** change timestamp of papers to date 
+** jabref::
 ** trip configs needed
 *** Worker
 ***** rest
@@ -226,6 +223,18 @@ For the sake of completeness, here the docstring of
 ** clerk
 *** t and ti options don't start to play now
 *** ratings , what is the new system  
+** org
+*** search text in all orgfiles    
+** i3
+*** fix grid
+*** pulse menu
+** CRON!!!!
+** edit(in the conkyrc)   
+make it center
+imap read count
+weather
+** Emacs TRAMP
+   
 * Linux
 ** Org
 *** TODO Chain babel blocks, ₆In example₆ launch multiple blocks togheter 
@@ -767,39 +776,6 @@ Itai
   mailto:citizenship2@danassan.com
 
 
-
-** New House 
-*** appliances
-  for ovens check telescopic rails
-**** traklin hasmal:
-  Shadi 0547877918
-  stove-electrolux 6747- 1690
-  7100 watt
-  oven delongi 432- 2150
-  dish beko advanced model- 2350
-**** Avi sofer
-  itzik: 0508626418
-  Bosch oven > 2560
-**** Alon Galsale
-  Cooper stove bmr641 > 1500
-  cooper bte64 > 1779
-  dish Normandy BMR641 > 
-  Rosier RFA03 > 2900 (with telescopic)
-  beko dfn103x
-
-  'stove-electrolux 6747- 1590'
-  'teka hr750- 2750?'
-  teka trx645> 18 50
-  'dish מדיח כלים בלומברג רחב דגם SMARTOUCHXB20- 1988'
-  beko 1001 white 
-  5
-
-*** TODO Masger for soragim
-      :PROPERTIES:
-      :ID:       9323c1aa-99ed-4150-a20c-73ca30981e42
-      :END:
-  nisim: 052-3923940
-*** home paint color is 016
 ** freedns
   zeltak.mooo.com
 ** Gnus
@@ -808,12 +784,25 @@ Itai
   This page describes how to configure Gnus to read and send mails from your gmail account, and should also explain how to do in Gnus what you’re able to do through the web interface.
 
 ** GARDEN
-*** place to order stuff for garden
+*** TODO place to order stuff for garden kimhi
+    :PROPERTIES:
+    :ID:       7a396cc0-0df9-4a59-81ec-fc5acebc2b70
+    :END:
   קמחי ובניו חומרי בניין
 
    כתובת הפלס 9 עמק שרה באר שבע הגדל מפה שעות פעילות
   יום א' - יום ה'	17:30 - 07:00
   יום שישי	13:30 - 07:00
+phone 08-6232172  
+
+somsomit 135 for 450 kg
+*** TODO rahat gardning
+    :PROPERTIES:
+    :ID:       97481008-e279-40a8-9c99-b0b2cd3deaa4
+    :END:
+Ahmhed:
+08-9912099
+050-4566004  
 *** renting equipment
   http://www.brener.co.il/
 
@@ -823,10 +812,19 @@ Itai
   נייד משה: 050-5408724 * טלפון חינם: 1-800-200-330 * פקס: 08-6278249
 *** שתילי בזיליקום תאי אפשר לקנות ברוב המשתלות שמחזיקות צמחי תבלין, לפעמים תחת השם מלכת סיאם.
 *** Pini
-**** deck one layer is off
-**** spary Vs knima
-**** make water source much closer to trees (extend it)
-**** ceramics all around
+**** last piece of deck+painting
+**** make water tap permanent on the wall
+**** ceramics all around the road 
+**** pest grass keep coming back time and time again, also under Hipoi (palrig)
+**** pest greass in the spice plant rows, grow very fast, what can be done?
+**** the lichi tree, make it grow staight
+**** taftafot in adaniot
+**** fix the ugly black seperator 
+**** grass is totally not leveld, fix it and make permemnant with nails
+**** take old shoe adanit
+**** check taftafot bear pomela
+
+*** home paint color is 016
 ** Pikod haoref
   הנך משוייך לאזור התרעה: באר שבע 286 (45 שניו
 ** mom ows me
@@ -843,4 +841,11 @@ Itai
 
 * Switch from priority to next
 
+* allan
 
+the homes are built with very open architectual style, with no AC everyone has 
+this is the best avilable exposure avilable
+this is well proven and useful because we keep finding associations
+exposure assement based on assignimn an ambient exposure where they live include 
+we know that whats outside comes inside (cite-lance wallace) 
+AC can serve as an effect modifidier and we weill try to control from it with elec cons ses
