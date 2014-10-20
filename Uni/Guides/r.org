@@ -7267,6 +7267,17 @@ Band 1 Block=400x400 Type=Int16, ColorInterp=Gray
 gdal_translate -of R HDF4_EOS:EOS_GRID:"MAIACAOT.h00v00.20013050915.hdf":grid1km:Optical_Depth_Land testout.RData            
 #+END_SRC
 
+** estimate separate slope for each day
+#+BEGIN_SRC R
+for(i in 1:length(moddays)){
+subdat <- mod1[mod1$date == moddays[i], ]
+day.mod1 <- try(lm(model.formula, data =  subdat, na.action = na.omit) )
+moddayslm$ith[i] <- i
+moddayslm$intercept[i]<-coef(day.mod1)[1]  #Is the intercept (a+uj) or uj ? fixed+random? Or only random?
+moddayslm$beta[i] <- coef(day.mod1)[2]   #Is the slope (β1+Vj) or Vj ? fixed+random? Or only random?
+moddayslm$nrows[i] <- nrow(subdat)
+}
+#+END_SRC
 
 * Packages specific
 ** Hemisc
