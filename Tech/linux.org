@@ -23780,22 +23780,44 @@ at the command line.
 To start the assistant without opening the webapp, you can run the command "git annex assistant --autostart". This is a good thing to configure your system to run automatically when you log in.
 
 *** syncthing
-**** basic sync:
+**** basic sync
 For two nodes two sync a repository, the following must be true on each node:
 
-1.The other node has been added to the config (Edit > Add Node)
-$Note$ to add the key ID
-2.The repository has been added on both nodes, with the same ID (Edit > Add Node):
+1.The other node has been added to the config (+add device):
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-10-21 17:24:02
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-10-21_17:24:02.png]]
+
+$Note- you need the KEY from the other machine you are trying to pair$
+
+2.after you add a device you need to add each repo you want to sync seperatly:
+
+click add folder :
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-10-21 17:23:42
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-10-21_17:23:42.png]]
+
+'FolderID' and 'Folder Path' need to be identical to the partner machine you are trying to sync
+
+then make sure the other node (machines) you want to share have been checked under "Share With Nodes" in the repository configuration
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-10-21 17:27:16
+#+attr_html: :width 300px
+
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-10-21_17:27:16.png]]
+
+finally `restart`
+
+in example: 
 
 #+BEGIN_EXAMPLE
-Repository ID
-sync
-Short identifier for the repository. Must be the same on all cluster nodes.
-Repository Path
-/home/zeltak/Sync
+Folder ID: sync
+Repository Path:/home/zeltak/Sync
 #+END_EXAMPLE
 
-3.The other node must have been checked under "Share With Nodes" in the repository configuration.
 
 **** install on arch linux
 install through community or git (on aur)
