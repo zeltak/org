@@ -767,6 +767,7 @@ prev isf for me # 714/14
    :END:
 ** TODO check uni payback for ISEE 
 :PROPERTIES:
+:ID:       fa95af36-8dff-41cd-bc12-f16fa6cd7d6b
 :END:
 ** TODO call joel 2.10.2014
 :PROPERTIES:
@@ -783,11 +784,6 @@ combining the 3k and 1k data which have different algorithms and hence different
       :END:
 ****** we can supplment 1k data with 3k data where we preform lousy and dont do so well
 ****** different resolution for different areas in the USA based on pop density/avilable health data
-***** EHP paper now waiting for final editor
-***** DVT paper, working on revisions
-***** Italy and mex travel plans
-when does he leave italy, could we meet on the friday be
-***** EHF grant back, need a revision, will send when ready
 ***** talk:
 latent variable model 
 trying to estimate latent value
@@ -797,10 +793,6 @@ brents idea:
 we need to fill missingness by interpolate to any given grid and that interpolation where we have monitors will be a predictor
 R package by lauren hunn
 -geoschem combine with aod qian 
-***** TODO get the 3x3 data ready by next week
-      :PROPERTIES:
-      :ID:       76abcd76-3824-49b2-a755-23929a98eaf2
-      :END:
 ***** sattelite humidity
 lowest level
 
@@ -808,6 +800,36 @@ lowest level
 
 
 
+** TODO call joel 22.10.2014
+   :PROPERTIES:
+   :ID:       eb7d2803-d151-4d98-ab9b-7c51e512313e
+   :END:
+*** 3km data with mihyee
+-also have 10k data 
+-smoothing over time (prev/next), space (surround pixels)
+- interpolate aod at 1st stage?
+throw out aod-pm combos that look bad
+
+mexico:
+leave 2 make prediction to the 2 you left out multiple times - calc R2
+
+aod devided by PBL- as a covariate
+
+logs of everything
+
+cluster by met days 
+
+NE fusion:
+summary measure of 3 sat measuremtns and relate that to monitor data
+
+smooth 10 and 3 k data 
+
+smooth over space and time 
+
+
+*** send myhee cleaning data 
+*** Italy and mex travel plans
+when does he leave italy, could we meet on the friday be
 
 * long term Misc
 ** GIS Trac k
