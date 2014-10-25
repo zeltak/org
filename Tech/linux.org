@@ -1,3 +1,4 @@
+#+BEGIN_EXAMPLE
 #+Title: Linux
 #+TAGS: Fav(f) Most_used(m) cbugs(c)
 
@@ -384,6 +385,60 @@ then install correct drivers
 sudo pacman -S nvidia
 #Intel integrated graphics:
 pacman -S xf86-video-intel
+#+END_SRC
+
+***** better font support
+add the following repo  to /etc/pacman.conf:
+#+BEGIN_EXAMPLE
+[heftig]
+SigLevel = Optional
+Server = http://pkgbuild.com/~heftig/repo/$arch
+#+END_EXAMPLE
+
+add this under
+file:~/.config/fontconfig/fonts.conf
+
+#+BEGIN_SRC xml 
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ~/.config/fontconfig/fonts.conf -->
+<!DOCTYPE fontconfig SYSTEM "fonts.dtd">
+<fontconfig>
+    <match target="font">
+        <edit name="rgba" mode="assign"> <const>rgb</const> </edit>
+        <edit name="hinting" mode="assign"> <bool>true</bool> </edit>
+        <edit name="autohint" mode="assign"> <bool>false</bool> </edit>
+        <edit name="antialias" mode="assign"> <bool>true</bool> </edit>
+        <edit name="hintstyle" mode="assign"> <const>hintslight</const> </edit>
+        <edit name="lcdfilter" mode="assign"> <const>lcddefault</const> </edit>
+        <edit name="embeddedbitmap" mode="assign"> <bool>false</bool> </edit>
+
+        <!-- Hack for the not_contains file test to work even when the property is missing -->
+        <edit name="file" mode="append">
+            <string/>
+        </edit>
+    </match>
+
+    <!-- Use hintslight for Type 1 fonts, a vast improvement -->
+    <match target="font">
+        <test name="fontformat" compare="eq"> <string>Type 1</string> </test>
+        <edit name="hintstyle" mode="assign"> <const>hintslight</const> </edit>
+    </match>
+
+    <!-- Prefer Arial instead of TeX Gyre Heros for Helvetica -->
+    <alias binding="same">
+        <family>Helvetica</family>
+        <prefer> <family>Arial</family> </prefer>
+    </alias>
+
+    <!-- Firefox download fonts -->
+    <match target="font">
+        <test name="family" compare="contains"><string>@font-face:</string> </test>
+        <test name="file" qual="all" compare="not_contains"> <string>/</string> </test>
+        <test name="fontformat" compare="eq"> <string>TrueType</string> </test>
+        <edit name="autohint" mode="assign"> <bool>true</bool> </edit>
+        <edit name="hintstyle" mode="assign"> <const>hintslight</const> </edit>
+    </match>
+</fontconfig>
 #+END_SRC
 
 **** Installs client
@@ -956,24 +1011,27 @@ pacman -Scc
 
 ***** errors
 ****** file exists in filesystem
+I get an error when updating:
 
-I get an error when updating: "file exists in filesystem"
- error: could not prepare transaction
- error: failed to commit transaction (conflicting files)
- package: /path/to/file exists in filesystem
- Errors occurred, no packages were upgraded.
- Why this is happening: pacman has detected a file conflict, and by
-design, will not overwrite files for you. This is a design feature, not
+#+BEGIN_EXAMPLE
+file exists in filesystem
+error: could not prepare transaction
+error: failed to commit transaction (conflicting files)
+package: /path/to/file exists in filesystem
+Errors occurred, no packages were upgraded.
+#+END_EXAMPLE
+Why this is happening: pacman has detected a file conflict, and by design, will not overwrite files for you. This is a design feature, not
 a flaw.
- The issue is usually trivial to solve. A safe way is to first check if
-another package owns the file
- # pacman -Qo /path/to/file
- If the file is owned by another package, file a bug report. If the file
-is not owned by another package, rename the file which 'exists in
-filesystem' and re-issue the update command. If all goes well, the file
-may then be removed.
- *SOLUTION:*
- sudo pacman -Sf *PACKAGENAME*
+The issue is usually trivial to solve. A safe way is to first check if another package owns the file
+#+BEGIN_SRC sh
+pacman -Qo /path/to/file
+#+END_SRC
+If the file is owned by another package, file a bug report. If the file s not owned by another package, rename the file which exists in filesystem and re-issue the update command. If all goes well, the file may then be removed.
+`SOLUTION`
+
+#+BEGIN_SRC sh
+sudo pacman -Sf *PACKAGENAME*
+#+END_SRC
 
 ****** bypass a erronous package in an upgrade
 
@@ -4022,7 +4080,6 @@ export _JAVA_OPTIONS='-Dawt.useSystemAAFontSettings=on -Dswing.aatext=true -Dswi
 %Tip-this should go inside the .bashrc/.zshrc% 
 
 ** i3
-** commands
 *** chaining commands
 Commands can be chained by using ; (a semicolon). So, to move a window to a specific workspace and immediately switch to that workspace, you can configure the following keybinding:
 Example:
@@ -4113,38 +4170,55 @@ webbrowser)
  bindsym $mod+g exec ~/bin/goto
 
 *** workspaces/app configs
-***** Automatically putting clients on specific workspaces
+***** mathcing window/clients by names					:Fav:
+The criteria which are currently implemented are:
 
-To automatically make a specific window show up on a specific workspace,
-you can use an assignment.
- You can match windows by using any criteria, see [command criteria].
-It is recommended that you match on window classes (and instances, when
-appropriate) instead of window titles whenever possible because some
-applications first create their window, and then worry about setting the
-correct title. Firefox with Vimperator comes to mind. The window starts
-up being named Firefox, and only when Vimperator is loaded does the
-title change. As i3 will get the title as soon as the application maps
-the window (mapping means actually displaying it on the screen), you'd
-need to have to match on Firefox in this case.
- assign <criteria> [] workspace
- # Assign URxvt terminals to workspace 2
- assign [class="URxvt"] 2
- # Same thing, but more precise (exact match instead of substring)
- assign [class="\^URxvt$"] 2
- # Same thing, but with a beautiful arrow :)
- assign [class="\^URxvt$"]  2
- # Assignment to a named workspace
- assign [class="\^URxvt$"]  work
- # Start urxvt -name irssi
- assign [class="\^URxvt$" instance="\^irssi$"]  3
+'class' %recommended way%  Compares the window class (the second part of WM_CLASS)
+
+'instance'  Compares the window instance (the first part of WM_CLASS)
+
+'window_role'- Compares the window role (WM_WINDOW_ROLE).
+
+'id'  Compares the X11 window ID, which you can get via xwininfo for example.
+
+'title' Compares the X11 window title (_NET_WM_NAME or WM_NAME as fallback).
+
+'urgent' Compares the urgent state of the window. Can be "latest" or "oldest". Matches the latest or oldest urgent window, respectively. (The following aliases are also available: newest, last, recent, first)
+
+'con_mark'  Compares the mark set for this container, see [vim_like_marks].
+
+'con_id' Compares the i3-internal container ID, which you can get via the IPC interface. Handy for scripting.
+
+The criteria class, instance, role, title and mark are actually regular expressions (PCRE)
+***** Automatically putting clients on specific workspaces
+To automatically make a specific window show up on a specific workspace, you can use an assignment.
+You can match windows by using any criteria, see [command criteria]. 
+It is recommended that you match on 'window classes' (and `instances`, when appropriate) instead of window titles whenever possible because some applications first create their window, and then worry about setting the correct title.
+
+the syntax is as follows:
+
+assign <criteria> [] workspace
+
+#+BEGIN_EXAMPLE
+# Assign URxvt terminals to workspace 2
+ssign [class="URxvt"] 2
+# Same thing, but more precise (exact match instead of substring)
+assign [class="\^URxvt$"] 2
+# Same thing, but with a beautiful arrow :)
+assign [class="\^URxvt$"]  2
+# Assignment to a named workspace
+assign [class="\^URxvt$"]  work
+# Start urxvt -name irssi
+assign [class="\^URxvt$" instance="\^irssi$"]  3
+#+END_EXAMPLE
+
 
 ***** define per workspace layout
-
 one can add an additional command in the workspace definitions
- *In example:*
- bindsym $mod+4 workspace 5:IM ; layout tabbed
- options are:
- workspace layout <default|stacking|tabbed>
+*In example:*
+bindsym $mod+4 workspace 5:IM ; layout tabbed
+options are:
+workspace layout <default|stacking|tabbed>
 
 ***** Arbitrary commands for specific windows (for window)
 
@@ -4164,7 +4238,6 @@ floating or to change their border style, for example.
  for window [title="x200: ~/work"] floating enable
 
 ***** Automatically putting workspaces on specific screens
-
 Automatically putting workspaces on specific screens
  If you assign clients to workspaces, it might be handy to put the
 workspaces on specific screens. Also, the assignment of workspaces to
@@ -4183,29 +4256,6 @@ the available outputs by running
  workspace 1 output LVDS1
  workspace 5 output VGA1
  workspace "2: vim" output VGA1
-
-***** mathcing window/clients by names					:Fav:
-The criteria which are currently implemented are:
-class
-Compares the window class (the second part of WM CLASS)
-instance
-Compares the window instance (the first part of WM CLASS)
-window role
-Compares the window role (WM WINDOW ROLE).
-id
-Compares the X11 window ID, which you can get via xwininfo for example.
-title
-Compares the X11 window title ( NET WM NAME or WM NAME as
-fallback).
-urgent
-Compares the urgent state of the window. Can be "latest" or "oldest".
-Matches the latest or oldest urgent window, respectively. (The following
-aliases are also available: newest, last, recent, first)
-con mark
-Compares the mark set for this container, see [vim like marks].
-con id
-Compares the i3-internal container ID, which you can get via the IPC
-interface. Handy for scripting.
 
 *** layouts
 ***** define a workspace layout by default
@@ -4429,6 +4479,31 @@ bindsym $mod+mod1+Control+m mode "xrandr- m(mobile)/h(home)"
 
 bindsym h exec /home/zeltak/.screenlayout/home.sh; mode "default"
 #+END_SRC
+
+*** icons in bar
+make sure you have the icon fonts installed in system
+https://aur.archlinux.org/packages/ttf-font-awesome/
+or
+https://aur.archlinux.org/packages/ttf-font-icons/
+
+then in your i3 config define icons as a secondary font
+
+#+BEGIN_EXAMPLE
+font pango:PragmataPro 10 , Icons 8
+#+END_EXAMPLE
+
+to get the fonts look at this pdf:
+file:/home/zeltak/Sync/attach/files_2014/icons.pdf
+
+then copy paste to your config. it will look like this:
+
+#+BEGIN_EXAMPLE
+# workspace defines 
+set $w1  (1)
+set $w2 (2)
+#+END_EXAMPLE
+
+
 
 ** xfce
 *** how to get desktop icons on xubuntu
@@ -21273,6 +21348,24 @@ or *perl-ext field in .Xresources.
 
 URxvt.perl-ext-common: default,clipboard
 
+*** lilyterm
+**** disable confirm_to_execute_command 
+edit this in config        
+#+BEGIN_SRC sh
+confirm_to_execute_command = 1        
+#+END_SRC
+
+also add to whitelist apps that don't need confirm
+#+BEGIN_SRC sh
+# separate with <space>.
+execute_command_whitelist = su sudo ssh 
+#+END_SRC
+
+**** configure web browser
+     #+BEGIN_SRC sh
+# The web browser using for http(s)://
+web_browser = firefox
+     #+END_SRC
 ** Web 
 *** Tinyrss
 **** change looks (css mods)
@@ -24327,19 +24420,6 @@ Emacs in a Text Terminal.
  n a text terminal, you can invoke the textual menu by pressing
 Alt+`. (or, pressing the Esc key followed by the backtick ` key.)
 
-******** saving/closing emacs
-
-Save
- To save file, press Ctrl+x, then Ctrl+s.
- Quit Emacs
- Type: Ctrl+x then Ctrl+c.
- Quit without Saving
- To quit without saving, just do quit and emacs will ask if you want to
-save.
- If the keys you press seem to do weird things, then, hold down Ctrl
-then press g. This will cancel the sequence of keys you may have pressed
-by mistake.
-
 ******** WINDOWS
 
 [[macsen_files/Image_zDZxTWFufFIlOlbuHLNYuw_0001.png]]
@@ -24456,6 +24536,16 @@ kill the buffer (C-x k)
 emacs -f eshell
 #+END_SRC
 
+******* saving/closing emacs
+******** base 
+Save To save file: press Ctrl+x, then Ctrl+s.
+Quit Emacs Type: Ctrl+x then Ctrl+c.
+Quit without Saving:To quit without saving, just do quit and emacs will ask if you want to
+save.
+If the keys you press seem to do weird things, then, hold down Ctrl then press g. This will cancel the sequence of keys you may have pressed
+by mistake.
+******** desktop-save-mode auto Save/Restore
+With desktop-save-mode on, now it automatically save/restore opened files, windows config (number of windows, size, position), when quit ＆ restart emacs.
 ******* Debug
 ******** How to startup emacs without loading any customization
 
@@ -25410,7 +25500,7 @@ then call align-regexp  you get:
  jenny = 8
  mary = 7
 ******* Console emacs
-******** How do I get to the menu in Emacs in console mode
+******** How do I met to the menu in Emacs in console mode
 M-x menu-bar-open, which is usually bound to ?F10? (or ?C-F10?). This works with and without menu-bar-mode (which just shows the names of the menus at the top of the screen).
 ******* config/Elisp
 ******** issue commands based on hostname in emacs config
@@ -25942,6 +26032,10 @@ M-x downcase-region
 *Note:* By default, this command is disabled, but when you try to use
 it, Emacs will give you the option of turning it on.
 
+******** Delete Duplicate Lines
+
+'delete-duplicate-lines' will delete duplicated lines in current text selection.
+
 ******* Regex in emacs
 ******** Regular Expression Syntax
 
@@ -26340,7 +26434,6 @@ issue U and then enter gmane.TAB to use completion
 if gnus hanges, one possibility is this: if you just commented out a previous setup for Gmail and replaced it with one for  
 an NNTP server, Gnus will now be confused and stuck trying to get those previously-subscribed Gmail IMAP folders. just delete .newsrc and try again
 ******* images
-
 ******** turn on image mode
 
 *M-x* iimage-mode
@@ -26379,6 +26472,10 @@ opening the file. For example:
 call it from the eval local variable (which is cleaner, but forces you
 to have the function definition somewhere else, away from your file)
 
+******** image mode
+Open a image in your photos folder. (call dired to open a dir, then Enter ↵ on a image file to open in image mode. 〔➤ dired tutorial〕)
+Press 'n' (image-next-file) to view next image.
+Press 'p' (image-previous-file) to view previous image. 
 ******* keybinds
 ******** What keys can be defined
 What type of keys can i define?
@@ -28196,6 +28293,15 @@ font-lock-face '(:background "#FFE3E3")))))
 "read_only"))
 (add-hook 'org-mode-hook 'org-mark-readonly)
 #+END_SRC
+
+******* Emacs web browser
+To start the web browser, call 'eww'
+
+How to open a new url: Just call eww again.
+
+How to open a local HTML file: Call eww-open-file.
+
+How to switch to a real browser: Call eww-browse-with-external-browser.
 
 *** 'org-mode'
        :PROPERTIES:
@@ -37185,6 +37291,15 @@ wget -r -A '*.mp3' url/path/dir/
  -np, --no-parent don't ascend to the parent directory.
  -l, --level=NUMBER maximum recursion depth (inf or 0 for infinite).
  -A, --accept=LIST comma-separated list of accepted extensions.
+***** use wget to download a ftp site
+use the following command (the -m is for mirror)
+
+#+BEGIN_SRC sh
+wget -m ftp://username:password@ip.of.old.host
+#if you need a passwordless login leave the passworld field empty
+wget -m ftp://username:@ip.of.old.host
+#+END_SRC 
+
 ** scripts
 
 *** basics
@@ -43798,3 +43913,4 @@ use 'tinymoviemanager' to process the files for xbmc
 Local variables:
 buffer-read-only: t
 End:
+#+END_EXAMPLE
