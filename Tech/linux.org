@@ -36722,7 +36722,7 @@ input is not a terminal.
 directory of were you want the file to go.
 
 *** compress/archive/zip 
-**** compress all files in a directory seperatly
+**** gzip-compress all files in a directory seperatly
 Individually compress each file in a directory
 
 #+NAME: 
@@ -36731,6 +36731,38 @@ gzip *
 #you can also use it recursivly
 gzip -r .
 #+END_SRC
+**** tar
+syntax of tar command:
+
+#+BEGIN_EXAMPLE
+tar -zcvf archive-name.tar.gz directory-name
+
+Where,
+
+    -z: Compress archive using gzip program
+    -c: Create archive
+    -v: Verbose i.e display progress while creating archive
+    -f: Archive File name
+#+END_EXAMPLE
+
+
+For example, you have directory called /home/jerry/prog and you would like to compress this directory then you can type tar command as follows:
+
+#+BEGIN_SRC sh
+tar -zcvf prog-1-jan-2005.tar.gz /home/jerry/prog
+#+END_SRC
+
+Above command will create an archive file called prog-1-jan-2005.tar.gz in current directory. If you wish to restore your archive then you need to use following command (it will extract all files in current directory):
+ tar -zxvf prog-1-jan-2005.tar.gz
+
+Where,
+
+    -x: Extract files
+
+If you wish to extract files in particular directory, for example in /tmp then you need to use following command:
+$ tar -zxvf prog-1-jan-2005.tar.gz -C /tmp
+$ cd /tmp
+$ ls - 
 *** list (ls)
 
 **** general
@@ -36885,13 +36917,6 @@ exactly the permissions, no more and no less.
 **** permission number table
 
 [[~/Dropbox/Org/Tech/linux_files/permissnapshot5.png]]
-
-*** tar
-
-**** Add all files and directories in current directory
-
-*tar czf /PATH/NAME tar.gz /PATH/TO/FILES/
-*
 
 *** Find Duplicate Files
 
