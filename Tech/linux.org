@@ -1,4 +1,3 @@
-#+BEGIN_EXAMPLE
 #+Title: Linux
 #+TAGS: Fav(f) Most_used(m) cbugs(c)
 
@@ -16993,7 +16992,6 @@ for gmail one might have something like this:
 let blacklists = ["https://mail.google.com/* gi gt x r f"]
 #+END_EXAMPLE
 that would disable keys gi, gt, x, r, and f on gmail.
-
  
 ** multimedia
 *** filebot
@@ -21366,6 +21364,16 @@ execute_command_whitelist = su sudo ssh
 # The web browser using for http(s)://
 web_browser = firefox
      #+END_SRC
+*** terminator
+**** Grouping Terminals
+Grouping terminals allows you to perform the same keystrokes on multiple servers at the same time. If terminator has a no.2 feature, this is it. Obviously this can be dangerous and is no substitute for scripting and configuration management, but there are cases where it can be very useful indeed.
+The simplest way to group is to click the menu on the top left of a terminal, create a new group and then add other terminals to it
+
+**** Layouts
+After setting up your terminals how you want them, right click anywhere, select preferences, then go to the layouts tab. From here click “Add”, and a layout will be created with your current settings
+
+Once you’ve saved a layout it’s not immediately obvious how to open it, but basically you have to launch a new instance of terminator with the “-l mylayout” option. 
+
 ** Web 
 *** Tinyrss
 **** change looks (css mods)
@@ -36160,6 +36168,9 @@ to grep recursivly use this:
  grep -irw "password" /home/zeltak/Dropbox/PC/dotfiles/
 
 ***** Intro
+%Tip- for regex grep look here:%
+
+http://www.cyberciti.biz/faq/grep-regular-expressions/ 
 
 grep Command Syntax
  grep 'word' filename
@@ -43913,4 +43924,3 @@ use 'tinymoviemanager' to process the files for xbmc
 Local variables:
 buffer-read-only: t
 End:
-#+END_EXAMPLE

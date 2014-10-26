@@ -351,7 +351,127 @@ where '3' is the number of digits after the dot.
 **** location of .rprofile file
 on linux
 file:/home/zeltak/.Rprofile
+**** example R intro file
+
+see code (and explenation below code):
+#+BEGIN_EXAMPLE
+     local({r <- getOption("repos")
+      r["CRAN"] <- "http://cran.revolutionanalytics.com"
+      options(repos=r)})
  
+options(stringsAsFactors=FALSE)
+ 
+options(max.print=100)
+ 
+options(scipen=10)
+ 
+options(editor="vim")
+ 
+# options(show.signif.stars=FALSE)
+ 
+options(menu.graphics=FALSE)
+ 
+options(prompt="> ")
+options(continue="... ")
+ 
+options(width = 80)
+ 
+q <- function (save="no", ...) {
+  quit(save=save, ...)
+}
+ 
+utils::rc.settings(ipck=TRUE)
+ 
+.First <- function(){
+  if(interactive()){
+    library(utils)
+    timestamp(,prefix=paste("##------ [",getwd(),"] ",sep=""))
+ 
+  }
+}
+ 
+.Last <- function(){
+  if(interactive()){
+    hist_file <- Sys.getenv("R_HISTFILE")
+    if(hist_file=="") hist_file <- "~/.RHistory"
+    savehistory(hist_file)
+  }
+}
+ 
+if(Sys.getenv("TERM") == "xterm-256color")
+  library("colorout")
+ 
+sshhh <- function(a.package){
+  suppressWarnings(suppressPackageStartupMessages(
+    library(a.package, character.only=TRUE)))
+}
+ 
+auto.loads <-c("dplyr", "ggplot2")
+ 
+if(interactive()){
+  invisible(sapply(auto.loads, sshhh))
+}
+ 
+.env <- new.env()
+ 
+ 
+.env$unrowname <- function(x) {
+  rownames(x) <- NULL
+  x
+}
+ 
+.env$unfactor <- function(df){
+  id <- sapply(df, is.factor)
+  df[id] <- lapply(df[id], as.character)
+  df
+}
+ 
+attach(.env)
+ 
+message("\n*** Successfully loaded .Rprofile ***\n")
+#+END_EXAMPLE
+
+[Lines 1-3]: First, because I don't have a site-wide R configuration script, I set my local CRAN mirror here. My particular choice of mirror is largely arbitrary.
+
+[Line 5]: If stringsAsFactors hasn't bitten you yet, it will.
+
+[Line 9]: Setting 'scipen=10' effectively forces R to never use scientific notation to express very small or large numbers.
+
+[Line 13]: I included the snippet to turn off significance stars because it is a popular choice, but I have it commented out because ever since 1st grade I've used number of stars as a proxy for my worth as a person.
+
+[Line 15]: I don't have time for Tk to load; I'd prefer to use the console, if possible.
+
+[Lines 17-18]: Often, when working in the interactive console I forget a closing brace or paren. When I start a new line, R changes the prompt to "+" to indicate that it is expecting a continuation. Because "+" and ">" are the same width, though, I often don't notice and really screw things up. These two lines make the R REPL mimic the Python REPL by changing the continuation prompt to the wider "...".
+
+[Lines 22-24]: Change the default behavior of "q()" to quit immediately and not save workspace.
+
+[Line 26]: This snippet allows you to tab-complete package names for use in "library()" or "require()" calls. Credit for this one goes to @mikelove.
+
+[Lines 28-34]: There are three main reasons I like to have R save every command I run in the console into a history file.
+
+    Occasionally I come up with a clever way to solve a problem in an interactive session that I may want to remember for later use; instead of it getting lost in the ether, if I save it to a history file, I can look it up later.
+    Sometimes I need an alibi for what I was doing at a particular time
+    I ran a bunch of commands in the console to perform an analysis not realizing that I would have to repeat this analysis later. I can retrieve the commands from a history file and put it into a script where it belongs.
+
+These lines instruct R to, before anything else, echo a timestamp to the console and to my R history file. The timestamp greatly improves my ability to search through my history for relevant commands.
+
+[Lines 36-42]: These lines instruct R, right before exiting, to write all commands I used in that session to my R command history file. I usually have this set in an environment variable called "R_HISTFILE" on most of my systems, but in case I don't have this defined, I write it to a file in my home directory called .Rhistory.
+
+[Line 44]: Enables the colorized output from R (provided by the colorout package) on appropriate consoles.
+
+[Lines 47-50]: This defines a function that loads a libary into the namespace without any warning or startup messages clobbering my console.
+
+[Line 52]: I often want to autoload the 'dplyr' and 'ggplot2' packages (particularly 'dplyr' as it is now an integral part of my R experience).
+
+[Lines 54-56]: This loads the packages in my "auto.loads" vector if the R session is interactive.
+
+[Lines 58-59]: This creates a new hidden namespace that we can store some functions in. We need to do this in order for these functions to survive a call to "rm(list=ls())" which will remove everything in the current namespace. This is described wonderfully in this blog post.
+
+[Lines 61-64]: This defines a simple function to remove any row names a data.frame might have. This was stolen from Stephen Turner (which was in turn stolen from plyr).
+
+[Lines 66-70]: This defines a function to sanely undo a "factor()" call. This was stolen from Dason Kurkiewicz.
+
+
 **** using Aliases
 I hate to type the full words 'head', 'summary', 'names' every time, so I use aliases.
 
