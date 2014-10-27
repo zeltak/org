@@ -35861,7 +35861,6 @@ to enter filter mode press *F4*
  to clear current filter double press *ESC*
 
 *** view
-
 **** less
 
 *Less command
@@ -35876,7 +35875,6 @@ mark (?).
  less /home/zed/Homeloads/Zed.txt
  
  
-
 **** cat
 
 Cat command
@@ -35950,7 +35948,6 @@ instance:
 to scroll through the file a screen at a time.
 
 *** searching
-
 **** find
 
 ***** find tips
@@ -36764,9 +36761,7 @@ $ tar -zxvf prog-1-jan-2005.tar.gz -C /tmp
 $ cd /tmp
 $ ls - 
 *** list (ls)
-
 **** general
-
 example:
  ls -lSr
  -l detailed listing; -t will sort the results by file time; -S will
@@ -36779,9 +36774,13 @@ folder---and the parent folder---the ".." folder.
  ls -l | grep \^d
  you can put this in Alias file
  alias lsd="ls -l | grep \^d"
+**** output all files/dirs with full path to a txt file
 
+#+NAME: 
+     #+BEGIN_SRC sh
+ls -d -1 $PWD/**/* > /home/zeltak/Path.txt
+     #+END_SRC
 **** list just directories
-
 *The simplest way of list just directories*
  ls -d */
  You can list the directories start with letter b

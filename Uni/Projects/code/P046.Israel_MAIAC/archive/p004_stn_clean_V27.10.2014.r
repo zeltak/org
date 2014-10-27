@@ -217,7 +217,7 @@ closestaod <- nearestbyday(pm.m, aod.m,
 ########### join aqua to pm10
 closestaod.aq <- nearestbyday(pm.m, aod.m.aq, 
                               pm10, aqua [, list(day, aodid, aod)], 
-                              "stn", "aodid", "closestaod", "aod", knearest = 5, maxdistance = 1500)
+                              "stn", "aodid", "closestaod", "aod","UN","WV","QA", knearest = 5, maxdistance = 1500)
 # this has aod even when there is no pm; it gets dropped on the merge
 
 setnames(closestaod.aq,"aod","aod.aq")
@@ -356,32 +356,24 @@ saveRDS(J14,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN00
 ##################################
 
 #PM25
-PM25 <- fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/0.raw/PM/PMData25.csv")
+PM25 <- fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/0.raw/PM/PM25_D.csv")
 PM25$date<-paste(PM25$Day,PM25$Month,PM25$Year,sep="/")
 PM25[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
 PM25[, c := as.numeric(format(day, "%Y")) ]
-PM25[,c("Year","Month","Day","V10","date","X","StationID"):=NULL]
-setnames(PM25,"Y","stn")
+PM25[,c("Year","Month","Day","date"):=NULL]
+PM25 <- PM25[X != 'NaN']
 
-
-
-
-
-#add full X,Y values
-setkey(fullxy , stn)
-setkey(PM25, stn)
-PM25 <- merge(PM25, fullxy, all.x = T)
-PM25 <- PM25[x_stn_ITM != 'NA']
 PM25[,length(na.omit(PM25)),by=list(stn,c)]
 PM25[, PM25_miss := length(na.omit(PM25)),by=list(stn,c)]
 PM25<-PM25[!is.na(PM25)]
 PM25<-na.omit(PM25)
 PM25 <- PM25[PM25 > 0  , ]
-PM25 <- PM25[PM25 < 1200  , ]
+#PM25 <- PM25[PM25 < 1200  , ]
+setnames(PM25,"X","x_stn_ITM")
+setnames(PM25,"Y","y_stn_ITM")
 
-# PM25[, .N, by=c("stn")] 
-# x5 <- PM25[stn== "AGR"]
-# summary(x5)
+
+#PM25 <- PM25[c == 2012  , ]
 
 
 # import monitor data and spatial merge with nearestbyday()
@@ -402,7 +394,7 @@ closestaod <- nearestbyday(pm.m, aod.m,
 
 ########### join aqua to PM25
 closestaod.aq <- nearestbyday(pm.m, aod.m.aq, 
-                              PM25, aqua [, list(day, aodid, aod)], 
+                              PM25, aqua [, list(day, aodid,aod,UN,WV,QA,QA1,QA2,QA3,QA4,QA5,QA6,QA7,QA8,QA9,QA10,QA11,QA12,QA13,QA14,QA15)], 
                               "stn", "aodid", "closestaod", "aod", knearest = 5, maxdistance = 1500)
 # this has aod even when there is no pm; it gets dropped on the merge
 
@@ -421,6 +413,11 @@ setkey(closestaod.aq ,stn,day)
 PM25.m1 <- merge(PM25.m1 , closestaod.aq[,list(stn,day,aod.aq)] , all.x = T)
 
 
+setkey(PM25 ,stn,day)
+setkey(closestaod.aq ,stn,day)
+PM25.m1 <- merge(PM25 , closestaod.aq[,list(stn,day,aod,UN,WV,QA,QA1,QA2,QA3,QA4,QA5,QA6,QA7,QA8,QA9,QA10,QA11,QA12,QA13,QA14,QA15)] , all.x = T)
+
+
 
 
 #####################
@@ -431,8 +428,6 @@ mg <- data.table(expand.grid(stn = PM25.m1[,unique(stn)], day = days))
 
 
 ##### start merges
-
-
 setkey(PM25.m1, day,stn)
 setkey(mg, day,stn)
 J1 <- merge(mg,PM25.m1, all.x = T)
@@ -455,9 +450,9 @@ setkey(WS, day,stn)
 setkey(J5, day,stn)
 J5 <- merge(J5,WS[,list(day,stn,WS)], all.x = T)
 
-setkey(SO2, day,stn)
+setkey(Rain, day,stn)
 setkey(J5, day,stn)
-J5 <- merge(J5,SO2[,list(day,stn,SO2)], all.x = T)
+J5 <- merge(J5,Rain[,list(day,stn,Rain)], all.x = T)
 
 setkey(NO2, day,stn)
 setkey(J5, day,stn)
@@ -525,7 +520,7 @@ setkey(dust2, day, stn)
 J14 <- merge(J13, dust2, all.x = T)
 J14<-J14[is.na(Dust), Dust:= 0]
 
-saveRDS(J14,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25all.RDS")
+saveRDS(J14,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25_2012_TEST.RDS")
 
 
 
