@@ -7428,6 +7428,12 @@ use arrange
 df <- arrange(df, date, mh)
 #+end_src
 
+*** run multiple model with by 
+#+BEGIN_SRC R
+modelList <- dlply(pm25.m1.c[A_T==1], "stn", function(x) lm(m1.formula, data=x))
+lapply(modelList, function(x) summary(x)$r.squared)
+#+END_SRC
+
 
 ** closestbyday  (allan KNN function)
 *** k nearest
@@ -8293,7 +8299,7 @@ This will set different shapes and colors for the grouping varibles:
 #+BEGIN_SRC sh
 ggplot(heightweight, aes(x=ageYear, y=heightIn, shape=sex, colour=sex)) +
 geom_point() +
-scale_shape_manual(values=c(1,2)) +
+smcale_shape_manual(values=c(1,2)) +
 scale_colour_brewer(palette="Set1")
 #+END_SRC
 **** Adding Fitted Regression Model Lines
@@ -8729,6 +8735,15 @@ both
 and the output file in the ':tangle' part
 
 * dplyr
+** @warning-plyr will screw with dplyr results so be careful when loading both@
+in general you should load plyr first and then dplyr
+to be specific one can call dplyr specifacly with dplyr::COMMAND like:
+#+BEGIN_SRC R
+x<-pm25.m1.c %>%
+    group_by(stn) %>%
+    dplyr::summarise (avg_delay = mean(PM25, na.rm=TRUE))
+#+END_SRC
+
 ** glimpse (dplyr str alternative)
 #+BEGIN_SRC R
 # dplyr approach: better formatting, and adapts to your screen width
@@ -8884,6 +8899,15 @@ flights %>%
 select from DF 'flights'
 then group by summary variable 'Dest'
 then run the process creating a mean of 'ArrDelay' by 'Dest' into a variable called avg_delay
+
+aggregate XY by station
+#+BEGIN_SRC R
+#aggregate station xy
+stnxy<-pm25.m1.c %>%
+  group_by(stn) %>%
+  dplyr::summarise(x = mean(x_stn_ITM, na.rm=TRUE),y = mean(y_stn_ITM, na.rm=TRUE) )
+#+END_SRC
+
 *** summary by 2 grouped variables
 #+BEGIN_SRC R
 flights %>%

@@ -13,72 +13,84 @@ library(mgcv)
 library(gdata)
 library(car)
 library(dplyr)
+library(ggmap)
 
 
-pm10.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm10all.RDS")
-pm25.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.pm25all.RDS")
+######## import mod1
+pm10.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.PM10all_reg.RDS")
+pm25.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.PM25all_reg.RDS")
 
-pm25.m1<-pm25.m1[c==2012]
+#note terra is '0' and aqua is '1'
+
+
+###################
+#PM25
+#clean data based on Alexeis and our input
+####################
+##test one year
+#pm25.m1<-pm25.m1[c==2012]
+
+#remove missing
 pm25.m1<-pm25.m1[aod != 'NA']
 
-summary(lm(PM25~aod,data=pm25.m1[UN > 0 & UN < 0.04 & QA6== 0 & QA7==0 & QA8==0 ]))
+#delte based on uncertainty
+pm25.m1.c<-pm25.m1[UN > 0 & UN < 0.04  ]
+plot(pm25.m1.c$aod,pm25.m1.c$PM25)
 
+#delete based on adjacancy
+pm25.m1.c<-pm25.m1.c[QA6== 0 & QA7==0 & QA8==0  ]
 
-x<-  lme(PM25~ aod,random=(~1+aod|day),data=pm25.m1[UN > 0 & UN < 0.04 & QA6== 0 & QA7==0 & QA8==0 ])
-
-pm25.m1[UN > 0 & UN < 0.04 & QA6== 0 & QA7==0 & QA8==0 ]$predicted <- predict(x)
-summary(lm(PM25~predicted,data=pm25.m1[UN > 0 & UN < 0.04 & QA6== 0 & QA7==0 & QA8==0 ]))
-
-
-
-
-
-m1.formula <- as.formula(PM25~ aod,random=~1+aod|day)
+#delete based on cloudmask
+#pm25.m1.c<-pm25.m1[QA1== 0 & QA2==0 & QA3==1   ]
 
 
 
 #base model for stage 1
+m1.formula<-PM25~aod
+summary(lm(PM25~aod,data=pm25.m1.c[A_T==1]))
+summary(lm(PM25~aod,data=pm25.m1.c[A_T==1 & PM25 < 200 & aod < 1]))
+#run by station
+modelList <- dlply(pm25.m1.c[A_T==1], "stn", function(x) lm(m1.formula, data=x))
+r2map<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
+#aggregate station xy
+stnxy<-pm25.m1.c %>%
+  group_by(stn) %>%
+  dplyr::summarise(x = mean(x_stn_ITM, na.rm=TRUE),y = mean(y_stn_ITM, na.rm=TRUE) )
+stnxy$r2<-r2map
+write.csv(stnxy,"/home/zeltak/ZH_tmp/tst.csv")
 
-#lme
+out <- pm25.m1.c %>%
+  group_by(stn) %>%
+  do(function(df){summary(lm(m1.formula,data=df))})
 
-m1.formula <- as.formula(PM10 ~ aod+elev+tden+pden+dist2rail+dist2A1+dist2water+daytemp+dayRH+season+MeanPbl+(1+aod+daytemp|day)+(1|stn))
-
-m1.formula <- as.formula(PM10 ~ aod*c+elev+tden+pden+dist2rail+dist2A1+dist2water+daytemp+dayRH+season+MeanPbl+(1+aod+daytemp|day)+(1|stn))
+dput(pm25.m1.c,"/home/zeltak/ZH_tmp/obj")
 
 
+pm25.m1.c %>%
+group_by(stn) %>%
+do(ok=summary(lm(m1.formula, .)))                        
+
+
+
+#lme mixed model
+pm25.m1.c.aq<-pm25.m1.c[A_T==1]
+m1.formula <- as.formula(PM25~ aod+Dust+elev+tden+pden+dist2rail+dist2A1+dist2water+ndvi+season+MeanPbl+p_os+p_dev+p_dos+p_farm+p_for+p_ind+(1+aod|day/reg_num))
+m1.formula <-as.formula(PM25~ aod+(1+aod|day))
 #model
 #lme
-x<-  lme(PM10~ aod,data=mod1,      random=~1+aod|day)
-
-
-m1.formula <- as.formula(PM10~ aod)
-out.m1 = lm(m1.formula ,data =  mod1)
-mod1$predicted <- predict(out.m1)
-summary(lm(PM10~predicted,data=mod1))
-
-
-#model
-out.m1 = lmer(m1.formula ,data =  mod1)
-mod1$predicted <- predict(out.m1)
-summary(lm(PM10~predicted,data=mod1))
+x<-  lmer(m1.formula,data=pm25.m1.c.aq)
+pm25.m1.c.aq$predicted <- predict(x)
+summary(lm(PM25~predicted,data=pm25.m1.c.aq))
 
 
 
 
-mod1_2002 <- mod1[c == "2002"]
-mod1_2003 <- mod1[c == "2003"]
-mod1_2004 <- mod1[c == "2004"]
-mod1_2005 <- mod1[c == "2005"]
-mod1_2006 <- mod1[c == "2006"]
-mod1_2007 <- mod1[c == "2007"]
-mod1_2008 <- mod1[c == "2008"]
-mod1_2009 <- mod1[c == "2009"]
-mod1_2010 <- mod1[c == "2010"]
-mod1_2011 <- mod1[c == "2011"]
-mod1_2012 <- mod1[c == "2012"]
 
-#base model for stage 1
-m1.formula <- as.formula(PM10~ aod+ (1+aod|day))
+
+
+
+
+
 
 #mod1 per year
 
