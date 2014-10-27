@@ -21,16 +21,13 @@ pm25.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data
 pm25.m1<-pm25.m1[c==2012]
 pm25.m1<-pm25.m1[aod != 'NA']
 
-#cloud mask=0 bit1=0 bit=0 bit 3=0
 summary(lm(PM25~aod,data=pm25.m1[UN > 0 & UN < 0.04 & QA6== 0 & QA7==0 & QA8==0 ]))
 
-[UN > 0 & UN < 0.04 & QA6== 0 & QA7==0 & QA8==0 ]
 
+x<-  lme(PM25~ aod,random=(~1+aod|day),data=pm25.m1[UN > 0 & UN < 0.04 & QA6== 0 & QA7==0 & QA8==0 ])
 
-x<-  lme(PM25~ aod,data=pm25.m1[UN > 0 & UN < 0.04 & QA6== 0 & QA7==0 & QA8==0 ],      random=~1+aod|day)
-
-pm25.m1$predicted <- predict(x)
-summary(lm(PM25~predicted,data=pm25.m1))
+pm25.m1[UN > 0 & UN < 0.04 & QA6== 0 & QA7==0 & QA8==0 ]$predicted <- predict(x)
+summary(lm(PM25~predicted,data=pm25.m1[UN > 0 & UN < 0.04 & QA6== 0 & QA7==0 & QA8==0 ]))
 
 
 
