@@ -63,12 +63,14 @@ out <- pm25.m1.c %>%
   group_by(stn) %>%
   do(function(df){summary(lm(m1.formula,data=df))})
 
-dput(pm25.m1.c,"/home/zeltak/ZH_tmp/obj")
+#dput(pm25.m1.c,"/home/zeltak/ZH_tmp/obj")
 
-
-pm25.m1.c %>%
+x<-pm25.m1.c %>%
 group_by(stn) %>%
-do(ok=summary(lm(m1.formula, .)))                        
+do(xx=summary(lm(m1.formula, .)))                        
+
+
+
 
 
 
