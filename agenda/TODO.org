@@ -4,11 +4,6 @@
 #+STARTUP: overview  inlineimages eval: (org-columns)
 
 * @TODAY@
-** dl per file type wget
-The easiest way to download all pdf or mp3 files from given url:
-
-wget -r -A '*.pdf' url/path
-wget -r -A '*.mp3'url/path/dir/ 
 ** sync//backup project
 *** Uni IP's
 
@@ -70,11 +65,12 @@ user chrome/firefox built in sync mechanisms
 **** family photos 
 **** daily backups
 ***** rsync 
-****** rsync to push data from laptop to synology nas
+****** TODO rsync to push data from laptop to synology nas (use urs.sh)
 
        #+BEGIN_SRC sh
 rsync -aRPz --delete -e ssh /home/zeltak/dotfiles/  root@132.72.152.204:/volume1/rsync/    
        #+END_SRC
+
 ****** TODO rsync to push data from laptop to QNAP nas
        :PROPERTIES:
        :ID:       d4f672c5-6ced-4670-ae67-4e785f17ea79
@@ -82,6 +78,7 @@ rsync -aRPz --delete -e ssh /home/zeltak/dotfiles/  root@132.72.152.204:/volume1
 use this script created in ~bin:
 file:/home/zeltak/bin/lrs
 
+*** TODO CRON!!! talk to rasi
 ** cleanup bin and scripts
 ** find out how to create org table with manual breaks
 ** fix i3 tray and revise i3 config for laptop   

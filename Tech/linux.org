@@ -37335,6 +37335,12 @@ wget -m ftp://username:password@ip.of.old.host
 wget -m ftp://username:@ip.of.old.host
 #+END_SRC 
 
+***** dl per file type wget
+The easiest way to download all pdf or mp3 files from given url:
+
+wget -r -A '*.pdf' url/path
+wget -r -A '*.mp3'url/path/dir/
+
 ** scripts
 
 *** basics
