@@ -79,16 +79,63 @@ use this script created in ~bin:
 file:/home/zeltak/bin/lrs
 
 *** TODO CRON!!! talk to rasi
-** cleanup bin and scripts
 ** find out how to create org table with manual breaks
-** fix i3 tray and revise i3 config for laptop   
-** a way to auto exce a command on specific file save emacs
-for sxhkd issue the kill command when saved
-** jabref::
+** TODO a way to auto exce a command on specific file save emacs
+#+BEGIN_EXAMPLE
+well, it wouldn't be trivial. you'd need to add an after-save-hook that looks for the specific file and then do     │
+what you want then.                                                                                                 │
+but my tip jar is looking a bit sad right now                                                                       │
+hehe OK thx nicferrier                                                                                              │
+but that's what you'd do.                                                                                           │
+nicferrier: perhaps than a simple function to save and exe command that i can run manually?                         │
+no.                                                                                                                 │
+so id dosent need to be file aware                                                                                  │
+but you could make one of those easily                                                                              │
+save-buffer and shell-command-to-string look good.                                                                  │
+nicferrier: ok ill look them up thx!                                                                                │
+np!                                                                                                                 │
+zeltak_:  (add-hook 'after-save-hook (lambda () (when (string= "/tmp/your-file" (buffer-file-name                   │
+(current-buffer))) (shell-command "ls"))))                                                                          │
+pjb: cool ill try it now :)                                                                                         │
+zeltak_: but you should rather do what you want to do in emacs lisp.  This will have the advantage of working even  │
+on MS-Windows and in different unix environments.                                                                   │
+Instead of (shell-command "whatever") write (whatever) and (defun whatever () …) in elisp.                          │
+I'm with Bastien and see no need for namespaces in Emacs Lisp.                                                      │
+https://lists.gnu.org/archive/html/emacs-devel/2013-07/msg00801.html                                                │
+[http://is.gd/GEilTO]                                                                                               │
+pjb: perhaps a simpler method then. as save buffer, exit buffer (but not emacs) and run bash command. would you     │
+mind shwoing me the elisp code for that                                                                             │
+zeltak_: what does your bash command do?                                                                            │
+pjb: pkill -USR1 -x sxhkd                                                                                           │
+pjb: that was silly. I told zeltak_ most of what was needed. it was a learning opportunity.                         │
+instead of that you gave a lecture.                                                                                 │
+nicferrier: hehe i am learning this way                                                                             │
+:)                                                                                                                  │
+i learn best via examples                                                                                           │
+kensanata: The only reason I'd like to see namespaces is better compositability. I don't think that's in any of the │
+Lisp-based namespace thingies, so not really relevant. Having a de-facto standard for namespace separation vs. word │
+divider would be great, though.                                                                                     │
+Working in MS-Windows encourages users to use proprietary software.                                                 │
+i will read about the commands as well                                                                              │
+/mode -rms                                                                                                          │
+Ok, emacs cannot easily send a unix signal to another random process.  So shell-command will do in this case.       │
+lol.                                                                                                                │
+forcer: What do you mean by compositability?                                                                        │
+zeltak_: you should also consider that you often save files that are half edited.  So you may not really want to    │
+systematically have it processed after C-x C-s.                                                                     │
+It may be dangerous.                                                                                                │
+pjb: true. thats why maybe the 2nd option of manually executing the save&pkill would be safer                       │
+its an app that you need to send a user sig1 to refreash it every time toy edit a config which i find annoying :)   │
+If you don't want to get out of emacs to kill, you can write a emacs command to do it: (defun update-sxhkd ()       │
+(interactive) (shell-command "pkill …"))  So you can C-x C-s and when you want M-x update-sxhkd RET                 │
+pjb: thx that could work well, appriciate the help!                                                                 │
+
+#+END_EXAMPLE
+
+** jabref
 ** trip configs needed
 *** Worker
 ***** rest
-new ssh connector buttons
 configure dunst notification colors specifacly for worker commands including short timeout
 raid shortcuts
 rsync buttons
