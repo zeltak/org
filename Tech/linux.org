@@ -20292,23 +20292,25 @@ glo[[~/Dropbox/Org/Tech/linux_files/Image_TUpdtItFoqgN94VUTXbMHw_0001.png]]bally
 
 **** keefox
 ***** setup
-steps:
+$Note-under arch linux it may be better to install the RPC plug-in from AUR
 
+https://aur.archlinux.org/packages/keepass-plugin-rpc/
+
+steps:
 1)install Mono from repos (make sure its the full mono version)
 2) Download KeePass Password Safe 2.19 (or higher) Portable (ZIP
 Package) from the website below or try your distribution's package
 manager (make sure you get a new enough version though!)
 3)Copy the KeePassRPC.plgx file to a subdirectory called plugins in the
 directory that contains your KeePass installation
-on arch it should be here:
 
+%Tip- on arch the plgxfile that needs to be copied should be here:%
 file:/home/zeltak/.mozilla/firefox/44v2x4pe.default/extensions/keefox@chris.tomlinson/deps
-
 and copy to plugin dir:
-/usr/share/keepass
+
+file:/usr/share/keepass/plugins/
 5) Restart FirefoxT
-6)go to keefox options>keepass, and fill in the correct
-apps/plugin/mono paths
+6)go to keefox options>keepass, and fill in the correct apps/plugin/mono paths
 
 ***** keefox wont save FF authentication (authorise every time Firefox starts up )
 
@@ -21500,28 +21502,26 @@ the prefered viewer.
  Select option: "Delete active entry when no other is selected"
 
 **** file types
+***** How can I set up a double click command for a file type .xyz?
+Go to the file type configuration (Config  Filetypes) and create a new type by clicking on New type. In the new window enter the name of the file type and enter the pattern matching expression which matches your file type in the pattern tab.
 
-*How can I set up a double click command for a file type .xyz?
-*
- Go to the file type configuration (Config  Filetypes) and create a new
-type by clicking on New type.
- In the new window enter the name of the file type and enter the pattern
-matching expression which matches your file type in the pattern tab.
- Example: *.png
- Add the command Worker should execute when double clicking this file
-type.
- Select DoubleClick-Action from the actions list and click at Add
-Command.
- Choose the own command from the list of available commands and enter
-the program name in the corresponding text field.
- You need to add a flag in the command string so Worker can replace it
-with the filename you clicked. In most cases you want to use *{f}* so an
-example looks like this:
- xedit {f}
- Close all dialogs with Ok and you are done.
- A complete description of all available options can be found in the
-file type configuration documentation.
+#+BEGIN_EXAMPLE
+Example: *.png
+#+END_EXAMPLE
 
+Add the command Worker should execute when double clicking this file type.
+Select DoubleClick-Action from the actions list and click at Add Command.
+Choose the own command from the list of available commands and enter the program name in the corresponding text field.
+You need to add a flag in the command string so Worker can replace it with the filename you clicked. In most cases you want to use `{f}` so an example looks like this:
+
+#+BEGIN_EXAMPLE
+xedit {f}
+#+END_EXAMPLE
+
+Close all dialogs with Ok and you are done.
+$Note-make sure the other methods of file type discovery (like by content or libmagic etc) are all unchecked$
+***** make sure zipped files like odt,cbr are not opened by zip
+go into the zip file setting and uncheck file content or libmagic. make sure only by extension is checked.
 **** editing config file
 
 the buttons start and end like this
