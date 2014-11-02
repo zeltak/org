@@ -1,18 +1,52 @@
 #+TITLE: 
 #+OPTIONS: toc:nil 
 
-* Base
-** base commit
+* X
 
-|---------------------+----------------------------------------------+---------+-----------|
-| Command             | function                                     | comment | tag       |
-|---------------------+----------------------------------------------+---------+-----------|
-| git add -A          | add all changed files in current repo        |         | agenda,F1 |
-|                     |                                              |         | agenda,F1 |
-| S-<right> // <left> | org-timestamp-up/down for days               |         | agenda,F1 |
-| S- <up> // <down>   | change cursor time (based on where cursor is |         | agenda,F1 |
-| M-S-RET             | insert TODO                                  |         | agenda,F1 |
-|---------------------+----------------------------------------------+---------+-----------|
+|--------------------------+-------------------------+---------+-----|
+| Key                      | function                | comment | tag |
+|--------------------------+-------------------------+---------+-----|
+| Control+super+Alt+x      | kill app                |         |     |
+| Control+super+Alt+t      | enable/disable touchpad |         |     |
+| Control+super+Alt+s      | suspend                 |         |     |
+| alt+super+control+Return | Root Term               |         |     |
+| super+alt+return         | scratch_term            |         |     |
+| C-A-Del                  | lxtask                  |         |     |
+| super+F12                | layout english          |         |     |
+| C-S-A-l                  | layout hebrew           |         |     |
+
+* rofi related
+|----------------------+---------------+---------+------|
+| Key                  | function      | comment | tag  |
+|----------------------+---------------+---------+------|
+| Control+Shift+Insert | Rofi paste    |         | rofi |
+| Alt+w                | Rofi launcher |         | rofi |
+| Alt+q                | Rofi switch   |         | rofi |
+| super+i              | Rofi Help`    |         | rofi |
+| super+alt+insert     | Teiler        |         | rofi |
+|                      |               |         |      |
+
+* clerk
+
+|-------------------+----------------------------------------+---------+------------------|
+| Key               | function                               | comment | tag              |
+|-------------------+----------------------------------------+---------+------------------|
+| Print             | MPD next                               |         | mpd              |
+| Win+Print         | clerk                                  |         | mpd,clerk        |
+| Shift+Print       | show MPD Queue                         |         | mpd,clerk        |
+|-------------------+----------------------------------------+---------+------------------|
+| super + /         | rate track                             |         | mpd,clerk,rating |
+| alt+super+/       | rate at '4' track                      |         | mpd,clerk,rating |
+| control+super + / | rate album                             |         | mpd,clerk,rating |
+|-------------------+----------------------------------------+---------+------------------|
+| super+.           | add track (insert)                     |         | mpd,clerk,track  |
+| super+alt+.       | load rated tracks (above 4 rating)     |         | mpd,clerk,track  |
+|-------------------+----------------------------------------+---------+------------------|
+| super+,           | library browser                        |         | mpd,clerk,album  |
+| alt+super+,       | load random album                      |         | mpd,clerk,album  |
+| Control+super+,   | replace with album                     |         | mpd,clerk,album  |
+| Shift+super+,     | show and load recent albums in library |         | mpd,clerk,album  |
+|-------------------+----------------------------------------+---------+------------------|
 
 
 
