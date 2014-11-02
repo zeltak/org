@@ -22,7 +22,7 @@ library(gdata)
 allbestpredlist <- list()
 path.data<-"/media/NAS/Uni/Data/Israel/MAIAC_new_10_2014/output/"
 
-for(i in 2012:2012){
+for(i in 2002:2013){
   allbestpredlist[[paste0("year_", i)]] <- read.csv(paste0(path.data, "MAIACTrIsr_", i, ".csv"), header=T)
   print(i)
 } 
@@ -40,7 +40,7 @@ allbestpred[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
 #create aodid
 allbestpred$aodid<-paste(allbestpred$long_aod,allbestpred$lat_aod,sep="-")
 grid <- unique(allbestpred, by="aodid")
-grid<-grid[,c(5,6,28),with=FALSE]
+grid<-grid[,c(5,6,29),with=FALSE]
 grid[,long_aod:=as.numeric(long_aod)]
 grid[,lat_aod:=as.numeric(lat_aod)]
 
@@ -52,7 +52,7 @@ write.dbf(grid,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/F
 clipgrid<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/ILclipgrid.csv")
 
 clippedaod<- allbestpred[allbestpred$aodid %in% clipgrid$aodid, ] 
-clippedaod<-clippedaod[,c(5:25,27,28),with=FALSE]
+clippedaod<-clippedaod[,c(5:29),with=FALSE]
 keep(clippedaod,clipgrid, sure=TRUE) 
 gc()
 #### add ITM x,y
@@ -76,7 +76,7 @@ keep(path.data, sure=TRUE)
 allbestpredlist <- list()
 path.data<-"/media/NAS/Uni/Data/Israel/MAIAC_new_10_2014/output/"
 
-for(i in 2012:2012){
+for(i in 2002:2013){
   allbestpredlist[[paste0("year_", i)]] <- read.csv(paste0(path.data, "MAIACAqIsr_", i, ".csv"), header=T)
   print(i)
 } 
@@ -94,7 +94,7 @@ allbestpred[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
 #create aodid
 allbestpred$aodid<-paste(allbestpred$long_aod,allbestpred$lat_aod,sep="-")
 grid <- unique(allbestpred, by="aodid")
-grid<-grid[,c(5,6,28),with=FALSE]
+grid<-grid[,c(5,6,29),with=FALSE]
 grid[,long_aod:=as.numeric(long_aod)]
 grid[,lat_aod:=as.numeric(lat_aod)]
 
@@ -102,9 +102,9 @@ grid[,lat_aod:=as.numeric(lat_aod)]
 clipgrid<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/ILclipgrid.csv")
 
 clippedaod<- allbestpred[allbestpred$aodid %in% clipgrid$aodid, ] 
-clippedaod<-clippedaod[,c(5:25,27,28),with=FALSE]
-keep(clippedaod,clipgrid, sure=TRUE) 
-gc()
+clippedaod<-clippedaod[,c(5:29),with=FALSE]
+#keep(clippedaod,clipgrid, sure=TRUE) 
+#gc()
 #### add ITM x,y
 setkey(clippedaod, aodid)
 setkey(clipgrid, aodid)
