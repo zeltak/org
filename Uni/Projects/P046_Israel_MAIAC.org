@@ -914,7 +914,7 @@ We used the national land cover polygon layer from LAMAS ([[*info%20on%20data][i
 
 #+DOWNLOADED: file:///home/zeltak/ZH_tmp/snapshot3.png @ 2014-04-03 13:00:25
 #+attr_html: :width 300px
- [[/home/zeltak/org/attach/images_2014/snapshot3_2014-04-03_13:00:25.png]]
+[[/home/zeltak/org/attach/images_2014/snapshot3_2014-04-03_13:00:25.png]]
 
 resulting in:
 
@@ -931,12 +931,13 @@ $Note-the aodid field has to be text other wise there may be issues$
 #+attr_html: :width 300px
  [[/home/zeltak/org/attach/images_2014/snapshot2_2014-04-03_12:49:16.png]]
 
-this gave us the mean value in each aodid cell and was multiplied by 100 to get the % open using field calculator:
+this gave us the mean value in each aodid cell
+
+later when we import into R it was multiplied by 100 to get the % open using field calculator:
 #+BEGIN_EXAMPLE
 [MEAN] * 100
 #+END_EXAMPLE
 
-Finally the percent open was joined (by table) back to the 'FULL' 1x1 point layer by 'aodid'
 
 We repeat this process for each land cover variable we want to try (see next section)
 *** Other Land cover variables calculated

@@ -7079,6 +7079,55 @@ R function to use to construct CI:
  plot(x0,y0, ylim=c(0,10))
  segments(x0, y0, y1=c(2,4))
 
+** construct time sereis 
+
+#plot 2 y scales
+
+x=pm25.m1[c == 2004 & A_T==1 & stn == "ANT"]$day
+y1=pm25.m1[c == 2004 & A_T==1 & stn == "ANT"]$aod;summary(y1)
+y2=pm25.m1[c == 2004 & A_T==1 & stn == "ANT" ]$PM25;summary(y2)
+length(x)
+
+## add extra space to right margin of plot within frame
+par(mar=c(5, 4, 4, 6) + 0.1)
+## Plot first set of data and draw its axis
+plot(x, y1, pch=19, cex=1.3,axes=FALSE, ylim=c(0,1.1), xlab="", ylab="", 
+     type="p",col="black")
+axis(2, ylim=c(0,1.1),col="black",las=1)  ## las=1 makes horizontal labels
+mtext("aod",side=2,line=2.5)
+box()
+
+## Allow a second plot on the same graph
+par(new=TRUE)
+## Plot the second plot and put axis scale on right
+plot(x, y2, pch=1, cex=1, xlab="", ylab="", ylim=c(0,530), 
+     axes=FALSE, type="p", col="red")
+## a little farther out (line=4) to make room for labels
+mtext("PM",side=4,col="red",line=2) 
+axis(4, ylim=c(0,530), col="red",col.axis="red",las=1)
+
+## Draw the x axis
+ #plot PM time series
+  plot(data$day,data$PM10,type="p",axes=FALSE,xlab="",ylab="PM10 [microgram'm^3']")
+axis(2, ,col="black",las=1)  ## las=1 makes horizontal labels
+axis.Date(1, at = seq(x[1], x[9439], length.out=12),
+          labels = seq(x[1], x[9439], length.out=12),
+          format= "%m/%d/%Y", las = 2)
+ 
+#x axis label
+axis(1,xlim=c(1:12),col="black")
+mtext("Month",side=1,col="black",line=2.5) 
+
+
+## Add Legend
+legend("topleft",legend=c("PM2.5","DB550"),
+       text.col=c("black","red"),pch=c(16,15),col=c("black","red"))
+
+
+
+
+
+
 ** ggmap
 *** use google API key to generate a map
 #+begin_src R
@@ -7622,6 +7671,7 @@ df3[,foo:=NULL]
 #EXAMPLE FOR MULTIPLE COLUMNS
 # remove old regions
 m1_2003[, c("region", "reg") := NULL]
+xaqua.se<-aqua.se[, c(8:24) := NULL]
 
 
 # Method 2
@@ -7647,7 +7697,7 @@ m1<-m1[,c(6,44,5),with=FALSE]
 will keep in m1 rows 6,44,55
 **** select values to keep
 #+begin_src R
-mod1 <- mod1[!mon %in% c("SAG", "PER", "XAL"), ]
+d1 <- mod1[!mon %in% c("SAG", "PER", "XAL"), ]
 #+end_src
 **** select values to keep by matching in vector/dataset
 #+begin_src R

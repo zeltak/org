@@ -22,6 +22,12 @@ pm25.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data
 
 #note terra is '0' and aqua is '1'
 
+system.time(pm25.m1[, MaskCloud := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[1:3]), collapse = "")}))])
+system.time(pm25.m1[, MaskLandWaterSnow := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[4:5]), collapse = "")}))])
+system.time(pm25.m1[, MaskAdjacency := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[6:8]), collapse = "")}))])
+system.time(pm25.m1[, MaskGlint := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[13]), collapse = "")}))])
+system.time(pm25.m1[, AerosolModel := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[14:15]), collapse = "")}))])
+
 
 ###################
 #PM25
@@ -33,41 +39,169 @@ pm25.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data
 #remove missing
 pm25.m1<-pm25.m1[aod != 'NA']
 
-#delte based on uncertainty
-pm25.m1.c<-pm25.m1[UN > 0 & UN < 0.04  ]
-plot(pm25.m1.c$aod,pm25.m1.c$PM25)
-#delete based on adjacancy
-pm25.m1.c<-pm25.m1.c[QA6== 0 & QA7==0 & QA8==0  ]
 
-#delete based on cloudmask
-#pm25.m1.c<-pm25.m1[QA1== 0 & QA2==0 & QA3==1   ]
+#pm25.check.aod <-pm25.m1[aod > 1]
+#pm25.check.pm <-pm25.m1[PM25 > 100]
 
 
-#combined
-summary(lm(PM25~aod,data=pm25.m1[QA6== 0 & QA7==0 & QA8==0 & UN > 0 & UN < 0.04]))
+#clean run
+summary(lm(PM25~aod,data=pm25.m1)) #0.053
+#aqua
+summary(lm(PM25~aod,data=pm25.m1[A_T==1])) #0.066
+#terra
+summary(lm(PM25~aod,data=pm25.m1[A_T==0])) #0.04
+#check availability
+describe(pm25.m1[A_T==1]$aod)#53616 aod points in aqua
+describe(pm25.m1[A_T==0]$aod)#43271 aod points in terra
+
+
+#alexei cleaning
+#uncert
+#aqua
+summary(lm(PM25~aod,data=pm25.m1[A_T==1 & UN > 0 & UN < 0.04 ])) #0.076
+#terra
+summary(lm(PM25~aod,data=pm25.m1[A_T==0 & UN > 0 & UN < 0.04 ])) #0.042
+## check only mask
+summary(lm(PM25~aod,data=pm25.m1[A_T==1 & MaskAdjacency == "000" ])) #0.072
+#from now on look only on aqua
+summary(lm(PM25~aod,data=pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04 ])) #0.08
+
+#clearing "outlier" values
+#from now on look only on aqua
+summary(lm(PM25~aod,data=pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04 & PM25 < 200 ])) #0.08
+
+
+
+
+
+plot(pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04]$aod,pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04]$PM25)#,xlim=c(-0.1,0.1))
+
+#per year
+m1.formula<-PM25~aod
+modelList <- dlply(pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04 ], "c", function(x) lm(m1.formula, data=x))
+aquaPY<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
+aquaPY
 
 
 #per year
 m1.formula<-PM25~aod
-
-modelList <- dlply(pm25.m1[A_T==1& QA6== 0 & QA7==0 & QA8==0 & UN > 0 & UN < 0.04], "c", function(x) lm(m1.formula, data=x))
-aquaPY<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
-
-modelList <- dlply(pm25.m1[A_T==0& QA6== 0 & QA7==0 & QA8==0 & UN > 0 & UN < 0.04], "c", function(x) lm(m1.formula, data=x))
+modelList <- dlply(pm25.m1[A_T==0 & MaskAdjacency == "000" & UN > 0 & UN < 0.04], "c", function(x) lm(m1.formula, data=x))
 terraPY<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
+terraPY
+
 
 
 #per station
-modelList <- dlply(pm25.m1[A_T==1& QA6== 0 & QA7==0 & QA8==0 & UN > 0 & UN < 0.04], "stn", function(x) lm(m1.formula, data=x))
+modelList <- dlply(pm25.m1[c == 2004 & A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04], "stn", function(x) lm(m1.formula, data=x))
 aquaSTN<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
+aquaSTN
+
+
+#per station
+modelList <- dlply(pm25.m1[c == 2004 & A_T==0& & MaskAdjacency == "000" & UN > 0 & UN < 0.04], "stn", function(x) lm(m1.formula, data=x))
+terraSTN<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
+terraSTN
+
+#compare
+c<-cbind(aquaSTN,terraSTN)
 
 
 
-#summary(lm(PM25~aod,data=pm25.m1[QA6== 0 & QA7==0 & QA8==0 & UN > 0 & UN < 0.04 & stn != "ASK" & stn != "TMM"]))
+#per station
+modelList <- dlply(pm25.m1[c == 2005 & A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04], "stn", function(x) lm(m1.formula, data=x))
+aquaSTN<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
+aquaSTN
 
 
 
 
+##check days lag bomer etc 
+
+# and by year
+rawdf <- ddply(pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04], c("stn", "c"), 
+      function(x) {
+        mod1 <- lm(PM25 ~ aod, data=x)
+        data.frame(R2 = round(summary(mod1)$r.squared, 2), 
+                   nsamps = length(summary(mod1)$resid))
+})
+rawdf
+ggplot(rawdf, aes(c, R2, color = stn)) + geom_line() + 
+  geom_text(aes(label = paste(stn, nsamps)), size = 3.5) + theme_bw(13)
+
+#no. of obsv. vs R2
+rawdf$n<-as.numeric(rawdf$nsamps)
+x<-ggplot(rawdf, aes(n, R2)) + geom_point() + stat_smooth(method=lm)+theme_bw(13)
+x
+
+
+
+
+###EXAMINE BAD STATIONS
+
+#MAL
+x<-ggplot(pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "MAL" & PM25 < 200], aes(aod, PM25)) + geom_line() + stat_smooth(method=lm)+
+theme_bw(13)
+x+ annotate("text", label="STN == MAL", parse = TRUE, x=0.5, y=400) 
+ggsave(file="/home/zeltak/ZH_tmp/ggplot/MAL.png")
+summary(lm(PM25~aod,data=pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "MAL" ]))
+summary(lm(PM25~aod,data=pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "MAL" & PM25 < 200]))
+days<-pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "MAL" & PM25 > 80]
+
+
+#HOL
+x<-ggplot(pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "HOL" & PM25 < 40 ], aes(aod, PM25)) + geom_line() + stat_smooth(method=lm)+
+theme_bw(13)
+x+ annotate("text", label="STN == HOL", parse = TRUE, x=0.5, y=400) 
+ggsave(file="/home/zeltak/ZH_tmp/ggplot/HOL.png")
+summary(lm(PM25~aod,data=pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "HOL" ]))
+summary(lm(PM25~aod,data=pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "HOL" & PM25 < 40]))
+days<-pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "HOL" & PM25 > 80]
+
+#ANT
+x<-ggplot(pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "ANT"  ], aes(aod, PM25)) + geom_line()+ geom_point(aes(colour = "red"))    + stat_smooth(method=lm)+
+theme_bw(13)
+x+ annotate("text", label="STN == ANT", parse = TRUE, x=0.5, y=400) 
+ggsave(file="/home/zeltak/ZH_tmp/ggplot/ANT.png")
+summary(lm(PM25~aod,data=pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "ANT" ]))
+summary(lm(PM25~aod,data=pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "ANT" & PM25 < 40]))
+days<-pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "ANT" & PM25 > 80]
+
+#NSH
+x<-ggplot(pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "NSH"  ], aes(aod, PM25)) + geom_line()+ geom_point(aes(colour = "red"))    + stat_smooth(method=lm)+
+theme_bw(13)
+x+ annotate("text", label="STN == NSH", parse = TRUE, x=0.5, y=400) 
+ggsave(file="/home/zeltak/ZH_tmp/ggplot/NSH.png")
+summary(lm(PM25~aod,data=pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "NSH" ]))
+summary(lm(PM25~aod,data=pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "NSH" & PM25 < 40]))
+days<-pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "NSH" & PM25 > 80]
+
+#PTR
+x<-ggplot(pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "PTR"  ], aes(aod, PM25)) + geom_line()+ geom_point(aes(colour = "red"))    + stat_smooth(method=lm)+
+theme_bw(13)
+x+ annotate("text", label="STN == PTR", parse = TRUE, x=0.5, y=400) 
+ggsave(file="/home/zeltak/ZH_tmp/ggplot/PTR.png")
+summary(lm(PM25~aod,data=pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "PTR" ]))
+summary(lm(PM25~aod,data=pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "PTR" & PM25 < 40]))
+days<-pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "PTR" & PM25 > 80]
+
+
+#REM
+x<-ggplot(pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & stn == "REM"  ], aes(aod, PM25)) + geom_line()+ geom_point(aes(colour = "red"))    + stat_smooth(method=lm)+
+theme_bw(13)
+x+ annotate("text", label="STN == REM", parse = TRUE, x=0.5, y=400) 
+ggsave(file="/home/zeltak/ZH_tmp/ggplot/REM.png")
+summary(lm(PM25~aod,data=pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "REM" ]))
+summary(lm(PM25~aod,data=pm25.m1[c == 2004 & A_T==1 & MaskAdjacency == "000" & stn == "REM"]))
+days<-pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "REM" & PM25 > 80]
+
+#YLB
+x<-ggplot(pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & stn == "YLB"  ], aes(aod, PM25)) + geom_line()+ geom_point(aes(colour = "red"))    + stat_smooth(method=lm)+
+theme_bw(13)
+x+ annotate("text", label="STN == YLB", parse = TRUE, x=0.5, y=400) 
+ggsave(file="/home/zeltak/ZH_tmp/ggplot/YLB.png")
+summary(lm(PM25~aod,data=pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "YLB" ]))
+summary(lm(PM25~aod,data=pm25.m1[c == 2004 & A_T==1 & MaskAdjacency == "000" & stn == "YLB"]))
+days<-pm25.m1[c == 2004 & A_T==1& MaskAdjacency == "000" & UN > 0 & UN < 0.04 & stn == "YLB" & PM25 > 80]
 
 #base model for stage 1
 

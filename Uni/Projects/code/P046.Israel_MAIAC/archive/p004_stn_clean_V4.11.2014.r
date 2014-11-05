@@ -153,6 +153,43 @@ aqua<- aqua[ y_aod_ITM >= 500000]
 
 
 
+#####################################
+#####################################
+#TEST
+#####################################
+
+aodpm5k<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/aod_pm_5k.csv")
+aqua.se <- aqua[aqua$aodid %in% aodpm5k$aodid, ] 
+aqua.se<-aqua.se[, c(8:24) := NULL]
+
+
+setkey(aodpm5k,aodid)
+setkey(aqua.se,aodid)
+aqua.se <- merge(aqua.se,aodpm5k[,list(dist,aodid,stn)], all.x = T)
+
+setkey(PM25,day,stn)
+setkey(aqua.se,day,stn)
+m1.s1 <- merge(PM25,aqua.se,all.x = T)
+
+#to leave only THE 1 closest sat data point to station in each day
+setkey(m1.s1,stn,day,dist)
+#take first ocurance by day per STN (its sorted by dist so the shortest one)
+x<-m1.s1[unique(m1.s1[, list(stn, day)]), mult = "first"]
+
+#from now on look only on aqua
+summary(lm(PM25~aod,data=x[UN > 0 & UN < 0.04 ])) #0.08
+
+
+
+data mod1_2000_s2s; set mod1_2000_s2; by station date dist;
+if first.date;
+run;
+
+
+
+
+
+
 
 
 
@@ -173,12 +210,14 @@ PM10 <- PM10[X != 'NaN']
 PM10[,length(na.omit(PM10)),by=list(stn,c)]
 #pm10_m means avialble obs per year
 PM10[, PM10_n := length(na.omit(PM10)),by=list(stn,c)]
+#clear non PM10 days
 PM10<-PM10[!is.na(PM10)]
-PM10<-na.omit(PM10)
-PM10 <- PM10[PM10 > 0  , ]
-#PM10 <- PM10[PM10 < 1200  , ]
+#clear non continous stations
+PM10 <- PM10[PM10_n > 5  , ]
 setnames(PM10,"X","x_stn_ITM")
 setnames(PM10,"Y","y_stn_ITM")
+
+
 
 #########
 #terra
@@ -195,10 +234,17 @@ closestaod <- nearestbyday(pm.m, aod.m,
                            PM10, terra [, list(day, aodid, aod,UN,WV,QA)], 
                            "stn", "aodid", "closestaod", "aod", knearest = 5, maxdistance = 1500)
 
+########### 
+# meanaod <- nearestbyday(pm.m, aod.m, 
+#                            PM10, terra [, list(day, aodid, aod,UN,WV,QA)], 
+#                            "stn", "aodid", "closestaod", "aod", knearest = 9, maxdistance = 2200, nearestmean = T)
+
+
+
+
 setkey(PM10,stn,day)
 setkey(closestaod,stn,day)
 PM10.m1 <- merge(PM10, closestaod[,list(stn,day,aod,UN,WV,QA)], all.x = T)
-
   
 
 #####################
@@ -236,8 +282,6 @@ J5 <- merge(J5,Rain[,list(day,stn,Rain)], all.x = T)
 setkey(NO2, day,stn)
 setkey(J5, day,stn)
 J5 <- merge(J5,NO2[,list(day,stn,NO2)], all.x = T)
-
-
 
 #import stn keytable
 stnkey<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/ILstnXY_aodid.csv")
@@ -439,12 +483,14 @@ PM25[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
 PM25[, c := as.numeric(format(day, "%Y")) ]
 PM25[,c("Year","Month","Day","date"):=NULL]
 PM25 <- PM25[X != 'NaN']
+#num. of obsv per year per stn
 PM25[,length(na.omit(PM25)),by=list(stn,c)]
-PM25[, PM25_miss := length(na.omit(PM25)),by=list(stn,c)]
+#PM25_m means avialble obs per year
+PM25[, PM25_n := length(na.omit(PM25)),by=list(stn,c)]
+#clear non PM25 days
 PM25<-PM25[!is.na(PM25)]
-PM25<-na.omit(PM25)
-PM25 <- PM25[PM25 > 0  , ]
-#PM25 <- PM25[PM25 < 1200  , ]
+#clear non continous stations
+PM25 <- PM25[PM25_n > 5  , ]
 setnames(PM25,"X","x_stn_ITM")
 setnames(PM25,"Y","y_stn_ITM")
 
