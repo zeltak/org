@@ -36,7 +36,6 @@ pm25.m1<-pm25.m1[aod != 'NA']
 #delte based on uncertainty
 pm25.m1.c<-pm25.m1[UN > 0 & UN < 0.04  ]
 plot(pm25.m1.c$aod,pm25.m1.c$PM25)
-
 #delete based on adjacancy
 pm25.m1.c<-pm25.m1.c[QA6== 0 & QA7==0 & QA8==0  ]
 
@@ -44,11 +43,38 @@ pm25.m1.c<-pm25.m1.c[QA6== 0 & QA7==0 & QA8==0  ]
 #pm25.m1.c<-pm25.m1[QA1== 0 & QA2==0 & QA3==1   ]
 
 
+#combined
+summary(lm(PM25~aod,data=pm25.m1[QA6== 0 & QA7==0 & QA8==0 & UN > 0 & UN < 0.04]))
+
+
+#per year
+m1.formula<-PM25~aod
+
+modelList <- dlply(pm25.m1[A_T==1& QA6== 0 & QA7==0 & QA8==0 & UN > 0 & UN < 0.04], "c", function(x) lm(m1.formula, data=x))
+aquaPY<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
+
+modelList <- dlply(pm25.m1[A_T==0& QA6== 0 & QA7==0 & QA8==0 & UN > 0 & UN < 0.04], "c", function(x) lm(m1.formula, data=x))
+terraPY<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
+
+
+#per station
+modelList <- dlply(pm25.m1[A_T==1& QA6== 0 & QA7==0 & QA8==0 & UN > 0 & UN < 0.04], "stn", function(x) lm(m1.formula, data=x))
+aquaSTN<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
+
+
+
+#summary(lm(PM25~aod,data=pm25.m1[QA6== 0 & QA7==0 & QA8==0 & UN > 0 & UN < 0.04 & stn != "ASK" & stn != "TMM"]))
+
+
+
+
 
 #base model for stage 1
-m1.formula<-PM25~aod
+
+
 summary(lm(PM25~aod,data=pm25.m1.c[A_T==1]))
 summary(lm(PM25~aod,data=pm25.m1.c[A_T==1 & PM25 < 200 & aod < 1]))
+
 #run by station
 modelList <- dlply(pm25.m1.c[A_T==1], "stn", function(x) lm(m1.formula, data=x))
 r2map<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
@@ -59,6 +85,9 @@ stnxy<-pm25.m1.c %>%
 stnxy$r2<-r2map
 write.csv(stnxy,"/home/zeltak/ZH_tmp/tst.csv")
 
+
+
+
 out <- pm25.m1.c %>%
   group_by(stn) %>%
   do(function(df){summary(lm(m1.formula,data=df))})
@@ -68,9 +97,6 @@ out <- pm25.m1.c %>%
 x<-pm25.m1.c %>%
 group_by(stn) %>%
 do(xx=summary(lm(m1.formula, .)))                        
-
-
-
 
 
 

@@ -187,12 +187,14 @@ pm.m <- makepointsmatrix(PM10, "x_stn_ITM", "y_stn_ITM", "stn")
 aod.m <- makepointsmatrix(terra[terra[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
 ########### join Terra to PM10
 closestaod <- nearestbyday(pm.m, aod.m, 
-                           PM10, terra [, list(day, aodid, aod,UN,WV,QA,QA1,QA2,QA3,QA4,QA5,QA6,QA7,QA8,QA9,QA10,QA11,QA12,QA13,QA14,QA15,A_T)], 
+                           PM10, terra [, list(day, aodid, aod,UN,WV,QA,QA0,QA1,QA2,QA3,QA4,QA5,QA6,QA7,QA8,QA9,QA10,QA11,QA12,QA13,QA14,QA15)], 
                            "stn", "aodid", "closestaod", "aod", knearest = 5, maxdistance = 1500)
 
 setkey(PM10,stn,day)
 setkey(closestaod,stn,day)
-PM10.m1 <- merge(PM10, closestaod[,list(stn,day,aod,UN,WV,QA,QA1,QA2,QA3,QA4,QA5,QA6,QA7,QA8,QA9,QA10,QA11,QA12,QA13,QA14,QA15,A_T)], all.x = T)
+PM10.m1 <- merge(PM10, closestaod[,list(stn,day,aod,UN,WV,QA,QA0,QA1,QA2,QA3,QA4,QA5,QA6,QA7,QA8,QA9,QA10,QA11,QA12,QA13,QA14,QA15)], all.x = T)
+
+  
 
 #####################
 #to create a date range based on start and end points use
@@ -286,7 +288,10 @@ setkey(J14 , aodid)
 setkey(reg, aodid)
 jreg10 <- merge(J14, reg, all.x = T)
 PM10.terra<-jreg10
-PM10.terra$A_T<-0
+PM10.terra$A_T<-1
+
+
+
 
 #########
 #aqua
@@ -300,12 +305,14 @@ pm.m <- makepointsmatrix(PM10, "x_stn_ITM", "y_stn_ITM", "stn")
 aod.m <- makepointsmatrix(aqua[aqua[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
 ########### join Terra to PM10
 closestaod <- nearestbyday(pm.m, aod.m, 
-                           PM10, aqua [, list(day, aodid, aod,UN,WV,QA,QA1,QA2,QA3,QA4,QA5,QA6,QA7,QA8,QA9,QA10,QA11,QA12,QA13,QA14,QA15,A_T)], 
+                           PM10, aqua [, list(day, aodid, aod,UN,WV,QA,QA0,QA1,QA2,QA3,QA4,QA5,QA6,QA7,QA8,QA9,QA10,QA11,QA12,QA13,QA14,QA15)], 
                            "stn", "aodid", "closestaod", "aod", knearest = 5, maxdistance = 1500)
 
 setkey(PM10,stn,day)
 setkey(closestaod,stn,day)
-PM10.m1 <- merge(PM10, closestaod[,list(stn,day,aod,UN,WV,QA,QA1,QA2,QA3,QA4,QA5,QA6,QA7,QA8,QA9,QA10,QA11,QA12,QA13,QA14,QA15,A_T)], all.x = T)
+PM10.m1 <- merge(PM10, closestaod[,list(stn,day,aod,UN,WV,QA,QA0,QA1,QA2,QA3,QA4,QA5,QA6,QA7,QA8,QA9,QA10,QA11,QA12,QA13,QA14,QA15)], all.x = T)
+
+
 
 #####################
 #to create a date range based on start and end points use
@@ -399,11 +406,20 @@ setkey(J14 , aodid)
 setkey(reg, aodid)
 jreg10 <- merge(J14, reg, all.x = T)
 PM10.aqua<-jreg10
-PM10.aqua$A_T<-1
+PM10.aqua$A_T<-0
+
 
 ##SAVE
 PM10.AT<-rbindlist(list(PM10.aqua,PM10.terra))
 saveRDS(PM10.AT,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.PM10all_reg.RDS")
+
+
+
+
+
+
+
+
 
 
 
@@ -439,12 +455,12 @@ pm.m <- makepointsmatrix(PM25, "x_stn_ITM", "y_stn_ITM", "stn")
 aod.m <- makepointsmatrix(terra[terra[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
 ########### join Terra to PM25
 closestaod <- nearestbyday(pm.m, aod.m, 
-                           PM25, terra [, list(day, aodid, aod,UN,WV,QA,QA1,QA2,QA3,QA4,QA5,QA6,QA7,QA8,QA9,QA10,QA11,QA12,QA13,QA14,QA15,A_T)], 
+                           PM25, terra [, list(day, aodid, aod,UN,WV,QA,QA0,QA1,QA2,QA3,QA4,QA5,QA6,QA7,QA8,QA9,QA10,QA11,QA12,QA13,QA14,QA15)], 
                            "stn", "aodid", "closestaod", "aod", knearest = 5, maxdistance = 1500)
 
 setkey(PM25,stn,day)
 setkey(closestaod,stn,day)
-PM25.m1 <- merge(PM25, closestaod[,list(stn,day,aod,UN,WV,QA,QA1,QA2,QA3,QA4,QA5,QA6,QA7,QA8,QA9,QA10,QA11,QA12,QA13,QA14,QA15,A_T)], all.x = T)
+PM25.m1 <- merge(PM25, closestaod[,list(stn,day,aod,UN,WV,QA,QA0,QA1,QA2,QA3,QA4,QA5,QA6,QA7,QA8,QA9,QA10,QA11,QA12,QA13,QA14,QA15)], all.x = T)
 
 #####################
 #to create a date range based on start and end points use
@@ -552,12 +568,12 @@ pm.m <- makepointsmatrix(PM25, "x_stn_ITM", "y_stn_ITM", "stn")
 aod.m <- makepointsmatrix(aqua[aqua[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
 ########### join Terra to PM25
 closestaod <- nearestbyday(pm.m, aod.m, 
-                           PM25, aqua [, list(day, aodid, aod,UN,WV,QA,QA1,QA2,QA3,QA4,QA5,QA6,QA7,QA8,QA9,QA10,QA11,QA12,QA13,QA14,QA15,A_T)], 
+                           PM25, aqua [, list(day, aodid, aod,UN,WV,QA,QA0,QA1,QA2,QA3,QA4,QA5,QA6,QA7,QA8,QA9,QA10,QA11,QA12,QA13,QA14,QA15)], 
                            "stn", "aodid", "closestaod", "aod", knearest = 5, maxdistance = 1500)
 
 setkey(PM25,stn,day)
 setkey(closestaod,stn,day)
-PM25.m1 <- merge(PM25, closestaod[,list(stn,day,aod,UN,WV,QA,QA1,QA2,QA3,QA4,QA5,QA6,QA7,QA8,QA9,QA10,QA11,QA12,QA13,QA14,QA15,A_T)], all.x = T)
+PM25.m1 <- merge(PM25, closestaod[,list(stn,day,aod,UN,WV,QA,QA0,QA1,QA2,QA3,QA4,QA5,QA6,QA7,QA8,QA9,QA10,QA11,QA12,QA13,QA14,QA15)], all.x = T)
 
 #####################
 #to create a date range based on start and end points use
