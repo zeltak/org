@@ -54,8 +54,16 @@ summary(lm(PM25~aod,data=pm25.m1[A_T==0])) #0.04
 describe(pm25.m1[A_T==1]$aod)#53616 aod points in aqua
 describe(pm25.m1[A_T==0]$aod)#43271 aod points in terra
 
+##adjusted aod
+pm25.m1$aodp<-pm25.m1$aod/pm25.m1$MeanPbl
+summary(lm(PM25~aodp,data=pm25.m1[A_T==1 & UN > 0 & UN < 0.04 ])) #0.083
+#logPM
+#pm25.m1$PM25l<-log(pm25.m1$PM25)
+#pm25.m1$aodl<-log(pm25.m1$aod)
 
-#alexei cleaning
+
+
+##alexei cleaning
 #uncert
 #aqua
 summary(lm(PM25~aod,data=pm25.m1[A_T==1 & UN > 0 & UN < 0.04 ])) #0.076
@@ -64,7 +72,7 @@ summary(lm(PM25~aod,data=pm25.m1[A_T==0 & UN > 0 & UN < 0.04 ])) #0.042
 ## check only mask
 summary(lm(PM25~aod,data=pm25.m1[A_T==1 & MaskAdjacency == "000" ])) #0.072
 #from now on look only on aqua
-summary(lm(PM25~aod,data=pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04 ])) #0.08
+summary(lm(PM25~aod,data=pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04   ])) #0.08
 
 #clearing "outlier" values
 #from now on look only on aqua
@@ -114,6 +122,10 @@ aquaSTN
 
 
 
+#per station overall
+modelList <- dlply(pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04], "stn", function(x) lm(m1.formula, data=x))
+aquaSTN<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
+aquaSTN
 
 ##check days lag bomer etc 
 
@@ -125,13 +137,12 @@ rawdf <- ddply(pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04], c(
                    nsamps = length(summary(mod1)$resid))
 })
 rawdf
-ggplot(rawdf, aes(c, R2, color = stn)) + geom_line() + 
-  geom_text(aes(label = paste(stn, nsamps)), size = 3.5) + theme_bw(13)
 
-#no. of obsv. vs R2
-rawdf$n<-as.numeric(rawdf$nsamps)
-x<-ggplot(rawdf, aes(n, R2)) + geom_point() + stat_smooth(method=lm)+theme_bw(13)
-x
+rawdf<-as.data.table(rawdf)
+rawdf2 <- rawdf[!stn %in% c("ANT","NSH","IRD","TMM","BIN"), ]
+ggplot(rawdf2, aes(c, R2, color = stn)) + geom_line() + geom_text(aes(label = paste(stn, nsamps)), size = 3.5) + theme_bw(13)
+ggsave(file="/home/zeltak/ZH_tmp/ggplot/stn_per_year_R2.png")
+
 
 
 
