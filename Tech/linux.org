@@ -41155,126 +41155,128 @@ pdbedit -a -u <user>
     :END:
 **** intro
 Intro
- *Client:* the system one types directly on, such as a laptop or desktop
-system (where your connecting*from*!)
+ Client: the system one types directly on, such as a laptop or desktop
+system (where your connectingfrom!)
  
- *Server:***anything connected to from the client. (where you are
-connecting *to*!)
+ Server:anything connected to from the client. (where you are
+connecting to!)
  This includes other servers accessed through the first server connected
 to.
- Warning: Never allow root-to-root trust between systems*
+ Warning: Never allow root-to-root trust between systems
  [[~/Dropbox/Org/Tech/linux_files/Image_aFKXI.png]]
-*
- The name*public key* comes from the fact that you can make the
+
+ The namepublic key comes from the fact that you can make the
 encryption key public without compromising the secrecy of the data or
 the decryption key.
- What this means is that it is safe to send your***public ke*y (i.e. the
+ What this means is that it is safe to send yourpublic key (i.e. the
 contents of the ~/.ssh/id rsa.pub file) in electronic mail or by having
 a system administrator of a remote site install that key into your
 ~/.ssh/authorized keys file.
- To actually gain access they need the corresponding*private key* (i.e.
+ To actually gain access they need the correspondingprivate key (i.e.
 the decrypted contents of ~/.ssh/id rsa) to identify themselves.
- To further protect your *private key* you should enter a passphrase to
+ To further protect your private key you should enter a passphrase to
 encrypt the key when it is stored in the filesystem. This will prevent
 people from using it even if they gain access to your files.To connect
 remotly you will need to open port 22 in the internet gateway (the
 router usually)
- The *public portion (id rsa.pub by default)* of this key pair will
-reside on the *servers* being connected to,
- the *private portion* *(id rsa by default)* needs to remain on a
-secure local area of the *client* system*
-*
-
+ The public portion (id rsa.pub by default) of this key pair will
+reside on the servers being connected to,
+ the private portion (id rsa by default) needs to remain on a
+secure local area of the client system
 **** create and distribute a new key
-***** 1.Create new ssh keys
+***** 1.Create new ssh keys  
 
-The *public portion (id rsa.pub by default)* of this key pair will
-reside on the *servers* being connected to,
- the *private portion* *(id rsa by default)* needs to remain on a
-secure local area of the *client* system*
- on the client:*
- to generate an SSH key issue:
+The `public` portion (`id rsa.pub` by default) of this key pair will reside on the server being connected to,
 
+the `private` portion (`id rsa by` default) needs to remain on a secure local area of the client system
+
+on the client:
+
+to generate an SSH key issue:
+
+#+BEGIN_SRC sh
 ssh-keygen -b 4096 -q
+#+END_SRC
 
- where: -b 4096 creates a high-security 4096-bit key, -q keeps the
-messages quiet
- Press enter twice for each of the password prompts so the key isn't
-encrypted with a password, and your screen should look like this:
+where: -b 4096 creates a high-security 4096-bit key, -q keeps the messages quiet
+Press enter twice for each of the password prompts so the key isn't encrypted with a password, and your screen should look like this:
 
+#+BEGIN_EXAMPLE
 user@server1 [~]# ssh-keygen -b 4096 -q
- Enter file in which to save the key (/home/user/.ssh/id rsa):
- Enter passphrase (empty for no passphrase):
- Enter same passphrase again:
- user@server1 [~]#
+Enter file in which to save the key (/home/user/.ssh/id rsa):
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+user@server1 [~]#
+#+END_EXAMPLE
 
- We now have an *unencrypted private SSH key*, and a *public key*.
- *Notes:
-*
- 1.you can give the key a different name then the default (id rsa). if
-doing so see [[#dcc8DgR3jlQwysBDrhAyyA][login with different private
-key]] for how to connect with a non default name
- 2.The file permissions should be locked down to prevent other users
-from being able to read the key pair data. OpenSSH may also refuse to
-support public key authentication if the file permissions are too open:
- client$
+We now have an unencrypted private SSH key, and a public key.
 
+Notes:
+
+1.you can give the key a different name then the default (id rsa). if doing so see [[#dcc8DgR3jlQwysBDrhAyyA][login with different private key]] for how to connect with a non default name
+
+2.The file permissions should be locked down to prevent other users from being able to read the key pair data. OpenSSH may also refuse to support public key authentication if the file permissions are too open:
+
+#+BEGIN_SRC sh
 chmod 700 ~/.ssh
-
- client$
-
-chmod go-rwx ~/.ssh/*
+#+END_SRC
 
 ***** 2.Copying your SSH key to servers
 
-*Copying your SSH key to servers*
- Now, we upload your *public key* to a *server*so that you can
-authenticate using your ssh key.
- Run this from your *client computer*(-i specifies the path to your
-public ssh key):
+Now, we upload your public key to a server so that you can authenticate using your ssh key.
 
-ssh-copy-id -i /home/USER/.ssh/id rsa.pub user@server2
+this is done by pushing the id_rsa.pub to a authorized_keys keys file on the server your trying to connect to
 
- for example:
+Run this from your client computer(-i specifies the path to your public ssh key):
 
-ssh-copy-id -i /home/zeltak/.ssh/id rsa.pub zeltak@192.168.0.2
+#+BEGIN_SRC sh
+ssh-copy-id -i /home/USER/.ssh/id_rsa.pub user@server2
+#for example:
+ssh-copy-id -i /home/zeltak/.ssh/id_rsa.pub zeltak@192.168.0.2
+#you can try
+cat ~/.ssh/id_rsa.pub | ssh user@machine "mkdir ~/.ssh; cat >> ~/.ssh/authorized_keys"
+#+END_SRC
 
- This ssh-copy command will copy your public key to the remote server,
-and *automatically add it to the authorized keys file.*
- It will automatically create the file and needed permissions, if this
-hasn't been done previously.
- Now try logging into the machine, with "ssh '*user*@*server*'", and
-check in:
+This ssh-copy command will copy your public key to the remote server, and automatically add it to the authorized keys file. It will automatically create the file and needed permissions, if this hasn't been done previously.
+
+Now try logging into the machine, with "ssh user@server", and check in:
  
- /home/USER/.ssh/authorized keys
+file:/home/USER/.ssh/authorized_keys
  
- to see if the file exists and if already there previously to make sure
-we haven't added extra keys that you weren't expecting.
- Unless you're using your SSH key to allow cronjobs/rsync to execute on
-remote servers, you should have all of your ssh keys encrypted with a
-password.
+to see if the file exists and if already there previously to make sure we haven't added extra keys that you weren't expecting. Unless you're using your SSH key to allow cronjobs/rsync to execute on remote servers, you should have all of your ssh keys encrypted with a password.
 
 ***** 3.configure sshd on the server
 
-*on the SERVER To make sure only keys can connect and NOT Passwords
-*
- on the server edit the sshd config (MAKE SURE ITS THE SSHD NOT SSH)
+on the server make sure only keys can connect and NOT Passwords
 
- sudo vim /etc/ssh/sshd config
+on the server edit the sshd config (!MAKE SURE ITS THE SSHD NOT SSH!)
 
- 1)we are going to check this line:
- ** If they aren't there, create them. Also make sure they're not
-commented out
- PasswordAuthentication no
- #PermitEmptyPasswords no
- 2) make sure that "PermitRootLogin" is set to no as well as it's a
-security risk.
- PermitRootLogin no
- 3)Restart the SSH on the *Server:*
+#+BEGIN_SRC sh
+sudo vim /etc/ssh/sshd config
+#+END_SRC
 
- systemctl start sshd.socket
+1)we are going to check this line:
+if they arent there, create them. Also make sure they're not commented out
 
- This time you should be greeted with "Enter passphrase for key...".
+#+BEGIN_EXAMPLE
+PasswordAuthentication no
+#PermitEmptyPasswords no
+#+END_EXAMPLE
+
+2) make sure that "PermitRootLogin" is set to no as well as it's a security risk.
+
+#+BEGIN_EXAMPLE
+PermitRootLogin no
+#+END_EXAMPLE
+
+3)Restart the SSH on the Server:
+
+
+#+BEGIN_SRC sh
+systemctl start sshd.socket
+#+END_SRC
+
+This time you should be greeted with "Enter passphrase for key...".
  
 **** ssh and systemd
 
