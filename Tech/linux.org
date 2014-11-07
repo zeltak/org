@@ -37,7 +37,7 @@ dd bs=4M if=/path/to/archlinux.iso of=/dev/sdx
 -boot from install cd (make sure to choose x86 for an x86 install)
 
 **** 2.prepare drives and system
-***** create drives:
+***** create drives
 
 %Tip it may be easier if you have issues/erorrs to use fdisk/gparted to create the partitions. you can also use a livecd tool to do it with gparted%
 
@@ -2744,8 +2744,6 @@ cd build/
 make
 make install
 #+END_SRC
-
-
 *** install ZSH
 For Debian based distros:
 
