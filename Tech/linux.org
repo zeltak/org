@@ -1,7 +1,6 @@
 #+Title: Linux
 #+TAGS: Fav(f) Most_used(m) cbugs(c)
 
-
 * distros/WM
 ** arch
 *** Fresh Sys Install
@@ -4504,8 +4503,6 @@ then copy paste to your config. it will look like this:
 set $w1  (1)
 set $w2 (2)
 #+END_EXAMPLE
-
-
 
 ** xfce
 *** how to get desktop icons on xubuntu
@@ -26415,6 +26412,19 @@ emacsclient -c -e '(x-change-window-property "WM_CLASS" "Client_NAME_NEEDED" nil
 
 $Note-you only need to change the Client_NAME_NEEDED part$:
 
+******* Ess
+******** connect to a remote R process
+ESS works with processes on remote computers as easily as with processes on the local machine. The recommended way to access a statistical program on remote computer is to start it with tramp. Require tramp in your .emacs file:
+(require 'tramp)
+%note- not needed with emacs 24 onwards%
+
+Now start an ssh session with
+
+?C-x f? /ssh:user@host: RET
+
+Tramp should open a dired buffer in your remote home directory. Now call your favorite ESS process (R, Julia, stata etc) as you would usually do on local machine: M-x R.
+
+Alternatively you can start your process normally (M-x R). After you are asked for starting directory, simply type ‘/ssh:user@host: RET’. R process will be started on the remote machine.
 ******* gnus
 ******** terms
 article-one information piece-email,article etc terms
@@ -39932,6 +39942,19 @@ stash apply
 
 you may get a merge commit which is normal          
 use git diff to see the changes of the stuff you are going to commit
+
+***** remote: error: GH001: Large files detected.
+use the following:
+cd into the git dir
+then issue the following command
+
+#+BEGIN_SRC sh
+git filter-branch -f --index-filter 'git rm --cached --ignore-unmatch LAPTOP/.mpd/log'
+#+END_SRC
+
+where-the LAPTOP/.mpd/log part is from the git error message telling you which file is to big and casuing issues
+
+then add, commit ,push and pull to fix the repo
 
 ***** 'Force overwrite of local file with whats it origin repo'
 If you want to overwrite only one file:

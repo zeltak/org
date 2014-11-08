@@ -881,3 +881,43 @@ You should see the message: “Package com.amazon.dcp new state: disabled”
 (If you instead see the word “Killed”, it means you have not gained super user (su) and need to go back and repeat step 3.)
 Then type: exit and hit enter
 Lastly, type: exit and hit enter again
+*** Install XBMC to the Fire TV
+
+Note: If your APK file name contains spaces, make sure you put quotes around it in the adb commands. On OS X and Linux, you may need to prepend ./ to the adb commands.
+
+    On your host (PC or other Android device), download your desired XBMC APK
+    Open a Command Prompt (Windows), Terminal (OS X/Linux), or Terminal Emulator app (Android)
+    Navigate (CD) to the directory with your XBMC APK (In Terminal Emulator on Android you only need to run the adb commands)
+    Run the following commands
+
+#+BEGIN_SRC sh
+  adb kill-server 
+  adb start-server 
+  adb connect <ip-address-of-fire-tv>
+#ie:
+adb connect 10.0.0.102
+#+END_SRC
+
+ADB is connected when it reports the message "connected to <ip-address-of-fire-tv>:<port>"
+Run the following command
+
+#+BEGIN_SRC sh
+adb install <apk-file-name> 
+#+END_SRC
+
+Installation is complete when it reports the message "success" 
+
+(Note: For Android you need to type in the full path. e.g. >adb install /sdcard/Download/apk-file-name.apk)
+*** updgarde xbmc on fire tv
+XBMC can be upgraded through ADB without losing your settings. To do this, you must use a newer version of the package already installed on the machine.
+Download the package to your machine
+Make sure ADB is connected to the Fire TV then install with the -r option to upgrade
+
+#+BEGIN_SRC sh
+adb connect 10.0.0.102
+adb install -r <apk-file-name>
+#+END_SRC
+
+Installation is complete when it reports the message "Success" 
+
+XBMC will still go through the "first run" screen the first time it is launched but your settings will remain intact.
