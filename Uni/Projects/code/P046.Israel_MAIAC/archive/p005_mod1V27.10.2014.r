@@ -28,6 +28,10 @@ system.time(pm25.m1[, MaskAdjacency := as.factor(sapply(QA, function(x){paste(re
 system.time(pm25.m1[, MaskGlint := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[13]), collapse = "")}))])
 system.time(pm25.m1[, AerosolModel := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[14:15]), collapse = "")}))])
 
+#new seasons
+#1-cloudy,#2-noncloud
+pm25.m1$cloudIL<-recode(pm25.m1$m,"1=1;2=1;3=2;4=2;5=2;6=2;7=2;8=2;9=2;10=2;11=1;12=1")
+
 
 ###################
 #PM25
@@ -57,6 +61,11 @@ describe(pm25.m1[A_T==0]$aod)#43271 aod points in terra
 ##adjusted aod
 pm25.m1$aodp<-pm25.m1$aod/pm25.m1$MeanPbl
 summary(lm(PM25~aodp,data=pm25.m1[A_T==1 & UN > 0 & UN < 0.04 ])) #0.083
+###GAMM NOT WORKING
+summary(gam(PM25~aod+s(MeanPbl),data=pm25.m1[A_T==1 & UN > 0 & UN < 0.04 ]))
+
+
+
 #logPM
 #pm25.m1$PM25l<-log(pm25.m1$PM25)
 #pm25.m1$aodl<-log(pm25.m1$aod)
@@ -91,6 +100,25 @@ modelList <- dlply(pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04 
 aquaPY<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
 aquaPY
 
+#per year per season
+m1.formula<-PM25~aod
+modelList <- dlply(pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04 ], c("c","season"), function(x) lm(m1.formula, data=x))
+aquaPY<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
+aquaPY
+#1-winter, 2-spring,3-summer,4-autum
+
+
+
+#1-winter, 2-summer
+m1.formula<-PM25~aod
+modelList <- dlply(pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04 ], c("c","cloudIL"), function(x) lm(m1.formula, data=x))
+aquaPY<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
+aquaPY
+#1-winter, 2-spring,3-summer,4-autum
+
+
+
+
 
 #per year
 m1.formula<-PM25~aod
@@ -101,15 +129,23 @@ terraPY
 
 
 #per station
-modelList <- dlply(pm25.m1[c == 2004 & A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04], "stn", function(x) lm(m1.formula, data=x))
+modelList <- dlply(pm25.m1[c == 2004 & A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04], c("stn","season"), function(x) lm(m1.formula, data=x))
 aquaSTN<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
 aquaSTN
 
+#which are the bad stations?
+modelList <- dlply(pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04], c("c","stn","season"), function(x) lm(m1.formula, data=x))
+aquaSTN<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
+aquaSTN
+write.csv(aquaSTN,"/home/zeltak/ZH_tmp/aq.csv")
+<-as.data.table(aquaSTN[which(aquaSTN[,1]<0.01),])
+x<-rownames(aquaSTN)
+t(x)
+badpy$stn<-x
 
-#per station
-modelList <- dlply(pm25.m1[c == 2004 & A_T==0& & MaskAdjacency == "000" & UN > 0 & UN < 0.04], "stn", function(x) lm(m1.formula, data=x))
-terraSTN<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
-terraSTN
+
+
+
 
 #compare
 c<-cbind(aquaSTN,terraSTN)
@@ -123,27 +159,48 @@ aquaSTN
 
 
 
-#per station overall
-modelList <- dlply(pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04], "stn", function(x) lm(m1.formula, data=x))
-aquaSTN<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
-aquaSTN
+#################BAD STN
 
-##check days lag bomer etc 
-
-# and by year
-rawdf <- ddply(pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04], c("stn", "c"), 
+rawdf <- ddply(pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04], c("stn", "c","cloudIL"), 
       function(x) {
         mod1 <- lm(PM25 ~ aod, data=x)
-        data.frame(R2 = round(summary(mod1)$r.squared, 2), 
+        data.frame(R2 = round(summary(mod1)$r.squared, 5), 
                    nsamps = length(summary(mod1)$resid))
 })
 rawdf
-
 rawdf<-as.data.table(rawdf)
-rawdf2 <- rawdf[!stn %in% c("ANT","NSH","IRD","TMM","BIN"), ]
-ggplot(rawdf2, aes(c, R2, color = stn)) + geom_line() + geom_text(aes(label = paste(stn, nsamps)), size = 3.5) + theme_bw(13)
-ggsave(file="/home/zeltak/ZH_tmp/ggplot/stn_per_year_R2.png")
+bad<- rawdf[R2< 0.01 & nsamps > 10]
+bad<-bad %>%
+  arrange(cloudIL,stn)
+badu<-unique(bad$stn)
+badu<-as.data.table(badu)
+setnames(badu,"badu","stn")
+#aggregate station xy
+stnxy<-pm25.m1 %>%
+  group_by(stn) %>%
+  dplyr::summarise(x = mean(x_stn_ITM, na.rm=TRUE),y = mean(y_stn_ITM, na.rm=TRUE),UN = mean(UN, na.rm=TRUE),MA = mean(MaskAdjacency, na.rm=TRUE) )
+# join
+x<- left_join(badu, stnxy)
+write.csv(x,"/home/zeltak/ZH_tmp/x.csv")
 
+#################BAD STN
+
+
+
+
+# dplyr approach (prints the new variable but does not store it)
+bad %>%
+    select(stn, season) %>%
+    mutate(stn.s = stn)
+# Alternativly to store the new variable
+flights <- flights %>% mutate(Speed = Distance/AirTime*60)
+
+rawdf2 <- rawdf[!stn %in% c("ANT","NSH","IRD","TMM","BIN"), ]
+
+ggplot(bad[stn=="ANT"], aes(c,season, color = R2)) + geom_line() + geom_text(aes(label = paste(stn, nsamps)), size = 3.5) + theme_bw(13)
+
+
+#ggsave(file="/home/zeltak/ZH_tmp/ggplot/stn_per_year_R2.png")
 
 
 
@@ -224,12 +281,7 @@ summary(lm(PM25~aod,data=pm25.m1.c[A_T==1 & PM25 < 200 & aod < 1]))
 #run by station
 modelList <- dlply(pm25.m1.c[A_T==1], "stn", function(x) lm(m1.formula, data=x))
 r2map<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
-#aggregate station xy
-stnxy<-pm25.m1.c %>%
-  group_by(stn) %>%
-  dplyr::summarise(x = mean(x_stn_ITM, na.rm=TRUE),y = mean(y_stn_ITM, na.rm=TRUE) )
-stnxy$r2<-r2map
-write.csv(stnxy,"/home/zeltak/ZH_tmp/tst.csv")
+
 
 
 

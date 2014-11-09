@@ -2781,9 +2781,6 @@ use the as.numeric command:
  zinc$rec <- as.numeric(zinc$Study)
 
 ** Sorting with internal order command
-
-  
-
 *** sorting with sort command
 
 Sorting Data
@@ -9424,3 +9421,16 @@ inner_join (similar to merge with all.x=F and all.y=F)
 left_join (similar to merge with all.x=T and all.y=F)
 semi_join (not really an equivalent in merge() unless y only includes join fields)
 anti_join (no equivalent in merge(), this is all x without a match in y)
+
+#+BEGIN_SRC R
+#inner
+inner_join(df1, df2)
+
+#left outer
+left_join(df1, df2)
+
+#right outer (just reverse argument order)
+left_join(df2, df1)
+#+END_SRC
+
+*** Join examples
