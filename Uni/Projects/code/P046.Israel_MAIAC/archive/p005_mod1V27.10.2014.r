@@ -78,6 +78,7 @@ summary(lm(PM25~aod,data=pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN <
 #from now on look only on aqua
 summary(lm(PM25~aod,data=pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04 & PM25 < 200 ])) #0.08
 
+summary(lm(PM25~aod+ns(MeanPbl,9),data=pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04 & PM25 < 200 ])) #0.08
 
 
 
