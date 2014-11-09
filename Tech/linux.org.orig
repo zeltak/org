@@ -729,13 +729,13 @@ pacman:
  xf86-video-intel pm-utils
  
  aur:
-
+<<<<<<< HEAD
  hdapsd
  hdapsd
-
+=======
  hdapsd
  hdapsd
-
+>>>>>>> be343795b3f863da5712ef5b27e357c6b074ac1b
 
 
 Thanks to aur it is very easy to make hdaps work with arch, because
@@ -41226,17 +41226,19 @@ secure local area of the client system
 ***** 1.Create new ssh keys  
 
 The public portion (`id rsa.pub` by default) of this key pair will reside on the server being connected to,
-
-
-the private portion (`id rsa by` default) needs to remain on a secure local area of the client system
-
-on the client:
-
+<<<<<<< HEAD
 
 the private portion (`id rsa by` default) needs to remain on a secure local area of the client system
 
 on the client:
 
+=======
+
+the private portion (`id rsa by` default) needs to remain on a secure local area of the client system
+
+on the client:
+
+>>>>>>> be343795b3f863da5712ef5b27e357c6b074ac1b
 to generate an SSH key issue:
 
 #+BEGIN_SRC sh
@@ -41257,19 +41259,19 @@ user@server1 [~]#
 We now have an unencrypted private SSH key, and a public key.
 
 Notes:
-
-
-1.you can give the key a different name then the default (id rsa). if doing so see [[#dcc8DgR3jlQwysBDrhAyyA][login with different private key]] for how to connect with a non default name
-
-2.The file permissions should be locked down to prevent other users from being able to read the key pair data. OpenSSH may also refuse to support public key authentication if the file permissions are too open, then run this:
-
-
+<<<<<<< HEAD
 
 1.you can give the key a different name then the default (id rsa). if doing so see [[#dcc8DgR3jlQwysBDrhAyyA][login with different private key]] for how to connect with a non default name
 
 2.The file permissions should be locked down to prevent other users from being able to read the key pair data. OpenSSH may also refuse to support public key authentication if the file permissions are too open, then run this:
 
+=======
 
+1.you can give the key a different name then the default (id rsa). if doing so see [[#dcc8DgR3jlQwysBDrhAyyA][login with different private key]] for how to connect with a non default name
+
+2.The file permissions should be locked down to prevent other users from being able to read the key pair data. OpenSSH may also refuse to support public key authentication if the file permissions are too open, then run this:
+
+>>>>>>> be343795b3f863da5712ef5b27e357c6b074ac1b
 #+BEGIN_SRC sh
 chmod 700 ~/.ssh
 #+END_SRC
@@ -41279,18 +41281,7 @@ chmod 700 ~/.ssh
 Now, we upload your public key to a server so that you can authenticate using your ssh key.
 
 this is done by pushing the `id_rsa.pub` to a `authorized_keys` keys file on the server your trying to connect to
-
-
-Run this from your client computer(-i specifies the path to your public ssh key):
-
-#+BEGIN_SRC sh
-#use this neat method 
-cat ~/.ssh/id_rsa.pub | ssh user@machine "mkdir ~/.ssh; cat >> ~/.ssh/authorized_keys"
-#+END_SRC
-
-
-which will copy your public key to the remote server, and automatically add it to the authorized keys file.
-
+<<<<<<< HEAD
 
 Run this from your client computer(-i specifies the path to your public ssh key):
 
@@ -41302,6 +41293,19 @@ cat ~/.ssh/id_rsa.pub | ssh user@machine "mkdir ~/.ssh; cat >> ~/.ssh/authorized
 
 which will copy your public key to the remote server, and automatically add it to the authorized keys file.
 
+=======
+
+Run this from your client computer(-i specifies the path to your public ssh key):
+
+#+BEGIN_SRC sh
+#use this neat method 
+cat ~/.ssh/id_rsa.pub | ssh user@machine "mkdir ~/.ssh; cat >> ~/.ssh/authorized_keys"
+#+END_SRC
+
+
+which will copy your public key to the remote server, and automatically add it to the authorized keys file.
+
+>>>>>>> be343795b3f863da5712ef5b27e357c6b074ac1b
 Now try logging into the machine, with "ssh user@server", and check in:
  
 file:/home/USER/.ssh/authorized_keys
@@ -41316,26 +41320,7 @@ sudo vim /etc/ssh/sshd_config
 #+END_SRC
 
 1)we are going to config part that have these uncommented lines:
-
-
-$Note-if they arent there, create them. Also make sure they're not commented out$
-
-#+BEGIN_EXAMPLE
-PasswordAuthentication no
-PermitEmptyPasswords no
-PubkeyAuthentication yes
-AuthorizedKeysFile .ssh/authorized_keys
-#+END_EXAMPLE
-
-2) make sure that "PermitRootLogin" is set to no as well as it's a security risk.
-
-#+BEGIN_EXAMPLE
-PermitRootLogin no
-#+END_EXAMPLE
-
-3)Restart the SSH on the Server:
-
-
+<<<<<<< HEAD
 
 $Note-if they arent there, create them. Also make sure they're not commented out$
 
@@ -41354,7 +41339,26 @@ PermitRootLogin no
 
 3)Restart the SSH on the Server:
 
+=======
 
+$Note-if they arent there, create them. Also make sure they're not commented out$
+
+#+BEGIN_EXAMPLE
+PasswordAuthentication no
+PermitEmptyPasswords no
+PubkeyAuthentication yes
+AuthorizedKeysFile .ssh/authorized_keys
+#+END_EXAMPLE
+
+2) make sure that "PermitRootLogin" is set to no as well as it's a security risk.
+
+#+BEGIN_EXAMPLE
+PermitRootLogin no
+#+END_EXAMPLE
+
+3)Restart the SSH on the Server:
+
+>>>>>>> be343795b3f863da5712ef5b27e357c6b074ac1b
 #+BEGIN_SRC sh
 systemctl start sshd
 #or for init
