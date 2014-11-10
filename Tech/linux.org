@@ -24607,7 +24607,8 @@ you can then M-x goto-char RET to get to the to-the-charachter-of-the-invalid-re
 
 For a simple example of usage, follow these 5 steps:
 
-create a directory named .emacs.d in the base of your home directory;
+create a directory named .emacs.d in the base of your home directory
+$Note-this usually is already created with most configs$ 
 
 #+BEGIN_SRC sh
 mkdir ~/.emacs.d
@@ -24625,40 +24626,30 @@ git clone git://orgmode.org/org-mode.git
 place the following code block in a file called init.el in your Emacs initialization directory (~/.emacs.d).
 
 #+BEGIN_SRC emacs-lisp :results none
-    ;;; init.el --- Where all the magic begins
-    ;;
-    ;; This file loads Org-mode and then loads the rest of our Emacs initialization from Emacs lisp
-    ;; embedded in literate Org-mode files.
+;;; init.el --- Where all the magic begins
+;;
+;; This file loads Org-mode and then loads the rest of our Emacs initialization from Emacs lisp
+;; embedded in literate Org-mode files.
 
-    ;; Load up Org Mode and (now included) Org Babel for elisp embedded in Org Mode files
-    (setq dotfiles-dir (file-name-directory (or (buffer-file-name) load-file-name)))
+;; Load up Org Mode and (now included) Org Babel for elisp embedded in Org Mode files
 
-    (let ((org-dir (expand-file-name
-                     "lisp" (expand-file-name
-                             "org" (expand-file-name
-                                    "src" dotfiles-dir))))
-           (org-contrib-dir (expand-file-name
-                             "lisp" (expand-file-name
-                                     "contrib" (expand-file-name
-                                                ".." org-dir))))
-           (load-path (append (list org-dir org-contrib-dir)
-                              (or load-path nil))))
-      ;; load up Org-mode and Org-babel
-      (require 'org-install)
-      (require 'ob-tangle))
+;; this line below tells Emacs where the orgmode file are
+(add-to-list 'load-path "~/.emacs.d/src/org-mode/lisp")
+;; load org
+(require 'org-install)
+(require 'org)
+;; location of the setting.org file (all Emacs configs to be evaluted by org babel)
+(org-babel-load-file
+ (expand-file-name "settings.org"
+                   user-emacs-directory))
 
-    ;; load up all literate org-mode files in this directory
-    (mapc #'org-babel-load-file (directory-files dotfiles-dir t "\\.org$"))
-
-    ;;; init.el ends here
+;; init.el ends here
 
 
 #+END_SRC
 
-implement all of your Emacs customizations inside of Emacs Lisp code blocks embedded in Org-mode files in the root directory (.emacs.d)
-
 The curent config can be found here:
-[[file:~/.emacs.d/econf.org]]
+[[file:~/.emacs.d/settings.org]]
 
 Re-start Emacs to load the customizations.
  
@@ -36397,172 +36388,6 @@ use these commands:
  example:
  gmusicbrowser &> /home/zeltak/test4.txt
 
-** cli networking
-*** wireless
-
-Turn off wireless card
- sudo ifconfig wlan0 down
-
-*** info
-
-Show which programs are listening on TCP and UDP ports
-
- netstat -plunt
- -p Tell me the name of the program and it's PID
- -l that is listening
- -u on a UDP port.
- -n Give me numeric IP addresses (don't resolve them)
- -t oh, also TCP portsShow which ports are open in the network
- nmap 192.168.0.1Use nmap to discover network connections on LAN
-issue:
- nmap -A
-*** ethhtool (enable 1000 network)
-very useful to get info and set properties to lan cards
-
-install from repos
-
-to get info issue as root 
-
-sudo ethtool eth0
-
-which should return info on your card and speed
-
-%Tip- if your lan card if 1gb and you see its only recognized as 100mbit issue:% 
-
-#+BEGIN_SRC sh
-sudo ethtool -s eth0 speed 1000 duplex full
-#+END_SRC
-
-@also check the cable is not a bad cable@
-
-*** host file
-
-The hosts file is a computer file used by an operating system to map
-hostnames to IP addresses.
- The hosts file is a plain-text file and is traditionally named hosts,
-and is most often located at the path /etc/hosts
- to edit issue:
- sudo nano /etc/hosts
- Configuring /etc/hosts
-
- If your IP address is assigned to you by a DHCP server, then /etc/hosts
-is configured as follows:
- 127.0.0.1mybox.mydomain.comlocalhost.localdomain localhost mybox
- If you have a static IP address, then /etc/hosts is configured as
-follows:
- 127.0.0.1localhost.localdomain localhost
- 192.168.0.10mybox.mydomain.commybox
-
-*** ifconfig
-
-1)To set an ip address to a network card:
- 
- sudo ifconfig <interface> <ip address>
- 
- example:
- ifconfig eth0 192.168.0.1
- 
- 
- 
- 2)To add a default gateway :
- 
- route add default gw 192.xx.xx.xx
- 
- 
- 3)To bring an interface up or take it down again use
- 
- sudo ifconfig <interface> (up/down)
-
-*** resolv.conf
-
-set up DNS
- 
- in the /etc/resolv.conf
- sudo nano /etc/resolv.conf
- 
- 
- add the nameservers you want to use, one to a line, in the following
-format.
- nameserver <nameserver>
- 
- Example:
- nameserver 192.115.106.10
-
-*** dhcp
-
-#+BEGIN_EXAMPLE
-sudo dhclient <interface>
-#+END_EXAMPLE
- 
-Example:
-
-#+BEGIN_SRC sh
-sudo dhclient eth0
-#+END_SRC
- 
-and this will look for a dhcp server and tell you the ip address it is
-given and lets you know when it will expire.
- 
-*** cli networking commands
-
-ARP
- shows simple mapping of IP addresses to MAC addresses
- 
- example: arp
- Hostname
- displays the computers host name.
- 
- example:
- hostname
- nslookup
- look up the IP address for a given DNS name.
- 
- example:
- 
- nslookup www.zeltak.com
- Server: 194.90.1.5
- Address: 194.90.1.5#53
- 
- Non-authoritative answer:
- Name: www.zeltak.com
- Address: 192.115.133.122
- 
- 
- traceroute
- shows how many "hops" (routers a packet makes untill destination)
- 
- example:
- 
- traceroute www.zeltak.com
-
-*** netstat
-
-**** check ports on local machine (nstat)
-
-Check ports on local machine
-
- for tcp:
- netstat -nlt
- for Udp:
- netstat -nlu
- for both
- netstat -nltu
- to see which prog uses the port add -p or run as root to see all
-programs
-
-**** see what port a program is listening on
-
-see what port it's listening on:
- sudo netstat -nlp | grep progname
- For example:
- sudo netstat -nlp | grep mpd
-
-*** print IP address
-
-ifconfig wlan0| awk 'NR==2 {print $2}'| awk -F: '{print $2}'
- or
- ifconfig eth0| awk 'NR==2 {print $2}'| awk -F: '{print $2}'
-
 ** files and directories
 *** tips
 Find and replace Files/Folder Tricks
@@ -38848,6 +38673,228 @@ add this to .zshrc
 use this command:
 
  PROMPT= urxvt -e zsh -f
+
+** cli networking
+*** wireless
+
+Turn off wireless card
+ sudo ifconfig wlan0 down
+
+*** info
+
+Show which programs are listening on TCP and UDP ports
+
+ netstat -plunt
+ -p Tell me the name of the program and it's PID
+ -l that is listening
+ -u on a UDP port.
+ -n Give me numeric IP addresses (don't resolve them)
+ -t oh, also TCP portsShow which ports are open in the network
+ nmap 192.168.0.1Use nmap to discover network connections on LAN
+issue:
+ nmap -A
+*** ethhtool (enable 1000 network)
+very useful to get info and set properties to lan cards
+
+install from repos
+
+to get info issue as root 
+
+sudo ethtool eth0
+
+which should return info on your card and speed
+
+%Tip- if your lan card if 1gb and you see its only recognized as 100mbit issue:% 
+
+#+BEGIN_SRC sh
+sudo ethtool -s eth0 speed 1000 duplex full
+#+END_SRC
+
+@also check the cable is not a bad cable@
+
+*** host file
+
+The hosts file is a computer file used by an operating system to map
+hostnames to IP addresses.
+ The hosts file is a plain-text file and is traditionally named hosts,
+and is most often located at the path /etc/hosts
+ to edit issue:
+ sudo nano /etc/hosts
+ Configuring /etc/hosts
+
+ If your IP address is assigned to you by a DHCP server, then /etc/hosts
+is configured as follows:
+ 127.0.0.1mybox.mydomain.comlocalhost.localdomain localhost mybox
+ If you have a static IP address, then /etc/hosts is configured as
+follows:
+ 127.0.0.1localhost.localdomain localhost
+ 192.168.0.10mybox.mydomain.commybox
+
+*** ifconfig
+
+1)To set an ip address to a network card:
+ 
+ sudo ifconfig <interface> <ip address>
+ 
+ example:
+ ifconfig eth0 192.168.0.1
+ 
+ 
+ 
+ 2)To add a default gateway :
+ 
+ route add default gw 192.xx.xx.xx
+ 
+ 
+ 3)To bring an interface up or take it down again use
+ 
+ sudo ifconfig <interface> (up/down)
+
+*** resolv.conf
+
+set up DNS
+ 
+ in the /etc/resolv.conf
+ sudo nano /etc/resolv.conf
+ 
+ 
+ add the nameservers you want to use, one to a line, in the following
+format.
+ nameserver <nameserver>
+ 
+ Example:
+ nameserver 192.115.106.10
+
+*** dhcp
+
+#+BEGIN_EXAMPLE
+sudo dhclient <interface>
+#+END_EXAMPLE
+ 
+Example:
+
+#+BEGIN_SRC sh
+sudo dhclient eth0
+#+END_SRC
+ 
+and this will look for a dhcp server and tell you the ip address it is
+given and lets you know when it will expire.
+ 
+*** cli networking commands
+
+ARP
+ shows simple mapping of IP addresses to MAC addresses
+ 
+ example: arp
+ Hostname
+ displays the computers host name.
+ 
+ example:
+ hostname
+ nslookup
+ look up the IP address for a given DNS name.
+ 
+ example:
+ 
+ nslookup www.zeltak.com
+ Server: 194.90.1.5
+ Address: 194.90.1.5#53
+ 
+ Non-authoritative answer:
+ Name: www.zeltak.com
+ Address: 192.115.133.122
+ 
+ 
+ traceroute
+ shows how many "hops" (routers a packet makes untill destination)
+ 
+ example:
+ 
+ traceroute www.zeltak.com
+
+*** netstat
+
+**** check ports on local machine (nstat)
+
+Check ports on local machine
+
+ for tcp:
+ netstat -nlt
+ for Udp:
+ netstat -nlu
+ for both
+ netstat -nltu
+ to see which prog uses the port add -p or run as root to see all
+programs
+
+**** see what port a program is listening on
+
+see what port it's listening on:
+ sudo netstat -nlp | grep progname
+ For example:
+ sudo netstat -nlp | grep mpd
+
+*** print IP address
+
+ifconfig wlan0| awk 'NR==2 {print $2}'| awk -F: '{print $2}'
+ or
+ ifconfig eth0| awk 'NR==2 {print $2}'| awk -F: '{print $2}'
+*** ip command
+**** Displays info about all network interfaces
+Type the following command to list and show all ip address associated on on all network interfaces:
+
+#+BEGIN_SRC sh
+ip a
+#OR
+ip addr
+#+END_SRC
+
+You can select between IPv4 and IPv6 using the following syntax:
+
+#+BEGIN_SRC sh
+### Only show TCP/IP IPv4  ##
+ip -4 a
+ 
+### Only show TCP/IP IPv6  ###
+ip -6 a
+
+#It is also possible to specify and list particular interface TCP/IP details:
+
+### Only show eth0 interface ###
+ip a show eth0
+ip a list eth0
+ip a show dev eth0
+ 
+### Only show running interfaces ###
+ip link ls up
+#+END_SRC
+
+**** Assigns the IP address to the interface
+The syntax is as follows to add an IPv4/IPv6 address:
+
+#+BEGIN_EXAMPLE
+ip a add {ip_addr/mask} dev {interface}
+#+END_EXAMPLE
+
+#+BEGIN_SRC sh
+#To assign 192.168.1.200/255.255.255.0 to eth0, enter:
+ip a add 192.168.1.200/255.255.255.0 dev eth0
+#OR
+ip a add 192.168.1.200/24 dev eth0
+#+END_SRC
+
+**** How do I change the state of the device to UP or DOWN?
+The syntax is as follows:
+#+BEGIN_EXAMPLE
+ip link set dev {DEVICE} {up|down}
+#+END_EXAMPLE
+
+To make the state of the device eth1 down, enter:
+#+BEGIN_SRC sh
+ip link set dev eth1 down
+#To make the state of the device eth1 up, enter:
+ip link set dev eth1 up
+#+END_SRC
 
 ** `networking`
 *** dynamic dns
