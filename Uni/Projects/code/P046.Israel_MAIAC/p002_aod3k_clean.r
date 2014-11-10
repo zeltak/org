@@ -22,41 +22,25 @@ trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 allbestpredlist <- list()
 path.data<-"/media/NAS/Uni/Data/Israel/modis3k/full_years/"
 
-# for(i in 2003:2003){
-#   allbestpredlist[[paste0("year_", i)]] <- fread(paste0(path.data, "C06_3k_", i, ".csv"))
-#   print(i)
-# } 
-# allbestpred <- rbindlist(allbestpredlist)
-# rm(allbestpredlist)
 
 
+for(i in 2002:2013){
+  allbestpredlist[[paste0("year_", i)]] <- read.csv(paste0(path.data, "C06_3k_", i, ".csv"), header=T)
+  print(i)
+} 
 
-d12n=read.table("/media/NAS/Uni/Data/Israel/modis3k/full_years/C06_3k_2012.csv",sep=",",header=TRUE) 
-## create new data tables from C06 data for years 2002-2012 with lat,long,dtaod,dbaod,combinedaod ##
-d12n<-as.data.table(d12n)
 
-#create table with relevant data
-# d02n=cbind(d02[,1:8],d02[,18:21])
-# d03n=cbind(d03[,1:8],d03[,18:21])
-# d04n=cbind(d04[,1:8],d04[,18:21])
-# d05n=cbind(d05[,1:8],d05[,18:21])
-# d06n=cbind(d06[,1:8],d06[,18:21])
-# d07n=cbind(d07[,1:8],d07[,18:21])
-# d08n=cbind(d08[,1:8],d08[,18:21])
-# d09n=cbind(d09[,1:8],d09[,18:21])
-# d10n=cbind(d10[,1:8],d10[,18:21])
-# d11n= cbind(d11[,1:8],d11[,18:21])
-# d12n=cbind(d12[,1:4],d12[,18:21])
-# d13n=cbind(d13[,1:8],d13[,18:21])
+allbestpred <- rbindlist(allbestpredlist)
+rm(allbestpredlist)
 
-d12n<-d12n[,c(1:3,6:8),with=FALSE]
+allbestpred <-allbestpred [,c(1:3,6:8),with=FALSE]
 #AOD=rbind(d02n,d03n,d04n,d05n,d06n,d07n,d08n,d09n,d10n,d11n,d12n,d13n)
 
 
 #AOD[,13]=data.frame(stn=character(dim(AOD)[1]))
-setnames(d12n,"Lat","lat_aod")
-setnames(d12n,"Long","long_aod")
-allbestpred <- d12n[long_aod > 34.1 & long_aod < 36  & lat_aod < 34 & lat_aod > 28, ]
+setnames(allbestpred,"Lat","lat_aod")
+setnames(allbestpred,"Long","long_aod")
+allbestpred <- allbestpred[long_aod > 34.1 & long_aod < 36  & lat_aod < 34 & lat_aod > 28, ]
 
 
 #create aodid and unique grid
@@ -78,6 +62,5 @@ grid <- unique(allbestpred, by="aodid")
 #export dbf for GIS
 write.dbf(grid,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/IL3kgrid.dbf")
 ##at this stage clip the data based on israel layer and reimport
-#for MAIAC
-clipgrid<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/ILclipgrid.csv")
+saveRDS(allbestpred,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/AOD_AQ_0014_3k.RDS")
 
