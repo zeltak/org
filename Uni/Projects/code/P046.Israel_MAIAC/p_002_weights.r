@@ -14,7 +14,8 @@ library(gdata)
 
 ##import AOD
 aod<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/AOD_AQ_0014.RDS")
-
+aod[, c := as.numeric(format(day, "%Y")) ]
+system.time(aod[, MaskCloud := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[1:3]), collapse = "")}))])
 
 #################################33
 
@@ -69,9 +70,7 @@ Temp<-Temp[Temp_miss > 364]
 ##2003
 ################################
 #xtract year met
-met2003<- met[c==2003]
-
-
+met2003<- Temp[c==2003]
 #create full LU TS
 days_2003<-seq.Date(from = as.Date("2003-01-01"), to = as.Date("2003-12-31"), 1)
 #create date range
@@ -80,77 +79,34 @@ setkey(test3.se,aodid)
 setkey(wlu,aodid)
 test4.se<- merge(test3.se,wlu,all.x=TRUE)
 
-
-
 source("/media/NAS/Uni/org/files/Uni/Projects/code/P031.MIAC_PM/code_snips/nearestbyday_MPM.r")
 #create PM matrix
-pm.m <- makepointsmatrix(Temp, "X", "Y", "stn")
+met.m <- makepointsmatrix(met2003, "X", "Y", "stn")
 #create aod matrix
 setkey(test4.se, aodid)
-mod3.m <- makepointsmatrix(test4.se[test4.se[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
+lu.m <- makepointsmatrix(test4.se[test4.se[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
 
-closestaodse<- nearestbyday(mod3.m ,pm.m , 
-                            test4.se, Temp [, list(day,Temp,stn)], 
-                            "aodid", "stn", "meanT", "Temp", knearest = 3, maxdistance = NA)
-
-#check data completness
-x1<-closestaodse[, .N, by=c("aodid")]
-summary(x1)
+closestaodse<- nearestbyday(lu.m ,met.m , 
+                            test4.se, met2003[, list(day,Temp,stn)], 
+                            "aodid", "stn", "meanT", "Temp", knearest = 1, maxdistance = NA)
 
 
+setkey(test4.se,aodid,day)
+setkey(closestaodse,aodid,day)
+ot2003 <- merge(test4.se[,list(stn,day,aodid,elev,x_aod_ITM, y_aod_ITM,pblid)], closestaodse[,list(day,Temp,aodid)], all.x = T)
 
-
-
-
-
-
-
-# import monitor data and spatial merge with nearestbyday()
-source("/home/zeltak/org/files/Uni/Projects/code/P031.MIAC_PM/code_snips/nearestbyday.r")
-#create PM matrix
-wlu.m <- makepointsmatrix(wlu, "x_stn_ITM", "y_stn_ITM", "stn")
-#create aod terra matrix
-t.m <- makepointsmatrix(terra[terra[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
-########### join Terra to PM10
-closestaod <- nearestbyday(pm.m, aod.m, 
-                           PM10, terra [, list(day, aodid, aod,UN,WV,QA)], 
-                           "stn", "aodid", "closestaod", "aod", knearest = 5, maxdistance = 1500)
-
-########### 
-# meanaod <- nearestbyday(pm.m, aod.m, 
-#                            PM10, terra [, list(day, aodid, aod,UN,WV,QA)], 
-#                            "stn", "aodid", "closestaod", "aod", knearest = 9, maxdistance = 2200, nearestmean = T)
-
-
-
-
-setkey(PM10,stn,day)
-setkey(closestaod,stn,day)
-PM10.m1 <- merge(PM10, closestaod[,list(stn,day,aod,UN,WV,QA)], all.x = T)
-
-
-
-
-
-###met
-#str(met2003)
-#str(am2.lu.nd.pb)
-setkey(met2003 , day, stn)
-setkey(test4.se, day, stn)
-test4.se.met <- merge(test4.se, met2003 , all.x = T)
-summary(test4.se.met)
-test4.se.met [, c("TEMP", "dewp","date","lat_met","long_met","wvp_mb","ah_gm3","c") := NULL]
-
-## import AOD
-w2003<- readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2003.rds")
-#l=seq(names(w2003));names(l)=names(w2003);l
-xw2003<-w2003[,c(1,2,9),with=FALSE]
-
-
+## subset AOD
+aod2003<-aod[c==2003]
 
 #join AOD
-setkey(test4.se.met,aodid,day)
-setkey(xw2003,aodid,day)
+setkey(ot2003 ,aodid,day)
+setkey(aod2003,aodid,day)
+
+x<-left_join(aod2003, ot2003)
+
+
+
+
 #we allow cartesian since there is some site codes sharing a lpmid and thus need to expand the base lpmid-date file
 #to check correctnes issue:
 #length(test2[,unique(SiteCode)])*365

@@ -10,7 +10,7 @@ library(data.table)
 library(reshape2)
 library(Hmisc)
 library(mgcv)
-library(gdata)
+library(gdata)5
 library(car)
 library(dplyr)
 library(ggmap)
@@ -50,8 +50,12 @@ pm25.m1<-pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04 & c >= 200
 pm10.m1<-pm10.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04 & c >= 2003] #0.066
 
 
+
+#### PM25
+
+
 #################BAD STN PM25
-rawdf <- ddply(pm25.m1, c("stn", "c"), 
+rawdf <- ddply(pm25.m1, c( "c"), 
       function(x) {
         mod1 <- lm(PM25 ~ aod, data=x)
         data.frame(R2 = round(summary(mod1)$r.squared, 5), 
@@ -67,9 +71,6 @@ pm25.m1[,badid := paste(stn,c,sep="-")]
 pm25.m1 <- pm25.m1[!(pm25.m1$badid %in% bad$badid), ] 
 
 
-
-
-
 # pm25.m1$aodp<-pm25.m1$aod/pm25.m1$MeanPbl
 # summary(lm(PM25~aodp,data=pm25.m1[A_T==1 & UN > 0 & UN < 0.04 ])) #0.083
 # summary(gam(PM25~aod+s(MeanPbl),data=pm25.m1[A_T==1 & UN > 0 & UN < 0.04 ]))
@@ -77,26 +78,13 @@ pm25.m1 <- pm25.m1[!(pm25.m1$badid %in% bad$badid), ]
 #pm25.m1$PM25l<-log(pm25.m1$PM25)
 #pm25.m1$aodl<-log(pm25.m1$aod)
 
-#per year
-m1.formula<-PM25~aod
-modelList <- dlply(pm25.m1, "c", function(x) lm(m1.formula, data=x))
-pm25.year<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
-pm25.year
 
-#per station
-modelList <- dlply(pm25.m1, c("stn","season"), function(x) lm(m1.formula, data=x))
-aquaSTN<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
-aquaSTN
-
-
-
-
-#base model for stage 1
 
 
 #lme mixed model
-m1.formula <- as.formula(PM25~ aod+Dust+elev+tden+pden+dist2rail+dist2A1+dist2water+ndvi+season+MeanPbl+p_os+p_dev+p_dos+p_farm+p_for+p_ind+(1+aod|day/reg_num))
+m1.formula <- as.formula(PM25~ aod+Temp+WS+NO2+Dust+elev+tden+pden+dist2rail+dist2A1+Dist2road+dist2water+ndvi+season+MeanPbl+p_os+p_dev+p_dos+p_farm+p_for+p_ind+(1+aod|day))
 m1.formula <- as.formula(PM25~ aod+(1+aod|day))
+m1.formula <- as.formula(PM25~ aod+(1+aod|day/reg_num))
 x<-  lmer(m1.formula,data=pm25.m1)
 pm25.m1$predicted <- predict(x)
 summary(lm(PM25~predicted,data=pm25.m1))
