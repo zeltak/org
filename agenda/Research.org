@@ -840,13 +840,39 @@ smooth over space and time
 *** send myhee cleaning data 
 *** Italy and mex travel plans
 when does he leave italy, could we meet on the friday be
-** call Joel 11.11.2014
+** TODO call Joel 11.11.2014
 *** ask about EHF
 *** what to present:
 meytar will present Sat background (modis, aod, limitations) and prelimeray Israel issues
 *** israel model
-Cleaning is important but still issues:
+**** Cleaning is important but still issues:
 specific years in specific monitors where there is basiclly a 0 cor in full year or specific cloudy season
+**** Deep Blue data preforms very well in some areas and as bad as maiac in other areas
+             [,1]
+2002 0.0002253763
+2003 0.0280230180
+2004 0.0704596668
+2005 0.0868770078
+2006 0.1596479966
+2007 0.0704473002
+2008 0.0888712746
+2009 0.0613804048
+2010 0.1683572408
+2011 0.0761252117
+2012 0.2537268439
+2013 0.4461787647
+
+*** ask Allan about gam plot Y-axisdep
+downscale DB to 1x1k by smoothing 
+or show DB data regression 
+regress PM+maiac as 
+regression calibration of obs vs pred prediited
+flag for diff between days with bad data and surrouning 
+-label aod pixel and surrounding pixels that are really bad and mark that bad
+also can use that in CV pred and tak out that data.
+get DB data for italy , mexico
+readshow some slides in lombardy
+send france pm to qian
 
 ** TODO call roz
 :PROPERTIES:
