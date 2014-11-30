@@ -25075,6 +25075,22 @@ if it's Windows or Mac, you can try:
 (setq browse-url-browser-function 'browse-url-default-macosx-browser)
 #+END_SRC
 
+******** autoload lisp files from a folder
+Any elisp files dropped into ~/.emacs.local.d/ will be automatically loaded.
+
+I usually use this is a testing ground for new configuration before adding it here, and also for any personal / sensitive configuration.
+
+#+BEGIN_SRC emacs-lisp :results none
+(defun my/load-elisp-directory (path)
+  (let ((file-pattern "\\.elc?$"))
+    (when (file-directory-p path)
+      (mapcar (lambda (lisp-file)
+                (load-file lisp-file))
+              (directory-files (expand-file-name path) t file-pattern)))))
+
+(my/load-elisp-directory "~/.emacs.local.d")
+#+END_SRC
+
 ******* backup,saving etc
 ******** 'save as'							:Fav:
 use:
