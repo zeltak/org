@@ -17000,6 +17000,12 @@ let blacklists = ["https://mail.google.com/ gi gt x r f"]
 #+END_EXAMPLE
 that would disable keys gi, gt, x, r, and f on gmail.
  
+**** using gist
+you only edit the gist on the github website
+₆In example₆ https://gist.github.com/zeltak/287a9f894d3c06a7568a
+
+then you add the above adress to the cvim setting, save and press sync
+
 ** multimedia
 *** filebot
 
@@ -25069,6 +25075,22 @@ if it's Windows or Mac, you can try:
 (setq browse-url-browser-function 'browse-url-default-macosx-browser)
 #+END_SRC
 
+******** autoload lisp files from a folder
+Any elisp files dropped into ~/.emacs.local.d/ will be automatically loaded.
+
+I usually use this is a testing ground for new configuration before adding it here, and also for any personal / sensitive configuration.
+
+#+BEGIN_SRC emacs-lisp :results none
+(defun my/load-elisp-directory (path)
+  (let ((file-pattern "\\.elc?$"))
+    (when (file-directory-p path)
+      (mapcar (lambda (lisp-file)
+                (load-file lisp-file))
+              (directory-files (expand-file-name path) t file-pattern)))))
+
+(my/load-elisp-directory "~/.emacs.local.d")
+#+END_SRC
+
 ******* backup,saving etc
 ******** 'save as'							:Fav:
 use:
@@ -28556,7 +28578,7 @@ Org Build System page on
 [[http://orgmode.org/worg/dev/org-build-system.html][Worg]].
 ******** `Update org from Git`
 
-#+BEGIN_EXAMPLE
+#+BEGIN_EXAMPLE 
 cd ~/.emacs.d/src/org-mode/
 git pull 
 make autoloads
@@ -29754,12 +29776,14 @@ same directory as the org-buffer and insert a link to this file."
 ******** get images to appear inline
 make sure you have this in your config:
 
+#+BEGIN_SRC emacs-lisp :results none
 ;;iimage in org (display images in org files)
 (setq org-startup-with-inline-images t)
+#+END_SRC
 
 also you can manually toggle with:
 
-org-toggle-inline-images
+?org-toggle-inline-images?
 
 finally you can have this code:
 
@@ -29772,9 +29796,17 @@ at the start of your org file
 ******** toggle inline inmage refresh 
 use :
 
-M-x org-redisplay-inline-images
+?M-x org-redisplay-inline-images?
 
 to redisplay images
+******** use attribut to specify size per image
+use this on the line on top of your image
+
+#+BEGIN_EXAMPLE
+#+attr_org: :width 300
+[IMAGE]
+#+END_EXAMPLE
+
 ******** scale inline images in orgmode
 You can use `org-image-actual-width' in your org config
 choose one of the below 4 options:
@@ -36200,106 +36232,263 @@ accessed in the last two minutes
  ...
 
 **** grep
-***** quick commands
-
-to grep recursivly use this:
- grep -irw "KEYWORD" /PATH/TO/BASE/DIR
- In example:
-
- grep -irw "password" /home/zeltak/Dropbox/PC/dotfiles/
-
 ***** Intro
+****** base syntax
 %Tip- for regex grep look here:%
 
 http://www.cyberciti.biz/faq/grep-regular-expressions/ 
 
-grep Command Syntax
- grep 'word' filename
- grep 'string1 string2' filename
- cat otherfile | grep 'something'
- command | grep 'something'
- command option1 | grep 'data'
- grep --color 'data' fileName
- How Do I Use grep To Search File?
- Search /etc/passwd for boo user:
+grep Command Syntax:
 
- $ grep boo /etc/passwd
+#+BEGIN_EXAMPLE
+grep 'word' filename
+grep 'string1 string2' filename
+cat otherfile | grep 'something'
+command | grep 'something'
+command option1 | grep 'data'
+grep --color 'data' fileName
+#+END_EXAMPLE
 
- You can force grep to ignore word case i.e match boo, Boo, BOO and all
-other combination with -i option:
+****** simple grep (search)
+Search /etc/passwd for boo user:
 
- $ grep -i "boo" /etc/passwd
+#+BEGIN_SRC sh
+grep boo /etc/passwd
+#+END_SRC
 
- You can search recursively i.e. read all files under each directory for
-a string "192.168.1.5"
+****** force grep to ignore word case
+i.e match boo, Boo, BOO and all other combination with -i option:
 
- $ grep -r "192.168.1.5" /etc/
+#+BEGIN_SRC sh
+grep -i "boo" /etc/passwd
+#+END_SRC
 
- Use grep to search words only. When you search for boo, grep will match
-fooboo, boo123, etc. You can force grep to select only those lines
-containing matches that form whole words i.e. match only boo word:
+****** search recursively
+i.e. read all files under each directory for a string "192.168.1.5"
 
- $ grep -w "boo" /path/to/file
+#+BEGIN_SRC sh
+grep -r "192.168.1.5" /etc/
+#+END_SRC
 
- Use grep to search 2 different words, use egrep as follows:
+In example:
 
- $ egrep -w 'word1|word2' /path/to/file
+#+BEGIN_EXAMPLE
+grep -irw "password" /home/zeltak/Dropbox/PC/dotfiles/
+#+END_EXAMPLE
 
- Count line when words has been matched. grep can report the number of
-times that the pattern has been matched for each file using -c (count)
-option:
+****** Use grep to search words only
+When you search for boo, grep will match fooboo, boo123, etc. You can force grep to select only those lines containing matches that form whole words i.e. match only boo word:
 
- $ grep -c 'word' /path/to/file
+#+BEGIN_SRC sh
+grep -w "boo" /path/to/file
+#+END_SRC
+
+****** Use grep to search 2 different words, use egrep as follows:
+
+#+BEGIN_SRC sh
+egrep -w 'word1|word2' /path/to/file
+#+END_SRC
+
+****** Count line when words has been matched
+grep can report the number of times that the pattern has been matched for each file using -c (count) option:
+
+#+BEGIN_SRC sh
+grep -c 'word' /path/to/file
+#+END_SRC
 
  Also note that you can use -n option, which causes grep to precede each
 line of output with the number of the line in the text file from which
 it was obtained:
 
- $ grep -n 'word' /path/to/file
+#+BEGIN_SRC sh
+grep -n 'word' /path/to/file
+#+END_SRC
 
- UNIX / Linux pipes and grep command
- grep command often used with pipes. For example print name of hard disk
-devices:
+****** UNIX / Linux pipes and grep command
+grep command often used with pipes. For example print name of hard disk devices:
 
- # dmesg | egrep '(s|h)d[a-z]'
+#+BEGIN_SRC sh
+dmesg | egrep '(s|h)d[a-z]'
+#Display cpu model name:
+cat /proc/cpuinfo | grep -i 'Model'
+#+END_SRC
 
- Display cpu model name:
+However, above command can be also used as follows without shell pipe:
 
- # cat /proc/cpuinfo | grep -i 'Model'
+#+BEGIN_SRC sh
+grep -i 'Model' /proc/cpuinfo
+#+END_SRC
 
- However, above command can be also used as follows without shell pipe:
+****** list just the names of matching files?
+Use the -l option to list file name whose contents mention main():
 
- # grep -i 'Model' /proc/cpuinfo
+#+BEGIN_SRC sh
+grep -l 'main' .c
+#+END_SRC
 
- How do I list just the names of matching files?
- Use the -l option to list file name whose contents mention main():
+****** force grep to display output in colors:
 
- $ grep -l 'main' .c
-
- Finally, you can force grep to display output in colors:
-
- $ grep --color vivek /etc/passwd
-
-***** exclude lines of text in file by words
-
+#+BEGIN_SRC sh
+grep --color vivek /etc/passwd
+#+END_SRC
+****** exclude lines of text in file by words
 use the egrep command
 
- egrep -v
-'(avi|mpg|mp4|nfo|jpg|tbn|sub|db|md5|iso|txt|rar|ogm|ogg|srt|mov|mpeg|mpg|mp4)'
-TEXTFILE /home/zeltak/BK/raid movies.txt
+#+BEGIN_EXAMPLE
+egrep -v '(avi|mpg|mp4|nfo|jpg|tbn|sub|db|md5|iso|txt|rar|ogm|ogg|srt|mov|mpeg|mpg|mp4)' TEXTFILE /home/zeltak/BK/raid movies.txt
+#+END_EXAMPLE
 
 this is a comprehensive command:
 
- egrep -v
-'(ass|com|divx|DIVX|css|gif|js|BUP|IFO|VOB|ogv|ogm|ogg|mp3|wmv|AVI|WMV|MKV|MOV|MPEG|xml|mkv|flv|sfv|xls|qpw|exe|oldversion|SRT|avi|mpg|mp4|nfo|jpg|tbn|sub|db|md5|iso|txt|rar|ogm|ogg|srt|mov|mpeg|mpg|mp4)'
-/home/zeltak/BK/raid TV.txt > /home/zeltak/ZH tmp/raid tv.txt
+#+BEGIN_EXAMPLE
+egrep -v '(ass|com|divx|DIVX|css|gif|js|BUP|IFO|VOB|ogv|ogm|ogg|mp3|wmv|AVI|WMV|MKV|MOV|MPEG|xml|mkv|flv|sfv|xls|qpw|exe|oldversion|SRT|avi|mpg|mp4|nfo|jpg|tbn|sub|db|md5|iso|txt|rar|ogm|ogg|srt|mov|mpeg|mpg|mp4)' /home/zeltak/BK/raid TV.txt > /home/zeltak/ZH tmp/raid tv.txt
+#+END_EXAMPLE
 
-***** extract part of piped output
-****** extract a part that starts with X
+****** extract part of piped output
+******* extract a part that starts with X
 #+NAME: extract only word starting with percent part 
        #+BEGIN_SRC sh
 acpi | grep -o "\w%\w"
        #+END_SRC 
+
+****** Anchors (grep start/end of lines)
+******* grep start of lines
+You can use ^ and $ to force a regex to match only at the start or end of a line, respectively. The following example displays lines starting with the word vivek only:
+
+#+BEGIN_SRC sh
+grep ^vivek /etc/passwd
+#+END_SRC
+
+You can display only lines starting with the word vivek only i.e. do not display vivekgite, vivekg etc:
+#+BEGIN_SRC sh
+grep -w ^vivek /etc/passwd
+#+END_SRC
+******* grep end of lines
+Find lines ending with word foo:
+
+#+BEGIN_SRC sh
+grep 'foo$' filename
+#+END_SRC
+
+******* Match line only containing foo:
+
+#+BEGIN_SRC sh
+grep '^foo$' filename
+#+END_SRC
+
+******* You can search for blank lines with the following examples
+#+BEGIN_SRC sh
+grep '^$' filename 
+#+END_SRC
+
+****** Character Class
+******* match any case
+#+BEGIN_SRC sh
+grep '[vV]ivek' filename
+#+END_SRC
+OR
+#+BEGIN_SRC sh
+grep '[vV][iI][Vv][Ee][kK]' filename
+#+END_SRC
+
+******* match digits
+(i.e match vivek1 or Vivek2 etc):
+#+BEGIN_SRC sh
+grep -w '[vV]ivek[0-9]' filename
+#+END_SRC
+
+match two numeric digits (i.e. match foo11, foo12 etc):
+#+BEGIN_SRC sh
+grep 'foo[0-9][0-9]' filename
+#+END_SRC
+
+******* match at least one letter:
+#+BEGIN_SRC sh
+grep '[A-Za-z]' filename
+#+END_SRC
+
+Display all the lines containing either letter
+₆In example₆ a "w" or "n" character:
+
+#+BEGIN_SRC sh
+grep [wn] filename
+#+END_SRC
+
+****** Within a bracket expressions
+
+the name of a character class enclosed in "[:" and ":]" stands for the list of all characters belonging to that class. Standard character class names are:
+
+#+BEGIN_EXAMPLE
+    [:alnum:] - Alphanumeric characters.
+    [:alpha:] - Alphabetic characters
+    [:blank:] - Blank characters: space and tab.
+    [:digit:] - Digits: '0 1 2 3 4 5 6 7 8 9'.
+    [:lower:] - Lower-case letters: 'a b c d e f g h i j k l m n o p q r s t u v w x y z'.
+    [:space:] - Space characters: tab, newline, vertical tab, form feed, carriage return, and space.
+    [:upper:] - Upper-case letters: 'A B C D E F G H I J K L M N O P Q R S T U V W X Y Z'.
+#+END_EXAMPLE
+
+In this example match all upper case letters:
+
+#+BEGIN_SRC sh
+grep '[:upper:]' filename
+#+END_SRC
+
+****** Wildcards
+******* syntax
+You can use the "." for a single character match. In this example match all 3 character word starting with "b" and ending in "t":
+
+grep '\<b.t\>' filename
+
+Where,
+
+    \< Match the empty string at the beginning of word
+    \> Match the empty string at the end of word.
+
+******* Print all lines with exactly two characters:
+
+#+BEGIN_SRC sh
+grep '^..$' filename
+#+END_SRC
+
+******* Display any lines starting with a dot and digit:
+#+BEGIN_SRC sh
+grep '^\.[0-9]' filename
+#+END_SRC
+
+****** Escaping the dot
+
+The following regex to find an IP address 192.168.1.254 will not work:
+
+#+BEGIN_SRC sh
+grep '192.168.1.254' /etc/hosts
+#All three dots need to be escaped:
+grep '192\.168\.1\.254' /etc/hosts
+#+END_SRC
+The following example will only match an IP address:
+
+#+BEGIN_SRC sh
+egrep '[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}' filename
+#+END_SRC
+
+The following will match word Linux or UNIX in any case:
+
+#+BEGIN_SRC sh
+egrep -i '^(linux|unix)' filename
+#+END_SRC
+
+****** How Do I do OR/AND with grep?
+
+Use the following syntax:
+
+#+BEGIN_SRC sh
+grep 'word1|word2' filename
+#or
+grep 'word1\|word2' filename
+#Use the following syntax to display all lines that contain both 'word1' and 'word2'
+grep 'word1' filenae | grep 'word2'
+#+END_SRC
+
 **** locate
 
 Locate
@@ -44154,3 +44343,5 @@ use 'tinymoviemanager' to process the files for xbmc
 Local variables:
 buffer-read-only: t
 End:
+#+END_SRC
+ 

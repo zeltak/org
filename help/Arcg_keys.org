@@ -91,13 +91,27 @@
 
 * common apps
 ** dunst
-|------------+--------------------------+---------|
-| Command    | function                 | tag     |
-|------------+--------------------------+---------|
-| Ctrl-space | clear dunst notification | dunst   |
-| Ctrl-space | clear dunst notification | dunst   |
-|------------+--------------------------+---------|
+|------------+--------------------------+-------|
+| Command    | function                 | tag   |
+|------------+--------------------------+-------|
+| Ctrl-space | clear dunst notification | dunst |
+| Ctrl-space | clear dunst notification | dunst |
+|------------+--------------------------+-------|
 
+** terminator
+
+|----------------------------+----------------------+------------|
+| Command                    | function             | tag        |
+|----------------------------+----------------------+------------|
+| A-up/dwn/lf/rght/pgup/pgdn | move between windows | terminator |
+| C-S-up/dwn/lf/rght/        | resize windows       | terminator |
+| C-t                        | create new table     | terminator |
+| C-S-TAB                    | next tab             | terminator |
+| C-S-F                      | search               | terminator |
+| C- -                       | split horizontal     | terminator |
+| C-+                        | split vertically     | terminator |
+| C-S-s                      | toggle scrollbar     | terminator |
+|                            |                      |            |
 
 * Misc apps
 |---------------------------------------+--------------------------+-----|

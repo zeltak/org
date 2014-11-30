@@ -685,6 +685,8 @@ image-nakasi-jdq39.zip
 
 Let's make sure you have your fastboot drivers installed and recognizing your device. Enter in the command prompt:
 
+$Note- you may need sudo for all command below$ 
+
 #+BEGIN_SRC sh
 fastboot devices
 #+END_SRC
@@ -714,6 +716,13 @@ fastboot erase userdata
 fastboot flash bootloader bootloader-grouper-4.18.img
 #+END_SRC
 
+@you may need to issue this- if command above says bootloader locked@
+#+BEGIN_SRC sh
+fastboot oem unlock
+#+END_SRC
+@you may need to issue this@
+
+
 5.Now reboot the bootloader:
 #+begin_src sh
 fastboot reboot-bootloader
@@ -731,8 +740,9 @@ wait, make sure the command finishes. This might take a few minutes.
 fastboot reboot-bootloader
 #+end_src
 
-
-8.Now we're just going to lock that bootloader. This step is optional but I strongly recommend it if you had issues earlier which led to this procedure. Now you can unlock again if you like, which will give your tablet that final full wipe to clear out any bad data remaining:
+8.Now we're just going to lock that bootloader.
+@this is optional and not needed if toy don't care about warrenty etc@
+This step is optional but I strongly recommend it if you had issues earlier which led to this procedure. Now you can unlock again if you like, which will give your tablet that final full wipe to clear out any bad data remaining:
 Code:
 #+begin_src sh
 fastboot oem lock
@@ -748,6 +758,8 @@ fastboot oem unlock
 #+begin_src sh
 fastboot reboot
 #+end_src
+
+
 ** BUGS/ERRORS
 *** Flashing ROM errors
 **** How To Fix Status 7 Error
