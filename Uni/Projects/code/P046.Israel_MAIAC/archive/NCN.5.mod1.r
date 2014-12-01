@@ -14,7 +14,7 @@ library(gdata)
 library(car)
 library(dplyr)
 library(ggmap)
-
+library(broom)
 
 ######## import mod1
 pm10.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.PM10all_reg.RDS")
@@ -45,17 +45,26 @@ pm10.m1$cloudIL<-recode(pm10.m1$m,"1=1;2=1;3=2;4=2;5=2;6=2;7=2;8=2;9=2;10=2;11=1
 pm25.m1<-pm25.m1[aod != 'NA']
 pm10.m1<-pm10.m1[aod != 'NA']
 
+#clean clean clean
+l=seq(names(pm25.m1));names(l)=names(pm25.m1);l
+pm25.m1<-pm25.m1[, c(17:33,40,67,68,70:79) := NULL]
+pm10.m1<-pm10.m1[, c(17:33,40,67,68,70:79) := NULL]
+
 ### subset to aqua and apply alexei cleaning methods
-pm25.m1<-pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04 & c >= 2003] #0.066
-pm10.m1<-pm10.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04 & c >= 2003] #0.066
+pm25.m1<-pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04 & c >= 2003] 
+pm10.m1<-pm10.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04 & c >= 2003] 
 
 
 
-#### PM25
+
+### base yearly model
+x<-  lmer(m1.formula,data=pm25.m1)
+pm25.m1$predicted <- predict(x)
+glance(lm(PM25~predicted,data=pm25.m1))#0.549
 
 
-#################BAD STN PM25
-rawdf <- ddply(pm25.m1, c( "c"), 
+################# clean BAD STN PM25 and check if improved model?
+rawdf <- ddply(pm25.m1, c( "c","stn"), 
       function(x) {
         mod1 <- lm(PM25 ~ aod, data=x)
         data.frame(R2 = round(summary(mod1)$r.squared, 5), 
@@ -70,104 +79,34 @@ pm25.m1[,badid := paste(stn,c,sep="-")]
 ####Take out bad stations
 pm25.m1 <- pm25.m1[!(pm25.m1$badid %in% bad$badid), ] 
 
+x<-  lmer(m1.formula,data=pm25.m1)
+pm25.m1$predicted <- predict(x)
+glance(lm(PM25~predicted,data=pm25.m1))#0.70
 
-# pm25.m1$aodp<-pm25.m1$aod/pm25.m1$MeanPbl
-# summary(lm(PM25~aodp,data=pm25.m1[A_T==1 & UN > 0 & UN < 0.04 ])) #0.083
-# summary(gam(PM25~aod+s(MeanPbl),data=pm25.m1[A_T==1 & UN > 0 & UN < 0.04 ]))
-#logPM
-#pm25.m1$PM25l<-log(pm25.m1$PM25)
-#pm25.m1$aodl<-log(pm25.m1$aod)
-
-
-
+#get rid of missing
+summary(pm25.m1)
+x2 <- pm25.m1[is.na(Temp)]
+write.csv(x2,"/home/zeltak/ZH_tmp/t2.csv")
 
 #lme mixed model
 m1.formula <- as.formula(PM25~ aod+Temp+WS+NO2+Dust+elev+tden+pden+dist2rail+dist2A1+Dist2road+dist2water+ndvi+season+MeanPbl+p_os+p_dev+p_dos+p_farm+p_for+p_ind+(1+aod|day))
 m1.formula <- as.formula(PM25~ aod+(1+aod|day))
 m1.formula <- as.formula(PM25~ aod+(1+aod|day/reg_num))
-x<-  lmer(m1.formula,data=pm25.m1)
-pm25.m1$predicted <- predict(x)
-summary(lm(PM25~predicted,data=pm25.m1))
+
+m1.formula <- as.formula(PM25~ aod+Temp+
+                        WS+NO2+Dust+elev+tden+pden+dist2rail+dist2A1+Dist2road+dist2water+ndvi+season+MeanPbl+p_os+p_dev+p_dos+p_farm+p_for+p_ind+
+                        (1+aod|day))
 
 
-
-#per year
-modelList <- dlply(pm25.m1, "c", function(x) lmer(m1.formula, data=x))
-pm25.year<-t(as.data.table(lapply(modelList, function(x) summary(x)$r.squared)))
-pm25.year
-
-
-#model
-mod1PM25<-pm25.m1
-mod1PM25_2002 <- mod1PM25[c == "2002"]
-mod1PM25_2003 <- mod1PM25[c == "2003"]
-mod1PM25_2004 <- mod1PM25[c == "2004"]
-mod1PM25_2005 <- mod1PM25[c == "2005"]
-mod1PM25_2006 <- mod1PM25[c == "2006"]
-mod1PM25_2007 <- mod1PM25[c == "2007"]
-mod1PM25_2008 <- mod1PM25[c == "2008"]
-mod1PM25_2009 <- mod1PM25[c == "2009"]
-mod1PM25_2010 <- mod1PM25[c == "2010"]
-mod1PM25_2011 <- mod1PM25[c == "2011"]
-mod1PM25_2012 <- mod1PM25[c == "2012"]
-
-# #model
-# out.m1 = lmer(m1.formula ,data =  mod1PM25_2002)
-# mod1PM25_2002$predicted <- predict(out.m1)
-# summary(lm(PM25~predicted,data=mod1PM25_2002))
-
-#model
-out.m1 = lmer(m1.formula ,data =  mod1PM25_2003)
-mod1PM25_2003$predicted <- predict(out.m1)
-summary(lm(PM25~predicted,data=mod1PM25_2003))
-
-#model
-out.m1 = lmer(m1.formula ,data =  mod1PM25_2004)
-mod1PM25_2004$predicted <- predict(out.m1)
-summary(lm(PM25~predicted,data=mod1PM25_2004))
-
-#model
-out.m1 = lmer(m1.formula ,data =  mod1PM25_2005)
-mod1PM25_2005$predicted <- predict(out.m1)
-summary(lm(PM25~predicted,data=mod1PM25_2005))
-
-#model
-out.m1 = lmer(m1.formula ,data =  mod1PM25_2006)
-mod1PM25_2006$predicted <- predict(out.m1)
-summary(lm(PM25~predicted,data=mod1PM25_2006))
-
-#model
-out.m1 = lmer(m1.formula ,data =  mod1PM25_2007)
-mod1PM25_2007$predicted <- predict(out.m1)
-summary(lm(PM25~predicted,data=mod1PM25_2007))
-
-#model
-out.m1 = lmer(m1.formula ,data =  mod1PM25_2008)
-mod1PM25_2008$predicted <- predict(out.m1)
-summary(lm(PM25~predicted,data=mod1PM25_2008))
-
-out.m1 = lmer(m1.formula ,data =  mod1PM25_2009)
-mod1PM25_2009$predicted <- predict(out.m1)
-summary(lm(PM25~predicted,data=mod1PM25_2009))
-
-#model
-out.m1 = lmer(m1.formula ,data =  mod1PM25_2010)
-mod1PM25_2010$predicted <- predict(out.m1)
-summary(lm(PM25~predicted,data=mod1PM25_2010))
-
-#model
-out.m1 = lmer(m1.formula ,data =  mod1PM25_2011)
-mod1PM25_2011$predicted <- predict(out.m1)
-summary(lm(PM25~predicted,data=mod1PM25_2011))
-
-#model
-out.m1 = lmer(m1.formula ,data =  mod1PM25_2012)
-mod1PM25_2012$predicted <- predict(out.m1)
-summary(lm(PM25~predicted,data=mod1PM25_2012))
-
-
-
-
-
-
+m1.formula <- as.formula( log_pm10 ~   log_aod + as.factor(nome_zona) + log_aod:as.factor(nome_zona) + as.factor(season) + ns(log_pbl,2) + ns(speed_ms,2) +
+                            flag_sea + flag_lake + as.factor(desc_zone) + as.factor(desc_monitor) + 
+                            dust + ns(log_restot,2) + log_ndvi + as.factor(elevation_10_cl3) + log_aod:as.factor(elevation_10_cl3) + 
+                            as.factor(isa_cl3) + log_aod:as.factor(isa_cl3)+
+                            log_near_a1 + log_near_a2 + log_near_a3 + near_airport_1000 + near_port_1000 +
+                            length_a1_1000 + ns(length_a23_1000,2) + r_sum_length_a1_1000 + r_sum_length_a23_1000 + 
+                            pct_deciduous + pct_evergreen + pct_crop + pct_pasture + pct_shrub + pct_high_dev + pct_low_dev +
+                            log(near_emip) + nox_2010p_100 + nh3_2005p + r_sum_nox_2010p_100 + r_sum_nh3_2010p +
+                            log_so2_2010a + log_nox_2010a + log_nh3_2010a +
+                            rh + ns(visib_km,2) + ns(temp_c,2) +
+                            (1+aod|day/nome_zona))
 

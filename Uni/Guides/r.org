@@ -330,7 +330,7 @@ variable:
 #+begin_src R
 lm(formula = y ~ x1 + factor(country)
 #+end_src
-** info on current R session
+** info on current R session, versions, packages loaded etc
 *** basic info
 use 
 #+begin_src R
@@ -7445,6 +7445,27 @@ moddayslm$nrows[i] <- nrow(subdat)
 }
 #+END_SRC
 
+** join aod by day 
+#+BEGIN_SRC R
+aodpm5k<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/aod_pm_5k.csv")
+aqua.se <- aqua[aqua$aodid %in% aodpm5k$aodid, ] 
+aqua.se<-aqua.se[, c(8:24) := NULL]
+
+
+setkey(aodpm5k,aodid)
+setkey(aqua.se,aodid)
+aqua.se <- merge(aqua.se,aodpm5k[,list(dist,aodid,stn)], all.x = T)
+
+setkey(PM25,day,stn)
+setkey(aqua.se,day,stn)
+m1.s1 <- merge(PM25,aqua.se,all.x = T)
+
+#to leave only THE 1 closest sat data point to station in each day
+setkey(m1.s1,stn,day,dist)
+#take first ocurance by day per STN (its sorted by dist so the shortest one)
+x<-m1.s1[unique(m1.s1[, list(stn, day)]), mult = "first"]
+#+END_SRC
+   
 * Packages specific
 ** Hemisc
 *** mtable
@@ -7486,6 +7507,17 @@ lapply(modelList, function(x) summary(x)$r.squared)
 knearest=100 is roughly 5.7 km's
 100/pi= 32
 sqrt(32)=5.7
+
+** broom
+https://github.com/dgrtwo/broom
+*** lme4
+#+BEGIN_SRC R
+lmm1 <- lmer(Reaction ~ Days + (Days | Subject), sleepstudy)
+tidy(lmm1)
+tidy(lmm1, effects = "fixed")
+head(augment(lmm1, sleepstudy))
+glance(lmm1)
+#+END_SRC
 
 * data.table
 *** basics
@@ -7635,6 +7667,15 @@ under data.table it looks like this:
 test4.se<- merge(test3.se,cases,allow.cartesian=TRUE)
 #+END_SRC
 
+**** leave only row based on sort (mult=)
+#+BEGIN_SRC R
+#to leave only THE 1 closest sat data point to station in each day
+setkey(m1.s1,stn,day,dist)
+#take first ocurance by day per STN (its sorted by dist so the shortest one)
+x<-m1.s1[unique(m1.s1[, list(stn, day)]), mult = "first"]
+
+#+END_SRC
+
 *** Dates
 **** extract dates in data.table
 #+begin_src r
@@ -7657,6 +7698,11 @@ mod1d$season<-recode(mod1d$month,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;
 #1-winter, 2-summer
 mod1d$seasonSW<-as.character(recode(mod1d$month,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;12=1"))
 #+END_SRC
+**** create year
+#+BEGIN_SRC R
+WD[, c := as.numeric(format(day, "%Y")) ]
+#+END_SRC
+     
      
 *** delete columns data.table
 Either of the following will remove column foo from the data.table df3:
@@ -7687,11 +7733,13 @@ Note: that if foo is not found, these last two methods will yield an empty data.
 
 *** subsetting data
 **** select columns to keep
-  
+ 
 #+begin_src R
 m1<-m1[,c(6,44,5),with=FALSE]
-#+end_src
++end_src
 will keep in m1 rows 6,44,55
+
+#+end_src
 **** select values to keep
 #+begin_src R
 d1 <- mod1[!mon %in% c("SAG", "PER", "XAL"), ]
@@ -7699,6 +7747,9 @@ d1 <- mod1[!mon %in% c("SAG", "PER", "XAL"), ]
 **** select values to keep by matching in vector/dataset
 #+begin_src R
 mod3grid.se <- mod3grid [mod3grid$guid %in% m2_agg$guid, ] 
+#to exclude by vector
+xtst <- terra[!(terra$aodid %in% pag$aodid), ] 
+
 #+end_src
 **** subset and rename
 #+BEGIN_SRC R
@@ -8927,7 +8978,7 @@ where for DT bwfull.ptvl, for years 2003 and 2004 rows the variable yearb will g
 
 
 
-** aggregate
+** aggregate/summary
 *** base
 summarise: Reduce variables to values
 
@@ -9085,7 +9136,7 @@ flights %>%
 Helper function n_distinct(vector) counts the number of unique items in that vector
 #+BEGIN_SRC R
 # for each destination, count the total number of flights and the number of distinct planes that flew there
-flights %>%
+ights %>%
     group_by(Dest) %>%
     summarise(flight_count = n(), plane_count = n_distinct(TailNum))
 #+END_SRC

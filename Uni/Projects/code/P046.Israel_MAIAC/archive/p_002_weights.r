@@ -62,7 +62,20 @@ Temp[,length(na.omit(Temp)),by=list(stn,c)]
 Temp[, Temp_miss := length(na.omit(Temp)),by=list(stn,c)]
 Temp<-Temp[Temp_miss > 364]
 
+#import PBL
+pbl <-  fread("/media/NAS/Uni/Data/Europe/PBL_Europe/dailymeanpbl/fianlpblXY_2002.csv")
+allbestpredlist <- list()
+path.data<-"/media/NAS/Uni/Data/Europe/PBL_Europe/dailymeanpbl/"
 
+for(i in 2002:2013){
+  allbestpredlist[[paste0("year_", i)]] <- fread(paste0(path.data, "fianlpblXY_", i, ".csv"))
+  print(i)
+} 
+allbestpred <- rbindlist(allbestpredlist)
+rm(allbestpredlist)
+
+pbl <-  allbestpred[ longitude > 32 & longitude < 37 & latitude < 34 & latitude > 29, ]
+pbl <- pbl [, day:=as.Date(strptime(date, "%m/%d/%Y"))]
 
 
 
@@ -102,20 +115,21 @@ aod2003<-aod[c==2003]
 setkey(ot2003 ,aodid,day)
 setkey(aod2003,aodid,day)
 
+#note there will be missing in PA areas (gaza and east bank)
 x<-left_join(aod2003, ot2003)
+x1<-as.data.table(x)
+x2<- x1[!is.na(pblid)]
+x2<-x2[, c(8:27) := NULL]
 
 
+#Join PBL
+setkey(pbl , day, pblid)
+setkey(x2, day, pblid)
+x3<-left_join(x2, pbl)
 
-
-#we allow cartesian since there is some site codes sharing a lpmid and thus need to expand the base lpmid-date file
-#to check correctnes issue:
-#length(test2[,unique(SiteCode)])*365
-test4.wt<- merge(test4.se.met,xw2003,all.x=TRUE)
-test4.wt$obs<-1
-test4.wt[is.na(aod), obs := 0]
-test4.wt [, c("stn","lat_aod","long_aod","pblid","WDSP","visib","aod") := NULL]
-test4.wt[, m := as.numeric(format(day, "%m")) ]
-test4.wt <- na.omit(test4.wt)
+#create for model
+x3<-x3[,obs:=0]
+x3<- x3[ aod  > 0 , obs  := 1]
 
 
 w1<- glm(obs ~ elev_m+slp+tempc+as.factor(m),family=binomial,data=test4.wt)

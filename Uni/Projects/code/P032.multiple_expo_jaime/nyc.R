@@ -1,12 +1,13 @@
 library(rpart)
 
-nyc <- read.csv("E:/users/jm17/Dropbox/Multi_Exposure_Project/Data/nyc.csv")
+nyc <- read.csv("/home/zeltak/ZH_tmp/nyc.csv")
 nyc <- read.csv("/Users/james/Dropbox/Multi_Exposure_Project/Data/nyc.csv")
 dim(nyc)
 names(nyc)
-
+summary(nyc$roachhome_perc)
+hist(nyc$roachhome_perc)
 fit <-rpart(ChildHospAst ~ PM25 +roachhome_perc +NO2 +SHS_perc, method="anova", data=nyc)
-
+str(nyc)
 printcp(fit) # display the results
 plotcp(fit) # visualize cross-validation results
 summary(fit) # detailed summary of splits
