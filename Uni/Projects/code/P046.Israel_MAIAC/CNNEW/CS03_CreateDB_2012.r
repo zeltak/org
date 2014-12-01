@@ -25,7 +25,7 @@ pbl <-  fread("/media/NAS/Uni/Data/Europe/PBL_Europe/dailymeanpbl/fianlpblXY_200
 allbestpredlist <- list()
 path.data<-"/media/NAS/Uni/Data/Europe/PBL_Europe/dailymeanpbl/"
 
-for(i in 2003:2003){
+for(i in 2012:2012){
   allbestpredlist[[paste0("year_", i)]] <- fread(paste0(path.data, "fianlpblXY_", i, ".csv"))
   print(i)
 } 
@@ -76,7 +76,7 @@ Temp[, c := as.numeric(format(day, "%Y")) ]
 Temp[,c("Year","Month","Day","date"):=NULL]
 Temp <- Temp[X != 'NaN']
 Temp <- Temp[Temp != 'NaN']
-Temp <- Temp[c == 2003]
+Temp <- Temp[c == 2012]
 
 
 #WD
@@ -87,7 +87,7 @@ WD[, c := as.numeric(format(day, "%Y")) ]
 WD[,c("Year","Month","Day","date"):=NULL]
 WD <- WD[X != 'NaN']
 WD <- WD[WD != 'NaN']
-WD <- WD[c == 2003]
+WD <- WD[c == 2012]
 
 #WS
 WS <- fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/0.raw/temporal MOEP/WS_D.csv")
@@ -97,7 +97,7 @@ WS[, c := as.numeric(format(day, "%Y")) ]
 WS[,c("Year","Month","Day","date"):=NULL]
 WS <- WS[X != 'NaN']
 WS <- WS[WS != 'NaN']
-WS <- WS[c == 2003]
+WS <- WS[c == 2012]
 
 
 #RH
@@ -108,7 +108,7 @@ RH[, c := as.numeric(format(day, "%Y")) ]
 RH[,c("Year","Month","Day","date"):=NULL]
 RH <- RH[X != 'NaN']
 RH <- RH[RH != 'NaN']
-RH <- RH[c == 2003]
+RH <- RH[c == 2012]
 
 
 #Rain
@@ -119,7 +119,7 @@ Rain[, c := as.numeric(format(day, "%Y")) ]
 Rain[,c("Year","Month","Day","date"):=NULL]
 Rain <- Rain[X != 'NaN']
 Rain<- Rain[Rain != 'NaN']
-Rain<- Rain[c == 2003]
+Rain<- Rain[c == 2012]
 
 
 
@@ -132,137 +132,137 @@ ilgreen <- fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data
 #load aod data
 aqua<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/AOD_AQ_0014.RDS")
 aqua <- aqua[aqua$aodid %in% ilgreen$aodid, ] 
-aqua<- aqua[yr == "2003"]
+aqua<- aqua[yr == "2012"]
 system.time(aqua[, MaskAdjacency := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[6:8]), collapse = "")}))])
 #clean
 l=seq(names(aqua));names(l)=names(aqua);l
 aqua<-aqua[, c(2,3,7:24,26,27,28) := NULL]
 
 #create full LU TS
-days<-seq.Date(from = as.Date("2003-01-01"), to = as.Date("2003-12-31"), 1)
+days<-seq.Date(from = as.Date("2012-01-01"), to = as.Date("2012-12-31"), 1)
 #create date range
-aod2003 <- data.table(expand.grid(aodid = aqua[, unique(aodid)], day = days))
-setkey(aod2003,aodid,day)
+aod2012 <- data.table(expand.grid(aodid = aqua[, unique(aodid)], day = days))
+setkey(aod2012,aodid,day)
 setkey(aqua,aodid,day)
-aodf.2003<-left_join(aod2003,aqua)
+aodf.2012<-left_join(aod2012,aqua)
 
 #add land use and X,Y
-setkey(aodf.2003,aodid)
+setkey(aodf.2012,aodid)
 setkey(wlu,aodid)
-aodf.2003.lu<-left_join(aodf.2003,wlu)
-aodf.2003.lu<-aodf.2003.lu[, c(7:9) := NULL]
+aodf.2012.lu<-left_join(aodf.2012,wlu)
+aodf.2012.lu<-aodf.2012.lu[, c(7:9) := NULL]
 #clean points with no lu data (on borders and in golan)
-aodf.2003.lu <- aodf.2003.lu[!is.na(pblid)]
+aodf.2012.lu <- aodf.2012.lu[!is.na(pblid)]
 
 #create temporal dataset
-aodf.2003.tmp <-aodf.2003.lu[,c(1,2,9,10),with=FALSE]
+aodf.2012.tmp <-aodf.2012.lu[,c(1,2,9,10),with=FALSE]
 
 
 
 #Temp
 #xtract year met
-met2003<- Temp[c==2003]
+met2012<- Temp[c==2012]
 #create PM matrix
-met.m <- makepointsmatrix(met2003, "X", "Y", "stn")
+met.m <- makepointsmatrix(met2012, "X", "Y", "stn")
 #create aod matrix
-setkey(aodf.2003.tmp, aodid)
-lu.m <- makepointsmatrix(aodf.2003.tmp[aodf.2003.tmp[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
+setkey(aodf.2012.tmp, aodid)
+lu.m <- makepointsmatrix(aodf.2012.tmp[aodf.2012.tmp[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
 closestaodse<- nearestbyday(lu.m ,met.m , 
-                            aodf.2003.tmp, met2003[, list(day,Temp,stn)], 
+                            aodf.2012.tmp, met2012[, list(day,Temp,stn)], 
                             "aodid", "stn", "meanT", "Temp", knearest = 5, maxdistance = NA)
 
-setkey(aodf.2003.tmp,aodid,day)
+setkey(aodf.2012.tmp,aodid,day)
 setkey(closestaodse,aodid,day)
-aodf.2003.tmp.s1 <- merge(aodf.2003.tmp, closestaodse[,list(day,Temp,aodid)], all.x = T)
+aodf.2012.tmp.s1 <- merge(aodf.2012.tmp, closestaodse[,list(day,Temp,aodid)], all.x = T)
 
 #WS
 #xtract year met
-met2003<- WS[c==2003]
+met2012<- WS[c==2012]
 #create PM matrix
-met.m <- makepointsmatrix(met2003, "X", "Y", "stn")
+met.m <- makepointsmatrix(met2012, "X", "Y", "stn")
 closestaodse<- nearestbyday(lu.m ,met.m , 
-                            aodf.2003.tmp.s1, met2003[, list(day,WS,stn)], 
+                            aodf.2012.tmp.s1, met2012[, list(day,WS,stn)], 
                             "aodid", "stn", "meanT", "WS", knearest = 5, maxdistance = NA)
 
-setkey(aodf.2003.tmp.s1,aodid,day)
+setkey(aodf.2012.tmp.s1,aodid,day)
 setkey(closestaodse,aodid,day)
-aodf.2003.tmp.s2 <- merge(aodf.2003.tmp.s1, closestaodse[,list(day,WS,aodid)], all.x = T)
+aodf.2012.tmp.s2 <- merge(aodf.2012.tmp.s1, closestaodse[,list(day,WS,aodid)], all.x = T)
 
 
 
 
 #WD
 #xtract year met
-met2003<- WD[c==2003]
+met2012<- WD[c==2012]
 #create PM matrix
-met.m <- makepointsmatrix(met2003, "X", "Y", "stn")
+met.m <- makepointsmatrix(met2012, "X", "Y", "stn")
 closestaodse<- nearestbyday(lu.m ,met.m , 
-                            aodf.2003.tmp.s2, met2003[, list(day,WD,stn)], 
+                            aodf.2012.tmp.s2, met2012[, list(day,WD,stn)], 
                             "aodid", "stn", "meanT", "WD", knearest = 5, maxdistance = NA)
 
-setkey(aodf.2003.tmp.s2,aodid,day)
+setkey(aodf.2012.tmp.s2,aodid,day)
 setkey(closestaodse,aodid,day)
-aodf.2003.tmp.s3 <- merge(aodf.2003.tmp.s2, closestaodse[,list(day,WD,aodid)], all.x = T)
+aodf.2012.tmp.s3 <- merge(aodf.2012.tmp.s2, closestaodse[,list(day,WD,aodid)], all.x = T)
 
 
 
 #Rain
 #xtract year met
-met2003<- Rain[c==2003]
+met2012<- Rain[c==2012]
 #create PM matrix
-met.m <- makepointsmatrix(met2003, "X", "Y", "stn")
+met.m <- makepointsmatrix(met2012, "X", "Y", "stn")
 closestaodse<- nearestbyday(lu.m ,met.m , 
-                            aodf.2003.tmp.s3, met2003[, list(day,Rain,stn)], 
+                            aodf.2012.tmp.s3, met2012[, list(day,Rain,stn)], 
                             "aodid", "stn", "meanT", "Rain", knearest = 5, maxdistance = NA)
 
-setkey(aodf.2003.tmp.s3,aodid,day)
+setkey(aodf.2012.tmp.s3,aodid,day)
 setkey(closestaodse,aodid,day)
-aodf.2003.tmp.s4 <- merge(aodf.2003.tmp.s3, closestaodse[,list(day,Rain,aodid)], all.x = T)
+aodf.2012.tmp.s4 <- merge(aodf.2012.tmp.s3, closestaodse[,list(day,Rain,aodid)], all.x = T)
 
 
 
 #RH
 #xtract year met
-met2003<- RH[c==2003]
+met2012<- RH[c==2012]
 #create PM matrix
-met.m <- makepointsmatrix(met2003, "X", "Y", "stn")
+met.m <- makepointsmatrix(met2012, "X", "Y", "stn")
 closestaodse<- nearestbyday(lu.m ,met.m , 
-                            aodf.2003.tmp.s4, met2003[, list(day,RH,stn)], 
+                            aodf.2012.tmp.s4, met2012[, list(day,RH,stn)], 
                             "aodid", "stn", "meanT", "RH", knearest = 5, maxdistance = NA)
 
-setkey(aodf.2003.tmp.s4,aodid,day)
+setkey(aodf.2012.tmp.s4,aodid,day)
 setkey(closestaodse,aodid,day)
-aodf.2003.tmp.s4 <- merge(aodf.2003.tmp.s4, closestaodse[,list(day,RH,aodid)], all.x = T)
+aodf.2012.tmp.s4 <- merge(aodf.2012.tmp.s4, closestaodse[,list(day,RH,aodid)], all.x = T)
 
 
 #join back LU
-setkey(aodf.2003.lu,aodid,day)
-setkey(aodf.2003.tmp.s4,aodid,day)
-x1<- left_join(aodf.2003.lu,aodf.2003.tmp.s4)
+setkey(aodf.2012.lu,aodid,day)
+setkey(aodf.2012.tmp.s4,aodid,day)
+x1<- left_join(aodf.2012.lu,aodf.2012.tmp.s4)
 
 
 #Join PBL
 setkey(pbl , day, pblid)
 setkey(x1, day, pblid)
-aodf.2003.tmp.s6<-left_join(x1, pbl)
+aodf.2012.tmp.s6<-left_join(x1, pbl)
 
 
 #add season
-aodf.2003.tmp.s6$month <- as.numeric(format(aodf.2003.tmp.s6$day, "%m"))
+aodf.2012.tmp.s6$month <- as.numeric(format(aodf.2012.tmp.s6$day, "%m"))
 #1-winter, 2-spring,3-summer,4-autum
-aodf.2003.tmp.s6$season<-recode(aodf.2003.tmp.s6$month,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")
+aodf.2012.tmp.s6$season<-recode(aodf.2012.tmp.s6$month,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")
 #1-winter, 2-summer
-aodf.2003.tmp.s6$seasonSW<-recode(aodf.2003.tmp.s6$month,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;12=1")
+aodf.2012.tmp.s6$seasonSW<-recode(aodf.2012.tmp.s6$month,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;12=1")
 #add month
-aodf.2003.tmp.s6[, m := as.numeric(format(day, "%m")) ]
+aodf.2012.tmp.s6[, m := as.numeric(format(day, "%m")) ]
 
 
 
-aodf.2003.tmp.s6[, c := as.numeric(format(day, "%Y")) ]
+aodf.2012.tmp.s6[, c := as.numeric(format(day, "%Y")) ]
 #join NDVI to aod
 setkey(ndvi, ndviid, c, m )
-setkey(aodf.2003.tmp.s6,  ndviid, c, m)
-aodf.2003.tmp.s8 <- merge(aodf.2003.tmp.s6, ndvi, all.x = T)
+setkey(aodf.2012.tmp.s6,  ndviid, c, m)
+aodf.2012.tmp.s8 <- merge(aodf.2012.tmp.s6, ndvi, all.x = T)
 
 #add dust days
 dust2<-fread("/media/NAS/Uni/Data/Israel/Dust/DDAqTer28.5.2014.csv")
@@ -272,31 +272,31 @@ dust2[,c("Year","Month","Day","Max","date"):=NULL]
 setnames(dust2,"StationID","stn")
 setnames(dust2,"StationID","stn")
 dust2[, c := as.numeric(format(day, "%Y")) ]
-dust2<- dust2[c==2003]
+dust2<- dust2[c==2012]
 
-setkey(aodf.2003.tmp.s8 , day, stn)
+setkey(aodf.2012.tmp.s8 , day, stn)
 setkey(dust2, day, stn)
-aodf.2003.tmp.s9 <- merge(aodf.2003.tmp.s8, dust2[,list(day,stn,Dust)], all.x = T)
-aodf.2003.tmp.s9<-aodf.2003.tmp.s9[is.na(Dust), Dust:= 0]
+aodf.2012.tmp.s9 <- merge(aodf.2012.tmp.s8, dust2[,list(day,stn,Dust)], all.x = T)
+aodf.2012.tmp.s9<-aodf.2012.tmp.s9[is.na(Dust), Dust:= 0]
 
 
 #create weights
-aodf.2003.tmp.s9<-aodf.2003.tmp.s9[,obs:=1]
-aodf.2003.tmp.s9[is.na(aod), obs:= 0]
+aodf.2012.tmp.s9<-aodf.2012.tmp.s9[,obs:=1]
+aodf.2012.tmp.s9[is.na(aod), obs:= 0]
 
 #model
-w1<- glm(obs ~ elev+MeanPbl+Temp+as.factor(month),family=binomial,data=aodf.2003.tmp.s9)
-aodf.2003.tmp.s9$prob <- predict(w1,type = c("response"))  #get probability prediction , note that its a binary logisitc and thus the type-repsonse option
-aodf.2003.tmp.s9$wt <- 1/aodf.2003.tmp.s9$prob
-aodf.2003.tmp.s9$normwt <- aodf.2003.tmp.s9$wt/mean(aodf.2003.tmp.s9$wt)
-aodf.2003.tmp.s9<-aodf.2003.tmp.s9[, c(53,54) := NULL]
+w1<- glm(obs ~ elev+MeanPbl+Temp+as.factor(month),family=binomial,data=aodf.2012.tmp.s9)
+aodf.2012.tmp.s9$prob <- predict(w1,type = c("response"))  #get probability prediction , note that its a binary logisitc and thus the type-repsonse option
+aodf.2012.tmp.s9$wt <- 1/aodf.2012.tmp.s9$prob
+aodf.2012.tmp.s9$normwt <- aodf.2012.tmp.s9$wt/mean(aodf.2012.tmp.s9$wt)
+aodf.2012.tmp.s9<-aodf.2012.tmp.s9[, c(53,54) := NULL]
 
 ###save mods
 #mod3
-saveRDS(aodf.2003.tmp.s9,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2003.rds")
+saveRDS(aodf.2012.tmp.s9,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2012.rds")
 #mod2
-aodf.2003.tmp.s9.m2 <- aodf.2003.tmp.s9[!is.na(aod)]
-saveRDS(aodf.2003.tmp.s9.m2,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2003.rds")
+aodf.2012.tmp.s9.m2 <- aodf.2012.tmp.s9[!is.na(aod)]
+saveRDS(aodf.2012.tmp.s9.m2,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2012.rds")
 #mod1
 ##################################
 #PM25
@@ -319,16 +319,16 @@ PM25<-PM25[!is.na(PM25)]
 PM25 <- PM25[PM25_n > 5  , ]
 setnames(PM25,"X","x_stn_ITM")
 setnames(PM25,"Y","y_stn_ITM")
-PM25<- PM25[c==2003]
+PM25<- PM25[c==2012]
 
 
 #create PM matrix
 pm.m <- makepointsmatrix(PM25, "x_stn_ITM", "y_stn_ITM", "stn")
 #create aod terra matrix
-aod.m <- makepointsmatrix(aodf.2003.tmp.s9.m2[aodf.2003.tmp.s9.m2[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
+aod.m <- makepointsmatrix(aodf.2012.tmp.s9.m2[aodf.2012.tmp.s9.m2[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
 ########### join Terra to PM25
 closestaod <- nearestbyday(pm.m, aod.m, 
-                           PM25, aodf.2003.tmp.s9.m2, 
+                           PM25, aodf.2012.tmp.s9.m2, 
                            "stn", "aodid", "closestaod", "aod", knearest = 5, maxdistance = 1500)
 
 setkey(PM25,stn,day)
@@ -337,7 +337,7 @@ PM25.m1 <- merge(PM25[,list(stn,day,PM25)], closestaod, all.x = T)
 PM25.m1<-PM25.m1[!is.na(aod)]
 
 #save mod 1
-saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2003.rds")
+saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2012.rds")
 
 
 
@@ -362,16 +362,16 @@ PM10<-PM10[!is.na(PM10)]
 PM10 <- PM10[PM10_n > 5  , ]
 setnames(PM10,"X","x_stn_ITM")
 setnames(PM10,"Y","y_stn_ITM")
-PM10<- PM10[c==2003]
+PM10<- PM10[c==2012]
 
 
 #create PM matrix
 pm.m <- makepointsmatrix(PM10, "x_stn_ITM", "y_stn_ITM", "stn")
 #create aod terra matrix
-aod.m <- makepointsmatrix(aodf.2003.tmp.s9.m2[aodf.2003.tmp.s9.m2[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
+aod.m <- makepointsmatrix(aodf.2012.tmp.s9.m2[aodf.2012.tmp.s9.m2[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
 ########### join Terra to PM10
 closestaod <- nearestbyday(pm.m, aod.m, 
-                           PM10, aodf.2003.tmp.s9.m2, 
+                           PM10, aodf.2012.tmp.s9.m2, 
                            "stn", "aodid", "closestaod", "aod", knearest = 5, maxdistance = 1500)
 
 setkey(PM10,stn,day)
@@ -380,4 +380,4 @@ PM10.m1 <- merge(PM10[,list(stn,day,PM10)], closestaod, all.x = T)
 PM10.m1<-PM10.m1[!is.na(aod)]
 
 #save mod 1
-saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.PM10.AQ.2003.rds")
+saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.PM10.AQ.2012.rds")

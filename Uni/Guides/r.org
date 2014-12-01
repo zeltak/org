@@ -7445,7 +7445,7 @@ moddayslm$nrows[i] <- nrow(subdat)
 }
 #+END_SRC
 
-** join aod by day 
+** join aod to pm by day 
 #+BEGIN_SRC R
 aodpm5k<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/aod_pm_5k.csv")
 aqua.se <- aqua[aqua$aodid %in% aodpm5k$aodid, ] 
@@ -7464,8 +7464,10 @@ m1.s1 <- merge(PM25,aqua.se,all.x = T)
 setkey(m1.s1,stn,day,dist)
 #take first ocurance by day per STN (its sorted by dist so the shortest one)
 x<-m1.s1[unique(m1.s1[, list(stn, day)]), mult = "first"]
+
 #+END_SRC
-   
+
+
 * Packages specific
 ** Hemisc
 *** mtable
@@ -7733,13 +7735,12 @@ Note: that if foo is not found, these last two methods will yield an empty data.
 
 *** subsetting data
 **** select columns to keep
- 
+  
 #+begin_src R
 m1<-m1[,c(6,44,5),with=FALSE]
-+end_src
 will keep in m1 rows 6,44,55
-
 #+end_src
+
 **** select values to keep
 #+begin_src R
 d1 <- mod1[!mon %in% c("SAG", "PER", "XAL"), ]
