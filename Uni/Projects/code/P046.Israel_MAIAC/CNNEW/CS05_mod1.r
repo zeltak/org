@@ -94,13 +94,8 @@ pm25.m1[,p_dev.s:= scale(p_dev)]
 pm25.m1[,p_os.s:= scale(p_os)]
 
 
-
-
-
 #lme mixed model
-
-m1.formula <- as.formula(PM25~ aod+(1+aod|day))
-
+#m1.formula <- as.formula(PM25~ aod+(1+aod|day))
 m1.formula <- as.formula(PM25~ aod+
                         Temp+WD+RH+WS+Dust+Rain+MeanPbl.s #temporal
                         +elev.s+tden.s+pden.s+dist2rail.s+dist2A1.s+Dist2road.s+dist2water.s+ndvi.s+season #spatial
@@ -108,12 +103,9 @@ m1.formula <- as.formula(PM25~ aod+
                           +as.factor(reg_num)+aod:as.factor(reg_num)+
                          +(1+aod|day/reg_num))
 
-x<-  lmer(m1.formula,data=pm25.m1,weights=normwt)
-pm25.m1$predicted <- predict(x)
+m1.fit<-  lmer(m1.formula,data=pm25.m1,weights=normwt)
+pm25.m1$predicted <- predict(m1.fit)
 glance(lm(PM25~predicted,data=pm25.m1))#0.741
-
-
-
 
 # m1.formula <- as.formula( log_pm10 ~   log_aod + as.factor(nome_zona) + log_aod:as.factor(nome_zona) + as.factor(season) + ns(log_pbl,2) + ns(speed_ms,2) +
 #                             flag_sea + flag_lake + as.factor(desc_zone) + as.factor(desc_monitor) + 
@@ -213,3 +205,59 @@ mod1CV_all<- data.table(rbind(mod1d_10_s1,mod1d_10_s2,mod1d_10_s3,mod1d_10_s4,mo
 
 mod1CV_reg <- lm(mod1CV_all$PM25~mod1CV_all$predicted)
 summary(mod1CV_reg)$r.squared 
+
+
+
+
+
+###############
+#MOD2
+###############
+m2.2003<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2003.rds")
+
+
+#generate predictions
+#m2_2003$predicted <- predict(object=out.m1_2003,newdata=m2_2003,allow.new.levels=TRUE,REform=NULL )
+m2_2003[, predicted.m2 := predict(object=out.m1_2003,newdata=m2_2003,allow.new.levels=TRUE,re.form=NULL)]
+
+
+
+
+
+m2_2003 <- m2_2003[predicted.m2 > 0.00000000000001 , ]
+#save mod2 with predictions
+saveRDS(m2_2003, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2003_pred.m2.rds")
+
+#######
+#M2 R2
+######
+#shorten data sets
+names(m1_2003)
+names(m2_2003)
+m1<-m1_2003[,c(1,2,3,7,12),with=FALSE]
+m2<-m2_2003[,c(1,2,56),with=FALSE]
+
+#merge co located mod1 and mod2 grids
+setkey(m1_2003,guid,day)
+setkey(m2_2003,guid,day)
+m.1.2.pred <- merge(m1_2003, m2_2003[, list(guid, day, predicted.m2)], all.x = T)
+mod2_reg<-lm(m.1.2.pred$predicted~m.1.2.pred$predicted.m2)
+#cleanup and save current stages (workspace)
+mod1table$r2003[20] <-summary(mod2_reg)$r.squared
+
+#map the predictions
+#aggregate by guid
+m2_agg <- m2_2003[, list(LTPM.m2 = mean(predicted.m2, na.rm = TRUE), lat_aod = lat_aod[1], long_aod = long_aod[1]), by = guid]
+saveRDS(m2_agg, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2003.rds")
+#map the predictions
+ggplot(m2_agg, aes(long_aod,lat_aod, color = LTPM.m2)) + 
+  geom_point(size = 3, shape = 15) +  xlab("longitude") + ylab("latitude") + 
+  scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(5)) + theme_bw() + ggtitle("Long term predictions")
+ggsave(file="/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
+
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2003_p2.rds")
+
+keep(mod1table , sure=TRUE) 
+gc()
+
+
