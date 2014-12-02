@@ -381,3 +381,5 @@ PM10.m1<-PM10.m1[!is.na(aod)]
 
 #save mod 1
 saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.PM10.AQ.2006.rds")
+
+

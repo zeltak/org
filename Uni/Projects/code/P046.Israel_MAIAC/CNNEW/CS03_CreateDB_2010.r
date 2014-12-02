@@ -270,7 +270,6 @@ dust2$date<-paste(dust2$Day,dust2$Month,dust2$Year,sep="/")
 dust2[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
 dust2[,c("Year","Month","Day","Max","date"):=NULL]
 setnames(dust2,"StationID","stn")
-setnames(dust2,"StationID","stn")
 dust2[, c := as.numeric(format(day, "%Y")) ]
 dust2<- dust2[c==2010]
 
