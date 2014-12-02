@@ -806,6 +806,17 @@ Although depending on what the process is doing it might not take right away.
 
 If youre on a unix based system, one thing I do is ?C-z? to go back to the command line prompt and then issue a 'kill' to the process ID.
 
+*** batch using rscript
+you can run the script itself as an executable by having the first line start with a shebang, which is #!, followed by the path to the place where Rscript is installed. ₆In example₆ 
+
+#+BEGIN_SRC sh
+#!/usr/bin/Rscript
+source("/media/NAS/Uni/org/files/Uni/Projects/code/P046.Israel_MAIAC/CNNEW/CS03_CreateDB_2006.r")
+#+END_SRC
+$Note-The path to Rscript listed in your shebang line needs to be in your PATH variable,$
+
+ 
+
 ** Memory
 *** function to check all object sizes
 use this function:
@@ -1737,21 +1748,29 @@ this can also be written to your .rprofile to be permanent
 [[R_files/img/Image_AtvHZv1ot3M1WsPzE7C4zA_0005.png]]
  [[R_files/img/Image_AtvHZv1ot3M1WsPzE7C4zA_0006.png]]
 
-*** Standarize data
+*** Standarize data (scale)
+By default, the scale() function standardizes the specified columns of a matrix or data frame to a mean of 0 and a standard deviation of 1:
+newdata <- scale(mydata)
+To standardize each column to an arbitrary mean and standard deviation, you can use code similar to the following:
 
-By default, the scale() function standardizes the specified columns of a
-matrix or data frame to a mean of 0 and a standard deviation of 1:
- newdata <- scale(mydata)
- To standardize each column to an arbitrary mean and standard deviation,
-you can use code similar to the following:
- newdata <- scale(mydata)*SD + M
- where M is the desired mean and SD is the desired standard deviation.
- Using the scale() function on non-numeric columns will produce an
-error. To standardize a specific column rather than an entire matrix or
-data frame, you can use code such as
- newdata <- transform(mydata, myvar = scale(myvar)*10+50)
- This code standardizes the variable myvar to a mean of 50 and standard
-deviation of 10.
+newdata <- scale(mydata)*SD + M
+
+where M is the desired mean and SD is the desired standard deviation.
+Using the scale() function on non-numeric columns will produce an error. To standardize a specific column rather than an entire matrix or data frame, you can use code such as
+
+newdata <- transform(mydata, myvar = scale(myvar)*10+50)
+
+This code standardizes the variable myvar to a mean of 50 and standard deviation of 10.
+
+examples
+
+#+BEGIN_SRC R
+pm25.m1[,elev.s:= scale(elev)]
+pm25.m1[,tden.s:= scale(tden)]
+pm25.m1[,pden.s:= scale(pden)]
+#+END_SRC
+
+
 
 *** Character functions
 
@@ -5685,6 +5704,23 @@ library(lmerTest)
 summary(lmer(momwt24 ~ pmpreg + momht + primiparous + momage + mombmiat06 + factor(SES_scored) + factor(educlevels) + (1|firstaodid), data = gestpred))
 #+END_SRC
 
+*** weights in lme4
+#+BEGIN_SRC R
+x<-  lmer(m1.formula,data=pm25.m1,weights=normwt)
+#+END_SRC
+
+*** re.form
+formula for random effects to include:
+If `NULL` > include all random effects
+if `NA`   > include no random effects
+
+example:
+
+#+BEGIN_SRC R
+mod1d_10_s10$predicted <- predict(object=out_90_s10,newdata=mod1d_10_s10,allow.new.levels=TRUE,re.form=NULL )
+
+#+END_SRC
+
 ** Generalized Linear Models
 *** Intro
 
@@ -7467,7 +7503,7 @@ x<-m1.s1[unique(m1.s1[, list(stn, day)]), mult = "first"]
 
 #+END_SRC
 
-
+   
 * Packages specific
 ** Hemisc
 *** mtable
@@ -7511,6 +7547,7 @@ knearest=100 is roughly 5.7 km's
 sqrt(32)=5.7
 
 ** broom
+
 https://github.com/dgrtwo/broom
 *** lme4
 #+BEGIN_SRC R
@@ -7519,6 +7556,21 @@ tidy(lmm1)
 tidy(lmm1, effects = "fixed")
 head(augment(lmm1, sleepstudy))
 glance(lmm1)
+#+END_SRC
+    
+** compare
+compare two dataframes
+http://cran.r-project.org/web/packages/compare/vignettes/compare-intro.pdf
+
+example
+#+BEGIN_SRC R
+comparison <- compare(aodf.2003.tmp.s9.m2,aodf.2004.tmp.s9.m2,allowAll=TRUE)
+comparison
+#+END_SRC
+
+$Note$ this may also be done to some extent with native R code
+#+BEGIN_SRC R
+all.equal(lapply(aodf.2003.tmp.s9.m2,class),lapply(aodf.2004.tmp.s9.m2,class))
 #+END_SRC
 
 * data.table
@@ -7738,7 +7790,9 @@ Note: that if foo is not found, these last two methods will yield an empty data.
   
 #+begin_src R
 m1<-m1[,c(6,44,5),with=FALSE]
-will keep in m1 rows 6,44,55
+#will keep in m1 rows 6,44,55
+#by name
+m1<-aodf.2003.tmp.s9.m2[,c( "x_aod_ITM", "y_aod_ITM", "aodid"),with=FALSE]
 #+end_src
 
 **** select values to keep

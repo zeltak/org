@@ -298,6 +298,8 @@ saveRDS(aodf.2004.tmp.s9,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gat
 aodf.2004.tmp.s9.m2 <- aodf.2004.tmp.s9[!is.na(aod)]
 saveRDS(aodf.2004.tmp.s9.m2,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2004.rds")
 #mod1
+
+
 ##################################
 #PM25
 ##################################
@@ -324,8 +326,11 @@ PM25<- PM25[c==2004]
 
 #create PM matrix
 pm.m <- makepointsmatrix(PM25, "x_stn_ITM", "y_stn_ITM", "stn")
+setkey(aodf.2004.tmp.s9.m2,aodid)
 #create aod terra matrix
 aod.m <- makepointsmatrix(aodf.2004.tmp.s9.m2[aodf.2004.tmp.s9.m2[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
+
+
 ########### join Terra to PM25
 closestaod <- nearestbyday(pm.m, aod.m, 
                            PM25, aodf.2004.tmp.s9.m2, 
@@ -367,6 +372,7 @@ PM10<- PM10[c==2004]
 
 #create PM matrix
 pm.m <- makepointsmatrix(PM10, "x_stn_ITM", "y_stn_ITM", "stn")
+setkey(aodf.2004.tmp.s9.m2,aodid)
 #create aod terra matrix
 aod.m <- makepointsmatrix(aodf.2004.tmp.s9.m2[aodf.2004.tmp.s9.m2[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
 ########### join Terra to PM10

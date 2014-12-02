@@ -16,51 +16,37 @@ library(dplyr)
 library(ggmap)
 library(broom)
 
-######## import mod1
-pm10.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.PM10all_reg.RDS")
-pm25.m1<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/mod1.PM25all_reg.RDS")
+######## import mod1 files
+pm25.m1.2003 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2003.rds")
+pm25.m1.2004 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2004.rds")
+pm25.m1.2005 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2005.rds")
+pm25.m1.2006 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2006.rds")
+pm25.m1.2007 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2007.rds")
+pm25.m1.2008 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2008.rds")
+pm25.m1.2009 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2009.rds")
+pm25.m1.2010 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2010.rds")
+pm25.m1.2011 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2011.rds")
+pm25.m1.2012 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2012.rds")
 
-#note terra is '0' and aqua is '1'
+#bind to 1 year
+pm25.m1<- rbindlist(list(pm25.m1.2003,pm25.m1.2004,pm25.m1.2005,pm25.m1.2007,pm25.m1.2008,pm25.m1.2009,pm25.m1.2010,pm25.m1.2011,pm25.m1.2012))
 
-system.time(pm25.m1[, MaskCloud := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[1:3]), collapse = "")}))])
-system.time(pm25.m1[, MaskLandWaterSnow := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[4:5]), collapse = "")}))])
-system.time(pm25.m1[, MaskAdjacency := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[6:8]), collapse = "")}))])
-system.time(pm25.m1[, MaskGlint := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[13]), collapse = "")}))])
-system.time(pm25.m1[, AerosolModel := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[14:15]), collapse = "")}))])
-
-#note terra is '0' and aqua is '1'
-
-system.time(pm10.m1[, MaskCloud := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[1:3]), collapse = "")}))])
-system.time(pm10.m1[, MaskLandWaterSnow := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[4:5]), collapse = "")}))])
-system.time(pm10.m1[, MaskAdjacency := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[6:8]), collapse = "")}))])
-system.time(pm10.m1[, MaskGlint := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[13]), collapse = "")}))])
-system.time(pm10.m1[, AerosolModel := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[14:15]), collapse = "")}))])
-
+pm25.m1$Temp<-as.numeric(unlist((pm25.m1$Temp)))
+str(pm25.m1)
 
 #new seasons
 #1-cloudy,#2-noncloud
-pm25.m1$cloudIL<-recode(pm25.m1$m,"1=1;2=1;3=2;4=2;5=2;6=2;7=2;8=2;9=2;10=2;11=1;12=1")
-pm10.m1$cloudIL<-recode(pm10.m1$m,"1=1;2=1;3=2;4=2;5=2;6=2;7=2;8=2;9=2;10=2;11=1;12=1")
-
-pm25.m1<-pm25.m1[aod != 'NA']
-pm10.m1<-pm10.m1[aod != 'NA']
-
-#clean clean clean
-l=seq(names(pm25.m1));names(l)=names(pm25.m1);l
-pm25.m1<-pm25.m1[, c(17:33,40,67,68,70:79) := NULL]
-pm10.m1<-pm10.m1[, c(17:33,40,67,68,70:79) := NULL]
+# pm25.m1$cloudIL<-recode(pm25.m1$m,"1=1;2=1;3=2;4=2;5=2;6=2;7=2;8=2;9=2;10=2;11=1;12=1")
+# pm10.m1$cloudIL<-recode(pm10.m1$m,"1=1;2=1;3=2;4=2;5=2;6=2;7=2;8=2;9=2;10=2;11=1;12=1")
 
 ### subset to aqua and apply alexei cleaning methods
-pm25.m1<-pm25.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04 & c >= 2003] 
-pm10.m1<-pm10.m1[A_T==1 & MaskAdjacency == "000" & UN > 0 & UN < 0.04 & c >= 2003] 
-
-
-
+pm25.m1<-pm25.m1[MaskAdjacency == "000" & UN > 0 & UN < 0.04] 
 
 ### base yearly model
+m1.formula <- as.formula(PM25~ aod+(1+aod|day))
 x<-  lmer(m1.formula,data=pm25.m1)
 pm25.m1$predicted <- predict(x)
-glance(lm(PM25~predicted,data=pm25.m1))#0.549
+glance(lm(PM25~predicted,data=pm25.m1))
 
 
 ################# clean BAD STN PM25 and check if improved model?
@@ -81,10 +67,12 @@ pm25.m1 <- pm25.m1[!(pm25.m1$badid %in% bad$badid), ]
 
 x<-  lmer(m1.formula,data=pm25.m1)
 pm25.m1$predicted <- predict(x)
-glance(lm(PM25~predicted,data=pm25.m1))#0.70
+glance(lm(PM25~predicted,data=pm25.m1))#0.69
+
+as.numeric(unlist(a))
 
 #get rid of missing
-summary(pm25.m1)
+pm25.m1$Temp<-as.numeric(unlist((pm25.m1$Temp))
 x2 <- pm25.m1[is.na(Temp)]
 write.csv(x2,"/home/zeltak/ZH_tmp/t2.csv")
 
