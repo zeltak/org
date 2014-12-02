@@ -26431,6 +26431,18 @@ emacsclient -c -e '(x-change-window-property "WM_CLASS" "Client_NAME_NEEDED" nil
 $Note-you only need to change the Client_NAME_NEEDED part$:
 
 ******* Ess
+******** install ESS through git
+#+BEGIN_SRC sh
+git clone https://github.com/emacs-ess/ESS.git  	 
+#+END_SRC
+
+then add this to Emacs config:
+
+#+BEGIN_SRC emacs-lisp :results none
+(add-to-list 'load-path "/home/zeltak/.emacs.d/src/ESS/lisp/")
+(load "ess-site")
+#+END_SRC
+
 ******** connect to a remote R process
 ESS works with processes on remote computers as easily as with processes on the local machine. The recommended way to access a statistical program on remote computer is to start it with tramp. Require tramp in your .emacs file:
 (require 'tramp)
