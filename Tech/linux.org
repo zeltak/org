@@ -37420,6 +37420,11 @@ The easiest way to download all pdf or mp3 files from given url:
 wget -r -A '.pdf' url/path
 wget -r -A '.mp3'url/path/dir/
 
+***** dl files recursivly by part of string
+in this example we want to downlaod all files containing 'AOD'
+#+BEGIN_SRC sh
+wget -r  -np ftp://maiac:@dataportal.nccs.nasa.gov/DataRelease/NorthAmerica/  -A "*AOT*.hdf"  
+#+END_SRC
 ** scripts
 
 *** basics
