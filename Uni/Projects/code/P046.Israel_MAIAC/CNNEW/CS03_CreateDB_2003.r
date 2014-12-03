@@ -20,8 +20,6 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/P031.MIAC_PM/code_snips/neare
 #import NDVI
 ndvid<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/ndviid_aodid.csv")
 ndvi<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN006_NDVI_yearly/ndvi.rds")
-#import PBL
-pbl <-  fread("/media/NAS/Uni/Data/Europe/PBL_Europe/dailymeanpbl/fianlpblXY_2002.csv")
 allbestpredlist <- list()
 path.data<-"/media/NAS/Uni/Data/Europe/PBL_Europe/dailymeanpbl/"
 
@@ -270,7 +268,6 @@ dust2$date<-paste(dust2$Day,dust2$Month,dust2$Year,sep="/")
 dust2[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
 dust2[,c("Year","Month","Day","Max","date"):=NULL]
 setnames(dust2,"StationID","stn")
-setnames(dust2,"StationID","stn")
 dust2[, c := as.numeric(format(day, "%Y")) ]
 dust2<- dust2[c==2003]
 
@@ -298,6 +295,8 @@ saveRDS(aodf.2003.tmp.s9,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gat
 aodf.2003.tmp.s9.m2 <- aodf.2003.tmp.s9[!is.na(aod)]
 saveRDS(aodf.2003.tmp.s9.m2,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2003.rds")
 #mod1
+
+
 ##################################
 #PM25
 ##################################
@@ -324,8 +323,11 @@ PM25<- PM25[c==2003]
 
 #create PM matrix
 pm.m <- makepointsmatrix(PM25, "x_stn_ITM", "y_stn_ITM", "stn")
+setkey(aodf.2003.tmp.s9.m2,aodid)
 #create aod terra matrix
 aod.m <- makepointsmatrix(aodf.2003.tmp.s9.m2[aodf.2003.tmp.s9.m2[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
+
+
 ########### join Terra to PM25
 closestaod <- nearestbyday(pm.m, aod.m, 
                            PM25, aodf.2003.tmp.s9.m2, 
@@ -367,6 +369,7 @@ PM10<- PM10[c==2003]
 
 #create PM matrix
 pm.m <- makepointsmatrix(PM10, "x_stn_ITM", "y_stn_ITM", "stn")
+setkey(aodf.2003.tmp.s9.m2,aodid)
 #create aod terra matrix
 aod.m <- makepointsmatrix(aodf.2003.tmp.s9.m2[aodf.2003.tmp.s9.m2[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
 ########### join Terra to PM10

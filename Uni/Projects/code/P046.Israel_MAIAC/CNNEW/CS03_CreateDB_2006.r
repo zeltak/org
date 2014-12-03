@@ -20,8 +20,6 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/P031.MIAC_PM/code_snips/neare
 #import NDVI
 ndvid<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/ndviid_aodid.csv")
 ndvi<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN006_NDVI_yearly/ndvi.rds")
-#import PBL
-pbl <-  fread("/media/NAS/Uni/Data/Europe/PBL_Europe/dailymeanpbl/fianlpblXY_2002.csv")
 allbestpredlist <- list()
 path.data<-"/media/NAS/Uni/Data/Europe/PBL_Europe/dailymeanpbl/"
 
@@ -169,7 +167,7 @@ setkey(aodf.2006.tmp, aodid)
 lu.m <- makepointsmatrix(aodf.2006.tmp[aodf.2006.tmp[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
 closestaodse<- nearestbyday(lu.m ,met.m , 
                             aodf.2006.tmp, met2006[, list(day,Temp,stn)], 
-                            "aodid", "stn", "meanT", "Temp", knearest =7 , maxdistance = NA)
+                            "aodid", "stn", "meanT", "Temp", knearest = 5, maxdistance = NA)
 
 setkey(aodf.2006.tmp,aodid,day)
 setkey(closestaodse,aodid,day)
@@ -182,7 +180,7 @@ met2006<- WS[c==2006]
 met.m <- makepointsmatrix(met2006, "X", "Y", "stn")
 closestaodse<- nearestbyday(lu.m ,met.m , 
                             aodf.2006.tmp.s1, met2006[, list(day,WS,stn)], 
-                            "aodid", "stn", "meanT", "WS", knearest = 7, maxdistance = NA)
+                            "aodid", "stn", "meanT", "WS", knearest = 5, maxdistance = NA)
 
 setkey(aodf.2006.tmp.s1,aodid,day)
 setkey(closestaodse,aodid,day)
@@ -198,7 +196,7 @@ met2006<- WD[c==2006]
 met.m <- makepointsmatrix(met2006, "X", "Y", "stn")
 closestaodse<- nearestbyday(lu.m ,met.m , 
                             aodf.2006.tmp.s2, met2006[, list(day,WD,stn)], 
-                            "aodid", "stn", "meanT", "WD", knearest = 7, maxdistance = NA)
+                            "aodid", "stn", "meanT", "WD", knearest = 5, maxdistance = NA)
 
 setkey(aodf.2006.tmp.s2,aodid,day)
 setkey(closestaodse,aodid,day)
@@ -213,7 +211,7 @@ met2006<- Rain[c==2006]
 met.m <- makepointsmatrix(met2006, "X", "Y", "stn")
 closestaodse<- nearestbyday(lu.m ,met.m , 
                             aodf.2006.tmp.s3, met2006[, list(day,Rain,stn)], 
-                            "aodid", "stn", "meanT", "Rain", knearest = 7, maxdistance = NA)
+                            "aodid", "stn", "meanT", "Rain", knearest = 5, maxdistance = NA)
 
 setkey(aodf.2006.tmp.s3,aodid,day)
 setkey(closestaodse,aodid,day)
@@ -269,7 +267,6 @@ dust2<-fread("/media/NAS/Uni/Data/Israel/Dust/DDAqTer28.5.2014.csv")
 dust2$date<-paste(dust2$Day,dust2$Month,dust2$Year,sep="/")
 dust2[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
 dust2[,c("Year","Month","Day","Max","date"):=NULL]
-setnames(dust2,"StationID","stn")
 setnames(dust2,"StationID","stn")
 dust2[, c := as.numeric(format(day, "%Y")) ]
 dust2<- dust2[c==2006]
@@ -366,7 +363,7 @@ PM10<-PM10[!is.na(PM10)]
 #clear non continous stations
 PM10 <- PM10[PM10_n > 5  , ]
 setnames(PM10,"X","x_stn_ITM")
-
+setnames(PM10,"Y","y_stn_ITM")
 PM10<- PM10[c==2006]
 
 

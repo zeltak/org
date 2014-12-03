@@ -20,6 +20,7 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/P031.MIAC_PM/code_snips/neare
 #import NDVI
 ndvid<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/ndviid_aodid.csv")
 ndvi<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN006_NDVI_yearly/ndvi.rds")
+#import PBL
 allbestpredlist <- list()
 path.data<-"/media/NAS/Uni/Data/Europe/PBL_Europe/dailymeanpbl/"
 
@@ -128,21 +129,21 @@ ilgreen <- fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data
 
 ###load Aqua
 #load aod data
-aqua<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/AOD_AQ_0014.RDS")
-aqua <- aqua[aqua$aodid %in% ilgreen$aodid, ] 
-aqua<- aqua[yr == "2004"]
-system.time(aqua[, MaskAdjacency := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[6:8]), collapse = "")}))])
+terra<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/AOD_TR_0014.RDS")
+terra <- terra[terra$aodid %in% ilgreen$aodid, ] 
+terra<- terra[yr == "2004"]
+system.time(terra[, MaskAdjacency := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[6:8]), collapse = "")}))])
 #clean
-l=seq(names(aqua));names(l)=names(aqua);l
-aqua<-aqua[, c(2,3,7:24,26,27,28) := NULL]
+l=seq(names(terra));names(l)=names(terra);l
+terra<-terra[, c(2,3,7:24,26,27,28) := NULL]
 
 #create full LU TS
 days<-seq.Date(from = as.Date("2004-01-01"), to = as.Date("2004-12-31"), 1)
 #create date range
-aod2004 <- data.table(expand.grid(aodid = aqua[, unique(aodid)], day = days))
+aod2004 <- data.table(expand.grid(aodid = terra[, unique(aodid)], day = days))
 setkey(aod2004,aodid,day)
-setkey(aqua,aodid,day)
-aodf.2004<-left_join(aod2004,aqua)
+setkey(terra,aodid,day)
+aodf.2004<-left_join(aod2004,terra)
 
 #add land use and X,Y
 setkey(aodf.2004,aodid)
@@ -167,7 +168,7 @@ setkey(aodf.2004.tmp, aodid)
 lu.m <- makepointsmatrix(aodf.2004.tmp[aodf.2004.tmp[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
 closestaodse<- nearestbyday(lu.m ,met.m , 
                             aodf.2004.tmp, met2004[, list(day,Temp,stn)], 
-                            "aodid", "stn", "meanT", "Temp", knearest = 5, maxdistance = NA)
+                            "aodid", "stn", "meanT", "Temp", knearest = 7, maxdistance = NA)
 
 setkey(aodf.2004.tmp,aodid,day)
 setkey(closestaodse,aodid,day)
@@ -180,7 +181,7 @@ met2004<- WS[c==2004]
 met.m <- makepointsmatrix(met2004, "X", "Y", "stn")
 closestaodse<- nearestbyday(lu.m ,met.m , 
                             aodf.2004.tmp.s1, met2004[, list(day,WS,stn)], 
-                            "aodid", "stn", "meanT", "WS", knearest = 5, maxdistance = NA)
+                            "aodid", "stn", "meanT", "WS", knearest = 7, maxdistance = NA)
 
 setkey(aodf.2004.tmp.s1,aodid,day)
 setkey(closestaodse,aodid,day)
@@ -196,7 +197,7 @@ met2004<- WD[c==2004]
 met.m <- makepointsmatrix(met2004, "X", "Y", "stn")
 closestaodse<- nearestbyday(lu.m ,met.m , 
                             aodf.2004.tmp.s2, met2004[, list(day,WD,stn)], 
-                            "aodid", "stn", "meanT", "WD", knearest = 5, maxdistance = NA)
+                            "aodid", "stn", "meanT", "WD", knearest = 7, maxdistance = NA)
 
 setkey(aodf.2004.tmp.s2,aodid,day)
 setkey(closestaodse,aodid,day)
@@ -211,7 +212,7 @@ met2004<- Rain[c==2004]
 met.m <- makepointsmatrix(met2004, "X", "Y", "stn")
 closestaodse<- nearestbyday(lu.m ,met.m , 
                             aodf.2004.tmp.s3, met2004[, list(day,Rain,stn)], 
-                            "aodid", "stn", "meanT", "Rain", knearest = 5, maxdistance = NA)
+                            "aodid", "stn", "meanT", "Rain", knearest = 7, maxdistance = NA)
 
 setkey(aodf.2004.tmp.s3,aodid,day)
 setkey(closestaodse,aodid,day)
@@ -226,7 +227,7 @@ met2004<- RH[c==2004]
 met.m <- makepointsmatrix(met2004, "X", "Y", "stn")
 closestaodse<- nearestbyday(lu.m ,met.m , 
                             aodf.2004.tmp.s4, met2004[, list(day,RH,stn)], 
-                            "aodid", "stn", "meanT", "RH", knearest = 5, maxdistance = NA)
+                            "aodid", "stn", "meanT", "RH", knearest = 7, maxdistance = NA)
 
 setkey(aodf.2004.tmp.s4,aodid,day)
 setkey(closestaodse,aodid,day)
@@ -290,13 +291,13 @@ aodf.2004.tmp.s9<-aodf.2004.tmp.s9[, c(53,54) := NULL]
 
 ###save mods
 #mod3
-saveRDS(aodf.2004.tmp.s9,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2004.rds")
+saveRDS(aodf.2004.tmp.s9,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.TR.2004.rds")
 #mod2
 aodf.2004.tmp.s9.m2 <- aodf.2004.tmp.s9[!is.na(aod)]
-saveRDS(aodf.2004.tmp.s9.m2,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2004.rds")
+saveRDS(aodf.2004.tmp.s9.m2,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.TR.2004.rds")
+
+
 #mod1
-
-
 ##################################
 #PM25
 ##################################
@@ -326,12 +327,10 @@ pm.m <- makepointsmatrix(PM25, "x_stn_ITM", "y_stn_ITM", "stn")
 setkey(aodf.2004.tmp.s9.m2,aodid)
 #create aod terra matrix
 aod.m <- makepointsmatrix(aodf.2004.tmp.s9.m2[aodf.2004.tmp.s9.m2[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
-
-
 ########### join Terra to PM25
 closestaod <- nearestbyday(pm.m, aod.m, 
                            PM25, aodf.2004.tmp.s9.m2, 
-                           "stn", "aodid", "closestaod", "aod", knearest = 5, maxdistance = 1500)
+                           "stn", "aodid", "closestaod", "aod", knearest = 7, maxdistance = 1500)
 
 setkey(PM25,stn,day)
 setkey(closestaod,stn,day)
@@ -339,7 +338,7 @@ PM25.m1 <- merge(PM25[,list(stn,day,PM25)], closestaod, all.x = T)
 PM25.m1<-PM25.m1[!is.na(aod)]
 
 #save mod 1
-saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2004.rds")
+saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.TR.2004.rds")
 
 
 
@@ -369,13 +368,13 @@ PM10<- PM10[c==2004]
 
 #create PM matrix
 pm.m <- makepointsmatrix(PM10, "x_stn_ITM", "y_stn_ITM", "stn")
-setkey(aodf.2004.tmp.s9.m2,aodid)
 #create aod terra matrix
+setkey(aodf.2004.tmp.s9.m2,aodid)
 aod.m <- makepointsmatrix(aodf.2004.tmp.s9.m2[aodf.2004.tmp.s9.m2[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
 ########### join Terra to PM10
 closestaod <- nearestbyday(pm.m, aod.m, 
                            PM10, aodf.2004.tmp.s9.m2, 
-                           "stn", "aodid", "closestaod", "aod", knearest = 5, maxdistance = 1500)
+                           "stn", "aodid", "closestaod", "aod", knearest = 7, maxdistance = 1500)
 
 setkey(PM10,stn,day)
 setkey(closestaod,stn,day)
@@ -383,4 +382,4 @@ PM10.m1 <- merge(PM10[,list(stn,day,PM10)], closestaod, all.x = T)
 PM10.m1<-PM10.m1[!is.na(aod)]
 
 #save mod 1
-saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.PM10.AQ.2004.rds")
+saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.PM10.TR.2004.rds")
