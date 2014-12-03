@@ -106,6 +106,9 @@ m1.formula <- as.formula(PM25~ aod+
                         +p_os.s+p_dev.s+p_dos.s+p_farm.s+p_for.s+p_ind.s  #land use
                          +(1+aod|day/reg_num))
 
+
+
+
 m1.fit.2003 <-  lmer(m1.formula,data=m1.2003,weights=normwt)
 m1.2003$predicted <- predict(m1.fit.2003)
 mod1table$r2003[1]<-summary(lm(PM25~predicted,data=m1.2003))$r.squared 
@@ -113,6 +116,171 @@ mod1table$r2003[1]<-summary(lm(PM25~predicted,data=m1.2003))$r.squared
 
 
 ######## CV
+
+#s1
+splits_s1 <- splitdf(m1.2003)
+mod1d_10_s1 <- splits_s1$trainset
+mod1d_90_s1 <- splits_s1$testset
+out_90_s1 =  lmer(m1.formula,data =  mod1d_90_s1,weights=normwt)
+mod1d_10_s1$predicted <- predict(object=out_90_s1,newdata=mod1d_10_s1,allow.new.levels=TRUE,re.form=NULL )
+
+
+#s2
+splits_s2 <- splitdf(m1.2003)
+mod1d_10_s2 <- splits_s2$trainset
+mod1d_90_s2 <- splits_s2$testset
+out_90_s2 =  lmer(m1.formula,data =  mod1d_90_s2,weights=normwt)
+mod1d_10_s2$predicted <- predict(object=out_90_s2,newdata=mod1d_10_s2,allow.new.levels=TRUE,re.form=NULL )
+
+#s3
+splits_s3 <- splitdf(m1.2003)
+mod1d_10_s3 <- splits_s3$trainset
+mod1d_90_s3 <- splits_s3$testset
+out_90_s3 =  lmer(m1.formula,data =  mod1d_90_s3,weights=normwt)
+mod1d_10_s3$predicted <- predict(object=out_90_s3,newdata=mod1d_10_s3,allow.new.levels=TRUE,re.form=NULL )
+
+#s4
+splits_s4 <- splitdf(m1.2003)
+mod1d_10_s4 <- splits_s4$trainset
+mod1d_90_s4 <- splits_s4$testset
+out_90_s4 =  lmer(m1.formula,data =  mod1d_90_s4,weights=normwt)
+mod1d_10_s4$predicted <- predict(object=out_90_s4,newdata=mod1d_10_s4,allow.new.levels=TRUE,re.form=NULL )
+
+#s5
+splits_s5 <- splitdf(m1.2003)
+mod1d_10_s5 <- splits_s5$trainset
+mod1d_90_s5 <- splits_s5$testset
+out_90_s5 =  lmer(m1.formula,data =  mod1d_90_s5,weights=normwt)
+mod1d_10_s5$predicted <- predict(object=out_90_s5,newdata=mod1d_10_s5,allow.new.levels=TRUE,re.form=NULL )
+
+
+#s6
+splits_s6 <- splitdf(m1.2003)
+mod1d_10_s6 <- splits_s6$trainset
+mod1d_90_s6 <- splits_s6$testset
+out_90_s6 =  lmer(m1.formula,data =  mod1d_90_s6,weights=normwt)
+mod1d_10_s6$predicted <- predict(object=out_90_s6,newdata=mod1d_10_s6,allow.new.levels=TRUE,re.form=NULL )
+
+
+#s7
+splits_s7 <- splitdf(m1.2003)
+mod1d_10_s7 <- splits_s7$trainset
+mod1d_90_s7 <- splits_s7$testset
+out_90_s7 =  lmer(m1.formula,data =  mod1d_90_s7,weights=normwt)
+mod1d_10_s7$predicted <- predict(object=out_90_s7,newdata=mod1d_10_s7,allow.new.levels=TRUE,re.form=NULL )
+
+#s8
+splits_s8 <- splitdf(m1.2003)
+mod1d_10_s8 <- splits_s8$trainset
+mod1d_90_s8 <- splits_s8$testset
+out_90_s8 =  lmer(m1.formula,data =  mod1d_90_s8,weights=normwt)
+mod1d_10_s8$predicted <- predict(object=out_90_s8,newdata=mod1d_10_s8,allow.new.levels=TRUE,re.form=NULL )
+
+#s9
+splits_s9 <- splitdf(m1.2003)
+mod1d_10_s9 <- splits_s9$trainset
+mod1d_90_s9 <- splits_s9$testset
+out_90_s9 =  lmer(m1.formula,data =  mod1d_90_s9,weights=normwt)
+mod1d_10_s9$predicted <- predict(object=out_90_s9,newdata=mod1d_10_s9,allow.new.levels=TRUE,re.form=NULL )
+
+#s10
+splits_s10 <- splitdf(m1.2003)
+mod1d_10_s10 <- splits_s10$trainset
+mod1d_90_s10 <- splits_s10$testset
+out_90_s10 =  lmer(m1.formula,data =  mod1d_90_s10,weights=normwt)
+mod1d_10_s10$predicted <- predict(object=out_90_s10,newdata=mod1d_10_s10,allow.new.levels=TRUE,re.form=NULL )
+####BIND ALL 10% into 1 dataset
+mod1CV_all<- data.table(rbind(mod1d_10_s1,mod1d_10_s2,mod1d_10_s3,mod1d_10_s4,mod1d_10_s5,mod1d_10_s6,mod1d_10_s7,mod1d_10_s8,mod1d_10_s9, mod1d_10_s10))
+# cleanup (remove from WS) objects from CV
+rm(list = ls(pattern = "mod1d|out_|splits_"))
+mod1CV_reg <- lm(mod1CV_all$PM25~mod1CV_all$predicted)
+mod1table$r2003[2] <-summary(mod1CV_reg)$r.squared #R2
+mod1table$r2003[3] <-summary(mod1CV_reg)$coef[1,1] #intercept
+mod1table$r2003[4] <-summary(mod1CV_reg)$coef[1,2] #intercept SE
+mod1table$r2003[5] <-summary(mod1CV_reg)$coef[2,1] #Slope
+mod1table$r2003[6] <-summary(mod1CV_reg)$coef[2,2] #Slope SE
+mod1table$r2003[7]<- sqrt(mean(mod1CV_reg$residual^2))#rmspe
+
+#spatial
+m1CV_agg <- (mod1CV_all[, j=list(mean(PM25, na.rm = TRUE),mean(predicted, na.rm = TRUE)),by = stn])  
+# Rename column
+setnames(m1CV_agg,"V1","barpm")
+setnames(m1CV_agg,"V2","barpred")
+mod1_spatial <- lm(barpm ~ barpred, data=m1CV_agg)
+mod1table$r2003[8] <- summary(mod1_spatial)$r.squared
+
+#temporal
+setkey(m1CV_agg ,stn)
+setkey(mod1CV_all,stn)
+dat <- merge(mod1CV_all,m1CV_agg, all.x = T)
+dat$delpm <-dat$PM25-dat$barpm
+dat$delpred <-dat$predicted-dat$barpred
+mod_temporal <- lm(delpm ~ delpred, data=dat)
+mod1table$r2003[9] <-summary(mod_temporal)$r.squared
+#rmspe_spatial (RMSPE of spatial predictions)
+dat$spatresid<-dat$barpm-dat$barpred
+mod1table$r2003[10]<- sqrt(mean(dat$spatresid^2))
+
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#>>ADD LOCAL PM STAGE
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+luf<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/luf_NE_MIA.rds")
+
+#add 50m LU to CV data
+setkey(mod1CV_all,stn)
+setkey(luf,stn)
+mod1d_all_st <- merge(mod1CV_all, luf, all.x = T)
+mod1d_all_st<-na.omit(mod1d_all_st)
+#summary(mod1d_all_st)
+#create residual mp3 variable
+mod1d_all_st$resm1<-mod1d_all_st$PM25-mod1d_all_st$predicted
+
+
+#The GAM model
+bp.model.ps<-gam(resm1~s(tden,popden)+s(tden,pbl)+s(tden,WDSP)+s(pcturban,fx=FALSE,k=4,bs='cr')+s(elev,fx=FALSE,k=4,bs='cr')+s(dist_pemis,fx=FALSE,k=4,bs='cr')+s(dist_A1,fx=FALSE,k=4,bs='cr'),data=mod1d_all_st)
+#summary(bp.model.ps)
+mod1d_all_st$Predlocm <-predict(bp.model.ps)
+mod1d_all_st$OAPred <- mod1d_all_st$predicted+mod1d_all_st$Predlocm
+
+####################reg
+mod1d_reg_st <- lm(mod1d_all_st$PM25~mod1d_all_st$OAPred)
+
+mod1table$r2003[11] <-summary(mod1d_reg_st)$r.squared
+mod1table$r2003[12] <-summary(mod1d_reg_st)$coef[1,1]
+mod1table$r2003[13] <-summary(mod1d_reg_st)$coef[1,2]
+mod1table$r2003[14] <-summary(mod1d_reg_st)$coef[2,1]
+mod1table$r2003[15] <-summary(mod1d_reg_st)$coef[2,2]
+#rmspe
+mod1table$r2003[16]<- sqrt(mean(mod1d_reg_st$residual^2))
+
+#spatial
+aggf<- ddply(mod1d_all_st, c("stn"), function(df) return(c(barpm=mean(df$PM25),barpred=mean(df$predicted))))
+
+#spatial
+m1CVLPM_agg <- (mod1d_all_st[, j=list(mean(PM25, na.rm = TRUE),mean(predicted, na.rm = TRUE)),by = stn])  
+# Rename column
+setnames(m1CVLPM_agg,"V1","barpm")
+setnames(m1CVLPM_agg,"V2","barpred")
+mod1LPM_spatial <- lm(barpm ~ barpred, data=m1CVLPM_agg)
+mod1table$r2003[17] <- summary(mod1LPM_spatial)$r.squared
+
+#temporal
+setkey(m1CVLPM_agg,stn)
+setkey(mod1d_all_st,stn)
+dat <- merge(mod1d_all_st,m1CVLPM_agg, all.x = T)
+dat$delpm <-dat$PM25-dat$barpm
+dat$delpred <-dat$predicted-dat$barpred
+mod_temporal <- lm(delpm ~ delpred, data=dat)
+mod1table$r2003[18] <-summary(mod_temporal)$r.squared
+#rmspe_spatial (RMSPE of spatial predictions)
+dat$spatresid<-dat$barpm-dat$barpred
+mod1table$r2003[19]<- sqrt(mean(dat$spatresid^2))
+
+
+#############save midpoint
+saveRDS(mod1table, "/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2003_p1.rds")
+
+
 
 
 ###############

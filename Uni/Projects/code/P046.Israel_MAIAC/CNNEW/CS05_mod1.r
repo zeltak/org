@@ -96,12 +96,17 @@ pm25.m1[,p_os.s:= scale(p_os)]
 
 #lme mixed model
 #m1.formula <- as.formula(PM25~ aod+(1+aod|day))
-m1.formula <- as.formula(PM25~ aod+
+m1.formula <- as.formula(PM25~ ns(aod,2)+
                         Temp+WD+RH+WS+Dust+Rain+MeanPbl.s #temporal
                         +elev.s+tden.s+pden.s+dist2rail.s+dist2A1.s+Dist2road.s+dist2water.s+ndvi.s+season #spatial
                         +p_os.s+p_dev.s+p_dos.s+p_farm.s+p_for.s+p_ind.s  #land use
                           +as.factor(reg_num)+aod:as.factor(reg_num)+
                          +(1+aod|day/reg_num))
+#lme mixed model
+#m1.formula <- as.formula(PM25~ aod+(1+aod|day))
+m1.formula <- as.formula(PM25~ ns(aod,2)+
+                                                 (1+aod|day))
+
 
 m1.fit<-  lmer(m1.formula,data=pm25.m1,weights=normwt)
 pm25.m1$predicted <- predict(m1.fit)
