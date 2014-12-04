@@ -106,17 +106,28 @@ m1.formula <- as.formula(PM25~ aod+
                         +p_os.s+p_dev.s+p_dos.s+p_farm.s+p_for.s+p_ind.s  #land use
                          +(1+aod|day/reg_num))
 
-
-
-
+#full fit
 m1.fit.2003 <-  lmer(m1.formula,data=m1.2003,weights=normwt)
 m1.2003$predicted <- predict(m1.fit.2003)
 mod1table$r2003[1]<-summary(lm(PM25~predicted,data=m1.2003))$r.squared 
 
 
+#spatial
+spatial2003<-m1.2003 %>%
+    group_by(stn) %>%
+    summarise(barpm = mean(PM25, na.rm=TRUE), barpred = mean(predicted, na.rm=TRUE)) 
+mod1table$r2003[8]<-  summary(lm(barpm ~ barpred, data=spatial2003))$r.squared
+spatial2003[,spatresid:= barpm-barpred]
+mod1table$r2003[10]<- sqrt(mean(spatial2003$spatresid^2))                   
+                           
+#temporal
+tempo2003<-left_join(m1.2003,spatial2003)
+tempo2003[,delpm := PM25-barpm]
+tempo2003[,delpred := PM25-barpred]
+mod1table$r2003[9] <- summary(lm(delpm ~ delpred, data=tempo2003))$r.squared
+
 
 ######## CV
-
 #s1
 splits_s1 <- splitdf(m1.2003)
 mod1d_10_s1 <- splits_s1$trainset
@@ -191,6 +202,9 @@ out_90_s10 =  lmer(m1.formula,data =  mod1d_90_s10,weights=normwt)
 mod1d_10_s10$predicted <- predict(object=out_90_s10,newdata=mod1d_10_s10,allow.new.levels=TRUE,re.form=NULL )
 ####BIND ALL 10% into 1 dataset
 mod1CV_all<- data.table(rbind(mod1d_10_s1,mod1d_10_s2,mod1d_10_s3,mod1d_10_s4,mod1d_10_s5,mod1d_10_s6,mod1d_10_s7,mod1d_10_s8,mod1d_10_s9, mod1d_10_s10))
+# save CV data sets
+saveRDS(mod1CV_all,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1CVset.2003.rds")
+
 # cleanup (remove from WS) objects from CV
 rm(list = ls(pattern = "mod1d|out_|splits_"))
 mod1CV_reg <- lm(mod1CV_all$PM25~mod1CV_all$predicted)
@@ -200,6 +214,22 @@ mod1table$r2003[4] <-summary(mod1CV_reg)$coef[1,2] #intercept SE
 mod1table$r2003[5] <-summary(mod1CV_reg)$coef[2,1] #Slope
 mod1table$r2003[6] <-summary(mod1CV_reg)$coef[2,2] #Slope SE
 mod1table$r2003[7]<- sqrt(mean(mod1CV_reg$residual^2))#rmspe
+
+#spatial
+spatialCV2003<-mod1CV_all %>%
+    group_by(stn) %>%
+    summarise(barpm = mean(PM25, na.rm=TRUE), barpred = mean(predicted, na.rm=TRUE)) 
+mod1table$r2003[8]<-  summary(lm(barpm ~ barpred, data=spatialCV2003))$r.squared
+spatialCV2003[,spatresid:= barpm-barpred]
+mod1table$r2003[10]<- sqrt(mean(spatialCV2003$spatresid^2))                   
+                           
+#temporal
+tempoCV2003<-left_join(mod1CV_all,spatialCV2003)
+tempoCV2003[,delpm := PM25-barpm]
+tempoCV2003[,delpred := PM25-barpred]
+mod1table$r2003[9] <- summary(lm(delpm ~ delpred, data=tempoCV2003))$r.squared
+
+
 
 #spatial
 m1CV_agg <- (mod1CV_all[, j=list(mean(PM25, na.rm = TRUE),mean(predicted, na.rm = TRUE)),by = stn])  
