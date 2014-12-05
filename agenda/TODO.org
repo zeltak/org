@@ -14,6 +14,10 @@ change to terminator from lilyterm
 check patst.sh in ZH_tmp
 check tarman
 org habits 
+** custom Emacs search and replace
+something like this (defun zeltak-whatever (&rest rest) (interactive) (save-excursion    
+ (goto-char (point-min)) (apply #'query-replace-regexp rest)))                            
+ then (define-key ...
 ** sync//backup project
 *** Uni IP's
 

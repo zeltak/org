@@ -1,5 +1,7 @@
 #+Title: Linux
 #+TAGS: Fav(f) Most_used(m) cbugs(c)
+#+STARTUP: overview
+
 
 * distros/WM
 ** arch
@@ -27987,9 +27989,6 @@ characters that you'll need to replace:
  [[macsen_files/Image_uAzmRVDZTNs1blt9dZ9E2g_0001.png]]
 
 ******** search
-
-
-
 How to search text?
 
 Press Ctrl+s (isearch-forward), then type your text. Emacs will
@@ -28007,17 +28006,17 @@ last searched word.
 ******** search for current word
 typing C-s (for isearch) followed by C-w which searches for the current word
 
-******** find and replace
+******** search and replace
 How to findreplace?
 
-Press Alt+% (query-replace). Then, emacs will prompt you for the
-find string and replace string. Once emacs found a match, you can press
-y to replace, n to skip, or ! to do all replacement without asking. To
-cancel further finding, press Ctrl+g.
+Press Alt+% (`query-replace`). Then, emacs will prompt you for the find string and replace string. Once emacs found a match, you can press
+y to replace, n to skip, or ! to do all replacement without asking. To cancel further finding, press Ctrl+g.
 
 If you made a mistake, you can cancel by pressing Ctrl+g. If you
 want to revert the findreplace you did, you can call undo by pressing
 Ctrl+ .
+
+%Tip% to search and replace in all doc either go to start of doc or press ?C-x h? (will select all doc) and the issue replace
 
 For regex replace and detail on issues of letter cases, see:
 [[http://ergoemacs.org/emacs/emacs_find_replace.html][FindReplace with
@@ -28566,6 +28565,27 @@ the agenda folder is defined in the org config:
 ;;For agenda files locations, each location you add within " "
 (setq org-agenda-files '("~/org/files/agenda/"))
 #+END_SRC
+
+******* startup
+******** startup options
+********* Initial visibility
+Initial visibility
+
+When Emacs first visits an Org file, the global state is set to OVERVIEW, i.e., only the top level headlines are visible1. This can be configured through the variable org-startup-folded, or on a per-file basis by adding one of the following lines anywhere in the buffer:
+
+#+BEGIN_EXAMPLE
+     #+STARTUP: overview
+     #+STARTUP: content
+     #+STARTUP: showall
+     #+STARTUP: showeverything
+#+END_EXAMPLE
+
+The startup visibility options are ignored when the file is open for the first time during the agenda generation: if you want the agenda to honor the startup visibility, set org-agenda-inhibit-startup to nil.
+
+Furthermore, any entries with a ‘VISIBILITY’ property (see Properties and Columns) will get their visibility adapted accordingly. Allowed values for this property are folded, children, content, and all.
+
+C-u C-u <TAB>     (org-set-startup-visibility)
+Switch back to the startup visibility of the buffer, i.e., whatever is requested by startup options and ‘VISIBILITY’ properties in individual entries.
 
 ******* BASE
 ******** Manual
@@ -29484,6 +29504,16 @@ org-ascii-publish-to-utf8
                      )
 ))
 #+END_SRC
+******** HTML export options
+A few other are used exclusively by the html exporter:
+
+#+BEGIN_EXAMPLE
+#+LANGUAGE:  en
+#+INFOJS_OPT: view:showall toc:t ltoc:t mouse:underline path:http://orgmode.org/org-info.js
+#+LINK_HOME: http://home.fnal.gov/~neilsen
+#+LINK_UP: http://home.fnal.gov/~neilsen/notebook
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="../css/notebook.css" />
+#+END_EXAMPLE
 ******* refile
 ********* base 
 To refile tasks in org you need to tell it where you want to refile things.
