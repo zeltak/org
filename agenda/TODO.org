@@ -14,10 +14,37 @@ change to terminator from lilyterm
 check patst.sh in ZH_tmp
 check tarman
 org habits 
-** custom Emacs search and replace
+** custom Emacs search and replace				       :COOK:
 something like this (defun zeltak-whatever (&rest rest) (interactive) (save-excursion    
  (goto-char (point-min)) (apply #'query-replace-regexp rest)))                            
  then (define-key ...
+** org sparese
+punchagan | zeltak: it looks like properties need to be all upper case. 
+ punchagan | zeltak: for instance I changed Ammount to AMMOUNT
+ punchagan | and it workd.. 
+    zeltak | wow ok let me try
+    zeltak | holy crap
+    zeltak | it worked
+    zeltak | so what was it..wow i guess i missed it in the manual
+ punchagan | zeltak: and it's a bug.. :)
+    zeltak | hehe :)
+ punchagan | zeltak: I don't think there is a hard and fast rule specified anywhere in the manual
+ punchagan | in face the properties section in the manual has an example .. that doesn't do this
+ punchagan | Imagine maintaining a file where you document bugs and plan releases for a piece of software. Instead of using
+           | tags like ‘:release_1:’, ‘:release_2:’, you can use a property, say ‘:Release:’, that in different subtrees has |
+           | different values, such as ‘1.0’ or ‘2.0’                                                                        |
+    zeltak | punchagan: i see
+    zeltak | ok good to know its a bug :)
+    zeltak | appriciate the help!
+    zeltak | can one sparese tree match on 2 properties?
+ punchagan | zeltak: no problem! and thanks for the recipes.. I see you have an Indian tag. me checks out.. 
+    zeltak | punchagan: your welcome! :)
+ punchagan | zeltak: you can do all kinds of stuff with `C-c / m' or `C-c \'. 
+ punchagan | zeltak: FAV="y"+Indian+TODO="SHOP"
+ punchagan | would work.. 
+ punchagan | (modulo the bug..)
+    zeltak | punchagan: cool thx!
+-mode
 ** sync//backup project
 *** Uni IP's
 
@@ -837,3 +864,6 @@ Ahmhed:
 
 
 
+
+
+* T

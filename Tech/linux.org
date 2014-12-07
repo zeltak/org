@@ -25673,6 +25673,21 @@ You can use C-h v to descrive auto-mode-alist fully
           (lambda ()      
             (flyspell-mode)))
 #+END_SRC
+******** check what the variable is set to
+it's easy to check whether local variables were actually set the way you expected,just use
+
+?C-h v? `VAR`
+
+for the `VAR` in question, and Emacs tells you if it has a buffer-local value.
+
+₆In example₆ C-h org-use-tag-inheritance will tell you if its set to t or nili
+
+******** describe key and get the key functions name
+use ?C-h k? , followed by the keybind
+******** add a speicifc orgmode TODO state
+#+BEGIN_SRC emacs-lisp :results none
+(org-todo "COOK") 
+#+END_SRC
 ******* Functions
 ******** simple food template Function
 here is an anotated version
@@ -29469,6 +29484,10 @@ Then use this in an Org file:
 This way, if Google decides to change it's url structure, all you have
 to do is redefine your link type, instead of all email links.
 
+******* column view
+******** base keys 
+see the cheat sheet id:a093cf5d-e70e-4127-b605-047bfbcee113                                        
+******* 
 ******* export
 ******** export in file options
 The table of contents is normally inserted directly before the first headline of the file. The depth of the table is by default the same as the number of headline levels, but you can choose a smaller number, or turn off the table of contents entirely, by configuring the variable org-export-with-toc, or on a per-file basis with a line like
@@ -30002,11 +30021,8 @@ Org will recognize plain URL-like links and activate them as clickable links. Th
 #+END_SRC
 If you place the cursor at the beginning or just behind the end of the displayed text and press <BACKSPACE>, you will remove the (invisible) bracket at that location. This makes the link incomplete and the internals are again displayed as plain text.
 ******** keybinds
+http://orgmode.org/manual/Handling-links.html
 
-| C-c C-l                                | insert link                                     |
-| C-u C-c C-l                            | insert link RELATIVE PATH                       |
-| C-c C-l (with cursor on existing link) | edit the link and description parts of the link |
-| C-c C-o                                | open current link                               |
 | C-u C-c C-o                            | open link in EMACS                              |
 | C-c %                                  | mark position on org                            |
 | C-C &                                  | go back to marked position                      |
@@ -30061,6 +30077,7 @@ where the ::25 means line 25 in that file
  (setq org-return-follows-link t)
  ;(setq org-tab-follows-link t)
 ******** Custom links
+	 
 ********* Tag Searches
 For another use case, the following code defines links which search your headlines for specific tags.
 #+BEGIN_SRC emacs-lisp :results none
@@ -30102,6 +30119,54 @@ TODO Refactor [[grep:OldClassName][OldClassName]] into NewClassName
 #+END_EXAMPLE
 
 [[Bittorrent-sync%20(btsync)][Bittorrent-sync (btsync)]] CLI Admin
+******** org-id 
+********* base commands
+org-id-get-create
+       Create an ID for the entry at point if it does not yet have one.
+       Returns the ID (old or new).  This function can be used
+       interactively, with prefix argument the creation of a new ID is
+       forced, even if there was an old one.
+
+org-id-get
+       Get the ID property of an entry.  Using appropriate arguments
+       to the function, it can also create the ID for this entry.
+
+org-id-goto
+       Command to go to a specific ID, this command can be used
+       interactively.
+
+org-id-get-with-outline-path-completion
+       Retrieve the ID of an entry, using outline path completion.
+       This function can work for multiple files.
+
+org-id-get-with-outline-drilling
+       Retrieve the ID of an entry, using outline path completion.
+       This function only works for the current file.
+
+org-id-find
+       Find the location of an entry with specific id.
+********* copy and id and linking to an id in orgmode
+to copy an id `use org-id-copy` (also creates one if missing on header for you)
+
+to link to it use in org the internal `id` command:
+id:B7423F4D-2E8A-471B-8810-C40F074717E9  >>> Link to heading by ID
+
+so you would go:
+#+BEGIN_EXAMPLE
+id: PASTE ID FROM KILL RING
+#+END_EXAMPLE
+
+$Note$ you can also use this in the config and then the copied id's will appear in the normal insert link menu (default bound to C-c C-l
+
+#+BEGIN_SRC emacs-lisp :results none
+(setq org-id-link-to-org-use-id t)
+ #+END_SRC
+
+******** force open links in Emacs 
+********* for documents (docview)
+docview:papers/last.pdf::NNN              open in doc-view mode at page 
+********* general open by Emacs
+ file+emacs:/path/to/file                  force opening by Emacs
 ******* view
 ******** TODO make subfolders folded(hidden) by default
 use this
