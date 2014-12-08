@@ -950,6 +950,13 @@ Developed, High Intensity - Includes highly developed areas where people reside 
 #+attr_html: :width 300px
  [[/home/zeltak/org/attach/images_2014/snapshot4_2014-04-03_13:29:17.png]]
  
+** calculate relevant study area
+I used a map of israel borders and made sure using basemaps that it didn't go over oceans
+I added some are using vertex editing that were outside the green like like modian and jeruslame areas
+I created a 500m buffer around borders (and water bodies) using create buffer internally. then I used select by locations to select points falling inside that buffer
+finally in edit mode I delted these points so that we don't have points near water bodies
+
+ 
 * 3.Analysis
 ** Cross validation mod1
 in this part using the scripts:

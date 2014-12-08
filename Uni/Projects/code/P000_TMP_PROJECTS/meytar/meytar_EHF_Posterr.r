@@ -104,7 +104,7 @@ m1.formula <- as.formula(PM25~ aod+(1+aod|day/reg_num))
 #full fit
 m1.fit.2007 <-  lmer(m1.formula,data=m1.2007,weights=normwt)
 m1.2007$predicted <- predict(m1.fit.2007)
-mod1table$r2007[1]<-summary(lm(PM25~predicted,data=m1.2007))$r.squared #0.75
+summary(lm(PM25~predicted,data=m1.2007))$r.squared #0.747
 
 
 ###############
@@ -130,14 +130,15 @@ m2.2007[,p_os.s:= scale(p_os)]
 
 #generate predictions
 m2.2007[, pred.m2 := predict(object=m1.fit.2007,newdata=m2.2007,allow.new.levels=TRUE,re.form=NULL)]
-
+#test
+#describe(m2.2007$pred.m2)
+#hist(m2.2007$pred.m2)
 #delete implossible values
 m2.2007 <- m2.2007[pred.m2 > 0.00000000000001 , ]
 m2.2007 <- m2.2007[pred.m2 < 500   , ]
 
-#test
-describe(m2.2007$pred.m2)
-hist(m2.2007$pred.m2)
+Dayx <- m2.2007[day == "2000-12-27"]
+
 
 #######
 #M2 R2
@@ -165,4 +166,4 @@ ggsave(file="/media/NAS/Uni/Projects/P046.Israel_MAIAC/3.Work/2.Gather_data/FN00
 saveRDS(mod1table, "/media/NAS/Uni/Projects/P046.Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2007_p2.rds")
 keep(mod1table , sure=TRUE) 
 gc()
-write.csv(m2_agg,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/ltpm.m2.2007.csv")
+write.csv(m2_agg,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/ltpm.m2.2007LUT.csv")

@@ -133,6 +133,7 @@ ilgreen <- fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data
 aqua<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/AOD_AQ_0014.RDS")
 aqua <- aqua[aqua$aodid %in% ilgreen$aodid, ] 
 aqua<- aqua[yr == "2007"]
+#system.time(aqua[, MaskLandWaterSnow := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[4:5]), collapse = "")}))])
 system.time(aqua[, MaskAdjacency := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[6:8]), collapse = "")}))])
 #clean
 l=seq(names(aqua));names(l)=names(aqua);l
@@ -275,7 +276,11 @@ setkey(dust2, day, stn)
 aodf.2007.tmp.s9 <- merge(aodf.2007.tmp.s8, dust2[,list(day,stn,Dust)], all.x = T)
 aodf.2007.tmp.s9<-aodf.2007.tmp.s9[is.na(Dust), Dust:= 0]
 
+
 #########-------------------############
+#clean
+aodf.2007.tmp.s9<-aodf.2007.tmp.s9[,]
+aodf.2007.tmp.s9 <- aodf.2007.tmp.s9[Temp != 'NA']
 #create weights
 aodf.2007.tmp.s9<-aodf.2007.tmp.s9[,obs:=1]
 aodf.2007.tmp.s9[is.na(aod), obs:= 0]
