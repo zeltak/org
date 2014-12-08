@@ -104,6 +104,49 @@ m1.2003[,WS.s:= scale(WS)]
 m1.2003[,RH.s:= scale(RH)]
 m1.2003[,Rain.s:= scale(Rain)]
 
+m1.2003[,zid := 1] #create id variable
+
+
+
+#set direction right so that all variables are positvly associated with PM (IE make pctopenspace positvy 'associated' with pm by multiplying by -1)
+m1.2003[,elev.s :=  elev.s*-1]
+m1.2003[,p_os.s :=  p_os.s*-1]
+m1.2003[,WS.s :=  WS.s*-1]
+m1.2003[,p_for.s :=  p_for.s*-1]
+m1.2003[,p_farm.s :=  p_farm.s*-1]
+m1.2003[,ndvi.s :=  ndvi.s*-1]
+m1.2003[,dist2A1.s :=  dist2A1.s*-1]
+m1.2003[,dist2water.s :=  dist2water.s*-1]
+m1.2003[,dist2rail.s :=  dist2rail.s*-1]
+m1.2003[,Dist2road.s :=  Dist2road.s*-1]
+
+#define spatial and temporal variables and create 2 matrixes: s.mat for spatial variables and t.mat for temporal variables
+attach(m1.2003)
+s.mat <- cbind(elev.s,tden.s,pden.s,dist2A1.s,dist2water.s,dist2rail.s,Dist2road.s,p_ind.s,p_for.s,p_farm.s,p_dos.s,p_dev.s,p_os.s)
+t.mat <- cbind(ndvi.s,MeanPbl.s,Temp.s,WD.s,WS.s,RH.s)
+detach(m1.2003)
+
+
+#function to create the matrix (st.mat) of interaction between the space variables and time variables
+
+  st.mat <-NULL
+  count <- 0
+#start of actual function
+for (i in 1: ncol(t.mat)){
+  for (j in 1: ncol(s.mat)){ 
+st.mat <- cbind (st.mat, t.mat[,i]*s.mat[,j])
+}
+}
+
+#get means for each variable types
+t.avgs <-apply(t.mat,1,mean)
+s.avgs <-apply(s.mat,1,mean)
+st.avgs <-apply(st.mat,1,mean)
+
+m1.2003 <- data.frame(m1.2003,s.mat,t.mat,st.mat,t.avgs,s.avgs,st.avgs)
+
+
+
 
 #lme mixed model
 #m1.formula <- as.formula(PM25~ aod+(1+aod|day))
@@ -113,10 +156,28 @@ m1.formula <- as.formula(PM25~ aod+
                         +p_os.s+p_dev.s+p_dos.s+p_farm.s+p_for.s+p_ind.s  #land use
                          +(1+aod|day/reg_num))
 
-#full fit
+
+
+
+#    model pm25 = aod Temp_F_x t_avgs s_avgs  st_avgs  / s outpred=pdataA_&year;
+#     random int aod Temp_F_x / sub = date s ;
+#   random int aod  / sub = date(reg_id) s;
+#     random x1--x18 / sub = zid type=toep(1) s;
+
+
+
+
+#lme mixed model
+#m1.formula <- as.formula(PM25~ aod+(1+aod|day))
+m1.formula <- as.formula(PM25~ aod+t.avgs+s.avgs+st.avgs+(1+aod|day/reg_num)+ (1+zid|X1)+ (1+zid|X2)+ (1+zid|X3)+ (1+zid|X4) )
+m1.formula <- as.formula(PM25~ aod+t.avgs+s.avgs+st.avgs+(1+aod|day/reg_num) )
+
 m1.fit.2003 <-  lmer(m1.formula,data=m1.2003,weights=normwt)
+
+
+
 m1.2003$predicted <- predict(m1.fit.2003)
-mod1table$r2003[1]<-summary(lm(PM25~predicted,data=m1.2003))$r.squared 
+summary(lm(PM25~predicted,data=m1.2003))$r.squared 
 
 
 #spatial
@@ -298,7 +359,7 @@ saveRDS(mod1table, "/media/NAS/Uni/Projects/P046.Israel_MAIAC/3.Work/2.Gather_da
 ###############
 #MOD2
 ###############
-m2.2003<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2003.rds")
+m2.2003<-readRDS("/media/NAS/Uni/Projects/P046.Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2003.rds")
 
 m2.2003[,elev.s:= scale(elev)]
 m2.2003[,tden.s:= scale(tden)]
