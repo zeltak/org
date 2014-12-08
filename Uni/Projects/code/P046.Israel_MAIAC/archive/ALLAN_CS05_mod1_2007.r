@@ -231,6 +231,77 @@ ggplot(mod1subsets, aes(yr, rsq)) + geom_point() + geom_line()
 
 
 
+
+
+# Cross-validation
+# for mod1
+
+stns <- unique(m1.2007$stn)
+
+# cross-validation and model building
+# repeated leave x stnitors out CV
+n.iter <- 20
+xout <- 5 # number of stnitors to hold out
+# how many combinations if we pull out xout stns
+ncol(combn(stns, 2))
+# list to store scheme
+cvscheme <- list()
+cvout <- list()
+system.time(for(i in 1:n.iter){
+  stns.test <- stns[sample(length(stns), xout)]
+  cvscheme[[i]] <- stns.test
+  test <- m1.2007[stn %in% stns.test, ]
+  train<- m1.2007[!stn %in% stns.test, ]
+  print(paste("iteration #", i, "testing set is stnitor", paste(unique(test$stn), collapse = ","), ",", nrow(test), "records from", paste(format(range(test$day), "%Y-%m-%d"), collapse = " to ")))
+  print(paste("training on", nrow(train), "records"))
+  trainmod <-  lmer(m1.formula, data =  train)
+  test$predcv <- predict(object=trainmod,newdata=test,allow.new.levels=TRUE,re.form=NULL )
+  test$itercv <- i  
+  # export these results
+  cvout[[i]] <- test[, list(day, stn, PM25, predcv, itercv)]
+}# end of cross-validation loop
+)
+alltest <- rbindlist(cvout)
+head(alltest, 2)
+summary(lm(PM25 ~ predcv, data = alltest))
+# compute root mean squared error
+alltest[, sqrt(mean((PM25 - predcv)^2))]
+
+alltest[which.max(PM25)]
+
+ggplot(alltest, aes(predcv, PM25)) + 
+  geom_abline(linetype = "dashed") + 
+  geom_point(aes(color = factor(itercv))) + geom_smooth() + 
+  facet_wrap(~stn) + coord_equal() + 
+  theme_bw(12)
+
+#save(iter.out, cv.rsq, stns.testset, file = "LUR_cross-validation_splits.Rdata") 
+
+
+# end of file
+
+
+# drop new years and newyears eve
+mod1 <- mod1[!dayofyr %in% c(1,365,366),]
+# drop christmas
+mod1 <- mod1[!day  %in% as.Date(paste0(2004:2014, "-12-25")), ]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #spatial
 spatialCV2007<-mod1CV_all %>%
     group_by(stn) %>%
