@@ -12170,8 +12170,6 @@ size
  fixed by setting tmux's aggressive-resize option.
 
 setw -g aggressive-resize on
-
-
 ***** colors
 
 you can use a hex code now in the tmux config to define colors IE:
@@ -12456,7 +12454,39 @@ OS X's Cmd+Tab is just as fast, but I don't think so.
  selects the next pane in numerical order
 
 ***** copy/paste mode
+`
+first configure you conf file to use better copy-paste config
 
+#+BEGIN_SRC sh
+setw -g mode-keys vi # vim-style movement
+# in normal tmux mode
+bind Escape copy-mode # `tmux prefix + Escape` starts copy mode.
+bind p paste-buffer # `prefix + p` pastes the latest buffer
+
+# in copy mode…
+bind -t vi-copy v begin-selection # `v` begins a selection. (movement keys to select the desired bits)
+bind -t vi-copy y copy-selection # `y` copies the current selection to one of tmux's "paste buffers"
+bind -t vi-copy V rectangle-toggle # `V` changes between line- and columnwise selection
+
+bind -t vi-copy Y copy-end-of-line # ^1
+bind + delete-buffer
+#+END_SRC
+
+I like Y to yank the current line, which is what ^1 does.
+
+Once you’ve copied some stuff, you can do more than just paste the last thing:
+
+#+BEGIN_EXAMPLE
+           #           List all paste buffers.
+           -           Delete the most recently copied buffer of text.
+           =           Choose which buffer to paste interactively from a list.
+           [           Enter copy mode to copy text or view the history.
+           ]           Paste the most recently copied buffer of text. 
+#+END_EXAMPLE
+
+$Note$ I have `[` remapped to `Escape` and `]` remapped to `p`. I use - for split-window -v, so I moved delete-buffer to +.)
+
+tmux remembers old buffers and prefix + = lets you paste them arbitrarily!
 ***** vi style
 
 to copy paste in VI mode with tmux:
@@ -29487,7 +29517,6 @@ to do is redefine your link type, instead of all email links.
 ******* column view
 ******** base keys 
 see the cheat sheet id:a093cf5d-e70e-4127-b605-047bfbcee113                                        
-******* 
 ******* export
 ******** export in file options
 The table of contents is normally inserted directly before the first headline of the file. The depth of the table is by default the same as the number of headline levels, but you can choose a smaller number, or turn off the table of contents entirely, by configuring the variable org-export-with-toc, or on a per-file basis with a line like
@@ -29740,33 +29769,32 @@ is open:
 Org-mode:
  pandoc -s -S FILE.html -o FILE.org
  
-******* convert formats to .org
-******** convert using calibre to org
+******** convert formats to .org
+********* convert using calibre to org
 
-Basically, Calibre -> htmlz -> unzip -> pandoc:
+ Basically, Calibre -> htmlz -> unzip -> pandoc:
 
-#+BEGIN_EXAMPLE
-$ cp ~/Calibre\ Library/Metz/Practi/.htmlz ./book.htmlz
-$ unzip -q book.htmlz 
-$ pandoc ./index.html -o book.org       
-#+END_EXAMPLE
+ #+BEGIN_EXAMPLE
+ $ cp ~/Calibre\ Library/Metz/Practi/.htmlz ./book.htmlz
+ $ unzip -q book.htmlz 
+ $ pandoc ./index.html -o book.org       
+ #+END_EXAMPLE
 
-After that I usually have to global convert [[image/foo.png]] to
-[[file:image/foo.png]] and add inlineimages to a start-up option on the
-file.
+ After that I usually have to global convert [[image/foo.png]] to
+ [[file:image/foo.png]] and add inlineimages to a start-up option on the
+ file.
  
-******* convert html to Org using pandoc
+******** convert html to Org using pandoc
 
-Org-mode:
- pandoc -s -S README -o example27.org
- pandoc -s -S FILE.html -o FILE.org
+ Org-mode:
+  pandoc -s -S README -o example27.org
+  pandoc -s -S FILE.html -o FILE.org
 
-[[http://johnmacfarlane.net/pandoc/demo/example27.org][http://johnmacfarlane.net/pandoc/demo/example27.org]]
- Warning if you get an error open the html file in an editor and
-save it with utf-8 encoding
+ [[http://johnmacfarlane.net/pandoc/demo/example27.org][http://johnmacfarlane.net/pandoc/demo/example27.org]]
+  Warning if you get an error open the html file in an editor and
+ save it with utf-8 encoding
 
 ******* dates
-
 ******** keybinds
 
 C-c .
@@ -30023,9 +30051,9 @@ If you place the cursor at the beginning or just behind the end of the displayed
 ******** keybinds
 http://orgmode.org/manual/Handling-links.html
 
-| C-u C-c C-o                            | open link in EMACS                              |
-| C-c %                                  | mark position on org                            |
-| C-C &                                  | go back to marked position                      |
+| C-u C-c C-o | open link in EMACS         |
+| C-c %       | mark position on org       |
+| C-C &       | go back to marked position |
 ******** External Links
 external linksstart with a short identifying string followed by a colon. There can be no space after the colon. The following list shows some examples for each link type.
 
