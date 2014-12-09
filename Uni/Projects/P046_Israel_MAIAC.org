@@ -940,6 +940,36 @@ later when we import into R it was multiplied by 100 to get the % open using fie
 
 
 We repeat this process for each land cover variable we want to try (see next section)
+*** Calculate the perecent of specific land use for the local 200m stage 
+
+we created a 300 meter buffer layer around the stations using the geoproccesing tool to preserve the layers attributes
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-12-09 10:31:33
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-12-09_10:31:33.png]]
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-12-09 10:19:16
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-12-09_10:19:16.png]]
+
+then using zonal statistics as table the mean ratio between 0(build area) and 1 (open space) was calculated as a table 
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2014-12-09 10:32:36
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-12-09_10:32:36.png]]
+
+
+this gave us the mean value in each cell
+
+later when we import into R it was multiplied by 100 to get the % open using field calculator:
+#+BEGIN_EXAMPLE
+[MEAN] * 100
+#+END_EXAMPLE
+
+We repeat this process for each land cover variable we want to try (see next section)
+
 *** Other Land cover variables calculated
 Developed, Open Space - Includes areas with a mixture of some constructed materials, but mostly vegetation in the form of lawn grasses. 
 

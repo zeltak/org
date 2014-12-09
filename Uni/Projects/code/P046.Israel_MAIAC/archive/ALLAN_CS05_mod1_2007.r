@@ -126,93 +126,6 @@ tempo2007[,delpred := PM25-barpred]
 mod1table$r2007[4] <- summary(lm(delpm ~ delpred, data=tempo2007))$r.squared
 
 
-######## CV
-#s1
-splits_s1 <- splitdf(m1.2007)
-mod1d_10_s1 <- splits_s1$trainset
-mod1d_90_s1 <- splits_s1$testset
-out_90_s1 =  lmer(m1.formula,data =  mod1d_90_s1,weights=normwt)
-mod1d_10_s1$predicted <- predict(object=out_90_s1,newdata=mod1d_10_s1,allow.new.levels=TRUE,re.form=NULL )
-
-
-#s2
-splits_s2 <- splitdf(m1.2007)
-mod1d_10_s2 <- splits_s2$trainset
-mod1d_90_s2 <- splits_s2$testset
-out_90_s2 =  lmer(m1.formula,data =  mod1d_90_s2,weights=normwt)
-mod1d_10_s2$predicted <- predict(object=out_90_s2,newdata=mod1d_10_s2,allow.new.levels=TRUE,re.form=NULL )
-
-#s3
-splits_s3 <- splitdf(m1.2007)
-mod1d_10_s3 <- splits_s3$trainset
-mod1d_90_s3 <- splits_s3$testset
-out_90_s3 =  lmer(m1.formula,data =  mod1d_90_s3,weights=normwt)
-mod1d_10_s3$predicted <- predict(object=out_90_s3,newdata=mod1d_10_s3,allow.new.levels=TRUE,re.form=NULL )
-
-#s4
-splits_s4 <- splitdf(m1.2007)
-mod1d_10_s4 <- splits_s4$trainset
-mod1d_90_s4 <- splits_s4$testset
-out_90_s4 =  lmer(m1.formula,data =  mod1d_90_s4,weights=normwt)
-mod1d_10_s4$predicted <- predict(object=out_90_s4,newdata=mod1d_10_s4,allow.new.levels=TRUE,re.form=NULL )
-
-#s5
-splits_s5 <- splitdf(m1.2007)
-mod1d_10_s5 <- splits_s5$trainset
-mod1d_90_s5 <- splits_s5$testset
-out_90_s5 =  lmer(m1.formula,data =  mod1d_90_s5,weights=normwt)
-mod1d_10_s5$predicted <- predict(object=out_90_s5,newdata=mod1d_10_s5,allow.new.levels=TRUE,re.form=NULL )
-
-
-#s6
-splits_s6 <- splitdf(m1.2007)
-mod1d_10_s6 <- splits_s6$trainset
-mod1d_90_s6 <- splits_s6$testset
-out_90_s6 =  lmer(m1.formula,data =  mod1d_90_s6,weights=normwt)
-mod1d_10_s6$predicted <- predict(object=out_90_s6,newdata=mod1d_10_s6,allow.new.levels=TRUE,re.form=NULL )
-
-
-#s7
-splits_s7 <- splitdf(m1.2007)
-mod1d_10_s7 <- splits_s7$trainset
-mod1d_90_s7 <- splits_s7$testset
-out_90_s7 =  lmer(m1.formula,data =  mod1d_90_s7,weights=normwt)
-mod1d_10_s7$predicted <- predict(object=out_90_s7,newdata=mod1d_10_s7,allow.new.levels=TRUE,re.form=NULL )
-
-#s8
-splits_s8 <- splitdf(m1.2007)
-mod1d_10_s8 <- splits_s8$trainset
-mod1d_90_s8 <- splits_s8$testset
-out_90_s8 =  lmer(m1.formula,data =  mod1d_90_s8,weights=normwt)
-mod1d_10_s8$predicted <- predict(object=out_90_s8,newdata=mod1d_10_s8,allow.new.levels=TRUE,re.form=NULL )
-
-#s9
-splits_s9 <- splitdf(m1.2007)
-mod1d_10_s9 <- splits_s9$trainset
-mod1d_90_s9 <- splits_s9$testset
-out_90_s9 =  lmer(m1.formula,data =  mod1d_90_s9,weights=normwt)
-mod1d_10_s9$predicted <- predict(object=out_90_s9,newdata=mod1d_10_s9,allow.new.levels=TRUE,re.form=NULL )
-
-#s10
-splits_s10 <- splitdf(m1.2007)
-mod1d_10_s10 <- splits_s10$trainset
-mod1d_90_s10 <- splits_s10$testset
-out_90_s10 =  lmer(m1.formula,data =  mod1d_90_s10,weights=normwt)
-mod1d_10_s10$predicted <- predict(object=out_90_s10,newdata=mod1d_10_s10,allow.new.levels=TRUE,re.form=NULL )
-####BIND ALL 10% into 1 dataset
-mod1CV_all<- data.table(rbind(mod1d_10_s1,mod1d_10_s2,mod1d_10_s3,mod1d_10_s4,mod1d_10_s5,mod1d_10_s6,mod1d_10_s7,mod1d_10_s8,mod1d_10_s9, mod1d_10_s10))
-# save CV data sets
-saveRDS(mod1CV_all,"/media/NAS/Uni/Projects/P046.Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1CVset.2007.rds")
-
-# cleanup (remove from WS) objects from CV
-rm(list = ls(pattern = "mod1d|out_|splits_"))
-mod1CV_reg <- lm(mod1CV_all$PM25~mod1CV_all$predicted)
-mod1table$r2007[5] <-summary(mod1CV_reg)$r.squared #R2
-mod1table$r2007[6] <-summary(mod1CV_reg)$coef[1,1] #intercept
-mod1table$r2007[7] <-summary(mod1CV_reg)$coef[1,2] #intercept SE
-mod1table$r2007[8] <-summary(mod1CV_reg)$coef[2,1] #Slope
-mod1table$r2007[9] <-summary(mod1CV_reg)$coef[2,2] #Slope SE
-mod1table$r2007[10]<- sqrt(mean(mod1CV_reg$residual^2))#rmspe
 #new method allan
 mod1[, sqrt(mean((daymean - predicted)^2))]
 
@@ -402,6 +315,8 @@ describe(m2.2007$pred.m2)
 #delete implossible values
 m2.2007 <- m2.2007[pred.m2 > 0.00000000000001 , ]
 m2.2007 <- m2.2007[pred.m2 < 500   , ]
+
+
 
 #test
 # describe(m2.2007$pred.m2)

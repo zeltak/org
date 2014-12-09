@@ -7828,6 +7828,14 @@ mod1d$seasonSW<-as.character(recode(mod1d$month,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2
 #+BEGIN_SRC R
 WD[, c := as.numeric(format(day, "%Y")) ]
 #+END_SRC
+
+**** drop specific dates from a dataset
+#+BEGIN_SRC R
+# drop new years and newyears eve
+mod1 <- mod1[!dayofyr %in% c(1,365,366),]
+# drop christmas
+mod1 <- mod1[!day  %in% as.Date(paste0(2004:2014, "-12-25")), ]
+#+END_SRC
      
      
 *** delete columns data.table
