@@ -137,7 +137,12 @@ m2.2007[, pred.m2 := predict(object=m1.fit.2007,newdata=m2.2007,allow.new.levels
 m2.2007 <- m2.2007[pred.m2 > 0.00000000000001 , ]
 m2.2007 <- m2.2007[pred.m2 < 500   , ]
 
-Dayx <- m2.2007[day == "2000-12-27"]
+Day17.1 <- m2.2007[day == "2007-01-17"]
+Day30.5 <- m2.2007[day == "2007-05-30"]
+write.csv(Day17.1,"/media/NAS/Uni/Projects/P000_TMP_PROJECTS/meytar_phd/ehf_poster/Day17.1.csv")
+write.csv(Day30.5,"/media/NAS/Uni/Projects/P000_TMP_PROJECTS/meytar_phd/ehf_poster/Day30.5.csv")
+
+
 
 
 #######

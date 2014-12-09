@@ -7503,6 +7503,62 @@ x<-m1.s1[unique(m1.s1[, list(stn, day)]), mult = "first"]
 
 #+END_SRC
 
+** LOOCV
+
+Here is some code for leave one (or many >1) CV method 
+`xout` below defines how many stations to leave out
+
+#+BEGIN_SRC R
+# Cross-validation
+#get the unique names of stations
+stns <- unique(m1.2007$stn)
+# cross-validation and model building
+# repeated leave x stnitors out CV
+#number of iterations you want the model to run
+n.iter <- 20
+xout <- 5 # number of stations to hold out
+# how many combinations if we pull out xout stns
+ncol(combn(stns, 2))
+# list to store scheme
+cvscheme <- list()
+cvout <- list()
+system.time(for(i in 1:n.iter){
+  stns.test <- stns[sample(length(stns), xout)]
+  cvscheme[[i]] <- stns.test
+  test <- m1.2007[stn %in% stns.test, ]
+  train<- m1.2007[!stn %in% stns.test, ]
+  print(paste("iteration #", i, "testing set is stnitor", paste(unique(test$stn), collapse = ","), ",", nrow(test), "records from", paste(format(range(test$day), "%Y-%m-%d"), collapse = " to ")))
+  print(paste("training on", nrow(train), "records"))
+  trainmod <-  lmer(m1.formula, data =  train)
+  test$predcv <- predict(object=trainmod,newdata=test,allow.new.levels=TRUE,re.form=NULL )
+  test$itercv <- i  
+  # export these results
+  cvout[[i]] <- test[, list(day, stn, PM25, predcv, itercv)]
+}# end of cross-validation loop
+)
+alltest <- rbindlist(cvout)
+head(alltest, 2)
+summary(lm(PM25 ~ predcv, data = alltest))
+# compute root mean squared error
+alltest[, sqrt(mean((PM25 - predcv)^2))]
+#+END_SRC
+
+%Tip- you can also plot these results with ggplot%    
+
+#+BEGIN_SRC R
+ggplot(alltest, aes(predcv, PM25)) + 
+  geom_abline(linetype = "dashed") + 
+  geom_point(aes(color = factor(itercv))) + geom_smooth() + 
+  facet_wrap(~stn) + coord_equal() + 
+  theme_bw(12)
+#+END_SRC
+
+
+
+** check max value of a variable
+#+BEGIN_SRC R
+alltest[which.max(PM25)]
+#+END_SRC
    
 * Packages specific
 ** Hemisc
@@ -7539,6 +7595,22 @@ modelList <- dlply(pm25.m1.c[A_T==1], "stn", function(x) lm(m1.formula, data=x))
 lapply(modelList, function(x) summary(x)$r.squared)
 #+END_SRC
 
+*** Alternative way>> run models on subset with plyr
+#+BEGIN_SRC R
+# easy way to run on subsets
+# first we define the function we want on each subset
+runandsummarizemod1 <- function(df){
+  out.m1.plyr = lmer(m1.formula, data = df)
+  df$predicted <- predict(out.m1.plyr)
+  data.frame(nobs = nrow(df), rsq = round(summary(lm(daymean~predicted, data = df))$r.squared, 3))  
+}
+# then we call ddply
+mod1subsets <- ddply(mod1, .(yr), runandsummarizemod1)
+mod1subsets
+ggplot(mod1subsets, aes(yr, rsq)) + geom_point() + geom_line()
+
+#+END_SRC
+    
 
 ** closestbyday  (allan KNN function)
 *** k nearest

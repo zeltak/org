@@ -117,7 +117,14 @@ spatial2007<-m1.2007 %>%
     summarise(barpm = mean(PM25, na.rm=TRUE), barpred = mean(predicted, na.rm=TRUE)) 
 mod1table$r2007[3]<-  summary(lm(barpm ~ barpred, data=spatial2007))$r.squared
 spatial2007[,spatresid:= barpm-barpred]
-mod1table$r2007[2]<- sqrt(mean(spatial2007$spatresid^2))                   
+mod1table$r2007[2]<- sqrt(mean(spatial2007$spatresid^2))        
+#new method allan
+mod1[, sqrt(mean((daymean - predicted)^2))]
+
+
+
+
+
                            
 #temporal
 tempo2007<-left_join(m1.2007,spatial2007)
