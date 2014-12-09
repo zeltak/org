@@ -92,14 +92,6 @@ m1.2007[,Rain.s:= scale(Rain)]
 
 
 
-#lme mixed model
-#m1.formula <- as.formula(PM25~ aod+(1+aod|day))
-# m1.formula <- as.formula(PM25~ aod+
-#                         Temp+WD+RH+WS+Dust+Rain+MeanPbl.s #temporal
-#                         +elev.s+tden.s+pden.s+dist2rail.s+dist2A1.s+Dist2road.s+dist2water.s+ndvi.s+season #spatial
-#                         +p_os.s+p_dev.s+p_dos.s+p_farm.s+p_for.s+p_ind.s  #land use
-#                          +(1+aod|day/reg_num) +(1|stn))
-
 m1.formula <- as.formula(PM25~ aod
                         +Temp.s+WD.s+RH.s+WS.s+Dust+Rain.s+MeanPbl.s #temporal
                         +elev.s+tden.s+pden.s+Dist2road.s+ndvi.s #spatial
@@ -110,28 +102,11 @@ m1.formula <- as.formula(PM25~ aod
 #full fit
 m1.fit.2007 <-  lmer(m1.formula,data=m1.2007,weights=normwt)
 m1.2007$pred.m1 <- predict(m1.fit.2007)
-res[res$year=="2007", 'm1.R2'] <- print(summary(lm(PM25~pred.m1,data=m1.2007))$r.squared)
+print(summary(lm(PM25~pred.m1,data=m1.2007))$r.squared)
 #RMSPE
-res[res$year=="2007", 'm1.PE'] <- print(rmse(residuals(m1.fit.2007)))
+print(rmse(residuals(m1.fit.2007)))
 
-#spatial
-###to check
-spatial2007<-m1.2007 %>%
-    group_by(stn) %>%
-    summarise(barpm = mean(PM25, na.rm=TRUE), barpred = mean(pred.m1, na.rm=TRUE)) 
-m1.fit.2007.spat<- lm(barpm ~ barpred, data=spatial2007)
-res[res$year=="2007", 'm1.R2.s'] <-  print(summary(lm(barpm ~ barpred, data=spatial2007))$r.squared)
-res[res$year=="2007", 'm1.PE.s'] <- print(rmse(residuals(m1.fit.2007.spat)))
-       
-#temporal
-tempo2007<-left_join(m1.2007,spatial2007)
-tempo2007$delpm <-tempo2007$PM25-tempo2007$barpm
-tempo2007$delpred <-tempo2007$pred.m1-tempo2007$barpred
-mod_temporal <- lm(delpm ~ delpred, data=tempo2007)
-res[res$year=="2007", 'm1.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2007))$r.squared)
-
-
-#---------------->>>> CV
+######## CV
 #s1
 splits_s1 <- splitdf(m1.2007)
 test_s1 <- splits_s1$testset
@@ -139,6 +114,7 @@ train_s1 <- splits_s1$trainset
 out_train_s1 <- lmer(m1.formula,data =  train_s1,weights=normwt)
 test_s1$pred.m1.cv <- predict(object=out_train_s1 ,newdata=test_s1,allow.new.levels=TRUE,re.form=NULL )
 test_s1$iter<-"s1"
+
 #s2
 splits_s2 <- splitdf(m1.2007)
 test_s2 <- splits_s2$testset
@@ -146,6 +122,7 @@ train_s2 <- splits_s2$trainset
 out_train_s2 <- lmer(m1.formula,data =  train_s2,weights=normwt)
 test_s2$pred.m1.cv <- predict(object=out_train_s2 ,newdata=test_s2,allow.new.levels=TRUE,re.form=NULL )
 test_s2$iter<-"s2"
+
 #s3
 splits_s3 <- splitdf(m1.2007)
 test_s3 <- splits_s3$testset
@@ -153,6 +130,7 @@ train_s3 <- splits_s3$trainset
 out_train_s3 <- lmer(m1.formula,data =  train_s3,weights=normwt)
 test_s3$pred.m1.cv <- predict(object=out_train_s3 ,newdata=test_s3,allow.new.levels=TRUE,re.form=NULL )
 test_s3$iter<-"s3"
+
 #s4
 splits_s4 <- splitdf(m1.2007)
 test_s4 <- splits_s4$testset
@@ -160,6 +138,7 @@ train_s4 <- splits_s4$trainset
 out_train_s4 <- lmer(m1.formula,data =  train_s4,weights=normwt)
 test_s4$pred.m1.cv <- predict(object=out_train_s4 ,newdata=test_s4,allow.new.levels=TRUE,re.form=NULL )
 test_s4$iter<-"s4"
+
 #s5
 splits_s5 <- splitdf(m1.2007)
 test_s5 <- splits_s5$testset
@@ -167,6 +146,7 @@ train_s5 <- splits_s5$trainset
 out_train_s5 <- lmer(m1.formula,data =  train_s5,weights=normwt)
 test_s5$pred.m1.cv <- predict(object=out_train_s5 ,newdata=test_s5,allow.new.levels=TRUE,re.form=NULL )
 test_s5$iter<-"s5"
+
 #s6
 splits_s6 <- splitdf(m1.2007)
 test_s6 <- splits_s6$testset
@@ -174,6 +154,7 @@ train_s6 <- splits_s6$trainset
 out_train_s6 <- lmer(m1.formula,data =  train_s6,weights=normwt)
 test_s6$pred.m1.cv <- predict(object=out_train_s6 ,newdata=test_s6,allow.new.levels=TRUE,re.form=NULL )
 test_s6$iter<-"s6"
+
 #s7
 splits_s7 <- splitdf(m1.2007)
 test_s7 <- splits_s7$testset
@@ -181,6 +162,8 @@ train_s7 <- splits_s7$trainset
 out_train_s7 <- lmer(m1.formula,data =  train_s7,weights=normwt)
 test_s7$pred.m1.cv <- predict(object=out_train_s7 ,newdata=test_s7,allow.new.levels=TRUE,re.form=NULL )
 test_s7$iter<-"s7"
+
+
 #s8
 splits_s8 <- splitdf(m1.2007)
 test_s8 <- splits_s8$testset
@@ -188,6 +171,7 @@ train_s8 <- splits_s8$trainset
 out_train_s8 <- lmer(m1.formula,data =  train_s8,weights=normwt)
 test_s8$pred.m1.cv <- predict(object=out_train_s8 ,newdata=test_s8,allow.new.levels=TRUE,re.form=NULL )
 test_s8$iter<-"s8"
+
 #s9
 splits_s9 <- splitdf(m1.2007)
 test_s9 <- splits_s9$testset
@@ -195,6 +179,7 @@ train_s9 <- splits_s9$trainset
 out_train_s9 <- lmer(m1.formula,data =  train_s9,weights=normwt)
 test_s9$pred.m1.cv <- predict(object=out_train_s9 ,newdata=test_s9,allow.new.levels=TRUE,re.form=NULL )
 test_s9$iter<-"s9"
+
 #s10
 splits_s10 <- splitdf(m1.2007)
 test_s10 <- splits_s10$testset
@@ -203,135 +188,11 @@ out_train_s10 <- lmer(m1.formula,data =  train_s10,weights=normwt)
 test_s10$pred.m1.cv <- predict(object=out_train_s10 ,newdata=test_s10,allow.new.levels=TRUE,re.form=NULL )
 test_s10$iter<-"s10"
 
+
 #BIND 1 dataset
 m1.2007.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s6,test_s7,test_s8,test_s9, test_s10))
-# cleanup (remove from WS) objects from CV
-rm(list = ls(pattern = "train_|test_"))
-#table updates
-m1.fit.2007.cv<-lm(PM25~pred.m1.cv,data=m1.2007.cv)
-res[res$year=="2007", 'm1cv.R2'] <- print(summary(lm(PM25~pred.m1.cv,data=m1.2007.cv))$r.squared)
-res[res$year=="2007", 'm1cv.I'] <-print(summary(lm(PM25~pred.m1.cv,data=m1.2007.cv))$coef[1,1])
-res[res$year=="2007", 'm1cv.I.se'] <-print(summary(lm(PM25~pred.m1.cv,data=m1.2007.cv))$coef[1,2])
-res[res$year=="2007", 'm1cv.S'] <-print(summary(lm(PM25~pred.m1.cv,data=m1.2007.cv))$coef[2,1])
-res[res$year=="2007", 'm1cv.S.se'] <-print(summary(lm(PM25~pred.m1.cv,data=m1.2007.cv))$coef[2,2])
-#RMSPE
-res[res$year=="2007", 'm1.PE'] <- print(rmse(residuals(m1.fit.2007.cv)))
-
-#spatial
-spatial2007.cv<-m1.2007.cv %>%
-    group_by(stn) %>%
-    summarise(barpm = mean(PM25, na.rm=TRUE), barpred = mean(pred.m1, na.rm=TRUE)) 
-m1.fit.2007.cv.s <- lm(barpm ~ barpred, data=spatial2007.cv)
-res[res$year=="2007", 'm1cv.R2.s'] <-  print(summary(lm(barpm ~ barpred, data=spatial2007.cv))$r.squared)
-res[res$year=="2007", 'm1cv.PE.s'] <- print(rmse(residuals(m1.fit.2007.cv.s)))
-       
-#temporal
-tempo2007.cv<-left_join(m1.2007.cv,spatial2007.cv)
-tempo2007.cv$delpm <-tempo2007.cv$PM25-tempo2007.cv$barpm
-tempo2007.cv$delpred <-tempo2007.cv$pred.m1.cv-tempo2007.cv$barpred
-mod_temporal.cv <- lm(delpm ~ delpred, data=tempo2007.cv)
-res[res$year=="2007", 'm1cv.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2007.cv))$r.squared)
+#full fit
+print(summary(lm(PM25~pred.m1.cv,data=m1.2007.cv,weights=normwt))$r.squared)
 
 
-
-#-------->>> loc stage
-luf<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN004_LU_full_dataset/local.csv")
-setnames(luf,"tden","loc.tden")
-setnames(luf,"elev50","loc.elev")
-
-#add 50m LU to CV data
-setkey(m1.2007.cv,stn)
-setkey(luf,stn)
-m1.2007.cv.loc <- merge(m1.2007.cv, luf, all.x = T)
-m1.2007.cv.loc<-na.omit(m1.2007.cv.loc)
-
-#create residual mp3 variable
-m1.2007.cv.loc$res.m1<-m1.2007.cv.loc$PM25-m1.2007.cv.loc$pred.m1.cv
-
-#The GAM model
-gam.out<-gam(res.m1~s(loc.tden)+s(tden,MeanPbl)+s(loc.tden,WS)+s(loc_p_os,fx=FALSE,k=4,bs='cr')+s(loc.elev,fx=FALSE,k=4,bs='cr')+s(dA1,fx=FALSE,k=4,bs='cr')+s(dsea,fx=FALSE,k=4,bs='cr'),data=m1.2007.cv.loc)
-#plot(bp.model.ps)
-#summary(bp.model.ps)
-
-m1.2007.cv.loc$pred.m1.loc <-predict(gam.out)
-m1.2007.cv.loc$pred.m1.both <- m1.2007.cv.loc$pred.m1.cv + m1.2007.cv.loc$pred.m1.loc
-
-####################reg
-summary(lm(PM25~pred.m1.both,data=m1.2007.cv.loc))
-
-
-
-
-#############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046.Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res2007_p1.rds")
-
-
-
-
-###############
-#MOD2
-###############
-m2.2007<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2007.rds")
-
-
-m2.2007[,elev.s:= scale(elev)]
-m2.2007[,tden.s:= scale(tden)]
-m2.2007[,pden.s:= scale(pden)]
-m2.2007[,dist2A1.s:= scale(dist2A1)]
-m2.2007[,dist2water.s:= scale(dist2water)]
-m2.2007[,dist2rail.s:= scale(dist2rail)]
-m2.2007[,Dist2road.s:= scale(Dist2road)]
-m2.2007[,ndvi.s:= scale(ndvi)]
-m2.2007[,MeanPbl.s:= scale(MeanPbl)]
-m2.2007[,p_ind.s:= scale(p_ind)]
-m2.2007[,p_for.s:= scale(p_for)]
-m2.2007[,p_farm.s:= scale(p_farm)]
-m2.2007[,p_dos.s:= scale(p_dos)]
-m2.2007[,p_dev.s:= scale(p_dev)]
-m2.2007[,p_os.s:= scale(p_os)]
-m2.2007[,Temp.s:= scale(Temp)]
-m2.2007[,WD.s:= scale(WD)]
-m2.2007[,WS.s:= scale(WS)]
-m2.2007[,RH.s:= scale(RH)]
-m2.2007[,Rain.s:= scale(Rain)]
-
-#generate predictions
-m2.2007[, pred.m2 := predict(object=m1.fit.2007,newdata=m2.2007,allow.new.levels=TRUE,re.form=NULL)]
-describe(m2.2007$pred.m2)
-#delete implossible values
-m2.2007 <- m2.2007[pred.m2 > 0.00000000000001 , ]
-m2.2007 <- m2.2007[pred.m2 < 500   , ]
-
-saveRDS(m2.2007,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2007.rds")
-
-#test
-# describe(m2.2007$pred.m2)
-# hist(m2.2007$pred.m2)
-
-#######
-#M2 R2
-######
-# m1.2007[,aodid:= paste(m1.2007$long_aod,m1.2007$lat_aod,sep="-")]
-# #merge co located mod1 and mod2 grids
-# setkey(m1.2007,aodid,day)
-# setkey(m2.2007,aodid,day)
-# m.1.2.pred <- merge(m1.2007, m2.2007[, list(aodid, day, pred.m2)], all.x = T)
-# mod2_reg<-lm(m.1.2.pred$predicted~m.1.2.pred$pred.m2)
-# #cleanup and save current stages (workspace)
-# summary(mod2_reg)$r.squared
-
-#map the predictions
-#aggregate by guid
-m2_agg <- m2.2007[, list(LTPM.m2 = mean(pred.m2, na.rm = TRUE), lat_aod = lat_aod[1], long_aod = long_aod[1]), by = aodid]
-#saveRDS(m2_agg, "/media/NAS/Uni/Projects/P046.Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2007.rds")
-#map the predictions
-ggplot(m2_agg, aes(long_aod,lat_aod, color = LTPM.m2)) + 
-  geom_point(size = 3, shape = 15) +  xlab("longitude") + ylab("latitude") + 
-  scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(5)) + theme_bw() + ggtitle("Long term predictions")
-ggsave(file="/media/NAS/Uni/Projects/P046.Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
-saveRDS(res, "/media/NAS/Uni/Projects/P046.Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res2007_p2.rds")
-keep(res , sure=TRUE) 
-gc()
-
-write.csv(m2_agg, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/m2.2007.LTPM.csv")
-
+print(summary(lm(PM25~pred.m1.cv,data=m1.2007.cv))$r.squared)
