@@ -30,7 +30,8 @@ colnames(res) <- c(
           ,"m1cv.R2","m1cv.I","m1cv.I.se","m1cv.S","m1cv.S.se","m1cv.PE","m1cv.R2.s","m1cv.R2.t","m1cv.PE.s" #mod1 CV
           ,"m1cv.loc.R2","m1cv.loc.I","m1cv.loc.I.se","m1cv.loc.S","m1cv.loc.S.se","m1cv.loc.PE","m1cv.loc.PE.s","m1cv.loc.R2.s","m1cv.loc.R2.t"#loc m1
           ,"mod2_R2" #mod2
-          ,"mod3a_pre_gam","mod3b_post_gam","mod3_pm_mod3","mod3_int"
+          ,"m3.t31","m3.t33" #mod3 tests
+          ,"mod3_pm_mod3","mod3_int"
           ,"mod3_int_SE","mod3_Slope","mod3_Slope SE","mod3_RMSPE"
           ,"mod3_spatial","mod3_temporal","mod3_RMSPE_spatial",
           "mod3LPM_pm_mod3LPM","mod3LPM_int","mod3LPM_int_SE","mod3LPM_Slope",
@@ -92,14 +93,6 @@ m1.2007[,Rain.s:= scale(Rain)]
 
 
 
-#lme mixed model
-#m1.formula <- as.formula(PM25~ aod+(1+aod|day))
-# m1.formula <- as.formula(PM25~ aod+
-#                         Temp+WD+RH+WS+Dust+Rain+MeanPbl.s #temporal
-#                         +elev.s+tden.s+pden.s+dist2rail.s+dist2A1.s+Dist2road.s+dist2water.s+ndvi.s+season #spatial
-#                         +p_os.s+p_dev.s+p_dos.s+p_farm.s+p_for.s+p_ind.s  #land use
-#                          +(1+aod|day/reg_num) +(1|stn))
-
 m1.formula <- as.formula(PM25~ aod
                         +Temp.s+WD.s+RH.s+WS.s+Dust+Rain.s+MeanPbl.s #temporal
                         +elev.s+tden.s+pden.s+Dist2road.s+ndvi.s #spatial
@@ -129,6 +122,7 @@ tempo2007$delpm <-tempo2007$PM25-tempo2007$barpm
 tempo2007$delpred <-tempo2007$pred.m1-tempo2007$barpred
 mod_temporal <- lm(delpm ~ delpred, data=tempo2007)
 res[res$year=="2007", 'm1.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2007))$r.squared)
+saveRDS(m1.2007,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2007.pred.rds")
 
 
 #---------------->>>> CV
@@ -215,7 +209,7 @@ res[res$year=="2007", 'm1cv.I.se'] <-print(summary(lm(PM25~pred.m1.cv,data=m1.20
 res[res$year=="2007", 'm1cv.S'] <-print(summary(lm(PM25~pred.m1.cv,data=m1.2007.cv))$coef[2,1])
 res[res$year=="2007", 'm1cv.S.se'] <-print(summary(lm(PM25~pred.m1.cv,data=m1.2007.cv))$coef[2,2])
 #RMSPE
-res[res$year=="2007", 'm1.PE'] <- print(rmse(residuals(m1.fit.2007.cv)))
+res[res$year=="2007", 'm1cv.PE'] <- print(rmse(residuals(m1.fit.2007.cv)))
 
 #spatial
 spatial2007.cv<-m1.2007.cv %>%
@@ -252,20 +246,36 @@ m1.2007.cv.loc$res.m1<-m1.2007.cv.loc$PM25-m1.2007.cv.loc$pred.m1.cv
 gam.out<-gam(res.m1~s(loc.tden)+s(tden,MeanPbl)+s(loc.tden,WS)+s(loc_p_os,fx=FALSE,k=4,bs='cr')+s(loc.elev,fx=FALSE,k=4,bs='cr')+s(dA1,fx=FALSE,k=4,bs='cr')+s(dsea,fx=FALSE,k=4,bs='cr'),data=m1.2007.cv.loc)
 #plot(bp.model.ps)
 #summary(bp.model.ps)
-
+## reg
 m1.2007.cv.loc$pred.m1.loc <-predict(gam.out)
 m1.2007.cv.loc$pred.m1.both <- m1.2007.cv.loc$pred.m1.cv + m1.2007.cv.loc$pred.m1.loc
+res[res$year=="2007", 'm1cv.loc.R2'] <- print(summary(lm(PM25~pred.m1.both,data=m1.2007.cv.loc))$r.squared)
+res[res$year=="2007", 'm1cv.loc.I'] <-print(summary(lm(PM25~pred.m1.both,data=m1.2007.cv.loc))$coef[1,1])
+res[res$year=="2007", 'm1cv.loc.I.se'] <-print(summary(lm(PM25~pred.m1.both,data=m1.2007.cv.loc))$coef[1,2])
+res[res$year=="2007", 'm1cv.loc.S'] <-print(summary(lm(PM25~pred.m1.both,data=m1.2007.cv.loc))$coef[2,1])
+res[res$year=="2007", 'm1cv.loc.S.se'] <-print(summary(lm(PM25~pred.m1.both,data=m1.2007.cv.loc))$coef[2,2])
+#RMSPE
+res[res$year=="2007", 'm1cv.loc.PE'] <- print(rmse(residuals(m1.fit.2007.cv)))
 
-####################reg
-summary(lm(PM25~pred.m1.both,data=m1.2007.cv.loc))
-
-
-
+#spatial
+spatial2007.cv.loc<-m1.2007.cv.loc %>%
+    group_by(stn) %>%
+    summarise(barpm = mean(PM25, na.rm=TRUE), barpred = mean(pred.m1, na.rm=TRUE)) 
+m1.fit.2007.cv.loc.s <- lm(barpm ~ barpred, data=spatial2007.cv.loc)
+res[res$year=="2007", 'm1cv.loc.R2.s'] <-  print(summary(lm(barpm ~ barpred, data=spatial2007.cv.loc))$r.squared)
+res[res$year=="2007", 'm1cv.loc.PE.s'] <- print(rmse(residuals(m1.fit.2007.cv.loc.s)))
+       
+#temporal
+tempo2007.loc.cv<-left_join(m1.2007.cv.loc,spatial2007.cv.loc)
+tempo2007.loc.cv$delpm <-tempo2007.loc.cv$PM25-tempo2007.loc.cv$barpm
+tempo2007.loc.cv$delpred <-tempo2007.loc.cv$pred.m1.both-tempo2007.loc.cv$barpred
+mod_temporal.loc.cv <- lm(delpm ~ delpred, data=tempo2007.loc.cv)
+res[res$year=="2007", 'm1cv.loc.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2007.loc.cv))$r.squared)
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046.Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res2007_p1.rds")
-
-
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res2007.m1.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.rds")
+saveRDS(m1.2007.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2007.predCV.rds")
 
 
 ###############
@@ -325,13 +335,13 @@ saveRDS(m2.2007,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/
 m2_agg <- m2.2007[, list(LTPM.m2 = mean(pred.m2, na.rm = TRUE), lat_aod = lat_aod[1], long_aod = long_aod[1]), by = aodid]
 #saveRDS(m2_agg, "/media/NAS/Uni/Projects/P046.Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2007.rds")
 #map the predictions
+write.csv(m2_agg, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/m2.2007.LTPM.csv")
 ggplot(m2_agg, aes(long_aod,lat_aod, color = LTPM.m2)) + 
   geom_point(size = 3, shape = 15) +  xlab("longitude") + ylab("latitude") + 
   scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(5)) + theme_bw() + ggtitle("Long term predictions")
-ggsave(file="/media/NAS/Uni/Projects/P046.Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
-saveRDS(res, "/media/NAS/Uni/Projects/P046.Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res2007_p2.rds")
+ggsave(file="/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.2007.m2.png")
 keep(res , sure=TRUE) 
 gc()
 
-write.csv(m2_agg, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/m2.2007.LTPM.csv")
+
 
