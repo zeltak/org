@@ -8988,7 +8988,6 @@ directory with the following bash shell commands:
 
 *** Utils
 **** atools
-
 ***** aunpack (unpack)
 
 to unpack an archive issue the aunpack command:
@@ -11618,247 +11617,255 @@ You need to press ctrl+a then TYPE resize and define line numbers
  Ctrl+a X is the same
  
 **** tmux
-***** switching windows
+***** Windows/panes
+****** switching windows
 
-Ctrl-b n (Move to the next window)
- Ctrl-b p (Move to the previous window)
- Ctrl-b l (Move to the previously selected window)
- Ctrl-b w (List all windows / window numbers)
- Ctrl-b <window number> (Move to the specified window number, the
-default bindings are from 0 -- 9)
- find-window option & keybinding.
- Type Ctrl-b f and type in the window name you want (it actually
-searches for the window so you can type in only part of the name of the
-window you're looking for).
+ Ctrl-b n (Move to the next window)
+  Ctrl-b p (Move to the previous window)
+  Ctrl-b l (Move to the previously selected window)
+  Ctrl-b w (List all windows / window numbers)
+  Ctrl-b <window number> (Move to the specified window number, the
+ default bindings are from 0 -- 9)
+  find-window option & keybinding.
+  Type Ctrl-b f and type in the window name you want (it actually
+ searches for the window so you can type in only part of the name of the
+ window you're looking for).
 
-***** tmux book
+****** split up a window into multiple smaller windows
 
-[[~/Dropbox/Org/Tech/linux_files/attach/tmux.epub][Attachment #14 (tmux.epub)]]
- (see attachment)
+ When you split up a window into multiple smaller windows they're
+ referred to as panes. Tmux also offers "layouts" for the panes, or the
+ default positioning and behavior when you create a new window. You can
+ switch through the panes by using the key binding:
+  Ctrl-b <space>
+  which will toggle through the different layouts.
+***** Sessions
+****** create a new names session
+issue 'tmux new -s NAME'
 
-***** Session Management
+#+BEGIN_SRC sh
+tmux new -s Uni
+#+END_SRC
 
-Sessions are useful for completely separating work environments. I have
-a 'Work' session and a 'Play' session; in 'Work', I keep everything open
-that I need during my day-to-day development, while in 'Play', I keep
-open current open-source gems or other work I hack on at home.
- tmux new -s session name
- creates a new tmux session named session name
- tmux attach -t session name
- attaches to an existing tmux session named session name
- tmux switch -t session name
- switches to an existing session named session name
- tmux list-sessions
- lists existing tmux sessions
- tmux detach (prefix + d)
- detach the currently attached session
- to kill a session:
- tmux kill-session -t session name
- kills current sassion (by name)
+this creates a new tmux session named session name
+****** attach and switch to a specific session 
+'tmux attach -t NAME'
 
-***** main shortcuts
+attaches to an existing tmux session named NAME
+%Tip- you can use `a` instead of the full `attach` % 
 
-<prefix> fSearch for window name)
- <prefix> wSelect from interactive list of windows
- <prefix>qshow pane numbers
- <prefix>
- <prefix>
- <prefix>
+#+BEGIN_SRC sh
+tmux a -t Uni
+#+END_SRC
 
-***** launch tmux
+'tmux switch -t NAME' switches to an existing session named NAME
 
-***** common terms for scripiting
-
-session: contains all windows and panes inside them
- [[~/Dropbox/Org/Tech/linux_files/Image_Y5JlfcyK99ZBuV9prYJyqQ_0001.png]]
- window: a window (view) inside a session
- [[~/Dropbox/Org/Tech/linux_files/Image_Y5JlfcyK99ZBuV9prYJyqQ_0002.png]]
- pane: can be split inside windows
- [[~/Dropbox/Org/Tech/linux_files/Image_Y5JlfcyK99ZBuV9prYJyqQ_0003.png]]
-
-***** zeltak script example
-
-below is an annotated script (annotation in blue)
- #!/bin/sh
- see comment , will not launch the session twice
- #to not launch if already running
- tmux has-session -t tmux mpd
- if [ $? != 0 ]
- then
- #create the main tmux session and detach
- tmux new-session -s tmux mpd -n Player -d
- #create first window
- tmux send-keys -t tmux mpd 'ncmpcpp' C-m
- #split that window vert
- tmux split-window -v -t tmux mpd
- #focus on that split and execute lyvi
- tmux send-keys -t tmux mpd:1.2 'lyvi' C-m
- #split the botom into 2 horizontoly
- tmux split-window -h -t tmux mpd
- #focus on right split now and execute alsamixer
- tmux send-keys -t tmux mpd:1.3 'export PS1=""; clear' C-m
- tmux split-window -h -t tmux mpd
- #focus on right split now and execute alsamixer
- tmux send-keys -t tmux mpd:1.4 'ncmpcpp -c
-/home/zeltak/.ncmpcpp/alt config' C-m
- #create a new window 2
- tmux new-window -t tmux mpd -n Audio
- tmux send-keys -t tmux mpd:2.1 'alsamixer' C-m
- #split that window vert
- tmux split-window -v -t tmux mpd
- #focus on that split and execute lyvi
- tmux send-keys -t tmux mpd:2.2 'pacmixer' C-m
- #create a new window 3
- tmux new-window -t tmux mpd -n Tag
- tmux send-keys -t tmux mpd:3.1 'mpc' C-m
- #create a new window 4
- tmux new-window -t tmux mpd -n Extra
- tmux send-keys -t tmux mpd:4.1 'mpc' C-m
- #select default focus
- tmux select-window -t tmux mpd:1
- use the -t switch to target a specific tmux session
- ###########THEME############################
- #split panes border colours
- #non active
- tmux set -t tmux mpd pane-border-fg default
- tmux set -t tmux mpd pane-border-bg default
- #active
- #set -t tmux mpd pane-active-border-bg '#006F95' #comment out to make
-pane thinner
- tmux set -t tmux mpd pane-active-border-fg '#006F95'
- #command line
- tmux set -t tmux mpd message-fg white
- tmux set -t tmux mpd message-bg black
- tmux set -t tmux mpd message-attr bright
- #Status-Bar
- tmux set -t tmux mpd status-bg "#222222"
- tmux set -t tmux mpd status-fg "#777777"
- # center align window list
- tmux set -t tmux mpd status-justify centre
+****** list sessions
+'tmux list-sessions' lists existing tmux sessions 
  
- #Left side of status bar
- tmux set -t tmux mpd status-left-length 500
- tmux set-option -t tmux mpd status-left
-'#[fg=#ffffff]Track#(/usr/bin/mpc current -f "%%track%%")(#(/usr/bin/mpc
-current -f "%%time%%"))'
- #right side of status bar
- tmux set -t tmux mpd status-right-length 500
- tmux set-option -t tmux mpd status-right '#[fg=#ffffff]#(/usr/bin/mpc
-current -f "%%title%%-%%album%% \(%%artist%%"))'
- ####window properties
- you will need to define each window property seperatly
- ###Win1
- # Current or active window in status bar
- tmux set -t tmux mpd:1 window-status-current-attr bold
- tmux set -t tmux mpd:1 window-status-current-fg white
- tmux set -t tmux mpd:1 window-status-current-bg '#0099CC'
- # Non active window in status bar
- tmux set -t tmux mpd:1 window-status-attr bold
- tmux set -t tmux mpd:1 window-status-fg black
- tmux set -t tmux mpd:1 window-status-bg '#828282'
- ###Win2
- tmux set -t tmux mpd:2 window-status-current-attr bold
- tmux set -t tmux mpd:2 window-status-current-fg white
- tmux set -t tmux mpd:2 window-status-current-bg '#0099CC'
- tmux set -t tmux mpd:2 window-status-attr bold
- tmux set -t tmux mpd:2 window-status-fg black
- tmux set -t tmux mpd:2 window-status-bg '#828282'
- ###Win3
- tmux set -t tmux mpd:3 window-status-current-attr bold
- tmux set -t tmux mpd:3 window-status-current-fg white
- tmux set -t tmux mpd:3 window-status-current-bg '#0099CC'
- tmux set -t tmux mpd:3 window-status-attr bold
- tmux set -t tmux mpd:3 window-status-fg black
- tmux set -t tmux mpd:3 window-status-bg '#828282'
- ###Win4
- tmux set -t tmux mpd:4 window-status-current-attr bold
- tmux set -t tmux mpd:4 window-status-current-fg white
- tmux set -t tmux mpd:4 window-status-current-bg '#0099CC'
- tmux set -t tmux mpd:4 window-status-attr bold
- tmux set -t tmux mpd:4 window-status-fg black
- tmux set -t tmux mpd:4 window-status-bg '#828282'
- #clear annoying window flags
- tmux set -t tmux mpd:1 window-status-current-format " #I$ #W"
- tmux set -t tmux mpd:2 window-status-current-format " #I$ #W"
- tmux set -t tmux mpd:3 window-status-current-format " #I$ #W"
- tmux set -t tmux mpd:4 window-status-current-format " #I$ #W"
- tmux set -t tmux mpd:1 window-status-format " #I$ #W "
- tmux set -t tmux mpd:2 window-status-format " #I$ #W "
- tmux set -t tmux mpd:3 window-status-format " #I$ #W "
- tmux set -t tmux mpd:4 window-status-format " #I$ #W "
- fi
- tmux attach -t tmux mpd
 
-***** from within tmux.conf
+#+BEGIN_SRC sh
+tmux list-sessions
+#+END_SRC
 
-Session initialization
+****** kill a session
+#+BEGIN_SRC sh
+tmux kill-session -t session name
+#+END_SRC
+
+kills current sassion (by name)
+
+***** configuring tmux 
+****** config syntax
+Note on binding:
+bind is the same as bind-key
+
+-r means 'repeatable without repeating the prefix'
+-n means 'does not need prefix'
+setw (and set -w) is short for set-window-option, and is
+window-specific
+set -g means 'set globally', set -u un-sets, set -a appends to a
+current value (for strings)     
+
+****** zeltak script example
+below is an annotated script (annotation in blue)
+#+BEGIN_EXAMPLE
+#!/bin/sh
+see comment , will not launch the session twice
+#to not launch if already running
+tmux has-session -t tmux mpd
+if [ $? != 0 ]
+then
+#create the main tmux session and detach
+tmux new-session -s tmux mpd -n Player -d
+#create first window
+tmux send-keys -t tmux mpd 'ncmpcpp' C-m
+#split that window vert
+tmux split-window -v -t tmux mpd
+#focus on that split and execute lyvi
+tmux send-keys -t tmux mpd:1.2 'lyvi' C-m
+#split the botom into 2 horizontoly
+tmux split-window -h -t tmux mpd
+#focus on right split now and execute alsamixer
+tmux send-keys -t tmux mpd:1.3 'export PS1=""; clear' C-m
+tmux split-window -h -t tmux mpd
+#focus on right split now and execute alsamixer
+tmux send-keys -t tmux mpd:1.4 'ncmpcpp -c
+home/zeltak/.ncmpcpp/alt config' C-m
+#create a new window 2
+tmux new-window -t tmux mpd -n Audio
+tmux send-keys -t tmux mpd:2.1 'alsamixer' C-m
+#split that window vert
+tmux split-window -v -t tmux mpd
+#focus on that split and execute lyvi
+tmux send-keys -t tmux mpd:2.2 'pacmixer' C-m
+#create a new window 3
+tmux new-window -t tmux mpd -n Tag
+tmux send-keys -t tmux mpd:3.1 'mpc' C-m
+#create a new window 4
+tmux new-window -t tmux mpd -n Extra
+tmux send-keys -t tmux mpd:4.1 'mpc' C-m
+#select default focus
+tmux select-window -t tmux mpd:1
+use the -t switch to target a specific tmux session
+###########THEME############################
+#split panes border colours
+#non active
+tmux set -t tmux mpd pane-border-fg default
+tmux set -t tmux mpd pane-border-bg default
+#active
+#set -t tmux mpd pane-active-border-bg '#006F95' #comment out to make
+ane thinner
+tmux set -t tmux mpd pane-active-border-fg '#006F95'
+#command line
+tmux set -t tmux mpd message-fg white
+tmux set -t tmux mpd message-bg black
+tmux set -t tmux mpd message-attr bright
+#Status-Bar
+tmux set -t tmux mpd status-bg "#222222"
+tmux set -t tmux mpd status-fg "#777777"
+# center align window list
+tmux set -t tmux mpd status-justify centre
+
+#Left side of status bar
+tmux set -t tmux mpd status-left-length 500
+tmux set-option -t tmux mpd status-left
+#[fg=#ffffff]Track#(/usr/bin/mpc current -f "%%track%%")(#(/usr/bin/mpc
+urrent -f "%%time%%"))'
+#right side of status bar
+tmux set -t tmux mpd status-right-length 500
+tmux set-option -t tmux mpd status-right '#[fg=#ffffff]#(/usr/bin/mpc
+urrent -f "%%title%%-%%album%% \(%%artist%%"))'
+####window properties
+you will need to define each window property seperatly
+###Win1
+# Current or active window in status bar
+tmux set -t tmux mpd:1 window-status-current-attr bold
+tmux set -t tmux mpd:1 window-status-current-fg white
+tmux set -t tmux mpd:1 window-status-current-bg '#0099CC'
+# Non active window in status bar
+tmux set -t tmux mpd:1 window-status-attr bold
+tmux set -t tmux mpd:1 window-status-fg black
+tmux set -t tmux mpd:1 window-status-bg '#828282'
+###Win2
+tmux set -t tmux mpd:2 window-status-current-attr bold
+tmux set -t tmux mpd:2 window-status-current-fg white
+tmux set -t tmux mpd:2 window-status-current-bg '#0099CC'
+tmux set -t tmux mpd:2 window-status-attr bold
+tmux set -t tmux mpd:2 window-status-fg black
+tmux set -t tmux mpd:2 window-status-bg '#828282'
+###Win3
+tmux set -t tmux mpd:3 window-status-current-attr bold
+tmux set -t tmux mpd:3 window-status-current-fg white
+tmux set -t tmux mpd:3 window-status-current-bg '#0099CC'
+tmux set -t tmux mpd:3 window-status-attr bold
+tmux set -t tmux mpd:3 window-status-fg black
+tmux set -t tmux mpd:3 window-status-bg '#828282'
+###Win4
+tmux set -t tmux mpd:4 window-status-current-attr bold
+tmux set -t tmux mpd:4 window-status-current-fg white
+tmux set -t tmux mpd:4 window-status-current-bg '#0099CC'
+tmux set -t tmux mpd:4 window-status-attr bold
+tmux set -t tmux mpd:4 window-status-fg black
+tmux set -t tmux mpd:4 window-status-bg '#828282'
+#clear annoying window flags
+tmux set -t tmux mpd:1 window-status-current-format " #I$ #W"
+tmux set -t tmux mpd:2 window-status-current-format " #I$ #W"
+tmux set -t tmux mpd:3 window-status-current-format " #I$ #W"
+tmux set -t tmux mpd:4 window-status-current-format " #I$ #W"
+tmux set -t tmux mpd:1 window-status-format " #I$ #W "
+tmux set -t tmux mpd:2 window-status-format " #I$ #W "
+tmux set -t tmux mpd:3 window-status-format " #I$ #W "
+tmux set -t tmux mpd:4 window-status-format " #I$ #W "
+fi
+tmux attach -t tmux mpd
+#+END_EXAMPLE
+
+****** from within tmux.conf
+ Session initialization
  You can have tmux open a session with preloaded windows by including
-those details in your ~/.tmux.conf:
- new -n WindowName Command
- neww -n WindowName Command
- neww -n WindowName Command
- To start a session with split windows (multiple panes), include the
-splitw command below the neww you would like to split; thus:
- new -s SessionName -n WindowName Command
- neww -n foo/bar foo
- splitw -v -p 50 -t 0 bar
- selectw -t 1
- selectp -t 0
- would open 2 windows, the second of which would be named foo/bar and
-would be split vertically in half (50%) with foo running above bar.
-Focus would be in window 2 (foo/bar), top pane (foo).
- Note: Numbering for sessions, windows and panes starts at zero, unless
-you have specified a base-index of 1 in your .conf
- To manage multiple sessions, source separate session files from your
-conf file:
- # initialize sessions
- bind F source-file ~/.tmux/foo
- bind B source-file ~/.tmux/bar
+ those details in your ~/.tmux.conf:
+  new -n WindowName Command
+  neww -n WindowName Command
+  neww -n WindowName Command
+  To start a session with split windows (multiple panes), include the
+ splitw command below the neww you would like to split; thus:
+  new -s SessionName -n WindowName Command
+  neww -n foo/bar foo
+  splitw -v -p 50 -t 0 bar
+  selectw -t 1
+  selectp -t 0
+  would open 2 windows, the second of which would be named foo/bar and
+ would be split vertically in half (50%) with foo running above bar.
+ Focus would be in window 2 (foo/bar), top pane (foo).
+  Note: Numbering for sessions, windows and panes starts at zero, unless
+ you have specified a base-index of 1 in your .conf
+  To manage multiple sessions, source separate session files from your
+ conf file:
+  # initialize sessions
+  bind F source-file ~/.tmux/foo
+  bind B source-file ~/.tmux/bar
+****** Using shell scripting to setup your tmux enviroment
 
-***** Using shell scripting to setup your tmux enviroment
-
-Using shell scripting to setup your tmux enviroment
- Tmux allows you to easily run commands for your different sessions
-through the command line without having to ever login to the session.
-This also allows us to make a simple bootstrap script which will setup
-your tmux environment and log you into it. Here is an example script I
-personally use:
- 1) The command new-session -d -s SESSION NAME creates a new tmux
-session, detaches it (so it doesn't open in your current terminal) and
-names it SESSION NAME in this case.
- THE script will not work without the -d at the begining
- 2)The following set of new-window commands create five new windows and
-executes the command at the end.
- The arguments are broken down as follows:
- -t SESSION NAME :1
- tells tmux to "target" the session SESSION NAME and the window with
-the id of 1.
- The -n 'Server1 ssh root@10.x.x.x'
- portion tells tmux to name the window Server1 and executes the command:
-ssh root@10.x.x.x
- 3) The select-window -t SESSION NAME:1
- command tells tmux that you want the active window the session to be
-SESSION NAME and window 1.
- 4) The
- -2 attach-session -t SESSION NAME
- tells tmux you want to attach the terminal with 256 colors and attach
-to the session SESSION NAME.
- Note: This is the command that brings the tmux session to the
-foreground. If you recall earlier when the script created the session we
-specified the -d switch which prevents it from loading in your terminal.
-
-***** Specify an alternative configuration file
-
-use the -f option:
- tmux -f file
- Specify an alternative configuration file. By default, tmux loads the
-system configuration file from /etc/tmux.conf, if present, then looks
-for a user
- configuration file at ~/.tmux.conf. The configuration file is a set of
-tmux commands which are executed in sequence when the server is first
-started.
-
-***** by sourcing a session file
+ Using shell scripting to setup your tmux enviroment
+  Tmux allows you to easily run commands for your different sessions
+ through the command line without having to ever login to the session.
+ This also allows us to make a simple bootstrap script which will setup
+ your tmux environment and log you into it. Here is an example script I
+ personally use:
+  1) The command new-session -d -s SESSION NAME creates a new tmux
+ session, detaches it (so it doesn't open in your current terminal) and
+ names it SESSION NAME in this case.
+  THE script will not work without the -d at the begining
+  2)The following set of new-window commands create five new windows and
+ executes the command at the end.
+  The arguments are broken down as follows:
+  -t SESSION NAME :1
+  tells tmux to "target" the session SESSION NAME and the window with
+ the id of 1.
+  The -n 'Server1 ssh root@10.x.x.x'
+  portion tells tmux to name the window Server1 and executes the command:
+ ssh root@10.x.x.x
+  3) The select-window -t SESSION NAME:1
+  command tells tmux that you want the active window the session to be
+ SESSION NAME and window 1.
+  4) The
+  -2 attach-session -t SESSION NAME
+  tells tmux you want to attach the terminal with 256 colors and attach
+ to the session SESSION NAME.
+  Note: This is the command that brings the tmux session to the
+ foreground. If you recall earlier when the script created the session we
+ specified the -d switch which prevents it from loading in your terminal.
+****** Specify an alternative configuration file
+ use the -f option:
+  tmux -f file
+  Specify an alternative configuration file. By default, tmux loads the
+ system configuration file from /etc/tmux.conf, if present, then looks
+ for a user
+  configuration file at ~/.tmux.conf. The configuration file is a set of
+ tmux commands which are executed in sequence when the server is first
+ started.
+****** by sourcing a session file
 
 You can source different sessions from your .tmux.conf like so:
  # initialize sessions
@@ -11873,18 +11880,59 @@ You can source different sessions from your .tmux.conf like so:
  would open 2 windows, the second of which would be named foo/bar and
 would be split vertically in half (50%) with foo running above bar.
 Focus would be in window 2 (foo/bar), top pane (foo).
+****** source part of the config (use base config and add on themes for
+ each tmux session)
 
-***** formating
+ you can make life easier if you have several tmux sessions and you want
+ them all to share the same base properties but different theme settings
+ for each by using the source option in your tmux.conf
+  In example:
+  have the same commands for each .tmux.conf you use in the first part.
+  then at the very end issue the source command:
+  #command to launch an internal ssh window
+  bind S command-prompt -p 'SSH to:' "new-window -n %1 'ssh %1'"
+  # Set Copy mode to escape key
+  unbind [
+  bind Escape copy-mode
+  #clear buffer history
+  bind -n C-k clear-history
+  source /home/zeltak/ZH tmp/mux home
+  this will load the file mux home with all its properties. in that file
+ you can define theme and special commands.
+****** pane thickness
+the pane separator background colour is in charge of the pane seperator thickness. it will always be one cell thick but if you set the bg colour they look much bigger
 
-We target a pane using the format
+#+BEGIN_EXAMPLE
+#set -g pane-active-border-bg '#F9F9F9'
+set -g pane-active-border-fg '#F9F9F9'
+#+END_EXAMPLE
+
+$Note-that the active border is commented out. to make it a thicker border uncomment it$
+
+****** formating
+ We target a pane using the format
+ #+BEGIN_EXAMPLE
  [session]:[window].[pane]
- in our case, development:1.2. So, we add this line to our configuration
-script, and we get exactly
- what we want.
+ #in our case
+ development:1.2.
+ #+END_EXAMPLE
+ So, we add this line to our configuration script, and we get exactly what we want.
+
+ #+BEGIN_EXAMPLE
  tmux send-keys -t development:1.2 'cd ~/devproject' C-m
+ #+END_EXAMPLE
+***** keybinds
+****** main shortcuts
 
-***** shortcuts
+ <prefix> fSearch for window name)
+  <prefix> wSelect from interactive list of windows
+  <prefix>qshow pane numbers
+  <prefix>
+  <prefix>
+  <prefix>
 
+****** bring up tmux command prompt
+type: ?<prefix> b?  
 ***** split the terminal window
 
 Now here are some default basic key bindings and commands to split the
@@ -11908,24 +11956,7 @@ the latter it will only be in effect for that session:
  bind -- split-window -v
  see binding keys section for detalied examples
 
-***** bring up tmux command prompt
-
-type:
- <prefix> b :
-
-***** Advanced Pane/split Handling
-
-***** split up a window into multiple smaller windows
-
-When you split up a window into multiple smaller windows they're
-referred to as panes. Tmux also offers "layouts" for the panes, or the
-default positioning and behavior when you create a new window. You can
-switch through the panes by using the key binding:
- Ctrl-b <space>
- which will toggle through the different layouts.
-
 ***** move between panes
-
 Now that you've seen the different layouts let's see what we can do with
 these panes. As mentioned above in the "Pane Handling" section you can
 switch through panes by issuing the
@@ -11935,7 +11966,6 @@ switch through panes by issuing the
  which will list the pane ID's and you select the one you want.
 
 ***** Make your pane into its own window
-
 Make your pane into its own window
  If you want to take a pane and make it into its own window you do the
 following:
@@ -12048,43 +12078,7 @@ main-pane-width window option.
  Panes are spread out as evenly as possible over the window in both
 rows and columns.
 
-***** config file
-
-***** source part of the config (use base config and add on themes for
-each tmux session)
-
-you can make life easier if you have several tmux sessions and you want
-them all to share the same base properties but different theme settings
-for each by using the source option in your tmux.conf
- In example:
- have the same commands for each .tmux.conf you use in the first part.
- then at the very end issue the source command:
- #command to launch an internal ssh window
- bind S command-prompt -p 'SSH to:' "new-window -n %1 'ssh %1'"
- # Set Copy mode to escape key
- unbind [
- bind Escape copy-mode
- #clear buffer history
- bind -n C-k clear-history
- source /home/zeltak/ZH tmp/mux home
- this will load the file mux home with all its properties. in that file
-you can define theme and special commands.
-
-***** binding keys
-
-***** intro
-
-Note on binding:
- bind is the same as bind-key
- -r means 'repeatable without repeating the prefix'
- -n means 'does not need prefix'
- setw (and set -w) is short for set-window-option, and is
-window-specific
- set -g means 'set globally', set -u un-sets, set -a appends to a
-current value (for strings)
-
 ***** Binding a key for "last-window"
-
 One of my favorite screen hotkeys is the last window hotkey which allows
 you to quickly switch between the current window and last window that
 was active. By default tmux doesn't have a binding for this however it
@@ -12196,11 +12190,6 @@ you can use a hex code now in the tmux config to define colors IE:
  The first two commands set the background t and foreground of the
 status bar.
 
-***** reload config without killing server
-
-reload config without killing server add this to config:
- bind R source-file ~/.tmux.conf
-
 ***** Notify you when a window has activity
 
 
@@ -12241,18 +12230,6 @@ the command, for example between the C-a and n in C-a n. This is because
 tmux is waiting for an escape sequence. Fix that by setting escape time
 to zero.
  set -s escape-time 0
-
-***** Browsing URL's
-
-Browsing URL's
- To browse URL's inside tmux you must have urlview installed and
-configured.
- Inside a new terminal:
- bind-key u capture-pane \; save-buffer /tmp/tmux-buffer \; run-shell
-"$TERMINAL -e urlview /tmp/tmux-buffer"
- Or inside a new tmux window (no new terminal needed):
- bind-key u capture-pane \; save-buffer /tmp/tmux-buffer \; new-window
--n "urlview" '$SHELL -c "urlview < /tmp/tmux-buffer"'
 
 ***** status line
 
@@ -12404,54 +12381,15 @@ some character need to be escaped before use in the status line,
 '#[fg=#ffffff]#[bg=#0099CC]#(/usr/bin/mpc current -f
 "%%title%%//%%album%% \(%%artist%%")) '
 
-***** pane thickness
-
-the pane separator background colour is in charge of the pane seperator
-thickness
- it will always be one cell thick but if you set the bg colour they look
-much bigger
- IE:
- #set -g pane-active-border-bg '#F9F9F9'
- set -g pane-active-border-fg '#F9F9F9'
- Note: that the active border is commented out. to make it a thicker
-border uncomment it
-
 ***** tmux info
 
-tmux list-keys
+`tmux list-keys` lists out every bound key and the tmux command it runs
 
- lists out every bound key and the tmux command it runs
+`tmux list-commands` lists out every tmux command and its arguments
 
- tmux list-commands
+`tmux info`  lists out every session, window, pane, its pid, etc.
 
- lists out every tmux command and its arguments
-
- tmux info
-
- lists out every session, window, pane, its pid, etc.
-
- tmux source-file ~/.tmux.conf
-
- reloads the current tmux configuration (based on a default tmux
-config)
-
-***** Panes
-
-Panes take my development time from bland to awesome. They're the reason
-I was able to uninstall MacVim and develop solely in iTerm2. I don't
-have to switch applications to switch contexts (editing, reading logs,
-IRB, etc.) - everything I do, I do in a terminal now. People argue that
-OS X's Cmd+Tab is just as fast, but I don't think so.
- tmux split-window (prefix + ")
- splits the window into two vertical panes
- tmux split-window -h (prefix + %)
- splits the window into two horizontal panes
- tmux swap-pane -[UDLR] (prefix + { or })
- swaps pane with another in the specified direction
- tmux select-pane -[UDLR]
- selects the next pane in the specified direction
- tmux select-pane -t :.+
- selects the next pane in numerical order
+`tmux source-file ~/.tmux.conf` reloads the current tmux configuration (based on a default tmux config)
 
 ***** copy/paste mode
 `
@@ -12487,28 +12425,74 @@ Once you’ve copied some stuff, you can do more than just paste the last thing:
 $Note$ I have `[` remapped to `Escape` and `]` remapped to `p`. I use - for split-window -v, so I moved delete-buffer to +.)
 
 tmux remembers old buffers and prefix + = lets you paste them arbitrarily!
-***** vi style
+***** Tmux Tips
+****** Browsing URL's
+To browse URL inside tmux you must have urlview installed and configured.
 
-to copy paste in VI mode with tmux:
- Note:[[~/Dropbox/Org/Tech/linux_files/Image_r588QywdTaC3w8gyvLd4xA_0001.png]] this example
-uses ctrl-b as prefix key
- You can also set up your .tmux.conf file by adding :
- bind-key -t vi-copy 'v' begin-selection
- bind-key -t vi-copy 'y' copy-selection
+https://aur.archlinux.org/packages/urlview/
 
-***** Select and focus on a specific pane every X seconds
+to see how to configure urlview: id:03d71f1b-8ec7-427e-a363-d023b07402d5
 
+Inside a new terminal:
+
+ #+BEGIN_SRC sh
+bind-key u capture-pane \; save-buffer /tmp/tmux-buffer \; run-shell "$TERMINAL -e urlview /tmp/tmux-buffer"
+ #+END_SRC
+
+Or inside a new tmux window (no new terminal needed):
+
+ #+BEGIN_SRC sh
+bind-key u capture-pane \; save-buffer /tmp/tmux-buffer \; new-window -n "urlview" '$SHELL -c "urlview < /tmp/tmux-buffer"'
+ #+END_SRC
+
+****** reconnect a ssh session that has different resolution
+ #+begin_src sh
+ tmux a -d
+ #+end_src
+ 
+****** Select and focus on a specific pane every X seconds
 to switch to a tmux window after x seconds
- while :; do sleep 10; tmux select-window -t tmux mpd:1; done
- to switch to a tmux window and then a pane:
- 
- while :; do sleep 10; tmux select-window -t tmux mpd:1 \; selectp -t
+
+#+BEGIN_EXAMPLE
+while :; do sleep 10; tmux select-window -t tmux mpd:1; done
+#+END_EXAMPLE
+to switch to a tmux window and then a pane:
+#+BEGIN_EXAMPLE
+while :; do sleep 10; tmux select-window -t tmux mpd:1 \; selectp -t
 tmux mpd:1.1; done
-***** reconnect a ssh session that has different res
-#+begin_src sh
-tmux a -d
-#+end_src
- 
+#+END_EXAMPLE
+
+****** TODO Autostart with systemd
+There are some notable advantages to starting a tmux server at startup. Notably, when you start a new tmux session, having the service already running reduces any delays in the startup.
+Furthermore, any customization attached to your tmux session will be retained and your tmux session can be made to persist even if you have never logged in, if you have some reason to do that (like a heavily scripted tmux configuration or shared user tmux sessions).
+The service below starts tmux for the specified user (i.e. start with tmux@username.service):
+
+#+BEGIN_EXAMPLE
+/etc/systemd/system/tmux@.service
+[Unit]
+Description=Start tmux in detached session
+
+[Service]
+Type=forking
+User=%I
+ExecStart=/usr/bin/tmux new-session -s %u -d
+ExecStop=/usr/bin/tmux kill-session -t %u
+
+[Install]
+WantedBy=multi-user.target
+#+END_EXAMPLE
+
+%Tip%-You may want to add WorkingDirectory=custom_path to customize working directory.
+
+Alternatively, you can place this file within your systemd/User directory (without User=%I), for example ~/.config/systemd/user/tmux.service. This way the tmux service will start when you log in.
+
+****** reload config without killing server
+reload config without killing server add this to config:
+
+#+BEGIN_EXAMPLE
+bind R source-file ~/.tmux.conf
+#+END_EXAMPLE
+
 **** urxvt
 ***** install perl-scripts
 
@@ -13368,6 +13352,23 @@ cd ~/dotfiles
 stow common
 #+END_SRC
  
+**** urlview
+     :PROPERTIES:
+     :ID:       03d71f1b-8ec7-427e-a363-d023b07402d5
+     :END:
+dowload from
+
+https://aur.archlinux.org/packages/urlview/
+
+to configure default browser and other option one needs to create a config file:
+
+file:$HOME/.urlview
+
+you define a browser like this: 
+
+#+BEGIN_EXAMPLE
+#COMMAND chromium %s
+#+END_EXAMPLE
 ** graphics
 *** gimp
 

@@ -1,0 +1,74 @@
+#+TITLE: 
+#+OPTIONS: toc:nil 
+
+* keybinds
+
+
+bind R source-file ~/.tmux.conf  #source the tmux file
+
+#make ctrl-a ctrl s work like alt-tab (last window)
+bind-key C-a last-window
+
+# Cycle through windows, or panes.   I prefer using it for panes
+#  (The way I use it, C-a C-a is good for most of my window switching needs)
+
+bind -n f11 select-pane -t :.+
+bind -n f1 previous-window  
+bind -n f2 next-window  
+
+#to still use F keys (use with prefix first so C-a F1 etc)
+bind F1 send-keys F1
+bind F2 send-keys F2
+bind F3 send-keys F3
+bind F4 send-keys F4
+bind F5 send-keys F5
+bind F6 send-keys F6
+bind F7 send-keys F7
+bind F8 send-keys F8
+bind F9 send-keys F9
+bind F10 send-keys F10
+bind F11 send-keys F11
+bind F12 send-keys F12
+
+###Vim type cuts
+setw -g mode-keys vi
+
+# use "v" and "s" to do vertical/horizontal splits, like vim
+unbind % # Remove default binding since we’re replacing
+bind s split-window -v
+bind v split-window -h
+
+# use the vim motion keys to move between panes
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+
+# use vim motion keys while in copy mode
+setw -g mode-keys vi
+
+
+# Pane navigation 
+# Both navigating and resizing panes is useful. 
+# using arrow-key combinations for both is easy for me to remember
+# I'll navigate more than resize, so I put the latter under is under Shift-arrows
+bind-key -r Left select-pane -L
+bind-key -r Right select-pane -R
+bind-key -r Down select-pane -D
+bind-key -r Up select-pane -U
+bind-key -r S-Left resize-pane -L 2
+bind-key -r S-Right resize-pane -R 2
+bind-key -r S-Down resize-pane -D 2
+bind-key -r S-Up resize-pane -U 2
+
+bind-key -n C-Left select-pane -L
+bind-key -n C-Right select-pane -R
+bind-key -n C-Down select-pane -D
+bind-key -n C-Up select-pane -U
+
+
+#launch urls for non urxvt terms
+bind-key u capture-pane \; save-buffer /tmp/tmux-buffer \; run-shell "$TERMINAL -e urlview /tmp/tmux-buffer"
+bind-key u capture-pane \; save-buffer /tmp/tmux-buffer \; new-window -n "urlview" '$SHELL -c "urlview < /tmp/tmux-buffer"'
+
+
