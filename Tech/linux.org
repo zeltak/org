@@ -11921,6 +11921,19 @@ $Note-that the active border is commented out. to make it a thicker border uncom
  #+BEGIN_EXAMPLE
  tmux send-keys -t development:1.2 'cd ~/devproject' C-m
  #+END_EXAMPLE
+****** Automatic window rename
+Automatic window rename
+
+You can have tmux rename the window to the command that is currently
+running. This is useful when you load up something such as irssi and the
+window is labeled accordingly:
+
+ #+BEGIN_EXAMPLE
+ # Automatically set window title
+ setw -g automatic-rename
+ #+END_EXAMPLE
+
+ [[http://blog.hawkhost.com/wp-content/uploads/2010/07/tmux-window-rename.png][]]
 ***** keybinds
 ****** main shortcuts
 
@@ -11933,6 +11946,13 @@ $Note-that the active border is commented out. to make it a thicker border uncom
 
 ****** bring up tmux command prompt
 type: ?<prefix> b?  
+****** move between panes and show pane ID 
+ #+BEGIN_EXAMPLE
+ #switch through panes by issuing the
+ Ctrl-b o
+ #list the pane ID's and you select the one you want.
+ Ctrl-b q
+ #+END_EXAMPLE
 ***** split the terminal window
 
 Now here are some default basic key bindings and commands to split the
@@ -11956,21 +11976,12 @@ the latter it will only be in effect for that session:
  bind -- split-window -v
  see binding keys section for detalied examples
 
-***** move between panes
-Now that you've seen the different layouts let's see what we can do with
-these panes. As mentioned above in the "Pane Handling" section you can
-switch through panes by issuing the
- Ctrl-b o
- key combination (which is using the down-pane command) or by typing
- Ctrl-b q
- which will list the pane ID's and you select the one you want.
-
 ***** Make your pane into its own window
 Make your pane into its own window
  If you want to take a pane and make it into its own window you do the
 following:
  Ctrl-b : "break-pane"
- Simple enough, you should now have the pane in its brand new window. If
+Simple enough, you should now have the pane in its brand new window. If
 you don't want it to automatically make the pane you just broke out as
 the active window issue the "-d" switch which will simply break the pane
 to a new window but keep you in the current window.
@@ -12104,34 +12115,6 @@ the Ctrl-b binding isn't horribly intuitive especially if you're used to
 screen. You can rebind this by putting the following in ~/.tmux.conf:
  set -g prefix Ctrl-a
  NOTE:replace all examples bellow using Ctrl-b with Ctrl-a
-
-***** Pane navigation
-
-# Both navigating and resizing panes is useful.
- # using arrow-key combinations for both is easy for me to remember
- # I'll navigate more than resize, so I put the latter under is under
-Shift-arrows
- bind-key -r Left select-pane -L
- bind-key -r Right select-pane -R
- bind-key -r Down select-pane -D
- bind-key -r Up select-pane -U
- bind-key -r S-Left resize-pane -L 2
- bind-key -r S-Right resize-pane -R 2
- bind-key -r S-Down resize-pane -D 2
- bind-key -r S-Up resize-pane -U 2
-
-***** Automatic window rename
-
-Automatic window rename
- 
-
-You can have tmux rename the window to the command that is currently
-running. This is useful when you load up something such as irssi and the
-window is labeled accordingly:
- # Automatically set window title
- setw -g automatic-rename
-
-[[http://blog.hawkhost.com/wp-content/uploads/2010/07/tmux-window-rename.png][]]
 
 ***** important config options
 
@@ -12492,6 +12475,209 @@ reload config without killing server add this to config:
 #+BEGIN_EXAMPLE
 bind R source-file ~/.tmux.conf
 #+END_EXAMPLE
+
+***** plugins 
+****** install tmux plugins
+https://github.com/tmux-plugins
+
+Clone TPM:
+
+#+BEGIN_SRC sh
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+#+END_SRC
+
+Put this at the bottom of your .tmux.conf (backslashes at the end of the lines are required):
+
+#+BEGIN_EXAMPLE
+# List of plugins
+# Supports `github_username/repo` or full git repo URLs
+set -g @tpm_plugins '              \
+  tmux-plugins/tpm                 \
+  tmux-plugins/tmux-sensible       \
+'
+# Other examples:
+# github_username/plugin_name    \
+# git@github.com/user/plugin     \
+# git@bitbucket.com/user/plugin  \
+
+# Initializes TMUX plugin manager.
+# Keep this line at the very bottom of tmux.conf.
+run-shell '~/.tmux/plugins/tpm/tpm'
+#+END_EXAMPLE
+
+Reload TMUX environment so TPM is sourced:
+
+type this in terminal
+
+#+BEGIN_SRC sh
+tmux source-file ~/.tmux.conf
+#+END_SRC
+
+That's it!
+****** adding plugins
+add a new plugin to the @tpm_plugins listm .₆In example₆ 
+
+
+#+BEGIN_EXAMPLE
+set -g @tpm_plugins '              \
+  tmux-plugins/tpm                 \
+  tmux-plugins/tmux-sensible       \
+  tmux-plugins/tmux-cpu           \
+'
+#+END_EXAMPLE
+
+hit prefix + I (I as in Install) to fetch the plugin
+You're good to go! The plugin was cloned to ~/.tmux/plugins/ dir and sourced.
+
+****** Tmux sessionist
+?prefix + g? - prompts for session name and switches to it. Performs 'kind-of' name completion.
+Faster than the built-in prefix + s prompt for long session lists.
+?prefix + shift + c? - prompt for creating a new session by name.
+?prefix + shift + s? - switches to the last session.
+
+****** tmux open
+https://github.com/tmux-plugins/tmux-open
+
+Plugin for opening highlighted selection directly from Tmux copy mode.
+
+Key bindings In tmux `copy mode`:
+
+?o? - "open" a highlighted selection with the system default program. open for OS X or xdg-open for Linux.
+?Ctrl-o? - open a highlighted selection with the $EDITOR
+
+Examples, In `copy mode`:
+
+#+BEGIN_EXAMPLE
+highlight file.pdf and press o - file will open in the default PDF viewer.
+highlight file.doc and press o - file will open in system default .doc file viewer.
+highlight http://example.com and press o - link will be opened in the default browser.
+highlight file.txt and press Ctrl-o - file will open in $EDITOR.
+#+END_EXAMPLE
+
+Configuration
+
+How can I change the default "o" key binding to something else? For example, key "x"?
+Put set -g @open 'x' in tmux.conf.
+
+How can I change the default "Ctrl-o" key binding to "Ctrl-x"?
+Put set -g @open-editor 'C-x' in tmux.conf.
+****** Tmux copycat
+******* basic search
+Search:
+
+?prefix + /?  - regex search (strings work too)
+
+Example search entries:
+
+#+BEGIN_EXAMPLE
+foo - searches for string foo
+[0-9]+ - regex search for numbers
+Grep is used for searching.
+Searches are case insensitive.
+#+END_EXAMPLE
+
+Predefined searches
+
+#+BEGIN_EXAMPLE
+prefix + ctrl-f - simple *f*ile search
+prefix + ctrl-g - jumping over *g*it status files (best used after git status command)
+prefix + ctrl-u - *u*rl search (http, ftp and git urls)
+prefix + ctrl-d - number search (mnemonic d, as digit)
+prefix + alt-i - *i*p address search
+#+END_EXAMPLE
+
+These start "copycat mode" and jump to first match.
+
+"Copycat mode" bindings
+
+These are enabled when you search with copycat:
+
+#+BEGIN_EXAMPLE
+n - jumps to the next match
+N - jumps to the previous match
+#To copy a highlighted match:
+Enter - if you're using Tmux vi mode
+ctrl-w or alt-w - if you're using Tmux emacs mode
+#Copying a highlighted match will take you "out" of copycat mode. Paste with prefix + ] (this is Tmux default paste).
+#+END_EXAMPLE
+
+Copying highlighted matches can be enhanced with tmux yank.
+******* config
+
+Most of the behavior of tmux-copycat can be customized via tmux options.
+To set a value, just put set -g @option 'value' in your .tmux.conf before loading the tmux-copycat plugin.
+
+Other options:
+
+@copycat_search (default /) defines the key-binding used (after prefix) to start an interactive search.
+@copycat_next (default n) defines the key (without prefix) used to jump to next search result.
+@copycat_prev (default N) defines the key (without prefix) used to jump to previous search result.
+
+Options for predefined searches:
+
+@copycat_git_special (default C-g) git status search
+@copycat_file_search (default C-f) file search
+@copycat_url_search (default C-u) url search
+@copycat_digit_search (default C-d) digit search
+@copycat_ip_search (default M-i) IP address search
+
+Example: to remap default file search to use C-t put
+
+#+BEGIN_EXAMPLE
+set -g @copycat_file_search 'C-t'
+#+END_EXAMPLE
+
+ in .tmux.conf.
+******* Defining new stored searches
+To speed up the workflow you can define new bindings in .tmux.conf for searches you use often.
+
+After adding any of the below snippets, make sure to reload your tmux configuration:
+
+# type this in the terminal
+$ tmux source-file ~/.tmux.conf
+Dummy examples (just for testing):
+
+prefix + ctrl-t example string search
+
+set -g @copycat_search_C-t 'search me'
+prefix + alt-t example regex search
+
+set -g @copycat_search_M-t 'regex search[[:alnum:]]\*'
+Useful searches
+
+prefix + ctrl-e in the Rails log output searches for previous request start
+
+set -g @copycat_search_C-e '^Processing[[:space:]]by[[:space:]][^[:space:]]*'
+prefix + D searches for numbers at the beginning of line.
+Useful with $ pgrep -lf process command to quickly select process PID.
+
+set -g @copycat_search_D '^[[:digit:]]+'
+prefix + G searches for git commit SHA1.
+Works for both the short (5 chars) and full (40 chars) versions.
+
+set -g @copycat_search_G '\b[0-9a-f]{5,40}\b'
+
+****** Tmux Yank
+$Note-requires xclip$
+
+Key bindings:
+
+?prefix + y? - copies text from the command line to clipboard.
+
+Works with all popular shells/repls. Tested with:
+shells: bash, zsh (with bindkey -e), tcsh
+remote shells: ssh, mosh
+
+copy mode bindings:
+
+?y? - copy selection to system clipboard
+?Y?- (shift-y) - "put" selection - equivalent to copying a selection, and pasting it to the command line
+?Alt-y? - performs both of the above: copy to system clipboard and put to command line
+
+%Tip- Mouse Support%
+
+When making a selection using tmux mode-mouse on or mode-mouse copy-mode, you cannot rely on the default 'release mouse after selection to copy' behavior. Instead, press `y` @before@ releasing mouse.
+
 
 **** urxvt
 ***** install perl-scripts
@@ -17464,91 +17650,90 @@ distros
 ***** mpd dosent seem to play and stuck at 00:00
 check the pulse output is enabled 
 **** Helpers/scripts
+***** albumbler     
+****** tips
 
-***** albumbler
+ to view the albums current database:
+  issue
 
-***** tips
+  albumbler best
 
-to view the albums current database:
- issue
+  and
 
- albumbler best
+  albumbler worst
 
- and
-
- albumbler worst
-
- which will give you a birds eye view of the most fav/disliked albumes
- to edit the config options edit :
- ~/.config/albumbler/config
- MusicPaths - Comma separated list of places to find music.
- Player - Choice of music player.
- Notify - Choice of notification alert.
- TimeWindow - Seconds before it think you liked music. Default 60.
- MaxPlaylist - Avoid sending huge directories to the player. Default
-1000.
- MinPlaylist - Avoid sending nearly empty directories. Default 3.
- PlaylistExts - Comma separated list of extensions to treat as
-playlists.
+  which will give you a birds eye view of the most fav/disliked albumes
+  to edit the config options edit :
+  ~/.config/albumbler/config
+  MusicPaths - Comma separated list of places to find music.
+  Player - Choice of music player.
+  Notify - Choice of notification alert.
+  TimeWindow - Seconds before it think you liked music. Default 60.
+  MaxPlaylist - Avoid sending huge directories to the player. Default
+ 1000.
+  MinPlaylist - Avoid sending nearly empty directories. Default 3.
+  PlaylistExts - Comma separated list of extensions to treat as
+ playlists.
 
 ***** mpdcron
+****** setup
 
-***** setup
+ MPDCRON
+  1)setup a directory for mpd cron:
+  /home/zeltak/.mpdcron/
+  2)add a config file (mpdcron.conf) in that dir including the following:
+  # mpdcron configuration file
+  [main]
+  # Path to the PID file, by default the PID file is
+ MPDCRON DIR/mpdcron.pid
+  pidfile = /path/to/mpdcron.pid
+  # Wait this many seconds after sending signal to kill the daemon.
+  # Default is 3 seconds.
+  killwait = 3
+  [mpd]
+  # Semicolon delimited list of events to wait for.
+  # By default mpdcron waits for all events.
+  # Valid events are:
+  # database: Song database has been updated.
+  # stored playlist: A stored playlist has been modified, created,
+ deleted or renamed.
+  # playlist: The queue has been modified.
+  # player: The player state has been changed: play, stop, pause, seek,
+ ...
+  # mixer: The volume has been modified.
+  # output: An audio output device has been enabled or disabled.
+  # options: Options have changed: crossfade, random, repeat, ...
+  # update: A database update has started or finished.
+  events = player;mixer
+  # Interval in seconds to reconnect to mpd after an error or disconnect.
+  reconnect = 5
+  # Timeout in milliseconds for mpd timeout, 0 for default timeout of
+ libmpdclient.
+  timeout = 0
+  3)add a "hooks" dir under the mpdcron dir
+  Hooks are executed depending on the event received from mpd.
+  for example: hooks/player: mpdcron calls status and currentsong and
+ updates the environment.
+  4)under the hooks dir add hook (player for example) and in it add what
+ is executed when a player event happens.
+  for example :
+  hooks/dump-status.bash
+  will launch the dump-status.bash script when the song changes
+  in my case i want dzen2 to show up so i put this in the player file:
+  #!/bin/sh
+  hooks/dzen music.sh
+  and in the dzen music script i put this:
+  #!/bin/sh
+  echo
+ "($MPD SONG TAG TRACK)$MPD SONG TAG TITLE,($MPD SONG TAG GENRE)"
+ | dzen2 -l 4 -y 700 -x 0 -fn 'Droid Sans Japanese Bold' -p 2; |
+  this will echo the mpdcron info to dzen
+  5)start with:
 
-MPDCRON
- 1)setup a directory for mpd cron:
- /home/zeltak/.mpdcron/
- 2)add a config file (mpdcron.conf) in that dir including the following:
- # mpdcron configuration file
- [main]
- # Path to the PID file, by default the PID file is
-MPDCRON DIR/mpdcron.pid
- pidfile = /path/to/mpdcron.pid
- # Wait this many seconds after sending signal to kill the daemon.
- # Default is 3 seconds.
- killwait = 3
- [mpd]
- # Semicolon delimited list of events to wait for.
- # By default mpdcron waits for all events.
- # Valid events are:
- # database: Song database has been updated.
- # stored playlist: A stored playlist has been modified, created,
-deleted or renamed.
- # playlist: The queue has been modified.
- # player: The player state has been changed: play, stop, pause, seek,
-...
- # mixer: The volume has been modified.
- # output: An audio output device has been enabled or disabled.
- # options: Options have changed: crossfade, random, repeat, ...
- # update: A database update has started or finished.
- events = player;mixer
- # Interval in seconds to reconnect to mpd after an error or disconnect.
- reconnect = 5
- # Timeout in milliseconds for mpd timeout, 0 for default timeout of
-libmpdclient.
- timeout = 0
- 3)add a "hooks" dir under the mpdcron dir
- Hooks are executed depending on the event received from mpd.
- for example: hooks/player: mpdcron calls status and currentsong and
-updates the environment.
- 4)under the hooks dir add hook (player for example) and in it add what
-is executed when a player event happens.
- for example :
- hooks/dump-status.bash
- will launch the dump-status.bash script when the song changes
- in my case i want dzen2 to show up so i put this in the player file:
- #!/bin/sh
- hooks/dzen music.sh
- and in the dzen music script i put this:
- #!/bin/sh
- echo
-"($MPD SONG TAG TRACK)$MPD SONG TAG TITLE,($MPD SONG TAG GENRE)"
-| dzen2 -l 4 -y 700 -x 0 -fn 'Droid Sans Japanese Bold' -p 2; |
- this will echo the mpdcron info to dzen
- 5)start with:
+  mpdcron --no-daemon
 
- mpdcron --no-daemon
-
+***** create missing album_Artist  
+use this script here id:e3878562-df9e-44b5-813e-df4c32b3cfe7 
 **** remote streams
 
 ***** stream to another pc using pulse
@@ -27889,6 +28074,9 @@ You can integrate directly Google Contacts into message-mode;
 #+END_SRC
 Then you can use TAB to go to complete e-mail addresses in the header fields.
 
+********* edit sever 
+in the config add config options
+then in chrome in editable areas launch with edit with Emacs 
 ******* registers
 ******** basics
 
@@ -44411,6 +44599,9 @@ issue:
 
 ** Audio
 *** albumartist
+    :PROPERTIES:
+    :ID:       e3878562-df9e-44b5-813e-df4c32b3cfe7
+    :END:
 `albumartist` is the artist that actually on the whole album 
 `artist` is the artist that preforming the current song
 
