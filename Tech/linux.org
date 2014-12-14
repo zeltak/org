@@ -12677,7 +12677,62 @@ copy mode bindings:
 %Tip- Mouse Support%
 
 When making a selection using tmux mode-mouse on or mode-mouse copy-mode, you cannot rely on the default 'release mouse after selection to copy' behavior. Instead, press `y` @before@ releasing mouse.
+****** Tmux cpu status
+Enables displaying cpu percentage and status icon in Tmux status-right.
 
+This is done by introducing 2 new format strings that can be added to status-right option:
+
+#{cpu_icon} - will display a cpu status icon
+#{cpu_percentage} - will show cpu percentage
+
+Usage:
+
+Add #{cpu_icon} or #{cpu_percentage} format strings to existing status-right Tmux option. Example:
+
+#+BEGIN_SRC sh
+# in .tmux.conf
+set -g status-right "CPU: #{cpu_icon} #{cpu_percentage} | %a %h-%d %H:%M "
+#+END_SRC
+
+config: 
+
+By default, these icons are displayed:
+
+cpu: "❏"
+You can change these defaults by adding the following to .tmux.conf (the following lines are not in the code block so that emojis can be seen):
+
+set-option -g @cpu_icon ":sunglasses:"
+
+Don't forget to reload TMUX environment ($ tmux source-file ~/.tmux.conf) after you do this.
+****** Tmux battery status
+Enables displaying battery percentage and status icon in Tmux status-right.
+
+This is done by introducing 2 new format strings that can be added to status-right option:
+
+#{battery_icon} - will display a battery status icon
+#{battery_percentage} - will show battery percentage
+
+Usage
+Add #{battery_icon} or #{battery_percentage} format strings to existing status-right Tmux option. Example:
+
+#+BEGIN_EXAMPLE
+# in .tmux.conf
+set -g status-right "Batt: #{battery_icon} #{battery_percentage} | %a %h-%d %H:%M "
+#+END_EXAMPLE
+
+Changing icons
+
+By default, these icons are displayed:
+
+charged: ":battery:" ("❇ " when not on OS X)
+charging: ":zap:"
+discharging: (nothing shown)
+You can change these defaults by adding the following to .tmux.conf (the following lines are not in the code block so that emojis can be seen):
+
+set-option -g @batt_charged_icon ":sunglasses:"
+set-option -g @batt_charging_icon ":+1:"
+set-option -g @batt_discharging_icon ":thumbsdown:"
+Don't forget to reload TMUX environment ($ tmux source-file ~/.tmux.conf) after you do this.
 
 **** urxvt
 ***** install perl-scripts
