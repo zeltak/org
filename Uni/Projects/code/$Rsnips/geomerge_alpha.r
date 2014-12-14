@@ -15,6 +15,8 @@ nearestbyday <- function(matrix1, matrix2, dt1, dt2, dt1varname, dt2varname,
   #maxdistance (optional)- defualts to NA-you can add second restriction that the points that are considred have to be within maxdist (will use units of cords being used- meters, dec degree)
   #if you set knearest if 5 and max dist of 20000 (20km) it will look for 5 closest points up to 20km.
   #please note knearest runs before maxdist, the maxdist is an additional screen
+  #
+  
   
   
   
@@ -25,6 +27,7 @@ nearestbyday <- function(matrix1, matrix2, dt1, dt2, dt1varname, dt2varname,
   # 4. add flexibility on day (name of variable - but add check on class across dt1 and dt2)
   # 5.change dt1 and ft2 to source etc.. (change argument name to be more intuitive)
   # 6.add idw into
+  # 7. on error we still need to put back the name of the variable that we changed
   
   
   knearest <- min(knearest, nrow(matrix2))

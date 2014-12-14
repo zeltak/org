@@ -15,8 +15,8 @@ library(gdata)
 library(car)
 library(broom)
 library(FNN)
-source("/media/NAS/Uni/org/files/Uni/Projects/code/P046.Israel_MAIAC/snippets/nearestbyday_MPM.r")
-source("/media/NAS/Uni/org/files/Uni/Projects/code/P046.Israel_MAIAC/snippets/nearestbyday.r")
+source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/geomerge_alpha.r")
+
 
 
 ########### import datasets
@@ -376,45 +376,43 @@ closestaodse<- nearestbyday(aod.m  ,pm.m ,
                             m3, pmall2007 [, list(day,PM25,stn)], 
                             "aodid", "stn", "closest","PM25",knearest = 5, maxdistance = 30000, nearestmean = T)
 
-
-#nearestbyday <- function(matrix_target, matrix_join, dt_target, dt_join, dt_target_varname, dt2_join_varname, 
-#                         closestname = "closestmet", varstoget = "avewsp", 
-#                         knearest = 5, maxdistance = NA, nearestmean = FALSE){
-
-#dt-target_varname-the string of the variable name for the units in the target dt
-#dt2_join_varname-the string of the variable name for the units in the join dt
-#closestname = "closestmet"-the string to be given to derived variable- a string prefix
-#varstoget = "avewsp"-isnt used ..here be dragons?- ignore it for now and just put target variable
-
-#2nd column (named based on the named in join dataset)-data point closest from unit
-#closest-which unit from the join was the closest one (which was used)
-#closestknn-which of the closest knn (k nearest) was used
-#closestnobs-total number of observations that met the knearst and maxdist criteria--WITH DATA!! if no data was avilable it would ne NA
-#closestmean- mean of all the points if nearstmean=True, if False then you dont get it.
-
-
-head(closestaodse[closestnobs > 1,])
-
 #cleanup
 closestaodse[,PM25 :=NULL]
-closestaodse[,meanPM25 :=NULL]
-closestaodse[,meanPM25knn:=NULL]
-closestaodse[,meanPM25nobs:=NULL]
+closestaodse[,closest :=NULL]
+closestaodse[,closestknn :=NULL]
+closestaodse[,closestnobs:=NULL]
+
 #join to DB
 setkey(closestaodse,aodid,day)
 setkey(m3,aodid,day)
 m4 <- merge(m3,closestaodse,all.x = T)
-summary(m4$meanPM25mean)
 
+m4_NA<- m4[is.na(closestmean),]
+m4_NA[,closestmean := NULL]
+m4_good<- m4[!is.na(closestmean),]
 
 closestaodse<- nearestbyday(aod.m  ,pm.m , 
-                            m3, pmall2007 [, list(day,PM25,stn)], 
-                            "aodid", "stn", "meanPM25", "PM25", knearest = 3, maxdistance = NA, nearestmean = TRUE)
+                            m4_NA, pmall2007 [, list(day,PM25,stn)], 
+                            "aodid", "stn", "closest", "PM25", knearest = 9, maxdistance = 90000, nearestmean = TRUE)
+#cleanup
+closestaodse[,PM25 :=NULL]
+closestaodse[,closest :=NULL]
+closestaodse[,closestknn :=NULL]
+closestaodse[,closestnobs:=NULL]
+
+#join to DB
+setkey(closestaodse,aodid,day)
+setkey(m4_NA,aodid,day)
+m4x <- merge(m4_NA,closestaodse,all.x = T)
+
+m5<-rbindlist(list(m4x,m4_good))
+setnames(m5,"closestmean","meanPM")
 
 
-##################################
-#PM10
-##################################
+
+#########-------------------############
+#add meanPM per grid per day
+
 #PM10
 PM10 <- fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/0.raw/PM/PM10_D.csv")
 PM10$date<-paste(PM10$Day,PM10$Month,PM10$Year,sep="/")
@@ -422,62 +420,83 @@ PM10[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
 PM10[, c := as.numeric(format(day, "%Y")) ]
 PM10[,c("Year","Month","Day","date"):=NULL]
 PM10 <- PM10[X != 'NaN']
-#num. of obsv per year per stn
-PM10[,length(na.omit(PM10)),by=list(stn,c)]
-#PM10_m means avialble obs per year
-PM10[, PM10_n := length(na.omit(PM10)),by=list(stn,c)]
-#clear non PM10 days
 PM10<-PM10[!is.na(PM10)]
 #clear non continous stations
-PM10 <- PM10[PM10_n > 5  , ]
 setnames(PM10,"X","x_stn_ITM")
 setnames(PM10,"Y","y_stn_ITM")
-pm10all2007<- PM10[c==2007]
-#keep only full stations
-table_temp<-as.data.table(ddply(na.omit(pm10all2007[,c("PM10","stn"),with=F]),.(stn),nrow))
-table_temp<-table_temp[V1 > 364]
-pm10all2007 <- pm10all2007[pm10all2007$stn %in% table_temp$stn, ] 
-#create PM matrix
-pm.m <- makepointsmatrix(pm10all2007, "x_stn_ITM", "y_stn_ITM", "stn")
-### create aod grid
+pmall2007<- PM10[c==2007]
+
+pm.m <- makepointsmatrix(pmall2007, "x_stn_ITM", "y_stn_ITM", "stn")
 setkey(m3, aodid)
-#create aod terra matrix
 aod.m <- makepointsmatrix(m3[m3[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
-closestaodse<- nearestbydayMEAN(aod.m  ,pm.m , 
-                            m3, pm10all2007 [, list(day,PM10,stn)], 
-                            "aodid", "stn", "meanPM10", "PM10", knearest = 6, maxdistance = NA)
-#check data completness
-x1<-closestaodse[, .N, by=c("aodid")]
-summary(x1)
+
+closestaodse<- nearestbyday(aod.m  ,pm.m , 
+                            m5, pmall2007 [, list(day,PM10,stn)], 
+                            "aodid", "stn", "closest","PM10",knearest = 5, maxdistance = 30000, nearestmean = T)
+
 #cleanup
 closestaodse[,PM10 :=NULL]
-closestaodse[,meanPM10 :=NULL]
-closestaodse[,meanPM10knn:=NULL]
-closestaodse[,meanPM10nobs:=NULL]
+closestaodse[,closest :=NULL]
+closestaodse[,closestknn :=NULL]
+closestaodse[,closestnobs:=NULL]
+
 #join to DB
 setkey(closestaodse,aodid,day)
-setkey(m3,aodid,day)
-m3 <- merge(m3,closestaodse,all.x = T)
+setkey(m5,aodid,day)
+m6 <- merge(m5,closestaodse,all.x = T)
+
+m6_NA<- m6[is.na(closestmean),]
+m6_NA[,closestmean := NULL]
+m6_good<- m6[!is.na(closestmean),]
+
+closestaodse<- nearestbyday(aod.m  ,pm.m , 
+                            m6_NA, pmall2007 [, list(day,PM10,stn)], 
+                            "aodid", "stn", "closest", "PM10", knearest = 9, maxdistance = 90000, nearestmean = TRUE)
+#cleanup
+closestaodse[,PM10 :=NULL]
+closestaodse[,closest :=NULL]
+closestaodse[,closestknn :=NULL]
+closestaodse[,closestnobs:=NULL]
+
+#join to DB
+setkey(closestaodse,aodid,day)
+setkey(m6_NA,aodid,day)
+m6x <- merge(m6_NA,closestaodse,all.x = T)
+
+m7<-rbindlist(list(m6x,m6_good))
+setnames(m7,"closestmean","meanPM10")
+
+
+
+
+
 
 
 
 ###save mods
 #mod3
-saveRDS(m3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2007.rds")
+saveRDS(m7,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2007.rds")
 #mod2
-m3.m2 <- m3[!is.na(aod)]
-saveRDS(m3.m2,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2007.rds")
+m7.m2 <- m7[!is.na(aod)]
+saveRDS(m7.m2,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2007.rds")
 #mod1
+# summary(m7.m2)
+# m7.m2<-m7.m2[!is.na(meanPM)]
+# m7.m2<-m7.m2[!is.na(meanPM10)]
 
+m7days <- sort(unique(m7.m2$day))
 ########### join aod to PM25
 #create PM matrix
 pm.m <- makepointsmatrix(PM25, "x_stn_ITM", "y_stn_ITM", "stn")
-setkey(m3.m2,aodid)
+setkey(m7.m2,aodid)
 #create aod terra matrix
-aod.m <- makepointsmatrix(m3.m2[m3.m2[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
+aod.m <- makepointsmatrix(m7.m2[m7.m2[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
 closestaod <- nearestbyday(pm.m, aod.m, 
-                           PM25, m3.m2, 
-                           "stn", "aodid", "closestaod", "aod", knearest = 7, maxdistance = 1500)
+                           PM25[day %in% m7days,], m7.m2, 
+                           "stn", "aodid", "closest", "aod", knearest = 4, maxdistance = 1500,nearestmean = FALSE)
+
+
+
 closestaod[,i.stn :=NULL]
 closestaod[,closestaodknn :=NULL]
 closestaod[,closestaodnobs:=NULL]

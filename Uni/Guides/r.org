@@ -9673,6 +9673,9 @@ gestwide <- merge(gestlong390[unique(gestlong390[, list(folio)]), list(folio, st
                   gestwide, by = "folio")
 gestwide[1,1:10, with = F]
 
+#head(closestaodse[!is.na(closestmean),])
+#head(closestaodse[closestnobs > 1,])
+
 
   #docu:
   #to calculate the mean use nearestmean= TRUE. if set to False it will only get knreaset and get closest one avilable by distance
