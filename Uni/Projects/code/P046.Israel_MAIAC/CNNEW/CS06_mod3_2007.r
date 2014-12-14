@@ -1,24 +1,6 @@
-###############
 #LIBS
-###############
-###############
-#LIBS
-###############
-library(lme4)
-library(reshape)
-library(foreign) 
-library(ggplot2)
-library(plyr)
-library(data.table)
-library(reshape2)
-library(Hmisc)
-library(mgcv)
-library(gdata)
-library(car)
-library(dplyr)
-library(ggmap)
-library(broom)
-library(splines)
+library(lme4); library(reshape); library(foreign) ; library(ggplot2); library(plyr); library(data.table); library(reshape2); library(Hmisc); library(mgcv);
+library(gdata); library(car); library(dplyr); library(ggmap); library(broom);library(splines);
 
 
 #sink("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/sink_mod3_2007.txt", type = c("output", "message"))
@@ -26,6 +8,8 @@ library(splines)
 #import mod2
 m2.2007<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2007.rds")
 m2.2007[, bimon := (m + 1) %/% 2]
+setkey(m2.2007,day, aodid)
+
 
 ###############
 #Mod3
@@ -39,7 +23,7 @@ m2.smooth = lme(pred.m2 ~ meanPM25mean,random = list(aodid= ~1 + meanPM25mean),c
 #correlate to see everything from mod2 and the mpm works
 m2.2007[, pred.t31 := predict(m2.smooth)]
 m2.2007[, resid  := residuals(m2.smooth)]
-res[res$year=="2007", 'm3.t31'] <- print(summary(lm(pred.m2~m2.2007,data=m2.2007))$r.squared)
+res[res$year=="2007", 'm3.t31'] <- print(summary(lm(pred.m2~pred.t31,data=m2.2007))$r.squared)
 
 
 #split the files to the separate bi monthly datsets
@@ -83,7 +67,12 @@ res[res$year=="2007", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.2
 data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2007.rds")
 data.m3 <- data.m3[,c(1,2,5,10,11,16,17,54,55),with=FALSE]
 data.m3[, bimon := (m + 1) %/% 2]
+setkey(data.m3,day, aodid)
 data.m3$pred.m3.mix <-  predict(Final_pred_2007,data.m3)
+
+
+
+
 #create unique grid
 ugrid <-data.m3 %>%
     group_by(aodid) %>%
@@ -164,7 +153,7 @@ mod3[,x_aod_ITM.y:=NULL]
 setnames(mod3,"y_aod_ITM.x","y_aod_ITM")
 setnames(mod3,"x_aod_ITM.x","x_aod_ITM")
 #subset mod3
-mod3<-mod3[,c("aodid","day","y_aod_ITM","x_aod_ITM","pred.m3"),with=FALSE]
+#mod3<-mod3[,c("aodid","day","y_aod_ITM","x_aod_ITM","pred.m3"),with=FALSE]
 
 #load mod1
 mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2007.pred.rds")
@@ -176,8 +165,7 @@ mod1<-mod1[,c("aodid","day","PM25","pred.m1","stn"),with=FALSE]
 setkey(mod3,day,aodid)
 setkey(mod1,day,aodid)
 mod1 <- merge(mod1,mod3[, list(day,aodid,pred.m3)], all.x = T)  			
-mod3d_reg <- lm(PM25~pred.m3,data=mod1)
-mod1table$r2007[23] <-summary(mod3d_reg)$r.squared
+print(summary(lm(PM25~pred.m3,data=mod1))$r.squared)
 saveRDS(mod1table, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2007_p3.rds.rds")
 saveRDS(mod1, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2007w_p.m3.rds")
 

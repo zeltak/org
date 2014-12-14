@@ -7726,7 +7726,7 @@ fread(data, select=c(1,4))        # same using column numbers
 loc<-fread("/media/NAS/Uni/Projects/P011.BirthW_NE/3.1.11.4.Work/3.Analysis/2.R_analysis/bw_diab37.csv",colClasses=c(FIPS="character",tract="character"))
 #+END_SRC
 *** Merge/Join
-**** Noal join
+**** Normal join
 #+begin_src R
 reg<-fread("y:/EAST_USA_MAIAC/data/FN007_Key_tables/region_guid.csv")
 #add new region
@@ -7879,6 +7879,13 @@ m1<-aodf.2003.tmp.s9.m2[,c( "x_aod_ITM", "y_aod_ITM", "aodid"),with=FALSE]
 #+begin_src R
 d1 <- mod1[!mon %in% c("SAG", "PER", "XAL"), ]
 #+end_src
+**** select columns to drop
+#+BEGIN_SRC R
+WS[,c("Year","Month","Day","date"):=NULL]
+#or
+m2<-m2[, c(10:12) := NULL]
+#+END_SRC
+ 
 **** select values to keep by matching in vector/dataset
 #+begin_src R
 mod3grid.se <- mod3grid [mod3grid$guid %in% m2_agg$guid, ] 
@@ -9141,6 +9148,13 @@ stnxy<-pm25.m1.c %>%
   dplyr::summarise(x = mean(x_stn_ITM, na.rm=TRUE),y = mean(y_stn_ITM, na.rm=TRUE) )
 #+END_SRC
 
+*** aggrtegate by XY
+#+BEGIN_SRC R
+ugrid <-data.m3 %>%
+    group_by(aodid) %>%
+    summarise(lat_aod = mean(lat_aod, na.rm=TRUE),  long_aod = mean(long_aod, na.rm=TRUE),x_aod_ITM = mean(x_aod_ITM, na.rm=TRUE),  y_aod_ITM = mean(y_aod_ITM, na.rm=TRUE)) 
+#+END_SRC
+
 *** summary by 2 grouped variables
 #+BEGIN_SRC R
 flights %>%
@@ -9620,3 +9634,22 @@ left_join(df2, df1)
 #+END_SRC
 
 *** Join examples
+** add to dplyr 
+
+left_join(test_data, kantrowitz, by = c("first_name" = "name"))
+
+
+summarise_each(funs(mean))
+₆In example₆ 
+#create single aod point per aodid per day
+aqua <-aqua %>%
+    group_by(aodid,day) %>%
+    summarise_each(funs(mean),lat_aod,aod,aod,UN,WV,day,x_aod_ITM, y_aod_ITM ,MaskAdjacency)
+
+
+c(1,9:ncol(aodf.2007)
+
+
+ask allan:
+#m2<-merge(m2,wlu[,list(c(1,9:ncol(m2)))],all.x = T)
+how to drop bu column #
