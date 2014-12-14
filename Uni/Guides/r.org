@@ -9148,6 +9148,14 @@ stnxy<-pm25.m1.c %>%
   dplyr::summarise(x = mean(x_stn_ITM, na.rm=TRUE),y = mean(y_stn_ITM, na.rm=TRUE) )
 #+END_SRC
 
+*** count number of obsv per station
+
+#+BEGIN_SRC R
+tst<-met2007 %>%
+    group_by(stn) %>%
+    summarise(data = n())
+#+END_SRC
+
 *** aggrtegate by XY
 #+BEGIN_SRC R
 ugrid <-data.m3 %>%
@@ -9651,5 +9659,41 @@ c(1,9:ncol(aodf.2007)
 
 
 ask allan:
-#m2<-merge(m2,wlu[,list(c(1,9:ncol(m2)))],all.x = T)
-how to drop bu column #
+
+setkey(m2,aodid)
+setkey(wlu,aodid)
+x2<-merge(m2,wlu[,c(1,18:ncol(wlu)), with = F],all.x = T)
+
+# export from 60 days before a period of 390 days (for Leon for P50)
+setkey(gestlong, folio, day)
+gestlong390 <- gestlong[, .SD[1:390,list(day, bestpred, dayindex = paste0("dayindex", sprintf("%0.3i", .I)))],by=folio]
+gestwide <-  dcast.data.table(gestlong390[, list(folio, dayindex, bestpred)],folio~dayindex)
+#by folio pull out a subset follio take out first 390 days of that
+gestwide <- merge(gestlong390[unique(gestlong390[, list(folio)]), list(folio, startday = day), mult = "first"],
+                  gestwide, by = "folio")
+gestwide[1,1:10, with = F]
+
+
+  #docu:
+  #to calculate the mean use nearestmean= TRUE. if set to False it will only get knreaset and get closest one avilable by distance
+  #knreast: number of nearest points it considers,if or if not they have data. assesment of how near something is , is done by pointmatrix. if you have alot of points with no data you might end up with no data. its the maximum number of points that gets considered.
+  #the higher the kneareast the bigger the Dataset needs to be- has RAM/CPU implications
+  #will only consider max number based in max number of monitors/sites in the joining dataset
+  #maxdistance (optional)- defualts to NA-you can add second restriction that the points that are considred have to be within maxdist (will use units of cords being used- meters, dec degree)
+  #if you set knearest if 5 and max dist of 20000 (20km) it will look for 5 closest points up to 20km.
+  #please note knearest runs before maxdist, the maxdist is an additional screen
+
+#nearestbyday <- function(matrix_target, matrix_join, dt_target, dt_join, dt_target_varname, dt2_join_varname, 
+#                         closestname = "closestmet", varstoget = "avewsp", 
+#                         knearest = 5, maxdistance = NA, nearestmean = FALSE){
+
+#dt-target_varname-the string of the variable name for the units in the target dt
+#dt2_join_varname-the string of the variable name for the units in the join dt
+#closestname = "closestmet"-the string to be given to derived variable- a string prefix
+#varstoget = "avewsp"-isnt used ..here be dragons?- ignore it for now and just put target variable
+
+#2nd column (named based on the named in join dataset)-data point closest from unit
+#closest-which unit from the join was the closest one (which was used)
+#closestknn-which of the closest knn (k nearest) was used
+#closestnobs-total number of observations that met the knearst and maxdist criteria--WITH DATA!! if no data was avilable it would ne NA
+#closestmean- mean of all the points if nearstmean=True, if False then you dont get it.

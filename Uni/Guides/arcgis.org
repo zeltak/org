@@ -1256,3 +1256,31 @@ print cities
 
 The result is as follows:
 ['Espanola', 'Alameda', 'Brazos', 'Dulce', 'Zuni']
+** fields
+*** Create sequential numbers in a field using Python in the Field Calculator
+he code in this article generates sequential numbers for unsorted data based on the OID or FID order. If your data is sorted on a field, the generated numbers will not be sequential.
+Create a new short integer field.
+Set the Parser to Python.
+Select Show Codeblock.
+Paste the following into the Pre-Logic Script Code: 
+
+#+BEGIN_SRC sh
+rec=0 
+def autoIncrement(): 
+ global rec 
+ pStart = 1  
+ pInterval = 1 
+ if (rec == 0):  
+  rec = pStart  
+ else:  
+  rec += pInterval  
+ return rec
+#+END_SRC
+
+Paste the following code in the smaller box below the Pre-Logic Script Code: 
+
+#+BEGIN_SRC sh
+autoIncrement()
+#+END_SRC
+
+Click OK.
