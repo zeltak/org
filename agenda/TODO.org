@@ -4,20 +4,22 @@
 #+STARTUP: overview  inlineimages eval: (org-columns)
 
 * @TODAY@
-** TODO flight
+** help file revison  
+try to find a way to do a refile/archive/function like thing that will copy a line/header to a defined file
+idealy: a function to copy current line, ask which file to copy to (like refile) and open file in next buffer. bonus check if that line start already exist and if so warn and paste below  that line.
+
+** TODO top 
    SCHEDULED: <2014-11-30 Sun>
 :PROPERTIES:
 :STYLE: habit
 :END:
+bodrom
 change stow so no more common
-change to terminator from lilyterm
 check patst.sh in ZH_tmp
 check tarman
 org habits 
-** custom Emacs search and replace				       :COOK:
-something like this (defun zeltak-whatever (&rest rest) (interactive) (save-excursion    
- (goto-char (point-min)) (apply #'query-replace-regexp rest)))                            
- then (define-key ...
+** tmux
+*** why isn't TAB working in Emacs (org mode)
 ** org sparese
 punchagan | zeltak: it looks like properties need to be all upper case. 
  punchagan | zeltak: for instance I changed Ammount to AMMOUNT
@@ -321,12 +323,9 @@ the recent albums also needs header as in 'recent albums'
 track replace like album replace
    
 ** org
-*** check out M-x org-indent-mode 
- #+BEGIN_SRC emacs-lisp :results none
-   (setq org-hide-leading-stars t)
-
- #+END_SRC
-*** search text in all orgfiles    
+** TODO create same level header
+how does one map universal header (c-u) before a command
+** search text in all orgfiles    
 ** i3 REVAMP
 *** fix grid
 *** cretae a nag menu of move to workspace    
@@ -646,6 +645,13 @@ internt pass -last pass
 
 weak-salt21salar
 strong-
+
+*** A fantastic font
+I've tried several fonts, and all of them were nice, but came up short on some way. Some didn't have italic variants, some had dotted zeroes instead of dashed zeroes, some even had entirely clear zeroes which make them look like O's, others had boring-looking parentheses4. Not Fantasque Sans Mono5, 6, it is awesome. If your web browser supports web fonts you should also see it used in the code blocks here.
+
+For normal Emacs setups you might use the set-frame-font function like so:
+
+(set-frame-font "Fantasque Sans Mono 13" nil t)
 *** Look at synergy for sharing betwee office pc and laptopz 
 *** automate git commit with script_cron daily 
 *** Dunst color per application
