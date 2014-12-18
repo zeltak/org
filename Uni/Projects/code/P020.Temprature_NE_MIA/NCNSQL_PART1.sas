@@ -1,6 +1,6 @@
 
 
-libname mods 'f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\3.Analysis\AN_001_mods\' ;
+libname mods 'Z:\Projects\P020_Temprature_NE_MIA\3.Work\3.Analysis\AN_001_mods\' ;
 
 
 

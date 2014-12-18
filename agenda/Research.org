@@ -233,13 +233,55 @@ exposure paper-massimo first/last
     :PROPERTIES:
     :ID:       3fdbbea8-2435-413b-b0ac-981b748fa528
     :END:
+*** kees talk 18.12
+**** we have all the grids in HDF formatting. I need to extract lat/long from the rasters. will send it over in the next few days
+**** TODO land use gathering project
+m1.2007[,elev.s:= scale(elev)]- we have for whole of europe 
+m1.2007[,tden.s:= scale(tden)]-
+high detail in swiss and holland
+traffic classifications for roads at high res 100m for europe
+weight the roads by classification for road density maps, weight themselves in a model 
+m1.2007[,pden.s:= scale(pden)]- avilable either on 1km or 100m level 
+point sources - EEA has datasets on point source emessions 
+area emssions- emap- emsiiosn are levels 
+m1.2007[,dist2A1.s:= scale(dist2A1)]
+m1.2007[,dist2water.s:= scale(dist2water)]
+m1.2007[,dist2rail.s:= scale(dist2rail)]
+m1.2007[,Dist2road.s:= scale(Dist2road)]
+m1.2007[,ndvi.s:= scale(ndvi)] -dowload from MODIS
+m1.2007[,MeanPbl.s:= scale(MeanPbl)]- extend the temporal coverage of PBL, talk to Johanna
+m1.2007[,p_ind.s:= scale(p_ind)]- corine dataset
+m1.2007[,p_for.s:= scale(p_for)]
+m1.2007[,p_farm.s:= scale(p_farm)]
+m1.2007[,p_dos.s:= scale(p_dos)]
+m1.2007[,p_dev.s:= scale(p_dev)]
+m1.2007[,p_os.s:= scale(p_os)]
+m1.2007[,tempa.s:= scale(tempa)]
+m1.2007[,WDa.s:= scale(WDa)]
+m1.2007[,WSa.s:= scale(WSa)]
+m1.2007[,RHa.s:= scale(RHa)]
+m1.2007[,Raina.s:= scale(Raina)]
+m1.2007[,NO2a.s:= scale(NO2a)]
+pm2.5/pm10- data from euro database 
+which sources from where
+
+grant: supplementing PM2.5 with PM10-25 relationshipnm that year
+compare euro wide model with localized model
+
+UTRS 89 for euro projection 
+ask chirra 
+
+TODO: NDVI for swiss ?
+
+**** compare osm and euromaps
+
+
 ** italy temperature models
 *** Ideas
 tmin tmax
 use 4 measuremtns per day and use aqua and terra
 talk to brent of a method to to a sophisticated way to impute t from aqua and terra
 ** Israel temperature models
-
 *** comparing the wrf model in israel to our model as part of the methods paper
 
 ** Sulfate analysis-explore calibrating the data we have with Sulfate instead of PM2.5
@@ -350,11 +392,19 @@ access to healthy food,access to health centers
      :ID:       ad417cd8-7eba-4697-81ce-ffcbc88ec479
      :END:
 
-** Noise pollution Israel
+** Noise pollution Israel- omer harovi
 *** sources
 **** israel contacts
 Shuki Cohen from Matat, or Shlomo may also be able to help you
      
+
+** peripheral artery disease (Andrea)
+*** idea
+By reading this paper it came back to my mind that there is another orphan cardiovascular disease in air pollution research: peripheral artery disease. This is usually due to atherosclerosis and narrowing of the arteries in the limbs and can lead to severe outcomes such as amputation.
+It makes sense to be affected by air pollution, but last time I checked no one had published anything on this. With a large database and geospatial resolution, PAD would be an obvious one to look at.
+*** data from antonella
+when there is no 2, it means that they are created form first diagnosis, when there is the 2 it means that are created based on 1 and up to 5 secondary diagnosis
+so the ones with the 2 should have higher numbers of hospitalizations    
 * Future Research Ideas
 ** PM model (NEXT BRANCH)
 *** NEW ideas
@@ -435,23 +485,9 @@ black particles are going to observer and scatter roughly the same ammount vs ot
     :ID:       2a65cb66-1218-4ad7-8467-d80dc3d84cf1
     :END:
 arange a skype call with alexie
-** light at night in Georgia- W/Joel
-Joel has mortality data
-   
-** Noise pollution models
-*** litrature
-**** Application of Land Use Regression Modelling to Assess the Spatial Distribution of Road Traffic Noise in Three European Citiest
-ABSTRACT #: O-193 isee 2014
-
 ** smoking and particle exposure 
 block group level data in block groups and exposre 
 
-** peripheral artery disease (Andrea)
-*** idea By reading this paper it came back to my mind that there is another orphan cardiovascular disease in air pollution research: peripheral artery disease. This is usually due to atherosclerosis and narrowing of the arteries in the limbs and can lead to severe outcomes such as amputation.
-It makes sense to be affected by air pollution, but last time I checked no one had published anything on this. With a large database and geospatial resolution, PAD would be an obvious one to look at.
-*** data from antonella
-when there is no 2, it means that they are created form first diagnosis, when there is the 2 it means that are created based on 1 and up to 5 secondary diagnosis
-so the ones with the 2 should have higher numbers of hospitalizations    
 ** MIT tracking project with petros
 ** Neuro outcomes and pm exposure
 ** Mortality and Ta 
@@ -487,12 +523,13 @@ http://aura.gsfc.nasa.gov/instruments/omi.html
 **** look at areas with low LAN measurements  and effect to lower LAN
 **** look at a way to break the LAN-popden correlation
 maybe use living near highways (A1 vs parkways vs low density roads)
+*** light at night in Georgia- W/Joel
+Joel has mortality data
+   
+
 ** LAN ideas Boris
 *** create a model to predict LAN wave lenght models
 *** use LAN maps to describe Land Use
-** birth and/or childern blood sample (macabi raanan) and exposure to pm2.5/temp/BC
-look at birth weight, preterm, preclampsia, IGUR, diabetes, hyper tension,birth head circumference
-** Autisem (raanan DB) and exposure to pm2.5/temp/BC
 ** associations of antenatal exposure to ambient air pollution with newborn systolic blood pressure (BP) blood preasure in babies and exposure to pm2.5/temp/BC
 ** Sara addar project
    Start running the models for these areas
@@ -557,7 +594,7 @@ the grant can be submitted directly to the EHF anytime up to July 2014
 -Joel: Placental abruption , acute effect that can happen
 http://en.wikipedia.org/wiki/Placental_abruption
 ***** A3:look at interactions between PM and Ta exposures and birth outcomes
-** TODO Resubmit ISF grant
+** PAUSED Resubmit ISF grant
    SCHEDULED: <2014-10-19 Sun>
    :PROPERTIES:
    :ID:       2d51f244-9704-406f-87ae-9a02c28cfcaa
@@ -653,7 +690,7 @@ NAS BGU:
 *** Phone
 *** bgu wifi network
 use id BGU-USERS\ikloog  
-** NEXT maabadot budget
+** PAUSED maabadot budget
    DEADLINE: <2014-08-30 Sat>
    :PROPERTIES:
    :ID:       366cb046-d309-40a1-8c30-6d9712caa313
@@ -702,7 +739,7 @@ Intel wifi card (strongly recommended for Linux)
    :PROPERTIES:
    :ID:       391ab9c4-4185-4765-b102-b16d0bcb91c6
    :END:
-** TODO buy cellphone
+** TODO refund cellphone
    :PROPERTIES:
    :ID:       75644e8e-69ea-47fe-b011-81b0b9d82c3b
    :END:
@@ -754,32 +791,10 @@ http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_t
 :ID:       08d89d98-7330-4d4e-894f-3792bd24a115
 :END:
 *** talk to oren tal about sharepoint access
-** TODO Talk to igor
+** TODO send igor  08-6472139 page on GIT 
    :PROPERTIES:
    :ID:       dac2f878-e3c4-43bf-b585-f6a681e22c99
    :END:
-*** better more live website
-*** take off 2-4 years should be 2 years
-*** sending future letters to wide pool of canidates
-** TODO send Roni English GIT site 
-   :PROPERTIES:
-   :ID:       917f77cc-ae24-4761-8fc9-93e9df66910f
-   :END:
-** TODO Call shlomo bar ISF
-   :PROPERTIES:
-   :ID:       f3d67e8e-87c4-4287-bd78-f12cc2e697d9
-   :END:
-ask about weather to reapply or new submission
-02-5885426
-prev isf for me # 714/14 
-** TODO talk to tal- mexico and italy and ISF
-   :PROPERTIES:
-   :ID:       bfbf14cb-b6b8-47eb-8479-22d44e684b3b
-   :END:
-** TODO check uni payback for ISEE 
-:PROPERTIES:
-:ID:       fa95af36-8dff-41cd-bc12-f16fa6cd7d6b
-:END:
 ** TODO call joel 2.10.2014
 :PROPERTIES:
 :ID:       942c598a-5d2c-47d8-ad63-fe8c555accb4
@@ -875,16 +890,7 @@ get DB data for italy , mexico
 readshow some slides in lombardy
 send france pm to qian
 
-** TODO call roz
-:PROPERTIES:
-:ID:       27aa2ebb-0d3f-44e9-9bb9-1a765eb018f1
-:END:
-cheaper from here , buy through agent?
-arrive friday night/saturday?
-flight from italy or from israel
-pay part of ticket?
-
-** TODO Italy Mexico Trip
+** TODO check Italy Mexico Trip reutrns from BGU
 :PROPERTIES:
 :ID:       4c360b55-aa81-4a3b-b470-af689a3347e4
 :END:
@@ -913,7 +919,8 @@ pay part of ticket?
 |   sum |       |       350 |   861 | 1211 |
 |       |       |           |       |      |
 
-** publications comitee
+** TODO Check mexico reimbursement mount Sinai
+** TODO publications comitee
 *** monetary benefits for publications- see examples below- always when accepted in all places
     should the money be awarded on start of MA or after the paper is accepted- always when accepted
 
@@ -952,7 +959,6 @@ huji
 
 פרס בגין פרסום מאמר בכתב עת אקדמי: פרס ובר ג’ורג’: על פרסום מאמר מצטיין באחד מכתבי העת האקדמיים של הפקולטה. הפרס יוענק בגין מאמר שהתקבל לפרסום (אף אם טרם התפרסם בפועל) במהלך שנת הלימודים הקודמת. יש לצרף לבקשה עותק מן המאמר. הפרס יוענק לתלמיד/ה אחד/ת. גובה הפרס כאלף ש”ח.
 *** TODO prepare proposal
-
 show how the best places do have these benefits on publishing short 1/2 page proposal with: giving cash prize for publishing a paper during MA in Q1/Q3 in the sum based on the yearly availability of funds in the department.
 
 * long term Misc
@@ -1070,11 +1076,6 @@ also allows one to experience what is learned in MA
 
 
 * misc
-** TODO lawyer feder yaakobvich 03-5644700
-:PROPERTIES:
-:END:
-call and see extra claims for savta
-** TODO moran do triple hot deal
 ** TODO check if we need to pay harel or healthy life insurance (see
 docs) and if we payed them already
 
