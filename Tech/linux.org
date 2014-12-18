@@ -44725,6 +44725,18 @@ caudec -g /path/to/folder/.flac
 *** convert FLAC/APE cue to flac 
 for 'FLAC' use flacon to split the large flac to tracs
 for 'ape' files first use gnome soundconverter to convert from ape to flac (the bug music file) and then flacon to split to tracks
+*** fix broken tags for clerk proper operation
+if beets screws your tags do the following
+delete uneeded tags:
+
+#+BEGIN_EXAMPLE
+album artist
+trackc 
+discc 
+#+END_EXAMPLE
+
+also make sure there is no missing Dates/year and album etc entries (all base entries if tags need to be complete)
+
 ** Video 
 *** Importing Video workflow
 **** clean crap and junk files 
