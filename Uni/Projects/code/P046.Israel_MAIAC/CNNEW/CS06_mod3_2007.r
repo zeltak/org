@@ -6,10 +6,10 @@ library(gdata); library(car); library(dplyr); library(ggmap); library(broom);lib
 #sink("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/sink_mod3_2007.txt", type = c("output", "message"))
 
 #import mod2
-m2.2007<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2007.rds")
+m2.2007<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2007.pred2.rds")
 m2.2007[, bimon := (m + 1) %/% 2]
 setkey(m2.2007,day, aodid)
-
+m2.2007<-m2.2007[!is.na(meanPM)]
 
 ###############
 #Mod3
@@ -18,8 +18,8 @@ res<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN0
 
 #run the lmer part regressing stage 2 pred Vs mean pm
 #in israel check per month, also check 30km band and other methods for meanpm
-m2.smooth = lme(pred.m2 ~ meanPM25mean,random = list(aodid= ~1 + meanPM25mean),control=lmeControl(opt = "optim"), data= m2.2007 )
-#xm2.smooth = lmer(pred.m2 ~ meanPM25mean+(1+ meanPM25mean|aodid), data= m2.2007 )
+m2.smooth = lme(pred.m2 ~ meanPM,random = list(aodid= ~1 + meanPM),control=lmeControl(opt = "optim"), data= m2.2007 )
+#xm2.smooth = lmer(pred.m2 ~ meanPM+(1+ meanPM|aodid), data= m2.2007 )
 #correlate to see everything from mod2 and the mpm works
 m2.2007[, pred.t31 := predict(m2.smooth)]
 m2.2007[, resid  := residuals(m2.smooth)]
@@ -57,7 +57,7 @@ m2.2007$pred.t32 <- c( Xpred_1,Xpred_2, Xpred_3, Xpred_4, Xpred_5, Xpred_6)
 setkey(m2.2007,day, aodid)
 
 #rerun the lme on the predictions including the spatial spline (smooth)
-Final_pred_2007 <- lme(pred.t32 ~ meanPM25mean ,random = list(aodid= ~1 + meanPM25mean ),control=lmeControl(opt = "optim"),data= m2.2007  )
+Final_pred_2007 <- lme(pred.t32 ~ meanPM ,random = list(aodid= ~1 + meanPM ),control=lmeControl(opt = "optim"),data= m2.2007  )
 m2.2007[, pred.t33 := predict(Final_pred_2007)]
 #check correlations
 res[res$year=="2007", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.2007))$r.squared)
@@ -65,9 +65,13 @@ res[res$year=="2007", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.2
 #------------------------>>>
 #import mod3 
 data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2007.rds")
-data.m3 <- data.m3[,c(1,2,5,10,11,16,17,54,55),with=FALSE]
+data.m3 <- data.m3[,c(1,2,5,29:32,51,52),with=FALSE]
 data.m3[, bimon := (m + 1) %/% 2]
 setkey(data.m3,day, aodid)
+summary(data.m3)
+data.m3<-data.m3[!is.na(meanPM)]
+data.m3<-data.m3[!is.na(meanPM10)]
+
 data.m3$pred.m3.mix <-  predict(Final_pred_2007,data.m3)
 
 
@@ -165,14 +169,14 @@ mod1<-mod1[,c("aodid","day","PM25","pred.m1","stn"),with=FALSE]
 setkey(mod3,day,aodid)
 setkey(mod1,day,aodid)
 mod1 <- merge(mod1,mod3[, list(day,aodid,pred.m3)], all.x = T)  			
-print(summary(lm(PM25~pred.m3,data=mod1))$r.squared)
+print(summary(lm(PM25~pred.m3,data=mod1))$r.squared)    
 saveRDS(mod1table, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2007_p3.rds.rds")
 saveRDS(mod1, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2007w_p.m3.rds")
 
 
 #########################
 #import mod2
-mod2<- readRDS( "/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod2_2007_pred.m2.rds")
+mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2007.pred2.rds")
 mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
 
 #########################
@@ -182,16 +186,16 @@ setkey(mod3best, day, aodid)
 setkey(mod2, day, aodid)
 mod3best <- merge(mod3best, mod2[,list(aodid, day, pred.m2)], all.x = T)
 #reload mod1
-mod1<- readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod1_2007_pred.m1.rds")
-mod1<-mod1[,c("aodid","day","PM25","predicted"),with=FALSE]
-setnames(mod1,"predicted","predicted.m1")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2007.pred.rds")
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+mod1<-mod1[,c("aodid","day","PM25","pred.m1"),with=FALSE]
 setkey(mod1,day,aodid)
-mod3best <- merge(mod3best, mod1, allow.cartesian=TRUE,all.x = T)
+mod3best <- merge(mod3best, mod1, all.x = T)
 mod3best[,bestpred := pred.m3]
 mod3best[!is.na(pred.m2),bestpred := pred.m2]
-mod3best[!is.na(predicted.m1),bestpred := predicted.m1]
+mod3best[!is.na(pred.m1),bestpred := pred.m1]
 #save
-saveRDS(mod3best,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/mod3best_2007.rds")
+saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3best_2007.rds")
 
 
 #map the predictions

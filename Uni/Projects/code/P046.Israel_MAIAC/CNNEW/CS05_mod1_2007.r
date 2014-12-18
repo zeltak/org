@@ -45,18 +45,19 @@ res$year <- c(2003:2011);
 m1.2007 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2007.rds")
 
 ### subset to aqua and apply alexei cleaning methods
-m1.2007<-m1.2007[MaskAdjacency == "000" & UN > 0 & UN < 0.04] 
+#MaskAdjacency == "000"
+m1.2007<-m1.2007[ UN > 0 & UN < 0.04] 
 
 ################# clean BAD STN PM25 and check if improved model?
-rawdf <- ddply(m1.2007, c( "stn"), 
+raWDaf <- ddply(m1.2007, c( "stn"), 
       function(x) {
         mod1 <- lm(PM25 ~ aod, data=x)
         data.frame(R2 = round(summary(mod1)$r.squared, 5), 
                    nsamps = length(summary(mod1)$resid))
 })
-rawdf
-rawdf<-as.data.table(rawdf)
-bad<- rawdf[R2< 0.05]
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2< 0.05]
 bad[,badid := paste(stn,sep="-")]
 #################BAD STN
 m1.2007[,badid := paste(stn,sep="-")]
@@ -85,16 +86,17 @@ m1.2007[,p_farm.s:= scale(p_farm)]
 m1.2007[,p_dos.s:= scale(p_dos)]
 m1.2007[,p_dev.s:= scale(p_dev)]
 m1.2007[,p_os.s:= scale(p_os)]
-m1.2007[,Temp.s:= scale(Temp)]
-m1.2007[,WD.s:= scale(WD)]
-m1.2007[,WS.s:= scale(WS)]
-m1.2007[,RH.s:= scale(RH)]
-m1.2007[,Rain.s:= scale(Rain)]
+m1.2007[,tempa.s:= scale(tempa)]
+m1.2007[,WDa.s:= scale(WDa)]
+m1.2007[,WSa.s:= scale(WSa)]
+m1.2007[,RHa.s:= scale(RHa)]
+m1.2007[,Raina.s:= scale(Raina)]
+m1.2007[,NO2a.s:= scale(NO2a)]
 
 
 
 m1.formula <- as.formula(PM25~ aod
-                        +Temp.s+WD.s+RH.s+WS.s+Dust+Rain.s+MeanPbl.s #temporal
+                        +tempa.s+WDa.s+WSa.s+Dust+MeanPbl.s #temporal
                         +elev.s+tden.s+pden.s+Dist2road.s+ndvi.s #spatial
                         +p_os.s #+p_dev.s+p_dos.s+p_farm.s+p_for.s+p_ind.s  #land use
                          #+aod*Dust #interactions
@@ -123,6 +125,7 @@ tempo2007$delpred <-tempo2007$pred.m1-tempo2007$barpred
 mod_temporal <- lm(delpm ~ delpred, data=tempo2007)
 res[res$year=="2007", 'm1.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2007))$r.squared)
 saveRDS(m1.2007,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2007.pred.rds")
+
 
 
 #---------------->>>> CV
@@ -243,7 +246,7 @@ m1.2007.cv.loc<-na.omit(m1.2007.cv.loc)
 m1.2007.cv.loc$res.m1<-m1.2007.cv.loc$PM25-m1.2007.cv.loc$pred.m1.cv
 
 #The GAM model
-gam.out<-gam(res.m1~s(loc.tden)+s(tden,MeanPbl)+s(loc.tden,WS)+s(loc_p_os,fx=FALSE,k=4,bs='cr')+s(loc.elev,fx=FALSE,k=4,bs='cr')+s(dA1,fx=FALSE,k=4,bs='cr')+s(dsea,fx=FALSE,k=4,bs='cr'),data=m1.2007.cv.loc)
+gam.out<-gam(res.m1~s(loc.tden)+s(tden,MeanPbl)+s(loc.tden,WSa)+s(loc_p_os,fx=FALSE,k=4,bs='cr')+s(loc.elev,fx=FALSE,k=4,bs='cr')+s(dA1,fx=FALSE,k=4,bs='cr')+s(dsea,fx=FALSE,k=4,bs='cr'),data=m1.2007.cv.loc)
 #plot(bp.model.ps)
 #summary(bp.model.ps)
 ## reg
@@ -283,7 +286,6 @@ saveRDS(m1.2007.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gathe
 ###############
 m2.2007<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2007.rds")
 
-
 m2.2007[,elev.s:= scale(elev)]
 m2.2007[,tden.s:= scale(tden)]
 m2.2007[,pden.s:= scale(pden)]
@@ -299,11 +301,14 @@ m2.2007[,p_farm.s:= scale(p_farm)]
 m2.2007[,p_dos.s:= scale(p_dos)]
 m2.2007[,p_dev.s:= scale(p_dev)]
 m2.2007[,p_os.s:= scale(p_os)]
-m2.2007[,Temp.s:= scale(Temp)]
-m2.2007[,WD.s:= scale(WD)]
-m2.2007[,WS.s:= scale(WS)]
-m2.2007[,RH.s:= scale(RH)]
-m2.2007[,Rain.s:= scale(Rain)]
+m2.2007[,tempa.s:= scale(tempa)]
+m2.2007[,WDa.s:= scale(WDa)]
+m2.2007[,WSa.s:= scale(WSa)]
+m2.2007[,RHa.s:= scale(RHa)]
+m2.2007[,Raina.s:= scale(Raina)]
+m2.2007[,NO2a.s:= scale(NO2a)]
+
+
 
 #generate predictions
 m2.2007[, pred.m2 := predict(object=m1.fit.2007,newdata=m2.2007,allow.new.levels=TRUE,re.form=NULL)]
@@ -312,23 +317,7 @@ describe(m2.2007$pred.m2)
 m2.2007 <- m2.2007[pred.m2 > 0.00000000000001 , ]
 m2.2007 <- m2.2007[pred.m2 < 500   , ]
 
-saveRDS(m2.2007,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2007.rds")
-
-#test
-# describe(m2.2007$pred.m2)
-# hist(m2.2007$pred.m2)
-
-#######
-#M2 R2
-######
-# m1.2007[,aodid:= paste(m1.2007$long_aod,m1.2007$lat_aod,sep="-")]
-# #merge co located mod1 and mod2 grids
-# setkey(m1.2007,aodid,day)
-# setkey(m2.2007,aodid,day)
-# m.1.2.pred <- merge(m1.2007, m2.2007[, list(aodid, day, pred.m2)], all.x = T)
-# mod2_reg<-lm(m.1.2.pred$predicted~m.1.2.pred$pred.m2)
-# #cleanup and save current stages (workspace)
-# summary(mod2_reg)$r.squared
+saveRDS(m2.2007,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2007.pred2.rds")
 
 #map the predictions
 #aggregate by guid
@@ -340,8 +329,5 @@ ggplot(m2_agg, aes(long_aod,lat_aod, color = LTPM.m2)) +
   geom_point(size = 3, shape = 15) +  xlab("longitude") + ylab("latitude") + 
   scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(5)) + theme_bw() + ggtitle("Long term predictions")
 ggsave(file="/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.2007.m2.png")
-keep(res , sure=TRUE) 
+keep(res, rmse, splitdf, sure=TRUE) 
 gc()
-
-
-
