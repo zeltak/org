@@ -27214,127 +27214,150 @@ Doesnt "Emacs, toggle column" just roll off your tongue as you're typing C-x t c
 
 ******* look and feel
 ******** fonts
-******** Face Attributes
+******** faces 	 
+********* find out colors/fonts etc for a specific package/mode
 
-[[file:/home/zeltak/Dropbox/Org/Tech/images/img23472PYP.jpg]]
+there are 2 ways to do it:
 
+you may use  ~M-x list-faces-display~ and look there in all available faces
 
-Face attributes determine the visual appearance of a face. The following table lists all the face attributes, their possible values, and their effects.
+!Or!
 
-Apart from the values given below, each face attribute can have the value unspecified. This special value means that the face doesn't specify that attribute directly. An unspecified attribute tells Emacs to refer instead to a parent face (see the description :inherit attribute below); or, failing that, to an underlying face (see Displaying Faces). The default face must specify all attributes.
+use the ~apropos~ command and search for a key word ₆In example₆ 
 
-Some of these attributes are meaningful only on certain kinds of displays. If your display cannot handle a certain attribute, the attribute is ignored.
+#+BEGIN_SRC emacs-lisp :results none
+~apropos~  >>> helm.*face actually
+#+END_SRC
 
-:family
-Font family or fontset (a string). See Fonts, for more information about font families. The function font-family-list (see below) returns a list of available family names. See Fontsets, for information about fontsets. 
-:foundry
-The name of the font foundry for the font family specified by the :family attribute (a string). See Fonts. 
-:width
-Relative character width. This should be one of the symbols ultra-condensed, extra-condensed, condensed, semi-condensed, normal, semi-expanded, expanded, extra-expanded, or ultra-expanded. 
-:height
-The height of the font. In the simplest case, this is an integer in units of 1/10 point.
-The value can also be a floating point number or a function, which specifies the height relative to an underlying face (see Displaying Faces). If the value is a floating point number, that specifies the amount by which to scale the height of the underlying face. If the value is a function, that function is called with one argument, the height of the underlying face, and returns the height of the new face. If the function is passed an integer argument, it must return an integer.
+********* Face Attributes
 
-The height of the default face must be specified using an integer; floating point and function values are not allowed. 
-
-:weight
-Font weightone of the symbols (from densest to faintest) ultra-bold, extra-bold, bold, semi-bold, normal, semi-light, light, extra-light, or ultra-light. On text terminals which support variable-brightness text, any weight greater than normal is displayed as extra bright, and any weight less than normal is displayed as half-bright.
+ [[file:/home/zeltak/Dropbox/Org/Tech/images/img23472PYP.jpg]]
 
 
-:slant
-Font slantone of the symbols italic, oblique, normal, reverse-italic, or reverse-oblique. On text terminals that support variable-brightness text, slanted text is displayed as half-bright. 
-:foreground
-Foreground color, a string. The value can be a system-defined color name, or a hexadecimal color specification. See Color Names. On black-and-white displays, certain shades of gray are implemented by stipple patterns. 
-:background
-Background color, a string. The value can be a system-defined color name, or a hexadecimal color specification. See Color Names.
+ Face attributes determine the visual appearance of a face. The following table lists all the face attributes, their possible values, and their effects.
+
+ Apart from the values given below, each face attribute can have the value unspecified. This special value means that the face doesn't specify that attribute directly. An unspecified attribute tells Emacs to refer instead to a parent face (see the description :inherit attribute below); or, failing that, to an underlying face (see Displaying Faces). The default face must specify all attributes.
+
+ Some of these attributes are meaningful only on certain kinds of displays. If your display cannot handle a certain attribute, the attribute is ignored.
+
+ :family
+ Font family or fontset (a string). See Fonts, for more information about font families. The function font-family-list (see below) returns a list of available family names. See Fontsets, for information about fontsets. 
+ :foundry
+ The name of the font foundry for the font family specified by the :family attribute (a string). See Fonts. 
+ :width
+ Relative character width. This should be one of the symbols ultra-condensed, extra-condensed, condensed, semi-condensed, normal, semi-expanded, expanded, extra-expanded, or ultra-expanded. 
+ :height
+ The height of the font. In the simplest case, this is an integer in units of 1/10 point.
+ The value can also be a floating point number or a function, which specifies the height relative to an underlying face (see Displaying Faces). If the value is a floating point number, that specifies the amount by which to scale the height of the underlying face. If the value is a function, that function is called with one argument, the height of the underlying face, and returns the height of the new face. If the function is passed an integer argument, it must return an integer.
+
+ The height of the default face must be specified using an integer; floating point and function values are not allowed. 
+
+ :weight
+ Font weightone of the symbols (from densest to faintest) ultra-bold, extra-bold, bold, semi-bold, normal, semi-light, light, extra-light, or ultra-light. On text terminals which support variable-brightness text, any weight greater than normal is displayed as extra bright, and any weight less than normal is displayed as half-bright.
 
 
-:underline
-Whether or not characters should be underlined, and in what way. The possible values of the :underline attribute are:
-nil
-Don't underline. 
-t
-Underline with the foreground color of the face. 
-color
-Underline in color color, a string specifying a color. 
-(:color color :style style)
-color is either a string, or the symbol foreground-color, meaning the foreground color of the face. Omitting the attribute :color means to use the foreground color of the face. style should be a symbol line or wave, meaning to use a straight or wavy line. Omitting the attribute :style means to use a straight line.
+ :slant
+ Font slantone of the symbols italic, oblique, normal, reverse-italic, or reverse-oblique. On text terminals that support variable-brightness text, slanted text is displayed as half-bright. 
+ :foreground
+ Foreground color, a string. The value can be a system-defined color name, or a hexadecimal color specification. See Color Names. On black-and-white displays, certain shades of gray are implemented by stipple patterns. 
+ :background
+ Background color, a string. The value can be a system-defined color name, or a hexadecimal color specification. See Color Names.
 
 
-:overline
-Whether or not characters should be overlined, and in what color. If the value is t, overlining uses the foreground color of the face. If the value is a string, overlining uses that color. The value nil means do not overline.
+ :underline
+ Whether or not characters should be underlined, and in what way. The possible values of the :underline attribute are:
+ nil
+ Don't underline. 
+ t
+ Underline with the foreground color of the face. 
+ color
+ Underline in color color, a string specifying a color. 
+ (:color color :style style)
+ color is either a string, or the symbol foreground-color, meaning the foreground color of the face. Omitting the attribute :color means to use the foreground color of the face. style should be a symbol line or wave, meaning to use a straight or wavy line. Omitting the attribute :style means to use a straight line.
 
 
-:strike-through
-Whether or not characters should be strike-through, and in what color. The value is used like that of :overline. 
-:box
-Whether or not a box should be drawn around characters, its color, the width of the box lines, and 3D appearance. Here are the possible values of the :box attribute, and what they mean:
-nil
-Don't draw a box. 
-t
-Draw a box with lines of width 1, in the foreground color. 
-color
-Draw a box with lines of width 1, in color color. 
-(:line-width width :color color :style style)
-This way you can explicitly specify all aspects of the box. The value width specifies the width of the lines to draw; it defaults to 1. A negative width -n means to draw a line of width n that occupies the space of the underlying text, thus avoiding any increase in the character height or width.
-The value color specifies the color to draw with. The default is the foreground color of the face for simple boxes, and the background color of the face for 3D boxes.
-
-The value style specifies whether to draw a 3D box. If it is released-button, the box looks like a 3D button that is not being pressed. If it is pressed-button, the box looks like a 3D button that is being pressed. If it is nil or omitted, a plain 2D box is used.
+ :overline
+ Whether or not characters should be overlined, and in what color. If the value is t, overlining uses the foreground color of the face. If the value is a string, overlining uses that color. The value nil means do not overline.
 
 
-:inverse-video
-Whether or not characters should be displayed in inverse video. The value should be t (yes) or nil (no). 
-:stipple
-The background stipple, a bitmap.
-The value can be a string; that should be the name of a file containing external-format X bitmap data. The file is found in the directories listed in the variable x-bitmap-file-path.
+ :strike-through
+ Whether or not characters should be strike-through, and in what color. The value is used like that of :overline. 
+ :box
+ Whether or not a box should be drawn around characters, its color, the width of the box lines, and 3D appearance. Here are the possible values of the :box attribute, and what they mean:
+ nil
+ Don't draw a box. 
+ t
+ Draw a box with lines of width 1, in the foreground color. 
+ color
+ Draw a box with lines of width 1, in color color. 
+ (:line-width width :color color :style style)
+ This way you can explicitly specify all aspects of the box. The value width specifies the width of the lines to draw; it defaults to 1. A negative width -n means to draw a line of width n that occupies the space of the underlying text, thus avoiding any increase in the character height or width.
+ The value color specifies the color to draw with. The default is the foreground color of the face for simple boxes, and the background color of the face for 3D boxes.
 
-Alternatively, the value can specify the bitmap directly, with a list of the form (width height data). Here, width and height specify the size in pixels, and data is a string containing the raw bits of the bitmap, row by row. Each row occupies (width + 7) / 8 consecutive bytes in the string (which should be a unibyte string for best results). This means that each row always occupies at least one whole byte.
+ The value style specifies whether to draw a 3D box. If it is released-button, the box looks like a 3D button that is not being pressed. If it is pressed-button, the box looks like a 3D button that is being pressed. If it is nil or omitted, a plain 2D box is used.
 
-If the value is nil, that means use no stipple pattern.
 
-Normally you do not need to set the stipple attribute, because it is used automatically to handle certain shades of gray. 
+ :inverse-video
+ Whether or not characters should be displayed in inverse video. The value should be t (yes) or nil (no). 
+ :stipple
+ The background stipple, a bitmap.
+ The value can be a string; that should be the name of a file containing external-format X bitmap data. The file is found in the directories listed in the variable x-bitmap-file-path.
 
-:font
-The font used to display the face. Its value should be a font object. See Font Selection, for information about font objects.
-When specifying this attribute using set-face-attribute (see Attribute Functions), you may also supply a font spec, a font entity, or a string. Emacs converts such values to an appropriate font object, and stores that font object as the actual attribute value. If you specify a string, the contents of the string should be a font name (see Fonts); if the font name is an XLFD containing wildcards, Emacs chooses the first font matching those wildcards. Specifying this attribute also changes the values of the :family, :foundry, :width, :height, :weight, and :slant attributes. 
+ Alternatively, the value can specify the bitmap directly, with a list of the form (width height data). Here, width and height specify the size in pixels, and data is a string containing the raw bits of the bitmap, row by row. Each row occupies (width + 7) / 8 consecutive bytes in the string (which should be a unibyte string for best results). This means that each row always occupies at least one whole byte.
 
-:inherit
-The name of a face from which to inherit attributes, or a list of face names. Attributes from inherited faces are merged into the face like an underlying face would be, with higher priority than underlying faces (see Displaying Faces). If a list of faces is used, attributes from faces earlier in the list override those from later faces.
- Function: font-family-list &optional frame
-This function returns a list of available font family names. The optional argument frame specifies the frame on which the text is to be displayed; if it is nil, the selected frame is used.
+ If the value is nil, that means use no stipple pattern.
 
- User Option: underline-minimum-offset
-This variable specifies the minimum distance between the baseline and the underline, in pixels, when displaying underlined text.
+ Normally you do not need to set the stipple attribute, because it is used automatically to handle certain shades of gray. 
 
- User Option: x-bitmap-file-path
-This variable specifies a list of directories for searching for bitmap files, for the :stipple attribute.
+ :font
+ The font used to display the face. Its value should be a font object. See Font Selection, for information about font objects.
+ When specifying this attribute using set-face-attribute (see Attribute Functions), you may also supply a font spec, a font entity, or a string. Emacs converts such values to an appropriate font object, and stores that font object as the actual attribute value. If you specify a string, the contents of the string should be a font name (see Fonts); if the font name is an XLFD containing wildcards, Emacs chooses the first font matching those wildcards. Specifying this attribute also changes the values of the :family, :foundry, :width, :height, :weight, and :slant attributes. 
 
- Function: bitmap-spec-p object
-This returns t if object is a valid bitmap specification, suitable for use with :stipple (see above). It returns nil otherwise.
+ :inherit
+ The name of a face from which to inherit attributes, or a list of face names. Attributes from inherited faces are merged into the face like an underlying face would be, with higher priority than underlying faces (see Displaying Faces). If a list of faces is used, attributes from faces earlier in the list override those from later faces.
+  Function: font-family-list &optional frame
+ This function returns a list of available font family names. The optional argument frame specifies the frame on which the text is to be displayed; if it is nil, the selected frame is used.
 
-Face attributes determine the visual appearance of a face. The following
-table lists all the face attributes, their possible values, and their`
-effects.
+  User Option: underline-minimum-offset
+ This variable specifies the minimum distance between the baseline and the underline, in pixels, when displaying underlined text.
+
+  User Option: x-bitmap-file-path
+ This variable specifies a list of directories for searching for bitmap files, for the :stipple attribute.
+
+  Function: bitmap-spec-p object
+ This returns t if object is a valid bitmap specification, suitable for use with :stipple (see above). It returns nil otherwise.
+
+ Face attributes determine the visual appearance of a face. The following
+ table lists all the face attributes, their possible values, and their`
+ effects.
 
 ******** themes
 ********* change theme
-
 use:
- M-x load-theme
- RET
- choose theme (you can use tab to list all available themes)
 
-********* load a theme
+#+BEGIN_EXAMPLE
+M-x load-theme
+#+END_EXAMPLE
 
-To choose a new theme just do a M-x load-theme (tab completion is
-available for the names of the available themes). At this point you can
-give the command a try with the tango theme.
- If you like a theme so much that you'd want to use it all the time you
-can put in your Emacs configuration (.emacs or init.el for instance)
-like this:
- (load-theme 'theme-name t)
- If you'd like to return to the default-theme just do a M-x
-disable-theme.
+choose theme (you can use tab to list all available themes)
+
+********* load a theme at startup 
+
+#+BEGIN_SRC emacs-lisp :results none
+;;;add custom themes to list
+(add-to-list 'custom-theme-load-path "/home/zeltak/.emacs.d/themes")
+;to load a specifc theme 
+(load-file "~/.emacs.d/themes/zprime-theme.el")
+;load the choosen theme at startup 
+(load-theme 'zprime t)
+#+END_SRC
+
+If you'd like to return to the default-theme just do a M-x disable-theme.
+********* create a custom theme file 
+Theme files !must be named *-theme.e! in your defined `custom-theme-load-path`
+********* Emacs intenral theme editing/info commands
+you can use the `customize-themes` command to select a theme interactively and edit it
+	Type M-x custom-describe-theme to describe the theme at point.  
 ********* How to Set a Theme Depending on Mode
 Here's how you can set background color depending on the file name extension.
 
@@ -27359,6 +27382,18 @@ You can modify the code to set themes instead of just background
 for more info look here:
 
 http://ergoemacs.org/emacs/emacs_set_theme_on_mode.html
+********* change a face in a theme 
+1.find out the specific face you want to change using list-faces-display
+then in your theme change the relevant section. ₆In example₆ using the leuven based theme to change the helm selection use
+
+#+BEGIN_SRC emacs-lisp :results none
+`(helm-selection ((,class (:foregrounf "black" :background "#2AA198")))) 
+#+END_SRC
+
+$Note$- you can change font,color, weight etc..
+
+also $Note$ that the above is relevant to leuven but other theme configs may be differently configed
+
 ******** menus
 ********* create custom menus
 the best way is to use easy menu:
