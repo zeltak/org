@@ -2141,7 +2141,9 @@ Alt+PrintScreen+r+s+e+i+u+b
 help you reboot safely)
   b - reboots the system
 
-*** X resources
+*** X resources (.Xresources) 
+**** .Xresources Vs .Xdefaults 
+`.Xresources` is !newer! then `.Xdefaults` so its better to config everything in Xresources and link it to xdefaults for legacy suppport
 **** intro
 
 $Note$ Xresources is newer then xdefaults so its better to config everything in Xresources and link it to xdefaults for legacy suppport:
@@ -2184,16 +2186,29 @@ The older (deprecated) ~/.Xdefaults is read every time you start an X
 program such as xterm --- but only if xrdb hasn't ever been used in the
 current X session
 
-**** .Xdefaults file
+**** source/refresh .Xresources
+#+BEGIN_SRC sh
+xrdb ~/.Xresources
+#+END_SRC
+**** Adding to xinitrc
+If you do not use a desktop environment, you probably need to add the following line to your ~/.xinitrc:
 
-The exclamation mark (!) or /.../ is used to comment a line in the
-.Xdefaults file. For example:
- / this is a comment /
- To reread your .Xresources file, and throw away your old resources, you
-can type:
- xrdb ~/.Xdefaults
- Avoid blank spaces at the beginning and end of lines in the .Xdefaults
-file.
+#+BEGIN_SRC sh
+[[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
+#+END_SRC
+**** check Default settings
+Detailed information on program-specific resources is usually provided in the man page for the program. xterm's man page is a good example, as it contains a list of X resources and their default values.
+To see the current loaded resources:
+#+BEGIN_SRC sh
+xrdb -query -all
+#+END_SRC
+**** Commenting
+To add a comment to your Xresources file, simply prefix it with an exclamation mark (!), for example:
+
+#+BEGIN_EXAMPLE
+! This is a comment placed above some Xft settings
+Xft.dpi:       96      ! this is an inline comment
+#+END_EXAMPLE
 
 *** grey windows error
 
@@ -8987,6 +9002,31 @@ directory with the following bash shell commands:
  todo.sh command ls
 
 *** Utils
+**** autojump     
+***** navigate using autojump (j)
+`j` is a convenience wrapper function around autojump. Any option that can be used with autojump can be used with j and vice versa.
+
+Jump To A Directory That Contains foo:
+
+#+BEGIN_SRC sh
+j foo
+#+END_SRC
+
+Jump To A Child Directory:
+
+Sometimes it's convenient to jump to a child directory (sub-directory of current directory) rather than typing out the full name.
+
+#+BEGIN_SRC sh
+jc bar
+#+END_SRC
+***** Open File Manager To Directories (instead of jumping):
+Instead of jumping to a directory, you can open a file explorer window (Mac Finder, Windows Explorer, GNOME Nautilus, etc.) to the directory instead.
+#+BEGIN_SRC sh
+jo music
+#Opening a file manager to a child directory is also supported:
+jco images
+#+END_SRC
+
 **** atools
 ***** aunpack (unpack)
 
