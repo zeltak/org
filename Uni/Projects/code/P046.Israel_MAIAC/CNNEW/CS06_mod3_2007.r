@@ -205,13 +205,13 @@ m3d_agg <- (mod3[, list(LTPM =mean(pred.m3, na.rm = TRUE),
                         y_aod_ITM = y_aod_ITM[1]),by = aodid])
 
 # plot
-# ggplot(m3d_agg, aes(x_aod_ITM, y_aod_ITM, color = LTPM)) + 
-#   geom_point(size = 3, shape = 15) + 
-#   #geom_text(aes(label = naod), color = "black", size = 6, subset = .(distcoy < 1500)) + #similar numbers of points
-#   xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
-#   scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(15)) + #c("purple", "blue", "white", "red", "orange")) + 
-#   theme_bw() + 
-#   ggtitle("Long term predictions")
+ggplot(m3d_agg, aes(x_aod_ITM, y_aod_ITM, color = LTPM)) + 
+  geom_point(size = 3, shape = 15) + 
+  #geom_text(aes(label = naod), color = "black", size = 6, subset = .(distcoy < 1500)) + #similar numbers of points
+  xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
+  scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(15)) + #c("purple", "blue", "white", "red", "orange")) + 
+  theme_bw() + 
+  ggtitle("Long term predictions")
 
 
 
@@ -220,7 +220,7 @@ write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T),
                           predmin = min(bestpred, na.rm = T),
                           predmax = max(bestpred, na.rm = T),
                           npred = sum(!is.na(bestpred)),
-                          npred.m1 = sum(!is.na(predicted.m1)),
+                          npred.m1 = sum(!is.na(pred.m1)),
                           npred.m2 = sum(!is.na(pred.m2)),
                           npred.m3 = sum(!is.na(pred.m3)),
                           x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/pestpred2007LPM.csv", row.names = F)

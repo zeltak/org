@@ -5578,6 +5578,95 @@ to extract and then subset residuals:
  #export
  write.dbf(x.sub1 ,"c:/Users/ekloog/Documents/tmp/resid11.dbf")
 
+*** specify random slope and intercept in models
+
+to assign a *random intercept* to a model use this:
+ random=~1|INTERCEPT VARIABLE,
+ example:
+ bp.model.lme<-lme(fixed=log(bp1sys)~ sex + as.factor(race) + smokpkyr +
+bmi+ as.factor(booze) + age + ser.chol, random=~1|locode, data=hanesna )
+ to assign a *random intercept+slope* to a model use this:
+ random=~1+Slope\_variable|INTERCEPT VARIABLE,
+ *example:
+*
+ bp.model.lme<-lme(fixed=log(bp1sys)~ sex + as.factor(race) + smokpkyr +
+bmi+ as.factor(booze) + age + ser.chol,
+ random=~1+age|locode, data=hanesna )
+
+*** define the correlation structure of the model
+
+*DEFINE THE CORRELATION STRUCTURE OF THE MODEL
+*
+ lmeStruct(reStruct, corStruct, varStruct): a linear mixed effect
+structure is a list of model components representing different sets of
+parameters in the model. An lmeStruct must contain at least a reStruct,
+but may also contain corStruct and varFunc objects.
+ reStruct: representing a random effects structrure
+ corStruct : representing a correlation structure. Default is NULL.
+ varStruct: a varFunc object, representing a variance function
+structure. Default is NULL.
+ CorClasses: standard classes of correlation structure:
+ CorAR1: autoregressive process of order 1
+ CorARMA: autoregressive moving average process
+ corCAR1:continuos autoregressive process
+ corCompSymm: compound symmetry structure corresponding to a
+constant correlation. The correlation model does not depend on the
+position of the observation but just on the group.
+ corExp, corLin, corGaus, corRatio, corSpher: exponential,
+linear,Gaussian, rational,spherical spatial correlation
+ corSymm: general correlation matrix, with no additional structure
+ All of these structures are functions in which the form needs to be
+specified. For example:
+ CorCompSymm(value, form, fixed)
+ this function is a constructor for the corComSymm class. Value is the
+correlation between any 2 correlated observations.
+ Form is a formula of the form ~t, or ~t|g, specifying a time covariate
+and a grouping factor.
+ VarCorr(x,sigma,rdig) -- This is a function that calculates the
+estimated variances, standard deviations and correlations between the
+random-effects terms.
+ *example :*
+ bp.model.lme3<-lme(fixed= log(bp1sys)~ sex + as.factor(race) + smokpkyr
++ bmi+ as.factor(booze) + age+ ser.chol, random=~1|locode, correlation=
+corCompSymm(form=~1|locode),data=hanesna)
+ summary(bp.model.lme3)
+
+*** Linear Mixed Effect Object
+
+*me.object$coefficients* - a list with two components, fixed and random,
+where the first is a vector containing the estimated coefficients for
+the fixed effects and the second is a matrix containing the estimated
+coefficients for the random effects. The columns refer to the parameters
+in the random formula, and the rows to the cluster levels; the names of
+the coefficients are the same as those in the fixed or random formulas.
+ *lme.object$fitted* - a data frame containing the population and
+cluster fitted values. The population fitted values are for the fixed
+effects only. The cluster fitted values are evaluated at the converged
+estimates of the fixed effects and the conditional estimates of the
+random effects.
+ *lme.object$residuals* - a data frame containing the population and
+cluster residuals from the fit. The population residuals are the
+observed values minus the population fitted values and the cluster
+residuals are the observed values minus the cluster fitted values
+ *lme.object$varFix*- An approximate covariance matrix of the fixed
+effects estimates.
+ *lme.object$modelStruct*-- a list of mixed-effects model components,
+such as reStruct, corStruct and varFunc objects.
+ *getVarCov(lme.object)* : extract the variance-covariance matrix from a
+fitted model
+ for example:
+ #Extract the coefficients for fixed and random components
+ bp.model.lme$coef
+ bp.model.lme$coef$fixed
+ bp.model.lme$coef$random
+ #Extract the covariance matrix for fixed effect.
+ bp.model.lme$varFix
+
+*** create a table from random coefficents
+
+Use something like this:
+ ranlung<- as.data.frame(lung\_new$coef$random )
+
 ** lme4
 *** extract part of results of lme4 Objects
 **** using arm Packages
@@ -5604,7 +5693,7 @@ bw270.res<- summary(bw270.mod)
 bw270.res$coefficients[2,5]
 #+END_SRC
  
-**** extract manually
+**** tract manually
 
 #+BEGIN_SRC R
 round(fixef(bw270.mod),3)
@@ -5680,6 +5769,11 @@ use the 'confit' command which are part of lme4
 confint(bw270.mod, method="Wald",'IQRfintempmabirth', level=0.95)
 #+END_SRC
 
+*** create "tTable/table of fixed effects" using broom
+use the package `broom` and the `tidy` function in it like this
+#+BEGIN_SRC R
+coall.2005<-tidy(m1.fit.2005,effects = "fixed")
+#+END_SRC
 
 *** exclude missing values
 #+BEGIN_SRC R
@@ -5727,6 +5821,112 @@ example:
 mod1d_10_s10$predicted <- predict(object=out_90_s10,newdata=mod1d_10_s10,allow.new.levels=TRUE,re.form=NULL )
 
 #+END_SRC
+
+*** specify nesting
+
+use this syntax, using a + after the last fixed variable:
+
+#+BEGIN_SRC R
+(1+Slope_variable|INTERCEPT_VAR/NESTED_VAR)
+#+END_SRC
+
+here is a complex example using several random statments
+
+#+BEGIN_SRC R
+CO+as.factor(year)+iregg+nitro+(1|Paircount)+(1+CO|crop)+(1|crop/Cultivar),na.action=na.omit,
+data = zinc)
+#+END_SRC
+
+*** Mixed Effects Logistic Regression (glmer)
+**** Background
+see [[file:KSG.org::*Background%20of%20mixed%20logistic][Background of mixed logistic]]
+**** glmer
+We use the glmer command to estimate a mixed effects logistic
+regression models.
+
+`if you have a numeric 0/1 response, you are predicting 1's and if you use a two level factor, you are predicting the second level of the factor`
+example formula
+
+#+begin_src r
+m <- glmer(remission ~ IL6 + CRP + CancerStage + LengthofStay + Experience +
+    (1 | DID), data = hdp, family = binomial)
+
+# print the mod results without correlations among fixed effects
+print(m, corr = FALSE)
+#+end_src
+
+output:
+#+begin_src
+## Generalized linear mixed model fit by maximum likelihood ['glmerMod']
+##  Family: binomial ( logit )
+## Formula: remission ~ IL6 + CRP + CancerStage + LengthofStay + Experience +      (1 | DID)
+##    Data: hdp
+##
+##      AIC      BIC   logLik deviance
+##     7397     7461    -3690     7379
+##
+## Random effects:
+##  Groups Name        Variance Std.Dev.
+##  DID    (Intercept) 4.06     2.02
+## Number of obs: 8525, groups: DID, 407
+##
+## Fixed effects:
+##                Estimate Std. Error z value Pr(>|z|)
+## (Intercept)     -2.0546     0.5244   -3.92  8.9e-05 ***
+## IL6             -0.0567     0.0114   -4.99  6.0e-07 ***
+## CRP             -0.0215     0.0101   -2.14  0.03257 *
+## CancerStageII   -0.4142     0.0745   -5.56  2.8e-08 ***
+## CancerStageIII  -1.0032     0.0968  -10.36  < 2e-16 ***
+## CancerStageIV   -2.3364     0.1569  -14.89  < 2e-16 ***
+## LengthofStay    -0.1212     0.0331   -3.66  0.00026 ***
+## Experience       0.1202     0.0272    4.42  9.7e-06 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#+end_src
+
+The first part tells us the estimates are based on an adaptive
+Gaussian Hermite approximation of the likelihood.
+
+The next section gives us basic information that can be used to
+compare models, followed by the random effect estimates. This
+represents the estimated variability in the intercept on the logit
+scale. Had there been other random effects, such as random slopes,
+they would also appear here. The top section concludes with the total
+number of observations, and the number of level 2 observations.
+
+The last section is a table of the fixed effects estimates. For many applications, these are what people are primarily interested in. The estimates represent the regression coefficients. These are unstandardized and are on the logit scale. The estimates are followed by their standard errors (SEs). As is common in GLMs, the SEs are obtained by inverting the observed information matrix (negative second derivative matrix). However, for GLMMs, this is again an approximation. The approximations of the coefficient estimates likely stabilize faster than do those for the SEs. Thus if you are using fewer integration points, the estimates may be reasonable, but the approximation of the SEs may be less accurate. The Wald tests, EstimateSE, rely on asymptotic theory, here referring to as the highest level unit size converges to infinity, these tests will be normally distributed, and from that, p values (the probability of obtaining the observed estimate or more extreme, given the true estimate is 0).
+
+It can be nice to get confidence intervals (CIs). We can get rough estimates using the SEs.
+
+#+begin_src r
+se <- sqrt(diag(vcov(m)))
+# table of estimates with 95% CI
+(tab <- cbind(Est = fixef(m), LL = fixef(m) - 1.96 * se, UL = fixef(m) + 1.96 *
+    se))
+##                     Est       LL        UL
+## (Intercept)    -2.05457 -3.08248 -1.026674
+## IL6            -0.05675 -0.07903 -0.034469
+## CRP            -0.02155 -0.04131 -0.001788
+## CancerStageII  -0.41417 -0.56028 -0.268064
+## CancerStageIII -1.00318 -1.19293 -0.813435
+## CancerStageIV  -2.33645 -2.64404 -2.028862
+## LengthofStay   -0.12116 -0.18613 -0.056190
+## Experience      0.12018  0.06693  0.173429
+
+##If we wanted odds ratios instead of coefficients on the logit scale, we could exponentiate the estimates and CIs.
+
+exp(tab)
+##                    Est      LL     UL
+## (Intercept)    0.12815 0.04585 0.3582
+## IL6            0.94483 0.92402 0.9661
+## CRP            0.97868 0.95954 0.9982
+## CancerStageII  0.66089 0.57105 0.7649
+## CancerStageIII 0.36671 0.30333 0.4433
+## CancerStageIV  0.09667 0.07107 0.1315
+## LengthofStay   0.88589 0.83017 0.9454
+## Experience     1.12770 1.06922 1.1894
+
+#+end_src
 
 ** Generalized Linear Models
 *** Intro
@@ -5999,200 +6199,6 @@ and compute odds ratio
  hi95ci.male<- exp((-beta+1.96*se))
 
 ** Mixed models
-*** Linear Mixed models (lme)
-
-**** specify random slope and intercept in models
-
-to assign a *random intercept* to a model use this:
- random=~1|INTERCEPT VARIABLE,
- example:
- bp.model.lme<-lme(fixed=log(bp1sys)~ sex + as.factor(race) + smokpkyr +
-bmi+ as.factor(booze) + age + ser.chol, random=~1|locode, data=hanesna )
- to assign a *random intercept+slope* to a model use this:
- random=~1+Slope\_variable|INTERCEPT VARIABLE,
- *example:
-*
- bp.model.lme<-lme(fixed=log(bp1sys)~ sex + as.factor(race) + smokpkyr +
-bmi+ as.factor(booze) + age + ser.chol,
- random=~1+age|locode, data=hanesna )
-
-**** define the correlation structure of the model
-
-*DEFINE THE CORRELATION STRUCTURE OF THE MODEL
-*
- lmeStruct(reStruct, corStruct, varStruct): a linear mixed effect
-structure is a list of model components representing different sets of
-parameters in the model. An lmeStruct must contain at least a reStruct,
-but may also contain corStruct and varFunc objects.
- reStruct: representing a random effects structrure
- corStruct : representing a correlation structure. Default is NULL.
- varStruct: a varFunc object, representing a variance function
-structure. Default is NULL.
- CorClasses: standard classes of correlation structure:
- CorAR1: autoregressive process of order 1
- CorARMA: autoregressive moving average process
- corCAR1:continuos autoregressive process
- corCompSymm: compound symmetry structure corresponding to a
-constant correlation. The correlation model does not depend on the
-position of the observation but just on the group.
- corExp, corLin, corGaus, corRatio, corSpher: exponential,
-linear,Gaussian, rational,spherical spatial correlation
- corSymm: general correlation matrix, with no additional structure
- All of these structures are functions in which the form needs to be
-specified. For example:
- CorCompSymm(value, form, fixed)
- this function is a constructor for the corComSymm class. Value is the
-correlation between any 2 correlated observations.
- Form is a formula of the form ~t, or ~t|g, specifying a time covariate
-and a grouping factor.
- VarCorr(x,sigma,rdig) -- This is a function that calculates the
-estimated variances, standard deviations and correlations between the
-random-effects terms.
- *example :*
- bp.model.lme3<-lme(fixed= log(bp1sys)~ sex + as.factor(race) + smokpkyr
-+ bmi+ as.factor(booze) + age+ ser.chol, random=~1|locode, correlation=
-corCompSymm(form=~1|locode),data=hanesna)
- summary(bp.model.lme3)
-
-**** Linear Mixed Effect Object
-
-*me.object$coefficients* - a list with two components, fixed and random,
-where the first is a vector containing the estimated coefficients for
-the fixed effects and the second is a matrix containing the estimated
-coefficients for the random effects. The columns refer to the parameters
-in the random formula, and the rows to the cluster levels; the names of
-the coefficients are the same as those in the fixed or random formulas.
- *lme.object$fitted* - a data frame containing the population and
-cluster fitted values. The population fitted values are for the fixed
-effects only. The cluster fitted values are evaluated at the converged
-estimates of the fixed effects and the conditional estimates of the
-random effects.
- *lme.object$residuals* - a data frame containing the population and
-cluster residuals from the fit. The population residuals are the
-observed values minus the population fitted values and the cluster
-residuals are the observed values minus the cluster fitted values
- *lme.object$varFix*- An approximate covariance matrix of the fixed
-effects estimates.
- *lme.object$modelStruct*-- a list of mixed-effects model components,
-such as reStruct, corStruct and varFunc objects.
- *getVarCov(lme.object)* : extract the variance-covariance matrix from a
-fitted model
- for example:
- #Extract the coefficients for fixed and random components
- bp.model.lme$coef
- bp.model.lme$coef$fixed
- bp.model.lme$coef$random
- #Extract the covariance matrix for fixed effect.
- bp.model.lme$varFix
-
-**** create a table from random coefficents
-
-Use something like this:
- ranlung<- as.data.frame(lung\_new$coef$random )
-
-*** lmer
-
-**** specify nesting
-
-use this syntax, using a + after the last fixed variable:
- (1+Slope\_variable|INTERCEPT VARIABLE/NESTED VARIABLE)
- here is a complex example using several random statments
-
-CO+as.factor(year)+iregg+nitro+(1|Paircount)+(1+CO|crop)+(1|crop/Cultivar),na.action=na.omit,
- data = zinc)
- summary(zinc5)
-
-*** Mixed Effects Logistic Regression (glmer)
-**** Background
-see [[file:KSG.org::*Background%20of%20mixed%20logistic][Background of mixed logistic]]
-**** glmer
-We use the glmer command to estimate a mixed effects logistic
-regression models.
-
-`if you have a numeric 0/1 response, you are predicting 1's and if you use a two level factor, you are predicting the second level of the factor`
-example formula
-
-#+begin_src r
-m <- glmer(remission ~ IL6 + CRP + CancerStage + LengthofStay + Experience +
-    (1 | DID), data = hdp, family = binomial)
-
-# print the mod results without correlations among fixed effects
-print(m, corr = FALSE)
-#+end_src
-
-output:
-#+begin_src
-## Generalized linear mixed model fit by maximum likelihood ['glmerMod']
-##  Family: binomial ( logit )
-## Formula: remission ~ IL6 + CRP + CancerStage + LengthofStay + Experience +      (1 | DID)
-##    Data: hdp
-##
-##      AIC      BIC   logLik deviance
-##     7397     7461    -3690     7379
-##
-## Random effects:
-##  Groups Name        Variance Std.Dev.
-##  DID    (Intercept) 4.06     2.02
-## Number of obs: 8525, groups: DID, 407
-##
-## Fixed effects:
-##                Estimate Std. Error z value Pr(>|z|)
-## (Intercept)     -2.0546     0.5244   -3.92  8.9e-05 ***
-## IL6             -0.0567     0.0114   -4.99  6.0e-07 ***
-## CRP             -0.0215     0.0101   -2.14  0.03257 *
-## CancerStageII   -0.4142     0.0745   -5.56  2.8e-08 ***
-## CancerStageIII  -1.0032     0.0968  -10.36  < 2e-16 ***
-## CancerStageIV   -2.3364     0.1569  -14.89  < 2e-16 ***
-## LengthofStay    -0.1212     0.0331   -3.66  0.00026 ***
-## Experience       0.1202     0.0272    4.42  9.7e-06 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-#+end_src
-
-The first part tells us the estimates are based on an adaptive
-Gaussian Hermite approximation of the likelihood.
-
-The next section gives us basic information that can be used to
-compare models, followed by the random effect estimates. This
-represents the estimated variability in the intercept on the logit
-scale. Had there been other random effects, such as random slopes,
-they would also appear here. The top section concludes with the total
-number of observations, and the number of level 2 observations.
-
-The last section is a table of the fixed effects estimates. For many applications, these are what people are primarily interested in. The estimates represent the regression coefficients. These are unstandardized and are on the logit scale. The estimates are followed by their standard errors (SEs). As is common in GLMs, the SEs are obtained by inverting the observed information matrix (negative second derivative matrix). However, for GLMMs, this is again an approximation. The approximations of the coefficient estimates likely stabilize faster than do those for the SEs. Thus if you are using fewer integration points, the estimates may be reasonable, but the approximation of the SEs may be less accurate. The Wald tests, EstimateSE, rely on asymptotic theory, here referring to as the highest level unit size converges to infinity, these tests will be normally distributed, and from that, p values (the probability of obtaining the observed estimate or more extreme, given the true estimate is 0).
-
-It can be nice to get confidence intervals (CIs). We can get rough estimates using the SEs.
-
-#+begin_src r
-se <- sqrt(diag(vcov(m)))
-# table of estimates with 95% CI
-(tab <- cbind(Est = fixef(m), LL = fixef(m) - 1.96 * se, UL = fixef(m) + 1.96 *
-    se))
-##                     Est       LL        UL
-## (Intercept)    -2.05457 -3.08248 -1.026674
-## IL6            -0.05675 -0.07903 -0.034469
-## CRP            -0.02155 -0.04131 -0.001788
-## CancerStageII  -0.41417 -0.56028 -0.268064
-## CancerStageIII -1.00318 -1.19293 -0.813435
-## CancerStageIV  -2.33645 -2.64404 -2.028862
-## LengthofStay   -0.12116 -0.18613 -0.056190
-## Experience      0.12018  0.06693  0.173429
-
-##If we wanted odds ratios instead of coefficients on the logit scale, we could exponentiate the estimates and CIs.
-
-exp(tab)
-##                    Est      LL     UL
-## (Intercept)    0.12815 0.04585 0.3582
-## IL6            0.94483 0.92402 0.9661
-## CRP            0.97868 0.95954 0.9982
-## CancerStageII  0.66089 0.57105 0.7649
-## CancerStageIII 0.36671 0.30333 0.4433
-## CancerStageIV  0.09667 0.07107 0.1315
-## LengthofStay   0.88589 0.83017 0.9454
-## Experience     1.12770 1.06922 1.1894
-
-#+end_src
-
 *** GAM Mixed modles
 **** basics
 
@@ -6276,7 +6282,6 @@ try<-gamm4(PM2_5MEA~s(POP00_SQ) +s(ELEV_M) +s(MJRRDDEN) +
 #+END_SRC
 
 *** posion
-
 **** extract the standart error for an interaction
 
 To extract the SE for the interaction use this code:
