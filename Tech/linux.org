@@ -18152,7 +18152,6 @@ issue:
 gmpc --clear-cover-db
 
 ***** ncmpcpp
-
 ****** browse and add local files to playlist
 
 first of all you need to [[#BaC30oz8FD.UrnRmSyUk-g][have a unix socket]]
@@ -24870,6 +24869,14 @@ kill the buffer (C-x k)
 emacs -f eshell
 #+END_SRC
 
+******** mouse
+********* mouse support in terminal
+Some terminal emulators under X support mouse clicks in the terminal window. In a terminal emulator which is compatible with xterm, you can use:
+
+~M-x xterm-mouse-mode ~
+
+to enable simple use of the mouse--only single clicks are supported. The normal xterm mouse functionality is still available by holding down the SHIFT key when you press the mouse button. The Linux console supports this mode if it has support for the mouse enabled, e.g. using the gpm daemon.
+
 ******* saving/closing emacs
 ******** base 
 Save To save file: press Ctrl+x, then Ctrl+s.
@@ -26794,7 +26801,7 @@ then add this to Emacs config:
 (load "ess-site")
 #+END_SRC
 
-******** connect to a remote R process
+******** connect to a remote server and run r scripts there 
 ESS works with processes on remote computers as easily as with processes on the local machine. The recommended way to access a statistical program on remote computer is to start it with tramp. Require tramp in your .emacs file:
 (require 'tramp)
 %note- not needed with emacs 24 onwards%
@@ -26806,6 +26813,62 @@ Now start an ssh session with
 Tramp should open a dired buffer in your remote home directory. Now call your favorite ESS process (R, Julia, stata etc) as you would usually do on local machine: M-x R.
 
 Alternatively you can start your process normally (M-x R). After you are asked for starting directory, simply type ‘/ssh:user@host: RET’. R process will be started on the remote machine.
+******** 'connect via ssh' to a remote server and run local ESS there
+this is my prefferd way of doing this:
+
+you connect to the server you want to run R on via SSH on your local machine (client)
+$Note- you need to make sure Emacs daemon is runnig on that server$
+
+#+BEGIN_SRC sh
+ssh -X user@hostipaddress 
+#+END_SRC
+$Note$ the -X for X11 forwarding. once connected issuse 
+
+#+BEGIN_SRC sh
+emacs -nw
+#+END_SRC 
+
+to start a terminal Emacs client.
+open your R script as usual (this should bring up ESS) and start working,that is evaluating lines/sections of code
+this will prompt you to choose a folder as your work dir and will create a *R* buffer which will act as the console
+
+%Tip-since this is an Emacs client window which is connected to the server you can close your ssh session and the R proccess will still keep running , very much like in tmux. you can simply exit EMACS (C-x C-c) and open a new Emacs and it will still be there. also you can connect to that session from Emacs gui when you get back to the office% 
+
+%Tip- if tab isn't working in terminal for some org related stuff (if using org with R) just use 0rg-cycle% 
+
+********* alternaive approach @not tested by me@
+
+Here is how to use ESS with R running in a remote screen session:
+
+ssh to the remote host (outside of emacs)
+
+start screen session
+
+detach it
+
+open shell in emacs (M-x shell)
+
+ssh to the remote host again in the emacs shell
+
+resume the screen session (screen -r)
+
+start R
+
+finally attach ESS to the R process using M-x ess-remote in the shell buffer where you started R
+
+
+******** a handy function to clear shell
+use the function below and bind it to a key of your liking
+
+ #+BEGIN_SRC emacs-lisp :results none
+ (defun clear-shell ()
+    (interactive)
+    (let ((old-max comint-buffer-maximum-size))
+      (setq comint-buffer-maximum-size 0)
+      (comint-truncate-buffer)
+      (setq comint-buffer-maximum-size old-max))) 
+ #+END_SRC 
+
 ******* gnus
 ******** terms
 article-one information piece-email,article etc terms
@@ -28117,22 +28180,39 @@ Instead of loading nonexistent auctex.el do
 (require 'tex)
 #+END_SRC
 ********* Helm
-********** Helm locate
-First be sure you have locate installed on your system. Most GNU/Linux distros come with locate included, you update or create the database with updatedb command. 
+********** intro 
+*********** $start here$ 
+!IMPORTANT! Please remember that, when you use Helm, @you never TAB to complete prefixes@
+like vanilla or other packages like Ido and its related packages. In Helm, when you type something, candidates get updated automatically. In vanilla Emacs, you have to TAB to get a list of candidate. This is a great feature from Helm, not a miss of feature. You have to forget the mentally of TABBING to get candidates. If you want quick completion of search patterns in Helm prompt, you always have hippie-expand to replace the TAB behaviour,
 
-`Search files`
+When you execute a Helm command, you enter a Helm session. A Helm session is a dedicated state to working with Helm features; while in a Helm session, a dedicated Helm buffer is always opened. When you quit a Helm session, a Helm buffer is closed. In Helm, you basically need to remember the 3 commands:
 
-To use, just launch
+Access to action menu with TAB. An action is a command to run on marked candidates (one or more) and quit current Helm session; an action menu is a text-based menu that lists actions you can take. For example, Find File (open file), Find File in Dired, Grep File…
+C-z executes helm-execute-persistent-action; a persistent action is an action that you use in a Helm session without quitting the session.
+In some Helm session, such as helm-find-files or helm-mini, you can select more than one candidates and execute actions on them, such as grep or open.
 
-M-x helm-locate
+*********** base completion
+Completion with Helm is very different with the usual Emacs completion:
+You type something:
 
-Then enter filename at prompt. It will search this pattern entered also in directory and subdirectory names. To limit your search to basename, add -b after the pattern. The search is performed on all files known to the database. They maybe not exist anymore, so to limit to really existing files add -e after the pattern. To limit your search to specific number of results, use -n after your pattern with the number of results you want.
-
-Example:
-
-Pattern: emacs -b -e -n 12
-
-You can also launch helm-locate from helm-find-files, just do C-x C-f. (With a prefix arg it will let you choose a local DB file)
+Instead of TAB to expand the common part until you find your candidates, in Helm, you type a parts of the candidate you want to search, separated by spaces. In Helm, these strings are called patterns. Patterns can also be regexps.
+Helm will try to search and sort according to highest match, from top to bottom. The best match is at the top, so you can press RET and select it.
+You can navigate the buffer with C-n and C-p or <up> and <down> to move up/down, C-v and M-v to move to next/previous pages, and M-< and M-> to move to top and bottom of the Helm buffer.
+You can mark candidates with C-SPC; this is useful when you need to perform an action on many candidates of your choice. M-a to select all.
+You can insert marked candidates into current buffer with C-c C-i. This is useful when you narrow to a list of candidates, i.e. files, then you want to save such candidates.
+If you find the current horizontal Helm window is small, you can always switch it to vertical window with C-t. Running C-t again returns the Helm window back to horizontal and so on.
+	   
+*********** base keys 	   
+~TAB~ shows menu of launch options
+select up/donn etc with common ~up/down/enter~ 
+~C-z~ same as tab for select action (but this is persistant, that is helm wont close)
+~C-SPACE~ mark canidadtes 
+~Alt-a~ mark all
+You can insert marked candidates into current buffer with ~C-c C-I~
+~C-t~ cycle through helm view modes
+~C-C ?~ get help on helm  	    
+~left/righ~ move between helm groups in helm view 
+********** config  
 ********** find in files (C-x f)
 use:
 `helm-for-files`
@@ -28142,26 +28222,284 @@ use:
 
 'Helm-org-headline'
 ********** helm colors
+used to see colors and faces currently in system, use:
+
+#+BEGIN_EXAMPLE
 helm-colors
-********** config
-***********  Helm commands
-helm-mini is a Helm command to switch buffers or open recent files. For me this is the most useful Helm command and I use it all the time instead of other buffer switchers like iswitchb or ido-switch-buffer. The source code:
+#+END_EXAMPLE
+
+Key binding: n <prefix> c (prefix is C-x c by default, or C-c h if set).
+
+If you want to quickly view and copy hexadecimal values of colors, helm-color provides such features. But, helm-color is beyond a mere color picker. The real usage for helm-color is for face customization: the command list ALL available faces, with a preview of each face in the same row. This makes theme customization really quick because you can quickly view a face with its color. Because the way Helm work, you can look at a group of faces together to have a global view if the colors work well with each other.
+
+helm-color contains two groups, with actions in each:
+
+Colors:
+Key	Action
+[f1] or C-c N	Copy Name
+ 	Copy color name into kill-ring
+[f2] or C-c R	Copy RGB
+ 	Copy hex value into kill-ring
+[f3] or C-c n	Insert Name
+ 	Insert color name into current buffer
+[f4] or C-c r	Insert RGB
+ 	Insert hex value into current buffer
+
+Customize Face:
+Key	Action
+[f1]	Customize
+ 	Open Customization window
+[f2]	Copy Name
+ 	Copy face name
+
+********** searching/mathcing
+*********** search with 2 search terms    
+helm has out of order matching, with regular expression. That's right, you can enter every search pattern as regexp!
+First, I enter main.c, and I got lots of candidates. Then, I only want the main.c inside x86 directory, so I type x86. The whole pattern is:
+#+BEGIN_EXAMPLE
+main.c x86 
+#+END_EXAMPLE
+and Helm returns the correct candidate: arch/x86/boot/main.c.
+********** helm mini
+*********** helm-mini comprises of multiple sources:
+
+`Current opened` buffers, under the header Buffers.
+`Recently opened` files, under the header Recentf.
+`create a new buffer` by pressing RET, under the header Create Buffer.
+
+You can move back and forth between the groups by using ~<left> // <right>~ arrow keys. Or you can just scroll down/up with C-v and M-v.
+
+*********** filter out buffers by major mode using the pattern *<major-mode>.
+For example,
+
+#+BEGIN_EXAMPLE
+*dired
+#+END_EXAMPLE
+
+*********** narrows to only Dired buffers.
+
+You can also `filter out` buffers that belong to a major mode by adding `!` to the pattern. For example,
+#+BEGIN_EXAMPLE
+*!dired
+#+END_EXAMPLE
+select all buffers that are not in Dired mode.
+
+*********** You can also select buffers in a specific directory by using the pattern `/directory`.
+For example,
+#+BEGIN_EXAMPLE
+/.emacs.d/
+#+END_EXAMPLE
+
+narrows to buffers that are only inside .emacs.d. Add ! before the pattern for reverse version. For example, !/.emacs.d/ narrows to buffers not in .emacs.d.
+
+*********** narrow to buffers that contains a regexp in their contents
+by appending `@` before the search pattern. For example, you can select buffers that only contain the string "test":
+
+#+BEGIN_EXAMPLE
+@test
+#+END_EXAMPLE
+
+*********** meaning of colors and prefixes for buffers:
+Remote buffers are prefixed with '@'.
+Red => Buffer have its file modified on disk by an external process.
+Indianred2 => Buffer exists but its file have been deleted.
+Orange => Buffer is modified and its file not saved to disk.
+Italic => A non-file buffer.
+$Note$-Some Emacs themes change the colors. You should check the corresponding colour in your color themes.
+
+*********** Example mini helm narrow searches
+
+If I enter in pattern prompt: *lisp ^helm @moc, Helm will narrow down the list by selecting only buffers that are in lisp mode, start by helm and match "moc" in their contents.
+If I want to specify more than one major-mode, separate them with ,, e.g *!lisp,!sh,!fun will list all buffers but the ones in lisp-mode, sh-mode and fundamental-mode.
+If I enter in pattern prompt: *lisp ^helm moc. Notice there is no @ this time helm will look for lisp mode buffers starting by "helm" and have "moc" in their name.
+If I enter in pattern prompt: *!lisp !helm Helm will narrow down to buffers that are not in "lisp" mode and that do not match "helm".
+If I enter in pattern prompt: /helm/ w3 Helm will narrow down buffers that are in any "helm" sub-directory and matching w3.
+	    
+********** helm find files 
+*********** base 
+helm-find-files is file navigation on steroid:
+
+helm-find-files can fuzzy match candidates in current directory. e.g "fob" or "fbr" will complete "foobar".
+
+You can also execute persistent action, which is bound to C-z (by default) or TAB if you changed the default configuration (to have TAB be persistant) to narrow the current highlighting candidate
+
+pressing  C-z or TAB again allows to  view content of the buffer (preview)
+
+You can scroll the other buffer up/down by M-<next> and M-<prior>.
+
+you can ~C-j~  to narrow to the highlighting candidate
+and ~C-j~ again to view the content of other buffer. C-l to go back.
+
+*********** quick nav 
+left take you back
+right enters a folder 
+Enter-opens the file or the folder in dired
+
+Enter ~/ at end of pattern to quickly reach home directory.
+Enter / at end of pattern to quickly reach root of your file system.
+Enter ./ at end of pattern to quickly reach `default-directory' (initial start of session). If you are in `default-directory' move cursor on top.
+*********** go up one directory level with ~C-l~
+You can also go up one directory level with ~C-l~
+
+$Note$ if you use C-l, Helm goes up one level and the cursor is on the directory you've just got out. If you want to go up and have the cursors on the parent directory, in Helm prompt, enter ../.
+
+*********** File and directory histories
+With prefix argument before running helm-find-files, Helm displays a list of visited directories. Select one at point transfer helm-find-files to that directory and you can start navigating there.
+
+During a helm-find-files session, you can get a list of visited files and directories with
+
+~C-c h~
+
+From there, the default action is RET to open the file/directory at point, or continue with helm-find-files starting at that file/directory.
+
+You can use M-p and M-n to move back and forth between previously visited directory.	    
+*********** create a directory/file
+enter a new name that does not exist in the current directory and append / at the end. After you created a directory, Helm continues in that directory.
+
+To create a new file, enter a name and select the top row that has the symbol [?] next to it. By default, Helm always selects the first match in the directory.
+
+*********** invoke grep on the current highlighting entry 
+You can invoke grep on the current highlighting entry by C-s. C-u C-s to perform recursive grep.
+*********** find file on point
+helm-find-files can be used to find file paths on point : all you need to do is moving your point on a proper filepath, and Helm will reach the correct path for you, similar to the screenshot. Now, you have no longer to use a separate command for open file at point, but using the same C-x C-f. It's really convenient.
+
+********** helm-man-woman (read manuals with org)
+    Key binding:
+
+    <prefix> m (prefix is C-x c by default, or C-c h if set).
+
+    Description:
+
+    With helm-man-woman, you can quickly jump to any man entry using Helm interface, either by typing in Helm prompt or if point is on a symbol, get a man page at point. To enable man page at point, add the following code:
+
+    (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
+********** helm locate    
+Key binding:
+
+<prefix> l (prefix is C-x c by default, or C-c h if set).
+
+Description:
+
+Similar to helm-find, but use locate command and accepts search patterns according to locate input. Use helm-man-woman to read locate man page.
+
+To use local database, execute helm-locate with prefix argument C-u. You can also customize Helm to use locate with arguments of your choice:
 
 #+BEGIN_SRC emacs-lisp :results none
-(defun helm-mini ()
-  "Preconfigured `helm' lightweight version \(buffer -> recentf\)."
-  (interactive)
-  (require 'helm-files)
-  (let ((helm-ff-transformer-show-only-basename nil))
-    (helm-other-buffer '(helm-source-buffers-list
-                         helm-source-recentf
-                         helm-source-buffer-not-found)
-                       "helm mini")))
+(setq helm-locate-command "locate %s -e -A --regex %s")
 #+END_SRC
-We can see that it calls helm-other-buffer with 3 sources, first a list of open buffers, then the recent files and a source to create new files. It is possible to create custom commands with just the sources you might like.
-Helm sources
 
-Sources like helm-source-recentf configure what the source will contain 
+If you use helm-locate on a large directory and feel the update is too sluggish, you can always suspend the live updating with C-! and resume the live updating with C-! later.
+
+To enable fuzzy matching in helm-locate, add this setting:
+
+#+BEGIN_SRC emacs-lisp :results none
+(setq helm-locate-fuzzy-match t)	    
+#+END_SRC
+********** helm-occur
+Command: helm-occur
+
+Key binding:
+
+<prefix> M-s o (prefix is C-x c by default, or C-c h if set). Since this is a rather long binding, we should bind a more convenient key sequence:
+
+(global-set-key (kbd "C-c h o") 'helm-occur)
+
+Similar to occur, but using Helm interface. As you type, matching lines are updated immediately. This is convenient when you want to have a list of matches in the current buffer to jump back and forth. TAB to temporary move point to the location of current highlighting match. C-g cancels current Helm session and returns to the original location where helm-occur is invoked. RET on a match jumps to that match.
+
+********** helm-apropos
+<prefix> a (prefix is C-x c by default, or C-c h if set).
+
+Pre-configured helm to describe commands, functions, variables and faces - all in one command!. It is similar to C-h a which runs apropos-command, but interactive includes more than just commands. helm-apropos comprises of 5 sources:
+
+Commands: Lists all available commands.
+Fucntion: Lists all available functions.
+Classes: Lists all classes created by defclass. See Building Classes.
+Generic Functions: Lists all functions created by defmethod. See Writing Methods
+Variables: Lists all available variables.
+Faces: Lists all available faces.
+Helm attributes: Lists all attributes that you can use to build a Helm source. Useful if you want to write extension with Helm.
+To enable fuzzy matching, add this setting:
+
+(setq helm-apropos-function-list t)
+********** helm-info-*
+
+Key binding:
+
+<prefix> h <key> (prefix is C-x c by default, or C-c h if set); <key>, by defaults, is one of g, i or r:
+
+So, the prefix for info commands is <prefix> h. You can think of h as stands for help and <key> is one of the info topic to make it easier to remember and recall.
+
+helm offers a wide ranges of info commands for various topics. M-x helm info to see these commands, i.e. helm-info-as, helm-info-gdb… You can search for info nodes easily with Helm interface and TAB on an entry to view. M-<next> moves to the next page, M-<prior> moves to the previous page in the other buffer.
+
+You can have more helm-info- commands, such as:
+
+helm-info-gdb.
+helm-info-find.
+helm-info-elisp.
+
+Use M-x helm-info to see the list of helm-info- commands using the default info prefix: <prefix> h or key bindings of your choice.
+
+********** helm-resume
+
+Key binding:
+
+<prefix> b (prefix is C-x c by default, or C-c h if set).
+
+Description:
+
+This command allows you to resume the previous Helm session, along with your previous patterns in the prompt. For example, if your last helm session was helm-ff-run-grep and you entered patterns in Helm prompt, helm-resume resumes that session along with your previous input.
+
+With prefix argument, helm-resume allows you to choose among all existing Helm buffers. helm-mini or helm-buffer-list does not show existing Helm buffers; they ignore it by default; but if you run ibuffer, you will see a list of Helm buffers visible there. Don't kill them or you won't be able to resume.
+
+This is really convenient when you have complex input ,and preparation steps. For example, if you have multiple regexp patterns in your previous Helm session, then you don't have to type it again. Or in your previous Helm session, you have to travel to a deep directory, and helm-resume helps you to reuse your previous session without going through all the troubles again.
+********** TODO helm-all-mark-rings
+
+!check what is a mark ring//also check helm registers!
+
+Key binding:
+
+<prefix> C-c SPC (prefix is C-x c by default, or C-c h if set). This is a rather long key sequence, this command deserves a better binding, for example:
+
+(global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
+Description:
+
+One handy command. It allows you to view the content of the both the local and global mark rings in a friendly interface, so you can always jump back to where you were. Without this command, if you want to view the mark rings, you have to run M-: and enter mark-ring or global-mark-ring to view their contents. And even so, Emacs only displays the bare content of the mark-ring and global-mark-ring lists, which is the line number and its buffer like this:
+
+********** helm-top
+
+  Key binding:
+
+  <prefix> t (prefix is C-x c by default, or C-c h if set).
+
+  Description:
+
+  This command provides Helm interface for top program. You can interact with each process with the following actions:
+
+  Key	Binding
+  [f1]	kill (SIGTERM)
+  [f2]	kill (SIGKILL)
+  [f3]	kill (SIGINT)
+  [f4]	kill (Choose signal)
+  helm-top specific commands:
+
+  Key	Binding
+  C-c C-u	Refresh helm-top
+  M-C	Sort by shell commands
+  M-P	Sort by CPU usage
+  M-U	Sort by user
+  M-M	Sort by memory
+  user and shell commands are sorted alphabetically.
+
+********** helm-calcul-expression
+
+Key binding:
+
+<prefix> C-, (prefix is C-x c by default, or C-c h if set).
+
+Description:
+
+This commands provides a Helm interface for calc command
+
 ********* google-contacts
 
 http://julien.danjou.info/projects/emacs-packages#google-contacts
@@ -28341,6 +28679,19 @@ as the gui save may have issues
 'write-region' 
 will save the current marked region start end filename &optional append visit lockname mustbenew
 This function writes the region delimited by start and end in the current buffer into the file specified by filename.  
+******* sync
+******** sync Emacs between laptop and work	
+********* Main Emacs config is laptop.
+ I sync between laptop and work this way:
+I only pull (after first clone) Emacs config from github (using my work file:/~/bin/ugs.sh script)
+in addition to that every big update I need to manually zip and upload the nested .git directories (₆In example₆ org,ESS etc) to the NAS (under software >> emacs_sync folder
+********* tips
+you may have to create a hist file if you get this warrning
+#+BEGIN_SRC sh
+mkdir -p  /home/zeltak/.cache/emacs/hist/
+zeltak@zuni:~$ touch  /home/zeltak/.cache/emacs/hist/hist.txt
+#+END_SRC
+ 	 
 ******* Search Text, FindReplace Text
 ******** regex
 ********* escape characters
