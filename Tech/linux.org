@@ -2141,7 +2141,9 @@ Alt+PrintScreen+r+s+e+i+u+b
 help you reboot safely)
   b - reboots the system
 
-*** X resources
+*** X resources (.Xresources) 
+**** .Xresources Vs .Xdefaults 
+`.Xresources` is !newer! then `.Xdefaults` so its better to config everything in Xresources and link it to xdefaults for legacy suppport
 **** intro
 
 $Note$ Xresources is newer then xdefaults so its better to config everything in Xresources and link it to xdefaults for legacy suppport:
@@ -2184,16 +2186,29 @@ The older (deprecated) ~/.Xdefaults is read every time you start an X
 program such as xterm --- but only if xrdb hasn't ever been used in the
 current X session
 
-**** .Xdefaults file
+**** source/refresh .Xresources
+#+BEGIN_SRC sh
+xrdb ~/.Xresources
+#+END_SRC
+**** Adding to xinitrc
+If you do not use a desktop environment, you probably need to add the following line to your ~/.xinitrc:
 
-The exclamation mark (!) or /.../ is used to comment a line in the
-.Xdefaults file. For example:
- / this is a comment /
- To reread your .Xresources file, and throw away your old resources, you
-can type:
- xrdb ~/.Xdefaults
- Avoid blank spaces at the beginning and end of lines in the .Xdefaults
-file.
+#+BEGIN_SRC sh
+[[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
+#+END_SRC
+**** check Default settings
+Detailed information on program-specific resources is usually provided in the man page for the program. xterm's man page is a good example, as it contains a list of X resources and their default values.
+To see the current loaded resources:
+#+BEGIN_SRC sh
+xrdb -query -all
+#+END_SRC
+**** Commenting
+To add a comment to your Xresources file, simply prefix it with an exclamation mark (!), for example:
+
+#+BEGIN_EXAMPLE
+! This is a comment placed above some Xft settings
+Xft.dpi:       96      ! this is an inline comment
+#+END_EXAMPLE
 
 *** grey windows error
 
@@ -8987,6 +9002,31 @@ directory with the following bash shell commands:
  todo.sh command ls
 
 *** Utils
+**** autojump     
+***** navigate using autojump (j)
+`j` is a convenience wrapper function around autojump. Any option that can be used with autojump can be used with j and vice versa.
+
+Jump To A Directory That Contains foo:
+
+#+BEGIN_SRC sh
+j foo
+#+END_SRC
+
+Jump To A Child Directory:
+
+Sometimes it's convenient to jump to a child directory (sub-directory of current directory) rather than typing out the full name.
+
+#+BEGIN_SRC sh
+jc bar
+#+END_SRC
+***** Open File Manager To Directories (instead of jumping):
+Instead of jumping to a directory, you can open a file explorer window (Mac Finder, Windows Explorer, GNOME Nautilus, etc.) to the directory instead.
+#+BEGIN_SRC sh
+jo music
+#Opening a file manager to a child directory is also supported:
+jco images
+#+END_SRC
+
 **** atools
 ***** aunpack (unpack)
 
@@ -18112,7 +18152,6 @@ issue:
 gmpc --clear-cover-db
 
 ***** ncmpcpp
-
 ****** browse and add local files to playlist
 
 first of all you need to [[#BaC30oz8FD.UrnRmSyUk-g][have a unix socket]]
@@ -24830,6 +24869,14 @@ kill the buffer (C-x k)
 emacs -f eshell
 #+END_SRC
 
+******** mouse
+********* mouse support in terminal
+Some terminal emulators under X support mouse clicks in the terminal window. In a terminal emulator which is compatible with xterm, you can use:
+
+~M-x xterm-mouse-mode ~
+
+to enable simple use of the mouse--only single clicks are supported. The normal xterm mouse functionality is still available by holding down the SHIFT key when you press the mouse button. The Linux console supports this mode if it has support for the mouse enabled, e.g. using the gpm daemon.
+
 ******* saving/closing emacs
 ******** base 
 Save To save file: press Ctrl+x, then Ctrl+s.
@@ -26754,7 +26801,7 @@ then add this to Emacs config:
 (load "ess-site")
 #+END_SRC
 
-******** connect to a remote R process
+******** connect to a remote server and run r scripts there 
 ESS works with processes on remote computers as easily as with processes on the local machine. The recommended way to access a statistical program on remote computer is to start it with tramp. Require tramp in your .emacs file:
 (require 'tramp)
 %note- not needed with emacs 24 onwards%
@@ -26766,6 +26813,62 @@ Now start an ssh session with
 Tramp should open a dired buffer in your remote home directory. Now call your favorite ESS process (R, Julia, stata etc) as you would usually do on local machine: M-x R.
 
 Alternatively you can start your process normally (M-x R). After you are asked for starting directory, simply type ‘/ssh:user@host: RET’. R process will be started on the remote machine.
+******** 'connect via ssh' to a remote server and run local ESS there
+this is my prefferd way of doing this:
+
+you connect to the server you want to run R on via SSH on your local machine (client)
+$Note- you need to make sure Emacs daemon is runnig on that server$
+
+#+BEGIN_SRC sh
+ssh -X user@hostipaddress 
+#+END_SRC
+$Note$ the -X for X11 forwarding. once connected issuse 
+
+#+BEGIN_SRC sh
+emacs -nw
+#+END_SRC 
+
+to start a terminal Emacs client.
+open your R script as usual (this should bring up ESS) and start working,that is evaluating lines/sections of code
+this will prompt you to choose a folder as your work dir and will create a *R* buffer which will act as the console
+
+%Tip-since this is an Emacs client window which is connected to the server you can close your ssh session and the R proccess will still keep running , very much like in tmux. you can simply exit EMACS (C-x C-c) and open a new Emacs and it will still be there. also you can connect to that session from Emacs gui when you get back to the office% 
+
+%Tip- if tab isn't working in terminal for some org related stuff (if using org with R) just use 0rg-cycle% 
+
+********* alternaive approach @not tested by me@
+
+Here is how to use ESS with R running in a remote screen session:
+
+ssh to the remote host (outside of emacs)
+
+start screen session
+
+detach it
+
+open shell in emacs (M-x shell)
+
+ssh to the remote host again in the emacs shell
+
+resume the screen session (screen -r)
+
+start R
+
+finally attach ESS to the R process using M-x ess-remote in the shell buffer where you started R
+
+
+******** a handy function to clear shell
+use the function below and bind it to a key of your liking
+
+ #+BEGIN_SRC emacs-lisp :results none
+ (defun clear-shell ()
+    (interactive)
+    (let ((old-max comint-buffer-maximum-size))
+      (setq comint-buffer-maximum-size 0)
+      (comint-truncate-buffer)
+      (setq comint-buffer-maximum-size old-max))) 
+ #+END_SRC 
+
 ******* gnus
 ******** terms
 article-one information piece-email,article etc terms
@@ -27174,127 +27277,150 @@ Doesnt "Emacs, toggle column" just roll off your tongue as you're typing C-x t c
 
 ******* look and feel
 ******** fonts
-******** Face Attributes
+******** faces 	 
+********* find out colors/fonts etc for a specific package/mode
 
-[[file:/home/zeltak/Dropbox/Org/Tech/images/img23472PYP.jpg]]
+there are 2 ways to do it:
 
+you may use  ~M-x list-faces-display~ and look there in all available faces
 
-Face attributes determine the visual appearance of a face. The following table lists all the face attributes, their possible values, and their effects.
+!Or!
 
-Apart from the values given below, each face attribute can have the value unspecified. This special value means that the face doesn't specify that attribute directly. An unspecified attribute tells Emacs to refer instead to a parent face (see the description :inherit attribute below); or, failing that, to an underlying face (see Displaying Faces). The default face must specify all attributes.
+use the ~apropos~ command and search for a key word ₆In example₆ 
 
-Some of these attributes are meaningful only on certain kinds of displays. If your display cannot handle a certain attribute, the attribute is ignored.
+#+BEGIN_SRC emacs-lisp :results none
+~apropos~  >>> helm.*face actually
+#+END_SRC
 
-:family
-Font family or fontset (a string). See Fonts, for more information about font families. The function font-family-list (see below) returns a list of available family names. See Fontsets, for information about fontsets. 
-:foundry
-The name of the font foundry for the font family specified by the :family attribute (a string). See Fonts. 
-:width
-Relative character width. This should be one of the symbols ultra-condensed, extra-condensed, condensed, semi-condensed, normal, semi-expanded, expanded, extra-expanded, or ultra-expanded. 
-:height
-The height of the font. In the simplest case, this is an integer in units of 1/10 point.
-The value can also be a floating point number or a function, which specifies the height relative to an underlying face (see Displaying Faces). If the value is a floating point number, that specifies the amount by which to scale the height of the underlying face. If the value is a function, that function is called with one argument, the height of the underlying face, and returns the height of the new face. If the function is passed an integer argument, it must return an integer.
+********* Face Attributes
 
-The height of the default face must be specified using an integer; floating point and function values are not allowed. 
-
-:weight
-Font weightone of the symbols (from densest to faintest) ultra-bold, extra-bold, bold, semi-bold, normal, semi-light, light, extra-light, or ultra-light. On text terminals which support variable-brightness text, any weight greater than normal is displayed as extra bright, and any weight less than normal is displayed as half-bright.
+ [[file:/home/zeltak/Dropbox/Org/Tech/images/img23472PYP.jpg]]
 
 
-:slant
-Font slantone of the symbols italic, oblique, normal, reverse-italic, or reverse-oblique. On text terminals that support variable-brightness text, slanted text is displayed as half-bright. 
-:foreground
-Foreground color, a string. The value can be a system-defined color name, or a hexadecimal color specification. See Color Names. On black-and-white displays, certain shades of gray are implemented by stipple patterns. 
-:background
-Background color, a string. The value can be a system-defined color name, or a hexadecimal color specification. See Color Names.
+ Face attributes determine the visual appearance of a face. The following table lists all the face attributes, their possible values, and their effects.
+
+ Apart from the values given below, each face attribute can have the value unspecified. This special value means that the face doesn't specify that attribute directly. An unspecified attribute tells Emacs to refer instead to a parent face (see the description :inherit attribute below); or, failing that, to an underlying face (see Displaying Faces). The default face must specify all attributes.
+
+ Some of these attributes are meaningful only on certain kinds of displays. If your display cannot handle a certain attribute, the attribute is ignored.
+
+ :family
+ Font family or fontset (a string). See Fonts, for more information about font families. The function font-family-list (see below) returns a list of available family names. See Fontsets, for information about fontsets. 
+ :foundry
+ The name of the font foundry for the font family specified by the :family attribute (a string). See Fonts. 
+ :width
+ Relative character width. This should be one of the symbols ultra-condensed, extra-condensed, condensed, semi-condensed, normal, semi-expanded, expanded, extra-expanded, or ultra-expanded. 
+ :height
+ The height of the font. In the simplest case, this is an integer in units of 1/10 point.
+ The value can also be a floating point number or a function, which specifies the height relative to an underlying face (see Displaying Faces). If the value is a floating point number, that specifies the amount by which to scale the height of the underlying face. If the value is a function, that function is called with one argument, the height of the underlying face, and returns the height of the new face. If the function is passed an integer argument, it must return an integer.
+
+ The height of the default face must be specified using an integer; floating point and function values are not allowed. 
+
+ :weight
+ Font weightone of the symbols (from densest to faintest) ultra-bold, extra-bold, bold, semi-bold, normal, semi-light, light, extra-light, or ultra-light. On text terminals which support variable-brightness text, any weight greater than normal is displayed as extra bright, and any weight less than normal is displayed as half-bright.
 
 
-:underline
-Whether or not characters should be underlined, and in what way. The possible values of the :underline attribute are:
-nil
-Don't underline. 
-t
-Underline with the foreground color of the face. 
-color
-Underline in color color, a string specifying a color. 
-(:color color :style style)
-color is either a string, or the symbol foreground-color, meaning the foreground color of the face. Omitting the attribute :color means to use the foreground color of the face. style should be a symbol line or wave, meaning to use a straight or wavy line. Omitting the attribute :style means to use a straight line.
+ :slant
+ Font slantone of the symbols italic, oblique, normal, reverse-italic, or reverse-oblique. On text terminals that support variable-brightness text, slanted text is displayed as half-bright. 
+ :foreground
+ Foreground color, a string. The value can be a system-defined color name, or a hexadecimal color specification. See Color Names. On black-and-white displays, certain shades of gray are implemented by stipple patterns. 
+ :background
+ Background color, a string. The value can be a system-defined color name, or a hexadecimal color specification. See Color Names.
 
 
-:overline
-Whether or not characters should be overlined, and in what color. If the value is t, overlining uses the foreground color of the face. If the value is a string, overlining uses that color. The value nil means do not overline.
+ :underline
+ Whether or not characters should be underlined, and in what way. The possible values of the :underline attribute are:
+ nil
+ Don't underline. 
+ t
+ Underline with the foreground color of the face. 
+ color
+ Underline in color color, a string specifying a color. 
+ (:color color :style style)
+ color is either a string, or the symbol foreground-color, meaning the foreground color of the face. Omitting the attribute :color means to use the foreground color of the face. style should be a symbol line or wave, meaning to use a straight or wavy line. Omitting the attribute :style means to use a straight line.
 
 
-:strike-through
-Whether or not characters should be strike-through, and in what color. The value is used like that of :overline. 
-:box
-Whether or not a box should be drawn around characters, its color, the width of the box lines, and 3D appearance. Here are the possible values of the :box attribute, and what they mean:
-nil
-Don't draw a box. 
-t
-Draw a box with lines of width 1, in the foreground color. 
-color
-Draw a box with lines of width 1, in color color. 
-(:line-width width :color color :style style)
-This way you can explicitly specify all aspects of the box. The value width specifies the width of the lines to draw; it defaults to 1. A negative width -n means to draw a line of width n that occupies the space of the underlying text, thus avoiding any increase in the character height or width.
-The value color specifies the color to draw with. The default is the foreground color of the face for simple boxes, and the background color of the face for 3D boxes.
-
-The value style specifies whether to draw a 3D box. If it is released-button, the box looks like a 3D button that is not being pressed. If it is pressed-button, the box looks like a 3D button that is being pressed. If it is nil or omitted, a plain 2D box is used.
+ :overline
+ Whether or not characters should be overlined, and in what color. If the value is t, overlining uses the foreground color of the face. If the value is a string, overlining uses that color. The value nil means do not overline.
 
 
-:inverse-video
-Whether or not characters should be displayed in inverse video. The value should be t (yes) or nil (no). 
-:stipple
-The background stipple, a bitmap.
-The value can be a string; that should be the name of a file containing external-format X bitmap data. The file is found in the directories listed in the variable x-bitmap-file-path.
+ :strike-through
+ Whether or not characters should be strike-through, and in what color. The value is used like that of :overline. 
+ :box
+ Whether or not a box should be drawn around characters, its color, the width of the box lines, and 3D appearance. Here are the possible values of the :box attribute, and what they mean:
+ nil
+ Don't draw a box. 
+ t
+ Draw a box with lines of width 1, in the foreground color. 
+ color
+ Draw a box with lines of width 1, in color color. 
+ (:line-width width :color color :style style)
+ This way you can explicitly specify all aspects of the box. The value width specifies the width of the lines to draw; it defaults to 1. A negative width -n means to draw a line of width n that occupies the space of the underlying text, thus avoiding any increase in the character height or width.
+ The value color specifies the color to draw with. The default is the foreground color of the face for simple boxes, and the background color of the face for 3D boxes.
 
-Alternatively, the value can specify the bitmap directly, with a list of the form (width height data). Here, width and height specify the size in pixels, and data is a string containing the raw bits of the bitmap, row by row. Each row occupies (width + 7) / 8 consecutive bytes in the string (which should be a unibyte string for best results). This means that each row always occupies at least one whole byte.
+ The value style specifies whether to draw a 3D box. If it is released-button, the box looks like a 3D button that is not being pressed. If it is pressed-button, the box looks like a 3D button that is being pressed. If it is nil or omitted, a plain 2D box is used.
 
-If the value is nil, that means use no stipple pattern.
 
-Normally you do not need to set the stipple attribute, because it is used automatically to handle certain shades of gray. 
+ :inverse-video
+ Whether or not characters should be displayed in inverse video. The value should be t (yes) or nil (no). 
+ :stipple
+ The background stipple, a bitmap.
+ The value can be a string; that should be the name of a file containing external-format X bitmap data. The file is found in the directories listed in the variable x-bitmap-file-path.
 
-:font
-The font used to display the face. Its value should be a font object. See Font Selection, for information about font objects.
-When specifying this attribute using set-face-attribute (see Attribute Functions), you may also supply a font spec, a font entity, or a string. Emacs converts such values to an appropriate font object, and stores that font object as the actual attribute value. If you specify a string, the contents of the string should be a font name (see Fonts); if the font name is an XLFD containing wildcards, Emacs chooses the first font matching those wildcards. Specifying this attribute also changes the values of the :family, :foundry, :width, :height, :weight, and :slant attributes. 
+ Alternatively, the value can specify the bitmap directly, with a list of the form (width height data). Here, width and height specify the size in pixels, and data is a string containing the raw bits of the bitmap, row by row. Each row occupies (width + 7) / 8 consecutive bytes in the string (which should be a unibyte string for best results). This means that each row always occupies at least one whole byte.
 
-:inherit
-The name of a face from which to inherit attributes, or a list of face names. Attributes from inherited faces are merged into the face like an underlying face would be, with higher priority than underlying faces (see Displaying Faces). If a list of faces is used, attributes from faces earlier in the list override those from later faces.
- Function: font-family-list &optional frame
-This function returns a list of available font family names. The optional argument frame specifies the frame on which the text is to be displayed; if it is nil, the selected frame is used.
+ If the value is nil, that means use no stipple pattern.
 
- User Option: underline-minimum-offset
-This variable specifies the minimum distance between the baseline and the underline, in pixels, when displaying underlined text.
+ Normally you do not need to set the stipple attribute, because it is used automatically to handle certain shades of gray. 
 
- User Option: x-bitmap-file-path
-This variable specifies a list of directories for searching for bitmap files, for the :stipple attribute.
+ :font
+ The font used to display the face. Its value should be a font object. See Font Selection, for information about font objects.
+ When specifying this attribute using set-face-attribute (see Attribute Functions), you may also supply a font spec, a font entity, or a string. Emacs converts such values to an appropriate font object, and stores that font object as the actual attribute value. If you specify a string, the contents of the string should be a font name (see Fonts); if the font name is an XLFD containing wildcards, Emacs chooses the first font matching those wildcards. Specifying this attribute also changes the values of the :family, :foundry, :width, :height, :weight, and :slant attributes. 
 
- Function: bitmap-spec-p object
-This returns t if object is a valid bitmap specification, suitable for use with :stipple (see above). It returns nil otherwise.
+ :inherit
+ The name of a face from which to inherit attributes, or a list of face names. Attributes from inherited faces are merged into the face like an underlying face would be, with higher priority than underlying faces (see Displaying Faces). If a list of faces is used, attributes from faces earlier in the list override those from later faces.
+  Function: font-family-list &optional frame
+ This function returns a list of available font family names. The optional argument frame specifies the frame on which the text is to be displayed; if it is nil, the selected frame is used.
 
-Face attributes determine the visual appearance of a face. The following
-table lists all the face attributes, their possible values, and their`
-effects.
+  User Option: underline-minimum-offset
+ This variable specifies the minimum distance between the baseline and the underline, in pixels, when displaying underlined text.
+
+  User Option: x-bitmap-file-path
+ This variable specifies a list of directories for searching for bitmap files, for the :stipple attribute.
+
+  Function: bitmap-spec-p object
+ This returns t if object is a valid bitmap specification, suitable for use with :stipple (see above). It returns nil otherwise.
+
+ Face attributes determine the visual appearance of a face. The following
+ table lists all the face attributes, their possible values, and their`
+ effects.
 
 ******** themes
 ********* change theme
-
 use:
- M-x load-theme
- RET
- choose theme (you can use tab to list all available themes)
 
-********* load a theme
+#+BEGIN_EXAMPLE
+M-x load-theme
+#+END_EXAMPLE
 
-To choose a new theme just do a M-x load-theme (tab completion is
-available for the names of the available themes). At this point you can
-give the command a try with the tango theme.
- If you like a theme so much that you'd want to use it all the time you
-can put in your Emacs configuration (.emacs or init.el for instance)
-like this:
- (load-theme 'theme-name t)
- If you'd like to return to the default-theme just do a M-x
-disable-theme.
+choose theme (you can use tab to list all available themes)
+
+********* load a theme at startup 
+
+#+BEGIN_SRC emacs-lisp :results none
+;;;add custom themes to list
+(add-to-list 'custom-theme-load-path "/home/zeltak/.emacs.d/themes")
+;to load a specifc theme 
+(load-file "~/.emacs.d/themes/zprime-theme.el")
+;load the choosen theme at startup 
+(load-theme 'zprime t)
+#+END_SRC
+
+If you'd like to return to the default-theme just do a M-x disable-theme.
+********* create a custom theme file 
+Theme files !must be named *-theme.e! in your defined `custom-theme-load-path`
+********* Emacs intenral theme editing/info commands
+you can use the `customize-themes` command to select a theme interactively and edit it
+	Type M-x custom-describe-theme to describe the theme at point.  
 ********* How to Set a Theme Depending on Mode
 Here's how you can set background color depending on the file name extension.
 
@@ -27319,6 +27445,18 @@ You can modify the code to set themes instead of just background
 for more info look here:
 
 http://ergoemacs.org/emacs/emacs_set_theme_on_mode.html
+********* change a face in a theme 
+1.find out the specific face you want to change using list-faces-display
+then in your theme change the relevant section. ₆In example₆ using the leuven based theme to change the helm selection use
+
+#+BEGIN_SRC emacs-lisp :results none
+`(helm-selection ((,class (:foregrounf "black" :background "#2AA198")))) 
+#+END_SRC
+
+$Note$- you can change font,color, weight etc..
+
+also $Note$ that the above is relevant to leuven but other theme configs may be differently configed
+
 ******** menus
 ********* create custom menus
 the best way is to use easy menu:
@@ -28042,22 +28180,39 @@ Instead of loading nonexistent auctex.el do
 (require 'tex)
 #+END_SRC
 ********* Helm
-********** Helm locate
-First be sure you have locate installed on your system. Most GNU/Linux distros come with locate included, you update or create the database with updatedb command. 
+********** intro 
+*********** $start here$ 
+!IMPORTANT! Please remember that, when you use Helm, @you never TAB to complete prefixes@
+like vanilla or other packages like Ido and its related packages. In Helm, when you type something, candidates get updated automatically. In vanilla Emacs, you have to TAB to get a list of candidate. This is a great feature from Helm, not a miss of feature. You have to forget the mentally of TABBING to get candidates. If you want quick completion of search patterns in Helm prompt, you always have hippie-expand to replace the TAB behaviour,
 
-`Search files`
+When you execute a Helm command, you enter a Helm session. A Helm session is a dedicated state to working with Helm features; while in a Helm session, a dedicated Helm buffer is always opened. When you quit a Helm session, a Helm buffer is closed. In Helm, you basically need to remember the 3 commands:
 
-To use, just launch
+Access to action menu with TAB. An action is a command to run on marked candidates (one or more) and quit current Helm session; an action menu is a text-based menu that lists actions you can take. For example, Find File (open file), Find File in Dired, Grep File…
+C-z executes helm-execute-persistent-action; a persistent action is an action that you use in a Helm session without quitting the session.
+In some Helm session, such as helm-find-files or helm-mini, you can select more than one candidates and execute actions on them, such as grep or open.
 
-M-x helm-locate
+*********** base completion
+Completion with Helm is very different with the usual Emacs completion:
+You type something:
 
-Then enter filename at prompt. It will search this pattern entered also in directory and subdirectory names. To limit your search to basename, add -b after the pattern. The search is performed on all files known to the database. They maybe not exist anymore, so to limit to really existing files add -e after the pattern. To limit your search to specific number of results, use -n after your pattern with the number of results you want.
-
-Example:
-
-Pattern: emacs -b -e -n 12
-
-You can also launch helm-locate from helm-find-files, just do C-x C-f. (With a prefix arg it will let you choose a local DB file)
+Instead of TAB to expand the common part until you find your candidates, in Helm, you type a parts of the candidate you want to search, separated by spaces. In Helm, these strings are called patterns. Patterns can also be regexps.
+Helm will try to search and sort according to highest match, from top to bottom. The best match is at the top, so you can press RET and select it.
+You can navigate the buffer with C-n and C-p or <up> and <down> to move up/down, C-v and M-v to move to next/previous pages, and M-< and M-> to move to top and bottom of the Helm buffer.
+You can mark candidates with C-SPC; this is useful when you need to perform an action on many candidates of your choice. M-a to select all.
+You can insert marked candidates into current buffer with C-c C-i. This is useful when you narrow to a list of candidates, i.e. files, then you want to save such candidates.
+If you find the current horizontal Helm window is small, you can always switch it to vertical window with C-t. Running C-t again returns the Helm window back to horizontal and so on.
+	   
+*********** base keys 	   
+~TAB~ shows menu of launch options
+select up/donn etc with common ~up/down/enter~ 
+~C-z~ same as tab for select action (but this is persistant, that is helm wont close)
+~C-SPACE~ mark canidadtes 
+~Alt-a~ mark all
+You can insert marked candidates into current buffer with ~C-c C-I~
+~C-t~ cycle through helm view modes
+~C-C ?~ get help on helm  	    
+~left/righ~ move between helm groups in helm view 
+********** config  
 ********** find in files (C-x f)
 use:
 `helm-for-files`
@@ -28067,26 +28222,284 @@ use:
 
 'Helm-org-headline'
 ********** helm colors
+used to see colors and faces currently in system, use:
+
+#+BEGIN_EXAMPLE
 helm-colors
-********** config
-***********  Helm commands
-helm-mini is a Helm command to switch buffers or open recent files. For me this is the most useful Helm command and I use it all the time instead of other buffer switchers like iswitchb or ido-switch-buffer. The source code:
+#+END_EXAMPLE
+
+Key binding: n <prefix> c (prefix is C-x c by default, or C-c h if set).
+
+If you want to quickly view and copy hexadecimal values of colors, helm-color provides such features. But, helm-color is beyond a mere color picker. The real usage for helm-color is for face customization: the command list ALL available faces, with a preview of each face in the same row. This makes theme customization really quick because you can quickly view a face with its color. Because the way Helm work, you can look at a group of faces together to have a global view if the colors work well with each other.
+
+helm-color contains two groups, with actions in each:
+
+Colors:
+Key	Action
+[f1] or C-c N	Copy Name
+ 	Copy color name into kill-ring
+[f2] or C-c R	Copy RGB
+ 	Copy hex value into kill-ring
+[f3] or C-c n	Insert Name
+ 	Insert color name into current buffer
+[f4] or C-c r	Insert RGB
+ 	Insert hex value into current buffer
+
+Customize Face:
+Key	Action
+[f1]	Customize
+ 	Open Customization window
+[f2]	Copy Name
+ 	Copy face name
+
+********** searching/mathcing
+*********** search with 2 search terms    
+helm has out of order matching, with regular expression. That's right, you can enter every search pattern as regexp!
+First, I enter main.c, and I got lots of candidates. Then, I only want the main.c inside x86 directory, so I type x86. The whole pattern is:
+#+BEGIN_EXAMPLE
+main.c x86 
+#+END_EXAMPLE
+and Helm returns the correct candidate: arch/x86/boot/main.c.
+********** helm mini
+*********** helm-mini comprises of multiple sources:
+
+`Current opened` buffers, under the header Buffers.
+`Recently opened` files, under the header Recentf.
+`create a new buffer` by pressing RET, under the header Create Buffer.
+
+You can move back and forth between the groups by using ~<left> // <right>~ arrow keys. Or you can just scroll down/up with C-v and M-v.
+
+*********** filter out buffers by major mode using the pattern *<major-mode>.
+For example,
+
+#+BEGIN_EXAMPLE
+*dired
+#+END_EXAMPLE
+
+*********** narrows to only Dired buffers.
+
+You can also `filter out` buffers that belong to a major mode by adding `!` to the pattern. For example,
+#+BEGIN_EXAMPLE
+*!dired
+#+END_EXAMPLE
+select all buffers that are not in Dired mode.
+
+*********** You can also select buffers in a specific directory by using the pattern `/directory`.
+For example,
+#+BEGIN_EXAMPLE
+/.emacs.d/
+#+END_EXAMPLE
+
+narrows to buffers that are only inside .emacs.d. Add ! before the pattern for reverse version. For example, !/.emacs.d/ narrows to buffers not in .emacs.d.
+
+*********** narrow to buffers that contains a regexp in their contents
+by appending `@` before the search pattern. For example, you can select buffers that only contain the string "test":
+
+#+BEGIN_EXAMPLE
+@test
+#+END_EXAMPLE
+
+*********** meaning of colors and prefixes for buffers:
+Remote buffers are prefixed with '@'.
+Red => Buffer have its file modified on disk by an external process.
+Indianred2 => Buffer exists but its file have been deleted.
+Orange => Buffer is modified and its file not saved to disk.
+Italic => A non-file buffer.
+$Note$-Some Emacs themes change the colors. You should check the corresponding colour in your color themes.
+
+*********** Example mini helm narrow searches
+
+If I enter in pattern prompt: *lisp ^helm @moc, Helm will narrow down the list by selecting only buffers that are in lisp mode, start by helm and match "moc" in their contents.
+If I want to specify more than one major-mode, separate them with ,, e.g *!lisp,!sh,!fun will list all buffers but the ones in lisp-mode, sh-mode and fundamental-mode.
+If I enter in pattern prompt: *lisp ^helm moc. Notice there is no @ this time helm will look for lisp mode buffers starting by "helm" and have "moc" in their name.
+If I enter in pattern prompt: *!lisp !helm Helm will narrow down to buffers that are not in "lisp" mode and that do not match "helm".
+If I enter in pattern prompt: /helm/ w3 Helm will narrow down buffers that are in any "helm" sub-directory and matching w3.
+	    
+********** helm find files 
+*********** base 
+helm-find-files is file navigation on steroid:
+
+helm-find-files can fuzzy match candidates in current directory. e.g "fob" or "fbr" will complete "foobar".
+
+You can also execute persistent action, which is bound to C-z (by default) or TAB if you changed the default configuration (to have TAB be persistant) to narrow the current highlighting candidate
+
+pressing  C-z or TAB again allows to  view content of the buffer (preview)
+
+You can scroll the other buffer up/down by M-<next> and M-<prior>.
+
+you can ~C-j~  to narrow to the highlighting candidate
+and ~C-j~ again to view the content of other buffer. C-l to go back.
+
+*********** quick nav 
+left take you back
+right enters a folder 
+Enter-opens the file or the folder in dired
+
+Enter ~/ at end of pattern to quickly reach home directory.
+Enter / at end of pattern to quickly reach root of your file system.
+Enter ./ at end of pattern to quickly reach `default-directory' (initial start of session). If you are in `default-directory' move cursor on top.
+*********** go up one directory level with ~C-l~
+You can also go up one directory level with ~C-l~
+
+$Note$ if you use C-l, Helm goes up one level and the cursor is on the directory you've just got out. If you want to go up and have the cursors on the parent directory, in Helm prompt, enter ../.
+
+*********** File and directory histories
+With prefix argument before running helm-find-files, Helm displays a list of visited directories. Select one at point transfer helm-find-files to that directory and you can start navigating there.
+
+During a helm-find-files session, you can get a list of visited files and directories with
+
+~C-c h~
+
+From there, the default action is RET to open the file/directory at point, or continue with helm-find-files starting at that file/directory.
+
+You can use M-p and M-n to move back and forth between previously visited directory.	    
+*********** create a directory/file
+enter a new name that does not exist in the current directory and append / at the end. After you created a directory, Helm continues in that directory.
+
+To create a new file, enter a name and select the top row that has the symbol [?] next to it. By default, Helm always selects the first match in the directory.
+
+*********** invoke grep on the current highlighting entry 
+You can invoke grep on the current highlighting entry by C-s. C-u C-s to perform recursive grep.
+*********** find file on point
+helm-find-files can be used to find file paths on point : all you need to do is moving your point on a proper filepath, and Helm will reach the correct path for you, similar to the screenshot. Now, you have no longer to use a separate command for open file at point, but using the same C-x C-f. It's really convenient.
+
+********** helm-man-woman (read manuals with org)
+    Key binding:
+
+    <prefix> m (prefix is C-x c by default, or C-c h if set).
+
+    Description:
+
+    With helm-man-woman, you can quickly jump to any man entry using Helm interface, either by typing in Helm prompt or if point is on a symbol, get a man page at point. To enable man page at point, add the following code:
+
+    (add-to-list 'helm-sources-using-default-as-input 'helm-source-man-pages)
+********** helm locate    
+Key binding:
+
+<prefix> l (prefix is C-x c by default, or C-c h if set).
+
+Description:
+
+Similar to helm-find, but use locate command and accepts search patterns according to locate input. Use helm-man-woman to read locate man page.
+
+To use local database, execute helm-locate with prefix argument C-u. You can also customize Helm to use locate with arguments of your choice:
 
 #+BEGIN_SRC emacs-lisp :results none
-(defun helm-mini ()
-  "Preconfigured `helm' lightweight version \(buffer -> recentf\)."
-  (interactive)
-  (require 'helm-files)
-  (let ((helm-ff-transformer-show-only-basename nil))
-    (helm-other-buffer '(helm-source-buffers-list
-                         helm-source-recentf
-                         helm-source-buffer-not-found)
-                       "helm mini")))
+(setq helm-locate-command "locate %s -e -A --regex %s")
 #+END_SRC
-We can see that it calls helm-other-buffer with 3 sources, first a list of open buffers, then the recent files and a source to create new files. It is possible to create custom commands with just the sources you might like.
-Helm sources
 
-Sources like helm-source-recentf configure what the source will contain 
+If you use helm-locate on a large directory and feel the update is too sluggish, you can always suspend the live updating with C-! and resume the live updating with C-! later.
+
+To enable fuzzy matching in helm-locate, add this setting:
+
+#+BEGIN_SRC emacs-lisp :results none
+(setq helm-locate-fuzzy-match t)	    
+#+END_SRC
+********** helm-occur
+Command: helm-occur
+
+Key binding:
+
+<prefix> M-s o (prefix is C-x c by default, or C-c h if set). Since this is a rather long binding, we should bind a more convenient key sequence:
+
+(global-set-key (kbd "C-c h o") 'helm-occur)
+
+Similar to occur, but using Helm interface. As you type, matching lines are updated immediately. This is convenient when you want to have a list of matches in the current buffer to jump back and forth. TAB to temporary move point to the location of current highlighting match. C-g cancels current Helm session and returns to the original location where helm-occur is invoked. RET on a match jumps to that match.
+
+********** helm-apropos
+<prefix> a (prefix is C-x c by default, or C-c h if set).
+
+Pre-configured helm to describe commands, functions, variables and faces - all in one command!. It is similar to C-h a which runs apropos-command, but interactive includes more than just commands. helm-apropos comprises of 5 sources:
+
+Commands: Lists all available commands.
+Fucntion: Lists all available functions.
+Classes: Lists all classes created by defclass. See Building Classes.
+Generic Functions: Lists all functions created by defmethod. See Writing Methods
+Variables: Lists all available variables.
+Faces: Lists all available faces.
+Helm attributes: Lists all attributes that you can use to build a Helm source. Useful if you want to write extension with Helm.
+To enable fuzzy matching, add this setting:
+
+(setq helm-apropos-function-list t)
+********** helm-info-*
+
+Key binding:
+
+<prefix> h <key> (prefix is C-x c by default, or C-c h if set); <key>, by defaults, is one of g, i or r:
+
+So, the prefix for info commands is <prefix> h. You can think of h as stands for help and <key> is one of the info topic to make it easier to remember and recall.
+
+helm offers a wide ranges of info commands for various topics. M-x helm info to see these commands, i.e. helm-info-as, helm-info-gdb… You can search for info nodes easily with Helm interface and TAB on an entry to view. M-<next> moves to the next page, M-<prior> moves to the previous page in the other buffer.
+
+You can have more helm-info- commands, such as:
+
+helm-info-gdb.
+helm-info-find.
+helm-info-elisp.
+
+Use M-x helm-info to see the list of helm-info- commands using the default info prefix: <prefix> h or key bindings of your choice.
+
+********** helm-resume
+
+Key binding:
+
+<prefix> b (prefix is C-x c by default, or C-c h if set).
+
+Description:
+
+This command allows you to resume the previous Helm session, along with your previous patterns in the prompt. For example, if your last helm session was helm-ff-run-grep and you entered patterns in Helm prompt, helm-resume resumes that session along with your previous input.
+
+With prefix argument, helm-resume allows you to choose among all existing Helm buffers. helm-mini or helm-buffer-list does not show existing Helm buffers; they ignore it by default; but if you run ibuffer, you will see a list of Helm buffers visible there. Don't kill them or you won't be able to resume.
+
+This is really convenient when you have complex input ,and preparation steps. For example, if you have multiple regexp patterns in your previous Helm session, then you don't have to type it again. Or in your previous Helm session, you have to travel to a deep directory, and helm-resume helps you to reuse your previous session without going through all the troubles again.
+********** TODO helm-all-mark-rings
+
+!check what is a mark ring//also check helm registers!
+
+Key binding:
+
+<prefix> C-c SPC (prefix is C-x c by default, or C-c h if set). This is a rather long key sequence, this command deserves a better binding, for example:
+
+(global-set-key (kbd "C-h SPC") 'helm-all-mark-rings)
+Description:
+
+One handy command. It allows you to view the content of the both the local and global mark rings in a friendly interface, so you can always jump back to where you were. Without this command, if you want to view the mark rings, you have to run M-: and enter mark-ring or global-mark-ring to view their contents. And even so, Emacs only displays the bare content of the mark-ring and global-mark-ring lists, which is the line number and its buffer like this:
+
+********** helm-top
+
+  Key binding:
+
+  <prefix> t (prefix is C-x c by default, or C-c h if set).
+
+  Description:
+
+  This command provides Helm interface for top program. You can interact with each process with the following actions:
+
+  Key	Binding
+  [f1]	kill (SIGTERM)
+  [f2]	kill (SIGKILL)
+  [f3]	kill (SIGINT)
+  [f4]	kill (Choose signal)
+  helm-top specific commands:
+
+  Key	Binding
+  C-c C-u	Refresh helm-top
+  M-C	Sort by shell commands
+  M-P	Sort by CPU usage
+  M-U	Sort by user
+  M-M	Sort by memory
+  user and shell commands are sorted alphabetically.
+
+********** helm-calcul-expression
+
+Key binding:
+
+<prefix> C-, (prefix is C-x c by default, or C-c h if set).
+
+Description:
+
+This commands provides a Helm interface for calc command
+
 ********* google-contacts
 
 http://julien.danjou.info/projects/emacs-packages#google-contacts
@@ -28266,6 +28679,19 @@ as the gui save may have issues
 'write-region' 
 will save the current marked region start end filename &optional append visit lockname mustbenew
 This function writes the region delimited by start and end in the current buffer into the file specified by filename.  
+******* sync
+******** sync Emacs between laptop and work	
+********* Main Emacs config is laptop.
+ I sync between laptop and work this way:
+I only pull (after first clone) Emacs config from github (using my work file:/~/bin/ugs.sh script)
+in addition to that every big update I need to manually zip and upload the nested .git directories (₆In example₆ org,ESS etc) to the NAS (under software >> emacs_sync folder
+********* tips
+you may have to create a hist file if you get this warrning
+#+BEGIN_SRC sh
+mkdir -p  /home/zeltak/.cache/emacs/hist/
+zeltak@zuni:~$ touch  /home/zeltak/.cache/emacs/hist/hist.txt
+#+END_SRC
+ 	 
 ******* Search Text, FindReplace Text
 ******** regex
 ********* escape characters
@@ -44725,6 +45151,18 @@ caudec -g /path/to/folder/.flac
 *** convert FLAC/APE cue to flac 
 for 'FLAC' use flacon to split the large flac to tracs
 for 'ape' files first use gnome soundconverter to convert from ape to flac (the bug music file) and then flacon to split to tracks
+*** fix broken tags for clerk proper operation
+if beets screws your tags do the following
+delete uneeded tags:
+
+#+BEGIN_EXAMPLE
+album artist
+trackc 
+discc 
+#+END_EXAMPLE
+
+also make sure there is no missing Dates/year and album etc entries (all base entries if tags need to be complete)
+
 ** Video 
 *** Importing Video workflow
 **** clean crap and junk files 

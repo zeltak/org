@@ -1,0 +1,2789 @@
+#+AUTHOR:    Fabrice Niessen
+#+EMAIL:     (concat "fniessen" at-sign "pirilampo.org")
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:4 num:2
+
+#+PROPERTY:  eval never
+#+PROPERTY:  exports both
+#+SETUPFILE: ~/src/org-style/setup/bigblow-pirilampo.setup
+
+* R reference card [[http://opensource.org/licenses/GPL-3.0][http://img.shields.io/:license-gpl-blue.svg]] [[https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=VCVAS6KPDQ4JC&lc=BE&item_number=refcard%2dR&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted][https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif]]
+
+Welcome to R reference card. It contains the reference documentation that
+describes how to perform *data analysis* using R.
+
+** Package                                                            :noexport:
+
+#+name: current-year
+#+begin_src emacs-lisp :eval yes :results silent :tangle no
+(format-time-string "%Y")
+#+end_src
+
+#+begin_src R :noweb yes :tangle Rlib.R
+#  Rlib.R -- Collection of utility and convenience functions
+#
+#  Copyright (C) 2014-<<current-year()>> Fabrice Niessen
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  A copy of the GNU General Public License is available at
+#  http://www.r-project.org/Licenses/
+#+end_src
+
+** Documentation
+
+- [[http://cran.r-project.org/doc/contrib/Short-refcard.pdf][R Reference Card]]
+- [[http://www.rdocumentation.org/][Search the documentation of R packages and R functions]]
+- [[http://www.statmethods.net/][Quick-R]] -- An excellent quick reference
+- Cookbook for R: http://www.cookbook-r.com/
+
+** Coding style
+
+- [[http://cran.r-project.org/doc/manuals/R-ints.html#R-coding-standards][R Internals manual, section 8. "R Coding Standards"]]
+
+- [[http://adv-r.had.co.nz/Style.html][R coding style guide]]
+
+- [[https://docs.google.com/document/d/1esDVxyWvH8AsX-VJa-8oqWaHLs4stGlIbk8kLc5VlII/edit?pli=1][R Coding Conventions]]
+
+- [[http://google-styleguide.googlecode.com/svn/trunk/Rguide.xml][Google R Style Guide]]
+
+  ~variable.name~ preferred (~variableName~ accepted) \\
+  ~FunctionName~ \\
+  ~kConstantName~
+
+  Place spaces around all binary operators (=, +, -, <-, etc.). \\
+  Exception: Spaces around ='s are optional when passing parameters in
+  a function call.
+
+  Do not place a space before a comma, but always place one after a comma.
+
+** Emacs Speaks Statistics (ESS) key bindings
+
+Most of the shortcuts are actually mnemonic and hierarchical:
+
+- ~C-c C-d~ for ~doc-map~,
+- ~C-c C-e~ for ~extra-map~,
+- ~C-c C-t~ for ~dev-map~ which includes mostly [t]racebug.
+
+*** References
+
+See
+- http://ess.r-project.org/refcard.pdf
+- http://www.damtp.cam.ac.uk/user/sje30/ess11/ess-slides.pdf
+
+*** Interacting with the ESS process
+
+**** Command History
+
+- ~M-r~ ::
+     Search for a regular expression backward in the command history (using
+     Isearch).
+
+     This is worth a wealth...
+
+**** Hot keys for common commands
+
+ESS handling of *multiple processes* is pretty unique.
+
+- ~C-c C-s~ ::
+     ess-switch-process
+
+- ~C-c C-q~ ::
+     Issue a ~q()~ command to the inferior process, and kill all the temporary
+     buffers.
+
+     Press ~C-c C-q~ + ~M-x R~ to quickly restart the R console (without restarting
+     the editor).
+
+**** Other commands provided by inferior-ESS
+
+- ~C-c C-z~ ::
+     *Switch to* the (most recent) *script buffer*.
+
+*** Sending code to the iESS process
+
+Primary process interaction commands:
+
+- ~C-M-x~ ::
+     *Send* the current *region or function or paragraph* to the ESS process.
+
+- ~C-c C-c~ ::
+     *Send* the current *region or function or paragraph* (defined as continuous set
+     of lines surrounded by a blank line at top and bottom) to the ESS process
+     *and step* to the next line of code, skipping comments.
+
+     If you group R statements into tasks, send the whole task to the R process
+     without selecting anything.
+
+- ~C-RET~ ::
+     *Send* the current *region or line* to the ESS process *and step* to the next
+     line of code.
+
+Other evaluation commands:
+
+- ~C-c C-b~ ::
+     *Send* the current *buffer* to the ESS process.
+
+- ~C-c C-r~ ::
+     *Send* the current *region* to the ESS process.
+
+- ~C-c C-f~ ::
+     *Send* the current *function* to the ESS process.
+
+- ~C-c C-p~ ::
+     *Send* the current *paragraph* to the ESS process *and step* to the next line of
+     code.
+
+- ~C-c C-n~ ::
+     *Send* the current *line* to the ESS process *and step* to the next line of code.
+
+*** Manipulating saved transcript files
+
+- ~C-u C-u C-y~ ::
+     *Paste cleaned commands* (from a region copied with ~M-w~) into a new R buffer
+     or at the prompt: remove all prompts and command output, leaving only the
+     commands.
+
+     This is handy if you paste code from iESS, mail buffers or PDF documents.
+
+*** Editing objects and functions
+
+**** Creating or modifying objects
+
+In-session function editing.
+
+- ~C-c C-e C-d~ ::
+     *Edit* the code of an *object* (such as the function ~lm~). Emacs opens a buffer
+     called ~<user-login-name>.<object>.R~.
+
+~C-c C-e d~ and ~C-c C-e C-d~ can open file versions of R functions. ~C-c C-e l~ sends
+same back.
+
+Other nice tools ( probably not available in other editors):
+
+- ~C-c C-e i~ :: ~ess-install-library~
+- ~C-c C-e l~ :: ~ess-load-library~
+- ~C-c C-e C-w~ :: ~ess-execute-screen-options~
+
+**** Loading source files into the ESS process
+
+- ~C-c C-l~ ::
+     *(Re-)Load a file* into the ESS process using ~source()~.
+
+     This usually works better than ~C-c C-c~ for reporting parsing errors /with
+     a trace/.
+
+**** Commands for motion, completion and more
+
+- ~C-c C-z~ ::
+     *Switch to* the associated *iESS process buffer*.
+
+***** Tags Tables
+
+- ~C-c C-e C-t~ ::
+     Build tag tables.
+
+     After building tags, use ~M-.~ to *jump to* function and objects *definitions*.
+
+Probably the most used command of mine is imenu-anywhere.
+
+   (global-set-key (kbd "C-.") 'imenu-anywhere)
+
+and you will be able to navigate to the definition of the symbol at point as
+long as the other file is open. This is like tag navigation but more convenient
+IMO. Both ido and helm interfaces are available.
+
+*** Reading help files
+
+Help at your fingertips:
+
+- ~C-c C-d C-d~ (or ~C-c C-v~) ::
+     Display *R help* on an object (which has an help file) *in Emacs*, for example
+     for the function call you're currently writing.
+
+     Same as typing ~?<object>~ in the iESS buffer.
+
+     Then Press ~l~ to *run example* in R help page, *line by line*.
+
+- ~C-c C-d C-a~ ::
+     Create an Apropos buffer with a linked list of apropos topics.
+
+- ~C-c C-d i~ ::
+     Display index of package.
+
+- ~C-c C-d C-v~ ::
+     Display vignettes.
+
+- ~C-c C-d C-e~ ::
+     *Describe object at point*.
+
+     Repeat ~C-e~ to cycle through the list of commands:
+     + ~str()~,
+     + ~htsummary()~,
+     + ~summary()~.
+
+- ~C-c C-d o~ ::
+     Create an Demos buffer with a linked list of available demos.
+
+- ~C-c C-d C-w~ ::
+     Search the web for documentation.
+
+*** Completion
+
+**** Integration with auto-complete package
+
+Auto-completion of objects and arguments:
+http://www.emacswiki.org/emacs/ESSAuto-complete.
+
+*** Developing with ESS
+
+**** ESS tracebug
+
+Tracebug highlighting of errors.
+
+***** Breakpoints
+
+- ~C-c C-t b~ ::
+     Set breakpoint (repeat to cycle through the breakpoint types: ~browser~ and ~recover~).
+
+- ~C-c C-t B~ ::
+     Set conditional breakpoint.
+
+- ~C-c C-t l~ ::
+     Set logger breakpoint.
+
+- ~C-c C-t o~ ::
+     Toggle the active/commented state of the breakpoint.
+
+- ~C-c C-t k~ ::
+     Kill breakpoint.
+
+- ~C-c C-t K~ ::
+     Kill all breakpoints.
+
+- ~C-c C-t n~ ::
+     Go to next breakpoint.
+
+- ~C-c C-t p~ ::
+     Go to previous breakpoint.
+
+(~C-~ prefixed equivalents are also defined)
+
+***** Debugging
+
+- ~C-c C-t `~ (also on ~C-c `~) ::
+     Show Traceback buffer (display source locations).
+
+- ~C-c C-t ~~ (also on ~C-c ~~) ::
+     Show call stack (display source locations).
+
+- ~C-c C-t e~ ::
+     Toggle *on-error action* (repeat to cycle):
+     + ~NONE~ ("-" in the mode line)
+     + ~RECOVER~ ("r" in the mode line)
+     + ~TRACEBACK~ ("t" in the mode line)
+
+- ~C-c C-t d~ ::
+     Flag for debugging.
+
+- ~C-c C-t u~ ::
+     Unflag for debugging.
+
+- ~C-c C-t w~ ::
+     Use ~ess-watch~ while debugging to see variables change at each step, or even
+     just at the prompt.
+
+(~C-~ prefixed equivalents are also defined)
+
+***** Interactive debugging
+
+- ~M-C~ ::
+     Continue
+
+- ~C-M-S-c~ ::
+     Continue multi
+
+- ~M-N~ ::
+     Next step
+
+- ~C-M-S-n~ ::
+     Next step multi
+
+- ~M-U~ ::
+     Up frame
+
+- ~M-Q~ ::
+     Quit debugging
+
+***** Navigation to errors
+
+#+begin_src R
+source(file="missing-file.R")
+list(a=22, b=343)
+^
+protocol <- NULL
+paste("{**", })
+stop("Test error")
+#+end_src
+
+The arrow in the left fringe of the iESS buffer is an indicator of the *beginning
+of the last evaluation*.  It helps you to quickly pinpoint the first error (often
+the most relevant one) in the ~*R*~ buffer by searching for this arrow.
+
+Error navigation in the ~*R*~ buffer is limited to the region between this arrow
+and the end of the buffer.
+
+- ~M-g n~ (~M-x next-error~) ::
+     Next error.
+
+- ~M-g p~ (~M-x previous-error~) ::
+     Previous error.
+
+***** Tracebug visual debugger
+
+**** ESS developer
+
+- ~C-c C-t C-a~ ::
+     Add a package to your development list.
+
+- ~C-c C-t C-t~ ::
+     Toggle developer mode on and off.
+
+- ~C-c C-t l~ ::
+     ess-developer-load-package (this one is in ESS dev as yet).
+
+*** Other ESS features and tools
+
+**** ElDoc
+
+*ElDoc* support: automatic display of function arguments in the *echo area*.
+
+*** Other Emacs features and tools
+
+I would add C-s and C-r to search in the help buffer and M-\ to indent
+
+Also the ability to mix in other, general purpose Emacs tools:
+
+paredit-mode to give me good shortcuts to navigate around and manipulate
+parentheses and braces,
+
+git-gutter-mode to keep tabs on lines I've changed in a file.
+
+M-/ to complete long words the second time I type them.
+
+** 0. Overview of R
+
+R system that you download from [[http://cran.r-project.org/][CRAN]]:
+- ~base~ package
+- Familiar packages (~utils~, ~datasets~, ...)
+- Recommended packages (~lattice~, ...)
+- 4,000 other packages
+
+[[http://cran.r-project.org/doc/contrib/Short-refcard.pdf][R Reference Card]]
+
+Some [[http://cran.r-project.org/manuals.html][R manuals]]:
+- [[http://cran.r-project.org/doc/manuals/R-intro.html][An introduction to R]]
+- [[http://cran.r-project.org/doc/manuals/r-release/R-data.html][R data import/export]]
+- [[http://cran.r-project.org/doc/manuals/R-exts.html][Writing R extensions]]
+
+** 1. Getting started and getting help
+
+#+begin_src R
+?function
+?dataset
+package ? lattice
+library(help=lattice)
+#+end_src
+
+- ~args(function)~ ::
+     Look at the arguments of a FUNCTION.
+
+Other ways:
+- [[http://www.google.com/][Google]]
+- [[mailto:r-help@r-project.org][R general mailing list]]
+- [[http://stackoverflow.com/questions/tagged/r][Stack Overflow]]
+
+** 2. Some basics
+
+*** Print something
+
+- ~print(object)~ ::
+     Explicitly print out an object.
+
+- ~cat()~ ::
+     Concatenate together a set of strings and prints out the concatenated
+     string (to a file or to the console).
+
+*** Setting variables
+
+- ~<-~ ::
+     Assign a value to a variable.
+
+*** Listing variables
+
+- ~ls()~, ~ls.str()~ ::
+     Show objects in my workspace.
+
+*** Deleting variables
+
+- ~rm()~ ::
+     Remove objects from your workspace.
+
+     #+begin_src R
+     rm(list=ls())                      # remove everything from the workspace
+     #+end_src
+
+*** Computing basic statistics
+
+- ~mean()~ ::
+     Take the mean.
+
+- ~median()~ ::
+     Take the median.
+
+- ~cor()~ ::
+     Correlation function.
+
+*** Creating sequences
+
+- ~n:m~ ::
+     Create an *sequence of* integers from ~n~ to ~m~ (~n~ < ~m~ or ~n~ > ~m~).
+
+- ~seq(from, to, len)~ ::
+     Create a *sequence of* ~len~ equally spaced fractional numbers.
+
+- ~rep(x, times)~ ::
+     Create a series of repeated values.
+
+*** Operators
+
+- ~==~ ::
+     Compare.
+
+- ~%in%~ ::
+     Test membership.
+
+** 3. Navigating the software
+
+- ~library(package)~ ::
+     Load PACKAGE.
+
+     #+begin_src R
+     library(datasets)
+     airquality
+     #+end_src
+
+- ~data(dataset)~ ::
+     Load DATASET.
+
+- ~source("file.R")~ ::
+     Evaluate R code file.
+
+*** Running a batch script
+
+You may write a script containing R code:
+
+#+begin_src sh
+#!/usr/bin/env Rscript
+
+argv <- commandArgs(TRUE)
+x <- as.numeric(argv[1])
+
+# etc.
+
+png("graph.png", 500, 500)
+plot(graph)
+graphics.off()
+#+end_src
+
+** 5. Data structures
+
+What is data?
+
+- Population ::
+     Set of items.
+
+- Variable ::
+     Measurement or characteristic.
+
+     + Qualitative ::
+          Can be defined by a label and have discrete values.
+
+     + Quantitative ::
+          Measured on a numerical scale.
+
+*** Basic ("atomic") vector types
+
+| Class       | Example                         |
+|-------------+---------------------------------|
+| ~logical~   | ~TRUE~ / ~FALSE~                |
+| ~integer~   | ~1L~ (with explicit ~L~ suffix) |
+| ~numeric~   | ~0.5~ or ~1~ (/real/ numbers)   |
+| ~complex~   | ~1+0i~                          |
+| ~character~ | "hello" (= lowest class)        |
+
+- ~class()~ ::
+     Show the class of the object.
+
+     #+begin_note
+     Note that an object can belong to more than one class.
+     #+end_note
+
+- ~unclass(vector)~ ::
+     Strip out the class (see factors).
+
+*** Vectors
+
+*Vectors* are sets of *elements of the same class*.
+
+When objects of different classes are mixed in a vector, /coercion/ occurs behind
+the scene so that every element is of the same class (the "lowest common
+denominator" class).
+
+- ~c()~ ::
+     Create a vector of objects (that is, *concatenate* or combine things
+     together).
+
+- ~vector(class, length)~ ::
+     Create an empty vector.
+
+- ~names()~ ::
+     Show or give a name to each *element* of a vector.
+
+     #+begin_src R
+     names(df) <- tolower(names(df))
+     #+end_src
+
+- ~length()~ ::
+
+*** Matrices
+
+Matrices are *vectors with 2 dimensions* attached to them (see ~dimension~
+attribute).
+
+They are constructed /column-wise/ (vector inserted by column).
+
+They can be created from vectors by adding a dimension attribute:
+
+#+begin_src R
+v <- 1:10
+dim(v) <- c(2, 5)
+print(v)
+#+end_src
+
+#+results:
+| 1 | 3 | 5 | 7 |  9 |
+| 2 | 4 | 6 | 8 | 10 |
+
+They can be created by /column-binding/ or /row-binding/.
+
+- ~matrix(nrow=x, ncol=y)~ ::
+     Create an empty matrix.
+
+- ~cbind()~ ::
+     Column-bind (if the row order matches; otherwise, use ~merge~).
+
+- ~rbind()~ ::
+     Row-bind.
+
+*** Arrays
+
+Arrays are *n-dimensional matrices*.
+
+- ~array()~ ::
+     Create an array.
+
+*** Lists
+
+*Lists* are vectors of objects of possibly different classes.
+
+The indexes of the elements of a list have double brackets around them.
+
+- ~list()~ ::
+     Construct a list.
+
+*** Factors
+
+*Factors* are /qualitative/ variables used to represent /categorical/ data, to store
+self-describing codes for /labels/ (such as "male" and "female", or "low",
+"medium" and "high").
+
+Unordered or ordered.
+
+- ~factor(character vector)~ ::
+     Create a factor variable (with levels by alphabetical order).
+
+     *Drop the levels that do not occur.*
+
+- ~levels(x)~ ::
+     Return the value of the levels.
+
+*** Data frames
+
+*Data frames* are used to store tabular data where each column can be of
+a different class: special type of *list (of columns)* where every element has the
+same length.
+
+- Row = observation, column = variable
+- Special attribute ~row.names~ (every row has a name, or defaults to a sequence
+  of integers)
+- Most often created by calling ~read.table()~ or ~read.csv()~
+
+- ~data.frame()~ ::
+     Create a data frame.
+
+     #+begin_src R
+     df <- data.frame(cbind(v1, v2))    # create a dataframe of two vectors
+     #+end_src
+
+- ~data.matrix()~ ::
+     Convert a data frame to a /numeric/ matrix (forced *coercion*!).
+
+- ~names()~ ::
+     Tell the names of each *column* included in the data frame.
+
+*** Tables
+
+By using the function [[id:5d29be63-e58c-4ef3-b28e-2818b65fd46f][~table~]], you create a ~table~ object.
+
+#+begin_note
+If you sort it, it creates an ~array~ object (an object of a different class). Add
+~as.table~ to get back a table object.
+#+end_note
+
+*** Vectorized operations (recycling rule)
+
+Avoid writing loops (code is a lot simpler):
+
+#+begin_src R
+x + y                                   # element-wise addition
+#+end_src
+
+Similar for the matrices:
+
+#+begin_src R
+x * y                                   # element-wise multiplication
+x %*% y                                 # true matrix multiplication
+#+end_src
+
+*** Selecting list elements or data frame columns by position (subsetting)
+
+- ~[~ ::
+     Return an *object* of the *same class as the original*: a list of elements (or
+     a data frame built from multiple columns). The data type is *preserved*.
+
+     Extract multiple elements of a list:
+
+     #+begin_src R
+     x[c(1, 3)]
+     #+end_src
+
+     Remove the first column:
+
+     #+begin_src R
+     df[, -1]
+     #+end_src
+
+- ~[[~ ::
+     Extract a *single element of a list* (or a single column of a data frame) *by
+     index*.
+
+     Can be used with /computed/ indices.
+
+     Can extract nested elements of a list:
+
+     #+begin_src R
+     x[[1]][[3]]                        # same as: x[[c(1, 3)]]
+                                        # third element of the first element
+     #+end_src
+
+     Partial matching allowed at the command-line:
+
+     #+begin_src R
+     x[["a", exact=FALSE]]              # instead of: x[["aardvark"]]
+     #+end_src
+
+*** Selecting list elements or data frame columns by name (subsetting)
+
+- ~$~ ::
+     Extract a *single element of a list* (or a single column of a data frame) *by
+     name*: you don't have to remember where the element is in the list.
+
+     #+begin_src R
+     x$bar                              # same as x[["bar"]]
+     #+end_src
+
+     Can only be used with literal names.
+
+     Partial matching allowed at the command-line:
+
+     #+begin_src R
+     x$a                                # instead of: x$aardvark
+     #+end_src
+
+#+begin_note
+The only (typical data) class that uses ~$~ as a accessor is *list* (from which
+*dataframes* inherit).  Hence, you can't use ~$~ notation with *matrices*.  You need
+to use ~x["ratio"]~ or ~x[["ratio"]]~.
+#+end_note
+
+*** Selecting data frame columns by position (subsetting)
+
+Matrices can be subsetted with ~(row, col)~ type indices.
+
+Indices can also be missing:
+- ~x[i, ]~ :: Row i.
+- ~x[, j]~ :: Column j.
+
+By default,
+
+- a single element is retrieved as a vector of length 1 rather than a 1x1
+  matrix.
+
+- a single column or a single row is retrieved as a vector, not as a matrix.
+
+This can be turned off by setting ~drop=FALSE~ (don't drop the dimension).
+
+*** ~which~
+
+- ~which~ ::
+     Return (a vector of) the *indices* of the elements which *are ~TRUE~* --
+     instead of a (longer) vector of Booleans (~TRUE~ / ~FALSE~).
+
+     This is computationally efficient.
+
+#+begin_note
+When you use ~[~ to extract from a dataframe, any calculation in the row position
+that results in ~NA~ will get a junk row returned. Using ~which~ *removes the
+~NA~'s*. You can use ~subset~ or ~%in%~, which do not create the same problem.
+#+end_note
+
+*** Flatten a list into a vector
+
+- ~unlist~ ::
+     Flatten the *list into* a *vector* (for functions which work on vectors but not
+     on lists.)
+
+** Control structures
+
+Control structures mentioned here are primarily useful for writing programs.
+For command-line interactive work, the ~*apply~ functions are more useful.
+
+*** Conditional statements
+
+#+begin_src R
+if (condition) {
+  ## do something
+} else {
+  ## do something else
+}
+#+end_src
+
+Here, the entire ~if/else~ construct is all about assigning a value to ~y~:
+
+#+begin_src R
+y <- if(x > 3) {                        # x must be a scalar here, not a vector
+  10
+} else {
+  0
+}
+#+end_src
+
+*** Loops
+
+Loop over the *elements*:
+
+#+begin_src R
+for (x in xs) {                         # take elements from the vector
+  ## do something
+}
+#+end_src
+
+Loop over the *numeric indices*:
+
+#+begin_src R
+for (i in seq_along(xs)) {              # successive values from a sequence or
+  ## do something                       # vector
+}
+#+end_src
+
+- ~seq_along(vector)~ ::
+     Create an integer sequence that's equal to the *length of the input vector*.
+
+- ~seq_len(integer)~ ::
+     Create an integer sequence that's as long as the integer in input.
+
+- ~nrow(dataset)~ ::
+     Tell the number of rows.
+
+- ~ncol(dataset)~ ::
+     Tell the number of columns.
+
+Loop over the *names*:
+
+#+begin_src R
+for (nm in names(xs)) {
+  ## do something
+}
+#+end_src
+
+#+begin_src R
+while (z >= 3 && z <= 10) {             # conditions are always evaluated from
+                                        # left to right
+  ## do something
+}
+#+end_src
+
+Initiate an infinite loop:
+
+#+begin_src R
+repeat {
+  ## do something
+  if(<condition>) {
+    break                               # only way to exit a repeat loop
+  }
+}
+#+end_src
+
+- ~break~ ::
+     Break the iteration of a loop.
+
+- ~next~ ::
+     Skip an iteration of a loop.
+
+- ~return~ ::
+     Exit an entire function and return a given value.
+
+Better to use a ~for~ loop with an hard limit on the number of iterations that
+it's allowed to run.
+
+** Writing functions
+
+- Functions are R objects of class ~function~
+
+  #+begin_src R
+  MyFunction <- function(arguments) {
+    # Function documentation.
+    ## do something
+  }
+  #+end_src
+
+- Functions can be *passed as arguments to other functions*
+
+- Functions can be nested, so that you can define a function inside of another
+  function (implications: see *lexical scoping*)
+
+- You can omit ~return~ if you want to return the *last value* produced in function.
+
+- 3 types of...
+  + formal argument
+  + local variable
+  + free variable
+
+- R *pass arguments by copy*, not by reference.
+
+  #+begin_note
+  To add a column in the data frame within a function, return new values either
+  by ~return(data_frame_I_work_with)~ or ~return(column_I_made)~.
+  #+end_note
+
+*** Arguments
+
+- /Named arguments/ can potentially have /default values/ (useful: not every
+  function call makes use of all the formal arguments; some can be /missing/)
+
+- The /formal arguments/ are the arguments included in the function definition
+
+- ~formals()~ returns a list of all the formal arguments of a function
+
+- Arguments can be matched *positionally* or *by name*
+
+  + When an argument is matched by name, it is "taken out" of the argument list
+    and the remaining unnamed arguments are matched in the order that they are
+    listed in the function definition
+
+- Named arguments help when:
+
+  + you want to use the defaults for everything except for an argument near the
+    end of the list
+
+  + you can't remember the position of the argument
+
+- Function arguments can also be partially /matched/
+  1. Check for an exact match
+  2. Check for a partial match
+  3. Check for a positional match
+
+- When defining a function, you can also set an argument value to ~NULL~ (there
+  is *no value* there)
+
+- Arguments to functions are evaluated /lazily/ (only when needed to be evaluated
+
+- The ~...~ argument indicates a variable number of arguments
+
+  + Used when extending a function and you don't want to copy the entire
+    argument list of the original function
+
+  + Used by generic functions (such as ~mean~) so that extra arguments can be
+    passed to methods
+
+  + Used when the number of arguments cannot be known in advance (see ~paste~
+    function)
+
+  + Any argument that appears /after/ the ~...~ must be named explicitly and cannot
+    be partially matched
+
+*** Scoping rules for R
+
+- R searches through the /search list/ (a series of ~environments~, an environment
+  being a collection of symbol/value pairs) to bind the appropriate value to
+  a symbol:
+
+  + Search the global environment ~.GlobalEnv~ (always the first)
+
+  + Search the namespaces of each of the packages on the search list
+
+    #+begin_src R
+    search()                            # find the search list
+    #+end_src
+
+  + Search the ~base~ package (always the last element)
+
+- Last loaded package gets put in position 2 of the search list and everything
+  else gets shifted
+
+- Separate namespaces for functions and non-function objects
+
+- R uses *lexical* (or /static/) *scoping* (instead of /dynamic scoping/): /the value of
+  free variables are searched for in the environment in which the function/ /was/
+  *defined* (until the empty environment, after the ~base~ package)
+
+  + With *dynamic* scoping, the value of free variables is looked up in the
+    environment from which the function was *called* (/calling environment/ = /parent
+    frame/) -- see slide 24 of "Scoping Rules for R" for a comparative example
+
+  + Other languages that support lexical scoping: Scheme, Perl, Python, Common
+    Lisp
+
+  + Consequences: all objects must be stored in memory, and all functions must
+    carry a *pointer to their respective defining environment*
+
+- Every environment has one parent environment (next thing down on the search
+  list); it is possible for an environment to have mulitple "children"
+
+- A function + an environment = a (/function/) /closure/
+
+- In R (unlike C), you can have functions defined /inside other functions/ -- in
+  this case, the environment in which a function is defined is the body of
+  another function!
+
+  #+begin_src R
+  make.power <- function(n) {           # "constructor" function
+    pow <- function(x) {
+      x^n                               # n is a free variable (not defined
+                                        # inside pow)
+    }
+    pow                                 # return function as return value
+  }
+  #+end_src
+
+  This function returns another function as its value
+
+  #+begin_src R
+  cube <- make.power(3)
+  square <- make.power(2)
+  #+end_src
+
+- Functions:
+
+  + ~environment(f)~ ::
+
+  + ~parent.env(environment)~ ::
+       Next thing down on the search list
+
+  + ~ls(environment)~ ::
+       List all the variables in the environment
+
+  + ~get(object, environment)~ ::
+       Get the value of an object inside an environment
+
+** 4. Data Input and output
+
+Types of files:
+- Tab-delimited
+- CSV
+- Excel
+- JSON
+- HTML/XML
+- Database
+
+*** Getting the current working directory
+
+- ~getwd()~ ::
+     Figure out what your *working directory* is.
+
+*** Creating, opening and closing connections
+
+- ~file()~ ::
+     + ~description~ is the name of the file
+     + ~open~ is a code (read-only, write, append)
+
+     #+begin_src R
+     con <- file("./data/cameras.csv", "r")
+     cameraData <- read.csv(con)
+     close(con)
+     #+end_src
+
+*** Make your data available (for StackOverflow)
+
+Data can now be imported directly into R without the ~textConnection~ function,
+simply by doing this:
+
+#+begin_src R :results value replace :eval yes :rownames yes :colnames yes
+df.str <- "State	Abbreviation
+Alabama	AL
+Alaska	AK
+Arizona	AZ
+Arkansas	AR
+California	CA"
+df <- read.table(text=df.str, header = TRUE)
+#+end_src
+
+#+results:
+|   | State      | Abbreviation |
+|---+------------+--------------|
+| 1 | Alabama    | AL           |
+| 2 | Alaska     | AK           |
+| 3 | Arizona    | AZ           |
+| 4 | Arkansas   | AR           |
+| 5 | California | CA           |
+
+or:
+
+#+begin_src R :results value replace :eval yes :rownames yes :colnames yes
+df.str <- "State,Abbreviation
+Alabama,AL
+Alaska,AK
+Arizona,AZ
+Arkansas,AR
+California,CA"
+df <- read.csv(text=df.str, header = TRUE)
+#+end_src
+
+#+results:
+|   | State      | Abbreviation |
+|---+------------+--------------|
+| 1 | Alabama    | AL           |
+| 2 | Alaska     | AK           |
+| 3 | Arizona    | AZ           |
+| 4 | Arkansas   | AR           |
+| 5 | California | CA           |
+
+*** Reading tabular data files
+
+- ~read.table(file)~ ::
+     Read tabular data file, create data frame.
+
+     Important arguments:
+     + ~file~
+     + ~header~
+     + ~sep~ (defaults to the *space*)
+     + ~quote~
+     + ~colClasses~ (class of each column, also used to *skip columns*)
+     + ~nrows~
+     + ~skip~ (number of lines to skip from the beginning)
+     + ~comment.char~
+     + ~stringsAsFactors~ (defaults to ~TRUE~)
+     + ~text~ to *feed your data text representation* directly to ~read.table~
+
+  #+begin_src R
+  data <- read.table("./data/file.txt", header=T, sep="\t", quote="")
+  #+end_src
+
+For *large datasets*:
+
+- Set ~comment.char~ = "" if there are no comments in your file.
+
+- Use the ~colClasses~ argument.
+
+  Quick and dirty way to figure out the classes of each column (if there aren't
+  any classes that you want to change from their defaults): read in the first
+  rows, /determine the classes from that/, and then import the rest of the file.
+
+  #+begin_src R
+  tabSample <- read.table("datatable.txt", nrows=100)
+  classes <- sapply(tabSample, class)
+  tabAll <- read.table("datatanble.txt", colClasses=classes)
+                                        # save time on importing data
+  #+end_src
+
+- Set ~nrows~ helps with memory usage.
+
+R equivalent of Linux ~cut~ (to read only certain columns from a file):
+
+#+begin_src R
+whichCols <- rep("NULL", 28)            # assuming 28 colums
+whichCols[c(1, 5, 28)] <- NA
+df <- read.table(file, colClasses=whichCols)
+#+end_src
+
+To call some shell script to do the column extraction and then using
+~read.table~ on its output:
+
+#+begin_src R
+df <- read.table(pipe("cut -f1,5,28 myFile.txt"))
+#+end_src
+
+*** Writing tabular data files
+
+- ~write.table()~ ::
+     Write data.
+
+*** Reading from CSV files
+
+- ~read.csv(file)~ ::
+     Read data from CSV file, create data frame.
+     + ~header~ (defaults to ~TRUE~)
+     + ~separator~ (defaults to *comma*)
+     + ~na.strings~ ("NULL", defaults to "NA")
+
+     #+begin_src R
+     data <- read.csv("./data/file.csv")
+
+     read.csv(file.choose())            # pick a file
+     #+end_src
+
+     It calls ~read.table~ with some default values. To look at them, just look at
+     the code of ~read.csv~ by typing ~read.csv~ and hitting <enter> at your
+     R command line).
+
+- ~read.csv2(file)~ ::
+     Read data from CSV file, create data frame.
+     + ~header~ (defaults to ~TRUE~)
+     + ~separator~ (defaults to ~;~)
+
+*** Reading from Excel files
+
+- ~read.xlsx()~, ~read.xlsx2()~ ::
+     Read Excel files.
+
+You can also read from Excel spreadsheets using RODBC and ~sqlQuery~.
+
+*** Reading from Google spreadsheets
+
+#+begin_src R
+require(RCurl)
+myCsv <- getURL("https://docs.google.com/spreadsheet/pub?...&output=csv")
+read.csv(textConnection(myCsv))
+#+end_src
+
+*** Reading files from the Internet
+
+- ~download.file()~ ::
+     Download a file from the Internet.
+
+     Be sure to record when you downloaded it.
+
+     #+begin_src R
+     fileUrl <- "http://..."
+     download.file(fileUrl, destfile="./data/file.csv", method="curl")
+     #+end_src
+
+*** Reading files with a complex structure
+
+- ~readLines()~ ::
+     Read lines of text from a connection.
+
+     /Connections/ can be made to:
+     - ~file~ (most common)
+     - ~gzfile~, file compressed with ~gzip~
+     - ~bzfile~, file compressed with ~bzip2~
+     - ~url~
+
+     *Remember to close connections*.
+
+     #+begin_src R
+     con <- url("http://scholar.google.com/citations")
+     htmlCode <- readLines(con)
+     close(con)
+
+     # get data off webpages
+     html3 <- htmlTreeParse("...")
+
+     # find value of title tag
+     xpathSApply(html3, "//title", xmlValue)
+
+     # access parts of the table
+     xpathSApply(html3, "//td[@id='col-citedby']", xmlValue)
+     #+end_src
+
+*** Reading from SQL Server databases
+
+#+begin_src R
+## install.packages("RODBC")
+library(RODBC)
+
+## channel <- odbcConnect("DSN", uid="username", pwd="password")
+## channel <- odbcDriverConnect("DSN=DSN;UID=username;PWD=password")
+
+## channel <- odbcDriverConnect("driver={SQL Server};server=hostname;database=dbname;trusted_connection=true")
+channel <- odbcDriverConnect("driver={SQL Server};server=hostname;database=dbname;uid=username;pwd=password")
+
+# Check that connection is working.
+if (channel == -1L) {
+  stop("Error establishing an ODBC connection.")
+} else
+  odbcGetInfo(channel)
+
+sql <-
+ "SELECT *
+  FROM table"
+sql <- gsub("\n", " ", sql)             # optional
+
+df <- sqlQuery(channel, sql)
+
+if (is.character(df)) {                 # SQL error (no data frame returned)
+  stop(paste(df, collapse="\n"))
+} else if (nrow(df) == 0) {
+  cat("No data\n")
+} else
+  print(head(df))
+
+odbcClose(channel)
+#+end_src
+
+#+begin_tip
+- Check the class of each column with ~lapply(df, class)~!
+- Display the factor columns with ~df[sapply(df, is.factor)]~!
+#+end_tip
+
+#+begin_src R
+if (transaction) sqlQuery(channel, 'START TRANSACTION')
+
+if (success & transaction) {
+  sqlQuery(channel, 'COMMIT')
+} else if (transaction){
+  sqlQuery(channel, 'ROLLBACK')
+}
+#+end_src
+
+There is a convergence movement to the DBI package.
+
+[[https://github.com/agstudy/rsqlserver][rsqlserver]] is part of it, but it is less mature than RODBC (though it's still
+high quality).
+
+*** Saving and transporting objects
+
+Textual formats (potentially recoverable in case of corruption).
+
+- ~dput()~ ::
+     Deparse a single R object.
+
+- ~dump()~ ::
+     Can be used on multiple R objects.
+
+*** Further resources
+
+Packages:
+
+- ~httr~ ::
+     For working with HTTP connections.
+
+- ~RMySQL~ ::
+     For interfacing with mySQL.
+
+- ~bigmemory~ ::
+     For handling data larger than RAM.
+
+- ~foreign~ ::
+     For getting data into R from SAS, SPSS, Octave, etc.
+
+** 12. Useful tricks
+   
+*** Peeking at your data
+
+- ~head()~ ::
+     Look at the first 6 rows.
+
+- ~tail()~ ::
+     Look at the last 6 rows.
+
+- ~str()~ ::
+     /Compactly/ display the internal *structure* (*classes*, etc.) of an object.
+
+     Alternative to ~summary()~.
+
+     When applied to functions, show the *arguments*.
+
+     #+begin_src R
+     str(.Platform)                     # what is the operating system
+     #+end_src
+
+- ~attributes()~ ::
+     Access (set or modify) the (list of) attributes of an object.
+
+** 9. General statistics
+
+*** Summarizing your data
+
+- ~range()~ ::
+     Give the *min* and the *max* (vector 2 elements) of the observations (vector of
+     numbers).
+
+     Useful to give the *extremes of a range to the ~xlim~ and ~ylim~ arguments* of an
+     axis.
+
+     #+begin_src R
+     yrange <- range(c(x1, x2, x3))
+     #+end_src
+
+- ~summary()~ ::
+     Produce a summary of the object.
+
+     Display the *number of NA values* in each column.
+
+*** Tabulating factors
+    :PROPERTIES:
+    :ID:       5d29be63-e58c-4ef3-b28e-2818b65fd46f
+    :END:
+
+- <<table>> ~table(f)~ ::
+     *Count* the number of observations in each /level/ (only works on /factors/).
+     Give a *frequency* of how many levels there are (sorted by level).
+
+     #+begin_note
+     This creates a ~table~ object.
+     #+end_note
+
+     #+begin_src R
+     unique(df$f)
+     length(unique(df$f))               # how many unique values
+
+     table(df$f, useNA="ifany")         # number of times each unique value
+                                        # appears (show missing values as well)
+     #+end_src
+
+     Sort by decreasing count:
+
+     #+begin_src R
+     sort(table(df$f, useNA="ifany"), decreasing=TRUE)
+     #+end_src
+
+     *Convert it* into a data frame if you're more comfortable working with that:
+
+     #+begin_src R
+     as.data.frame(table(df$f, useNA="ifany"))
+     #+end_src
+
+     Relative frequencies:
+
+     #+begin_src R
+     tbl <- table(df$f, useNA="ifany")
+     tbl / sum(tbl)
+     #+end_src
+
+     Use the ~cut~ function to calculate tables with /numeric/ values.
+
+     #+begin_src R
+     f <- cut(df$x, breaks=30)          # use `labels' to give nice names
+     table(f, useNA="ifany")
+     #+end_src
+
+     Draw a useful graphical summary (to describe proportions):
+
+     #+begin_src R
+     pie(table(df$x))
+     pie(sort(table(df$x)))             # bigger and bigger
+     #+end_src
+
+- ~table(f1, f2)~ ::
+     Produce a /contingency table/ (cross-tabulation).
+
+     #+begin_src R
+     table(df$f1, df$f2)                # look at the relationship between f1
+                                        # and f2
+     #+end_src
+
+- ~ftable(f)~ ::
+     3-dimensional contingency table.
+
+*** Testing categorical variables for independence
+
+#+begin_src R
+summary(table(f1, f2))
+#+end_src
+
+Conventionally, a /p/-value of less than 0.05 indicates that the variables are
+likely not independent (there is some connection between the variables).
+
+*** Calculating quantiles (and quartiles) of a dataset
+
+#+begin_src R
+quantile(vec, na.rm=TRUE)
+#+end_src
+
+** 6. Data transformations
+
+(Partial list of) munging operations (= key process)
+- *These steps must be recorded* in their own R script
+- *90% of your effort will often be spent here*
+
+Processed (*tidy*) data:
+- Each variable forms a column.
+- Each observation forms a row.
+- Each table / file stores data about one kind of observation.
+
+*** Fixing variable names
+
+#+begin_src R
+tolower(names(df))
+#+end_src
+
+#+begin_src R
+splitNames <- strsplit(names(df), "\\.") # split at period in names
+firstElement <- function(x) x[1]        # select the 1st component of the vector
+sapply(splitNames, firstElement)        # remove everything after the trailing
+                                        # dot
+#+end_src
+
+#+begin_src R
+gsub("_", "", names(df))
+#+end_src
+
+Rename one named column:
+
+#+begin_src R
+colnames(df)[colnames(df) == "old"] <- "new"
+#+end_src
+
+*** Creating new variables
+
+#+begin_src R
+df$ranges <- ranges                     # add a variable to the data frame
+#+end_src
+
+*** Change the class of many columns from factor to character (or numeric)
+
+#+begin_src R
+unfactor.cols <- c("V1", "V2")
+d[, unfactor.cols] <- lapply(unfactor.cols,
+                           function(x) as.character(d[, x]))
+#+end_src
+
+Add ~as.numeric~ to convert them to numeric (may induce ~NA~).
+
+#+begin_src R :tangle Rlib.R
+## Convert all factors from a data frame to character
+unfactor <- function (df) {
+  cols <- sapply(df, is.factor)         # find the factors
+  df[cols] <- lapply(df[cols], as.character) # convert to character
+  df
+}
+#+end_src
+
+*** Removing list elements using a condition
+
+*Subsetting* by using 2 types of index:
+- a numeric vector (~x[2]~, ~x[1:4]~)
+- a *logical vector* (~x[x > "a"]~)
+
+Create a logical vector:
+
+#+begin_src R
+u <- x > "a"
+x[u]                                    # get all elements which are greater
+                                        # than "a"
+#+end_src
+
+*** Selecting rows and columns more easily
+
+Subset on V1 and/or V2 > 0.
+
+#+begin_src R
+df[df$V1 > 0 & df$V2 > 0, c("V1", "V2")]
+df[df$V1 > 0 | df$V2 > 0, c("V1", "V2")]
+#+end_src
+
+Using the ~subset~ function.
+
+#+begin_src R
+subset(df, select=c(V1, V2), subset=(V1 > 0 & V2 > 0))
+subset(df, select=c(V1, V2), subset=(V1 > 0 | V2 > 0))
+#+end_src
+
+Note that you *do /not/ quote the column names* in the ~subset~ argument (and you /must/
+omit them in the ~select~ argument /if/ the vector is negated).
+
+#+begin_warning
+This is a convenience function intended *for interactive use*.  For programming,
+it is better to use the standard subsetting functions like ~[~.  In particular,
+the non-standard evaluation of argument ~subset~ can have unanticipated
+consequences.
+#+end_warning
+
+Use the ~%in%~ operator to compare a variable to a list of desired values.
+
+*** Removing NA from a list
+
+Remove missing values (~NA~) from a *list*:
+
+#+begin_src R
+missing <- is.na(x)                     # logical vector
+y <- x[!missing]
+sum(y)                                  # = sum(x, na.rm=TRUE)
+#+end_src
+
+#+begin_note
+The function ~sum~ (like many other math functions in R) takes an argument
+~na.rm~. If you set ~na.rm=TRUE~, R removes all NA values before doing the
+calculation.
+#+end_note
+
+The analogue of ~is.na~ for *data frames* is ~complete.cases~.
+
+*** Removing rows that contain NAs from a data frame
+
+Remove rows that contain any NA values:
+
+#+begin_src R
+df <- na.omit(df)
+#+end_src
+
+List all the rows of a data frame with *missing values*:
+
+#+begin_src R
+nonmissing <- complete.cases(df)
+df[!nonmissing, ]
+#+end_src
+
+Take the subset of all objects (~dfx~ and ~dfy~) that has no missing values:
+
+#+begin_src R
+bothnonmissing <- complete.cases(dfx, dfy) # logical vector
+dfx[bothnonmissing, ]
+#+end_src
+
+*** Removing columns that contain NAs from a data frame
+
+Get rid of any column that has one or more NAs.
+
+#+begin_src R
+df <- df[, colSums(is.na(df)) == 0]
+#+end_src
+
+*** Removing columns by name
+
+To *drop columns by name* in a data frame, you can use direct indexing (with
+booleans vectors) and then, simply reassign data:
+
+#+begin_src R
+tokeep <- !names(df) %in% c("remove1", "remove2")
+df <- df[, tokeep]                      # or...
+df <- df[, tokeep, drop=FALSE]          # you will need this option to avoid the
+                                        # conversion to an atomic vector if
+                                        # there is only one column left
+
+df <- subset(df, select=-c(remove1, remove2))
+                                        # use the `-' operator directly on a
+                                        # vector of column names
+#+end_src
+
+#+begin_src R
+## remove columns
+df$remove3 <- NULL
+
+## rename columns
+colnames(df)[colnames(df) == "old"] <- "new"
+#+end_src
+
+*** Merging data frames by common column
+
+- ~merge(df1, df2, by="CustomerId")~ ::
+     Natural join (special case of *inner* join).
+
+- ~merge(df1, df2, by="CustomerId", all.x=TRUE)~ ::
+     *Left* (outer) join.
+
+- ~merge(df1, df2, by="CustomerId", all.y=TRUE)~ ::
+     *Right* (outer) join.
+
+- ~merge(df1, df2, by="CustomerId", all=TRUE)~ ::
+     *(Full) outer* join (all records from both tables).
+
+Merge data sets (of different columns).
+
+#+begin_src R
+merged.data <- merge(df1, df2, by.x="id1", by.y="id2", all=TRUE)
+#+end_src
+
+*** Convert a list of data frames into one data frame
+
+Combine a list of data frames (of identical columns) into a single data frame:
+
+#+begin_src R
+df <- do.call("rbind", list.of.data.frames)
+#+end_src
+
+*** Converting
+
+- ~as.*()~ ::
+     Explicitly coerce from one class to another.
+
+- ~as.numeric()~ ::
+     Coerce the (~character~) column to be ~numeric~.
+
+- ~as.Date("January 2, 2007", "%B %d, %Y")~ ::
+     "2007-01-02"
+
+- ~as.ts()~ ::
+     Convert to a time series object.
+
+You can always convert variables between types.
+
+#+begin_src R
+df$x <- as.factor(df$x)                 # character to factor
+df$x <- as.character(df$x)              # factor to character
+#+end_src
+
+#+begin_warning
+*Warning* \\
+To convert factors to numeric or integer, first convert to character.
+Converting factors directly to numeric or integer data can lead to unwanted
+outcomes. Always check the results of a conversion to make sure R did what you
+wanted.
+#+end_warning
+
+Convert at once all the string columns to factors:
+
+#+begin_src R
+ind <- sapply(x, is.character)
+x[ind] <- lapply(x[ind], factor)
+#+end_src
+
+*** Applying a function to each list element
+
+Alternative (to ~for~ *loops*) to apply a function (or summary statistics).
+
+The following two articles provide the necessary background to motivate the
+*functional programming* techniques that are being provided by the ~apply~ family of
+functions.
+
+- [[http://adv-r.had.co.nz/Functional-programming.html][Advanced R: Functional Programming]], by Hadley Wickham
+- [[http://www.bioinformaticszen.com/post/simple-functional-programming-in-r/][Simple Functional Programming in R]], by Michael Barton
+
+**** ~lapply~
+
+*Loop over a list* (or every /column/ of a data frame) and apply a *function* on each
+*element. /Always/ returns a list* back (that is, not a simplified result).
+
+- (coerced) list ~X~
+- function ~FUN~
+- other arguments you wanna pass to the function ~...~
+
+#+begin_src R
+x <- list(a=1:5, b=rnorm(10))
+lapply(x, mean)
+#+end_src
+
+#+begin_src R
+lapply(1:4, runif, min=0, max=10)       # arguments passed through the `...'
+#+end_src
+
+Extract the first column of each matrix of a list:
+
+#+begin_src R
+lapply(x, function(x) x[, 1])
+#+end_src
+
+**** ~sapply~
+
+Same as ~lapply~ (for lists or /columns/ of data frames), but tries to "*simplify*"
+the *result* in a much more compact format (return the simplest possible data
+structure that can represent the output and is useful interactively, by putting
+all the elements into a *vector* or a *matrix* when possible, instead of returning
+a list).
+
+#+begin_src R
+sapply(s, function(x) colMeans(x[, c("Ozone", "Solar.R", "Wind")]))
+#+end_src
+
+Pass ~na.rm~ argument to ~ColMeans~ to remove the missing values before calculating
+the mean.
+
+#+begin_src R
+sapply(s, function(x) colMeans(x[, c("Ozone", "Solar.R", "Wind")], na.rm=TRUE))
+#+end_src
+
+*** Splitting a vector into groups
+
+- ~split(x, f)~ ::
+     Take a vector, and *split* it into subpieces (the number of groups identified
+     by the levels of a *factor* variable). Always return a *list* (of lists?) back.
+
+     + ~drop=TRUE~ ::
+          Don't keep the empty levels of the factor.
+
+Auxiliary function, used in conjunction with functions like ~lapply~ or ~sapply~ to
+apply a function to those individual groups.
+
+#+begin_src R
+lapply(split(x, f), mean)
+#+end_src
+
+Like ~tapply~, but without applying the summary statistics.
+
+Split a data frame (or other kinds of lists), and apply an /anonymous function/:
+
+#+begin_src R
+s <- split(airquality, airquality$Month) # split according to month
+lapply(s, function(x) colMeans(x[, c("Ozone", "Solar.R", "Wind")])
+#+end_src
+
+Split a data frame into chunks of size ~max~:
+
+#+begin_src R
+size.max <- 20
+split(x, ceiling(seq_along(x$V1) / size.max))
+#+end_src
+
+*** Applying a function to every row/column
+
+- ~apply(df, margin, fun, ...)~ ::
+     Apply a function over the /margins/ of an *array*.
+
+     Often used to apply a function to the rows or columns of a matrix. Very
+     useful if you wanna take *summaries* of matrices or higher-dimensional arrays
+     (such as array of matrices).
+
+     ~MARGIN~ is an integer vector which indicates which margins should be
+     "retained":
+     - *margin 1* = apply FUN *for each row* (dimension 1): preserve all the rows,
+       eliminate all columns, get a vector of the number of rows
+     - *margin 2* = *for each column* (dimension 2); first dimension has been
+       eliminated
+
+     #+begin_src R
+     x <- matrix(rnorm(200), 20, 10)
+     apply(x, 2, mean)
+     #+end_src
+
+     #+begin_src R
+     x <- matrix(rnorm(200), 20, 10)
+     apply(x, 1, quantile, probs=c(0.25, 0.75)) # no default value for `probs'
+     #+end_src
+
+     Shortcut functions (/much/ faster on large matrices):
+     + ~rowSums~ = ~apply(x, 1, sum)~
+     + ~rowMeans~ = ~apply(x, 1, mean)~
+     + ~colSums~ = ~apply(x, 2, sum)~
+     + ~colMeans~ = ~apply(x, 2, mean)~
+
+#+begin_warning
+~apply~ works on matrices, *not data frames*. It will *coerce* the first argument *to
+a matrix*, by converting its columns to the lowest common form -- which you can
+see with ~apply(df, 2, class)~.
+
+If you are using a data frame which has character data as well as numeric data,
+/the whole matrix will be converted to character/ and numerical operations will
+probably not give what you expect.
+
+Unlike ~apply~, ~sapply~ does not coerce the data frame to a matrix: see ~sapply(df,
+class)~.
+#+end_warning
+
+*** Applying a function to groups of data
+
+- ~tapply(x, index, fun)~ ::
+     Short for "*table apply*" (or "tagged apply", where the tags identify the
+     subsets).
+
+     Apply a *function* over *subsets* of a vector:
+     + Splits up a vector into little groups (such as men and women, indicated
+       by a *factor*),
+     + Applies a function to those groups and
+     + Brings the pieces back together.
+
+     Function may be anonymous.
+
+     ~Simplify=FALSE~ to get back a list (instead of an array).
+
+     ~tapply~ is one of the most useful commands you'll ever need. For example, to
+     calculate statistics of ~x~ separately for each group identified in the
+     variable ~f~:
+
+     #+begin_src R
+     tapply(x, f, sum, simplify=FALSE)  # = lapply(split(x, f), sum)
+     tapply(x, f, mean)                 # = sapply(split(x, f), mean)
+     tapply(x, f, length)
+     #+end_src
+
+     For counting the number of elements, see [[table][table]].
+
+     See also ~by~ to apply a function to a data frame split by factors.
+
+- ~interaction(f1, f2)~ ::
+     Combines all the levels of the first factor with all the levels of the
+     second factor.
+
+     You can also use ~aggregate~ to analyze groups defined by more than one
+     categorical variable (e.g., month and year).
+
+*** Applying a function to parallel vectors or lists
+
+- ~mapply~ ::
+     Apply a *function* to the elements of *multiple lists* in parallel
+     (multivariate version of ~lapply~).
+
+     For example, apply a function over 2 lists, where the elements of the first
+     list go into one argument of the function, and the elements of the second
+     list go into another argument of the function
+
+     *Vectorizing a function* (that doesn't allow for vector arguments).
+
+     #+begin_src R
+     mapply(rnorm, 1:3, 1:3, 2)         # fixed standard deviation
+     #+end_src
+
+     is the same as
+
+     #+begin_src R
+     list(rnorm(1, 1, 2),
+          rnorm(2, 2, 2),
+          rnorm(3, 3, 2))
+     #+end_src
+
+*** Checking on and removing inconsistent values
+
+** 7. Strings (and dates)
+
+*** Getting the length of a string
+
+- ~nchar()~ ::
+     Get the length of a string.
+
+*** Concatenating strings
+
+- ~paste()~ ::
+     *Concatenate* a set of *strings together* to create one string or a vector of
+     strings.
+
+     Convert a vector to a string:
+
+     #+begin_src R
+     paste(c("This", "is", "one", "sentence."), collapse=" ")
+     #+end_src
+
+     #+results:
+     : This is one sentence.
+
+- ~paste0(...)~ ::
+     Equivalent to ~paste(..., sep="")~.
+
+- ~sprintf()~ ::
+
+*** Regular expressions
+
+**** Metacharacters
+
+- ~^~ ::
+     Start of a line (or negation of a character class).
+
+- ~$~ ::
+     End of a line.
+
+- ~[]~ ::
+     Character classes.
+
+- ~.~ ::
+     Any character.
+
+- ~|~ ::
+     Or.
+
+- ~()~ ::
+     Subexpressions (alternatives or "remember" matched text).
+
+- ~?~ ::
+     Optional.
+
+- \ ::
+     "Escape" the metacharacter.
+
+- ~+~ ::
+     Any number, including none.
+
+- ~*~ ::
+     Any number, at least one -- it is "greedy" so it always matches the /longest/
+     possible string that satisfies the regular expression.
+
+     The greediness can be turned off with the ~?~ metacharacter (make the regex
+     "lazy"), as in:
+
+     #+begin_src R
+     ^s(.*?)s$
+     #+end_src
+
+- ~{}~ ::
+     Interval quantifiers (minimum, maximum).
+
+**** Regular expressions in R
+
+For the moment, we assume pattern matching on *ASCII strings*...
+
+These functions can take vector arguments.
+
+- ~grep~ ::
+     Return the *indices* into the character vector where the regex pattern
+     matches (it won't do anything).
+
+     #+begin_src R
+     i <- grep("regexp", vector)        # get a set of indices
+     j <- grep("anotherregexp", vector) # get another set of indices
+     setdiff(i, j)                      # substract j elements from i when they are the same
+     setdiff(j, i)                      # different result
+     #+end_src
+
+     Setting ~value=TRUE~ returns the *actual elements* of the character vector
+     that match.
+
+- ~grepl~ ::
+     Return a *logical vector* (~TRUE~ / ~FALSE~) indicating which element matches
+     (used for /subsetting/).
+
+- ~regexpr~ ::
+     Return the indices (integer vector) of the string *where the first match
+     begins* and the length of the match.
+
+     If I want to see what the match is, use ~substr~:
+
+     #+begin_src R
+     regexpr("...", string)
+     substr(string, start + length - 1)
+     #+end_src
+
+     Useful in conjunction with ~regmatches~ which extracts the matches in the
+     strings without having you to use ~substr~.
+
+     #+begin_src R
+     r <- regexpr("...", string)
+     regmatches(string, r)
+     #+end_src
+
+- ~gregexpr~ ::
+     Return *all of the matches* ("global") in a given string.
+
+- ~sub~ ::
+     Replace *the first match* with another string (used to strip out stuff by
+     replacing the match with nothing).
+
+- ~gsub~ ::
+     Replace *all of the matches* with another string.
+
+     #+begin_src R
+     names(data)[i] <- gsub("-", ".", names(data)[i])
+     #+end_src
+
+- ~regexec~ ::
+     Give the indices (list) for parenthesized sub-expressions.
+
+     If I want to see what the submatch is:
+
+     #+begin_src R
+     r <- regexpr("... (.*) ...", string) # find all the date fields
+     m <- regmatches(string, r)         # parse out
+     dates <- sapply(m, function(x) x[2]) # extract the 2nd element of each list object
+     dates <- as.Date(dates, "%B %d, %Y") # convert to date
+     hist(dates, "month", freq=TRUE)    # aggregate the dates by month and give an histogram
+     #+end_src
+
+** 8. Probability
+
+*** Names of distributions
+
+- Functions for *probability distributions*
+
+  + rnorm(n, mean, sd) ::
+       Generate =n= *normal* random variates
+
+  + runif(n) ::
+       Generate =n= *uniform* random variates
+
+  + rpois(n, lambda) ::
+       Generate =n= *Poisson* random variates with a given rate
+
+  + rbinom(n, size, prob) ::
+       Generate binary data
+
+  + rexp ::
+
+
+  + rgamma ::
+
+- Associated functions
+  + r* ::
+       Generate *random* numbers (draw samples)
+
+  + d* ::
+       Evaluate the probability *density*
+
+  + p* ::
+       Evaluate the *cumulative distribution* function
+
+       #+begin_src R
+       ppois(4, 2)                      # Pr(x <= 4)
+       ppois(6, 2)                      # Pr(x <= 6)
+       #+end_src
+
+  + q* :: evaluate the *quantile* function
+
+*** Generate reproducible random numbers
+
+Set the random number *seed* is critical for *reproducibility*: *always set it when
+conducting a simulation!*
+
+  #+begin_src R
+  set.seed(1)                           # or use any other positive integer
+  #+end_src
+
+*** Generate a random sample
+
+*Sample randomly* from a specified vector of scalar objects.
+
+#+begin_src R
+sample(1:10, 4)                         # select 4 different numbers at random
+sample(1:10)                            # permutation
+sample(1:10, replace=TRUE)              # sample with replacement (I can get repeats)
+#+end_src
+
+Sample can draw according to a set of probabilities.
+
+** 10. Graphics
+  :PROPERTIES:
+  :eval:     yes
+  :END:
+
+2 systems:
+
+- ~base~ ::
+     Graphics are constructed piecemeal by *different function calls*;
+     you can add things one by one:
+     + annotate (some of the points in) the plot,
+     + put some points on the canvas,
+     + draw a title,
+     + add some axis labels,
+     + add some colors,
+     + add a legend.
+
+- ~lattice~ ::
+     Graphics are constructed via a single function call: all options have to be
+     specified at once (advantage: that allows R to calculate the necessary
+     spacings, margins and font sizes).
+
+Behavior:
+
+- Base graphics functions have a "side effect": they plot data directly to the
+  graphics device.
+
+- Lattice graphics functions return an object of the class ~trellis~ (object
+  designed for plotting).
+
+  When you call Lattice functions, even if you don't assign it to a "plot
+  object", the result will be *auto-printed* (generate the plot *on the graphics
+  device*), so it will look like Lattice functions have a "side effect"
+
+You cannot use functions from the base plotting system in a Lattice plot.
+
+Excellent resource for graphics: http://www.cookbook-r.com/Graphs/Scatterplot/.
+
+*** Base graphics
+
+**** Make a plot
+
+- ~plot~ ::
+     Create a *scatter plot* (or another type of plot, depending on the class of
+     the object being plotted).
+
+- ~barplot~ ::
+     Create a *bar chart* (analogue of an histogram for categorical data).
+
+- ~hist~ ::
+     Make an *histogram* showing the *distribution* of the numeric vector ~x~.
+
+- ~boxplot~ ::
+     Create a box-and-whisker plot of the ~y~ variable by the grouping variable ~x~
+     (usually a ~factor~).
+
+***** Create a scatter plot
+
+- ~plot(x)~ ::
+     Plot the (numeric) data against the index (~1:N~).
+
+     #+begin_src R :results graphics :file Rplots/base-scatterplot-sort.png
+     data(iris)
+     plot(sort(iris$Petal.Width),
+          main="Distribution of petal widths",
+          xlab="Rank", ylab="Width", col=as.integer(iris$Species)+1)
+     #+end_src
+
+     #+results:
+     [[file:Rplots/base-scatterplot-sort.png]]
+
+- ~plot(x, y)~ ::
+     Create a scatter plot of ~x~ and ~y~.
+
+     #+begin_src R :results graphics :file Rplots/base-scatterplot.png
+     data(iris)
+     plot(iris$Petal.Length, iris$Petal.Width,
+          main="Petals: Length vs Width",
+          xlab="Length", ylab="Width", col=as.integer(iris$Species)+1)
+     #+end_src
+
+     #+results:
+     [[file:Rplots/base-scatterplot.png]]
+
+- ~plot(x, y, type="n")~ ::
+     Set up the plot window, but don't actually plot the data in there.
+
+     Note that you have ~POSIXct~ dates in your data frame... XXX
+
+- ~plot(df)~ ::
+     Create *multiple scatter plots* if your data frame contains more than
+     2 columns.
+
+     #+begin_src R :results graphics :file Rplots/base-multi-scatterplots.png
+     data(iris)
+     plot(iris[, 1:4], main="Multiple scatter plots",
+          col=as.integer(iris$Species)+1)
+     #+end_src
+
+     #+results:
+     [[file:Rplots/base-multi-scatterplots.png]]
+
+     You can see that petal length and width appear strongly correlated. You
+     could check the correlation between features with the ~cor()~ function.
+
+     #+begin_src R
+     data(iris)
+     cor(iris[-5])
+     #+end_src
+
+     #+results:
+     |                  1 | -0.117569784133002 | 0.871753775886583 |  0.817941126271576 |
+     | -0.117569784133002 |                  1 | -0.42844010433054 | -0.366125932536439 |
+     |  0.871753775886583 |  -0.42844010433054 |                 1 |  0.962865431402796 |
+     |  0.817941126271576 | -0.366125932536439 | 0.962865431402796 |                  1 |
+
+***** TODO ~barplot~
+
+See http://onertipaday.blogspot.be/2007/05/barplots-of-two-sets.html for
+barplot with figures above the bars.
+
+***** ~hist~
+
+Histogram (*distribution* of data, *frequency* = exact number).
+
+Generic function: you can call it on different types of data. When you call ~hist~
+on a ~Date~ object, it requires an interval ("day" / "week" / "month" / "year") in
+order to break it up into sequences.
+
+#+begin_src R :results graphics :file Rplots/base-hist.png
+data(iris)
+hist(iris$Petal.Length, main="Histogram", col="lightblue") # shape of distribution
+#+end_src
+
+#+results:
+[[file:Rplots/base-hist.png]]
+
+~breaks~ is key: it specifies the number of categories to plot or the breakpoints
+for each category.
+
+#+begin_src R :results graphics :file Rplots/base-hist-breaks.png
+data(iris)
+hist(iris$Petal.Length, breaks=seq(1, 7, by=0.1), main="Histogram", col="lightblue")
+                                        # much more fine-grained distribution
+#+end_src
+
+#+results:
+[[file:Rplots/base-hist-breaks.png]]
+
+Can you explain the peculiar pattern? Graphical representations of data are
+useful at identifying these sorts of artifacts...
+
+Report where the distribution is centered:
+
+#+begin_src R :results graphics :file Rplots/base-hist-center.png
+data(iris)
+hist(iris$Petal.Length, breaks=100, main="Histogram", col="lightblue")
+meanValue <- mean(iris$Petal.Length)
+lines(rep(meanValue, 100), seq(0, 100, length=100), col="red", lwd=5)
+#+end_src
+
+#+results:
+[[file:Rplots/base-hist-center.png]]
+
+
+#+begin_src R :results graphics :file Rplots/base-plot-table.png
+data(iris)
+plot(table(iris$Petal.Length), main="Table", col="blue")
+#+end_src
+
+#+results:
+[[file:Rplots/base-plot-table.png]]
+
+Note -- In the table plot, x values with one occurrence (out of thousands) would
+be visible as one dot in the graphics. They don't in the histogram (as the line,
+being too small, would be on the x-axis itself).
+
+- Density plot (smoother histogram)
+
+  *Density* = percentage of observations
+
+  #+begin_src R
+  dens <- density(data$var) # smooth density function
+  plot(dens, lwd=3, col="blue")
+# or: lines(dens, lwd=3, col="blue") after hist plot
+  #+end_src
+
+  #+results:
+
+  Easy to compare multiple distributions:
+
+  #+begin_src R
+  # add another density
+  densMales <- density(data$var[which(data$sex==1)])
+  lines(densMales, lwd=3, col="orange")
+  #+end_src
+
+  #+results:
+
+***** ~boxplot~
+
+~boxplot~ draws plot summarizing:
+
+- Median (wide line)
+
+- Quartiles (Q1, Q3)
+
+- Lowest data still within 1.5 * IQR (= Q3 - Q1) of the lower quartile, and the
+  highest datum still within 1.5 * IQR of the upper quartile
+
+- Outliers --- By default, observations more than 1.5 * IQR distant from nearest
+  quartile
+
+#+begin_src R :results graphics :file Rplots/base-boxplot.png
+data(iris)
+boxplot(iris[, 1:4], col=rainbow(4), main="Boxplot", ylab="Appropriate units")
+#+end_src
+
+#+results:
+[[file:Rplots/base-boxplot.png]]
+
+***** violinplot
+
+See http://www.math.csi.cuny.edu/Statistics/R/simpleR/stat006.html
+
+**** Add to an existing plot
+
+- ~points~ ::
+     *Add points to a plot* (~col~ for boundary color, ~bg~ for fill color, ~pch~ for
+     plotting character).
+
+     Plot points *in groups separately*.
+
+     #+begin_src R :results graphics :file Rplots/base-points-distinguished.png
+     data(iris)
+     attach(iris)
+     plot(Petal.Length, Petal.Width, type="n")
+     points(Petal.Length[Species == "setosa"], Petal.Width[Species == "setosa"],
+            col="red")
+     points(Petal.Length[Species == "versicolor"], Petal.Width[Species == "versicolor"],
+            col="green", pch=19)
+     points(Petal.Length[Species == "virginica"], Petal.Width[Species == "virginica"],
+            col="blue", pch=18)
+     #+end_src
+
+     #+results:
+     [[file:Rplots/base-points-distinguished.png]]
+
+     #+begin_src R :results graphics :file Rplots/base-points-distinguished-col.png
+     data(iris)
+     plot(iris$Petal.Length, iris$Petal.Width, col=as.integer(iris$Species)+1)
+     #+end_src
+
+     #+results:
+     [[file:Rplots/base-points-distinguished-col.png]]
+
+     #+begin_src R :results graphics :file Rplots/base-points-distinguished-col-unclass.png
+     data(iris)
+     plot(iris[, 3:4], col=c("red", "green", "blue")[unclass(iris$Species)])
+     #+end_src
+
+     #+results:
+     [[file:Rplots/base-points-distinguished-col-unclass.png]]
+
+- ~lines~ ::
+     *Add lines* (connect all the dots) *to a plot*.
+
+     #+begin_src R :eval no
+     lines(x, y)                        # all lines
+     #+end_src
+
+     Even better: option ~type="b"~ to plot method for /both/ *points and lines*.
+
+- ~abline~ ::
+     Add a straight line.
+
+     Plot the *regression line* of a scatter plot.
+
+     #+begin_src R :results graphics :file Rplots/base-abline.png
+     data(iris)
+     attach(iris)
+     plot(Petal.Length, Petal.Width)
+     fit <- lm(Petal.Width ~ Petal.Length)
+     abline(fit, lwd=3, col="blue")
+     #+end_src
+
+     #+results:
+     [[file:Rplots/base-abline.png]]
+
+
+- ~text~ ::
+     Add text labels (inside the plot region).
+
+     Could be used to label datapoints.
+
+     #+begin_src R :eval no
+     text(-2, 2, "Label")
+     #+end_src
+
+- ~title~ ::
+     Add a title (or axis labels, subtitle, ...).
+
+     #+begin_src R :eval no
+     title("plot")
+     plot(x, y, xlab="Weight", ylab="Height", main="Scatterplot")
+     #+end_src
+
+- ~mtext~ ::
+     Add *text to the margins*.
+
+     #+begin_src R :eval no
+     mtext("Label on the X-axis", side=2, line=3, col="blue")
+     #+end_src
+
+     Can be used to add multiline legends.
+
+- ~axis~ ::
+     *Annotate the axis* (tick marks, labels).
+
+     #+begin_src R :eval no
+     axis(side=2, col="blue", col.axis="blue", las=1)
+     #+end_src
+
+- ~legend~ ::
+     Add a legend.
+
+     #+begin_src R :eval no
+     legend("topleft", legend="Data", pch=1)
+     #+end_src
+
+**** Changing graphical parameters
+
+- ~par()~ ::
+     control *all the graphing parameters* that you can specify (/defaults/ for all
+     plots in a session, which can be overridden as arguments to specific
+     plotting functions).
+
+     + ~pch~ ::
+          *Plotting character* (default: open circle symbol).
+
+     + ~lty~ ::
+          Line type (default: ~solid~ line).
+
+     + ~lwd~ ::
+          Line width.
+
+     + ~col~ ::
+          Plotting color.
+
+     + ~las~ ::
+          *Orientation* of the axis *labels* on the plot.
+          - ~las=0~: *parallel* to the axis [default],
+          - ~las=1~: *horizontal*,
+          - ~las=2~: *perpendicular* to the axis,
+          - ~las=3~: *vertical*.
+
+     + ~bg~ ::
+          Background color (default: ~transparent~).
+
+     + ~mar~ ::
+          Margin size (vector of 4 numbers, 1 per side).
+
+          #+begin_src R :eval no
+          par(mar=c(2, 2, 1, 1))
+          #+end_src
+
+     + ~oma~ ::
+          Outer margin size (relevant if you have more than one plot per
+          canvas).
+
+     + ~mfrow~ ::
+          Number of *plots per row and per column* on the canvas (filled
+          row-wise).
+
+          #+begin_src R :eval no
+          par(mfrow=c(2, 1))            # 2 rows and 1 column
+          plot(x, y)
+          plot(x, z)
+          #+end_src
+
+     + ~mfcol~ ::
+          Number of plots per row and per column on the canvas (filled
+          column-wise).
+
+     + ~bty~ ::
+          Type of "box" which is drawn around plots.
+
+          A value of ~"n"~ suppresses the box (same as ~axes=FALSE~).
+
+     Look at the defaults:
+
+     #+begin_src R :eval no
+     par("lty")
+     #+end_src
+
+- ~?Devices~ ::
+     List graphical devices.
+
+     + ~pdf~ ::
+          Vector format (very, very large for a graphic with *2 million points* on
+          it: specify information for every single object on the plot).
+
+     + ~png~ ::
+          Bitmapped format (specify information for pixels), lossless
+          *compression*, but *does not resize well*.
+
+     + ~jpeg~ ::
+          Lossy compression.
+
+     + ~bitmap~ ::
+          If you're running R in a batch mode (you can't use the ~png~ and ~jpeg~
+          functions).
+
+- Copy the plot to another device
+  + ~dev.copy2pdf~ :: copy a plot to PDF
+
+*** Lattice graphics
+
+- Tellis graphics
+
+  + =xyplot= :: *scatterplots*
+  + =bwplot= :: box-and-whiskers plots ("boxplots")
+  + histogram :: histograms
+  + stripplot :: like a boxplot but with actual points (instead of boxes)
+  + dotplot :: plot dots on "violin strings"
+  + splom :: scatterplot matrix, like =pairs= in the base graphics system
+  + =levelplot=, =contourplot= :: for plotting "image" data
+
+  #+begin_src R
+  library(lattice)
+  #+end_src
+
+- Generally create plots all in one go, from a single function call
+
+- Strength of Lattice functions = conditioning plots: you can plot
+  the *relationship* between =x= and =y=, *conditioned* on the levels of a third
+  variable (factor variable =f= or variable cut into different ranges, see
+  =equal.count=)
+
+  #+begin_src R
+  y ~ x | f * g                         # formula
+  #+end_src
+
+  + =y= = response (on the y-axis)
+  + =x= = input, predictor (on the x-axis)
+  + =f * g= = factors which are *interacting* with each other (often, just one
+    factor)
+
+- Tell the function =xyplot= where to find the variables =y= and =x=: look up names
+  inside the =environmental= data frame (because they are not objects in my
+  workspace)
+
+  #+begin_src R
+  xyplot(y ~ x, data=environmental)
+  #+end_src
+
+- Lattice functions have a separate panel created for each level of the
+  factors
+
+  #+begin_src R
+  xyplot(y ~ x | f)
+  #+end_src
+
+  The *panel function* controls what happens inside each panel of the entire
+  plot
+
+  I can create my own (anonymous) panel function:
+
+  #+begin_src R
+  xyplot(y ~ x | f,
+         panel=function(x, y, ...) {    # x and y = data that appear in a specific panel (it's not all the data)
+                 panel.xyplot(x, y, ...) # plot using all the default options
+                 panel.abline(h=median(y), lty=2) # plot the median of the y values in each panel
+         })
+  #+end_src
+
+  Add a (simple linear) regression line to each panel of the plot:
+
+  #+begin_src R
+  xyplot(y ~ x | f,
+         panel=function(x, y, ...) {
+                 panel.xyplot(x, y, ...)
+                 panel.lmline(x, y, col=2)
+         })
+  #+end_src
+
+  #+begin_src R
+  xyplot(y ~ x | f, pch=20,
+         panel=function(x, y, ...) {
+                 panel.xyplot(x, y, ...)
+                 fit <- lm(y ~ x)
+                 panel.abline(fit, lwd=2) # add a regression line to the plot
+         })
+  #+end_src
+
+- Options
+  + Don't worry about spacing: everything gets automatically adjusted!
+  + main :: title
+  + layout=c(1,4) :: 4 panels on top of each other
+  + as.table=TRUE :: change the order in which the panels are drawn, from
+       top to bottom (default: from bottom to top)
+  + xlab :: label on the x-axis
+  + ylab :: label on the y-axis
+
+- Functions
+  + x.cut <- equal.count(x, l) :: cut the original =x= variable, creating =l=
+       different ranges (~ levels, which may overlap slightly)
+
+  + panel.loess(x, y) :: give a smooth rendition of the linear model
+
+**** Splom
+
+-  Look at pairwise relationships possible in the data frame (make a scatter
+   plot of all the different variables against each other)
+
+  #+begin_src R
+  splom(~ df)
+  #+end_src
+
+**** Histogram
+
+- Histogram of =x=
+
+  #+begin_src R
+  histogram(~ x, data=df)
+  #+end_src
+
+- Histogram of =x=, as =f= varies (for each range of =f.cut=)
+
+  #+begin_src R
+  histogram(~ x | f.cut, data=df)
+  #+end_src
+
+*** ggplot2
+
+See http://tutorials.iq.harvard.edu/R/Rgraphics/Rgraphics.html for a comparison
+with Base graphics.
+
+See post of Antoine Lizée in
+http://stackoverflow.com/questions/5234117/how-to-drop-columns-by-name-in-a-data-frame
+for an excellent performance reporting.
+
+#+begin_src R :results graphics :file Rplots/ggplot2.png
+library(ggplot2)
+summary(cars)
+qplot(speed, dist, data=cars) + geom_smooth()
+#+end_src
+
+#+results:
+[[file:Rplots/ggplot2.png]]
+
+*** Other graphics
+
+**** Pareto diagrams
+
+#+begin_src R :results graphics :file Rplots/qcc-pareto.png
+## install.packages("qcc")
+library(qcc)
+data(iris)
+pareto.chart(table(iris[iris$Species=="setosa", ]$Petal.Length))
+#+end_src
+
+#+results:
+[[file:Rplots/qcc-pareto.png]]
+
+** 11. Linear regression and ANOVA
+
+https://www.zoology.ubc.ca/~schluter/R/fit-model/
+
+*** Linear model
+
+y = \beta_{0} + \beta_{1} x + \epsilon
+
+#+begin_src R
+x <- rnorm(100)                         # predictor
+e <- rnorm(100, 0, 2)                   # noise
+#+end_src
+
+*** Regression tree models
+
+- arbres de régression : la variable expliquée est de type numérique et il
+  s'agit de prédire une valeur la plus proche possible de la vraie valeur.
+
+http://www.statmethods.net/advstats/cart.html
+
+*** Classification tree models
+
+- arbres de classification : la variable expliquée est de type nominale
+  (facteur). A chaque étape du partitionnement, on cherche à réduire l'impureté
+  totale des deux noeuds fils par rapport au noeud père.
+
+#+begin_src R
+rpart
+#+end_src
+
+** Debugging
+
+- 3 main indications of a problem / =condition=:
+
+  + =message=
+
+    #+begin_src R
+    print("message")
+    #+end_src
+
+  + =warning=
+
+    #+begin_src R
+    log(-1)
+    #+end_src
+
+  + =error=
+
+    #+begin_src R
+    stop("error")                       # throw an error
+    #+end_src
+
+- General notion of a =condition=: you can create your own if something
+  specific happens
+
+- Functions:
+
+  + invisible(x) ::
+       *Prevent auto-printing* of the last element in the function value; *still
+       return* the same object
+
+- *Interactive* debugging tools to find problematic code:
+
+  + =traceback= ::
+       Print out the function call stack -- you have to call it *immediately*
+       after the error occurred.
+
+  + =debug= ::
+       Flag a function for "debug" mode to step through any function (you wrote
+       or not), one expression at a time, from the top of the function.
+
+  + browser ::
+       Put the function in debug mode anywhere in your code; in the browser,
+       there is nothing in your environment except for the function arguments
+       (and the default values which are not listed). You can nest browser
+       frames: you can call the debug function even while you're in the
+       debugger.
+
+  + trace ::
+       Insert debugging code into a function, without actually editing the
+       function.
+
+  + recover ::
+       Modify the default behavior (of getting the console back) by creating an
+       error handler.
+
+       #+begin_src R
+       options(error=recover)
+       #+end_src
+
+- Blunt techniques:
+  + ~print~
+  + ~cat~
+
+** Assert
+
+#+begin_src R :tangle Rlib.R
+## TODO Add a message to use; if not provided, generic one...
+warn_if_not_empty <- function (..., env=parent.frame())
+{
+  check <- eval(substitute(alist(...)))
+  cat(paste(check, "empty?\n"))
+
+  expr <- eval(parse(text=check))
+
+  if (nrow(expr) == 0) {
+    cat("OK!\n")
+    return(TRUE)
+  } else {
+    print(expr)
+    stop(nrow(expr), " contradictions.\n")
+  }
+}
+
+## warn_if_not_empty(pfisortie[is.na(pfisortie$frmArretDate), ])
+##
+## warn_if_not_empty(pfisortie[is.na(pfisortie$stgNom.x), ])
+#+end_src
+
+** Contributing
+
+*** Issues
+
+Report issues and suggest features and improvements on the [[https://github.com/fniessen/refcard-R/issues/new][GitHub issue tracker]].
+
+*** Patches
+
+I love contributions!  Patches under any form are always welcome!
+
+*** Donations
+
+If you like the refcard-R project, you can show your appreciation and
+support future development by making a [[https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=VCVAS6KPDQ4JC&lc=BE&item_number=refcard%2dR&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted][donation]] through PayPal.
+
+Regardless of the donations, refcard-R will always be free both as in
+beer and as in speech.
+
+** License
+
+Copyright (C) 2013-2014 Free Software Foundation, Inc.
+
+Author: Fabrice Niessen \\
+Keywords: r reference card
+
+This program is free software; you can redistribute it and/or modify it under
+the terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any later
+version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with
+this program. If not, see http://www.gnu.org/licenses/.
