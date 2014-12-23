@@ -169,7 +169,9 @@ mod1<-mod1[,c("aodid","day","PM25","pred.m1","stn"),with=FALSE]
 setkey(mod3,day,aodid)
 setkey(mod1,day,aodid)
 mod1 <- merge(mod1,mod3[, list(day,aodid,pred.m3)], all.x = T)  			
-print(summary(lm(PM25~pred.m3,data=mod1))$r.squared)    
+res[res$year=="2007", 'm3.t33'] <- print(summary(lm(PM25~pred.m3,data=mod1))$r.squared)    
+
+
 saveRDS(mod1table, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1table2007_p3.rds.rds")
 saveRDS(mod1, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2007w_p.m3.rds")
 
