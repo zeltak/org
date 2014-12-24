@@ -553,25 +553,6 @@ gc()
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ###############
 #LIBS
 ###############
@@ -601,7 +582,7 @@ m1.2004 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_dat
 
 #subset to aqua and apply alexei cleaning methods
 #MaskAdjacency == "000"
-m1.2004<-m1.2004[ UN > 0 & UN < 0.04] 
+m1.2004<-m1.2004[ UN > 0 & UN < 0.04  ] 
 
 ################# clean BAD STN PM25 and check if improved model?
 raWDaf <- ddply(m1.2004, c( "stn"), 
@@ -612,7 +593,7 @@ raWDaf <- ddply(m1.2004, c( "stn"),
 })
 raWDaf
 raWDaf<-as.data.table(raWDaf)
-bad<- raWDaf[R2< 0.02]
+bad<- raWDaf[R2< 0.05]
 bad[,badid := paste(stn,sep="-")]
 #################BAD STN
 m1.2004[,badid := paste(stn,sep="-")]
@@ -626,7 +607,7 @@ m1.2004$predicted <- predict(x)
 glance(lm(PM25~predicted,data=m1.2004))
 #get rid of missing
 #m1.2004 <- na.omit(m1.2004)
-m1.2004[,elev.s:= scale(elev)];
+m1.2004[,elev.s:= scale(elev)]
 m1.2004[,tden.s:= scale(tden)]
 m1.2004[,pden.s:= scale(pden)]
 m1.2004[,dist2A1.s:= scale(dist2A1)]
@@ -650,22 +631,21 @@ m1.2004[,NO2a.s:= scale(NO2a)]
 
 
 
+
+
+
+
+
+
+
+
+
 m1.formula <- as.formula(PM25~ aod
-                        +tempa.s+wda.s+wsa.s+dust+meanpbl.s #temporal
-                        +elev.s+tden.s+pden.s+dist2road.s+ndvi.s #spatial
+                        +tempa.s+WDa.s+WSa.s+MeanPbl.s #temporal
+                        +elev.s+tden.s+pden.s+Dist2road.s+ndvi.s #spatial
                         +p_os.s #+p_dev.s+p_dos.s+p_farm.s+p_for.s+p_ind.s  #land use
-                         #+aod*dust #interactions
+                         #+aod*Dust #interactions
                          +(1+aod|day/reg_num)) #+(1|stn) !!! stn screws up mod3 
-
-
-
-m1.formula <- as.formula(PM25~ aod
-#                        +tempa.s+wda.s+wsa.s+dust+meanpbl.s #temporal
-#                        +elev.s+tden.s+pden.s+dist2road.s+ndvi.s #spatial
-#                        +p_os.s #+p_dev.s+p_dos.s+p_farm.s+p_for.s+p_ind.s  #land use
-                         #+aod*dust #interactions
-                         +(1+aod|day/reg_num)) #+(1|stn) !!! stn screws up mod3 
-
 
 #full fit
 m1.fit.2004 <-  lmer(m1.formula,data=m1.2004,weights=normwt)
@@ -1140,13 +1120,6 @@ gc()
 
 
 
-
-
-
-
-
-
-
 ###############
 #LIBS
 ###############
@@ -1175,25 +1148,25 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 ### import data
 m1.2005 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2005.rds")
 
-#subset to aqua and apply alexei cleaning methods
-#MaskAdjacency == "000"
-m1.2005<-m1.2005[ UN > 0 & UN < 0.04  ] 
+## #subset to aqua and apply alexei cleaning methods
+## #MaskAdjacency == "000"
+## m1.2005<-m1.2005[ UN > 0 & UN < 0.04  ] 
 
-################# clean BAD STN PM25 and check if improved model?
-raWDaf <- ddply(m1.2005, c( "stn"), 
-      function(x) {
-        mod1 <- lm(PM25 ~ aod, data=x)
-        data.frame(R2 = round(summary(mod1)$r.squared, 5), 
-                   nsamps = length(summary(mod1)$resid))
-})
-raWDaf
-raWDaf<-as.data.table(raWDaf)
-bad<- raWDaf[R2< 0.05]
-bad[,badid := paste(stn,sep="-")]
-#################BAD STN
-m1.2005[,badid := paste(stn,sep="-")]
-####Take out bad stations
-m1.2005 <- m1.2005[!(m1.2005$badid %in% bad$badid), ] 
+## ################# clean BAD STN PM25 and check if improved model?
+## raWDaf <- ddply(m1.2005, c( "stn"), 
+##       function(x) {
+##         mod1 <- lm(PM25 ~ aod, data=x)
+##         data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+##                    nsamps = length(summary(mod1)$resid))
+## })
+## raWDaf
+## raWDaf<-as.data.table(raWDaf)
+## bad<- raWDaf[R2< 0.05]
+## bad[,badid := paste(stn,sep="-")]
+## #################BAD STN
+## m1.2005[,badid := paste(stn,sep="-")]
+## ####Take out bad stations
+## m1.2005 <- m1.2005[!(m1.2005$badid %in% bad$badid), ] 
 
 #check it does better
 m1.formula <- as.formula(PM25~ aod+(1+aod|day))
