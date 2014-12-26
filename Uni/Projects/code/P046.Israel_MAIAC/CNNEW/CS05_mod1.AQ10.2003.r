@@ -308,13 +308,13 @@ saveRDS(m2.2007,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/
 #map the predictions
 #aggregate by guid
 m2_agg <- m2.2007[, list(LTPM.m2 = mean(pred.m2, na.rm = TRUE), lat_aod = lat_aod[1], long_aod = long_aod[1]), by = aodid]
-#saveRDS(m2_agg, "/media/NAS/Uni/Projects/P046.Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2007.rds")
+saveRDS(m2_agg, "/media/NAS/Uni/Projects/P046.Israel_MAIAC/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2007.rds")
 #map the predictions
-write.csv(m2_agg, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM2.AQ10.2007.csv")
-ggplot(m2_agg, aes(long_aod,lat_aod, color = LTPM.m2)) + 
-  geom_point(size = 3, shape = 15) +  xlab("longitude") + ylab("latitude") + 
-  scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(5)) + theme_bw() + ggtitle("Long term predictions")
-ggsave(file="/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM2.AQ10.2007.png")
+## write.csv(m2_agg, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM2.AQ10.2007.csv")
+## ggplot(m2_agg, aes(long_aod,lat_aod, color = LTPM.m2)) + 
+##   geom_point(size = 3, shape = 15) +  xlab("longitude") + ylab("latitude") + 
+##   scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(5)) + theme_bw() + ggtitle("Long term predictions")
+## ggsave(file="/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM2.AQ10.2007.png")
 
 #prepare for mod3
 m2.2007[, bimon := (m + 1) %/% 2]
@@ -512,20 +512,20 @@ mod3best[!is.na(pred.m1),bestpred := pred.m1]
 saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2007.FINAL.rds")
 #map the predictions
 #aggregate by aodid
-m3d_agg <- (mod3[, list(LTPM =mean(pred.m3, na.rm = TRUE), 
-                        x_aod_ITM = x_aod_ITM[1], #use the first long and lat (by aodid)
-                        y_aod_ITM = y_aod_ITM[1]),by = aodid])
+## m3d_agg <- (mod3[, list(LTPM =mean(pred.m3, na.rm = TRUE), 
+##                         x_aod_ITM = x_aod_ITM[1], #use the first long and lat (by aodid)
+##                         y_aod_ITM = y_aod_ITM[1]),by = aodid])
 
-# plot
-ggplot(m3d_agg, aes(x_aod_ITM, y_aod_ITM, color = LTPM)) + 
-  geom_point(size = 3, shape = 15) + 
-  #geom_text(aes(label = naod), color = "black", size = 6, subset = .(distcoy < 1500)) + #similar numbers of points
-  xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
-  scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(15)) + #c("purple", "blue", "white", "red", "orange")) + 
-  theme_bw() + 
-  ggtitle("Long term predictions")
+## # plot
+## ggplot(m3d_agg, aes(x_aod_ITM, y_aod_ITM, color = LTPM)) + 
+##   geom_point(size = 3, shape = 15) + 
+##   #geom_text(aes(label = naod), color = "black", size = 6, subset = .(distcoy < 1500)) + #similar numbers of points
+##   xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
+##   scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(15)) + #c("purple", "blue", "white", "red", "orange")) + 
+##   theme_bw() + 
+##   ggtitle("Long term predictions")
 
-ggsave(file="/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ10.2007.png")
+## ggsave(file="/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ10.2007.png")
 
 #save for GIS
 write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T), 
