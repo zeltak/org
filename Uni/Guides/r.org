@@ -9229,6 +9229,17 @@ flights %>%
 summarise_each allows you to apply the same summary function to multiple columns at once
 $Note$ mutate_each is also available
 
+BASE example:
+
+#+BEGIN_SRC R
+#summurize all variables in data set (only works for continous)
+AYLTPM<- LTPM.ALL %>%
+    group_by(aodid) %>%
+    summarise_each(funs(mean))
+#+END_SRC
+
+second example:
+
 #+BEGIN_SRC R
 #for each carrier, calculate the percentage of flights cancelled or diverted
 flights %>%

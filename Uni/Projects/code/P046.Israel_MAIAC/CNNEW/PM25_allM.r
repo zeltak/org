@@ -10,11 +10,10 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
 #if needed load res table
-#res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
-
+#res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 #-------------------->> RES TABLE
-res <- matrix(nrow=9, ncol=45)
+res <- matrix(nrow=10, ncol=45)
 res <- data.frame(res)
 colnames(res) <- c(
           "year"
@@ -27,34 +26,23 @@ colnames(res) <- c(
           ,"XX","XX","XX","XX","XX","XX","XX","XX","XX","XX","XX","XX","XX"    )
 
 
-res$year <- c(2003:2011) 
-
+res$year <- c(2003:2012) 
 
 
 ### import data
-m1.2003 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2003.rds")
+m1.2003 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2003.rds")
 
-#subset to aqua and apply alexei cleaning methods
-#MaskAdjacency == "000"
-# m1.2003<-m1.2003[ UN > 0 & UN < 0.04  ] 
-# 
-# ################# clean BAD STN PM10 and check if improved model?
-# raWDaf <- ddply(m1.2003, c( "stn"), 
-#       function(x) {
-#         mod1 <- lm(PM10 ~ aod, data=x)
-#         data.frame(R2 = round(summary(mod1)$r.squared, 5), 
-#                    nsamps = length(summary(mod1)$resid))
-# })
-# raWDaf
-# raWDaf<-as.data.table(raWDaf)
-# bad<- raWDaf[R2< 0.05]
-# bad[,badid := paste(stn,sep="-")]
-# #################BAD STN
-# m1.2003[,badid := paste(stn,sep="-")]
-# ####Take out bad stations
-# m1.2003 <- m1.2003[!(m1.2003$badid %in% bad$badid), ] 
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2< 0.01]
+bad[,badid := paste(stn,sep="-")]
+#################BAD STN
+m1.2003[,badid := paste(stn,sep="-")]
+####Take out bad stations
+m1.2003 <- m1.2003[!(m1.2003$badid %in% bad$badid), ] 
 
-#get rid of missing
+#scale vars
 m1.2003[,elev.s:= scale(elev)]
 m1.2003[,tden.s:= scale(tden)]
 m1.2003[,pden.s:= scale(pden)]
@@ -108,7 +96,7 @@ tempo2003$delpm <-tempo2003$PM10-tempo2003$barpm
 tempo2003$delpred <-tempo2003$pred.m1-tempo2003$barpred
 mod_temporal <- lm(delpm ~ delpred, data=tempo2003)
 res[res$year=="2003", 'm1.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2003))$r.squared)
-saveRDS(m1.2003,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2003.pred.rds")
+saveRDS(m1.2003,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2003.pred.rds")
 
 
 
@@ -261,9 +249,9 @@ mod_temporal.loc.cv <- lm(delpm ~ delpred, data=tempo2003.loc.cv)
 res[res$year=="2003", 'm1cv.loc.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2003.loc.cv))$r.squared)
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2003.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
-saveRDS(m1.2003.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2003.predCV.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2003.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
+saveRDS(m1.2003.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2003.predCV.rds")
 
 
 ###############
@@ -302,7 +290,7 @@ describe(m2.2003$pred.m2)
 m2.2003 <- m2.2003[pred.m2 > 0.00000000000001 , ]
 m2.2003 <- m2.2003[pred.m2 < 1500   , ]
 
-saveRDS(m2.2003,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2003.pred2.rds")
+saveRDS(m2.2003,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2003.pred2.rds")
 
 
 
@@ -437,7 +425,7 @@ mod3$pred.m3 <-mod3$pred.m3.mix+mod3$gpred
 #describe(mod3$pred.m3)
 #recode negative into zero
 mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2003.pred.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2003.pred.rds")
 
 #clean
 keep(mod3,res,rmse, sure=TRUE) 
@@ -448,7 +436,7 @@ gc()
 #prepare for m3.R2
 #########################
 #load mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2003.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2003.pred.rds")
 mod1[,aodid:= paste(mod1$long_aod,mod1$lat_aod,sep="-")]
 mod1<-mod1[,c("aodid","day","PM10","pred.m1","stn"),with=FALSE]
 
@@ -481,12 +469,12 @@ res[res$year=="2003", 'm3.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=temp
 
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2003.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2003.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 #########################
 #import mod2
-mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2003.pred2.rds")
+mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2003.pred2.rds")
 mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
 
 #----------------> store the best available
@@ -495,7 +483,7 @@ setkey(mod3best, day, aodid)
 setkey(mod2, day, aodid)
 mod3best <- merge(mod3best, mod2[,list(aodid, day, pred.m2)], all.x = T)
 #reload mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2003.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2003.pred.rds")
 mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
 mod1<-mod1[,c("aodid","day","PM10","pred.m1"),with=FALSE]
 setkey(mod1,day,aodid)
@@ -504,7 +492,7 @@ mod3best[,bestpred := pred.m3]
 mod3best[!is.na(pred.m2),bestpred := pred.m2]
 mod3best[!is.na(pred.m1),bestpred := pred.m1]
 #save
-saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2003.FINAL.rds")
+saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2003.FINAL.rds")
 
 #save for GIS
 write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T), 
@@ -515,10 +503,10 @@ write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T),
                           npred.m1 = sum(!is.na(pred.m1)),
                           npred.m2 = sum(!is.na(pred.m2)),
                           npred.m3 = sum(!is.na(pred.m3)),
-                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ10.2003.csv", row.names = F)
+                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ.2003.csv", row.names = F)
 
 keep(res, sure=TRUE) 
-gc()
+c()
 
 
 
@@ -534,33 +522,29 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
 #if needed load res table
-res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
+res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 
 ### import data
-m1.2004 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2004.rds")
+m1.2004 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2004.rds")
 
-#subset to aqua and apply alexei cleaning methods
-#MaskAdjacency == "000"
-## m1.2004<-m1.2004[ UN > 0 & UN < 0.04  ] 
+################# clean BAD STN PM10 and check if improved model?
+raWDaf <- ddply(m1.2004, c( "stn"), 
+      function(x) {
+        mod1 <- lm(PM10 ~ aod, data=x)
+        data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                   nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2< 0.01]
+bad[,badid := paste(stn,sep="-")]
+#################BAD STN
+m1.2004[,badid := paste(stn,sep="-")]
+####Take out bad stations
+m1.2004 <- m1.2004[!(m1.2004$badid %in% bad$badid), ] 
 
-## ################# clean BAD STN PM10 and check if improved model?
-## raWDaf <- ddply(m1.2004, c( "stn"), 
-##       function(x) {
-##         mod1 <- lm(PM10 ~ aod, data=x)
-##         data.frame(R2 = round(summary(mod1)$r.squared, 5), 
-##                    nsamps = length(summary(mod1)$resid))
-## })
-## raWDaf
-## raWDaf<-as.data.table(raWDaf)
-## bad<- raWDaf[R2< 0.05]
-## bad[,badid := paste(stn,sep="-")]
-## #################BAD STN
-## m1.2004[,badid := paste(stn,sep="-")]
-## ####Take out bad stations
-## m1.2004 <- m1.2004[!(m1.2004$badid %in% bad$badid), ] 
-
-#get rid of missing
+#scale vars
 m1.2004[,elev.s:= scale(elev)]
 m1.2004[,tden.s:= scale(tden)]
 m1.2004[,pden.s:= scale(pden)]
@@ -614,7 +598,7 @@ tempo2004$delpm <-tempo2004$PM10-tempo2004$barpm
 tempo2004$delpred <-tempo2004$pred.m1-tempo2004$barpred
 mod_temporal <- lm(delpm ~ delpred, data=tempo2004)
 res[res$year=="2004", 'm1.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2004))$r.squared)
-saveRDS(m1.2004,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2004.pred.rds")
+saveRDS(m1.2004,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2004.pred.rds")
 
 
 
@@ -767,9 +751,9 @@ mod_temporal.loc.cv <- lm(delpm ~ delpred, data=tempo2004.loc.cv)
 res[res$year=="2004", 'm1cv.loc.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2004.loc.cv))$r.squared)
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2004.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
-saveRDS(m1.2004.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2004.predCV.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2004.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
+saveRDS(m1.2004.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2004.predCV.rds")
 
 
 ###############
@@ -808,7 +792,7 @@ describe(m2.2004$pred.m2)
 m2.2004 <- m2.2004[pred.m2 > 0.00000000000001 , ]
 m2.2004 <- m2.2004[pred.m2 < 1500   , ]
 
-saveRDS(m2.2004,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2004.pred2.rds")
+saveRDS(m2.2004,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2004.pred2.rds")
 
 
 
@@ -943,7 +927,7 @@ mod3$pred.m3 <-mod3$pred.m3.mix+mod3$gpred
 #describe(mod3$pred.m3)
 #recode negative into zero
 mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2004.pred.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2004.pred.rds")
 
 #clean
 keep(mod3,res,rmse, sure=TRUE) 
@@ -954,7 +938,7 @@ gc()
 #prepare for m3.R2
 #########################
 #load mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2004.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2004.pred.rds")
 mod1[,aodid:= paste(mod1$long_aod,mod1$lat_aod,sep="-")]
 mod1<-mod1[,c("aodid","day","PM10","pred.m1","stn"),with=FALSE]
 
@@ -987,12 +971,12 @@ res[res$year=="2004", 'm3.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=temp
 
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2004.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2004.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 #########################
 #import mod2
-mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2004.pred2.rds")
+mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2004.pred2.rds")
 mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
 
 #----------------> store the best available
@@ -1001,7 +985,7 @@ setkey(mod3best, day, aodid)
 setkey(mod2, day, aodid)
 mod3best <- merge(mod3best, mod2[,list(aodid, day, pred.m2)], all.x = T)
 #reload mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2004.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2004.pred.rds")
 mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
 mod1<-mod1[,c("aodid","day","PM10","pred.m1"),with=FALSE]
 setkey(mod1,day,aodid)
@@ -1010,7 +994,7 @@ mod3best[,bestpred := pred.m3]
 mod3best[!is.na(pred.m2),bestpred := pred.m2]
 mod3best[!is.na(pred.m1),bestpred := pred.m1]
 #save
-saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2004.FINAL.rds")
+saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2004.FINAL.rds")
 
 #save for GIS
 write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T), 
@@ -1021,7 +1005,7 @@ write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T),
                           npred.m1 = sum(!is.na(pred.m1)),
                           npred.m2 = sum(!is.na(pred.m2)),
                           npred.m3 = sum(!is.na(pred.m3)),
-                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ10.2004.csv", row.names = F)
+                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ.2004.csv", row.names = F)
 
 keep(res, sure=TRUE) 
 gc()
@@ -1040,34 +1024,31 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
 #if needed load res table
-res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
+res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 
 
 ### import data
-m1.2005 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2005.rds")
+m1.2005 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2005.rds")
 
-#subset to aqua and apply alexei cleaning methods
-#MaskAdjacency == "000"
-## m1.2005<-m1.2005[ UN > 0 & UN < 0.04  ] 
 
-## ################# clean BAD STN PM10 and check if improved model?
-## raWDaf <- ddply(m1.2005, c( "stn"), 
-##       function(x) {
-##         mod1 <- lm(PM10 ~ aod, data=x)
-##         data.frame(R2 = round(summary(mod1)$r.squared, 5), 
-##                    nsamps = length(summary(mod1)$resid))
-## })
-## raWDaf
-## raWDaf<-as.data.table(raWDaf)
-## bad<- raWDaf[R2< 0.05]
-## bad[,badid := paste(stn,sep="-")]
-## #################BAD STN
-## m1.2005[,badid := paste(stn,sep="-")]
-## ####Take out bad stations
-## m1.2005 <- m1.2005[!(m1.2005$badid %in% bad$badid), ] 
+################# clean BAD STN PM10 and check if improved model?
+raWDaf <- ddply(m1.2005, c( "stn"), 
+      function(x) {
+        mod1 <- lm(PM10 ~ aod, data=x)
+        data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                   nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2< 0.01]
+bad[,badid := paste(stn,sep="-")]
+#################BAD STN
+m1.2005[,badid := paste(stn,sep="-")]
+####Take out bad stations
+m1.2005 <- m1.2005[!(m1.2005$badid %in% bad$badid), ] 
 
-#get rid of missing
+#scale vars
 m1.2005[,elev.s:= scale(elev)]
 m1.2005[,tden.s:= scale(tden)]
 m1.2005[,pden.s:= scale(pden)]
@@ -1121,7 +1102,7 @@ tempo2005$delpm <-tempo2005$PM10-tempo2005$barpm
 tempo2005$delpred <-tempo2005$pred.m1-tempo2005$barpred
 mod_temporal <- lm(delpm ~ delpred, data=tempo2005)
 res[res$year=="2005", 'm1.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2005))$r.squared)
-saveRDS(m1.2005,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2005.pred.rds")
+saveRDS(m1.2005,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2005.pred.rds")
 
 
 
@@ -1274,9 +1255,9 @@ mod_temporal.loc.cv <- lm(delpm ~ delpred, data=tempo2005.loc.cv)
 res[res$year=="2005", 'm1cv.loc.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2005.loc.cv))$r.squared)
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2005.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
-saveRDS(m1.2005.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2005.predCV.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2005.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
+saveRDS(m1.2005.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2005.predCV.rds")
 
 
 ###############
@@ -1315,7 +1296,7 @@ describe(m2.2005$pred.m2)
 m2.2005 <- m2.2005[pred.m2 > 0.00000000000001 , ]
 m2.2005 <- m2.2005[pred.m2 < 1500   , ]
 
-saveRDS(m2.2005,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2005.pred2.rds")
+saveRDS(m2.2005,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2005.pred2.rds")
 
 
 
@@ -1450,7 +1431,7 @@ mod3$pred.m3 <-mod3$pred.m3.mix+mod3$gpred
 #describe(mod3$pred.m3)
 #recode negative into zero
 mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2005.pred.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2005.pred.rds")
 
 #clean
 keep(mod3,res,rmse, sure=TRUE) 
@@ -1461,7 +1442,7 @@ gc()
 #prepare for m3.R2
 #########################
 #load mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2005.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2005.pred.rds")
 mod1[,aodid:= paste(mod1$long_aod,mod1$lat_aod,sep="-")]
 mod1<-mod1[,c("aodid","day","PM10","pred.m1","stn"),with=FALSE]
 
@@ -1494,12 +1475,12 @@ res[res$year=="2005", 'm3.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=temp
 
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2005.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2005.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 #########################
 #import mod2
-mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2005.pred2.rds")
+mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2005.pred2.rds")
 mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
 
 #----------------> store the best available
@@ -1508,7 +1489,7 @@ setkey(mod3best, day, aodid)
 setkey(mod2, day, aodid)
 mod3best <- merge(mod3best, mod2[,list(aodid, day, pred.m2)], all.x = T)
 #reload mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2005.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2005.pred.rds")
 mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
 mod1<-mod1[,c("aodid","day","PM10","pred.m1"),with=FALSE]
 setkey(mod1,day,aodid)
@@ -1517,7 +1498,7 @@ mod3best[,bestpred := pred.m3]
 mod3best[!is.na(pred.m2),bestpred := pred.m2]
 mod3best[!is.na(pred.m1),bestpred := pred.m1]
 #save
-saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2005.FINAL.rds")
+saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2005.FINAL.rds")
 
 #save for GIS
 write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T), 
@@ -1528,7 +1509,7 @@ write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T),
                           npred.m1 = sum(!is.na(pred.m1)),
                           npred.m2 = sum(!is.na(pred.m2)),
                           npred.m3 = sum(!is.na(pred.m3)),
-                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ10.2005.csv", row.names = F)
+                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ.2005.csv", row.names = F)
 
 keep(res, sure=TRUE) 
 c()
@@ -1547,15 +1528,11 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
 #if needed load res table
-#res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
+#res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 
 ### import data
-m1.2006 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2006.rds")
-
-#subset to aqua and apply alexei cleaning methods
-#MaskAdjacency == "000"
-m1.2006<-m1.2006[ UN > 0 & UN < 0.04  ] 
+m1.2006 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2006.rds")
 
 ################# clean BAD STN PM10 and check if improved model?
 raWDaf <- ddply(m1.2006, c( "stn"), 
@@ -1566,14 +1543,14 @@ raWDaf <- ddply(m1.2006, c( "stn"),
 })
 raWDaf
 raWDaf<-as.data.table(raWDaf)
-bad<- raWDaf[R2< 0.05]
+bad<- raWDaf[R2< 0.01]
 bad[,badid := paste(stn,sep="-")]
 #################BAD STN
 m1.2006[,badid := paste(stn,sep="-")]
 ####Take out bad stations
 m1.2006 <- m1.2006[!(m1.2006$badid %in% bad$badid), ] 
 
-#get rid of missing
+#scale vars
 m1.2006[,elev.s:= scale(elev)]
 m1.2006[,tden.s:= scale(tden)]
 m1.2006[,pden.s:= scale(pden)]
@@ -1627,7 +1604,7 @@ tempo2006$delpm <-tempo2006$PM10-tempo2006$barpm
 tempo2006$delpred <-tempo2006$pred.m1-tempo2006$barpred
 mod_temporal <- lm(delpm ~ delpred, data=tempo2006)
 res[res$year=="2006", 'm1.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2006))$r.squared)
-saveRDS(m1.2006,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2006.pred.rds")
+saveRDS(m1.2006,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2006.pred.rds")
 
 
 
@@ -1780,9 +1757,9 @@ mod_temporal.loc.cv <- lm(delpm ~ delpred, data=tempo2006.loc.cv)
 res[res$year=="2006", 'm1cv.loc.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2006.loc.cv))$r.squared)
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2006.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
-saveRDS(m1.2006.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2006.predCV.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2006.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
+saveRDS(m1.2006.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2006.predCV.rds")
 
 
 ###############
@@ -1821,7 +1798,7 @@ describe(m2.2006$pred.m2)
 m2.2006 <- m2.2006[pred.m2 > 0.00000000000001 , ]
 m2.2006 <- m2.2006[pred.m2 < 1500   , ]
 
-saveRDS(m2.2006,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2006.pred2.rds")
+saveRDS(m2.2006,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2006.pred2.rds")
 
 
 
@@ -1956,7 +1933,7 @@ mod3$pred.m3 <-mod3$pred.m3.mix+mod3$gpred
 #describe(mod3$pred.m3)
 #recode negative into zero
 mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2006.pred.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2006.pred.rds")
 
 #clean
 keep(mod3,res,rmse, sure=TRUE) 
@@ -1967,7 +1944,7 @@ gc()
 #prepare for m3.R2
 #########################
 #load mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2006.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2006.pred.rds")
 mod1[,aodid:= paste(mod1$long_aod,mod1$lat_aod,sep="-")]
 mod1<-mod1[,c("aodid","day","PM10","pred.m1","stn"),with=FALSE]
 
@@ -2000,12 +1977,12 @@ res[res$year=="2006", 'm3.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=temp
 
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2006.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2006.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 #########################
 #import mod2
-mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2006.pred2.rds")
+mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2006.pred2.rds")
 mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
 
 #----------------> store the best available
@@ -2014,7 +1991,7 @@ setkey(mod3best, day, aodid)
 setkey(mod2, day, aodid)
 mod3best <- merge(mod3best, mod2[,list(aodid, day, pred.m2)], all.x = T)
 #reload mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2006.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2006.pred.rds")
 mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
 mod1<-mod1[,c("aodid","day","PM10","pred.m1"),with=FALSE]
 setkey(mod1,day,aodid)
@@ -2023,7 +2000,7 @@ mod3best[,bestpred := pred.m3]
 mod3best[!is.na(pred.m2),bestpred := pred.m2]
 mod3best[!is.na(pred.m1),bestpred := pred.m1]
 #save
-saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2006.FINAL.rds")
+saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2006.FINAL.rds")
 
 #save for GIS
 write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T), 
@@ -2034,7 +2011,7 @@ write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T),
                           npred.m1 = sum(!is.na(pred.m1)),
                           npred.m2 = sum(!is.na(pred.m2)),
                           npred.m3 = sum(!is.na(pred.m3)),
-                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ10.2006.csv", row.names = F)
+                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ.2006.csv", row.names = F)
 
 keep(res, sure=TRUE) 
 c()
@@ -2053,16 +2030,12 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
 #if needed load res table
-#res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
+#res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 
 
 ### import data
-m1.2007 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2007.rds")
-
-#subset to aqua and apply alexei cleaning methods
-#MaskAdjacency == "000"
-m1.2007<-m1.2007[ UN > 0 & UN < 0.04  ] 
+m1.2007 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2007.rds")
 
 ################# clean BAD STN PM10 and check if improved model?
 raWDaf <- ddply(m1.2007, c( "stn"), 
@@ -2073,14 +2046,14 @@ raWDaf <- ddply(m1.2007, c( "stn"),
 })
 raWDaf
 raWDaf<-as.data.table(raWDaf)
-bad<- raWDaf[R2< 0.05]
+bad<- raWDaf[R2< 0.01]
 bad[,badid := paste(stn,sep="-")]
 #################BAD STN
 m1.2007[,badid := paste(stn,sep="-")]
 ####Take out bad stations
 m1.2007 <- m1.2007[!(m1.2007$badid %in% bad$badid), ] 
 
-#get rid of missing
+#scale vars
 m1.2007[,elev.s:= scale(elev)]
 m1.2007[,tden.s:= scale(tden)]
 m1.2007[,pden.s:= scale(pden)]
@@ -2134,7 +2107,7 @@ tempo2007$delpm <-tempo2007$PM10-tempo2007$barpm
 tempo2007$delpred <-tempo2007$pred.m1-tempo2007$barpred
 mod_temporal <- lm(delpm ~ delpred, data=tempo2007)
 res[res$year=="2007", 'm1.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2007))$r.squared)
-saveRDS(m1.2007,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2007.pred.rds")
+saveRDS(m1.2007,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2007.pred.rds")
 
 
 
@@ -2287,9 +2260,9 @@ mod_temporal.loc.cv <- lm(delpm ~ delpred, data=tempo2007.loc.cv)
 res[res$year=="2007", 'm1cv.loc.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2007.loc.cv))$r.squared)
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2007.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
-saveRDS(m1.2007.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2007.predCV.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2007.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
+saveRDS(m1.2007.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2007.predCV.rds")
 
 
 ###############
@@ -2328,7 +2301,7 @@ describe(m2.2007$pred.m2)
 m2.2007 <- m2.2007[pred.m2 > 0.00000000000001 , ]
 m2.2007 <- m2.2007[pred.m2 < 1500   , ]
 
-saveRDS(m2.2007,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2007.pred2.rds")
+saveRDS(m2.2007,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2007.pred2.rds")
 
 
 
@@ -2463,7 +2436,7 @@ mod3$pred.m3 <-mod3$pred.m3.mix+mod3$gpred
 #describe(mod3$pred.m3)
 #recode negative into zero
 mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2007.pred.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2007.pred.rds")
 
 #clean
 keep(mod3,res,rmse, sure=TRUE) 
@@ -2474,7 +2447,7 @@ gc()
 #prepare for m3.R2
 #########################
 #load mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2007.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2007.pred.rds")
 mod1[,aodid:= paste(mod1$long_aod,mod1$lat_aod,sep="-")]
 mod1<-mod1[,c("aodid","day","PM10","pred.m1","stn"),with=FALSE]
 
@@ -2507,12 +2480,12 @@ res[res$year=="2007", 'm3.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=temp
 
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2007.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2007.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 #########################
 #import mod2
-mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2007.pred2.rds")
+mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2007.pred2.rds")
 mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
 
 #----------------> store the best available
@@ -2521,7 +2494,7 @@ setkey(mod3best, day, aodid)
 setkey(mod2, day, aodid)
 mod3best <- merge(mod3best, mod2[,list(aodid, day, pred.m2)], all.x = T)
 #reload mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2007.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2007.pred.rds")
 mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
 mod1<-mod1[,c("aodid","day","PM10","pred.m1"),with=FALSE]
 setkey(mod1,day,aodid)
@@ -2530,7 +2503,7 @@ mod3best[,bestpred := pred.m3]
 mod3best[!is.na(pred.m2),bestpred := pred.m2]
 mod3best[!is.na(pred.m1),bestpred := pred.m1]
 #save
-saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2007.FINAL.rds")
+saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2007.FINAL.rds")
 
 #save for GIS
 write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T), 
@@ -2541,7 +2514,7 @@ write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T),
                           npred.m1 = sum(!is.na(pred.m1)),
                           npred.m2 = sum(!is.na(pred.m2)),
                           npred.m3 = sum(!is.na(pred.m3)),
-                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ10.2007.csv", row.names = F)
+                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ.2007.csv", row.names = F)
 
 keep(res, sure=TRUE) 
 c()
@@ -2560,18 +2533,15 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
 #if needed load res table
-#res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
+#res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 
 
 
 
 ### import data
-m1.2008 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2008.rds")
+m1.2008 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2008.rds")
 
-#subset to aqua and apply alexei cleaning methods
-#MaskAdjacency == "000"
-m1.2008<-m1.2008[ UN > 0 & UN < 0.04  ] 
 
 ################# clean BAD STN PM10 and check if improved model?
 raWDaf <- ddply(m1.2008, c( "stn"), 
@@ -2582,14 +2552,14 @@ raWDaf <- ddply(m1.2008, c( "stn"),
 })
 raWDaf
 raWDaf<-as.data.table(raWDaf)
-bad<- raWDaf[R2< 0.05]
+bad<- raWDaf[R2< 0.01]
 bad[,badid := paste(stn,sep="-")]
 #################BAD STN
 m1.2008[,badid := paste(stn,sep="-")]
 ####Take out bad stations
 m1.2008 <- m1.2008[!(m1.2008$badid %in% bad$badid), ] 
 
-#get rid of missing
+#scale vars
 m1.2008[,elev.s:= scale(elev)]
 m1.2008[,tden.s:= scale(tden)]
 m1.2008[,pden.s:= scale(pden)]
@@ -2643,7 +2613,7 @@ tempo2008$delpm <-tempo2008$PM10-tempo2008$barpm
 tempo2008$delpred <-tempo2008$pred.m1-tempo2008$barpred
 mod_temporal <- lm(delpm ~ delpred, data=tempo2008)
 res[res$year=="2008", 'm1.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2008))$r.squared)
-saveRDS(m1.2008,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2008.pred.rds")
+saveRDS(m1.2008,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2008.pred.rds")
 
 
 
@@ -2796,9 +2766,9 @@ mod_temporal.loc.cv <- lm(delpm ~ delpred, data=tempo2008.loc.cv)
 res[res$year=="2008", 'm1cv.loc.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2008.loc.cv))$r.squared)
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2008.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
-saveRDS(m1.2008.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2008.predCV.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2008.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
+saveRDS(m1.2008.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2008.predCV.rds")
 
 
 ###############
@@ -2837,7 +2807,7 @@ describe(m2.2008$pred.m2)
 m2.2008 <- m2.2008[pred.m2 > 0.00000000000001 , ]
 m2.2008 <- m2.2008[pred.m2 < 1500   , ]
 
-saveRDS(m2.2008,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2008.pred2.rds")
+saveRDS(m2.2008,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2008.pred2.rds")
 
 
 
@@ -2972,7 +2942,7 @@ mod3$pred.m3 <-mod3$pred.m3.mix+mod3$gpred
 #describe(mod3$pred.m3)
 #recode negative into zero
 mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2008.pred.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2008.pred.rds")
 
 #clean
 keep(mod3,res,rmse, sure=TRUE) 
@@ -2983,7 +2953,7 @@ gc()
 #prepare for m3.R2
 #########################
 #load mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2008.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2008.pred.rds")
 mod1[,aodid:= paste(mod1$long_aod,mod1$lat_aod,sep="-")]
 mod1<-mod1[,c("aodid","day","PM10","pred.m1","stn"),with=FALSE]
 
@@ -3016,12 +2986,12 @@ res[res$year=="2008", 'm3.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=temp
 
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2008.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2008.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 #########################
 #import mod2
-mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2008.pred2.rds")
+mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2008.pred2.rds")
 mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
 
 #----------------> store the best available
@@ -3030,7 +3000,7 @@ setkey(mod3best, day, aodid)
 setkey(mod2, day, aodid)
 mod3best <- merge(mod3best, mod2[,list(aodid, day, pred.m2)], all.x = T)
 #reload mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2008.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2008.pred.rds")
 mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
 mod1<-mod1[,c("aodid","day","PM10","pred.m1"),with=FALSE]
 setkey(mod1,day,aodid)
@@ -3039,7 +3009,7 @@ mod3best[,bestpred := pred.m3]
 mod3best[!is.na(pred.m2),bestpred := pred.m2]
 mod3best[!is.na(pred.m1),bestpred := pred.m1]
 #save
-saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2008.FINAL.rds")
+saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2008.FINAL.rds")
 
 #save for GIS
 write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T), 
@@ -3050,7 +3020,7 @@ write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T),
                           npred.m1 = sum(!is.na(pred.m1)),
                           npred.m2 = sum(!is.na(pred.m2)),
                           npred.m3 = sum(!is.na(pred.m3)),
-                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ10.2008.csv", row.names = F)
+                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ.2008.csv", row.names = F)
 
 keep(res, sure=TRUE) 
 c()
@@ -3069,18 +3039,15 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
 #if needed load res table
-#res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
+#res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 
 
 
 
 ### import data
-m1.2009 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2009.rds")
+m1.2009 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2009.rds")
 
-#subset to aqua and apply alexei cleaning methods
-#MaskAdjacency == "000"
-m1.2009<-m1.2009[ UN > 0 & UN < 0.04  ] 
 
 ################# clean BAD STN PM10 and check if improved model?
 raWDaf <- ddply(m1.2009, c( "stn"), 
@@ -3091,14 +3058,14 @@ raWDaf <- ddply(m1.2009, c( "stn"),
 })
 raWDaf
 raWDaf<-as.data.table(raWDaf)
-bad<- raWDaf[R2< 0.05]
+bad<- raWDaf[R2< 0.01]
 bad[,badid := paste(stn,sep="-")]
 #################BAD STN
 m1.2009[,badid := paste(stn,sep="-")]
 ####Take out bad stations
 m1.2009 <- m1.2009[!(m1.2009$badid %in% bad$badid), ] 
 
-#get rid of missing
+#scale vars
 m1.2009[,elev.s:= scale(elev)]
 m1.2009[,tden.s:= scale(tden)]
 m1.2009[,pden.s:= scale(pden)]
@@ -3152,7 +3119,7 @@ tempo2009$delpm <-tempo2009$PM10-tempo2009$barpm
 tempo2009$delpred <-tempo2009$pred.m1-tempo2009$barpred
 mod_temporal <- lm(delpm ~ delpred, data=tempo2009)
 res[res$year=="2009", 'm1.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2009))$r.squared)
-saveRDS(m1.2009,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2009.pred.rds")
+saveRDS(m1.2009,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2009.pred.rds")
 
 
 
@@ -3305,9 +3272,9 @@ mod_temporal.loc.cv <- lm(delpm ~ delpred, data=tempo2009.loc.cv)
 res[res$year=="2009", 'm1cv.loc.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2009.loc.cv))$r.squared)
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2009.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
-saveRDS(m1.2009.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2009.predCV.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2009.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
+saveRDS(m1.2009.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2009.predCV.rds")
 
 
 ###############
@@ -3346,7 +3313,7 @@ describe(m2.2009$pred.m2)
 m2.2009 <- m2.2009[pred.m2 > 0.00000000000001 , ]
 m2.2009 <- m2.2009[pred.m2 < 1500   , ]
 
-saveRDS(m2.2009,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2009.pred2.rds")
+saveRDS(m2.2009,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2009.pred2.rds")
 
 
 
@@ -3481,7 +3448,7 @@ mod3$pred.m3 <-mod3$pred.m3.mix+mod3$gpred
 #describe(mod3$pred.m3)
 #recode negative into zero
 mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2009.pred.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2009.pred.rds")
 
 #clean
 keep(mod3,res,rmse, sure=TRUE) 
@@ -3492,7 +3459,7 @@ gc()
 #prepare for m3.R2
 #########################
 #load mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2009.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2009.pred.rds")
 mod1[,aodid:= paste(mod1$long_aod,mod1$lat_aod,sep="-")]
 mod1<-mod1[,c("aodid","day","PM10","pred.m1","stn"),with=FALSE]
 
@@ -3525,12 +3492,12 @@ res[res$year=="2009", 'm3.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=temp
 
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2009.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2009.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 #########################
 #import mod2
-mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2009.pred2.rds")
+mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2009.pred2.rds")
 mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
 
 #----------------> store the best available
@@ -3539,7 +3506,7 @@ setkey(mod3best, day, aodid)
 setkey(mod2, day, aodid)
 mod3best <- merge(mod3best, mod2[,list(aodid, day, pred.m2)], all.x = T)
 #reload mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2009.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2009.pred.rds")
 mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
 mod1<-mod1[,c("aodid","day","PM10","pred.m1"),with=FALSE]
 setkey(mod1,day,aodid)
@@ -3548,7 +3515,7 @@ mod3best[,bestpred := pred.m3]
 mod3best[!is.na(pred.m2),bestpred := pred.m2]
 mod3best[!is.na(pred.m1),bestpred := pred.m1]
 #save
-saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2009.FINAL.rds")
+saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2009.FINAL.rds")
 
 #save for GIS
 write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T), 
@@ -3559,7 +3526,7 @@ write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T),
                           npred.m1 = sum(!is.na(pred.m1)),
                           npred.m2 = sum(!is.na(pred.m2)),
                           npred.m3 = sum(!is.na(pred.m3)),
-                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ10.2009.csv", row.names = F)
+                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ.2009.csv", row.names = F)
 
 keep(res, sure=TRUE) 
 c()
@@ -3578,18 +3545,15 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
 #if needed load res table
-#res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
+#res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 
 
 
 
 ### import data
-m1.2010 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2010.rds")
+m1.2010 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2010.rds")
 
-#subset to aqua and apply alexei cleaning methods
-#MaskAdjacency == "000"
-m1.2010<-m1.2010[ UN > 0 & UN < 0.04  ] 
 
 ################# clean BAD STN PM10 and check if improved model?
 raWDaf <- ddply(m1.2010, c( "stn"), 
@@ -3600,14 +3564,14 @@ raWDaf <- ddply(m1.2010, c( "stn"),
 })
 raWDaf
 raWDaf<-as.data.table(raWDaf)
-bad<- raWDaf[R2< 0.05]
+bad<- raWDaf[R2< 0.01]
 bad[,badid := paste(stn,sep="-")]
 #################BAD STN
 m1.2010[,badid := paste(stn,sep="-")]
 ####Take out bad stations
 m1.2010 <- m1.2010[!(m1.2010$badid %in% bad$badid), ] 
 
-#get rid of missing
+#scale vars
 m1.2010[,elev.s:= scale(elev)]
 m1.2010[,tden.s:= scale(tden)]
 m1.2010[,pden.s:= scale(pden)]
@@ -3661,7 +3625,7 @@ tempo2010$delpm <-tempo2010$PM10-tempo2010$barpm
 tempo2010$delpred <-tempo2010$pred.m1-tempo2010$barpred
 mod_temporal <- lm(delpm ~ delpred, data=tempo2010)
 res[res$year=="2010", 'm1.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2010))$r.squared)
-saveRDS(m1.2010,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2010.pred.rds")
+saveRDS(m1.2010,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2010.pred.rds")
 
 
 
@@ -3814,9 +3778,9 @@ mod_temporal.loc.cv <- lm(delpm ~ delpred, data=tempo2010.loc.cv)
 res[res$year=="2010", 'm1cv.loc.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2010.loc.cv))$r.squared)
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2010.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
-saveRDS(m1.2010.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2010.predCV.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2010.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
+saveRDS(m1.2010.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2010.predCV.rds")
 
 
 ###############
@@ -3855,7 +3819,7 @@ describe(m2.2010$pred.m2)
 m2.2010 <- m2.2010[pred.m2 > 0.00000000000001 , ]
 m2.2010 <- m2.2010[pred.m2 < 1500   , ]
 
-saveRDS(m2.2010,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2010.pred2.rds")
+saveRDS(m2.2010,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2010.pred2.rds")
 
 
 
@@ -3990,7 +3954,7 @@ mod3$pred.m3 <-mod3$pred.m3.mix+mod3$gpred
 #describe(mod3$pred.m3)
 #recode negative into zero
 mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2010.pred.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2010.pred.rds")
 
 #clean
 keep(mod3,res,rmse, sure=TRUE) 
@@ -4001,7 +3965,7 @@ gc()
 #prepare for m3.R2
 #########################
 #load mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2010.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2010.pred.rds")
 mod1[,aodid:= paste(mod1$long_aod,mod1$lat_aod,sep="-")]
 mod1<-mod1[,c("aodid","day","PM10","pred.m1","stn"),with=FALSE]
 
@@ -4034,12 +3998,12 @@ res[res$year=="2010", 'm3.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=temp
 
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2010.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2010.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 #########################
 #import mod2
-mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2010.pred2.rds")
+mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2010.pred2.rds")
 mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
 
 #----------------> store the best available
@@ -4048,7 +4012,7 @@ setkey(mod3best, day, aodid)
 setkey(mod2, day, aodid)
 mod3best <- merge(mod3best, mod2[,list(aodid, day, pred.m2)], all.x = T)
 #reload mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2010.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2010.pred.rds")
 mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
 mod1<-mod1[,c("aodid","day","PM10","pred.m1"),with=FALSE]
 setkey(mod1,day,aodid)
@@ -4057,7 +4021,7 @@ mod3best[,bestpred := pred.m3]
 mod3best[!is.na(pred.m2),bestpred := pred.m2]
 mod3best[!is.na(pred.m1),bestpred := pred.m1]
 #save
-saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2010.FINAL.rds")
+saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2010.FINAL.rds")
 
 #save for GIS
 write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T), 
@@ -4068,7 +4032,7 @@ write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T),
                           npred.m1 = sum(!is.na(pred.m1)),
                           npred.m2 = sum(!is.na(pred.m2)),
                           npred.m3 = sum(!is.na(pred.m3)),
-                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ10.2010.csv", row.names = F)
+                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ.2010.csv", row.names = F)
 
 keep(res, sure=TRUE) 
 c()
@@ -4087,18 +4051,15 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
 #if needed load res table
-#res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
+#res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 
 
 
 
 ### import data
-m1.2011 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2011.rds")
+m1.2011 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2011.rds")
 
-#subset to aqua and apply alexei cleaning methods
-#MaskAdjacency == "000"
-m1.2011<-m1.2011[ UN > 0 & UN < 0.04  ] 
 
 ################# clean BAD STN PM10 and check if improved model?
 raWDaf <- ddply(m1.2011, c( "stn"), 
@@ -4109,14 +4070,14 @@ raWDaf <- ddply(m1.2011, c( "stn"),
 })
 raWDaf
 raWDaf<-as.data.table(raWDaf)
-bad<- raWDaf[R2< 0.05]
+bad<- raWDaf[R2< 0.01]
 bad[,badid := paste(stn,sep="-")]
 #################BAD STN
 m1.2011[,badid := paste(stn,sep="-")]
 ####Take out bad stations
 m1.2011 <- m1.2011[!(m1.2011$badid %in% bad$badid), ] 
 
-#get rid of missing
+#scale vars
 m1.2011[,elev.s:= scale(elev)]
 m1.2011[,tden.s:= scale(tden)]
 m1.2011[,pden.s:= scale(pden)]
@@ -4170,7 +4131,7 @@ tempo2011$delpm <-tempo2011$PM10-tempo2011$barpm
 tempo2011$delpred <-tempo2011$pred.m1-tempo2011$barpred
 mod_temporal <- lm(delpm ~ delpred, data=tempo2011)
 res[res$year=="2011", 'm1.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2011))$r.squared)
-saveRDS(m1.2011,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2011.pred.rds")
+saveRDS(m1.2011,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2011.pred.rds")
 
 
 
@@ -4323,9 +4284,9 @@ mod_temporal.loc.cv <- lm(delpm ~ delpred, data=tempo2011.loc.cv)
 res[res$year=="2011", 'm1cv.loc.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2011.loc.cv))$r.squared)
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2011.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
-saveRDS(m1.2011.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2011.predCV.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2011.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
+saveRDS(m1.2011.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2011.predCV.rds")
 
 
 ###############
@@ -4364,7 +4325,7 @@ describe(m2.2011$pred.m2)
 m2.2011 <- m2.2011[pred.m2 > 0.00000000000001 , ]
 m2.2011 <- m2.2011[pred.m2 < 1500   , ]
 
-saveRDS(m2.2011,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2011.pred2.rds")
+saveRDS(m2.2011,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2011.pred2.rds")
 
 
 
@@ -4499,7 +4460,7 @@ mod3$pred.m3 <-mod3$pred.m3.mix+mod3$gpred
 #describe(mod3$pred.m3)
 #recode negative into zero
 mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2011.pred.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2011.pred.rds")
 
 #clean
 keep(mod3,res,rmse, sure=TRUE) 
@@ -4510,7 +4471,7 @@ gc()
 #prepare for m3.R2
 #########################
 #load mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2011.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2011.pred.rds")
 mod1[,aodid:= paste(mod1$long_aod,mod1$lat_aod,sep="-")]
 mod1<-mod1[,c("aodid","day","PM10","pred.m1","stn"),with=FALSE]
 
@@ -4543,12 +4504,12 @@ res[res$year=="2011", 'm3.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=temp
 
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2011.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2011.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 #########################
 #import mod2
-mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2011.pred2.rds")
+mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2011.pred2.rds")
 mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
 
 #----------------> store the best available
@@ -4557,7 +4518,7 @@ setkey(mod3best, day, aodid)
 setkey(mod2, day, aodid)
 mod3best <- merge(mod3best, mod2[,list(aodid, day, pred.m2)], all.x = T)
 #reload mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2011.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2011.pred.rds")
 mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
 mod1<-mod1[,c("aodid","day","PM10","pred.m1"),with=FALSE]
 setkey(mod1,day,aodid)
@@ -4566,7 +4527,7 @@ mod3best[,bestpred := pred.m3]
 mod3best[!is.na(pred.m2),bestpred := pred.m2]
 mod3best[!is.na(pred.m1),bestpred := pred.m1]
 #save
-saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2011.FINAL.rds")
+saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2011.FINAL.rds")
 
 #save for GIS
 write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T), 
@@ -4577,7 +4538,7 @@ write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T),
                           npred.m1 = sum(!is.na(pred.m1)),
                           npred.m2 = sum(!is.na(pred.m2)),
                           npred.m3 = sum(!is.na(pred.m3)),
-                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ10.2011.csv", row.names = F)
+                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ.2011.csv", row.names = F)
 
 keep(res, sure=TRUE) 
 c()
@@ -4596,34 +4557,12 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
 #if needed load res table
-#res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
-
-
+#res<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 ### import data
-m1.2012 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2012.rds")
+m1.2012 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2012.rds")
 
-#subset to aqua and apply alexei cleaning methods
-#MaskAdjacency == "000"
-m1.2012<-m1.2012[ UN > 0 & UN < 0.04  ] 
-
-################# clean BAD STN PM10 and check if improved model?
-raWDaf <- ddply(m1.2012, c( "stn"), 
-      function(x) {
-        mod1 <- lm(PM10 ~ aod, data=x)
-        data.frame(R2 = round(summary(mod1)$r.squared, 5), 
-                   nsamps = length(summary(mod1)$resid))
-})
-raWDaf
-raWDaf<-as.data.table(raWDaf)
-bad<- raWDaf[R2< 0.05]
-bad[,badid := paste(stn,sep="-")]
-#################BAD STN
-m1.2012[,badid := paste(stn,sep="-")]
-####Take out bad stations
-m1.2012 <- m1.2012[!(m1.2012$badid %in% bad$badid), ] 
-
-#get rid of missing
+#rescale
 m1.2012[,elev.s:= scale(elev)]
 m1.2012[,tden.s:= scale(tden)]
 m1.2012[,pden.s:= scale(pden)]
@@ -4677,7 +4616,7 @@ tempo2012$delpm <-tempo2012$PM10-tempo2012$barpm
 tempo2012$delpred <-tempo2012$pred.m1-tempo2012$barpred
 mod_temporal <- lm(delpm ~ delpred, data=tempo2012)
 res[res$year=="2012", 'm1.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2012))$r.squared)
-saveRDS(m1.2012,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2012.pred.rds")
+saveRDS(m1.2012,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2012.pred.rds")
 
 
 
@@ -4830,9 +4769,9 @@ mod_temporal.loc.cv <- lm(delpm ~ delpred, data=tempo2012.loc.cv)
 res[res$year=="2012", 'm1cv.loc.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempo2012.loc.cv))$r.squared)
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2012.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
-saveRDS(m1.2012.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2012.predCV.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2012.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
+saveRDS(m1.2012.cv.loc,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2012.predCV.rds")
 
 
 ###############
@@ -4871,7 +4810,7 @@ describe(m2.2012$pred.m2)
 m2.2012 <- m2.2012[pred.m2 > 0.00000000000001 , ]
 m2.2012 <- m2.2012[pred.m2 < 1500   , ]
 
-saveRDS(m2.2012,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2012.pred2.rds")
+saveRDS(m2.2012,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2012.pred2.rds")
 
 
 
@@ -5006,7 +4945,7 @@ mod3$pred.m3 <-mod3$pred.m3.mix+mod3$gpred
 #describe(mod3$pred.m3)
 #recode negative into zero
 mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2012.pred.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2012.pred.rds")
 
 #clean
 keep(mod3,res,rmse, sure=TRUE) 
@@ -5017,7 +4956,7 @@ gc()
 #prepare for m3.R2
 #########################
 #load mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2012.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2012.pred.rds")
 mod1[,aodid:= paste(mod1$long_aod,mod1$lat_aod,sep="-")]
 mod1<-mod1[,c("aodid","day","PM10","pred.m1","stn"),with=FALSE]
 
@@ -5050,12 +4989,12 @@ res[res$year=="2012", 'm3.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=temp
 
 
 #############save midpoint
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ10.2012.rds")
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ10.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/res.AQ.2012.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.rds")
 
 #########################
 #import mod2
-mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ10.2012.pred2.rds")
+mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod2.AQ.2012.pred2.rds")
 mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
 
 #----------------> store the best available
@@ -5064,7 +5003,7 @@ setkey(mod3best, day, aodid)
 setkey(mod2, day, aodid)
 mod3best <- merge(mod3best, mod2[,list(aodid, day, pred.m2)], all.x = T)
 #reload mod1
-mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ10.2012.pred.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.AQ.2012.pred.rds")
 mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
 mod1<-mod1[,c("aodid","day","PM10","pred.m1"),with=FALSE]
 setkey(mod1,day,aodid)
@@ -5073,7 +5012,7 @@ mod3best[,bestpred := pred.m3]
 mod3best[!is.na(pred.m2),bestpred := pred.m2]
 mod3best[!is.na(pred.m1),bestpred := pred.m1]
 #save
-saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ10.2012.FINAL.rds")
+saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2012.FINAL.rds")
 
 #save for GIS
 write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T), 
@@ -5084,8 +5023,8 @@ write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T),
                           npred.m1 = sum(!is.na(pred.m1)),
                           npred.m2 = sum(!is.na(pred.m2)),
                           npred.m3 = sum(!is.na(pred.m3)),
-                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ10.2012.csv", row.names = F)
+                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM3.AQ.2012.csv", row.names = F)
 
 keep(res, sure=TRUE) 
-gc()
+
 
