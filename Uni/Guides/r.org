@@ -8009,6 +8009,10 @@ DT.1 <- data.table(x = letters[1:5], y = 6:10)
 DT.2 <- data.table(x = LETTERS[1:5], y = 11:15)
 # works fine
 rbindlist(list(DT.1, DT.2))
+
+#$Note$ - you can add DT's with different column numbers with fill=TRUE
+m1.all <- rbindlist(list(m1.2003,m1.2004,m1.2005,m1.2006,m1.2007,m1.2008,m1.2009,m1.2010,m1.2011,m1.2012,m1.2013), fill=TRUE)
+
 #+end_src
 *** Aggregate
 **** aggregate on 1 key variable and 1 aggregated variable
