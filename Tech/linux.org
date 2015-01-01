@@ -12514,6 +12514,13 @@ reload config without killing server add this to config:
 bind R source-file ~/.tmux.conf
 #+END_EXAMPLE
 
+****** synchronize panes
+You can do this by switching to the appropriate window, typing your Tmux prefix (commonly Ctrl-B or Ctrl-A) and then a colon to bring up a Tmux command line, and typing:
+#+BEGIN_EXAMPLE
+:setw synchronize-panes
+#+END_EXAMPLE
+You can optionally add `on` or `off` to specify which state you want; otherwise the option is simply toggled. This option is specific to one window, so it won’t change the way your other sessions or windows operate. When you’re done, toggle it off again by repeating the command.
+
 ***** plugins 
 ****** install tmux plugins
 https://github.com/tmux-plugins
@@ -12771,6 +12778,67 @@ set-option -g @batt_charged_icon ":sunglasses:"
 set-option -g @batt_charging_icon ":+1:"
 set-option -g @batt_discharging_icon ":thumbsdown:"
 Don't forget to reload TMUX environment ($ tmux source-file ~/.tmux.conf) after you do this.
+
+***** teamocil
+https://github.com/remiprev/teamocil
+****** Installation
+
+#+BEGIN_SRC sh
+# Install the `teamocil` Ruby gem
+$ gem install teamocil
+
+# Create your layout directory
+$ mkdir ~/.teamocil
+
+# Edit ~/.teamocil/sample.yml (look for sample layouts in this very `README.md`)
+$ teamocil --edit sample
+
+# Launch tmux
+$ tmux
+
+# Run your newly-created sample layout
+$ teamocil sample
+#+END_SRC
+****** Usage
+#+BEGIN_EXAMPLE
+$ teamocil [options] [layout-name]
+
+--list	Lists all available layouts in ~/.teamocil
+--layout	Takes a custom file path to a YAML layout file instead of [layout-name]
+--here	Uses the current window as the layout’s first window
+--edit	Opens the layout file with $EDITOR instead of executing it
+--show	Shows the layout content instead of executing it
+#+END_EXAMPLE
+****** Configuration
+Session
+`Key	Description`
+name	The tmux session name
+windows	An Array of windows
+
+Windows
+`Key	Description`
+name	The tmux window name
+root	The path where all panes in the window will be started
+layout	The layout that will be set after all panes are created by Teamocil
+panes	An Array of panes
+focus	If set to true, the window will be selected after the layout has been executed
+
+Panes-A pane can either be a String or a Hash. If it’s a String, Teamocil will treat it as a single-command pane.
+`Key	Description`
+commands	An Array of commands that will be ran when the pane is created
+focus	If set to true, the pane will be selected after the layout has bee
+****** name the session
+For the moment, you can specify the layout name with the name key in your layout
+#+BEGIN_SRC ruby
+name: my-session-name
+windows:
+  - name: foo
+    root: ~
+    layout: tiled
+    panes:
+      - pwd
+      - pwd
+#+END_SRC
 
 **** urxvt
 ***** install perl-scripts
