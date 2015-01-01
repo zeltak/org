@@ -103,7 +103,11 @@ m1.formula <- as.formula(PM25~ aod
                         #+ as.factor(reg_num) + aod:as.factor(reg_num)
                         #+aod*Dust #interactions
                         #+ns(tempa.s)
-                        +meanPM+meanPM10
+                        #+meanPM10 
+                        #+meanPM
+                        #+ndvi.s*season
+                        #+aod*WSa.s
+                        #+aod*tempa.s
                         +(1+aod|day/reg_num)) #+(1|stn) !!! stn screws up mod3 
 #[1] 0.7455536
 #1] 0.7893207 (with meanPM)

@@ -7687,6 +7687,24 @@ closestknn-which of the closest knn (k nearest) was used
 closestnobs-total number of observations that met the knearst and maxdist criteria--WITH DATA!! if no data was avilable it would ne NA
 closestmean- mean of all the points if nearstmean=True, if False then you dont get it.
 
+** zoo 
+*** fill in/impute missing days from day before 
+sort by day and use the following syntax
+
+#+BEGIN_EXAMPLE
+#DT[,FULLVAR := na.loc(VAR,na.rm=F)]
+#+END_EXAMPLE
+
+#+BEGIN_SRC R
+# impute missing Temperature
+# to start with - use last observation carried forward
+library(zoo)
+#set the key by day 
+setkey(Temp, day)
+Temp[, Temp.im := na.locf(Temp, na.rm = F)]
+describe(Temp[, list(Temp, Temp.im)])
+#+END_SRC
+
 * data.table
 *** basics
 **** into
@@ -7980,7 +7998,7 @@ dat2013 <- clippedaod[yr == "2013"]
 #+end_src
 **** subset to remove NAs
 #+begin_src R
-temp <- temp[x_stn_ITM != 'NA']
+temp <- temp[x_s_ITM != 'NA']
 #+end_src
 
 **** subset by value
