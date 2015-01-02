@@ -12042,6 +12042,17 @@ $Note$ above the bg/fg option as  #[bg=#002E41]#[fg=#008ED1](#h)
  add this to the config:
   setw -g window-status-format " #I$ #W "
   setw -g window-status-current-format " #I$ #W" 
+****** How to pass command keys to a remote tmux session when you SSH from a local tmux session into a remove tmux session
+You can set up in your .tmux.conf.
+
+#+BEGIN_EXAMPLE
+bind-key b send-prefix
+#or in my config 
+bind ` send-prefix	#uses send-prefix to pass ` along to the application
+#+END_EXAMPLE
+
+double issuing PREFIX will send the command to the remote PC
+
 ***** keybinds
 ****** main shortcuts
 
@@ -12899,7 +12910,7 @@ windows:
 #+END_SRC
 
 ****** Specifying Precise Window Layouts
-We can get the current window layout spec like this ($Note-from outside a Tmux session$) :
+We can get the !current window! layout spec like this ($Note-from outside a Tmux session$) :
 
 #+BEGIN_SRC sh
 tmux list-windows
@@ -12927,7 +12938,6 @@ You thenb Paste that text into your teamocil config:
       - commands:
          - watch free -m
 #+END_SRC
-
 
 **** urxvt
 ***** install perl-scripts
