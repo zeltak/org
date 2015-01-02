@@ -11679,6 +11679,28 @@ You need to press ctrl+a then TYPE resize and define line numbers
  switch through the panes by using the key binding:
   Ctrl-b <space>
   which will toggle through the different layouts.
+****** swap/change window order
+The swap-window command is closest to what you want.
+
+~PREFIX :~  brings you to the tmux-command prompt. There you enter:
+
+swap-window -s 3 -t 1
+to let window number 3 and window number 1 swap their positions.
+
+To swap the current window with the top window, do:
+
+swap-window -t 0  !or 1 if you start window counts from 1 (if base-index is 0, as it is by default)!
+
+In the unlikely case of having no window at index 0, do:
+
+move-window -t 0
+
+You can bind that command to a key (T for "top" for example) by adding the following to your ~/.tmux.conf:
+
+#+BEGIN_EXAMPLE
+bind-key T swap-window -t 0
+#+END_EXAMPLE
+
 ***** Sessions
 ****** create a new names session
 issue 'tmux new -s NAME'
@@ -37543,6 +37565,18 @@ use these commands:
  for just stderr,
  example:
  gmusicbrowser &> /home/zeltak/test4.txt
+
+*** Watch command  
+Some examples of simple but useful monitoring tasks are:
+
+#+BEGIN_EXAMPLE
+Load average — watch uptime
+Disk space — watch df -h
+Process count — watch 'ps -ef | wc -l'
+Memory usage — watch free -m
+Size of a volatile file — watch du -sh filename.sh
+
+#+END_EXAMPLE
 
 ** files and directories
 *** tips
