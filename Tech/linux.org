@@ -12053,6 +12053,40 @@ bind ` send-prefix	#uses send-prefix to pass ` along to the application
 
 double issuing PREFIX will send the command to the remote PC
 
+***** panel attributes
+Special values in titles include:
+
+#+BEGIN_EXAMPLE
+Character pair Replaced with:
+#(shell-command) First line of the command's output
+#[attributes] Colour or attribute change
+#H Hostname of local host
+#F Current window flag
+#I Current window index
+#P Current pane index
+#S Session name
+#T Current window title (a shell thing? typically user@host:path ?)
+#W Current window name (tmux's own, the one shown in the bottom bar)
+## A literal '#'
+#+END_EXAMPLE
+
+The #(shell-command) form executes ‘shell-command’ and inserts the first line of its output. Note that shell commands are only executed once at the interval specified by the status-interval option: if the status line is redrawn in the meantime, the previous result is used. Shell commands are executed with the tmux global environment set (see the ENVIRONMENT section).
+
+The window title (#T) is the title set by the program running within the window using the OSC title setting sequence, for example:
+
+$ printf ’\033]2;My Title\033\\’
+
+When a window is first created, its title is the hostname.
+
+#[attributes] allows a comma-separated list of attributes to be specified, these may be ‘fg=colour’ to set the foreground colour, ‘bg=colour’ to set the background colour, the name of one of the attributes (listed under the message-attr option) to turn an attribute on, or an attribute prefixed with ‘no’ to turn one off, for example nobright. Examples are:
+
+#(sysctl vm.loadavg) 
+#[fg=yellow,bold]#(apm −l)%%#[default] [#S]
+
+Where appropriate, special character sequences may be prefixed with a number to specify the maximum length, for example ‘#24T’.
+
+By default, UTF-8 in string is not interpreted, to enable UTF-8, use the status-utf8 option.
+
 ***** keybinds
 ****** main shortcuts
 
@@ -12332,44 +12366,6 @@ window-status-fg and window-status-bg window options.
  The status line is automatically refreshed at interval if it has
 changed,
  the interval may be controlled with the status-interval session option.
-
-***** panel attributes
-
-Special values in titles include:
- Character pair Replaced with
- #(shell-command) First line of the command's output
- #[attributes] Colour or attribute change
- #H Hostname of local host
- #F Current window flag
- #I Current window index
- #P Current pane index
- #S Session name
- #T Current window title (a shell thing? typically user@host:path ?)
- #W Current window name (tmux's own, the one shown in the bottom bar)
- ## A literal '#'
- The #(shell-command) form executes 'shell-command' and inserts the
-first line of its output.
- Note that shell commands are only executed once at the interval
-specified by the status-interval option: if the status line is
- redrawn in the meantime, the previous result is used.
- Shell commands are executed with the tmux global environment set (see
-the ENVIRONMENT section).
- For details on how the names and titles can be set see the NAMES AND
-TITLES section.
- #[attributes] allows a comma-separated list of attributes to be
-specified, these may be 'fg=colour' to set the
- foreground colour, 'bg=colour' to set the background colour, the name
-of one of the attributes (listed under
- the message-attr option) to turn an attribute on, or an attribute
-prefixed with 'no' to turn one off, for example
- nobright. Examples are:
- #(sysctl vm.loadavg)
- #[fg=yellow,bold]#(apm -l)%%#[default] [#S]
- Where appropriate, special character sequences may be prefixed with a
-number to specify the maximum length, for
- example '#24T'.
- By default, UTF-8 in string is not interpreted, to enable
- UTF-8, use the status-utf8 option.
 
 ***** windows
 

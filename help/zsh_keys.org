@@ -1,0 +1,92 @@
+#+TITLE: 
+#+OPTIONS: toc:nil 
+
+* keybinds Aliases
+
+##start system
+alias sxx='xinit'
+alias sx='startx'
+
+# Sys Utils
+alias ptop='sudo powertop --auto-tune'
+
+
+# System
+alias rm='rm -Iv'
+alias cp='cp -iv'
+alias mv='mv -iv'
+alias df='pydf'
+
+#sound
+alias als='alsamixer'
+
+# function to make ls look nice is below
+alias ll='ls -l'
+alias la='ls -a'
+alias lla='ls -la'
+alias lld='ls -ld'
+
+#ROOT stuff
+alias rstat='cat /proc/mdstat'
+alias su='su -'
+
+#vim stuff
+alias v='vim'
+alias gv='gvim'
+alias sv='sudo vim'
+alias sgv='sudo gvim'
+
+#bash
+alias ping='ping -c 5'
+alias ..='cd ..'
+alias sr='sudo reboot'
+alias hal='sudo halt'
+
+#zsh
+alias cl="clear"
+alias xx="exit"
+
+#Tmux
+alias tlist='tmux list-sessions'
+alias tnew='tmux new-session -s'
+alias tcm='teamocil --here lmain'
+
+#chmod
+alias cm='chmod +x' #change mode of exec
+
+
+#--------------> package managers
+#PACMAN 
+
+
+#install
+ alias p='pacaur -S' #quick install 
+ #updates
+ alias pu='pacaur -Syu' #update all Repo+AUR
+ # Search repo+AUR
+ #query (local packages)
+ #Remove
+ alias prem='pacaur -R'
+
+
+#Apt-get
+alias apt='sudo apt-get install'
+alias aptv='sudo apt-get update & sudo apt-get upgrade'
+alias aptu='sudo apt-get update'
+alias aptg='sudo apt-get upgrade'
+alias aptr='sudo apt-get remove'
+alias apts='sudo apt-cache search'
+alias sor='sudo nano /etc/apt/sources.list' 
+alias aptp='sudo add-apt-repository'
+alias apto='sudo apt-get update & sudo apt-get install'
+
+#programs
+#refresg sxhks
+alias sxr='pkill -USR1 -x sxhkd'
+#surfraw
+alias yn='surfraw yubnub'
+#beets
+alias badd='sed "s:/home/zeltak/music/::" | sed "s/ /\ /g" | mpc add'
+alias baddr='sed "s:/home/zeltak/music/::" | sed "s/ /\ /g" | mpc add'
+alias bl='beet list'
+
