@@ -12840,6 +12840,42 @@ windows:
       - pwd
 #+END_SRC
 
+****** order of window opened
+it seems like the most bottom window in the config  opens up first, ₆In example₆ below Home will be the 1st window while services the second 
+
+#+BEGIN_SRC ruby
+name: "lmain"
+windows:
+  - name: "Services"
+    root: "~"
+    layout: tiled
+    panes:
+      - commands:
+        - htop 
+        - focus: true
+      - commands:
+         - wath free -m
+      - commands:
+         - glances 
+      - commands:
+        - su 
+  - name: "Home"
+    root: "~"
+    layout: tiled
+    panes:
+      - commands:
+        - zsh 
+        - focus: true
+      - commands:
+         - zsh
+         - clear
+      - commands:
+         - zsh
+         - clear
+      - commands:
+        - su
+#+END_SRC
+
 **** urxvt
 ***** install perl-scripts
 
