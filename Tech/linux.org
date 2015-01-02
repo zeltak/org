@@ -11679,6 +11679,28 @@ You need to press ctrl+a then TYPE resize and define line numbers
  switch through the panes by using the key binding:
   Ctrl-b <space>
   which will toggle through the different layouts.
+****** swap/change window order
+The swap-window command is closest to what you want.
+
+~PREFIX :~  brings you to the tmux-command prompt. There you enter:
+
+swap-window -s 3 -t 1
+to let window number 3 and window number 1 swap their positions.
+
+To swap the current window with the top window, do:
+
+swap-window -t 0  !or 1 if you start window counts from 1 (if base-index is 0, as it is by default)!
+
+In the unlikely case of having no window at index 0, do:
+
+move-window -t 0
+
+You can bind that command to a key (T for "top" for example) by adding the following to your ~/.tmux.conf:
+
+#+BEGIN_EXAMPLE
+bind-key T swap-window -t 0
+#+END_EXAMPLE
+
 ***** Sessions
 ****** create a new names session
 issue 'tmux new -s NAME'
@@ -11974,6 +11996,52 @@ window is labeled accordingly:
  #+END_EXAMPLE
 
  [[http://blog.hawkhost.com/wp-content/uploads/2010/07/tmux-window-rename.png][]]
+****** colors
+******* colors for status
+you can use a hex code now in the tmux config to define colors IE:
+ #+BEGIN_EXAMPLE
+  ###Ztheme
+  #default statusbar colors
+  set -g status-fg white
+  set -g status-bg '#DDDDDD'
+  set -g status-attr bright
+  # default window title colors
+  set-window-option -g window-status-fg white
+  set-window-option -g window-status-bg '#777777'
+  set-window-option -g window-status-attr dim
+  # active window title colors
+  set-window-option -g window-status-current-fg white
+  set-window-option -g window-status-current-bg '#33B5E5'
+  set-window-option -g window-status-current-attr bright
+  # command/message line colors
+  set -g message-fg white
+  set -g message-bg black
+  set -g message-attr bright
+  #split panes border colours
+  set -g pane-active-border-bg '#33B5E5'
+#+END_EXAMPLE
+
+The first two commands set the background t and foreground of the status bar.
+******* Complex color changes 
+#+BEGIN_EXAMPLE
+set -g status-right "CPU:#{cpu_icon}#{cpu_percentage}|Batt:#{battery_icon}#{battery_percentage}|%a %h-%d %H:%M|#[bg=#002E41]#[fg=#008ED1](#h)"
+#+END_EXAMPLE
+
+$Note$ above the bg/fg option as  #[bg=#002E41]#[fg=#008ED1](#h)
+****** Faster Command Sequences
+
+ Faster Command Sequences
+  Upon starting to use tmux, I noticed that I had to add a noticeable
+ delay between two characters in a command sequence for it to recognize
+ the command, for example between the C-a and n in C-a n. This is because
+ tmux is waiting for an escape sequence. Fix that by setting escape time
+ to zero.
+  set -s escape-time 0
+****** get rid of flags (the ~,+, etc in window name)
+
+ add this to the config:
+  setw -g window-status-format " #I$ #W "
+  setw -g window-status-current-format " #I$ #W" 
 ***** keybinds
 ****** main shortcuts
 
@@ -12187,32 +12255,6 @@ size
  fixed by setting tmux's aggressive-resize option.
 
 setw -g aggressive-resize on
-***** colors
-
-you can use a hex code now in the tmux config to define colors IE:
- ###Ztheme
- #default statusbar colors
- set -g status-fg white
- set -g status-bg '#DDDDDD'
- set -g status-attr bright
- # default window title colors
- set-window-option -g window-status-fg white
- set-window-option -g window-status-bg '#777777'
- set-window-option -g window-status-attr dim
- # active window title colors
- set-window-option -g window-status-current-fg white
- set-window-option -g window-status-current-bg '#33B5E5'
- set-window-option -g window-status-current-attr bright
- # command/message line colors
- set -g message-fg white
- set -g message-bg black
- set -g message-attr bright
- #split panes border colours
- set -g pane-active-border-bg '#33B5E5'
-
- The first two commands set the background t and foreground of the
-status bar.
-
 ***** Notify you when a window has activity
 
 
@@ -12239,24 +12281,7 @@ if a smaller client is actively looking at it. This behaviour can be
 fixed by setting tmux's aggressive-resize option.
  setw -g aggressive-resize on
 
-***** make ctrl-a ctral s work like alt-tab (
-
-#make ctrl-a ctral s work like alt-tab (last window)
- bind-key C-a last-window
-
-***** Faster Command Sequences
-
-Faster Command Sequences
- Upon starting to use tmux, I noticed that I had to add a noticeable
-delay between two characters in a command sequence for it to recognize
-the command, for example between the C-a and n in C-a n. This is because
-tmux is waiting for an escape sequence. Fix that by setting escape time
-to zero.
- set -s escape-time 0
-
-***** status line
-
-***** status
+***** status bar windows signs
 
 STATUS LINE
  tmux includes an optional status line which is displayed in the bottom
@@ -12335,12 +12360,6 @@ number to specify the maximum length, for
  By default, UTF-8 in string is not interpreted, to enable
  UTF-8, use the status-utf8 option.
 
-***** get rid of flags (the ~,+, etc in window name)
-
-add this to the config:
- setw -g window-status-format " #I$ #W "
- setw -g window-status-current-format " #I$ #W"
-
 ***** windows
 
 window-status-bell-attr attributes
@@ -12395,14 +12414,15 @@ window-status-bell-attr attributes
  default is '#I:#W#F'.
 
 ***** escape characters
-
 some character need to be escaped before use in the status line,
  for example '%' would be exaped as %%
  '(' would need to be set to /(
- In example:
- tmux set-option -t tmux mpd status-left
-'#[fg=#ffffff]#[bg=#0099CC]#(/usr/bin/mpc current -f
-"%%title%%//%%album%% \(%%artist%%")) '
+
+In example:
+
+#+BEGIN_EXAMPLE
+tmux set-option -t tmux mpd status-left '#[fg=#ffffff]#[bg=#0099CC]#(/usr/bin/mpc current -f "%%title%%//%%album%% \(%%artist%%")) '
+#+END_EXAMPLE
 
 ***** tmux info
 
@@ -12515,6 +12535,13 @@ reload config without killing server add this to config:
 #+BEGIN_EXAMPLE
 bind R source-file ~/.tmux.conf
 #+END_EXAMPLE
+
+****** synchronize panes
+You can do this by switching to the appropriate window, typing your Tmux prefix (commonly Ctrl-B or Ctrl-A) and then a colon to bring up a Tmux command line, and typing:
+#+BEGIN_EXAMPLE
+:setw synchronize-panes
+#+END_EXAMPLE
+You can optionally add `on` or `off` to specify which state you want; otherwise the option is simply toggled. This option is specific to one window, so it won’t change the way your other sessions or windows operate. When you’re done, toggle it off again by repeating the command.
 
 ***** plugins 
 ****** install tmux plugins
@@ -12773,6 +12800,134 @@ set-option -g @batt_charged_icon ":sunglasses:"
 set-option -g @batt_charging_icon ":+1:"
 set-option -g @batt_discharging_icon ":thumbsdown:"
 Don't forget to reload TMUX environment ($ tmux source-file ~/.tmux.conf) after you do this.
+
+***** teamocil
+https://github.com/remiprev/teamocil
+****** Installation
+
+#+BEGIN_SRC sh
+# Install the `teamocil` Ruby gem
+$ gem install teamocil
+
+# Create your layout directory
+$ mkdir ~/.teamocil
+
+# Edit ~/.teamocil/sample.yml (look for sample layouts in this very `README.md`)
+$ teamocil --edit sample
+
+# Launch tmux
+$ tmux
+
+# Run your newly-created sample layout
+$ teamocil sample
+#+END_SRC
+****** Usage
+#+BEGIN_EXAMPLE
+$ teamocil [options] [layout-name]
+
+--list	Lists all available layouts in ~/.teamocil
+--layout	Takes a custom file path to a YAML layout file instead of [layout-name]
+--here	Uses the current window as the layout’s first window
+--edit	Opens the layout file with $EDITOR instead of executing it
+--show	Shows the layout content instead of executing it
+#+END_EXAMPLE
+****** Configuration
+Session
+`Key	Description`
+name	The tmux session name
+windows	An Array of windows
+
+Windows
+`Key	Description`
+name	The tmux window name
+root	The path where all panes in the window will be started
+layout	The layout that will be set after all panes are created by Teamocil
+panes	An Array of panes
+focus	If set to true, the window will be selected after the layout has been executed
+
+Panes-A pane can either be a String or a Hash. If it’s a String, Teamocil will treat it as a single-command pane.
+`Key	Description`
+commands	An Array of commands that will be ran when the pane is created
+focus	If set to true, the pane will be selected after the layout has bee
+****** name the session
+For the moment, you can specify the layout name with the name key in your layout
+#+BEGIN_SRC ruby
+name: my-session-name
+windows:
+  - name: foo
+    root: ~
+    layout: tiled
+    panes:
+      - pwd
+      - pwd
+#+END_SRC
+
+****** order of window opened
+it seems like the most bottom window in the config  opens up first, ₆In example₆ below Home will be the 1st window while services the second 
+
+#+BEGIN_SRC ruby
+name: "lmain"
+windows:
+  - name: "Services"
+    root: "~"
+    layout: tiled
+    panes:
+      - commands:
+        - htop 
+        - focus: true
+      - commands:
+         - wath free -m
+      - commands:
+         - glances 
+      - commands:
+        - su 
+  - name: "Home"
+    root: "~"
+    layout: tiled
+    panes:
+      - commands:
+        - zsh 
+        - focus: true
+      - commands:
+         - zsh
+         - clear
+      - commands:
+         - zsh
+         - clear
+      - commands:
+        - su
+#+END_SRC
+
+****** Specifying Precise Window Layouts
+We can get the current window layout spec like this ($Note-from outside a Tmux session$) :
+
+#+BEGIN_SRC sh
+tmux list-windows
+#output:
+1: blog* (3 panes) [203x52] [layout 809b,203x52,0,0{13052,0,0,11,72x52,131,0[72x25,131,0,12,72x26,131,26,13]}] @4 (active)
+#+END_SRC
+
+The teamocil documentation has the following example to extract the right info to include in it's config:
+
+#+BEGIN_SRC sh
+tmux list-windows -F "#{window_active} #{window_layout}" | grep "^1" | cut -d " " -f 2
+#output:
+809b,203x52,0,0{130x52,0,0,11,72x52,131,0[72x25,131,0,12,72x26,131,26,13]}
+#+END_SRC
+
+You thenb Paste that text into your teamocil config:
+
+#+BEGIN_SRC ruby
+  - name: "Services"
+    root: "~"
+    layout: bd7e,199x50,0,0[199x10,0,0{92x10,0,0,4,106x10,93,0,5},199x11,0,11{92x11,0,11,6,106x11,93,11,7},199x27,0,23,8]
+    panes:
+      - commands:
+        - zsh 
+      - commands:
+         - watch free -m
+#+END_SRC
+
 
 **** urxvt
 ***** install perl-scripts
@@ -20510,7 +20665,7 @@ zathura-pdf-mupdf or zathura-pdf-poppler
 *** keepass
 **** keepass plugin directory
 ***** on arch
-file:/usr/share/keepass/
+      file:/usr/share/keepass/
 ***** on debian
 
 #+BEGIN_EXAMPLE
@@ -20609,9 +20764,7 @@ glo[[~/Dropbox/Org/Tech/linux_files/Image_TUpdtItFoqgN94VUTXbMHw_0001.png]]bally
  or per[[~/Dropbox/Org/Tech/linux_files/Image_TUpdtItFoqgN94VUTXbMHw_0002.png]] entry
 
 **** keepassx
-
 ***** autotype setup
-
 [[~/Dropbox/Org/Tech/linux_files/Image_NcsfEhuhPox0tzVTWPpGFQ_0001.png]]
  [[~/Dropbox/Org/Tech/linux_files/Image_NcsfEhuhPox0tzVTWPpGFQ_0002.png]]
 
@@ -20729,7 +20882,7 @@ there is an option how exported entries are sorted there
 
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2014-07-22 11:01:46
-#+attr_html: :width 300px
+#+attr_html: :width 500px
  [[/home/zeltak/org/attach/images_2014/screenshot_2014-07-22_11:01:46.png]]
 
 I usually use the option "export in current table sort order". Then I sort them e.g. by year. 
@@ -26856,6 +27009,7 @@ start R
 
 finally attach ESS to the R process using M-x ess-remote in the shell buffer where you started R
 
+
 ******** a handy function to clear shell
 use the function below and bind it to a key of your liking
 
@@ -26868,8 +27022,6 @@ use the function below and bind it to a key of your liking
       (setq comint-buffer-maximum-size old-max))) 
  #+END_SRC 
 
-******** kill  a proccess in the console 
-use ~C-c C-c~
 ******* gnus
 ******** terms
 article-one information piece-email,article etc terms
@@ -37445,6 +37597,18 @@ use these commands:
  example:
  gmusicbrowser &> /home/zeltak/test4.txt
 
+*** Watch command  
+Some examples of simple but useful monitoring tasks are:
+
+#+BEGIN_EXAMPLE
+Load average — watch uptime
+Disk space — watch df -h
+Process count — watch 'ps -ef | wc -l'
+Memory usage — watch free -m
+Size of a volatile file — watch du -sh filename.sh
+
+#+END_EXAMPLE
+
 ** files and directories
 *** tips
 Find and replace Files/Folder Tricks
@@ -45084,18 +45248,78 @@ issue:
     :PROPERTIES:
     :ID:       e3878562-df9e-44b5-813e-df4c32b3cfe7
     :END:
+**** basics 
 `albumartist` is the artist that actually on the whole album 
 `artist` is the artist that preforming the current song
 
 [[~/Dropbox/Org/Tech/linux_files/Image_ygeUDVxk4TCc5gzAYvCANg_0001.png
-]]
- you simply add an albumartist tag to a release. for example:
- albumartist=tribute
- this way you have the artist field free for the individual artists of
+]]you simply add an albumartist tag to a release. for example:
+
+albumartist=tribute
+
+this way you have the artist field free for the individual artists of
 the tracks
- [[~/Dropbox/Org/Tech/linux_files/Image_ygeUDVxk4TCc5gzAYvCANg_0002.png]]
+[[
+~/Dropbox/Org/Tech/linux_files/Image_ygeUDVxk4TCc5gzAYvCANg_0002.png]]
+
 example:
- [[~/Dropbox/Org/Tech/linux_files/pA8d9.jpeg]]
+[[
+~/Dropbox/Org/Tech/linux_files/pA8d9.jpeg]]
+
+**** rasi blog post in depth (focused on mpd)
+Grouping VA albums in mpd
+http://journal.53280.de/mpd.html
+
+The issue:
+Every once in a while some user joins #mpd and asks how albums with several artists can be grouped together instead of displaying each artist individually in library. And while I agree that this is annoying, their assumptions are wrong. They assume this is a player issue, while in reality it's caused by missing tags in the music files.
+
+Messed up Compilation album
+
+Say hello to the albumartist tag
+The solution is in fact relatively simple. The artist tag that everyone knows just represents the artist for the current title. There is another artist tag, called "albumartist", which represents the artist of the album.
+
+Wrong usage of albumartist - a common problem
+Many users know the albumartist tag, but only tag their Multi-artist albums accordingly. This is wrong, because for this to work, the music player has to make exceptions what to do with files that don't have an albumartist tag.
+
+You see: EVERY album has a global artist. It just happens to be the same artist for all tracks on regular albums. It's still a album-related artist.
+
+Long story short: Every album needs an albumartist tag. For regular albums the albumartist tag is the same as the artist tag. For multi-artist releases it can be something like "Various Artists" or "Soundtrack"
+
+I have thousands of albums, how to sort this mess?
+Don't worry, the process of fixing your files is a short one. It's a 2 step process.
+
+1. Fixing of your multi-artist releases.
+First step is to get a tagger, for this example I use the excellent picard tagger. Install it from your repository. Now load all your multi-artist albums into it, by simply dragging the folders on picards window.
+
+When all files were properly added, select them all and watch the lower part of picards window. As you can see my files already have the albumartist tag. If you have such a line too, simply click in the right column and give it a name (e.g. Various Artists)
+
+Adding albumartist tag in picard
+
+If no "Album Artist" line is visible right click and chose "Add New Tag" type "albumartist" and fill the value as above.
+
+Now make sure that "Move Files" and "Rename Files" is disabled in the Options menu on top.
+
+Finally hit save. You have successfully fixed your Multi-Artist albums.
+
+2. Fix your regular albums
+But remember, all albums need an albumartist tag. Luckily ncmpcpp has a little tool to fix this automatically for you, but we need to build it.
+
+Open a terminal. Create an empty directory and cd into it. run these commands:
+
+wget http://repo.or.cz/w/ncmpcpp.git/blob_plain/HEAD:/extras/Makefile
+wget http://repo.or.cz/w/ncmpcpp.git/blob_plain/HEAD:/extras/artist_to_albumartist.cpp
+make
+This will build a little programm, called artist_to_albumartist, that you can find in the same directory now. To use it simply run this command:
+
+find /PATH/TO/YOUR/MUSIC \( -name "*.flac" -o -name "*.mp3" -o -name "*.ogg" \) -exec ./artist_to_albumartist {} \;
+Replace /PATH/TO/YOUR/MUSIC with your actual music root. This will copy the artist tag of all files to the albumartist tag, skipping those files that already have one (aka the multi-artist releases we fixed earlier)
+
+Finally to make ncmpcpp use this new tag add this to your ~/.ncmpcpp/config file:
+
+media_library_primary_tag = "album_artist"
+Result
+See the same track from first image properly grouped under its album:
+
 *** convert album to albumartist script
 use this script to convert
 

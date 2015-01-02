@@ -3,7 +3,6 @@
 
 * keybinds
 
-test pgit
 ** bind R source-file ~/.tmux.conf  #source the tmux file
 ** bind-key C-a last-window
 ** bind -n f11 select-pane -t :.+
@@ -35,3 +34,5 @@ bind-key u capture-pane \; save-buffer /tmp/tmux-buffer \; run-shell "$TERMINAL 
 bind-key u capture-pane \; save-buffer /tmp/tmux-buffer \; new-window -n "urlview" '$SHELL -c "urlview < /tmp/tmux-buffer"'
 
 
+
+PREFIX z >> zoom in out pane
