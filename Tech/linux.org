@@ -12898,6 +12898,37 @@ windows:
         - su
 #+END_SRC
 
+****** Specifying Precise Window Layouts
+We can get the current window layout spec like this ($Note-from outside a Tmux session$) :
+
+#+BEGIN_SRC sh
+tmux list-windows
+#output:
+1: blog* (3 panes) [203x52] [layout 809b,203x52,0,0{13052,0,0,11,72x52,131,0[72x25,131,0,12,72x26,131,26,13]}] @4 (active)
+#+END_SRC
+
+The teamocil documentation has the following example to extract the right info to include in it's config:
+
+#+BEGIN_SRC sh
+tmux list-windows -F "#{window_active} #{window_layout}" | grep "^1" | cut -d " " -f 2
+#output:
+809b,203x52,0,0{130x52,0,0,11,72x52,131,0[72x25,131,0,12,72x26,131,26,13]}
+#+END_SRC
+
+You thenb Paste that text into your teamocil config:
+
+#+BEGIN_SRC ruby
+  - name: "Services"
+    root: "~"
+    layout: bd7e,199x50,0,0[199x10,0,0{92x10,0,0,4,106x10,93,0,5},199x11,0,11{92x11,0,11,6,106x11,93,11,7},199x27,0,23,8]
+    panes:
+      - commands:
+        - zsh 
+      - commands:
+         - watch free -m
+#+END_SRC
+
+
 **** urxvt
 ***** install perl-scripts
 
