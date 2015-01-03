@@ -10188,18 +10188,19 @@ lime -bg '#e0e8ea' -fg black -x 635
  dzen2 -o80
 
 **** fb (upload pastbin)
-
 ***** register and setup
+****** new method using API keys
+issue fb -a and generate an API (it will be copied to your sysclip)
+then add that API to a file name apikey in :
 
+file:~/.config/fb-client/apikey
+****** old way (.nertc)
 go to
-
 [[http://paste.xinu.at/user/register/JPZ9v4TbGnmIyHN][http://paste.xinu.at/user/register/JPZ9v4TbGnmIyHN]]
- and register (you may need an invite)
- then register the account on the pc:
-
+and register (you may need an invite)
+then register the account on the pc:
 echo "machine paste.xinu.at login USER password PASSWORD" > ~/.netrc
-
- and your ready to use it
+and your ready to use it
 
 ***** using fb
 
@@ -12028,6 +12029,13 @@ set -g status-right "CPU:#{cpu_icon}#{cpu_percentage}|Batt:#{battery_icon}#{batt
 #+END_EXAMPLE
 
 $Note$ above the bg/fg option as  #[bg=#002E41]#[fg=#008ED1](#h)
+******* get tmux colors name
+issue this inside tmux term session:
+	#+BEGIN_SRC sh
+for i in {0..255} ; do                                                          master⚡
+    printf "\x1b[38;5;${i}mcolour${i}\n"
+done
+	#+END_SRC
 ****** Faster Command Sequences
 
  Faster Command Sequences
@@ -21971,11 +21979,9 @@ compile worker
  NOTE: make sure the after the .configure there are no issues
 
 **** keybinds
-
-open dir cahce alt+enter
- Ctrl+s- You can enter a search pattern and press, Ctrl+s again to jump
-to the next match.
-
+***** searching 
+****** activating the search entry mode two times for prev search 
+anything in between (usually by just pressing Ctrl-s twice), the previously used filter string is inserted. This is useful to re-apply a filter to the same or different directory, or to refine a filter (like the new expression based filter).
 **** views
 
 If you prefer imagemagick to the default xli for image display mode,
@@ -22091,6 +22097,9 @@ a good tiny font for the button bar is ProggyTiny (part of proggy fonts): https:
 check this link
 
 http://www.boomerangsworld.de/cms/worker/downloads/
+**** filtering
+The search string can contain wildcards like "*.c". If no entry matches, the so-called flexible matching is applied. With this mode, all entries matches that contain the characters in the given order no matter if any other character is between two search characters.
+The filter string itself is visible in the top list view bar.
 
 *** krusader
 
@@ -28381,7 +28390,6 @@ You can insert marked candidates into current buffer with ~C-c C-I~
 ~C-t~ cycle through helm view modes
 ~C-C ?~ get help on helm  	    
 ~left/righ~ move between helm groups in helm view 
-********** config  
 ********** find in files (C-x f)
 use:
 `helm-for-files`
@@ -28669,6 +28677,11 @@ Description:
 
 This commands provides a Helm interface for calc command
 
+********** helm m-x
+*********** prefix key
+n the original M-x, you pass prefix arguments before M-x.I
+'In Helm', you pass prefix arugments after running helm-M-x.
+In a helm-M-x session, if you type any prefix argument, it will be visible, i.e. if you type C-u 100, a message prefix argument: 100 appears. Then run your command as usual, the interactive command will receive the argument you passed in.
 ********* google-contacts
 
 http://julien.danjou.info/projects/emacs-packages#google-contacts
