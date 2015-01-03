@@ -12053,39 +12053,41 @@ bind ` send-prefix	#uses send-prefix to pass ` along to the application
 
 double issuing PREFIX will send the command to the remote PC
 
-***** panel attributes
-Special values in titles include:
+****** panel attributes
+ Special values in titles include:
 
-#+BEGIN_EXAMPLE
-Character pair Replaced with:
-#(shell-command) First line of the command's output
-#[attributes] Colour or attribute change
-#H Hostname of local host
-#F Current window flag
-#I Current window index
-#P Current pane index
-#S Session name
-#T Current window title (a shell thing? typically user@host:path ?)
-#W Current window name (tmux's own, the one shown in the bottom bar)
-## A literal '#'
-#+END_EXAMPLE
+ #+BEGIN_EXAMPLE
+ Character pair Replaced with:
+ #(shell-command) First line of the command's output
+ #[attributes] Colour or attribute change
+ #H Hostname of local host
+ #F Current window flag
+ #I Current window index
+ #P Current pane index
+ #S Session name
+ #T Current window title (a shell thing? typically user@host:path ?)
+ #W Current window name (tmux's own, the one shown in the bottom bar)
+ ## A literal '#'
+ #+END_EXAMPLE
 
-The #(shell-command) form executes ‘shell-command’ and inserts the first line of its output. Note that shell commands are only executed once at the interval specified by the status-interval option: if the status line is redrawn in the meantime, the previous result is used. Shell commands are executed with the tmux global environment set (see the ENVIRONMENT section).
+ The #(shell-command) form executes ‘shell-command’ and inserts the first line of its output. Note that shell commands are only executed once at the interval specified by the status-interval option: if the status line is redrawn in the meantime, the previous result is used. Shell commands are executed with the tmux global environment set (see the ENVIRONMENT section).
 
-The window title (#T) is the title set by the program running within the window using the OSC title setting sequence, for example:
+ The window title (#T) is the title set by the program running within the window using the OSC title setting sequence, for example:
 
-$ printf ’\033]2;My Title\033\\’
+ $ printf ’\033]2;My Title\033\\’
 
-When a window is first created, its title is the hostname.
+ When a window is first created, its title is the hostname.
 
-#[attributes] allows a comma-separated list of attributes to be specified, these may be ‘fg=colour’ to set the foreground colour, ‘bg=colour’ to set the background colour, the name of one of the attributes (listed under the message-attr option) to turn an attribute on, or an attribute prefixed with ‘no’ to turn one off, for example nobright. Examples are:
+ #[attributes] allows a comma-separated list of attributes to be specified, these may be ‘fg=colour’ to set the foreground colour, ‘bg=colour’ to set the background colour, the name of one of the attributes (listed under the message-attr option) to turn an attribute on, or an attribute prefixed with ‘no’ to turn one off, for example nobright. Examples are:
 
-#(sysctl vm.loadavg) 
-#[fg=yellow,bold]#(apm −l)%%#[default] [#S]
+ #+BEGIN_EXAMPLE
+ #(sysctl vm.loadavg) 
+ #[fg=yellow,bold]#(apm −l)%%#[default] [#S]
+ #+END_EXAMPLE
 
-Where appropriate, special character sequences may be prefixed with a number to specify the maximum length, for example ‘#24T’.
+ Where appropriate, special character sequences may be prefixed with a number to specify the maximum length, for example ‘#24T’.
 
-By default, UTF-8 in string is not interpreted, to enable UTF-8, use the status-utf8 option.
+ By default, UTF-8 in string is not interpreted, to enable UTF-8, use the status-utf8 option.
 
 ***** keybinds
 ****** main shortcuts
@@ -12604,10 +12606,10 @@ hit prefix + I (I as in Install) to fetch the plugin
 You're good to go! The plugin was cloned to ~/.tmux/plugins/ dir and sourced.
 
 ****** Tmux sessionist
-?prefix + g? - prompts for session name and switches to it. Performs 'kind-of' name completion.
+~prefix + g~ - prompts for session name and switches to it. Performs 'kind-of' name completion.
 Faster than the built-in prefix + s prompt for long session lists.
-?prefix + shift + c? - prompt for creating a new session by name.
-?prefix + shift + s? - switches to the last session.
+~prefix + shift + cr~ - prompt for creating a new session by name.
+~Prefix + shift + s~ - switches to the last session.
 
 ****** tmux open
 https://github.com/tmux-plugins/tmux-open
@@ -12630,11 +12632,15 @@ highlight file.txt and press Ctrl-o - file will open in $EDITOR.
 
 Configuration
 
-How can I change the default "o" key binding to something else? For example, key "x"?
-Put set -g @open 'x' in tmux.conf.
+How can I change the default "o" key binding to something else, For example, key "x"
 
-How can I change the default "Ctrl-o" key binding to "Ctrl-x"?
+put this in tmux.conf:
+#+BEGIN_EXAMPLE
+set -g @open 'x'
+#to change the default "Ctrl-o" key binding to "Ctrl-x"?
 Put set -g @open-editor 'C-x' in tmux.conf.
+#+END_EXAMPLE
+
 ****** Tmux copycat
 ******* basic search
 Search:
@@ -12701,7 +12707,7 @@ Example: to remap default file search to use C-t put
 set -g @copycat_file_search 'C-t'
 #+END_EXAMPLE
 
- in .tmux.conf.
+in .tmux.conf.
 ******* Defining new stored searches
 To speed up the workflow you can define new bindings in .tmux.conf for searches you use often.
 
@@ -12709,27 +12715,25 @@ After adding any of the below snippets, make sure to reload your tmux configurat
 
 # type this in the terminal
 $ tmux source-file ~/.tmux.conf
-Dummy examples (just for testing):
 
-prefix + ctrl-t example string search
-
+#+BEGIN_EXAMPLE
+#Dummy examples (just for testing):
+#prefix + ctrl-t example string search
 set -g @copycat_search_C-t 'search me'
-prefix + alt-t example regex search
 
+#prefix + alt-t example regex search
 set -g @copycat_search_M-t 'regex search[[:alnum:]]\*'
-Useful searches
 
-prefix + ctrl-e in the Rails log output searches for previous request start
-
+#Useful searches
+#prefix + ctrl-e in the Rails log output searches for previous request start
 set -g @copycat_search_C-e '^Processing[[:space:]]by[[:space:]][^[:space:]]*'
-prefix + D searches for numbers at the beginning of line.
-Useful with $ pgrep -lf process command to quickly select process PID.
-
+#prefix + D searches for numbers at the beginning of line.
+#Useful with $ pgrep -lf process command to quickly select process PID.
 set -g @copycat_search_D '^[[:digit:]]+'
-prefix + G searches for git commit SHA1.
-Works for both the short (5 chars) and full (40 chars) versions.
-
+#prefix + G searches for git commit SHA1.
+#Works for both the short (5 chars) and full (40 chars) versions.
 set -g @copycat_search_G '\b[0-9a-f]{5,40}\b'
+#+END_EXAMPLE
 
 ****** Tmux Yank
 $Note-requires xclip$
@@ -12737,10 +12741,6 @@ $Note-requires xclip$
 Key bindings:
 
 ?prefix + y? - copies text from the command line to clipboard.
-
-Works with all popular shells/repls. Tested with:
-shells: bash, zsh (with bindkey -e), tcsh
-remote shells: ssh, mosh
 
 copy mode bindings:
 
@@ -12751,6 +12751,16 @@ copy mode bindings:
 %Tip- Mouse Support%
 
 When making a selection using tmux mode-mouse on or mode-mouse copy-mode, you cannot rely on the default 'release mouse after selection to copy' behavior. Instead, press `y` @before@ releasing mouse.
+
+Copying to clipboard is done using xclip -selection c command by default.
+
+If copying is different on your system, and you need the command to be i.e. xclip -selection normal, here's how to customize:
+
+#+BEGIN_EXAMPLE
+# in .tmux.conf
+set -g @yank_selection "primary"
+#+END_EXAMPLE
+
 ****** Tmux cpu status
 Enables displaying cpu percentage and status icon in Tmux status-right.
 

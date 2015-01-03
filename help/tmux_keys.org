@@ -39,4 +39,24 @@ PREFIX z >> zoom in out pane
 PREFIX PREFIX KEY  >> send prefix to remote tmux
 
 PREFIX Shift-c  >> create new session
- 
+
+* plugins 
+?o? - "open" a highlighted selection with the system default program. open for OS X or xdg-open for Linux.
+?Ctrl-o? - open a highlighted selection with the $EDITOR
+
+** Copycat mode" bindings
+?prefix + /?  -tmux copycat >  regex search (strings work too)
+
+n - jumps to the next match
+N - jumps to the previous match
+Enter - if youre using Tmux vi mode OR ctrl-w or alt-w - if youre using Tmux emacs mode
+
+prefix + I >> installs new plugins from github or any other git repo
+prefix + U >> updates plugins
+#url serach set -g @copycat_url_search  'b'
+#select numbers (use PREFIX D) for pgrep- set -g @copycat_search_D '^[[:digit:]]+'
+
+** tmux yank
+?y? - copy selection to system clipboard
+?Y?- (shift-y) - "put" selection - equivalent to copying a selection, and pasting it to the command line
+?Alt-y? - performs both of the above: copy to system clipboard and put to command line
