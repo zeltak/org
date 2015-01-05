@@ -8006,7 +8006,8 @@ dat2013 <- clippedaod[yr == "2013"]
 #+end_src
 **** subset to remove NAs
 #+begin_src R
-temp <- temp[x_s_ITM != 'NA']
+  temp <- temp[x_s_ITM != 'NA']
+  temp <- temp[x_s_ITM != 'NA']           #
 #+end_src
 
 **** subset by value

@@ -218,3 +218,29 @@ $length + 1
     #+BEGIN_EXAMPLE
  "type"  =  'primary' OR  "type"  =  'secondary' 
     #+END_EXAMPLE
+** maps
+*** change label precision
+You can use "New Column" tool in attribute table of your layer.
+
+Width represent the total number of digits. Precision represents the number of decimals
+
+Examples:
+#+BEGIN_EXAMPLE
+
+Width 5 Precision 3
+
+-2.001
+99.999
+Width 3 Precision 1
+
+0.1
+1.2
+99.9
+Width 20 Precision 9
+
+11123456789.123456789
+#+END_EXAMPLE
+
+If your calculations are getting NULL values, first try to save and refresh your table attribute.
+
+If the problem persist, make sure that the output of your calculus is a number and not a text.
