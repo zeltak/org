@@ -24391,47 +24391,76 @@ To start the webapp, run
 git annex webapp
 #+END_SRC
 at the command line.
+***** start up withought webapp
 To start the assistant without opening the webapp, you can run the command "git annex assistant --autostart". This is a good thing to configure your system to run automatically when you log in.
 
 *** syncthing
-**** basic sync
-For two nodes two sync a repository, the following must be true on each node:
+**** Introduction
+For this guide lets assume you have two machines that you want to sync files between.
+In keeping with syncthing terminology they are going to be called "devices" in the rest of the documentation. The "local device" is the one you are configuring, viewing status for, etc while the "remote device" is the other machine.
 
-1.The other node has been added to the config (+add device):
+The best way to follow this guide is to do the install on both machines and configure them in parallel. If both machines arent accessible simultaneously that's fine, the results will just be a little less immediately obvious.
 
-#+DOWNLOADED: /tmp/screenshot.png @ 2014-10-21 17:24:02
-#+attr_html: :width 300px
- [[/home/zeltak/org/attach/images_2014/screenshot_2014-10-21_17:24:02.png]]
+**** Installing
+Grab the [latest release:
+https://github.com/syncthing/syncthing/releases/latest
 
-$Note- you need the KEY from the other machine you are trying to pair$
-
-2.after you add a device you need to add each repo you want to sync seperatly:
-
-click add folder :
-
-
-#+DOWNLOADED: /tmp/screenshot.png @ 2014-10-21 17:23:42
-#+attr_html: :width 300px
- [[/home/zeltak/org/attach/images_2014/screenshot_2014-10-21_17:23:42.png]]
-
-'FolderID' and 'Folder Path' need to be identical to the partner machine you are trying to sync
-
-then make sure the other node (machines) you want to share have been checked under "Share With Nodes" in the repository configuration
-
-#+DOWNLOADED: /tmp/screenshot.png @ 2014-10-21 17:27:16
-#+attr_html: :width 300px
-
- [[/home/zeltak/org/attach/images_2014/screenshot_2014-10-21_17:27:16.png]]
-
-finally `restart`
-
-in example: 
+of Syncthing for your operating system at  and unpack it. There will be a binary called `syncthing` (or `syncthing.exe` on Windows). Start this in whatever way you are most comfortable with; double clicking should work in any graphical environment, but I'll use the terminal to better illustrate what happens. At first start, syncthing will generate a configuration and some keys and then start the admin GUI in your browser. Something like the following will be printed on the terminal:
 
 #+BEGIN_EXAMPLE
-Folder ID: sync
-Repository Path:/home/zeltak/Sync
+$ syncthing
+ [monitor] 15:56:58 INFO: Starting syncthing
+ 15:56:58 INFO: Generating RSA key and certificate for syncthing...
+ [ANSMX] 15:57:05 INFO: syncthing v0.10.14 (go1.4 darwin-amd64 default) jb@syno...
+ [ANSMX] 15:57:05 INFO: My ID: ANSMXYD-E6CF3JC-TCVPYGF-GXJPHSJ-MKUXBUQ-ZSPOKXH-...
+ [ANSMX] 15:57:05 INFO: No config file; starting with empty defaults
+ [ANSMX] 15:57:05 INFO: Edit gs1/config.xml to taste or use the GUI
+ [ANSMX] 15:57:05 INFO: Starting web GUI on http://127.0.0.1:8080/
+ [ANSMX] 15:57:05 INFO: Loading HTTPS certificate: open gs1/https-cert.pem: no ...
+ [ANSMX] 15:57:05 INFO: Creating new HTTPS certificate
+ [ANSMX] 15:57:05 INFO: Generating RSA key and certificate for syno...
+ [ANSMX] 15:57:07 INFO: Starting UPnP discovery...
+ [ANSMX] 15:57:13 INFO: UPnP discovery complete (found 0 devices).
+ [ANSMX] 15:57:13 INFO: Starting local discovery announcements
+ [ANSMX] 15:57:13 INFO: Local discovery over IPv4 unavailable
+ [ANSMX] 15:57:13 INFO: Starting global discovery announcements
+ [ANSMX] 15:57:13 OK: Ready to synchronize default (read-write)
+ [ANSMX] 15:57:13 INFO: Device ANSMXYD-E6CF3JC-TCVPYGF-GXJPHSJ-MKUXBUQ-ZSPOKXH-...
+ [ANSMX] 15:57:13 INFO: Completed initial scan (rw) of folder default
 #+END_EXAMPLE
 
+At this point syncthing will also have set up a folder called `default` for you, in a directory called `Sync` in your home directory. You can use this as a starting point, then remove it or add more folders later.
+%Tip- I usually atthis point add a folder sync (at destination~/Sync/) and delete the default folder % 
+**** Configuring
+
+The admin GUI starts automatically and remains available on http://localhost:8080/. 
+
+On the left is the list of "folders", or directories to synchronize. You can see the `default` folder was created for you, and its currently marked "Unshared" since it's not yet shared with any other device. On the right is the list of devices. Currently there is only one device, the computer you are running this on.
+
+For Syncthing to be able to synchronize files with another device, it must be told about that device. This is accomplished by exchanging "device IDs". A device ID is a unique, cryptographically secure identifier that is generated as part of the key generation the first time you start Syncthing. It is printed in the log above, and you can see it in the web GUI by selecting the "gear menu" (top right) and "Show ID".
+
+Two devices will *only* connect and talk to each other if they both know about the others device ID. Since the configuration must be mutual for a connection to happen, device IDs don't need to be kept secret.
+
+%To get your two devices to talk to each other%:
+
+click "Add Device" at the bottom right on both, and enter the device ID of the other side
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-01-09 10:54:17
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2015-01-09_10:54:17.png]]
+
+
+You should also select the folder(s) that you want to share with this device. The device name is optional, but you can set it to something that makes sense for you to remember what device this is.
+On you click "Save" the new device will appear on right side of the GUI (although disconnected) and a prompt will be shown to indicate the need for a restart.
+
+
+$Note$ Syncthing needs to be restarted for some configuration changes, like sharing folders with new devices, to take effect. When you click restart syncthing will first restart
+
+
+after the restart the webui will come back up and after a while (up to a minute) connect to the other device. Remember though that you need to do the above process on both devices, and only once you've done this on both they will be able to connect.
+
+At this point the two devices share an empty directory. Adding files to the Sync directory on either device will synchronize those files to the other side. Each device scans for changes every sixty seconds, so changes can take a bit over a minute to propagate to the other side.
 
 **** install on arch linux
 install through community or git (on aur)
@@ -24448,122 +24477,10 @@ then use the webgui to use at:
 
 http://localhost:8080/
 
-*** unsion
-**** Synchronizing org files with Unison
-This describes how to synchronize org files using the 
-[[http://www.cis.upenn.edu/~bcpierce/unison/][Unisonfile synchronizer]],
-as well as how to configure it to use an external tool to merge conflicting
-edits.
-
-also see:
-http://orgmode.org/worg/org-tutorials/unison-sync.html
-
-***** Prerequisites
-
-You should have Unison up and running. Binaries can be found 
-[[http://www.cis.upenn.edu/~bcpierce/unison/download.html][here]] and the
-documentation is 
-[[http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html][here]].
-
-***** Synchronization
-
-Unison is a file synchronizer, thus it may be used to synchronize org files. To
-configure Unison, on uses a /profile/ which states where the things to
-synchronize are as well as some options. Assuming I want to synchronize the
-files in ~/Users/schmitta/dir1~ and ~/Users/schmitta/dir2~, the profile would
-look like this
-
-#+BEGIN_EXAMPLE
-root = /Users/schmitta/dir1
-root = /Users/schmitta/dir2
-#+END_EXAMPLE
-
-In most cases Unison will be used with a remote machine. The local machine is
-called the /client/ and the remote one the /server/. For such remote
-synchronization, the ~unison~ binary must be installed in the server as
-well. The simplest way to connect to the machine is using ssh. One should check
-that unison can be found there by doing ~ssh address@hidden unison -version~. If
-~unison~ cannot be found in the path, one may set the ~servercmd~ option as
-indicated in the next example.
-
-(Please see the 
-[[http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#roots][manual
- section on roots]] for further details.)
-
-#+BEGIN_EXAMPLE
-root = /Users/schmitta/dir1
-root = ssh://address@hidden/relative/path/to/dir2
-
-servercmd = /usr/bin/unison
-#+END_EXAMPLE
-
-***** Merging
-
-As Unison works on the level of files, it will trigger a /conflict/ if both
-files have changed since the last synchronization. In that case one can only
-choose which file to keep, which is not satisfying. Unison offers the
-possibility to use external tools to merge the files. There is an 
-[[http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#merge][extensive
-manual section]] regarding this, we'll just describe how to use emacs and ediff 
-to
-do it.
-
-For better merging, we will ask unison to keep the last synchronized version of
-every org file on the client; this way we can use ediff with ancestor. These
-~currentbackup~ files may live alongside the synchronized files (with names of
-the form ~.bak.version.name~, which is configurable) or in a central location.
-
-Here is the modified configuration file.
-
-#+BEGIN_EXAMPLE
-root = /Users/schmitta/dir1
-root = ssh://address@hidden/relative/path/to/dir2
-
-servercmd = /usr/bin/unison
-
-backupcurrent = Name .org
-backuplocation = local
-maxbackups = 0
-
-merge = Name .org -> emacsclient -c --eval '(ediff-merge-files-with-ancestor 
-"CURRENT1" "CURRENT2" "CURRENTARCH" nil "NEW")'
-
-#+END_EXAMPLE
-
-The ~backupcurrent~ option tells unison to keep a backup of the last
-synchronized version of ever file with an ~org~ extension. The location of the
-backup should be local (alongside the file). Finally, no other backup should be
-created.
-
-Next follows the merge command. For every org file in conflict, use the command
-that launches a new emacs frame calling the ediff with ancestor function. The
-~CURRENT1~, ~CURRENT2~, and ~CURRENTARCH~ strings are  replaced with the file
-from the first root, the file from the second root, and the last synchronized
-version. The ~NEW~ file is where Unison expects the file to be saved (which will
-be done by the ediff session).
-
-Thus, when an org file has been modified on both hosts, an ediff session will be
-launched in a new frame. Closing the frame will make Unison commit the merge (it
-waits until the command has finished).
-
-If one does not want to use backups, it's possible to use the simpler ediff
-(without ancestor) command as follows.
-
-#+BEGIN_EXAMPLE
-root = /Users/schmitta/dir1
-root = ssh://address@hidden/relative/path/to/dir2
-
-servercmd = /usr/bin/unison
-
-merge = Name .org -> emacsclient -c --eval '(ediff-merge-files "CURRENT1" 
-"CURRENT2" nil "NEW")'
-
-#+END_EXAMPLE
-
-***** virtualizations
-****** virtualbox
-******* vbox on arch
-******** install
+** virtualizations
+*** virtualbox
+**** vbox on arch
+***** install
 install from community repo
 
 #+begin_src sh
@@ -24577,7 +24494,7 @@ then load the module
 modprobe vboxdrv
 #+END_SRC
 
-******* virtual machine cloning
+**** virtual machine cloning
 
 Virtual Machine Cloning
 
@@ -24597,7 +24514,7 @@ simply giving them access to your .vdi file (VirtualBox VM instance) and
 configuration settings. In addition, once you set up a pristine
 environment you can clone it and always have it stored as a backup
 incase you mess something up with the VM you are currently working with.
-******* move a virtual machine
+**** move a virtual machine
 
 `VirtualBox v4.0.0 and later`
 
@@ -24611,14 +24528,14 @@ If you want the original and the copy to be registered at the same time on the s
 
 If you are running on a Windows host then be wary of moving VMs to removable storage. Windows has a nasty habit of changing the drive letters of removable drives, which will invalidate the VM path stored when you used Machine|Add.
  
-******* launch vm from cli
+**** launch vm from cli
 
 Launch a VirtualBox virtual machine from the command line
 VBoxManage startvm "name"
  foe example
  VBoxManage startvm "Xp Stable"
 
-******* install-upgrade
+**** install-upgrade
 
 Reinstalling virtual box after kernel upgrade
 
@@ -24628,7 +24545,7 @@ Reinstalling virtual box after kernel upgrade
 you are having trouble accessing USB devices in a guest, make sure that
 you are a member of the vboxusers system group.
 
-******* errors
+**** errors
 
 The VirtualBox kernel driver is not accessible to the current user
 error
@@ -24687,7 +24604,7 @@ resolution:
  Save, exit the editor, and log out. You should now have a large virtual
 machine
 
-******** virtualbox cant operate in vmx root mode
+***** virtualbox cant operate in vmx root mode
 
  Failed to start the virtual machine Xp Testing ATD (about to die
 Edition).
@@ -24700,16 +24617,16 @@ kernel extension, recompile your kernel and reboot
  or
  sudo apt-get remove qemu-kvm
 
-******* Virtualbox on windowz
+**** Virtualbox on windowz
 
-******** mount a windows share drive in a linux guest
+***** mount a windows share drive in a linux guest
 
 You should remove the spaces between mount, ., and vboxsf. If that still
 doesn't work, this should work:
  mount -t vboxsf win share /mnt/share
  Make sure the name of the folder and the share are not equal, otherwise
 you get a protocol error
-******* expand a virtualbox hardrive
+**** expand a virtualbox hardrive
 in the CLI issue the following:
 
 #+BEGIN_SRC sh
@@ -24720,9 +24637,9 @@ note: the new size is in MB
 
 then use gparted live to enlarge the drive for the OS to see it
 
-****** vmware
+*** vmware
 
-******* tips
+**** tips
 
 Installing vmware from scratch or after Linux Kernel Upgrade
 
@@ -24739,7 +24656,7 @@ Installing vmware from scratch or after Linux Kernel Upgrade
  
  and press enter to all Questions, that's it!
 
-******* import from virtualbox
+**** import from virtualbox
 
 issue this :
  VBoxManage clonehd /home/zeltak/.VirtualBox/VDI/Xp Uni.vdi
@@ -24749,9 +24666,9 @@ needed) to the vmdk folder
  edit with editor to fit new machine
  open the vmx file from vm workstation
 
-******* Vmware7 on arch
+**** Vmware7 on arch
 
-******** VMware Workstation or VMware Player
+***** VMware Workstation or VMware Player
 
 To install Workstation or Player on a Linux host using a bundle:
  1. Download
@@ -24811,7 +24728,7 @@ the service is started automatically on boot.
  11. Now, open your VMware Workstation (vmware in the console) to
 configure & use!
 
-******** uninstall
+***** uninstall
 
 Uninstallation
  Check the product name
@@ -24821,14 +24738,14 @@ Uninstallation
  Manually included parts in /etc/rc.d have to be deleted manually. Don't
 forget to remove vmware from the /etc/rc.conf DAEMONS array.
 
-******** recompile after kernel change arch
+***** recompile after kernel change arch
 
 issue this after every kernel change:
  sudo vmware-modconfig --console --install-all
 
-****** Android
+*** Android
 
-******* Enable market place
+**** Enable market place
 
 [[http://tech-droid.blogspot.com/2009/11/android-market-on-emulator.html][download]]
 or use your already dl copy (see zeltak backup files) the new Android
@@ -24845,9 +24762,9 @@ for some resaon)
 Manager, and you should see your new AndEmu listed along with your other
 Android virtual machines. Click Start to run it.
  [[~/Dropbox/Org/Tech/linux_files/image186.png]]
-****** Teamviewer
-******* Bugs
-******** fix wierd issues on debian with VPN in BGU
+*** Teamviewer
+**** Bugs
+***** fix wierd issues on debian with VPN in BGU
 
 @note-on arch make aure latest version of `snx` package is installed thorugh AUR@
 
@@ -24899,7 +24816,6 @@ issue:
 x11vnc -display :0
 #+END_SRC
 then connect with vinagre or any VNC viwer and start TV through GUI
-
 ** Editors
 *** 'Emacs'
        :PROPERTIES:
@@ -36204,6 +36120,105 @@ this command:
 /media/raid/Music/Backup Zmusic
 
 **** advanced commands
+*** unsion
+**** Synchronizing org files with Unison
+This describes how to synchronize org files using the [[http://www.cis.upenn.edu/~bcpierce/unison/][Unisonfile synchronizer]],
+as well as how to configure it to use an external tool to merge conflicting
+edits.
+also see:
+http://orgmode.org/worg/org-tutorials/unison-sync.html
+
+***** Synchronization
+
+Unison is a file synchronizer, thus it may be used to synchronize org files. To
+configure Unison, on uses a /profile/ which states where the things to
+synchronize are as well as some options. Assuming I want to synchronize the
+files in ~/Users/schmitta/dir1~ and ~/Users/schmitta/dir2~, the profile would
+look like this
+
+#+BEGIN_EXAMPLE
+root = /Users/schmitta/dir1
+root = /Users/schmitta/dir2
+#+END_EXAMPLE
+
+In most cases Unison will be used with a remote machine. The local machine is
+called the /client/ and the remote one the /server/. For such remote
+synchronization, the ~unison~ binary must be installed in the server as
+well. The simplest way to connect to the machine is using ssh. One should check
+that unison can be found there by doing ~ssh address@hidden unison -version~. If
+~unison~ cannot be found in the path, one may set the ~servercmd~ option as
+indicated in the next example.
+
+#+BEGIN_EXAMPLE
+root = /Users/schmitta/dir1
+root = ssh://address@hidden/relative/path/to/dir2
+
+servercmd = /usr/bin/unison
+#+END_EXAMPLE
+
+***** Merging
+
+As Unison works on the level of files, it will trigger a /conflict/ if both
+files have changed since the last synchronization. In that case one can only
+choose which file to keep, which is not satisfying. Unison offers the
+possibility to use external tools to merge the files. There is an 
+[[http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#merge][extensive
+manual section]] regarding this, we'll just describe how to use emacs and ediff 
+to
+do it.
+
+For better merging, we will ask unison to keep the last synchronized version of
+every org file on the client; this way we can use ediff with ancestor. These
+~currentbackup~ files may live alongside the synchronized files (with names of
+the form ~.bak.version.name~, which is configurable) or in a central location.
+
+Here is the modified configuration file.
+
+#+BEGIN_EXAMPLE
+root = /Users/schmitta/dir1
+root = ssh://address@hidden/relative/path/to/dir2
+
+servercmd = /usr/bin/unison
+
+backupcurrent = Name .org
+backuplocation = local
+maxbackups = 0
+
+merge = Name .org -> emacsclient -c --eval '(ediff-merge-files-with-ancestor 
+"CURRENT1" "CURRENT2" "CURRENTARCH" nil "NEW")'
+
+#+END_EXAMPLE
+
+The ~backupcurrent~ option tells unison to keep a backup of the last
+synchronized version of ever file with an ~org~ extension. The location of the
+backup should be local (alongside the file). Finally, no other backup should be
+created.
+
+Next follows the merge command. For every org file in conflict, use the command
+that launches a new emacs frame calling the ediff with ancestor function. The
+~CURRENT1~, ~CURRENT2~, and ~CURRENTARCH~ strings are  replaced with the file
+from the first root, the file from the second root, and the last synchronized
+version. The ~NEW~ file is where Unison expects the file to be saved (which will
+be done by the ediff session).
+
+Thus, when an org file has been modified on both hosts, an ediff session will be
+launched in a new frame. Closing the frame will make Unison commit the merge (it
+waits until the command has finished).
+
+If one does not want to use backups, it's possible to use the simpler ediff
+(without ancestor) command as follows.
+
+#+BEGIN_EXAMPLE
+root = /Users/schmitta/dir1
+root = ssh://address@hidden/relative/path/to/dir2
+
+servercmd = /usr/bin/unison
+
+merge = Name .org -> emacsclient -c --eval '(ediff-merge-files "CURRENT1" 
+"CURRENT2" nil "NEW")'
+
+#+END_EXAMPLE
+
 *** fscheck
 
 **** cancel fscheck
@@ -38394,68 +38409,6 @@ otherwise you will get a error:
  Error trying to open /dev/dvd exclusively (Device or resource busy)...
 retrying in 1 second.
 
-*** internet
-
-**** Wget
-***** Specify a download Path for wget putput
-      
-      #+NAME: wget_output_path
-      #+BEGIN_SRC sh
-wget -P/PATH  http://URL/
-#example
-wget -P/tmp  http://www.cnn.com/
-      #+END_SRC
-      
-***** Download an entire website
-Download an entire website:
-
-wget --random-wait -r -p -e robots=off -U mozilla [[http://www.example.com][http://www.example.com]]
-
-#or try
-
-wget --recursive --no-clobber --page-requisites --html-extension --convert-links --restrict-file-names=windows --no-parent URL
-
-***** Mirror a site
-      
-      #+NAME: mirror a site with wget
-      #+BEGIN_SRC sh
-wget --mirror -p --adjust-extension --no-parent --convert-links -P yii_doc http://www.yiiframework.com/doc/api/1.1
-#for password site
-wget -e robots=off --wait 1 -x --user=xxx --password=xxx -m -k http://domain.to.mirror/
-      #+END_SRC
-      
-***** download all links to a specific file type
-
-wget -r -np -l 1 -A zip http://site.com/download/
-wget -r -A '.pdf' url/path
-wget -r -A '.mp3' url/path/dir/ 
-
-
- Options meaning:
- -r, --recursive specify recursive download.
- -np, --no-parent don't ascend to the parent directory.
- -l, --level=NUMBER maximum recursion depth (inf or 0 for infinite).
- -A, --accept=LIST comma-separated list of accepted extensions.
-***** use wget to download a ftp site
-use the following command (the -m is for mirror)
-
-#+BEGIN_SRC sh
-wget -m ftp://username:password@ip.of.old.host
-#if you need a passwordless login leave the passworld field empty
-wget -m ftp://username:@ip.of.old.host
-#+END_SRC 
-
-***** dl per file type wget
-The easiest way to download all pdf or mp3 files from given url:
-
-wget -r -A '.pdf' url/path
-wget -r -A '.mp3'url/path/dir/
-
-***** dl files recursivly by part of string
-in this example we want to downlaod all files containing 'AOD'
-#+BEGIN_SRC sh
-wget -r  -np ftp://maiac:@dataportal.nccs.nasa.gov/DataRelease/NorthAmerica/  -A "*AOT*.hdf"  
-#+END_SRC
 ** scripts
 
 *** basics
@@ -43996,6 +43949,88 @@ create_ap wlan0 eth0 MyAccessPoint
 #WPA + WPA2 passphrase:
 create_ap wlan0 eth0 MyAccessPoint MyPassPhrase
 #+END_SRC
+
+*** Wget
+**** Specify a download Path for wget putput
+      
+      #+NAME: wget_output_path
+      #+BEGIN_SRC sh
+wget -P/PATH  http://URL/
+#example
+wget -P/tmp  http://www.cnn.com/
+      #+END_SRC
+      
+**** Download an entire website
+Download an entire website:
+
+wget --random-wait -r -p -e robots=off -U mozilla [[http://www.example.com][http://www.example.com]]
+
+#or try
+
+wget --recursive --no-clobber --page-requisites --html-extension --convert-links --restrict-file-names=windows --no-parent URL
+
+**** Mirror a site
+      
+      #+NAME: mirror a site with wget
+      #+BEGIN_SRC sh
+wget --mirror -p --adjust-extension --no-parent --convert-links -P yii_doc http://www.yiiframework.com/doc/api/1.1
+#for password site
+wget -e robots=off --wait 1 -x --user=xxx --password=xxx -m -k http://domain.to.mirror/
+      #+END_SRC
+      
+**** download all links to a specific file type
+
+wget -r -np -l 1 -A zip http://site.com/download/
+wget -r -A '.pdf' url/path
+wget -r -A '.mp3' url/path/dir/ 
+
+
+ Options meaning:
+ -r, --recursive specify recursive download.
+ -np, --no-parent don't ascend to the parent directory.
+ -l, --level=NUMBER maximum recursion depth (inf or 0 for infinite).
+ -A, --accept=LIST comma-separated list of accepted extensions.
+**** use wget to download a ftp site
+use the following command (the -m is for mirror)
+
+#+BEGIN_SRC sh
+wget -m ftp://username:password@ip.of.old.host
+#if you need a passwordless login leave the passworld field empty
+wget -m ftp://username:@ip.of.old.host
+#+END_SRC 
+
+**** dl per file type wget
+The easiest way to download all pdf or mp3 files from given url:
+
+wget -r -A '.pdf' url/path
+wget -r -A '.mp3'url/path/dir/
+
+**** dl files recursivly by part of string
+in this example we want to downlaod all files containing 'AOD'
+#+BEGIN_SRC sh
+wget -r  -np ftp://maiac:@dataportal.nccs.nasa.gov/DataRelease/NorthAmerica/  -A "*AOT*.hdf"  
+#+END_SRC
+*** Curl
+**** Save the cURL Output to a file
+We can save the result of the curl command to a file by using -o/-O options.
+
+-o (lowercase o) the result will be saved in the filename provided in the command line
+-O (uppercase O) the filename in the URL will be taken and it will be used as the filename to store the result
+
+#+BEGIN_SRC sh
+curl -o mygettext.html http://www.gnu.org/software/gettext/manual/gettext.html
+#+END_SRC
+
+Now the page gettext.html will be saved in the file named ‘mygettext.html’. You can also note that when running curl with -o option, it displays the progress meter for the download as follows.
+
+
+When you use curl -O (uppercase O), it will save the content in the file named ‘gettext.html’ itself in the local machine.
+
+#+BEGIN_SRC sh
+curl -O http://www.gnu.org/software/gettext/manual/gettext.html
+#+END_SRC
+
+Note: When curl has to write the data to the terminal, it disables the Progress Meter, to avoid confusion in printing. We can use ‘>’|'-o’|'-O’ options to move the result to a file.
 
 ** X system
 *** X11
