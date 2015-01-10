@@ -18,48 +18,6 @@ zeltak: good. we celebrated the birth of our lord and savior the last two days
 ༜ ⌘ ⎈ ▣ ◨ ★ ☎ ☘  ⚉  ◈
 ◈ ⚫ ⚑ ⚒ ✔✓ ✜ ✙ ✠ ✥ ✤ ✪
 ✬✱✹ ✾ ✽ ❤ ➠ ⭤⮀☍⛢
-** btsync
-WebGUI can be accessed via following URL: http://localhost:8888
-
-        * Running btsync system instance (using dedicated btsync:btsync account)
-
-          System instance of btsync is preconfigured (configuration file located
-          at /etc/btsync.conf) and can be used directly after installation.
-
-          Execute:
-
-            to reload system systemd modules:     systemctl daemon-reload
-            to starnnt btsync manually:             systemctl start btsync
-            to autostart btsync on system start:  systemctl enable btsync
-
-        * Running btsync user instance (using current user account)
-
-          User instance MUST be configured before use. To perform configuration,
-          install btsync-autoconfig package or follow manual configuration steps:
-
-            1. Copy /etc/btsync/btsync.conf to ~/.config/btsync/btsync.conf for
-            the user you wish to configure btsync:
-
-              mkdir -p ~/.config/btsync
-              cp /etc/btsync.conf ~/.config/btsync/btsync.conf
-
-            2. Replace user-specific references with the appropriate information,
-            including the following settings:
-
-              - storage_path
-              - pid_file
-              - webui.listen
-              - webui.login
-              - webui.password
-
-            3. Make sure folder you specified as storage_path and folder where pid_file will
-            be located both exist in the filesystem, since btsync will not create it for you.
-
-          Execute:
-
-            to reload user systemd modules:       systemctl --user daemon-reload
-            to start btsync manually:             systemctl --user start btsync
-            to autostart btsync on user login:    systemctl --user enable btsync
 ** a new Emacs pop up window for helm chrome bookmarks
 ** TODO top 
    SCHEDULED: <2014-11-30 Sun>
@@ -100,7 +58,7 @@ punchagan | zeltak: it looks like properties need to be all upper case.
  punchagan | (modulo the bug..)
     zeltak | punchagan: cool thx!
 -mode
-** sync//backup project
+** @sync//backup project@
 *** Uni IP's
 
 | Machine      |             IP | Ports open                                                                       | Comments |
@@ -189,6 +147,29 @@ add rsync at uni/laptop to overwrite local file each type
 
 ftp://132.72.152.204/rsync/keepass/zpass.kbsx
 
+*** unison
+**** sync folder structure
+I used the following organizing structure:
+***** Scans 
+This has all my scanned documents organized as follows: 
+ -year
+  -- BGU
+  -- docs
+  -- receipts
+  -- family 
+***** Uni
+  -- CV
+  -- PDF library
+  -- signatures
+***** VT - Personal sensetive docs
+***** attach
+org mode attached files and pictures 
+
+$Note$ this needs to be changed yearly in the Emacs config (under org-downlaod section): 
+
+#+BEGIN_SRC emacs-lisp :results none
+(setq-default org-download-image-dir "/home/zeltak/org/attach/images_2015")
+#+END_SRC
 
 ** find out how to create org table with manual breaks
 ** TODO a way to auto exce a command on specific file save emacs
