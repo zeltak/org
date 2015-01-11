@@ -2,7 +2,7 @@
 /*pollution part*/
 
 
-libname poll "c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.1.NE_PM_MODELS\3.1.1.4.Work\3.Analysis\AN040_Lags\" ;
+libname poll "Z:\Projects\P001_NE_PM_MODELS\3.1.1.NE_PM_MODELS\3.1.1.4.Work\3.Analysis\AN040_Lags\" ;
 
 
 data poll;
@@ -14,7 +14,7 @@ run;
 
 
 PROC IMPORT OUT= WORK.INC 
-            DATAFILE= "c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.12.MORTALITY_NE\3.1.10.4.Work\2.Gather_data\FN002_SES\S3_edu_ses_inc_cleaned.dbf" 
+            DATAFILE= "Z:\Projects\P012.MORTALITY_NE\3.1.10.4.Work\2.Gather_data\FN002_SES\S3_edu_ses_inc_cleaned.dbf" 
             DBMS=DBF REPLACE;
      GETDELETED=NO;
 RUN;
@@ -55,7 +55,7 @@ run;
 
 
 PROC IMPORT OUT= WORK.maguid
-            DATAFILE= "c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.12.MORTALITY_NE\3.1.10.4.Work\2.Gather_data\FN007_keyed_tables\MA_only_grids.dbf" 
+            DATAFILE= "Z:\Projects\P012.MORTALITY_NE\3.1.10.4.Work\2.Gather_data\FN007_keyed_tables\MA_only_grids.dbf" 
 			            DBMS=DBF   REPLACE;
 						     GETDELETED=NO;
 							 RUN; 
@@ -183,7 +183,7 @@ options notes source source2 ; *re-instate LOG WINDOW printing;
 
 
 PROC IMPORT OUT= WORK.mortguid
-            DATAFILE= "c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.12.MORTALITY_NE\3.1.10.4.Work\2.Gather_data\FN001_Cases_guid\cases_guid_reg_final.dbf" 
+            DATAFILE= "Z:\Projects\P012.MORTALITY_NE\3.1.10.4.Work\2.Gather_data\FN001_Cases_guid\cases_guid_reg_final.dbf" 
 			            DBMS=DBF   REPLACE;
 						     GETDELETED=NO;
 							 RUN; 
@@ -536,7 +536,7 @@ run;
 
 
 PROC IMPORT OUT= WORK.lu
-            DATAFILE= "c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.12.MORTALITY_NE\3.1.10.4.Work\2.Gather_data\FN007_keyed_tables\close_2_monitor.dbf" 
+            DATAFILE= "Z:\Projects\P012.MORTALITY_NE\3.1.10.4.Work\2.Gather_data\FN007_keyed_tables\close_2_monitor.dbf" 
 			            DBMS=DBF   REPLACE;
 						     GETDELETED=NO;
 							 RUN; 
@@ -605,7 +605,7 @@ run;
 
 
 PROC EXPORT DATA= times8
-            OUTFILE= "c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.12.MORTALITY_NE\3.1.10.4.Work\3.Analysis\AN001_R_files_bycase\allmort.csv" 
+            OUTFILE= "Z:\Projects\P012.MORTALITY_NE\3.1.10.4.Work\3.Analysis\AN001_R_files_bycase\allmort.csv" 
 			            DBMS=CSV REPLACE;
 						     PUTNAMES=YES;
 							 RUN;
@@ -973,7 +973,7 @@ run;
 
 
 PROC IMPORT OUT= WORK.lu
-            DATAFILE= "c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.12.MORTALITY_NE\3.1.10.4.Work\2.Gather_data\FN007_keyed_tables\close_2_monitor.dbf" 
+            DATAFILE= "Z:\Projects\P012.MORTALITY_NE\3.1.10.4.Work\2.Gather_data\FN007_keyed_tables\close_2_monitor.dbf" 
 			            DBMS=DBF   REPLACE;
 						     GETDELETED=NO;
 							 RUN; 
@@ -1042,7 +1042,7 @@ run;
 
 
 PROC EXPORT DATA= times8
-            OUTFILE= "c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.12.MORTALITY_NE\3.1.10.4.Work\3.Analysis\AN001_R_files_bycase\allmort_resp.csv" 
+            OUTFILE= "Z:\Projects\P012.MORTALITY_NE\3.1.10.4.Work\3.Analysis\AN001_R_files_bycase\allmort_resp.csv" 
 			            DBMS=CSV REPLACE;
 						     PUTNAMES=YES;
 							 RUN;
@@ -1450,7 +1450,7 @@ run;
 
 
 PROC IMPORT OUT= WORK.lu
-            DATAFILE= "c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.12.MORTALITY_NE\3.1.10.4.Work\2.Gather_data\FN007_keyed_tables\close_2_monitor.dbf" 
+            DATAFILE= "Z:\Projects\P012.MORTALITY_NE\3.1.10.4.Work\2.Gather_data\FN007_keyed_tables\close_2_monitor.dbf" 
 			            DBMS=DBF   REPLACE;
 						     GETDELETED=NO;
 							 RUN; 
@@ -1519,7 +1519,7 @@ run;
 
 
 PROC EXPORT DATA= times8
-            OUTFILE= "c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.12.MORTALITY_NE\3.1.10.4.Work\3.Analysis\AN001_R_files_bycase\allmort_cvd.csv" 
+            OUTFILE= "Z:\Projects\P012.MORTALITY_NE\3.1.10.4.Work\3.Analysis\AN001_R_files_bycase\allmort_cvd.csv" 
 			            DBMS=CSV REPLACE;
 						     PUTNAMES=YES;
 							 RUN;
@@ -1894,7 +1894,7 @@ run;
 
 
 PROC EXPORT DATA= times8
-            OUTFILE= "c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.12.MORTALITY_NE\3.1.10.4.Work\3.Analysis\AN001_R_files_bycase\cvd_mort.csv" 
+            OUTFILE= "Z:\Projects\P012.MORTALITY_NE\3.1.10.4.Work\3.Analysis\AN001_R_files_bycase\cvd_mort.csv" 
 			            DBMS=CSV REPLACE;
 						     PUTNAMES=YES;
 							 RUN;
@@ -2241,7 +2241,7 @@ run;
 
 
 PROC EXPORT DATA= times8
-            OUTFILE= "c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.12.MORTALITY_NE\3.1.10.4.Work\3.Analysis\AN001_R_files_bycase\stroke_mort.csv" 
+            OUTFILE= "Z:\Projects\P012.MORTALITY_NE\3.1.10.4.Work\3.Analysis\AN001_R_files_bycase\stroke_mort.csv" 
 			            DBMS=CSV REPLACE;
 						     PUTNAMES=YES;
 							 RUN;
@@ -2586,7 +2586,7 @@ run;
 
 
 PROC EXPORT DATA= times8
-            OUTFILE= "c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.12.MORTALITY_NE\3.1.10.4.Work\3.Analysis\AN001_R_files_bycase\diab_mort.csv" 
+            OUTFILE= "Z:\Projects\P012.MORTALITY_NE\3.1.10.4.Work\3.Analysis\AN001_R_files_bycase\diab_mort.csv" 
 			            DBMS=CSV REPLACE;
 						     PUTNAMES=YES;
 							 RUN;
@@ -2929,7 +2929,7 @@ run;
 
 
 PROC EXPORT DATA= times8
-            OUTFILE= "c:\Users\ekloog\Documents\$Doc\3.PostDoc\3.1.Projetcs\3.1.12.MORTALITY_NE\3.1.10.4.Work\3.Analysis\AN001_R_files_bycase\lung_mort.csv" 
+            OUTFILE= "Z:\Projects\P012.MORTALITY_NE\3.1.10.4.Work\3.Analysis\AN001_R_files_bycase\lung_mort.csv" 
 			            DBMS=CSV REPLACE;
 						     PUTNAMES=YES;
 							 RUN;
