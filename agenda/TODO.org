@@ -58,7 +58,7 @@ punchagan | zeltak: it looks like properties need to be all upper case.
  punchagan | (modulo the bug..)
     zeltak | punchagan: cool thx!
 -mode
-** sync//backup project
+** @sync//backup project@
 *** Uni IP's
 
 | Machine      |             IP | Ports open                                                                       | Comments |
@@ -147,6 +147,29 @@ add rsync at uni/laptop to overwrite local file each type
 
 ftp://132.72.152.204/rsync/keepass/zpass.kbsx
 
+*** unison
+**** sync folder structure
+I used the following organizing structure:
+***** Scans 
+This has all my scanned documents organized as follows: 
+ -year
+  -- BGU
+  -- docs
+  -- receipts
+  -- family 
+***** Uni
+  -- CV
+  -- PDF library
+  -- signatures
+***** VT - Personal sensetive docs
+***** attach
+org mode attached files and pictures 
+
+$Note$ this needs to be changed yearly in the Emacs config (under org-downlaod section): 
+
+#+BEGIN_SRC emacs-lisp :results none
+(setq-default org-download-image-dir "/home/zeltak/org/attach/images_2015")
+#+END_SRC
 
 ** find out how to create org table with manual breaks
 ** TODO a way to auto exce a command on specific file save emacs

@@ -4701,9 +4701,7 @@ GNU/Linux 4.0 system I wrote the file:
  xvattr -a XV\_COLORKEY -v 66048
 
 ** internet-web
-
 *** Google
-
 **** gmail\_lifehacker\_tips.pdf
 
 [[tech_files/attach/gmail_lifehacker_tips.pdf][Attachment #03
@@ -4817,6 +4815,9 @@ operators in Gmail
 use:
  is:unread label:inbox
 
+**** google plus
+***** leave a community
+use the phone g+ app and go to the specific community, then in the menu press 'leave' community 
 *** isp
 
 *Info (dns servers. ip stuff etc...) for Israeli ISP
@@ -5910,3 +5911,26 @@ is going to be bypassed and you'll get to iPhone's House screen.
 *** reach Bios
 connect hdmi
 on boot press F2/Delete to reach Bios     
+*** complie applications
+
+this example is geared for tmux from source but can be used as a general install guide
+
+1. make sure to install all needed dev packages:
+
+#+BEGIN_SRC sh
+ipkg install optware-devel gcc make libstdc++
+#+END_SRC
+
+2. download the source (you can use wget from ipkg) and extract it
+
+3. before .config run this
+
+
+#+BEGIN_SRC sh
+export PATH=/opt/bin:$PATH
+#then follow with 
+./configure
+# if you get no erros:
+make
+make install 
+#+END_SRC
