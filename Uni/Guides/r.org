@@ -7580,6 +7580,18 @@ ggplot(alltest, aes(predcv, PM25)) +
 alltest[which.max(PM25)]
 #+END_SRC
    
+** cite R and R packages
+the `citation()` function produces the correct citation for R in general and is good to use when citing R.
+
+A call to `citation(package="MASS")` will provide package specific citation
+
+to extract the `bibtex entry` from the return value
+
+#+BEGIN_SRC R
+x <- citation()
+toBibtex(x)
+#+END_SRC
+
 * Packages specific
 ** Hemisc
 *** mtable
@@ -7667,27 +7679,36 @@ all.equal(lapply(aodf.2003.tmp.s9.m2,class),lapply(aodf.2004.tmp.s9.m2,class))
 
 ** nearestbyday
 
-to calculate the mean use nearestmean= TRUE. if set to False it will only get knreaset and get closest one avilable by distance
-
-knreast: number of nearest points it considers,if or if not they have data. assesment of how near something is , is done by pointmatrix. if you have alot of points with no data you might end up with no data. its the maximum number of points that gets considered.
-the higher the kneareast the bigger the Dataset needs to be- has RAM/CPU implications
-will only consider max number based in max number of monitors/sites in the joining dataset
-
-maxdistance (optional)- defualts to NA-you can add second restriction that the points that are considred have to be within maxdist (will use units of cords being used- meters, dec degree)
-if you set knearest if 5 and max dist of 20000 (20km) it will look for 5 closest points up to 20km.
-
-please note knearest runs before maxdist, the maxdist is an additional screen
-
 #+BEGIN_SRC R
 nearestbyday <- function(matrix_target, matrix_join, dt_target, dt_join, dt_target_varname, dt2_join_varname, 
                          closestname = "closestmet", varstoget = "avewsp", 
                          knearest = 5, maxdistance = NA, nearestmean = FALSE){
 #+END_SRC
 
-dt-target_varname-the string of the variable name for the units in the target dt
-dt2_join_varname-the string of the variable name for the units in the join dt
-closestname = "closestmet"-the string to be given to derived variable- a string prefix
-varstoget = "avewsp"-isnt used ..here be dragons?- ignore it for now and just put target variable
+- knreast: number of nearest points it considers, if or if not they have data. assesment of how near something is , is done by pointmatrix. if you have many points with no data you might end up with no data.
+its the maximum number of points that gets considered.
+
+the higher the kneareast the bigger the Dataset needs to be- This has RAM/CPU implications
+
+will only consider max number based in max number of monitors/sites in the joining dataset
+
+- maxdistance (optional)- defualts to NA
+
+you can add a second restriction where the points that are considered have to be within a max distance (will use units of cords being used- meters, dec degree)
+
+example: if you set knearest if 5 and max dist of 20000 (20km) it will look for 5 closest points up to 20km.
+
+- nearestmean: To calculate the mean (and not just the first point) use nearestmean= TRUE.
+
+if set to False it will only get knreaset and get closest one available by distance
+Please note knearest runs before maxdist, the maxdist is an additional screen
+
+- dt-target_varname- the string of the variable name for the units in the target dt
+
+- dt2_join_varname- the string of the variable name for the units in the join dt
+
+- closestname = "closestmet":  the string to be given to derived variable- a string prefix
+- varstoget = "avewsp" : isnt used ..here be dragons?- ignore it for now and just put target variable
 
 2nd column (named based on the named in join dataset)-data point closest from unit
 closest-which unit from the join was the closest one (which was used)
@@ -8156,7 +8177,7 @@ pm10all[is.na(Dust), Dust:= 0]
 x<- mod3[predicted.m3  < 0 , predicted.m3  := 0.01]
 #+END_SRC
 
-*** choose based on best avilable
+*** choose based on best avilable				  :CANCELLED:
 #+begin_src R
 # store the best available
 mod3best <- mod3[, list(aodid, elev, x_aod_utm, y_aod_utm, day, pm_mod3)]
@@ -8892,6 +8913,38 @@ P4 +
 #+END_SRC
 
 * ESS
+** starting ESS process  
+*** to start a new process
+ESS allows you to run more than one ESS process simultaneously in the same session. Each process has a name and a number
+the initial process (process 1) is simply named ‘R+3:1’.
+The name of the process is shown in the mode line in square brackets (for example, ‘[R+3:2]’)
+this is useful if the process buffer is renamed.
+
+₆In example₆ the buffers will look like `*R*` then `*R:2*` etc
+
+Without a prefix argument ~M-x R~ starts a new ESS process, using the first available process number.
+With a prefix argument (for R) ~C-u M-x R~  allows for the specification of command line options.
+
+*** You can switch to any active ESS process
+use the command `M-x ess-request-a-process`
+Just enter the name of the process you require; completion is provided over the names of all running S processes. This is a good command to consider binding to a global key.
+*** Changing the startup actions
+If you do not wish ESS to prompt for a starting directory when starting a new process, set the variable ess-ask-for-ess-directory to nil. In this case, the starting directory will be set using one of the following methods:
+
+If the variable ess-directory-function stores the name of a function, the value returned by this function is used. The default for this variable is nil.
+Otherwise, if the variable ess-directory stores the name of a directory (ending in a slash), this value is used. The default for this variable is nil.
+Otherwise, the working directory of the current buffer is used.
+
+₆In example₆ 
+
+#+BEGIN_SRC emacs-lisp :results none
+(setq ess-ask-for-ess-directory nil)
+;define deault ess dir
+(setq ess-directory "/home/zeltak/ZH_tmp/")
+#+END_SRC
+
+*** ask for a filename for the transcript before the ESS process starts
+    
 ** Useful keyboard shortcuts and tips for ESS/R
 *** Control and up/down arrow keys to search history with matching what you've already typed:
 #+BEGIN_SRC R
@@ -8909,6 +8962,11 @@ P4 +
 (define-key ess-mode-map (kbd "C-d") 'comment-region)
 (define-key ess-mode-map (kbd "C-S-d") 'uncomment-region)
  #+END_SRC
+*** Handy commands
+Command: ess-handy-commands
+Request and execute a command from ess-handy-commands list.
+
+ 
 * org mode and r
 ** basics shortcuts
 ?C-c ' ?- open code block for editing in ESS

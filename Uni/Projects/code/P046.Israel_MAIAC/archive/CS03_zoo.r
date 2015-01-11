@@ -16,7 +16,9 @@ library(car)
 library(broom)
 library(FNN)
 library(zoo)
+source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/geomerge_alpha_ex-1.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/geomerge_alpha.r")
+
 
 
 
@@ -208,7 +210,6 @@ NO[, NO.im := na.locf(NO, na.rm = F)]
 # setkey(NO,stn,day)
 # mt <- merge(mt, NO[,list(stn,day,NO.im)], all.x = T)  
 
-summary(mt)
 #########-------------------############
 #load PA grid (points in "palestine authority")
 ilgreen <- fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/IL.green_grid_north.csv")
