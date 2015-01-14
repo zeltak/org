@@ -1994,7 +1994,7 @@ like. Here is a very simple example.
  # cast the melted data
  # cast(data, formula, function)
  subjmeans <- cast(mdata, id~variable, mean)
- timemeans <- cast(mdata, time~variable, mean)
+ timemeans <- cast(mdata, time~variable, mean5)
  *subj means
 *
  *id    x1    x2*
@@ -9457,7 +9457,7 @@ flights %>%
 Helper function n_distinct(vector) counts the number of unique items in that vector
 #+BEGIN_SRC R
 # for each destination, count the total number of flights and the number of distinct planes that flew there
-ights %>%
+illghts %>%
     group_by(Dest) %>%
     summarise(flight_count = n(), plane_count = n_distinct(TailNum))
 #+END_SRC
