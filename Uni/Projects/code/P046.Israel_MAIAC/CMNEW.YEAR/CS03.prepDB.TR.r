@@ -546,6 +546,28 @@ m9[,c("ndviid","pblid","pop","area","date","month","lat_ndvi","long_ndvi","lat_a
 saveRDS(m9,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.TR.rds")
 #mod2
 m9.m2 <- m9[!is.na(aod)]
+#calculate  prev/post day
+#sort PM data
+setkey(m9.m2,aodid,day)
+m9x<-as.data.frame(m9.m2)
+# next day PM
+Data1 <- slide(m9x, Var = "aod", GroupVar = "aodid",
+               slideBy = 1)
+#prev day PM 
+Data2 <- slide(Data1, Var = "aod", GroupVar = "aodid",
+               slideBy = -1)
+
+data1<-as.data.table(Data1)
+data2<-as.data.table(Data2)
+setkey(data1,day,aodid)
+setkey(data2,day,aodid)
+setnames(data1,"aod1","aodpre")
+setnames(data2,"aod-1","aodpost")
+rm(m9.m2)
+rm(m9x)
+gc()
+m9.m2 <- merge(data1, data2[,list(aodid,day, aodpost)], all.x = T)
+
 saveRDS(m9.m2,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod2.TR.rds")
 
 

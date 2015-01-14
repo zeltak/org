@@ -124,9 +124,6 @@ m1.all<- m1.all[!is.na(m1.mpm)]
 m1.all<- m1.all[!is.na(PM25_pre)]
 m1.all<- m1.all[!is.na(PM25_post)]
 
-
-
-
 m1.formula <- as.formula(PM25~ aod
                          +PM25_pre+PM25_post+m1.mpm
                          +tempa.s
@@ -138,7 +135,7 @@ m1.formula <- as.formula(PM25~ aod
 #--------->mod1
 #full fit
 m1.fit.all <-  lmer(m1.formula,data=m1.all,weights=normwt)
-summary(m1.fit.all)
+summary(m1.fit.all)+
 m1.all$pred.m1 <- predict(m1.fit.all)
 res[res$type=="PM25", 'm1.R2'] <- print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
 #RMSPE
