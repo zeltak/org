@@ -20,7 +20,7 @@ mexpo<-readRDS("/media/NAS/Uni/Projects/P032_multiple_expo_jaime/3.Work/FN001_da
 
 
 #NOTE- caret package-may be worth while to look into
-
+mexpo<-as.data.table(mexpo)
 
 
 #fit <-rpart(birthw ~ ges_calc+sex, method="anova", data=mexpo)
@@ -28,18 +28,16 @@ mexpo<-readRDS("/media/NAS/Uni/Projects/P032_multiple_expo_jaime/3.Work/FN001_da
 ### regression
 #mexpo<-mexpo
 test<-mexpo[1:10000,]
-
-bwctree <- ctree(birthw ~temppreg+pmpreg.x+NDVI+lan+med_income+sex, data = mexpo)
-bwctree
-plot(bwctree)
+# 
+# bwctree <- ctree(birthw ~temppreg+pmpreg.x+NDVI+lan+med_income+sex, data = mexpo)
+# bwctree
+# plot(bwctree)
 
 ?cforest
 # set up a simple unbiased forest
 ##increase mtry when you increase ntree // scale ntree 5x of mtry 
-bwcforest <- cforest(birthw ~temppreg+pmpreg.x+NDVI+lan+med_income+sex, data = test,
+bwcforest <- cforest(birthw ~temppreg+pmpreg.x+med_income+sex, data = test,
                control = cforest_unbiased(mtry = 2, ntree = 20))
-
-
 bwcforest
 # biased variable importance
 # (not protected for correlated predictrs - but fast)
@@ -51,10 +49,8 @@ varimp(bwcforest, conditional = F)
 # peak under the hood
 str(bwcforest, max.level = 2)
 # not yet clear how to plot the trees
-
 summary(lm(birthw~temppreg+pmpreg.x+NDVI+lan+med_income,data=mexpo))
 
-# fit <-rpart(lbw ~ temppreg+pmpreg.x+NDVI+lan+med_income, method="class",control=rpart.control(minsplit=2,minbucket=1), data=mexpo)
 
 printcp(fit) # display the results
 plotcp(fit) # visualize cross-validation results
