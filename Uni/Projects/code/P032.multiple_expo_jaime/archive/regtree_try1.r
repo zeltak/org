@@ -21,10 +21,10 @@ mexpo<-readRDS("/media/NAS/Uni/Projects/P032_multiple_expo_jaime/3.Work/FN001_da
 #fit <-rpart(birthw ~ ges_calc+sex, method="anova", data=mexpo)
 ?ctree
 ### regression
-test<-mexpo[1:100000,]
+test<-mexpo[1:10000,]
 
-airct <- ctree(birthw ~temppreg+pmpreg.x+NDVI+lan+med_income, data = test)
-                   
+airct <- ctree(birthw ~temppreg+pmpreg.x+med_income+sex, data = test)
+          
 airct
 plot(airct)
 

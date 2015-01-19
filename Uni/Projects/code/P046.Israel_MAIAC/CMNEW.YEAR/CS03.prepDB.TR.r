@@ -275,6 +275,7 @@ l=seq(names(m3));names(l)=names(m3);l
 m3x<-m3[,c(1:4,29,30),with=FALSE]
 
 #Temp
+
 met.m <- makepointsmatrix(Temp, "X", "Y", "stn")
 setkey(m3x, aodid)
 lu.m <- makepointsmatrix(m3x[m3x[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
@@ -385,6 +386,8 @@ m5$normwt <- m5$wt/mean(m5$wt)
 m5<-m5[, c("prob","wt") := NULL]
 
 #clean 
+rm(m1)
+rm(m2)
 rm(m3)
 rm(m3x)
 rm(m4)
@@ -529,7 +532,7 @@ setnames(m6x,"closestmean","meanPM10")
 setnames(m6_good,"closestmean","meanPM10")
 
 m8<-rbindlist(list(m6x,m6_good))
-m8x<-m8[,c(1,2,54),with=FALSE]
+m8x<-m8[,c(1,2,52),with=FALSE]
 
 setkey(m7,aodid,day)
 setkey(m8x,aodid,day)
@@ -543,6 +546,28 @@ m9[,c("ndviid","pblid","pop","area","date","month","lat_ndvi","long_ndvi","lat_a
 saveRDS(m9,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.TR.rds")
 #mod2
 m9.m2 <- m9[!is.na(aod)]
+#calculate  prev/post day
+#sort PM data
+setkey(m9.m2,aodid,day)
+m9x<-as.data.frame(m9.m2)
+# next day PM
+Data1 <- slide(m9x, Var = "aod", GroupVar = "aodid",
+               slideBy = 1)
+#prev day PM 
+Data2 <- slide(Data1, Var = "aod", GroupVar = "aodid",
+               slideBy = -1)
+
+data1<-as.data.table(Data1)
+data2<-as.data.table(Data2)
+setkey(data1,day,aodid)
+setkey(data2,day,aodid)
+setnames(data1,"aod1","aodpre")
+setnames(data2,"aod-1","aodpost")
+rm(m9.m2)
+rm(m9x)
+gc()
+m9.m2 <- merge(data1, data2[,list(aodid,day, aodpost)], all.x = T)
+
 saveRDS(m9.m2,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod2.TR.rds")
 
 
@@ -646,3 +671,9 @@ PM10.m1 <- merge(PM10.m1, PM10[,list(stn,day,m1.mpm10 )] , all.x = T)
 
 #save mod 1
 saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.PM10.TR.rds")
+
+
+
+
+
+

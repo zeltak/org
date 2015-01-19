@@ -7734,6 +7734,23 @@ Temp[, Temp.im := na.locf(Temp, na.rm = F)]
 describe(Temp[, list(Temp, Temp.im)])
 #+END_SRC
 
+** library(DataCombine)- lags
+*** create prev and next day lags
+@this will not work with data.table@
+#+BEGIN_SRC R
+#calculate  prev/post day
+#sort PM data
+setkey(PM25,stn,day)
+PM25<-as.data.frame(PM25)
+# next day PM
+Data1 <- slide(PM25, Var = "PM25", GroupVar = "stn",
+               slideBy = 1)
+#prev day PM 
+Data2 <- slide(Data1, Var = "PM25", GroupVar = "stn",
+               slideBy = -1)
+
+#+END_SRC
+
 * data.table
 *** basics
 **** into
