@@ -21,7 +21,37 @@ library(DataCombine)
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
-m1.all <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.PM25.TR.rds")
+
+
+
+#-------------------->> RES TABLE
+res <- matrix(nrow=2, ncol=44)
+res <- data.frame(res)
+colnames(res) <- c(
+          "m1.R2","m1.PE","m1.R2.s","m1.R2.t","m1.PE.s" #full model
+          ,"m1cv.R2","m1cv.I","m1cv.I.se","m1cv.S","m1cv.S.se","m1cv.PE","m1cv.R2.s","m1cv.R2.t","m1cv.PE.s" #mod1 CV
+      ,"m1cv.loc.R2","m1cv.loc.I","m1cv.loc.I.se","m1cv.loc.S","m1cv.loc.S.se","m1cv.loc.PE","m1cv.loc.PE.s","m1cv.loc.R2.s","m1cv.loc.R2.t"#loc m1
+          ,"m2.R2" #mod2
+          ,"m3.t31","m3.t33" #mod3 tests
+          ,"m3.R2","m3.PE","m3.R2.s","m3.R2.t","m3.PE.s"#mod3
+          ,"XX1" ,"XX","XX","XX","XX","XX","XX","XX","XX","XX","XX","XX","XX")
+          
+res$type <- c("PM25","PM10")
+
+
+
+m1.all #<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.PM25.TR.rds")
+
+m1.all <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.PM25.AQ.rds")
+
+
+#add stn elev
+estn <- fread("/media/NAS/Uni/Data/Israel/IPA_stations/PMstnASL.csv")
+estn<-estn[!is.na(Long)]
+setkey(estn,stn)
+setkey(m1.all,stn)
+m1.all <- merge(m1.all, estn[,list(stn,ASLm)], all.x = T)
+
 
 # take out stn with co located PM10/25 with very high ratios
 #calculate meanPM per grid per day to each station (excluding first station)
@@ -120,26 +150,63 @@ m1.all <- m1.all[!(m1.all$badid %in% bad$badid), ]
 
 summary(m1.all)
 #clear missings
-m1.all<- m1.all[!is.na(m1.mpm)]
-m1.all<- m1.all[!is.na(PM25_pre)]
-m1.all<- m1.all[!is.na(PM25_post)]
+m1.all<- m1.all[!is.na(ASLm)]
+m1.all<- m1.all[!is.na(aodpre)]
+m1.all<- m1.all[!is.na(aodpost)]
 
 m1.formula <- as.formula(PM25~ aod
-                         +PM25_pre+PM25_post+m1.mpm
-                         +tempa.s
-                         +elev.s+tden.s+pden.s+ndvi.s #spatial
-                          +p_os.s
-                        +(1+aod|day/reg_num)) #+(1|stn) !!! stn screws up mod3 
+                        +tempa.s+WSa.s
+                        +Dust#+MeanPbl.s
+                        +RHa.s+O3a.s 
+                        +ASLm+tden.s
+                        +pden.s
+                        +Dist2road.s
+                        +ndvi.s 
+                        +dist2rail.s +dist2water.s +dist2A1.s
+                        +p_os.s+p_dev.s
+                        +p_dos.s
+                        +p_farm.s
+                        +p_for.s
+                        +p_ind.s  #land use
+                  #       +aodpre
+                   #      +aodpost
+                        # +meanPM10
+                      # + aod:Dust 
+                        +(1+aod+|day/reg_num)) #+(1|stn) !!! stn screws up mod3 
 
 
-#--------->mod1
+#--------->mod1  .76
 #full fit
 m1.fit.all <-  lmer(m1.formula,data=m1.all,weights=normwt)
-summary(m1.fit.all)+
+summary(m1.fit.all)
 m1.all$pred.m1 <- predict(m1.fit.all)
 res[res$type=="PM25", 'm1.R2'] <- print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
 #RMSPE
 res[res$type=="PM25", 'm1.PE'] <- print(rmse(residuals(m1.fit.all)))
+
+
+
+## names(m1.all)
+## m1.allx<-m1.all[,c(1,2,3,7,30),with=FALSE]
+## m1.allDF<-as.data.frame(m1.allx)
+## #per season
+## #base model for stage 1
+## m1.formula <- as.formula(PM25~ aod)
+## t1<- m1.allDF  %>% group_by(season) %>% do(function(df){lmer(m1.formula,data=df)})
+
+## seas2007<- m1.allDF  %>% group_by(season) %>% do(function(df){summary(lm(m1.formula,data=df))})
+
+
+## ################# clean BAD STN PM25 and check if improved model?
+## raWDaf <- ddply(m1.all, c("season"), 
+##       function(x) {
+##         mod1 <- lmer(m1.formula, data=x)
+##         data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+##                    nsamps = length(summary(mod1)$resid))
+## })
+## raWDaf
+## raWDaf<-as.data.table(raWDaf)
+
 
 
 
@@ -160,8 +227,7 @@ tempoall$delpred <-tempoall$pred.m1-tempoall$barpred
 mod_temporal <- lm(delpm ~ delpred, data=tempoall)
 res[res$type=="PM25", 'm1.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempoall))$r.squared)
 
-saveRDS(m1.all,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.TR.allYEARS.pred.rds")
-
+#saveRDS(m1.all,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.TR.allYEARS.pred.rds")
 
 
 #---------------->>>> CV
@@ -266,3 +332,53 @@ mod_temporal.cv <- lm(delpm ~ delpred, data=tempoall.cv)
 res[res$type=="PM25", 'm1cv.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.cv))$r.squared)
 
 
+# LOOCross-validation
+# for mod1
+library(doRNG)
+library(doParallel)
+
+
+# cross-validation and model building
+# repeated leave x monitors out CV
+#neveruse <- c("PER")
+neveruse <- c("")
+mons <- unique(m1.all[!stn %in% neveruse, stn]); length(mons)
+xout <- 2 # number of monitors to hold out
+# how many combinations if we pull out xout mons
+ncol(combn(mons, xout))
+n.iter <- 50
+# we will compute mean of the other monitors using all monitoring data
+setkey(m1.all, stn)
+
+# list to store scheme
+cvscheme <- list()
+cvout <- list()
+# set seed for reproducibility
+set.seed(20150112)
+
+# cross-validation in parallel
+
+registerDoParallel(14)
+# use a proper reproducible backend RNG
+registerDoRNG(1234)
+system.time({
+  iter.out <- foreach(i=1:n.iter, .combine = rbind, .packages = c("data.table", "lme4") ) %dorng% {
+  #system.time(for(i in 1:n.iter){
+  #mons.test <- mons[sample(length(mons), xout)]
+  mons.test <- combn(mons, xout)[,i]
+  cvscheme[[i]] <- mons.test
+  test <- m1.all[stn %in% mons.test, ]
+  train<- m1.all[!stn %in% mons.test, ]
+  # fit the model
+  print(paste("iteration #", i, "testing set is monitor", paste(unique(test$stn), collapse = ","), ",", nrow(test), "records from", paste(format(range(test$day), "%Y-%m-%d"), collapse = " to ")))
+  print(paste("training on", nrow(train), "records"))
+  trainmod <-  lmer(m1.formula, data =  train)
+  test$predcv <- predict(object=trainmod,newdata=test,allow.new.levels=TRUE,re.form=NULL )
+  test$itercv <- i  
+  # export these results
+  test[, list(day, stn, PM25, predcv, itercv)]
+}# end of cross-validation loop
+})
+summary(lm(PM25 ~ predcv, data = iter.out))
+# compute root mean squared error
+iter.out[, sqrt(mean((PM25 - predcv)^2))]

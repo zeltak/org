@@ -547,8 +547,6 @@ m9[,c("ndviid","pblid","pop","area","date","month","lat_ndvi","long_ndvi","lat_a
 saveRDS(m9,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.rds")
 #mod2
 m9.m2 <- m9[!is.na(aod)]
-saveRDS(m9.m2,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod2.AQ.rds")
-
 #calculate  prev/post day
 #sort PM data
 setkey(m9.m2,aodid,day)
@@ -570,6 +568,8 @@ rm(m9.m2)
 rm(m9x)
 gc()
 m9.m2 <- merge(data1, data2[,list(aodid,day, aodpost)], all.x = T)
+saveRDS(m9.m2,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod2.AQ.rds")
+
 
 #--------->mod1
 #PM25

@@ -5512,7 +5512,6 @@ possible model is
 subsets regression.
 
 *** Cross Validation
-
 **** intro
 
 Cross-validation is a useful method for evaluating the generalizability
@@ -5537,6 +5536,55 @@ total number of observations, this approach is called jackknifing.)
 in the bootstrap package. The following listing provides a function
 (called shrinkage()) for cross-validating a model's R-square statistic
 using k-fold cross-validation.
+
+**** leave one out_90_s10
+#+BEGIN_SRC R
+# cross-validation and model building
+# repeated leave x monitors out CV
+#neveruse <- c("PER")
+neveruse <- c("")
+mons <- unique(m1.all[!stn %in% neveruse, stn]); length(mons)
+xout <- 2 # number of monitors to hold out
+# how many combinations if we pull out xout mons
+ncol(combn(mons, xout))
+n.iter <- 50
+# we will compute mean of the other monitors using all monitoring data
+setkey(m1.all, stn)
+
+# list to store scheme
+cvscheme <- list()
+cvout <- list()
+# set seed for reproducibility
+set.seed(20150112)
+
+# cross-validation in parallel
+
+registerDoParallel(14)
+# use a proper reproducible backend RNG
+registerDoRNG(1234)
+system.time({
+  iter.out <- foreach(i=1:n.iter, .combine = rbind, .packages = c("data.table", "lme4") ) %dorng% {
+  #system.time(for(i in 1:n.iter){
+  #mons.test <- mons[sample(length(mons), xout)]
+  mons.test <- combn(mons, xout)[,i]
+  cvscheme[[i]] <- mons.test
+  test <- m1.all[stn %in% mons.test, ]
+  train<- m1.all[!stn %in% mons.test, ]
+  # fit the model
+  print(paste("iteration #", i, "testing set is monitor", paste(unique(test$stn), collapse = ","), ",", nrow(test), "records from", paste(format(range(test$day), "%Y-%m-%d"), collapse = " to ")))
+  print(paste("training on", nrow(train), "records"))
+  trainmod <-  lmer(m1.formula, data =  train)
+  test$predcv <- predict(object=trainmod,newdata=test,allow.new.levels=TRUE,re.form=NULL )
+  test$itercv <- i  
+  # export these results
+  test[, list(day, stn, PM25, predcv, itercv)]
+}# end of cross-validation loop
+})
+summary(lm(PM25 ~ predcv, data = iter.out))
+# compute root mean squared error
+iter.out[, sqrt(mean((PM25 - predcv)^2))]
+
+#+END_SRC
 
 *** extract coeficents
 #+BEGIN_SRC R
@@ -6394,7 +6442,7 @@ example 45 new variables in 'test')
  then cbind it back to the original dataset
  test2<-cbind(ts0004lag,test)
  finally export it to the format of choice (csv etc)
-
+ 
 * Plots/Graphs
 ** Basics
 *** create a new windows for each graph
@@ -7735,7 +7783,7 @@ describe(Temp[, list(Temp, Temp.im)])
 #+END_SRC
 
 ** library(DataCombine)- lags
-*** create prev and next day lags
+*** slide- create prev and next day lags
 @this will not work with data.table@
 #+BEGIN_SRC R
 #calculate  prev/post day
@@ -7749,6 +7797,19 @@ Data1 <- slide(PM25, Var = "PM25", GroupVar = "stn",
 Data2 <- slide(Data1, Var = "PM25", GroupVar = "stn",
                slideBy = -1)
 
+#+END_SRC
+
+*** slideMA-create moving averages
+**** to create a MA of 3 days before day of outcome
+#+BEGIN_SRC R
+#read PM data
+x<-PM25[,c(3,4,5,6,7), with=FALSE]
+setkey(x,day,stn)
+x<-as.data.frame(x)
+dd<-slideMA(data =x , Var = "PM25", GroupVar = "stn", periodBound = -3, offset = 1, NewVar = "MA_PM25", reminder = FALSE)
+y<-as.data.table(dd)
+setkey(y,stn,day)
+head(y[stn=="ANT"],n=10)
 #+END_SRC
 
 * data.table

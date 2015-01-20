@@ -544,7 +544,10 @@ m9 <- merge(m7,m8x,all.x = T)
 #clean
 m9[,c("ndviid","pblid","pop","area","date","month","lat_ndvi","long_ndvi","lat_aod.y","long_aod.y"):=NULL]
 saveRDS(m9,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.TR.rds")
-#mod2
+#m9<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.TR.rds")
+
+
+#--------->mod2
 m9.m2 <- m9[!is.na(aod)]
 #calculate  prev/post day
 #sort PM data
@@ -569,13 +572,7 @@ gc()
 m9.m2 <- merge(data1, data2[,list(aodid,day, aodpost)], all.x = T)
 
 saveRDS(m9.m2,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod2.TR.rds")
-
-
-
-#--------->mod1
-#PM25
-#to fix missing days issues resulting in cartesean error
-m9days <- sort(unique(m9.m2$day))
+#m9.m2<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod2.TR.rds")
 
 
 ########### join aod to PM25
