@@ -75,7 +75,7 @@ summary(mod1$pm10)
 #add date
 # mod1[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
 mod1$aod<-mod1$aod*0.001
-summary(mod1$aod)
+summary(mod1$aod
 pm25.m1<- filter(mod1, PM25 >= 0)
 pm10.m1<- filter(mod1, PM10 >= 0)
 
@@ -510,7 +510,6 @@ library(splines)
 
 
 ### Next, we add season and put NEAR_EMIP as log
-
 
 m5.formula <- as.formula(log_pm10 ~ log_aod*as.factor(season)+log_r_mean_restot+ns(log_pbl,3)+log_ndvi+ns(elevation,3)+dust+log(near_emip)+
                         ns(log_near_a1,3)+log_near_a2+log_near_a3+near_airport+near_port+length_a1+length_a23+

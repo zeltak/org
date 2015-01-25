@@ -180,26 +180,23 @@ summary(m1.all)
 m1.all<- m1.all[!is.na(aodpre)]
 m1.all<- m1.all[!is.na(aodpost)]
 m1.all<- m1.all[!is.na(aodpost)]
-
-
 m1.all[,aod.log:= log(aod+000000000001)]
 m1.all[,PM25.log:= log(PM25+000000000001)]
 summary(m1.all)
+describe(m1.all$aod)
 m1.all<- m1.all[PM25 < 100]
-d8(m1.all$aod)
-m1.all<- m1.all[aod < 100]
+m1.all<- m1.all[aod < 1.3]
 
-
-> names(m1.all)
- [1] "stn"          "day"          "PM25"         "closest"      "c"            "m"            "aod"          "UN"           "WV"           "dist2rail"   
-[11] "dist2A1"      "dist2water"   "Dist2road"    "elev"         "tden"         "pden"         "reg_num"      "p_os"         "p_dev"        "p_dos"       
-[21] "p_farm"       "p_for"        "p_ind"        "lat_aod.x"    "long_aod.x"   "x_aod_ITM"    "y_aod_ITM"    "metreg"       "MeanPbl"      "season"      
-[31] "seasonSW"     "ndvi"         "Dust"         "Temp.im"      "WD.im"        "WS.im"        "SR.im"        "O3.im"        "NO.im"        "Rain.im"     
-[41] "SO2.im"       "RH.im"        "obs"          "normwt"       "meanPM"       "meanPM10"     "aodpre"       "aodpost"      "m1.mpm"       "m1.mpm10"    
-[51] "ASLm"         "badstn"       "PM25_pre"     "PM25_post"    "elev.s"       "tden.s"       "pden.s"       "dist2A1.s"    "dist2water.s" "dist2rail.s" 
-[61] "Dist2road.s"  "ndvi.s"       "MeanPbl.s"    "p_ind.s"      "p_for.s"      "p_farm.s"     "p_dos.s"      "p_dev.s"      "p_os.s"       "tempa.s"     
-[71] "WDa.s"        "WSa.s"        "RHa.s"        "Raina.s"      "NOa.s"        "O3a.s"        "SO2a.s"       "badid"        "aod.log"      "PM25.log"    
-[81] "pred.m1"     
+# > names(m1.all)
+#  [1] "stn"          "day"          "PM25"         "closest"      "c"            "m"            "aod"          "UN"           "WV"           "dist2rail"   
+# [11] "dist2A1"      "dist2water"   "Dist2road"    "elev"         "tden"         "pden"         "reg_num"      "p_os"         "p_dev"        "p_dos"       
+# [21] "p_farm"       "p_for"        "p_ind"        "lat_aod.x"    "long_aod.x"   "x_aod_ITM"    "y_aod_ITM"    "metreg"       "MeanPbl"      "season"      
+# [31] "seasonSW"     "ndvi"         "Dust"         "Temp.im"      "WD.im"        "WS.im"        "SR.im"        "O3.im"        "NO.im"        "Rain.im"     
+# [41] "SO2.im"       "RH.im"        "obs"          "normwt"       "meanPM"       "meanPM10"     "aodpre"       "aodpost"      "m1.mpm"       "m1.mpm10"    
+# [51] "ASLm"         "badstn"       "PM25_pre"     "PM25_post"    "elev.s"       "tden.s"       "pden.s"       "dist2A1.s"    "dist2water.s" "dist2rail.s" 
+# [61] "Dist2road.s"  "ndvi.s"       "MeanPbl.s"    "p_ind.s"      "p_for.s"      "p_farm.s"     "p_dos.s"      "p_dev.s"      "p_os.s"       "tempa.s"     
+# [71] "WDa.s"        "WSa.s"        "RHa.s"        "Raina.s"      "NOa.s"        "O3a.s"        "SO2a.s"       "badid"        "aod.log"      "PM25.log"    
+# [81] "pred.m1"     
 
 m1.formula <- as.formula(PM25~ aod
                         +tempa.s+WSa.s
@@ -266,7 +263,7 @@ tempoall$delpred <-tempoall$pred.m1-tempoall$barpred
 mod_temporal <- lm(delpm ~ delpred, data=tempoall)
 res[res$type=="PM25", 'm1.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempoall))$r.squared)
 
-#saveRDS(m1.all,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.TR.allYEARS.pred.rds")
+saveRDS(m1.all,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod1.TR.allYEARS.pred_TRANSTMP.rds")
 
 
 #---------------->>>> CV
