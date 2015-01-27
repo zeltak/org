@@ -1,10 +1,10 @@
 #+LAST_MOBILE_CHANGE: 2014-08-15 17:03:15
-#+TITLE: TODO
 #+TAGS: Fav(f) Most_used(m) PreR(p)
+#+TITLE: TODO
 #+STARTUP: overview  inlineimages eval: (org-columns)
 
 * @TODAY@
-** help file revison  
+** help file revison
 try to find a way to do a refile/archive/function like thing that will copy a line/header to a defined file
 idealy: a function to copy current line, ask which file to copy to (like refile) and open file in next buffer. bonus check if that line start already exist and if so warn and paste below  that line.
 
@@ -114,6 +114,7 @@ I use this for android to pull my whole git repo (org) and have a copy of it on 
 ********* TODO you can also git push back changes
 ******** Mobile org 
 i used that for agenda notes to have a more accesable way to quick read notes from there
+***** TODO create color git output
 **** Binary files (images,pdfs etc)-Unison
 I use unison to sync the following folders
 I create a profile called sync under file:/home/zeltak/.unison/sync.prf
@@ -237,7 +238,7 @@ pjb: thx that could work well, appriciate the help!                             
 #+END_EXAMPLE
 
 ** jabref
-** Worker
+** Worer
 **** ssh into a remote and issue a command 
 tried this but didn't send the command (its waiting for a password)
 **** configure dunst notification colors specifacly for worker commands including short timeout
@@ -916,9 +917,7 @@ Ahmhed:
 
 
 * T
-
-
-set org mode block color
+org mode block color
 #+BEGIN_SRC emacs-lisp :results none
 (defun org-src-color-blocks-light ()
   "Colors the block headers and footers to make them stand out more for lighter themes"
@@ -954,3 +953,28 @@ set org mode block color
    ; (set-face-foreground 'minibuffer-prompt "white")
 )
 #+END_SRC
+ 
+* t2
+
+sa
+dais
+asd
+
+4444	
+C-a # 
+C-k # 
+There is also
+
+C-S-ba
+(global-set-key "\C-cd" 'kill-whole-line)     # Sets `C-c d` to `M-x kill-whole-line`
+If you want to delete a number of whole lines, you can prefix the command with a number:
+
+C-u 
+C-a # Go to beginning of line
+C-k # Kill line from current point
+There is also
+
+C-S-C-u C-S-backspace     # delete 4 whole lines. C-u without a number defaults to 4
+
+C-u -5 C-S-backspace   # deletes previous 5 whole lines
+ododoodyy

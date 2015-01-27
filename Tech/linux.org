@@ -2246,7 +2246,7 @@ Zeltak fresh Ubuntu install
  install Video drivers from distros gui (jockey in buntu) if needed
 2.Install my programs through apt-get install
 
-sudo apt-get install firefox keepassx digikam krename audacity wine
+sudo apt-get install nfs-common firefox keepassx digikam krename audacity wine
 easytag k9copy vlc gcolor2 gthumb k3b gimp rar unrar zip unzip xournal
 htop ktorrent comix inkscape gconf-editor gparted kalarm gnome-schedule
 getmail4 build-essential automake nfs-common portmap nfs-kernel-server
@@ -25193,19 +25193,9 @@ If the keys you press seem to do weird things, then, hold down Ctrl then press g
 by mistake.
 ******** desktop-save-mode auto Save/Restore
 With desktop-save-mode on, now it automatically save/restore opened files, windows config (number of windows, size, position), when quit ＆ restart emacs.
-******* Debug
-******** How to startup emacs without loading any customization
-
-How to startup emacs without loading any customization?
-To run emacs without loading your personal init file, start emacs like this:
-#+BEGIN_SRC sh
-emacs -q
-#+END_SRC
-To not load any site-wide startup file, start emacs with emacs -Q. The site-wide startup file is usually part of your emacs
-distribution, such as from Carbon emacs, Aquamacs, ErgoEmacs. Starting
-emacs with "-Q" is like running a bare bone GNU Emacs.
-
+******* !Debuging Emacs for Bugs/errors!
 ******** debugging your config file
+%Tip-a good way I found to do so is to open Emacs (non deamon mode) and open the conf file. then start binary splitting it and after each split you can open a new Emacs window (again non deamon) and see if the problem is solved % 
 ********* Binary search
 The secret to finding a problem in your init file is not a secret: binary search.
 Use comment-region to comment out half your init file, then 3/4, 7/8,... It is very quick to identify the problem. comment-region also uncomments: C-h f comment-region RET.
@@ -25232,7 +25222,41 @@ it will check extra parenthesis and quotes and let you know where andwhat is wro
 ********* debug erros in code
 type ~M-x toggle-debug-on-error RET~, reproduce the problem/error you have to get the debug info 
 
-you can then M-x goto-char RET to get to the to-the-charachter-of-the-invalid-read 
+you can then M-x goto-char RET to get to the to-the-charachter-of-the-invalid-read
+
+******** get rid of unreadable characters (unicode etc)		:Fav:
+
+How do I search for, delete, or replace unprintable (eight-bit or control) characters
+(see also http://www.gnu.org/software/emacs/emacs-faq.text)
+
+issue this in a problematic buffer with ?M-:? and paste the code below or just highlight below code and use 'eval-region'
+
+#+BEGIN_SRC emacs-lisp
+ (let ((buffer-invisibility-spec)) (query-replace-regexp "[^\t\n\r\f -~]" ""))
+#+END_SRC
+
+then enter y or ! (!no return!) to clear place/all
+
+%Tip%:
+
+-Regexp for the printable chars: `[\t\n\r\f -~]'
+
+-Regexp for the unprintable chars: `[^\t\n\r\f -~]'
+
+******** emacs ignores the org config file at startup (econf.org for me)
+close all emacs session and delete the .el file (including # and links) corresponding to your conf.org
+In example in my case its econf.el which corresponds to my org config file econf.org
+restart emacs and things should be back to normal
+******** How to startup emacs without loading any customization
+
+How to startup emacs without loading any customization?
+To run emacs without loading your personal init file, start emacs like this:
+#+BEGIN_SRC sh
+emacs -q
+#+END_SRC
+To not load any site-wide startup file, start emacs with emacs -Q. The site-wide startup file is usually part of your emacs
+distribution, such as from Carbon emacs, Aquamacs, ErgoEmacs. Starting
+emacs with "-Q" is like running a bare bone GNU Emacs.
 
 ******* .emacs
 ******** Org mode file as a emacs config
@@ -26006,31 +26030,6 @@ easy enough:
 press ESC 3 times:
  ESC ESC ESC
 
-******* !Bugs/errors!
-******** `get rid of unreadable characters (unicode etc)`		:Fav:
-
-How do I search for, delete, or replace unprintable (eight-bit or control) characters
-(see also http://www.gnu.org/software/emacs/emacs-faq.text)
-
-issue this in a problematic buffer with ?M-:? and paste the code below or just highlight below code and use 'eval-region'
-
-#+BEGIN_SRC emacs-lisp
- (let ((buffer-invisibility-spec)) (query-replace-regexp "[^\t\n\r\f -~]" ""))
-#+END_SRC
-
-then enter y or ! (!no return!) to clear place/all
-
-%Tip%:
-
--Regexp for the printable chars: `[\t\n\r\f -~]'
-
--Regexp for the unprintable chars: `[^\t\n\r\f -~]'
-
-******** emacs ignores the org config file at startup (econf.org for me)
-close all emacs session and delete the .el file (including # and links) corresponding to your conf.org
-In example in my case its econf.el which corresponds to my org config file econf.org
-restart emacs and things should be back to normal
-
 ******* commands
 ******** basics
 
@@ -26307,7 +26306,7 @@ for the `VAR` in question, and Emacs tells you if it has a buffer-local value.
 
 ₆In example₆ C-h org-use-tag-inheritance will tell you if its set to t or nili
 
-******** describe key and get the key functions name
+******** describe key ofand get the key functions name
 use ?C-h k? , followed by the keybind
 ******** add a speicifc orgmode TODO state
 #+BEGIN_SRC emacs-lisp :results none
@@ -26632,13 +26631,47 @@ Restoring Abbrevs- Turning on abbrev mode will read your abbrev file. To turn on
 (setq-default abbrev-mode t)
 #+END_SRC
 
-
 ********* set abbriv location and name
 this can be done in the init file or if defined your custom file:/home/zeltak/.emacs.d/custom.el
 
 #+BEGIN_SRC emacs-lisp :results none
 (setq abbrev-file-name "/home/zeltak/.emacs.d/abbrv/personal_abbrv.txt")
 #+END_SRC
+
+*********  use orgmode tables for abbrv files
+For example, I wanted to be able to define my abbreviations in an Org Mode table in my config. I remembered coming across this technique a few weeks ago, but I couldn’t find the webpage with the code. It turned out to be simple to write from scratch. Here’s the plain text I added to my config.
+
+#+NAME: abbrev
+| Base  | Expansion                             |
+|-------+---------------------------------------|
+| bc    | because                               |
+| wo    | without                               |
+| wi    | with                                  |
+| ex    | For example,                          |
+| email | sacha@sachachua.com                   |
+| dote  | http://sachachua.com/dotemacs         |
+| web   | http://sachachua.com/                 |
+| blog  | http://sachachua.com/blog/            |
+| ec    | http://sachachua.com/blog/emacs-chat/ |
+
+#+begin_src emacs-lisp :exports code :var data=abbrev
+(mapc (lambda (x) (define-global-abbrev (car x) (cadr x))) data)
+#+end_src
+
+The :var data=abbrev argument to the Emacs Lisp source block is where all the magic happens. Here, it takes the data from the table named “abbrev” (which I set using #+NAME: before the table) and makes it available to the code. Emacs evaluates that data when the code is tangled (or exported) to my configuration. The code that’s in my Sacha.el looks like this:
+
+#+BEGIN_EXAMPLE
+(let ((data (quote (("bc" "because")
+                    ("wo" "without")
+                    ("wi" "with")
+                    ("ex" "For example,")
+                    ("email" "sacha@sachachua.com")
+                    ("dote" "http://sachachua.com/dotemacs")
+                    ("web" "http://sachachua.com/")
+                    ("blog" "http://sachachua.com/blog/")
+                    ("ec" "http://sachachua.com/blog/emacs-chat/")))))
+  (mapc (lambda (x) (define-global-abbrev (car x) (cadr x))) data) )
+#+END_EXAMPLE
 
 ********* list current abbriviations
 To display a list of the current abbreviations Emacs uses, enter the command
@@ -27808,6 +27841,24 @@ One way to determine PATH is to use C-h k and click on a menu item close to wher
 which is an interactive autoloaded Lisp function in `tetris'.
 #+END_SRC
 
+******** modline 
+********* change the modeline to highlight the active bar
+You can change the modeline to highlight the active bar using the following in your .emacs (change colors and style to suit your preferences of course).
+
+#+BEGIN_EXAMPLE
+(set-face-attribute  'mode-line
+                 nil 
+                 :foreground "gray80"
+                 :background "gray25" 
+                 :box '(:line-width 1 :style released-button))
+(set-face-attribute  'mode-line-inactive
+                 nil 
+                 :foreground "gray30"
+                 :background MY_BG_COLOR 
+                 :box '(:line-width 1 :style released-button))
+#+END_EXAMPLE
+
+you can also add this to yout theme you use. Just open the file within your color-theme library named ₆In example₆ zenburn.el and search for the lines that have modline and replace with above text  
 ******* movment
 ******** basic 
 The following commands are useful for viewing screenfuls:
@@ -27901,7 +27952,6 @@ In any future emacs session, you can call your kmacro by name just like any emac
 when your recored a macro press ~c-x q~ while its running to specify a stop in the macro
 when you run that macro and it stops emacs will present a menu and you can enter 'recursive editing' to enter text 
 ******* minor modes
-
 ********* define in .emacs
 
 minor mode examples are blink-cursor-mode and column-number-mode
@@ -27913,6 +27963,16 @@ the scroll bars, menu-bar and tool-bar, respectively.
  (scroll-bar-mode -1)
  (menu-bar-mode -1)
  (tool-bar-mode -1)
+********* cua mode
+********** columnd edit mode
+to start 
+
+press ~C-Enter~
+
+to add text to strat of section press Enter/home and start typing
+to add text to end of section press Enter again/end  and start typing
+
+to create a numbered list higlight the area, press ~esc n~ and then enter as needed 
 
 ******* opening local/remote/root files
 
@@ -45895,3 +45955,4 @@ buffer-read-only: t
 End:
 #+END_SRC
  
+

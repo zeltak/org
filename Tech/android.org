@@ -147,6 +147,76 @@ Acast
  unlock with wifu
  [[android_files/img/Image_0009.png]]
 
+** Nexus 6 
+*** Root nexus 6 and unlock bootloader
+**** make sure adb is installed properly
+on Arch install it from AUR
+to check issue:
+#+BEGIN_SRC sh
+adb version
+#+END_SRC
+
+**** prepare phone
+>>>>>>Before you begin, make sure your N6 has USB Debugging Mode switched on<<<<<<
+Before continuing, users must enable Developer Options in the devices settings and select the OEM Unlock option. To do so:
+
+#+BEGIN_EXAMPLE
+- Go into Settings
+- Under About Phone, you'll be able to locate your Build Number
+- Tap Build Number until you are notified that you have activated Developer options
+- Go into Developer Options, ensure it is enabled and check the Enable OEM Unlock box
+- While in Developer Options, ensure the USB Debugging box is checked
+#+END_EXAMPLE
+
+**** Unlock The Bootloader
+Turn the phone off. Then boot it into the bootloader/fastboot mode by holding volume down + power.
+Plug the phone into your PC, then open a command prompt window window and type:
+#+BEGIN_SRC sh
+fastboot devices
+#+END_SRC
+
+This command will list the connected devices. If your phones serial number shows up you are good to go and may continue. If the phone is NOT listed this indicates that your drivers are not installed correctly. In order for you to continue you must fix your drivers so that your phone is listed under fastboot devices.
+
+If the phone has been recognized by the command above, proceed to unlocking the bootloader with the following command:
+Remember that this step will wipe EVERYTHING off the phone
+#+BEGIN_SRC sh
+fastboot oem unlock
+#+END_SRC
+On the phone a screen should pop up asking whether or not you would like to unlock the bootloader. Use the volume rockers to highlight "Yes" then press power to confirm the action.
+!After the above command has finished executing, run the following!
+@ DO NOT skip this step, it is more important than you think@
+
+#+BEGIN_SRC sh
+fastboot reboot
+#+END_SRC
+
+The phone will reboot. Next you will be presented with a screen containing an android logo and a progress bar (this may take up to ten minutes to complete). Wait until the phone has fully booted up into android, then proceed onto the next section of the guide.
+Close the command prompt window.
+
+**** Obtain Root
+The instructions below and the zip file are the work of our beloved @Chainfire. CF-Root is the root for "rooting beginners" and those who want to keep as close to stock as possible. CF-Root is meant to be used in combination with stock firmware and be the quickest and easiest way for your first root.
+
+- Download the ZIP file at http://download.chainfire.eu/628/CF-Root/CF-Auto-Root/CF-Auto-Root-shamu-shamu-nexus6.zip
+its also in my own local folder as CF-Auto-Root-shamu-shamu-nexus6.zip:
+file:/home/zeltak/org/attach/files_2015/CF-Auto-Root-shamu-shamu-nexus6.zip
+
+- Extract the ZIP file
+- Boot your device in bootloader/fastboot mode. Usually this can be done by turning your device off, then holding VolUp+VolDown+Power to turn it on.
+- Connect your device to your computer using USB
+
+- Windows:
+--- Run root-windows.bat
+
+- Linux
+--- chmod +x root-linux.sh
+--- Run root-linux.sh
+
+- Mac OS X
+--- chmod +x root-mac.sh
+--- Run root-mac.sh
+
+Follow the on-screen instructions - watch both the computer and the device!
+
 ** apps
 *** install obb files
 install the apk then copy the folder containing the .obb files to file:android/obb/
