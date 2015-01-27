@@ -859,11 +859,32 @@ readshow some slides in lombardy
 send france pm to qian
 
 ** NEXT call joel
+*** general
 - is mean 20km per day for excluding the actual monitoring data is OK to use a predictor
 - Maayan coming :
 talk about Phd and EHF initial study
 - is it OK to leave name out of Israel paper? CV issues here at BGU 
 - ehf workshops with mark in Julym offer to cover tickets regardless of our grant
+*** VIIRS update
+We made touch with VIIRS- meytar knows Rob levy
+VIIRS is supposed to replace MODIS that is *scheduled* to go down in 2016
+the data currently is in Beta stage
+AOD data current base resolution is 6km (compared to MODIS base of 100/10km) ..will go down over time to 0.75 km 
+we have very preliminary data we can get access today
+VIIRS will have deep and blue dark target like algo. over both land and ocean
+data range is 2012- current 
+*** MAIAC Europe
+Sorry for the delay. The process is delayed because we found some issues with the code, one is over partially snow covered area, another one is over some bright surface area.
+Alexei is looking through this problem, so the process has to be hold to wait for the new updated code.
+
+The issue about bright surface is: we need a threshold to decide when the algorithm go to bright surface mode. It seems this threshold is related to the location. For small area such as Israel, we can fix this number and get good retrieval, however, for large scale retrieval, we need find out how this threshold changes.  So the Israel subset is OK.
+ 
+Regards,
+*** MAIAC Israel 
+progress with data fusion for next iteration. 
+geochem data for israel
+what techniques are they using- kalman filter
+
 
 ** TODO check Italy Mexico Trip reutrns from BGU
 :PROPERTIES:

@@ -2238,9 +2238,7 @@ this should take precedance over
 ~/.local/share/applications/mimeapps.list
 
 ** Ubuntu
-
 *** fresh install
-
 **** start
 
 Zeltak fresh Ubuntu install
@@ -2302,6 +2300,33 @@ ttf-larabie-straight ttf-larabie-uncommon ttf-staypuft ttf-summersby
 ttf-ubuntu-title ttf-xfree86-nonfree xfonts-intl-european ttf-droid
 
 **** ppa
+
+**** Install Nvidia drivers     
+***** Installation without X / from the console
+From Ubuntu 14.04 and up
+The jockey-text command was removed with the release of Ubuntu 14.04. You can now use ubuntu-drivers to get the list of packages for each driver, and then install the packages using apt-get. For example:
+
+#+BEGIN_SRC sh
+sudo ubuntu-drivers devices
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+== /sys/devices/pci0000:00/0000:00:01.0/0000:01:00.0 ==
+vendor   : NVIDIA Corporation
+modalias : pci:v000010DEd00000DDAsv000017AAsd000021D1bc03sc00i00
+model    : GF106GLM [Quadro 2000M]
+driver   : xserver-xorg-video-nouveau - distro free builtin
+driver   : nvidia-304-updates - distro non-free
+driver   : nvidia-304 - distro non-free
+driver   : nvidia-331 - distro non-free recommended
+driver   : nvidia-331-updates - distro non-free
+#+END_EXAMPLE
+
+then:
+
+#+BEGIN_SRC sh
+sudo apt-get install nvidia-331
+#+END_SRC
 
 *** networking
 
@@ -22106,15 +22131,23 @@ to change the way tinyrss looks
 
 download the latest source files both for worker and avfs from
 [[http://www.boomerangsworld.de/cms/worker/download?lang=en][HERE]]
- In ubuntu (or other distro) install the xorg dev tools (xorg-dev
-package),libmagic-dev and xli package for image view
- for new HAL support install libhal-storage-devandlibdbus-glib-1-dev
- 1)compile avfs (see basic compile how to [[javascript:;][here]])
-basiclly ./configure, make, sudo make install
- you will only get a yes in the building libraries , its ok continue to
-compile worker
- 2)compile worker also basiclly ./configure, make, sudo make install
- NOTE: make sure the after the .configure there are no issues
+In ubuntu (or other distro) install:
+
+#+BEGIN_EXAMPLE
+xorg-dev libmagic-dev xli  libdbus-glib-1-2
+#+END_EXAMPLE
+
+for new HAL support install
+
+#+BEGIN_EXAMPLE
+libhal-storage-devandlibdbus-glib-1-dev
+#+END_EXAMPLE
+
+
+1)compile avfs (see basic compile how to [[javascript:;][here]]) basiclly ./configure, make, sudo make install you will only get a yes in the building libraries , its ok continue to compile worker
+
+2)compile worker also basiclly ./configure, make, sudo make install
+$note$: make sure the after the .configure there are no issue
 
 **** keybinds
 ***** searching 

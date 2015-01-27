@@ -9208,6 +9208,7 @@ glimpse(flights)
 
 ** subset data
 *** filter command basics   
+**** Basic 
 Base R approach to filtering forces you to repeat the data frame’s name
 dplyr approach is simpler to write and read
 Command structure (for all dplyr verbs):
@@ -9215,49 +9216,55 @@ first argument is a data frame
 return value is a data frame
 nothing is modified in place
 $Note$ dplyr generally does not preserve row names
-*** simple subset ("filter")
+**** simple subset ("filter")
+ #+BEGIN_SRC R
+ # dplyr approach
+ # note: you can use comma or ampersand to represent AND condition
+ filter(flights, Month==1, DayofMonth==1)
+ #+END_SRC
+**** using and/OR
+ #+BEGIN_SRC R
+ # use pipe for OR condition
+ filter(flights, UniqueCarrier=="AA" | UniqueCarrier=="UA")
+ #+END_SRC
+**** using with %in% (select values to keep by matching in vector/dataset) 
+ #+BEGIN_SRC R
+ # you can also use %in% operator
+ filter(flights, UniqueCarrier %in% c("AA", "UA"))
+ #+END_SRC
+
+**** filter NA (missing) 
 #+BEGIN_SRC R
-# dplyr approach
-# note: you can use comma or ampersand to represent AND condition
-filter(flights, Month==1, DayofMonth==1)
-#+END_SRC
-*** using and/OR
-#+BEGIN_SRC R
-# use pipe for OR condition
-filter(flights, UniqueCarrier=="AA" | UniqueCarrier=="UA")
-#+END_SRC
-*** using with %in% (select values to keep by matching in vector/dataset) 
-#+BEGIN_SRC R
-# you can also use %in% operator
-filter(flights, UniqueCarrier %in% c("AA", "UA"))
+ppb<-filter(pb,!is.na(V4))
 #+END_SRC
 
 *** select: Pick columns by name
+**** Basic
 Base R approach is awkward to type and to read
     dplyr approach uses similar syntax to filter
     Like a SELECT in SQL
 use colon to select multiple contiguous columns, and use `contains` to match columns by name
 $Note$  `starts_with`, `ends_with`, and `matches` (for regular expressions) can also be used to match columns by name
 
-*** select columns
-$Note$ the first word is for the DF
-#+BEGIN_SRC R
-# dplyr approach
-#select(DF, VAR1, VAR2, VAR3)
-select(flights, DepTime, ArrTime, FlightNum)
-#+END_SRC
-*** advanced select columns
-you can select a range using the : symbol
-#+BEGIN_SRC R
-# use colon to select multiple contiguous columns, and use `contains` to match columns by name
-# note: `starts_with`, `ends_with`, and `matches` (for regular expressions) can also be used to match columns by name
-select(flights, Year:DayofMonth, contains("Taxi"), contains("Delay"))
-#+END_SRC
-*** select columns by range
-#+BEGIN_SRC R
-#select(DF, colXname:colYname)
-select(flights, Year:DayofMonth)
-#+END_SRC
+**** select columns
+ $Note$ the first word is for the DF
+ #+BEGIN_SRC R
+ # dplyr approach
+ #select(DF, VAR1, VAR2, VAR3)
+ select(flights, DepTime, ArrTime, FlightNum)
+ #+END_SRC
+**** advanced select columns
+ you can select a range using the : symbol
+ #+BEGIN_SRC R
+ # use colon to select multiple contiguous columns, and use `contains` to match columns by name
+ # note: `starts_with`, `ends_with`, and `matches` (for regular expressions) can also be used to match columns by name
+ select(flights, Year:DayofMonth, contains("Taxi"), contains("Delay"))
+ #+END_SRC
+**** select columns by range
+ #+BEGIN_SRC R
+ #select(DF, colXname:colYname)
+ select(flights, Year:DayofMonth)
+ #+END_SRC
 ** Chaining
 *** intro
 $Note- this is not dplyr sepcific$

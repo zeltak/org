@@ -41,16 +41,18 @@ res$type <- c("PM25","PM10")
 
 
 #m1.all <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.PM25.TR.rds")
-
 m1.all <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.PM25.AQ.rds")
 
+# neveruse <- c("AZB","BIL","BSV","NSH","PTR","TMM","YLB")
+# myetar <- m1.all[stn %in% neveruse]
+# write.csv(myetar,"/media/NAS/Uni/Projects/P000_TMP_PROJECTS/meytar_phd/Ratio/m1ration.csv")
 
-#add stn elev
-estn <- fread("/media/NAS/Uni/Data/Israel/IPA_stations/PMstnASL.csv")
-estn<-estn[!is.na(Long)]
-setkey(estn,stn)
-setkey(m1.all,stn)
-m1.all <- merge(m1.all, estn[,list(stn,ASLm)], all.x = T)
+# #add stn elev
+# estn <- fread("/media/NAS/Uni/Data/Israel/IPA_stations/PMstnASL.csv")
+# estn<-estn[!is.na(Long)]
+# setkey(estn,stn)
+# setkey(m1.all,stn)
+# m1.all <- merge(m1.all, estn[,list(stn,ASLm)], all.x = T)
 
 
 # take out stn with co located PM10/25 with very high ratios
@@ -74,7 +76,7 @@ PM10[, c := as.numeric(format(day, "%Y")) ]
 PM10[,c("Year","Month","Day","date"):=NULL]
 PM10 <- PM10[X != 'NaN']
 PM10<-PM10[!is.na(PM10)]
-PM10<-PM10[PM10 > 0.000000000001 & PM10 < 20200 ]
+PM10<-PM10[PM10 > 0.000000000001 & PM10 <  2000 ]
 #clear non continous stations
 setnames(PM10,"X","x_stn_ITM")
 setnames(PM10,"Y","y_stn_ITM")
@@ -91,23 +93,23 @@ PM.j<- PM.j[ratio > 0.95]
 ####Take out bad stations
 m1.all <- m1.all[!(m1.all$badstn %in% PM.j$badstn), ] 
 
-#cal prev/post day
-#read PM data
-setkey(PM25,stn,day)
-PM25<-as.data.frame(PM25)
-
-Data1 <- slide(PM25, Var = "PM25", GroupVar = "stn",
-               slideBy = 1)
-Data2 <- slide(Data1, Var = "PM25", GroupVar = "stn",
-               slideBy = -1)
-
-data2<-as.data.table(Data2)
-setkey(data2,day,stn)
-setnames(data2,"PM251","PM25_pre")
-setnames(data2,"PM25-1","PM25_post")
-setkey(m1.all,day,stn)
-m1.all <- merge(m1.all, data2[,list(stn,day, PM25_pre, PM25_post)], all.x = T)
-summary(m1.all)
+# #cal prev/post day
+# #read PM data
+# setkey(PM25,stn,day)
+# PM25<-as.data.frame(PM25)
+# 
+# Data1 <- slide(PM25, Var = "PM25", GroupVar = "stn",
+#                slideBy = 1)
+# Data2 <- slide(Data1, Var = "PM25", GroupVar = "stn",
+#                slideBy = -1)
+# 
+# data2<-as.data.table(Data2)
+# setkey(data2,day,stn)
+# setnames(data2,"PM251","PM25_pre")
+# setnames(data2,"PM25-1","PM25_post")
+# setkey(m1.all,day,stn)
+# m1.all <- merge(m1.all, data2[,list(stn,day, PM25_pre, PM25_post)], all.x = T)
+# summary(m1.all)
 
 m1.all[,elev.s:= scale(elev)]
 m1.all[,tden.s:= scale(tden)]
@@ -177,49 +179,170 @@ m1.all <- m1.all[!(m1.all$badid %in% bad$badid), ]
 summary(m1.all)
 #clear missings
 # m1.all<- m1.all[!is.na(ASLm)]
-m1.all<- m1.all[!is.na(aodpre)]
-m1.all<- m1.all[!is.na(aodpost)]
-m1.all<- m1.all[!is.na(aodpost)]
-m1.all[,aod.log:= log(aod+000000000001)]
-m1.all[,PM25.log:= log(PM25+000000000001)]
-summary(m1.all)
+# m1.all<- m1.all[!is.na(aodpre)]
+# m1.all<- m1.all[!is.na(aodpost)]
+# m1.all[,aod.log:= log(aod+1)]
+# m1.all[,PM25.log:= log(PM25+1)]
+m1.all<- m1.all[!is.na(pbldag)]
 describe(m1.all$aod)
-m1.all<- m1.all[PM25 < 100]
-m1.all<- m1.all[aod < 1.3]
+describe(m1.all$PM25)
+#m1.all<- m1.all[PM25 < 100]
+#m1.all<- m1.all[aod < 1.2]
+neveruse <- c("TMM","ASH")
+m1.all <- m1.all[!stn %in% neveruse]
+
+# use pipe for OR condition
+#m1.all <- filter(m1.all, PM25 > 30 & aod < 0.5)
 
 # > names(m1.all)
-#  [1] "stn"          "day"          "PM25"         "closest"      "c"            "m"            "aod"          "UN"           "WV"           "dist2rail"   
-# [11] "dist2A1"      "dist2water"   "Dist2road"    "elev"         "tden"         "pden"         "reg_num"      "p_os"         "p_dev"        "p_dos"       
-# [21] "p_farm"       "p_for"        "p_ind"        "lat_aod.x"    "long_aod.x"   "x_aod_ITM"    "y_aod_ITM"    "metreg"       "MeanPbl"      "season"      
-# [31] "seasonSW"     "ndvi"         "Dust"         "Temp.im"      "WD.im"        "WS.im"        "SR.im"        "O3.im"        "NO.im"        "Rain.im"     
-# [41] "SO2.im"       "RH.im"        "obs"          "normwt"       "meanPM"       "meanPM10"     "aodpre"       "aodpost"      "m1.mpm"       "m1.mpm10"    
-# [51] "ASLm"         "badstn"       "PM25_pre"     "PM25_post"    "elev.s"       "tden.s"       "pden.s"       "dist2A1.s"    "dist2water.s" "dist2rail.s" 
-# [61] "Dist2road.s"  "ndvi.s"       "MeanPbl.s"    "p_ind.s"      "p_for.s"      "p_farm.s"     "p_dos.s"      "p_dev.s"      "p_os.s"       "tempa.s"     
-# [71] "WDa.s"        "WSa.s"        "RHa.s"        "Raina.s"      "NOa.s"        "O3a.s"        "SO2a.s"       "badid"        "aod.log"      "PM25.log"    
-# [81] "pred.m1"     
+#  [1] "stn"           "day"           "PM25"          "closest"       "c"             "m"             "aod"           "UN"            "WV"           
+# [10] "dist2rail"     "dist2A1"       "dist2water"    "Dist2road"     "elev"          "tden"          "pden"          "reg_num"       "p_os"         
+# [19] "p_dev"         "p_dos"         "p_farm"        "p_for"         "p_ind"         "lat_aod.x"     "long_aod.x"    "x_aod_ITM"     "y_aod_ITM"    
+# [28] "metreg"        "MeanPbl"       "season"        "seasonSW"      "ndvi"          "Dust"          "Temp.im"       "WD.im"         "WS.im"        
+# [37] "SR.im"         "O3.im"         "NO.im"         "Rain.im"       "SO2.im"        "RH.im"         "obs"           "normwt"        "meanPM"       
+# [46] "meanPM10"      "closest5kmean" "pbldag"        "m1.mpm"        "m1.mpm10"      "badstn"        "elev.s"        "tden.s"        "pden.s"       
+# [55] "dist2A1.s"     "dist2water.s"  "dist2rail.s"   "Dist2road.s"   "ndvi.s"        "MeanPbl.s"     "p_ind.s"       "p_for.s"       "p_farm.s"     
+# [64] "p_dos.s"       "p_dev.s"       "p_os.s"        "tempa.s"       "WDa.s"         "WSa.s"         "RHa.s"         "Raina.s"       "NOa.s"        
+# [73] "O3a.s"         "SO2a.s"        "badid"   
+
+#added region
+xreg<-fread("/media/NAS/Uni/ztmp/treg.csv")
+setkey(xreg,stn)
+setkey(m1.all,stn)
+m1.all <- merge(m1.all,xreg[,list(stn,reg5=metreg_1)],all.x = T)
+
+#for paper
+#m1.formula <- as.formula(PM25~ aod+(1+aod|day))
+m1.formula <- as.formula(PM25~ aod
+                        +pbldag
+                        +(1+aod|day))
 
 m1.formula <- as.formula(PM25~ aod
+                          +aod
                         +tempa.s+WSa.s
-                        +Dust#+MeanPbl.s
+                        +pbldag
                         +RHa.s+O3a.s+Raina.s+NOa.s 
                         +elev.s+tden.s
                         +pden.s
                         +ndvi.s 
                         +dist2rail.s +dist2water.s +dist2A1.s+Dist2road.s
                         +p_os.s+p_dev.s+p_dos.s+p_farm.s+p_for.s+p_ind.s  
-                        +as.factor(metreg)
+                        #+as.factor(metreg)+as.factor(reg_num)
+                        +as.factor(season)
+                        +as.factor(season)*aod
+                         #                        +closest5kmean
                          #      +aodpre #+aodpost
                          #+meanPM10
                          # + aod:Dust 
-                        +(1+aod|day/reg_num))#+(0+tempa.s|day)) #+(1|stn) !!! stn screws up mod3 
-#--------->mod1  .77, CV=.64
+                        #+aod*lat_aod.x
+                        #+Dust*lat_aod.x#+MeanPbl.s
+                        #+pbldag*lat_aod.x
+                        +(1+aod|day/reg5))#+(0+tempa.s|day)) #+(1|stn) !!! stn screws up mod3 
+#--------->mod1  .771, CV=.64
 #full fit
-m1.fit.all <-  lmer(m1.formula,data=m1.all,weights=normwt)
-#summary(m1.fit.all)
-m1.all$pred.m1 <- predict(m1.fit.all)
+m1_sc <-  lmer(m1.formula,data=m1.all,weights=normwt)
+#summary(m1_sc)
+#AIC(m1_sc) 
+
+m1.all[,pred.m1 := NULL]
+m1.all$pred.m1 <- predict(m1_sc)
 res[res$type=="PM25", 'm1.R2'] <- print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
 #RMSPE
-res[res$type=="PM25", 'm1.PE'] <- print(rmse(residuals(m1.fit.all)))
+res[res$type=="PM25", 'm1.PE'] <- print(rmse(residuals(m1_sc)))
+
+
+
+
+#lme by region
+m1.formula <- as.formula(PM25~ aod
+                        
+                        +tempa.s+WSa.s
+                        +pbldag
+                        +RHa.s+O3a.s+Raina.s+NOa.s 
+                        +elev.s+tden.s
+                        +pden.s
+                        +ndvi.s 
+                        +dist2rail.s +dist2water.s +dist2A1.s+Dist2road.s
+                        +p_os.s+p_dev.s+p_dos.s+p_farm.s+p_for.s+p_ind.s  
+                        #+as.factor(metreg)+as.factor(reg_num)
+                         #                        +closest5kmean
+                         #      +aodpre #+aodpost
+                         #+meanPM10
+                         # + aod:Dust 
+                        #+aod*lat_aod.x
+                        #+Dust*lat_aod.x#+MeanPbl.s
+                        #+pbldag*lat_aod.x
+                        +(1+aod|day/reg5))#+(0+tempa.s|day)) #+(1|stn) !!! stn screws up mod3 
+
+
+r1<- m1.all[season==1]
+r2<- m1.all[season==2]
+r3<- m1.all[season==3]
+r4<- m1.all[season==4]
+
+#1-winter, 2-spring,3-summer,4-autum
+
+m1_sc <-  lmer(m1.formula,data=r1,weights=normwt)
+r1$pred.m1 <- predict(m1_sc)
+print(summary(lm(PM25~pred.m1,data=r1))$r.squared)
+
+m1_sc <-  lmer(m1.formula,data=r2,weights=normwt)
+r2$pred.m1 <- predict(m1_sc)
+print(summary(lm(PM25~pred.m1,data=r2))$r.squared)
+
+m1_sc <-  lmer(m1.formula,data=r3,weights=normwt)
+r3$pred.m1 <- predict(m1_sc)
+print(summary(lm(PM25~pred.m1,data=r3))$r.squared)
+
+m1_sc <-  lmer(m1.formula,data=r4,weights=normwt)
+r4$pred.m1 <- predict(m1_sc)
+print(summary(lm(PM25~pred.m1,data=r4))$r.squared)
+
+
+
+
+#lme EDA
+tt <- getME(m1_sc,"theta")
+ll <- getME(m1_sc,"lower")
+min(tt[ll==0])
+
+derivs1 <- m1_sc@optinfo$derivs
+sc_grad1 <- with(derivs1,solve(Hessian,gradient))
+max(abs(sc_grad1))
+max(pmin(abs(sc_grad1),abs(derivs1$gradient)))
+
+
+dd <- update(m1_sc,devFunOnly=TRUE)
+pars <- unlist(getME(m1_sc,c("theta","fixef")))
+grad2 <- grad(dd,pars)
+hess2 <- hessian(dd,pars)
+sc_grad2 <- solve(hess2,grad2)
+max(pmin(abs(sc_grad2),abs(grad2)))
+
+#Restart-Try restarting from previous fit … restart didn’t converge in 10000 evals, so bumped up max number of iterations.
+
+ss <- getME(m1_sc,c("theta","fixef"))
+m2 <- update(m1_sc,start=ss,control=lmerControl(optCtrl=list(maxfun=2e4)))
+m1.all[,pred.m1 := NULL]
+m1.all$pred.m1 <- predict(m2)
+print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
+
+#Try a different optimizer-Try bobyqa for both phases – current GLMM default is bobyqa for first phase, Nelder-Mead for second phase. We are thinking about changing the default to nloptwrap, which is generally much faster. As we’ll see below, nloptwrap would not help with the convergence warning in this case …
+
+m3 <- update(m1_sc,start=ss,control=lmerControl(optimizer="bobyqa",
+                            optCtrl=list(maxfun=2e5)))
+m1.all[,pred.m1 := NULL]
+m1.all$pred.m1 <- predict(m3)
+print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
+ 
+
+#Use this recipe to source the allFit script from Github (it’s also been incorporated into the mixed package):
+afurl <- "/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/lme4_convergance_tester.r"
+aa <- allFit(m2)
+is.OK <- sapply(aa,is,"merMod")  ## nlopt NELDERMEAD failed, others succeeded
+aa.OK <- aa[is.OK]
+lapply(aa.OK,function(x) x@optinfo$conv$lme4$messages)
+
 
 
 ## names(m1.all)
@@ -341,7 +464,7 @@ test_s10$iter<-"s10"
 #BIND 1 dataset
 m1.all.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s6,test_s7,test_s8,test_s9, test_s10))
 # cleanup (remove from WS) objects from CV
-rm(list = ls(pattern = "train_|test_"))
+#rm(list = ls(pattern = "train_|test_"))
 #table updates
 m1.fit.all.cv<-lm(PM25~pred.m1.cv,data=m1.all.cv)
 res[res$type=="PM25", 'm1cv.R2'] <- print(summary(lm(PM25~pred.m1.cv,data=m1.all.cv))$r.squared)
@@ -367,7 +490,7 @@ tempoall.cv$delpred <-tempoall.cv$pred.m1.cv-tempoall.cv$barpred
 mod_temporal.cv <- lm(delpm ~ delpred, data=tempoall.cv)
 res[res$type=="PM25", 'm1cv.R2.t'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.cv))$r.squared)
 
-
+#Current 0.6621
 # LOOCross-validation
 # for mod1
 library(doRNG)
@@ -377,12 +500,12 @@ library(doParallel)
 # cross-validation and model building
 # repeated leave x monitors out CV
 #neveruse <- c("PER")
-neveruse <- c("")
+neveruse <- c("TAM","ASH")
 mons <- unique(m1.all[!stn %in% neveruse, stn]); length(mons)
-xout <- 2 # number of monitors to hold out
+xout <- 1 # number of monitors to hold out
 # how many combinations if we pull out xout mons
 ncol(combn(mons, xout))
-n.iter <- 20
+n.iter <- 30
 # we will compute mean of the other monitors using all monitoring data
 setkey(m1.all, stn)
 
@@ -394,7 +517,7 @@ set.seed(20150112)
 
 # cross-validation in parallel
 
-registerDoParallel(14)
+registerDoParallel(15)
 # use a proper reproducible backend RNG
 registerDoRNG(1234)
 system.time({

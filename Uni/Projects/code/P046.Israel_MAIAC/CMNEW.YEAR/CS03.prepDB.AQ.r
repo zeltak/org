@@ -538,36 +538,64 @@ m9 <- merge(m7,m8x,all.x = T)
 
 
 
+# create mean aod
+aod.o <- makepointsmatrix(m9[m9[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
+aod.m <- makepointsmatrix(m9[m9[,unique(aodid)], list(x_aod_ITM, y_aod_ITM, aodid), mult = "first"], "x_aod_ITM", "y_aod_ITM", "aodid")
+#note this function is the one excluding the first station
+closestaodse<- nearestbyday(aod.o  ,aod.m , 
+                            m9, m9 [, list(day,aod,aodid)], 
+                            "aodid", "aodid", "closest5k","aod",knearest = 9, maxdistance = 5000, nearestmean = T)
+
+#summary(closestaodse$closest5kmean)
+setkey(closestaodse,aodid,day)
+setkey(m9,aodid,day)
+m9 <- merge(m9,closestaodse[,list(day,closest5kmean,aodid)],all.x = T)
+head(m9)
 
 
 
-#----------> save mods 2+3
+#add local PBL
+pb1<-fread("/media/NAS/Uni/Data/Israel/PBL_data/PBL1.csv")
+pb2<-fread("/media/NAS/Uni/Data/Israel/PBL_data/PBL2.csv")
+pb<-rbindlist(list(pb1,pb2))
+
+pb$date<-paste(pb$V3,pb$V2,pb$V1,sep="/")
+pb[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
+pb[,c("V1","V2","V3","date"):=NULL]
+ppb<-filter(pb,!is.na(V4))
+
+setkey(pb,day)
+setkey(m9,day)
+m9 <- merge(m9,pb[,list(day,pbldag=V4)],all.x = T)
+
+#---------> save mods 2+3
 #clean
 m9[,c("ndviid","pblid","pop","area","date","month","lat_ndvi","long_ndvi","lat_aod.y","long_aod.y"):=NULL]
 saveRDS(m9,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.rds")
+#m9<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.rds")
 #mod2
 m9.m2 <- m9[!is.na(aod)]
 #calculate  prev/post day
-#sort PM data
-setkey(m9.m2,aodid,day)
-m9x<-as.data.frame(m9.m2)
-# next day PM
-Data1 <- slide(m9x, Var = "aod", GroupVar = "aodid",
-               slideBy = 1)
-#prev day PM 
-Data2 <- slide(Data1, Var = "aod", GroupVar = "aodid",
-               slideBy = -1)
-
-data1<-as.data.table(Data1)
-data2<-as.data.table(Data2)
-setkey(data1,day,aodid)
-setkey(data2,day,aodid)
-setnames(data1,"aod1","aodpre")
-setnames(data2,"aod-1","aodpost")
-rm(m9.m2)
-rm(m9x)
-gc()
-m9.m2 <- merge(data1, data2[,list(aodid,day, aodpost)], all.x = T)
+# #sort PM data
+# setkey(m9.m2,aodid,day)
+# m9x<-as.data.frame(m9.m2)
+# # next day PM
+# Data1 <- slide(m9x, Var = "aod", GroupVar = "aodid",
+#                slideBy = 1)
+# #prev day PM 
+# Data2 <- slide(Data1, Var = "aod", GroupVar = "aodid",
+#                slideBy = -1)
+# 
+# data1<-as.data.table(Data1)
+# data2<-as.data.table(Data2)
+# setkey(data1,day,aodid)
+# setkey(data2,day,aodid)
+# setnames(data1,"aod1","aodpre")
+# setnames(data2,"aod-1","aodpost")
+# rm(m9.m2)
+# rm(m9x)
+# gc()
+# m9.m2 <- merge(data1, data2[,list(aodid,day, aodpost)], all.x = T)
 saveRDS(m9.m2,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod2.AQ.rds")
 
 
@@ -575,6 +603,34 @@ saveRDS(m9.m2,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN
 #PM25
 #to fix missing days issues resulting in cartesean error
 m9days <- sort(unique(m9.m2$day))
+
+
+#calculate meanPM per grid per day to each station (excluding first station)
+PM25 <- fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/0.raw/PM/PM25_D.csv")
+PM25$date<-paste(PM25$Day,PM25$Month,PM25$Year,sep="/")
+PM25[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
+PM25[, c := as.numeric(format(day, "%Y")) ]
+PM25[,c("Year","Month","Day","date"):=NULL]
+PM25 <- PM25[X != 'NaN']
+PM25<-PM25[!is.na(PM25)]
+PM25<-PM25[PM25 > 0.000000000001 & PM25 < 900 ]
+#clear non continous stations
+setnames(PM25,"X","x_stn_ITM")
+setnames(PM25,"Y","y_stn_ITM")
+
+#calculate meanPM per grid per day to each station (excluding first station)
+PM10 <- fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/0.raw/PM/PM10_D.csv")
+PM10$date<-paste(PM10$Day,PM10$Month,PM10$Year,sep="/")
+PM10[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
+PM10[, c := as.numeric(format(day, "%Y")) ]
+PM10[,c("Year","Month","Day","date"):=NULL]
+PM10 <- PM10[X != 'NaN']
+PM10<-PM10[!is.na(PM10)]
+PM10<-PM10[PM10 > 0.000000000001 & PM10 < 20200 ]
+#clear non continous stations
+setnames(PM10,"X","x_stn_ITM")
+setnames(PM10,"Y","y_stn_ITM")
+
 
 
 ########### join aod to PM25
