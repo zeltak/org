@@ -184,7 +184,7 @@ summary(m1.all)
 # m1.all[,aod.log:= log(aod+1)]
 # m1.all[,PM25.log:= log(PM25+1)]
 m1.all<- m1.all[!is.na(pbldag)]
-describe(m1.all$aod)
+describe(m1.all$Cpm)
 describe(m1.all$PM25)
 #m1.all<- m1.all[PM25 < 100]
 #m1.all<- m1.all[aod < 1.2]
@@ -205,11 +205,15 @@ m1.all <- m1.all[!stn %in% neveruse]
 # [64] "p_dos.s"       "p_dev.s"       "p_os.s"        "tempa.s"       "WDa.s"         "WSa.s"         "RHa.s"         "Raina.s"       "NOa.s"        
 # [73] "O3a.s"         "SO2a.s"        "badid"   
 
-#added region
+#added met region
 xreg<-fread("/media/NAS/Uni/ztmp/treg.csv")
 setkey(xreg,stn)
 setkey(m1.all,stn)
 m1.all <- merge(m1.all,xreg[,list(stn,reg5=metreg_1)],all.x = T)
+m1.all <- m1.all %>% mutate(Caod = aod/pbldag)
+m1.all <- m1.all %>% mutate(Cpm = PM25*(1/(1-RH.im/100)))
+m1.all<- m1.all %>% filter(m1.all,Cpm < 7416)  
+
 
 #for paper
 #m1.formula <- as.formula(PM25~ aod+(1+aod|day))
@@ -218,7 +222,7 @@ m1.formula <- as.formula(PM25~ aod
                         +(1+aod|day))
 
 m1.formula <- as.formula(PM25~ aod
-                          +aod
+                         
                         +tempa.s+WSa.s
                         +pbldag
                         +RHa.s+O3a.s+Raina.s+NOa.s 
@@ -236,11 +240,35 @@ m1.formula <- as.formula(PM25~ aod
                          # + aod:Dust 
                         #+aod*lat_aod.x
                         #+Dust*lat_aod.x#+MeanPbl.s
-                        #+pbldag*lat_aod.x
+                        #=+pbldag*lat_aod.x
+                        +as.factor(reg5)
                         +(1+aod|day/reg5))#+(0+tempa.s|day)) #+(1|stn) !!! stn screws up mod3 
-#--------->mod1  .771, CV=.64
+#--------->mod1  .0.803, CV=.64
+s
+m1.formula <- as.formula(Cpm ~ Caod
+                         
+                        +tempa.s+WSa.s
+                        +pbldag
+                        +RHa.s+O3a.s+Raina.s+NOa.s 
+                        +elev.s+tden.s
+                        +pden.s
+                        +ndvi.s 
+                        +dist2rail.s +dist2water.s +dist2A1.s+Dist2road.s
+                        +p_os.s+p_dev.s+p_dos.s+p_farm.s+p_for.s+p_ind.s  
+                        #+as.factor(metreg)+as.factor(reg_num)
+                        
+                         #                        +closest5kmean
+                         #      +aodpre #+aodpost
+                         #+meanPM10
+                         # + aod:Dust 
+                        #+aod*lat_aod.x
+                        #+Dust*lat_aod.x#+MeanPbl.s
+                        #=+pbldag*lat_aod.x
+                  
+                        +(1+aod|day/reg5))#+(0+tempa.s|day)) #+(1|stn) !!! stn screws up mod3 
+
 #full fit
-m1_sc <-  lmer(m1.formula,data=m1.all,weights=normwt)
+m1_sc <- lmer(m1.formula,data=m1.all,weights=normwt)
 #summary(m1_sc)
 #AIC(m1_sc) 
 
@@ -249,13 +277,12 @@ m1.all$pred.m1 <- predict(m1_sc)
 res[res$type=="PM25", 'm1.R2'] <- print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
 #RMSPE
 res[res$type=="PM25", 'm1.PE'] <- print(rmse(residuals(m1_sc)))
-
+m
 
 
 
 #lme by region
-m1.formula <- as.formula(PM25~ aod
-                        
+m1.formula <- as.formula(PM25~ aod=
                         +tempa.s+WSa.s
                         +pbldag
                         +RHa.s+O3a.s+Raina.s+NOa.s 
@@ -289,7 +316,6 @@ print(summary(lm(PM25~pred.m1,data=r1))$r.squared)
 m1_sc <-  lmer(m1.formula,data=r2,weights=normwt)
 r2$pred.m1 <- predict(m1_sc)
 print(summary(lm(PM25~pred.m1,data=r2))$r.squared)
-
 m1_sc <-  lmer(m1.formula,data=r3,weights=normwt)
 r3$pred.m1 <- predict(m1_sc)
 print(summary(lm(PM25~pred.m1,data=r3))$r.squared)
@@ -300,48 +326,6 @@ print(summary(lm(PM25~pred.m1,data=r4))$r.squared)
 
 
 
-
-#lme EDA
-tt <- getME(m1_sc,"theta")
-ll <- getME(m1_sc,"lower")
-min(tt[ll==0])
-
-derivs1 <- m1_sc@optinfo$derivs
-sc_grad1 <- with(derivs1,solve(Hessian,gradient))
-max(abs(sc_grad1))
-max(pmin(abs(sc_grad1),abs(derivs1$gradient)))
-
-
-dd <- update(m1_sc,devFunOnly=TRUE)
-pars <- unlist(getME(m1_sc,c("theta","fixef")))
-grad2 <- grad(dd,pars)
-hess2 <- hessian(dd,pars)
-sc_grad2 <- solve(hess2,grad2)
-max(pmin(abs(sc_grad2),abs(grad2)))
-
-#Restart-Try restarting from previous fit … restart didn’t converge in 10000 evals, so bumped up max number of iterations.
-
-ss <- getME(m1_sc,c("theta","fixef"))
-m2 <- update(m1_sc,start=ss,control=lmerControl(optCtrl=list(maxfun=2e4)))
-m1.all[,pred.m1 := NULL]
-m1.all$pred.m1 <- predict(m2)
-print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
-
-#Try a different optimizer-Try bobyqa for both phases – current GLMM default is bobyqa for first phase, Nelder-Mead for second phase. We are thinking about changing the default to nloptwrap, which is generally much faster. As we’ll see below, nloptwrap would not help with the convergence warning in this case …
-
-m3 <- update(m1_sc,start=ss,control=lmerControl(optimizer="bobyqa",
-                            optCtrl=list(maxfun=2e5)))
-m1.all[,pred.m1 := NULL]
-m1.all$pred.m1 <- predict(m3)
-print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
- 
-
-#Use this recipe to source the allFit script from Github (it’s also been incorporated into the mixed package):
-afurl <- "/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/lme4_convergance_tester.r"
-aa <- allFit(m2)
-is.OK <- sapply(aa,is,"merMod")  ## nlopt NELDERMEAD failed, others succeeded
-aa.OK <- aa[is.OK]
-lapply(aa.OK,function(x) x@optinfo$conv$lme4$messages)
 
 
 
@@ -505,7 +489,7 @@ mons <- unique(m1.all[!stn %in% neveruse, stn]); length(mons)
 xout <- 1 # number of monitors to hold out
 # how many combinations if we pull out xout mons
 ncol(combn(mons, xout))
-n.iter <- 30
+n.iter <- 38
 # we will compute mean of the other monitors using all monitoring data
 setkey(m1.all, stn)
 
