@@ -149,3 +149,51 @@ Archived entries from file /home/zeltak/.emacs.d/settings.org
   ;;          (set-face-background 'mode-line (car color))
   ;;          (set-face-foreground 'mode-line (cdr color))))))
 #+END_SRC
+
+* repeatable command
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-01-30 Fri 09:14
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages/key-chord
+  :ARCHIVE_CATEGORY: settings
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+  (defun zeltak/def-rep-command (alist)
+      "Return a lambda that calls the first function of ALIST.
+  It sets the transient map to all functions of ALIST,
+  allowing you to repeat those functions as needed."
+      (lexical-let ((keymap (make-sparse-keymap))
+                    (func (cdar alist)))
+        (mapc (lambda (x)
+                (when x
+                  (define-key keymap (kbd (car x)) (cdr x))))
+              alist)
+        (lambda (arg)
+          (interactive "p")
+          (when func
+            (funcall func arg))
+          (set-transient-map keymap t))))
+#+END_SRC
+
+* orgmode
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-01-30 Fri 09:14
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages/key-chord
+  :ARCHIVE_CATEGORY: settings
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+(key-chord-define-global "oo"   
+      (zeltak/def-rep-command
+       '(nil
+         ("d" . org-download-screenshot)
+         ("<right>" . org-download-screenshot)
+         ("<down>" . windmove-down)
+         ("<up>" . windmove-up)
+         ("y" . other-window)
+         ("h" . ace-window)
+         ("s" . (lambda () (interactive) (ace-window 4)))
+         ("d" . (lambda () (interactive) (ace-window 16)))
+         )))
+#+END_SRC
+
