@@ -28921,6 +28921,140 @@ Then you can use TAB to go to complete e-mail addresses in the header fields.
 ********* edit sever 
 in the config add config options
 then in chrome in editable areas launch with edit with Emacs 
+********* Hydra
+********** setup 
+http://oremacs.com/2015/01/20/introducing-hydra/
+
+The Concept
+This package can be used to tie related functions into a family of short bindings with a common prefix - a Hydra.
+
+Once you summon the Hydra through the prefixed binding (the body + any one head), all heads can be called in succession with only a short extension.
+
+The Hydra is vanquished once Hercules, any binding that isnt the Hydras head, arrives.
+Note that Hercules, besides vanquishing the Hydra, will still serve his orignal purpose, calling his proper command. This makes the Hydra very seamless, it's like a minor mode that disables itself auto-magically.
+
+An Example
+This code will accomplish the task of the previous post:
+
+#+BEGIN_EXAMPLE
+(require 'hydra)
+(hydra-create "<f2>"
+  '(("g" text-scale-increase)
+    ("l" text-scale-decrease)))
+#+END_EXAMPLE
+
+Now, `<f2>` is the Hydra's body: you need to press it only once, together with one of the heads (g or l), to summon the Hydra.
+
+Afterwards, you can call the heads in succession without the body prefix, i.e. <f2> g g g l will work. To vanquish the Hydra, just call up Hercules: any key binding that's not g or l, e.g. C-f or whatever you wanted to do.
+
+Note that you can still assign an unrelated binding to e.g. <f2> f: the Hydra does not take over <f2>, only over <f2> l and <f2> g.
+
+%The Infrastructure%
+
+hydra-create will create new interactive functions for you with the proper docstrings:
+
+hydra-<f2>-text-scale-increase is an interactive Lisp function.
+
+It is bound to <f2> g.
+
+(hydra-<f2>-text-scale-increase)
+
+Create a hydra with a "<f2>" body and the heads:
+
+"g": text-scale-increase,
+
+"l": text-scale-decrease.
+Call the head: text-scale-increase.
+
+********** An exciting new Hydra: move window splitter
+
+Zooming is old news, Hydra bundles a new application:
+
+#+BEGIN_EXAMPLE
+(require 'hydra-examples)
+(hydra-create "C-M-o" hydra-example-move-window-splitter)
+#+END_EXAMPLE
+
+or in the expanded form (equivalent):
+
+#+BEGIN_EXAMPLE
+(hydra-create "C-M-o"
+  '(("h" hydra-move-splitter-left)
+    ("j" hydra-move-splitter-down)
+    ("k" hydra-move-splitter-up)
+    ("l" hydra-move-splitter-right)))
+#+END_EXAMPLE
+
+This will allow you to move the window splitter, after you issue C-x 2 or C-x 3 one or more times, with e.g. C-M-o h h j k j l k l h. You can, of course, customize both the body and the heads of this Hydra to your preferences.
+
+********** The docstrings for this Hydra:
+
+hydra-C-M-o-move-splitter-up is an interactive Lisp function.
+
+It is bound to C-M-o k.
+
+(hydra-C-M-o-move-splitter-up)
+
+Create a hydra with a "C-M-o" body and the heads:
+
+"h": hydra-move-splitter-left,
+"j": hydra-move-splitter-down,
+"k": hydra-move-splitter-up,
+"l": hydra-move-splitter-right.
+Call the head: hydra-move-splitter-up.
+********** Combining ace-window and windmove with hydra
+http://oremacs.com/2015/01/29/more-hydra-goodness/
+Heres what I've come up with, thanks to the newest code in hydra:
+
+#+BEGIN_EXAMPLE
+(defun hydra-universal-argument (arg)
+  (interactive "P")
+  (setq prefix-arg (if (consp arg)
+                       (list (* 4 (car arg)))
+                     (if (eq arg '-)
+                         (list -4)
+                       '(4)))))
+
+(defhydra hydra-window (global-map "C-M-o")
+  "window"
+  ("h" windmove-left "left")
+  ("j" windmove-down "down")
+  ("k" windmove-up "up")
+  ("l" windmove-right "right")
+  ("a" ace-window "ace")
+  ("u" hydra-universal-argument "universal")
+  ("s" (lambda () (interactive) (ace-window 4)) "swap")
+  ("d" (lambda () (interactive) (ace-window 16)) "delete")
+  ("o"))
+
+(key-chord-define-global "yy" 'hydra-window/body)
+#+END_EXAMPLE
+
+The new code should already be available in MELPA. I'll update the code in GNU ELPA soon, when I make sure that there were no bugs introduced by the change.
+
+If anyone wants to see how the defhydra macro expands, you can check out hydra-test.el. I just added a Travis CI setup, so if you're interested in starting to test your Elisp code, you can have a very simple example.
+
+How the defined Hydra works
+With this setup:
+
+to swap two windows (i.e. call C-u ace-window), I can do any of:
+
+C-M-o s
+C-M-o ua
+yys
+yyua
+to delete one window (i.e. call C-u C-u ace-window), any of:
+
+C-M-o d
+C-M-o uua
+yyd
+yyuua
+to move one window down, two windows right, and one window up:
+
+C-M-o jllk
+yyjllk
+Although every other shortcut except the Hydra heads will vanquish the Hydra, sometimes I have nothing on my mind that needs doing. For that case, as you can see above, I enter o in its own list without a function, so that o will dismiss the Hydra without doing anything.
+
 ********* ace-isearch
 ********** install 
 https://github.com/tam17aki/ace-isearch	  
@@ -29028,6 +29162,104 @@ Sample Configuration
 (ace-isearch-set-ace-jump-after-isearch-exit t)
 #+END_SRC
 
+********* key chord 
+********** base
+########   Quick start   ########################################
+#+BEGIN_EXAMPLE
+      (require 'key-chord)
+      (key-chord-mode 1)
+#+END_EXAMPLE
+
+Add above to your ~/.emacs
+
+ and some chords, for example
+
+(key-chord-define-global "hj"     'undo)
+(key-chord-define-global ",."     "<>\C-b")
+
+########   Terminology   ########################################
+
+ In this package, a "key chord" is two keys pressed simultaneously,
+ or a single key quickly pressed twice.
+
+ (Sometimes pressing SHIFT and/or META plus another key is call a chord,
+ but not here. However SHIFT plus two normal keys can be a "key chord".)
+
+ ########   Description   ########################################
+
+ Key chord mode acts like a global minor mode controlled by the function
+ `key-chord-mode'.
+
+ Key chord definitions are stored in ordinary key-maps.
+ The function `key-chord-define-global' defines a chord in the global
+ key-map and `key-chord-define' defines a chord in a specified key-map,
+ for example for a specific mode.
+
+*********** A TWO-key chord is two distinct keys pressed simultaneously (within one tenth of a second, or so).
+
+ Examples:
+
+#+BEGIN_SRC emacs-lisp :results none
+      (key-chord-define-global ",."     "<>\C-b")
+      (key-chord-define-global "hj"     'undo)
+      (key-chord-define-global [?h ?j]  'undo)  ; the same
+      (key-chord-define-global "jk"     'dabbrev-expand)
+      (key-chord-define-global "cv"     'reindent-then-newline-and-indent)
+      (key-chord-define-global "4r"     "$")
+#+END_SRC
+
+ Comma and dot pressed together insert a pair of angle brackets.
+ `h' and `j' pressed together invoke the undo command.
+ `j' and `k' pressed together invoke the dabbrev-expand command.
+ 'c' and 'v' pressed together insert a newline.
+ `4' and `r' pressed together insert a dollar sign.
+
+*********** A ONE-key chord is a single key quickly pressed twice (within one thirdof a second or so). 
+Examples:
+
+#+BEGIN_SRC emacs-lisp :results none
+      (key-chord-define-global "''"     "`'\C-b")
+      (key-chord-define-global ",,"     'indent-for-comment)
+      (key-chord-define-global "qq"     "the ")
+      (key-chord-define-global "QQ"     "The ")
+#+END_SRC
+
+ Tick (') pressed twice inserts a back-tick and a tick (`').
+ Comma (,) pressed twice indents for and/or inserts a comment.
+ `q' pressed twice inserts the word "the ".
+
+ Examples: Mode specific chords
+
+      (key-chord-define c++-mode-map ""  "\C-e;")
+      (key-chord-define c++-mode-map "{}"  "{\n\n}\C-p\t")
+
+ The command `key-chord-describe' lists currently defined key chords.
+ The standard command `describe-bindings' (C-h b) will also show key chords.
+
+ The standard command `describe-key' (C-h k) will accept a key chord and
+ show its definition. (Isn't that amazing. There is no explicit code to
+ carry out this functionality.)
+
+ ########   Tips   ########################################
+
+ Don't chord key combinations that exists in the languages you typically
+ write. Otherwise, if you are typing fast, two key intended to be separate
+ letters might instead trig a chord.
+ E.g. "uu" would be a good chord in spanish but not in finnish, and
+ "hj" would be a good chord in english but not in swedish. 
+
+ Don't rely solely on /usr/dict/words to find unusual combination.
+ For example "cv" or "fg" can be quite common in certain kinds of
+ programming. Grep your own texts to verify that a combination is unusual.
+ And don't forget to check both permutations: "fg" and "gf".
+
+ Choose two keys that are close to each other on the keyboard, so they
+ can be quickly typed without effort. Chords involving two hands (as
+ opposed to two fingers on one hand) are harder to type (quickly).
+ The idea is that key chords are to replace function keys for functions
+ that are frequently performed while the hands are in writing position.
+
+ Key chords might not work well over a slow network.
 ******* registers
 ******** basics
 
@@ -29730,6 +29962,28 @@ First, create a calendar in Google calendar that will hold these entries. You ca
 Visit the calendar settings section of the MobileOrg preferences
 
 Choose the calendar you want to sync with. It is recommended you clear your database after setting this to make sure all of your org files are pulled to the device. MobileOrg will examine org files as they are synced to the device and any new or updated items will be added to the Calendar
+******** Org mode TODO from cellphone
+Software needed:
+
+-IFTTT
+-Linux shell
+-Dropbox
+
+What to do:
+
+3.1 Connect your Dropbox account to IFTTT
+3.2 Use this recipe to register your notes in a .txt file
+
+https://ifttt.com/recipe_embed_use/235317-add-todo-to-a-orgmode-file
+
+3.3 Use a linux script to copy the notes to your org file
+
+#+BEGIN_SRC sh
+#!/bin/bash
+cat ~/Dropbox/ifttt/Email/mobile_todo.txt >> ~/Dropbox/org/notes.org
+cat /dev/null > ~/Dropbox/ifttt/Email/mobile_todo.txt
+#+END_SRC
+
 ******** Using Mobileorg
 ********* Where do captures go after a sync?
 Notes are appended to the end of the file:mobileorg.org file on your 'dropbox/WebDAV/etc' server. 
@@ -37295,7 +37549,6 @@ seperated by a :
 
 ** cli info
 *** process managment
-
 **** top
 
 ***** Global defaults
@@ -37379,50 +37632,43 @@ the actual sort environment matches your intent.
 
 Press 'W'- to write into the rc file the current config
 
-**** ps-pstree
+**** ps
+***** pgrep
+A quick way of getting the PID of a process called dhclient is with the pgrep command, type:
 
-PS (Process status)
+#+BEGIN_EXAMPLE
+pgrep dhclient
+#+END_EXAMPLE
 
- PS commands can diagnose and treat process problems.
- The first of these is the ps command. This stands for Process Status
-and will report a list
- of currently running processes on your system. This command is normally
-used with the -aux options:
- ps -aux
- This will return a list something like what you see when you run top.
- If you can spot the problematic process, look for its PID and
-issue the following command:pstree
-
+***** pstree
  pstree is a graphical tree view of processes
-
 **** kill-xkill
+***** Some of the more commonly used signals and meaning
+----------+----------------------------------------------
+  SIGNAL  |   NAME (Meaning)
+----------+----------------------------------------------
+     1    |   HUP (hang up)
+     2    |   INT (interrupt)
+     3    |   QUIT (quit)
+     6    |   ABRT (abort)
+     9    |   KILL (non-catchable, non-ignorable kill)
+     14   |   ALRM (alarm clock)
+     15   |   TERM (software termination signal)
+--------------------------------------------------------
+***** To kill process by name, use killall command
+The basic syntax is as follows:
 
-Kill
-
- kill <PID number>
- 
- For example, to kill a process with a PID of 5122, you would type
-this:
- kill 5122
- If, after this, you find the process isn't killed, then you should
-use the top program, as
- described in the previous sections, because it allows for a more
-in-depth investigation.
- 
- Another handy process-killing command lets you use the actual process
-name.
- The killall command is handy if you already know from past experience
-what a program's process is called.
- For example, to kill the process called firefox-bin, which is the chief
-process of the Firefox web browser, you would use the following command:
- killall firefox-binEasily Kill Unresponsive Applications with single
-click Using Xkill
-
- 1. When a program gets hung, hit Alt + F2 to bring up the Run dialog.
- 2. Type in xkill and hit enter.
- 3. Your mouse cursor will change into a cross or skull and bones.
- 4. If the unresponsive application is not in focus, use Alt-Tab to
-switch to it. Left click anywhere on the application window to kill it.
+#+BEGIN_SRC sh
+ killall process
+ killall firefox
+ killall -SIGNAL process
+ killall -term firefox
+ killall -15 command
+ killall -15 firefox
+#To kill user's process:
+ killall -u <user> process
+ killall -u tom firefox
+#+END_SRC
 
 **** Htop
 

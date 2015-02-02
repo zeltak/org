@@ -9023,6 +9023,16 @@ Otherwise, the working directory of the current buffer is used.
 
 *** ask for a filename for the transcript before the ESS process starts
     
+*** How can I background the R process in ESS / Emacs?
+ESS runs R as asynchronous process. You don't need to background anything. You can run your code for hours and still work in ESS uninterrupted.
+
+Your problem seems to be something else. When you execute your script you do it "visibly", i.e. your executed code is printed to the terminal. This cause Emacs to freeze.
+
+Set ess-eval-visibly-p to nil and huge chunks of code will be sent to R instantly:
+
+(setq ess-eval-visibly-p nil)
+
+There is a new setting for ess-eval-visibply-p in recent versions of ESS - 'nowait. It places your code in an inferior buffer and then sends it to the subprocess. In this way you can see your code and all the output afterwards without waiting for the subprocess to finish.
 ** Useful keyboard shortcuts and tips for ESS/R
 *** Control and up/down arrow keys to search history with matching what you've already typed:
 #+BEGIN_SRC R

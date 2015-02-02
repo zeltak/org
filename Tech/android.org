@@ -369,10 +369,8 @@ Scroll down and you'll find "Recovery mode" "Create"update.zip" from
 app+data backups".
 
 *** tasker
-
-**** ideA
-
-Autorotate for select apps. I used to use a toggle button to turn
+**** idea Autorotate for select apps.
+ I used to use a toggle button to turn
 autorotate off and on as needed. Really, though, the only app I use
 autorotate for is the photo Gallery app. So I set up Tasker to turn
 autorotate on when I launch Gallery, and then turn it back off again
@@ -496,6 +494,65 @@ Click the check box
 Click the check box
 
 [[android_files/img/Image_0021.png]]
+
+**** Password Protect Your Android (Only) When Away From Home 
+1. Download Tasker and Secure Settings.
+
+2. In Secure Settings app, enable "Password/PIN" under Options > Dev Admin Actions. It will now be a selectable Task plugin configuration in Tasker.
+
+How To: Password Protect Your Android (Only) When Away From Home
+3. In Tasker, create a profile + task for leaving the house:
+
+A. New Profile > State > Net > Wifi Connected
+
+How To: Password Protect Your Android (Only) When Away From Home
+SSID:Your router's SSID (you can choose multiple SSIDs "/" delimited)
+
+Invert: Checked (meaning when you are NOT connected to this wifi)
+
+B. New Task > (blank name) > Add Action > Plugin > Secure Settings
+
+How To: Password Protect Your Android (Only) When Away From Home
+Configuration edit > Password/PIN (under Dev Admin Actions)
+
+NOTE: You can choose Pattern or Face lock (under Root Actions) if you have root access.
+
+How To: Password Protect Your Android (Only) When Away From Home
+Enable button > Choose Pin or Password > Enter Pin or Password > Save
+
+How To: Password Protect Your Android (Only) When Away From Home
+NOTE: This will only turn on and set the PIN/password. It will not modify any settings regarding how long the screen needs to be off before the lock goes in place. This can be modified when in the away from home state in Settings>Security. We have ours set to 5 minutes after sleep.
+
+4. In Tasker, create a profile + task for returning to home:
+
+A. New Profile > State > Net > Wifi Connected
+
+How To: Password Protect Your Android (Only) When Away From Home
+SSID: Your router's SSID (you can choose multiple SSIDs "/" delimited)
+
+Invert: LEAVE UNCHECKED (i.e. you are at home and connected to the SSID)
+
+B. New Task > (blank name) > Add Action > Plugin > Secure Settings
+
+How To: Password Protect Your Android (Only) When Away From Home
+Configuration edit > Password/PIN (under Dev Admin Actions)
+
+How To: Password Protect Your Android (Only) When Away From Home
+Disabled button > Device Admin Enabled is checked > Save
+
+How To: Password Protect Your Android (Only) When Away From Home
+5. Set Tasker so you don't have a persistent notification icon in Tasker's Preferences > Monitor > Run in Foreground is unchecked. (This may cause Tasker to quit, however we haven't had a problem yet)
+
+6. Test (by connecting and disconnecting your wifi)
+*** android keyboard 
+**** add android keyboard number row
+From there, youll need to get into the keyboards settings. The easiest way to do that is to press and hold the comma until you see the settings gear. Then release. Youll find yourself in the Google Keyboard Settings. (Spend some time poking around there for other options, if you haven't already.)
+
+Choose "Appearance & Layouts." Then choose "Custom input styles." And from here we're going to set up a new custom input style. So hit the + button in the top right.
+
+Google Keyboard styles Now set your language to whatever language you want — I went with English, for the obvious reasons — and choose "PC" for the layout.
+
+Google Keyboard custom options Finally youll need to enable this custom input style. Follow the prompt to get to the "Languages" part of the settings. Now deselect "Use system language" and then select English (US) (PC). (That may look a little different if you chose a different language.) And now you'll have a dedicated number row in the Google Keyboard.
 
 *** pocket casts
 **** intents
@@ -990,6 +1047,12 @@ adb install <apk-file-name>
 Installation is complete when it reports the message "success" 
 
 (Note: For Android you need to type in the full path. e.g. >adb install /sdcard/Download/apk-file-name.apk)
+**** Amazon Fire TV DNS Setup for Smart DNS Proxy
+Following Amazon Fire TV DNS setup instructions is only needed one time for Smart DNS Proxy. Once you finish the initial setup you won't be needing to take the same steps anytime. Your connection will work automatically *anytime! (as long as your IP is in our database - please read info at the end of this instructions for later)
+
+--- --- ---
+
+If you
 *** updgarde xbmc on fire tv
 XBMC can be upgraded through ADB without losing your settings. To do this, you must use a newer version of the package already installed on the machine.
 Download the package to your machine
