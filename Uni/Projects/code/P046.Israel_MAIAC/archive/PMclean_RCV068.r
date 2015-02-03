@@ -212,7 +212,7 @@ setkey(m1.all,stn)
 m1.all <- merge(m1.all,xreg[,list(stn,reg5=metreg_1)],all.x = T)
 m1.all <- m1.all %>% mutate(Caod = aod/pbldag)
 m1.all <- m1.all %>% mutate(Cpm = PM25*(1/(1-RH.im/100)))
-m1.all<- m1.all %>% filter(m1.all,Cpm < 7416)  
+m1.all<- m1.all %>% filter(Cpm < 7416)  
 
 
 #for paper
@@ -244,8 +244,8 @@ m1.formula <- as.formula(PM25~ aod
                         +as.factor(reg5)
                         +(1+aod|day/reg5))#+(0+tempa.s|day)) #+(1|stn) !!! stn screws up mod3 
 #--------->mod1  .0.803, CV=.64
-s
-m1.formula <- as.formula(Cpm ~ Caod
+
+m1.formula <- as.formula(PM25 ~ Caod
                          
                         +tempa.s+WSa.s
                         +pbldag
@@ -277,7 +277,7 @@ m1.all$pred.m1 <- predict(m1_sc)
 res[res$type=="PM25", 'm1.R2'] <- print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
 #RMSPE
 res[res$type=="PM25", 'm1.PE'] <- print(rmse(residuals(m1_sc)))
-m
+
 
 
 
@@ -352,7 +352,7 @@ print(summary(lm(PM25~pred.m1,data=r4))$r.squared)
 
 
 
-
+s
 
 #spatial
 ###to check
@@ -385,7 +385,7 @@ test_s1$iter<-"s1"
 splits_s2 <- splitdf(m1.all)
 test_s2 <- splits_s2$testset
 train_s2 <- splits_s2$trainset
-out_train_s2 <- lmer(m1.formula,data =  train_s2,weights=normwt)
+oasut_train_s2 <- lmer(m1.formula,data =  train_s2,weights=normwt)
 test_s2$pred.m1.cv <- predict(object=out_train_s2 ,newdata=test_s2,allow.new.levels=TRUE,re.form=NULL )
 test_s2$iter<-"s2"
 #s3
@@ -447,6 +447,8 @@ test_s10$iter<-"s10"
 
 #BIND 1 dataset
 m1.all.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s6,test_s7,test_s8,test_s9, test_s10))
+
+g 
 # cleanup (remove from WS) objects from CV
 #rm(list = ls(pattern = "train_|test_"))
 #table updates

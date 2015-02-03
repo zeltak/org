@@ -908,7 +908,7 @@ summary(lm(log_pm10~pred,data=mod2))
 
 write.dta(mod2,file="F:\\stage one\\stage_one_modpred.dta", version=11)
 
-
+a
 ##### POINT 2.
 
 # In Stata I have: a) identified the variables, 2) created for each variable a corresponding var called "var_cl3" in terciles
@@ -985,7 +985,6 @@ summary(lm(log_pm10~pred3,data=mod2b))
 mod3.formula<-as.formula(log_pm10 ~   log_aod+(1+aod+temp_c|day))
 
 library(plyr)
-
 
 modelList <- dlply(mod2b, "nome_zona", function(x) lmer(mod3.formula, data=x))
 
