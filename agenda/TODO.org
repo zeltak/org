@@ -3,7 +3,8 @@
 #+TITLE: TODO
 #+STARTUP: overview  inlineimages eval: (org-columns)
 
-* @TODAY@
+
+@TODAY@
 ** help file revison
 try to find a way to do a refile/archive/function like thing that will copy a line/header to a defined file
 idealy: a function to copy current line, ask which file to copy to (like refile) and open file in next buffer. bonus check if that line start already exist and if so warn and paste below  that line.
@@ -359,7 +360,22 @@ For the sake of completeness, here the docstring of
 |                                                                      |
 
 
+** fix HD res issues
+SOLVED (Solution can be found on the bottom)
+Hi there I really hope someone can help me...
 
+If got my new XPS13 (2015) yesterday and even though it's a really nice pice of hardware there are some problems (obviously ^^)
+
+So I've got the QHD display (3200x1800) which doesn't quite work with all applications (like google chrome is awfull and isn't affected by the window scaling)
+
+So I thought...
+Well lets simpley change the resolution to 1920x1080 for now so I can at least work. Sadly apart from the original 3200x1800 there are only 4:3 ratio resolution (non of them is usable) so I added the 1920x1080 myself using xrandr.
+But everytime I set the resolution to use my new one, it sets it, display flickers for a moment and than falls back to the original 3200x1080 (all via command-line). Same happen if I use the UI though.
+Next I tried using a custom X11 conf which (it looks like) does set the 1920x1080 while beeing on the lockscreen (I'm using gdm btw) but once I log in, it falls back to the 3200x1800.
+
+Solution
+Problem: Changing to the new, manually added, resolution did not work because it immediately switched back to the original one
+Solution: (For me at least) removing ~/.config/monitors.xml did the trick. You might have to restart GDM after removing/renaming the file﻿
 ** clerk
 select rating has to have a album/track indicator in rofi..confusing
 the rating mpd/beets issue, is it solvable?
@@ -389,6 +405,9 @@ WWW Gopher : gopher://sdfeu.org/users/zeltak       (after 'mkgopher')
 Webmail    : https://sdfeu.org/webmail             (after validation)
 Twitter    : http://twitter.com/sdf_pubnix
 
+** filbot qnap
+http://www.filebot.net/forums/viewtopic.php?f=8&t=2335&p=13416&hilit=qnap#p13416
+** flexget  
 
 * Linux
 ** Org
@@ -916,65 +935,3 @@ Ahmhed:
 
 
 
-* T
-org mode block color
-#+BEGIN_SRC emacs-lisp :results none
-(defun org-src-color-blocks-light ()
-  "Colors the block headers and footers to make them stand out more for lighter themes"
-  (interactive)
-  (custom-set-faces
-   '(org-block-begin-line
-    ((t (:underline "#A7A6AA" :foreground "#008ED1" :background "#EAEAFF"))))
-   '(org-block-background
-     ((t (:background "#FFFFEA"))))
-   '(org-block-end-line
-     ((t (:overline "#A7A6AA" :foreground "#008ED1" :background "#EAEAFF"))))
-
-   '(mode-line-buffer-id ((t (:foreground "#005000" :bold t))))
-   '(which-func ((t (:foreground "#008000")))))
-)
-
-(defun org-src-color-blocks-dark ()
-  "Colors the block headers and footers to make them stand out more for dark themes"
-  (interactive)
-  (custom-set-faces
-   '(org-block-begin-line
-     ((t (:foreground "#008ED1" :background "#002E41"))))
-   '(org-block-background
-     ((t (:background "#111111"))))
-   '(org-block-end-line
-     ((t (:foreground "#008ED1" :background "#002E41"))))
-
-   '(mode-line-buffer-id ((t (:foreground "black" :bold t))))
-   '(which-func ((t (:foreground "green")))))
-
-   ;; Looks like the minibuffer issues are only for v23
-   ; (set-face-foreground 'minibuffer "white")
-   ; (set-face-foreground 'minibuffer-prompt "white")
-)
-#+END_SRC
- 
-* t2
-
-sa
-dais
-asd
-
-4444	
-C-a # 
-C-k # 
-There is also
-
-C-S-ba
-(global-set-key "\C-cd" 'kill-whole-line)     # Sets `C-c d` to `M-x kill-whole-line`
-If you want to delete a number of whole lines, you can prefix the command with a number:
-
-C-u 
-C-a # Go to beginning of line
-C-k # Kill line from current point
-There is also
-
-C-S-C-u C-S-backspace     # delete 4 whole lines. C-u without a number defaults to 4
-
-C-u -5 C-S-backspace   # deletes previous 5 whole lines
-ododoodyy

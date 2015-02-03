@@ -155,7 +155,17 @@ seasoanlity
 ***** add to the methods section the regression calibration part :
 we did it to reduce the noise etc etc 
 
+**** add to paper
+Good news !
+My affiliations are :
+1. Univ. Grenoble Alpes, IAB, Team of Environmental Epidemiology applied to Reproduction and Respiratory Health, F-38000 Grenoble, France.
+2. INSERM, IAB, Team of Environmental Epidemiology applied to Reproduction and Respiratory Health, F-38000 Grenoble, France.
+3. CHU de Grenoble, IAB, Team of Environmental Epidemiology applied to Reproduction and Respiratory Health, F-38000 Grenoble, France.
+4. Exposure, Epidemiology, and Risk Program, Department of Environmental Health, Harvard School of Public Health, Boston, Massachusetts, U.S.A.
 
+Temperature and wind speed data came from measurements operated by Météo-France. I think Annick Auffray from Météo-France should be a co-author. Note that we need them to approve the paper before submission (it was explicitly written in our contract).
+Planetary boundary layer data came from CNRS, Robert Vautard. If needed, he will add something in the paper about the model from which these data come from (50km resolution).
+I’ve got population density, hydrology, and traffic data from the IGN (Institut national de l'information géographique et forestière (IGN)) website but I will need to check how we should acknowledge them.
 ** SUBMITTED DVT admissions and PM
    :PROPERTIES:
    :ID:       2668bdf2-f4de-40cd-b57f-101a88076ba7
@@ -253,8 +263,20 @@ exposure paper-massimo first/last
     :PROPERTIES:
     :ID:       3fdbbea8-2435-413b-b0ac-981b748fa528
     :END:
-*** kees talk 18.12
-**** we have all the grids in HDF formatting. I need to extract lat/long from the rasters. will send it over in the next few days
+*** TODO OMI OC
+how well the maiac algo does with high OC (organic carbon) in southern italy.
+aerosol index OMI- second iteration
+
+from email:
+
+#+BEGIN_EXAMPLE
+I want to report an interesting discussion I had last week with Daniel Jacob. We have a Indonesian Smoke project, where Daniel's group runs nested GEOS-Chem models for Southeast Asia with fire emissions estimates from a group at Columbia (Ruth DeFries) and I do a health impact assessment. There was one seasonally unusual air pollution peak in Singapore which was due to fires in Indonesia, but AOD did not pick it up. However, the OMI Aerosol Index did. Daniel's group came up with two contributing factors. One is that there was some sand transport from Arabia and and the look up tables do very poorly when dust is mixed with organic carbon. The other is that the AI from OMI is in the near ultraviolet, and organic aerosols are picked up better in that frequency. 
+This may have implications for Italy, where there is dust transport, even when there is not a peak event, and where there is wood smoke in the winter. I wonder if we could look at AOD in the 400nm range, or make use of the AI to help with the model?
+#+END_EXAMPLE
+
+** MAIAC EURO
+*** kees talk 18.12.15
+**** DONE we have all the grids in HDF formatting. I need to extract lat/long from the rasters. will send it over in the next few days
 **** TODO land use gathering project
 m1.2007[,elev.s:= scale(elev)]- we have for whole of europe 
 m1.2007[,tden.s:= scale(tden)]-
@@ -284,20 +306,23 @@ m1.2007[,Raina.s:= scale(Raina)]
 m1.2007[,NO2a.s:= scale(NO2a)]
 pm2.5/pm10- data from euro database 
 which sources from where
-
-grant: supplementing PM2.5 with PM10-25 relationshipnm that year
-compare euro wide model with localized model
-
 ETRS 89 for euro projection 
-ask chirra 
-
+ask chirra
 TODO: NDVI for swiss ?
+*** grant ideas : supplementing PM2.5 with PM10-25 relationshipnm that year
+compare euro wide model with localized model
+*** compare osm and euromaps
+*** kees talk 28.1.15     
+**** MAIAC Data- they found a bug over bright surfaces and snow-will process again so data only in a few weeks
+**** Massimo analysis in lombardy- very encouraging CV ~ 0.8
 
-**** compare osm and euromaps
+**** we need to clip our grid to exclude points over water areas (MAIAC AOD over water body is very biased)
+**** centralized repositoary
+for my NAS, with FTP access to project members?
+later if we get grant money we can build a server+NAS some centralized location
+**** kees points
+swiss 200m resolution point source emision
 
-*** TODO OMI OC
-how well the maiac algo does with high OC (organic carbon) in southern italy.
-aerosol index OMI- second iteration
 
 ** italy temperature models
 *** Ideas
@@ -480,6 +505,199 @@ resid~ LU+MET+Interactions+ s(x,y)
       :END:
 
       
+***** Better error estimation
+I have one other idea regarding error estimation. What I previously proposed samples spatial variability in error. We take the annual error in each monitoring location and do a LUR. But there is also temporal variability in at least the GEOS-Chem output, because the chemistry is not perfect and on some days that will matter more. For this I propose the following. On each day, for a region, e.g. New England, we compute the daily rmse. We can then regress these against temporal factors, mostly meteorological. 
+
+***** mihyee weighted CV
+#+BEGIN_SRC R
+#remove.packages('lme4');
+install.packages('c:/test/lme4_1.0-6.tar.gz', repos=NULL,
+type='source')
+#http://cran.r-project.org/src/contrib/Archive/lme4/
+#If error, install R developer tool (Rtools31.exe default installation
+at http://cran.r-project.org/bin/windows/Rtools/)
+#After lme4_1.1-5, produces error like random coeff >= obs.
+:options(lmerControl=list(check.nobs.vs.rankZ = "ignore"))
+#https://github.com/lme4/lme4/issues/175
+library(data.table); library(plyr); library(lme4); library(mgcv)
+#Making a grand report table
+#colnames(mod1table) <- c('Year', 'Group', 'OA_R2', 'CV_R2', 'CV_int',
+'CV_int_se', 'CV_slope', 'CV_slope_se', 'RMSPE', 'spatial',
+'temporal', 'RMSPE_spatial', 'LPM_CV_R2', 'LPM_CV_int',
+'LPM_CV_int_se', 'LPM_CV_slope', 'LPM_CV_slope_se', 'LPM_RMSPE',
+'LPM_spatial', 'LPM_temporal', 'LPM_RMSPE_spatial')
+mod1table <- matrix(nrow=27, ncol=22); mod1table <- data.frame(mod1table)
+colnames(mod1table) <- c('Year', 'Group', 'OA_R2', 'CV_R2', 'CV_int',
+'CV_int_se', 'CV_slope', 'CV_slope_se', 'RMSPE', 'spatial',
+'temporal', 'RMSPE_spatial', 'LPM_CV_R2', 'LPM_CV_int',
+'LPM_CV_int_se', 'LPM_CV_slope', 'LPM_CV_slope_se', 'LPM_RMSPE',
+'LPM_spatial', 'LPM_temporal', 'LPM_RMSPE_spatial', 'LPM_CV_2')
+mod1table$Year <- rep(2003:2011, each=3); mod1table$Group <- rep(1:3, 9)
+lu <- read.csv('C:/Data/Thesis/Topic 2/Data/Local
+PM/pm_stations_lpmvariables_2_7_14.csv')
+lu$dist_pemis[is.na(lu$dist_pemis)] <- 15; lu$dist_A1[is.na(lu$dist_A1)] <- 50
+lu$elev_m <- NULL
+m1.formula1 <- as.formula(PM25_2 ~ aod + TEMP.x + DEWP.x + SLP.x +
+WDSP.x + VISIB.x + ah_gm3.x + NDVI + elev_m + pbl
+                          + pcturb_1km + Emsn_Pt + PM10_Pt + NOX + (1
++ aod|Date/Region2))
+m1.formula2 <- as.formula(PM25_2 ~ aod + TEMP.x + DEWP.x + SLP.x +
+WDSP.x + VISIB.x + ah_gm3.x + NDVI + elev_m + pbl
+                          + pcturb_1km + Emsn_Pt + (1 + aod|Date/Region2))
+m1.formula3 <- as.formula(PM25_2 ~ aod + TEMP.x + DEWP.x + SLP.x +
+WDSP.x + VISIB.x + ah_gm3.x + (1 + aod|Date/Region2))
+m10.formula1 <- as.formula(PM25.y ~ AOD + TEMP.y + DEWP.y + SLP.y +
+WDSP.y + VISIB.y + ah_gm3.x + Ave_Elev
+                          + p_open + Ems_Pts + Ems_Cnty + A1_dist_km +
+Sum_DISTAN + (1 + AOD|Date))
+m10.formula2 <- as.formula(PM25.y ~ AOD + TEMP.y + DEWP.y + SLP.y +
+WDSP.y + VISIB.y + ah_gm3.y + Ave_Elev
+                          + p_open + Ems_Pts + (1 + AOD|Date/Region))
+m10.formula3 <- as.formula(PM25.y ~ AOD + TEMP.y + DEWP.y + SLP.y +
+WDSP.y + VISIB.y + ah_gm3.y + (1 + AOD|Date/Region))
+ctrl <- lmerControl(optCtrl=list(maxfun=50000))
+cv.records.year <- list()
+options(warn=1) #Produce warnings right away where it occurs (if 2, stops)
+for (i in 2003:2011)  {
+
+  for (j in 1:3)  {
+
+    print(paste(i, j))
+
+    m1 <- read.csv(paste('C:/Data/Thesis/Topic 2/Results/Stage
+1/Pred/Pred1 CSV/Pred1_', i, '_', j, '.csv', sep=''),
+colClasses=c('SiteCode'='character')) #To keep leading zeros in
+sitecode
+    m10 <- read.csv(paste('C:/Data/Thesis/Topic 2/Deep Blue 10 Km/Data
+in CSV/Stage1_', i, '_', j, '.csv', sep=""),
+colClasses=c('SiteCode'='character')) #To keep leading zeros in
+sitecode
+
+    ####
+    #M1<-PART OF SOCKET?
+    #M1<-ONLY THE COMMON?
+    ####
+
+    combi <- merge(m1, m10, by=c('Date', 'SiteCode'))
+    #load CV data for each aod resolution
+    CV10.1 <- read.csv('C:/Data/Thesis/Topic 2/Results/Stage 1/Stage1_CV10.csv')
+    CV10.10 <- read.csv('C:/Data/Thesis/Topic 2/Deep Blue 10
+Km/Stage1_CV10.csv')
+    #extract the RSMPE
+    RMSPE.spatial.1 <- CV10.1[CV10.1$Year==i & CV10.1$Group==j, 'RMSPE_spatial']
+    RMSPE.spatial.10 <- CV10.10[CV10.10$Year==i & CV10.10$Group==j,
+'RMSPE_spatial']
+    #create weights based on RMSPE
+    w1 <- 1/(RMSPE.spatial.1)^2
+    w2 <- 1/(RMSPE.spatial.10)^2
+    #the j is for every region
+    if (j==1) {m1.formula <- m1.formula1; m10.formula <- m10.formula1}
+    if (j==2) {m1.formula <- m1.formula2; m10.formula <- m10.formula2}
+    if (j==3) {m1.formula <- m1.formula3; m10.formula <- m10.formula3}
+
+    out.m1 <- lmer(m1.formula, data=combi)
+    combi$prednew <- predict(out.m1)
+    mod1d_reg <- lm(combi$PM25_2 ~ combi$prednew)
+    eval(parse(text=paste("mod1table[mod1table$Year==", i, " &
+mod1table$Group==", j, ", 'OA_R2'] <- summary(mod1d_reg)$r.squared",
+sep="")))
+
+    #Site sHUFFLING- CV  per Site
+
+    index <- unique(combi[, 'SiteCode']) #List monitoring sites
+    suffled.sites <- sample(index) #Shuffle them
+    quotient <- trunc(length(suffled.sites)/10) #Divide them by 10
+    remainder10 <- ((length(suffled.sites)/10)%%1)*10
+    series <- rep(quotient, 10)# take 10% of sites
+    series[0:remainder10] <- series[0:remainder10]+1
+
+    for (k in 1:10) { #set k-th CV
+      if (k==1) {start <- 1; end <- series[k]} else {start <- end+1;
+end <- start+series[k]-1}
+      site.ith <- suffled.sites[start:end]
+      combi$CVSetID[combi$SiteCode%in%site.ith] <- k
+    }
+    #Site sHUFFLING
+
+    cv.results <- list()
+    for (m in 1:10)  {
+
+      trainset <- combi[!combi$CVSetID==m, ]
+      testset <- combi[combi$CVSetID==m, ]
+
+      out_90.1 <- lmer(m1.formula, data=trainset, control=ctrl)
+      testset$prednew10.1 <- predict(object=out_90.1, newdata=testset,
+allow.new.levels=TRUE, REform=NULL)
+
+      out_90.10 <- lmer(m10.formula, data=trainset, control=ctrl)
+      testset$prednew10.2 <- predict(object=out_90.10,
+newdata=testset, allow.new.levels=TRUE, REform=NULL)
+
+      #add the weights to the CV results
+      testset$pmnew <- (w1*testset$prednew10.1 +
+w2*testset$prednew10.2)/(w1 + w2)
+
+      cv.results[[m]] <- testset
+    }
+
+    mod1d_all <- do.call(rbind, cv.results)
+    mod1d_reg <- lm(mod1d_all$PM25_2 ~ mod1d_all$pmnew)
+
+    eval(parse(text=paste("mod1table[mod1table$Year==", i, " &
+mod1table$Group==", j, ", 'CV_R2'] <- summary(mod1d_reg)$r.squared",
+sep="")))
+    eval(parse(text=paste("mod1table[mod1table$Year==", i, " &
+mod1table$Group==", j, ", 'CV_int'] <- summary(mod1d_reg)$coef[1,1]",
+sep="")))
+    eval(parse(text=paste("mod1table[mod1table$Year==", i, " &
+mod1table$Group==", j, ", 'CV_int_se'] <-
+summary(mod1d_reg)$coef[1,2]", sep="")))
+    eval(parse(text=paste("mod1table[mod1table$Year==", i, " &
+mod1table$Group==", j, ", 'CV_slope'] <-
+summary(mod1d_reg)$coef[2,1]", sep="")))
+    eval(parse(text=paste("mod1table[mod1table$Year==", i, " &
+mod1table$Group==", j, ", 'CV_slope_se'] <-
+summary(mod1d_reg)$coef[2,2]", sep="")))
+
+    #rmspe
+    eval(parse(text=paste("mod1table[mod1table$Year==", i, " &
+mod1table$Group==", j, ", 'RMSPE'] <-
+sqrt(mean(mod1d_reg$residual^2))", sep="")))
+
+    #spatial
+    aggf<- ddply(mod1d_all, c("SiteCode"), function(df)
+return(c(barpm=mean(df$PM25_2),barpred=mean(df$pmnew))))
+    mod_spatial <- lm(barpm ~ barpred, data=aggf)
+    eval(parse(text=paste("mod1table[mod1table$Year==", i, " &
+mod1table$Group==", j, ", 'spatial'] <-
+summary(mod_spatial)$r.squared", sep="")))
+    aggfdt <- data.table(aggf)
+
+    #temporal
+    dat <- merge(mod1d_all, aggf, by='SiteCode', all.x=T)
+    dat$delpm <-dat$PM25_2 - dat$barpm
+    dat$delpred <- dat$pmnew - dat$barpred
+    mod_temporal <- lm(delpm ~ delpred, data=dat)
+    eval(parse(text=paste("mod1table[mod1table$Year==", i, " &
+mod1table$Group==", j, ", 'temporal'] <-
+summary(mod_temporal)$r.squared", sep="")))
+
+    #rmspe_spatial (RMSPE of spatial predictions)
+    dat$spatresid <- dat$barpm - dat$barpred
+    eval(parse(text=paste("mod1table[mod1table$Year==", i, " &
+mod1table$Group==", j, ", 'RMSPE_spatial'] <-
+sqrt(mean(dat$spatresid^2))", sep="")))
+
+    write.csv(mod1table, 'C:/Data/Thesis/Topic 2/Deep Blue 10
+Km/Stage1_CV10_pmnew2.csv', row.names=F)
+
+    #Just round to 2 decimal places
+    #eval(parse(text=paste('mod1table$', i, '_', j, ' <-
+round(mod1table$', i, '_', j, ', 2)', sep='')))
+
+  }
+}
+#+END_SRC
 
 ** Future exposure models 
    :PROPERTIES:
@@ -578,7 +796,6 @@ study of nursing home cases, dont move much good for 1x1 km data
 create moving averages of the 4,8,12 weeks and try that in the model> will capture only non traffic exposures
 when we get the 1x1km data ready go back to the icam/vcam reanalysis by marie-able and the stacey BC paper and see if that changes things
 * Grants
-
 ** SUBMITTED EHF grant: birth weight outcomes (defects, Ultra sound measurements and Ta,PM2.5
    :PROPERTIES:
    :ID:       39e8a4e3-a097-46c4-a3a5-8c35b9452187
@@ -666,6 +883,26 @@ trips abroad goes under remarks
 ** K_TRACK Seed money
 account number 87347711 saif 40 
 
+** Mara mexican grant 
+
+1. A paragraph on how the hybrid satellite model is an advancement on previous exposure methods:
+Previous exposure methods have primarily used either assignment of exposure from central site monitors or parameterization of estimates based on land use regression (LUR) using spatial covariates. Individuals that live further from central site monitors may be assigned estimates with more error in this first approach which also does not account for spatial determinants of exposure such as living in an area with heavy traffic. Land use regression may better capture this spatial variability but typically doesn't include short term temporal variation. Error in assigning exposures can bias effect estimates (likely towards the null) and decrease the power to detect true associations. The hybrid satellite model uses the strengths of both exposure modeling approaches and adds in physical measurements of aerosol optical depth calibrated against the trusted ground monitoring network of central sites while accounting for local variability in spatial determinants of exposure such as roadway density.
+ 
+2. A short statement on how we can collaborate with the geospatial institute:
+Because vehicular emissions are a large contributor to PM2.5 concentrations, we will work with the Geospatial  Institute to develop measures of traffic that can serve as proxies for vehicular emissions to augment future iterations of the exposure model. In particular, metrics of roadway usage and fleet composition (e.g. diesel buses and trucks) that reflect historic and present patterns of traffic and that vary in both space and time are expected to improve on our currently implemented roadway density measures.
+ 
+3. A summary of what GIS info/help we could use right away that can be forwarded to Martine?
+We need some help with finding GIS data for political boundaries since we are currently building our models for an arbitrarily selected rectangular area. In particular, it would be very helpful to get a GIS shapefile delineating the boundaries of the Mexico City Metropolitan Area (particularly if it clarified the boundaries of the DF vs included municipios from outlying areas like in the State of Mexico). Also, it would be great in the future to know the boundaries of the "megalopolis" and include the boundaries of the component states. 
+ 
+We already have a shapefile with the AGEBs from the INEGI which has been joined to the 2010 census population counts so perhaps we are okay on that for now.
+ 
+here is a quick paragraph on some epi methods for different kinds of health data.
+
+Associations between air pollution and individual level health outcomes will be tested with generalized linear mixed models that account for the potential unexplained correlation of survey participants coming from the same census units. Count based (ecologic) data will be fit with negative binomial regression allowing for overdispersion and using a population offset. Models for dichotomous outcomes will be fit using relative risk regression with modified poisson links in order to estimate risk ratios rather than odds ratios and to avoid apparent interaction in the odds ratio that can be due to differences in outcome prevalence between socioeconomic strata. Interaction will be assessed as departure from additivity and thus, in multiplicative models will be assessed using the relative excess risk due to interaction. Potential confounders will be derived from previous literature on the health impacts of air pollution and considered for inclusion after the construction of directed acyclic graphs. ### PUT SOME EXAMPLES HERE - PERHAPS I WOULD CONSIDER SEASON AND LONG TERM TIME TREND IN ADDITION TO THE INDIVIDUAL LEVEL CHARACTERISTICS LIKE SEX AGE EDUCATION AND SMOKING DEPENDING ON WHAT YOU HAVE ###
+
+
+I would also consider the hypothesis that social context is important and that individual SES responses on the health survey could be augmented with census based SES about the neighborhood and accommodated in this mixed model framework - for example, is it the same thing to be poor in a wealthy neighborhood than it is to be of lower means but similar to everyone around you? That could be another area where you work with the geospatial institute to derive neighborhood metrics.
+-Allan
 ** NEXT BSF grant
     :PROPERTIES:
     :ID:       46751f92-a1d4-4d1c-a1f2-5565da630550
@@ -799,6 +1036,7 @@ internet from home
    :PROPERTIES:
    :ID:       6c1e9592-8c50-41e4-b187-c42884527820
    :END:
+** TODO Talk to mihyee about how she proccesws MATLAB- tell her to talk to meytar
 ** try our R package biocLite
 source("http://bioconductor.org/biocLite.R")
 biocLite("interactiveDisplay")

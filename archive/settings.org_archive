@@ -149,3 +149,131 @@ Archived entries from file /home/zeltak/.emacs.d/settings.org
   ;;          (set-face-background 'mode-line (car color))
   ;;          (set-face-foreground 'mode-line (cdr color))))))
 #+END_SRC
+
+* repeatable command
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-01-30 Fri 09:14
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages/key-chord
+  :ARCHIVE_CATEGORY: settings
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+  (defun zeltak/def-rep-command (alist)
+      "Return a lambda that calls the first function of ALIST.
+  It sets the transient map to all functions of ALIST,
+  allowing you to repeat those functions as needed."
+      (lexical-let ((keymap (make-sparse-keymap))
+                    (func (cdar alist)))
+        (mapc (lambda (x)
+                (when x
+                  (define-key keymap (kbd (car x)) (cdr x))))
+              alist)
+        (lambda (arg)
+          (interactive "p")
+          (when func
+            (funcall func arg))
+          (set-transient-map keymap t))))
+#+END_SRC
+
+* orgmode
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-01-30 Fri 09:14
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages/key-chord
+  :ARCHIVE_CATEGORY: settings
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+(key-chord-define-global "oo"   
+      (zeltak/def-rep-command
+       '(nil
+         ("d" . org-download-screenshot)
+         ("<right>" . org-download-screenshot)
+         ("<down>" . windmove-down)
+         ("<up>" . windmove-up)
+         ("y" . other-window)
+         ("h" . ace-window)
+         ("s" . (lambda () (interactive) (ace-window 4)))
+         ("d" . (lambda () (interactive) (ace-window 16)))
+         )))
+#+END_SRC
+
+
+* !icicles!
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-01-30 Fri 10:47
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages
+  :ARCHIVE_CATEGORY: settings
+  :END:
+
+#+BEGIN_SRC emacs-lisp :results none
+  ;; (require 'icicles)
+  ;; ;turn on by default
+  ;; (icy-mode 1)
+#+END_SRC
+
+* !Inactive!
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-01-30 Fri 10:47
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages
+  :ARCHIVE_CATEGORY: settings
+  :END:
+** org-screenshot
+
+https://github.com/dfeich/org-screenshot
+
+#+BEGIN_SRC emacs-lisp :results none
+;(load-file "/home/zeltak/.emacs.g/extra/org-screenshot/org-screenshot.el")
+;(require 'org-screenshot)
+#+END_SRC
+
+** fill column indicator
+
+#+BEGIN_SRC emacs-lisp :results none
+  ;; (require 'fill-column-indicator)
+  ;;  (setq fci-rule-width 1)
+  ;;   (setq fci-rule-color "darkblue")
+  
+  ;; ;to turn it on automatically when visiting a file with C code, put the following line in your init file:
+  ;; (add-hook 'org-mode-hook 'fci-mode)
+  
+  ;; ;To turn on fci-mode automatically for all files, put the following line in your init file:
+  ;; ;add-hook 'after-change-major-mode-hook 'fci-mode)
+  
+  ;; ;To enable fci-mode as a global minor mode, put the following code to your init file:
+  ;; ;(define-globalized-minor-mode global-fci-mode fci-mode (lambda () (fci-mode 1)))
+  ;; ;(global-fci-mode 1)
+  
+#+END_SRC 
+
+
+
+
+* SML (smartmodeline) @broken currently@
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-01-30 Fri 11:07
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages
+  :ARCHIVE_CATEGORY: settings
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+#+END_SRC
+
+
+* switch window
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-01-30 Fri 11:08
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages
+  :ARCHIVE_CATEGORY: settings
+  :END:
+https://github.com/dimitri/switch-window/blob/master/switch-window.el
+
+when !3 or more! windows are present the command numbers the windows for easy switching
+if only 2 windows are avilabe it will switch between
+
+#+BEGIN_SRC emacs-lisp :results none
+(global-set-key (kbd "C-x o") 'switch-window)
+(require 'switch-window)
+#+END_SRC
