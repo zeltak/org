@@ -5984,6 +5984,66 @@ exp(tab)
 
 #+end_src
 
+*** convergance issues
+**** convergance diagnostics lme4
+Look here for more info:
+https://rpubs.com/bbolker/lme4trouble1
+
+#+BEGIN_SRC R
+#lme EDA
+tt <- getME(m1_sc,"theta")
+ll <- getME(m1_sc,"lower")
+min(tt[ll==0])
+
+derivs1 <- m1_sc@optinfo$derivs
+sc_grad1 <- with(derivs1,solve(Hessian,gradient))
+max(abs(sc_grad1))
+max(pmin(abs(sc_grad1),abs(derivs1$gradient)))
+
+
+dd <- update(m1_sc,devFunOnly=TRUE)
+pars <- unlist(getME(m1_sc,c("theta","fixef")))
+grad2 <- grad(dd,pars)
+hess2 <- hessian(dd,pars)
+sc_grad2 <- solve(hess2,grad2)
+max(pmin(abs(sc_grad2),abs(grad2)))
+
+#Restart-Try restarting from previous fit … restart didn’t converge in 10000 evals, so bumped up max number of iterations.
+
+ss <- getME(m1_sc,c("theta","fixef"))
+m2 <- update(m1_sc,start=ss,control=lmerControl(optCtrl=list(maxfun=2e4)))
+m1.all[,pred.m1 := NULL]
+m1.all$pred.m1 <- predict(m2)
+print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
+
+#Try a different optimizer-Try bobyqa for both phases – current GLMM default is bobyqa for first phase, Nelder-Mead for second phase. We are thinking about changing the default to nloptwrap, which is generally much faster. As we’ll see below, nloptwrap would not help with the convergence warning in this case …
+
+m3 <- update(m1_sc,start=ss,control=lmerControl(optimizer="bobyqa",
+                            optCtrl=list(maxfun=2e5)))
+m1.all[,pred.m1 := NULL]
+m1.all$pred.m1 <- predict(m3)
+print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
+ 
+
+#Use this recipe to source the allFit script from Github (it’s also been incorporated into the mixed package):
+afurl <- "/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/lme4_convergance_tester.r"
+aa <- allFit(m2)
+is.OK <- sapply(aa,is,"merMod")  ## nlopt NELDERMEAD failed, others succeeded
+aa.OK <- aa[is.OK]
+lapply(aa.OK,function(x) x@optinfo$conv$lme4$messages)
+#+END_SRC
+
+*** run lmer by group (by=)
+This method requires dplyr    
+#+BEGIN_SRC R
+library(plyr)
+modelList <- dlply(mod2b, "nome_zona", function(x) lmer(mod3.formula, data=x))
+mod2b<-as.data.table(mod2b)
+#to extract the single models
+mod2b[nome_zona == "Alto adriatico"]$pred <- predict(modelList[[1]])
+summary(lm(log_pm10~pred,data=mod2b[nome_zona == "Alto adriatico"]))
+#+END_SRC
+
 ** Generalized Linear Models
 *** Intro
 
@@ -6443,6 +6503,65 @@ example 45 new variables in 'test')
  test2<-cbind(ts0004lag,test)
  finally export it to the format of choice (csv etc)
  
+*** cross validation 
+**** leave one out cross validation- allans code
+#+BEGIN_SRC R
+#Current 0.6621
+# LOOCross-validation
+# for mod1
+library(doRNG)
+library(doParallel)
+
+
+# cross-validation and model building
+# repeated leave x monitors out CV
+#neveruse <- c("PER")
+neveruse <- c("TAM","ASH")
+mons <- unique(m1.all[!stn %in% neveruse, stn]); length(mons)
+xout <- 1 # number of monitors to hold out
+# how many combinations if we pull out xout mons
+ncol(combn(mons, xout))
+n.iter <- 38
+# we will compute mean of the other monitors using all monitoring data
+setkey(m1.all, stn)
+
+# list to store scheme
+cvscheme <- list()
+cvout <- list()
+# set seed for reproducibility
+set.seed(20150112)
+
+# cross-validation in parallel
+
+registerDoParallel(15)
+# use a proper reproducible backend RNG
+registerDoRNG(1234)
+system.time({
+  iter.out <- foreach(i=1:n.iter, .combine = rbind, .packages = c("data.table", "lme4") ) %dorng% {
+  #system.time(for(i in 1:n.iter){
+  #mons.test <- mons[sample(length(mons), xout)]
+  mons.test <- combn(mons, xout)[,i]
+  cvscheme[[i]] <- mons.test
+  test <- m1.all[stn %in% mons.test, ]
+  train<- m1.all[!stn %in% mons.test, ]
+  # fit the model
+  print(paste("iteration #", i, "testing set is monitor", paste(unique(test$stn), collapse = ","), ",", nrow(test), "records from", paste(format(range(test$day), "%Y-%m-%d"), collapse = " to ")))
+  print(paste("training on", nrow(train), "records"))
+  trainmod <-  lmer(m1.formula, data =  train)
+  test$predcv <- predict(object=trainmod,newdata=test,allow.new.levels=TRUE,re.form=NULL )
+  test$itercv <- i  
+  # export these results
+  test[, list(day, stn, PM25, predcv, itercv)]
+}# end of cross-validation loop
+})
+summary(lm(PM25 ~ predcv, data = iter.out))
+# compute root mean squared error
+iter.out[, sqrt(mean((PM25 - predcv)^2))]
+
+
+
+#+END_SRC
+
 * Plots/Graphs
 ** Basics
 *** create a new windows for each graph
