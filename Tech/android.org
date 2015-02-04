@@ -886,6 +886,72 @@ fastboot oem unlock
 fastboot reboot
 #+end_src
 
+** Use unison to sync files
+*** Requirements
+1. A rooted device
+2. SSHDroid installed on your Android (or any any 
+3 OpenSSH, SSHFS and Unison properly installed on your linux machine 
+*** SSH
+After ensured the requirements above, you should be able to ssh to your android device. It's ip is shown by SSHDroid.
+
+#+BEGIN_SRC sh
+ssh root@10.0.0.6
+#+END_SRC
+
+First connect will take some time, coz ssh will handshake your device and save the fingerprint. After the connect succeeded, you will be easily able to connect your device anytime over wifi.
+
+SSHFS
+
+First we'll create a directory in our PC box and then mount the device into it.
+
+#+BEGIN_SRC sh
+mkdir /home/zeltak/mounts/nexus6
+sshfs root@<your device ip>:/sdcard/ /home/zeltak/mounts/nexus6
+#+END_SRC
+
+SSHFS will ask for your root password anytime you try to connect.
+
+If not configured different within SSHDroid, it will be admin. You're ought to change it for safety reasons. 
+
+After above steps, your device is mounted. You can easily browse the contents using your preferred linux filemanager (like dolphin or nautilus). 
+To unmount device
+
+#+BEGIN_SRC sh
+use fusermount -u mkdir /home/zeltak/mounts/nexus6
+#+END_SRC
+
+*** UNISON
+Unison will handle the syncing between your box and your device. It comes with an cli and even with a gui. Whatever you will use is up to your personal preference.
+
+First of all we're going to create the unison profile directory and a basic example profile for syncing pictures.
+
+#+BEGIN_SRC sh
+mkdir ~/.unison && touch pictures.prf
+#+END_SRC
+
+
+Open pictures.prf with your preferred editor (nano, vi, kate, gedit, orwutevah) and write down some config stuff.
+
+#+BEGIN_EXAMPLE
+root=/home/<username>/Pictures
+root=/home/<username>/wifidroid/Pictures
+
+path=Friends
+path=Landscape
+path=Misc Stuff
+
+perms=0
+ignore=Name .*~
+ignore=Name *~
+ignore=Name .*
+#+END_EXAMPLE
+
+The first root=/home/<username>/Pictures points to your local pictures directory, whereas the second one, root=/home/<username>/wifidroid/Pictures points to the pictures-folder at your mounted android device. Unison syncs recursevly, so it would simply sync anything beneath the directory Pictures. If you want to sync only some Subfolders, use path=Friends i. e. to include Pictures/Friends. You may edit this to your own convince. We don't want unison to set permissions on synced files, so we set perms=0. Rest should be self explanatory. 
+
+Okay, now just fire up unison with unison pictures for cli-version, or unison-gtk pictures for the gui-version and syncing should begin.
+Keep in mind that, depending on your wifi speed, it will take a huge amount of time to sync a whole mp3/picture library for the first time. After first sync things should be butter smooth 
+Above example is just a basic profile. You can easily use unison to backup your whole device, or, as i do, make regular backups of your Camera-Roll, WhatsApp and Threema Backups. If you wanna go deeper into this, you should take a look at the Unison Reference Guide.
+
 
 ** BUGS/ERRORS
 *** Flashing ROM errors

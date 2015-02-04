@@ -1,0 +1,164 @@
+
+Archived entries from file /home/zeltak/org/files/Tech/linux.org
+
+
+* setup
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-02-04 Wed 06:23
+  :ARCHIVE_FILE: ~/org/files/Tech/linux.org
+  :ARCHIVE_OLPATH: Software/Editors/'Emacs'/!packages/plugins!/plugins/Hydra
+  :ARCHIVE_CATEGORY: linux
+  :END:
+http://oremacs.com/2015/01/20/introducing-hydra/
+
+The Concept
+This package can be used to tie related functions into a family of short bindings with a common prefix - a Hydra.
+
+Once you summon the Hydra through the prefixed binding (the body + any one head), all heads can be called in succession with only a short extension.
+
+The Hydra is vanquished once Hercules, any binding that isnt the Hydras head, arrives.
+Note that Hercules, besides vanquishing the Hydra, will still serve his orignal purpose, calling his proper command. This makes the Hydra very seamless, it's like a minor mode that disables itself auto-magically.
+
+An Example
+This code will accomplish the task of the previous post:
+
+#+BEGIN_EXAMPLE
+(require 'hydra)
+(hydra-create "<f2>"
+  '(("g" text-scale-increase)
+    ("l" text-scale-decrease)))
+#+END_EXAMPLE
+
+Now, `<f2>` is the Hydra's body: you need to press it only once, together with one of the heads (g or l), to summon the Hydra.
+
+Afterwards, you can call the heads in succession without the body prefix, i.e. <f2> g g g l will work. To vanquish the Hydra, just call up Hercules: any key binding that's not g or l, e.g. C-f or whatever you wanted to do.
+
+Note that you can still assign an unrelated binding to e.g. <f2> f: the Hydra does not take over <f2>, only over <f2> l and <f2> g.
+
+%The Infrastructure%
+
+hydra-create will create new interactive functions for you with the proper docstrings:
+
+hydra-<f2>-text-scale-increase is an interactive Lisp function.
+
+It is bound to <f2> g.
+
+(hydra-<f2>-text-scale-increase)
+
+Create a hydra with a "<f2>" body and the heads:
+
+"g": text-scale-increase,
+
+"l": text-scale-decrease.
+Call the head: text-scale-increase.
+
+
+* An exciting new Hydra: move window splitter
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-02-04 Wed 06:24
+  :ARCHIVE_FILE: ~/org/files/Tech/linux.org
+  :ARCHIVE_OLPATH: Software/Editors/'Emacs'/!packages/plugins!/plugins/Hydra
+  :ARCHIVE_CATEGORY: linux
+  :END:
+
+Zooming is old news, Hydra bundles a new application:
+
+#+BEGIN_EXAMPLE
+(require 'hydra-examples)
+(hydra-create "C-M-o" hydra-example-move-window-splitter)
+#+END_EXAMPLE
+
+or in the expanded form (equivalent):
+
+#+BEGIN_EXAMPLE
+(hydra-create "C-M-o"
+  '(("h" hydra-move-splitter-left)
+    ("j" hydra-move-splitter-down)
+    ("k" hydra-move-splitter-up)
+    ("l" hydra-move-splitter-right)))
+#+END_EXAMPLE
+
+This will allow you to move the window splitter, after you issue C-x 2 or C-x 3 one or more times, with e.g. C-M-o h h j k j l k l h. You can, of course, customize both the body and the heads of this Hydra to your preferences.
+
+
+* The docstrings for this Hydra:
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-02-04 Wed 06:24
+  :ARCHIVE_FILE: ~/org/files/Tech/linux.org
+  :ARCHIVE_OLPATH: Software/Editors/'Emacs'/!packages/plugins!/plugins/Hydra
+  :ARCHIVE_CATEGORY: linux
+  :END:
+
+hydra-C-M-o-move-splitter-up is an interactive Lisp function.
+
+It is bound to C-M-o k.
+
+(hydra-C-M-o-move-splitter-up)
+
+Create a hydra with a "C-M-o" body and the heads:
+
+"h": hydra-move-splitter-left,
+"j": hydra-move-splitter-down,
+"k": hydra-move-splitter-up,
+"l": hydra-move-splitter-right.
+Call the head: hydra-move-splitter-up.
+
+* Combining ace-window and windmove with hydra
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-02-04 Wed 06:24
+  :ARCHIVE_FILE: ~/org/files/Tech/linux.org
+  :ARCHIVE_OLPATH: Software/Editors/'Emacs'/!packages/plugins!/plugins/Hydra
+  :ARCHIVE_CATEGORY: linux
+  :END:
+http://oremacs.com/2015/01/29/more-hydra-goodness/
+Heres what I've come up with, thanks to the newest code in hydra:
+
+#+BEGIN_EXAMPLE
+(defun hydra-universal-argument (arg)
+  (interactive "P")
+  (setq prefix-arg (if (consp arg)
+                       (list (* 4 (car arg)))
+                     (if (eq arg '-)
+                         (list -4)
+                       '(4)))))
+
+(defhydra hydra-window (global-map "C-M-o")
+  "window"
+  ("h" windmove-left "left")
+  ("j" windmove-down "down")
+  ("k" windmove-up "up")
+  ("l" windmove-right "right")
+  ("a" ace-window "ace")
+  ("u" hydra-universal-argument "universal")
+  ("s" (lambda () (interactive) (ace-window 4)) "swap")
+  ("d" (lambda () (interactive) (ace-window 16)) "delete")
+  ("o"))
+
+(key-chord-define-global "yy" 'hydra-window/body)
+#+END_EXAMPLE
+
+The new code should already be available in MELPA. I'll update the code in GNU ELPA soon, when I make sure that there were no bugs introduced by the change.
+
+If anyone wants to see how the defhydra macro expands, you can check out hydra-test.el. I just added a Travis CI setup, so if you're interested in starting to test your Elisp code, you can have a very simple example.
+
+How the defined Hydra works
+With this setup:
+
+to swap two windows (i.e. call C-u ace-window), I can do any of:
+
+C-M-o s
+C-M-o ua
+yys
+yyua
+to delete one window (i.e. call C-u C-u ace-window), any of:
+
+C-M-o d
+C-M-o uua
+yyd
+yyuua
+to move one window down, two windows right, and one window up:
+
+C-M-o jllk
+yyjllk
+Although every other shortcut except the Hydra heads will vanquish the Hydra, sometimes I have nothing on my mind that needs doing. For that case, as you can see above, I enter o in its own list without a function, so that o will dismiss the Hydra without doing anything.
+

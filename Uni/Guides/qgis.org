@@ -256,6 +256,23 @@ Now you can use a screenshot tool to cut the color ramp image you want and save/
 
 Now, in 'Composer Manager', use 'Add Label' and 'Add Image' to add continuous color ramp along with legend. To get the 'Max' and 'Min' value for continuous color ramp use, Layer Properties -> Style.
 %Tip-I already created some common use png images and store them in file:~/.qgis2/ramp/ % 
+*** add basemap
+more info:
+http://maps.cga.harvard.edu/qgis/wkshop/basemap.php
+
+From the main menu click Plugins -> Manage and Install Plugins
+Start typing the name of the plugin "OpenLayers" in the SEARCH box and the list will be filtered
+OpenLayers should already be installed, as indicated by the checkbox being ticked.
+If you get an error using Open Layers Plugin, Uninstall, then Install a fresh version. To install any plugin, click on the item in the list, then INSTALL PLUGIN button.
+After you see "successfully installed" dialog box, CLOSE the Plugins window.
+
+`BEFORE` adding your basemap, you must make sure the Projections are set properly.
+From the main menu click Project > Project Properties
+Now we are ready to add a basemap using OpenLayers plugin.
+Back on the main menu, click Web and then navigate to OpenLayers Plugin -> Google Maps -> Google Streets
+Or you can pick on of the other layers to add, such as OSM or Yahoo choices.
+Click Web from the top menu and -> Open Layers plugins
+
 *** create nice grided exposure maps in qgis
 1.import the x,y and epxosure data from csv/dbf
 2.convert them into voronoi polygons in qgis2 :
