@@ -1736,3 +1736,178 @@ are you interested? would remind you its july in Israel
 ** Haifa grant
 involvment? you really don't have to be to much involved if you don't find it interesting..
 ** imaging of arteries , coronary calcium meauserments , lung imaging
+
+* TODO send igor  08-6472139 page on GIT 
+  :PROPERTIES:
+  :ID:       dac2f878-e3c4-43bf-b585-f6a681e22c99
+  :ARCHIVE_TIME: 2015-02-04 Wed 10:58
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Short term Misc
+  :ARCHIVE_CATEGORY: Research
+  :ARCHIVE_TODO: TODO
+  :END:
+
+* TODO send igor  08-6472139 page on GIT 
+  :PROPERTIES:
+  :ID:       dac2f878-e3c4-43bf-b585-f6a681e22c99
+  :ARCHIVE_TIME: 2015-02-04 Wed 10:59
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Short term Misc
+  :ARCHIVE_CATEGORY: Research
+  :ARCHIVE_TODO: TODO
+  :END:
+
+* try our R package biocLite
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-02-04 Wed 10:59
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Short term Misc
+  :ARCHIVE_CATEGORY: Research
+  :END:
+source("http://bioconductor.org/biocLite.R")
+biocLite("interactiveDisplay")
+
+* TODO Talk to mihyee about how she proccesws MATLAB- tell her to talk to meytar
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-02-04 Wed 10:59
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Short term Misc
+  :ARCHIVE_CATEGORY: Research
+  :ARCHIVE_TODO: TODO
+  :END:
+
+* Brent 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-02-04 Wed 10:59
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Short term Misc/call joel 2.10.2014
+  :ARCHIVE_CATEGORY: Research
+  :END:
+-how is joey antonelli project going?
+
+* TODO call joel 22.10.2014
+  :PROPERTIES:
+  :ID:       eb7d2803-d151-4d98-ab9b-7c51e512313e
+  :ARCHIVE_TIME: 2015-02-04 Wed 11:14
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Short term Misc
+  :ARCHIVE_CATEGORY: Research
+  :ARCHIVE_TODO: TODO
+  :END:
+** 3km data with mihyee
+-also have 10k data 
+-smoothing over time (prev/next), space (surround pixels)
+- interpolate aod at 1st stage?
+throw out aod-pm combos that look bad
+
+mexico:
+leave 2 make prediction to the 2 you left out multiple times - calc R2
+
+aod devided by PBL- as a covariate
+
+logs of everything
+
+cluster by met days 
+
+NE fusion:
+summary measure of 3 sat measuremtns and relate that to monitor data
+
+smooth 10 and 3 k data 
+
+smooth over space and time 
+
+
+** send myhee cleaning data 
+** Italy and mex travel plans
+when does he leave italy, could we meet on the friday be
+
+* TODO call Joel 11.11.2014
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-02-04 Wed 11:15
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Short term Misc
+  :ARCHIVE_CATEGORY: Research
+  :ARCHIVE_TODO: TODO
+  :END:
+** ask about EHF
+** what to present:
+meytar will present Sat background (modis, aod, limitations) and prelimeray Israel issues
+** israel model
+*** Cleaning is important but still issues:
+specific years in specific monitors where there is basiclly a 0 cor in full year or specific cloudy season
+*** Deep Blue data preforms very well in some areas and as bad as maiac in other areas
+             [,1]
+2002 0.0002253763
+2003 0.0280230180
+2004 0.0704596668
+2005 0.0868770078
+2006 0.1596479966
+2007 0.0704473002
+2008 0.0888712746
+2009 0.0613804048
+2010 0.1683572408
+2011 0.0761252117
+2012 0.2537268439
+2013 0.4461787647
+
+ask Allan about gam plot Y-axisdep
+downscale DB to 1x1k by smoothing 
+or show DB data regression 
+regress PM+maiac as regression calibration of obs vs pred predited
+flag for diff between days with bad data and surrouning 
+-label aod pixel and surrounding pixels that are really bad and mark that bad
+also can use that in CV pred and tak out that data.
+get DB data for italy , mexico
+readshow some slides in lombardy
+send france pm to qian
+
+
+* TODO CHECK BEER SHEVA STATION THAT HAVE COMPOSITION
+  :PROPERTIES:
+  :ID:       6740694b-505a-411a-a6fa-08346a3dab4d
+  :ARCHIVE_TIME: 2015-02-04 Wed 11:41
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: @Ongoing@/Israel pm models
+  :ARCHIVE_CATEGORY: Research
+  :ARCHIVE_TODO: TODO
+  :END:
+
+* good PM10 yet bad PM25
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-02-04 Wed 11:41
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: @Ongoing@/Israel pm models
+  :ARCHIVE_CATEGORY: Research
+  :END:
+PICKS UP Salt/Sand - maybe thats why PM 10 is better
+
+
+* TODO MAIAC PM and BW
+  :PROPERTIES:
+  :ID:       221d8731-4375-4c80-9605-16acbc29ea80
+  :ARCHIVE_TIME: 2015-02-04 Wed 12:21
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: @Ongoing@
+  :ARCHIVE_CATEGORY: Research
+  :ARCHIVE_TODO: TODO
+  :END:
+
+* Massimo meetings
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-02-04 Wed 12:23
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: @Ongoing@/Italy PM models
+  :ARCHIVE_CATEGORY: Research
+  :END:
+** 10.10.2013
+ask about pop den reso  ltion
+
+* DONE send massimo PBL dta for all years
+  :PROPERTIES:
+  :ID:       3fdbbea8-2435-413b-b0ac-981b748fa528
+  :ARCHIVE_TIME: 2015-02-04 Wed 12:23
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: @Ongoing@/Italy PM models
+  :ARCHIVE_CATEGORY: Research
+  :ARCHIVE_TODO: DONE
+  :END:

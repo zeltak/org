@@ -99,22 +99,15 @@ in the discussion compare our model to the liu paper and the seattle's group pap
     :ID:       7716b93c-4a8f-42a4-a602-5e57d517febf
     :END:
 -why do we correlate 24h and not by overpass
-- better regions
+-better regions
 -go over PM25 and see if it looks
-*** TODO CHECK BEER SHEVA STATION THAT HAVE COMPOSITION
-    :PROPERTIES:
-    :ID:       6740694b-505a-411a-a6fa-08346a3dab4d
-    :END:
-*** good PM10 yet bad PM25
-PICKS UP Salt/Sand - maybe thats why PM 10 is better
- 
 *** improvment
 run by season
 ask california group whats the raw pm-aod correlations
 create yearly nox etc variables 
 *** TODO check in Israel for next iteration
 composition of PM in israel, 
-teom at 50 may over measure and introduce noise to pm25.
+teom at 50 celsius  may over measure and introduce noise to pm25.
 look at average residual in monitors 
 put that in the paper teom is limited
 *** TODO talking to alexei about size distribution
@@ -127,10 +120,7 @@ Tried prev/post AOD as predictor
 tried mean of surrounding AOD as predictor. works almost as well as monitor AOD but both linerly don't improve much in model.
 both didn't imporve R2 by much 
 
-any progress with data fusion for next iteration. 
-geochem data for israel
-what techniques are they using- kalman filter
-
+Lasso 
 
 ** TODO France temperature paper
    :PROPERTIES:
@@ -216,10 +206,6 @@ Greg will send over the tract and i will assign exposure per tract, if the tract
     :PROPERTIES:
     :ID:       a4d12737-b033-4032-bc15-6591c7f2e9ce
     :END:
-** TODO MAIAC PM and BW
-   :PROPERTIES:
-   :ID:       221d8731-4375-4c80-9605-16acbc29ea80
-   :END:
 ** NEXT Mexico
    :PROPERTIES:
    :ID:       6bbf7400-720f-437e-bbbc-213154482dd2
@@ -245,24 +231,12 @@ if prev day isnt avilable we use the same day twice
 better
 -compare in Brecsia- the town with and without smellter, talk to
 Brent about this
--regress log of pm vs log of aod and all variables
--we have multicliple model so all interactions are build in
-
 - aod in upwind squere is excellent predictor for a specifc grid cell 
 avg Per day, weighted average per grid cell 
-
-check with Joel about F.forestierti mill data in lazio
 *** Bob Wright italian Grant
-*** Massimo meetings
-**** 10.10.2013
-ask about pop den reso  ltion
 *** grant reports,how do we publish so the grant doesent get annoyed, first author where, etc
 exposure paper- france -last or first
 exposure paper-massimo first/last
-*** DONE send massimo PBL dta for all years
-    :PROPERTIES:
-    :ID:       3fdbbea8-2435-413b-b0ac-981b748fa528
-    :END:
 *** TODO OMI OC
 how well the maiac algo does with high OC (organic carbon) in southern italy.
 aerosol index OMI- second iteration
@@ -445,7 +419,6 @@ access to healthy food,access to health centers
 **** israel contacts
 Shuki Cohen from Matat, or Shlomo may also be able to help you
      
-
 ** peripheral artery disease (Andrea)
 *** idea
 By reading this paper it came back to my mind that there is another orphan cardiovascular disease in air pollution research: peripheral artery disease. This is usually due to atherosclerosis and narrowing of the arteries in the limbs and can lead to severe outcomes such as amputation.
@@ -453,6 +426,7 @@ It makes sense to be affected by air pollution, but last time I checked no one h
 *** data from antonella
 when there is no 2, it means that they are created form first diagnosis, when there is the 2 it means that are created based on 1 and up to 5 secondary diagnosis
 so the ones with the 2 should have higher numbers of hospitalizations    
+
 * Future Research Ideas
 ** PM model (NEXT BRANCH)
 *** NEW ideas
@@ -1036,10 +1010,6 @@ internet from home
    :PROPERTIES:
    :ID:       6c1e9592-8c50-41e4-b187-c42884527820
    :END:
-** TODO Talk to mihyee about how she proccesws MATLAB- tell her to talk to meytar
-** try our R package biocLite
-source("http://bioconductor.org/biocLite.R")
-biocLite("interactiveDisplay")
 ** TODO investigate national transportation model
    :PROPERTIES:
    :ID:       2d43ca32-4aa2-4ecb-bd5a-9a1d231dc35a
@@ -1052,16 +1022,10 @@ http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_t
 :ID:       08d89d98-7330-4d4e-894f-3792bd24a115
 :END:
 *** talk to oren tal about sharepoint access
-** TODO send igor  08-6472139 page on GIT 
-   :PROPERTIES:
-   :ID:       dac2f878-e3c4-43bf-b585-f6a681e22c99
-   :END:
 ** TODO call joel 2.10.2014
 :PROPERTIES:
 :ID:       942c598a-5d2c-47d8-ad63-fe8c555accb4
 :END:
-*** Brent 
--how is joey antonelli project going?
 *** Joel
 **** data fusion in North America
 combining the 3k and 1k data which have different algorithms and hence different errors
@@ -1086,70 +1050,6 @@ lowest level
 
 
 
-
-** TODO call joel 22.10.2014
-   :PROPERTIES:
-   :ID:       eb7d2803-d151-4d98-ab9b-7c51e512313e
-   :END:
-*** 3km data with mihyee
--also have 10k data 
--smoothing over time (prev/next), space (surround pixels)
-- interpolate aod at 1st stage?
-throw out aod-pm combos that look bad
-
-mexico:
-leave 2 make prediction to the 2 you left out multiple times - calc R2
-
-aod devided by PBL- as a covariate
-
-logs of everything
-
-cluster by met days 
-
-NE fusion:
-summary measure of 3 sat measuremtns and relate that to monitor data
-
-smooth 10 and 3 k data 
-
-smooth over space and time 
-
-
-*** send myhee cleaning data 
-*** Italy and mex travel plans
-when does he leave italy, could we meet on the friday be
-** TODO call Joel 11.11.2014
-*** ask about EHF
-*** what to present:
-meytar will present Sat background (modis, aod, limitations) and prelimeray Israel issues
-*** israel model
-**** Cleaning is important but still issues:
-specific years in specific monitors where there is basiclly a 0 cor in full year or specific cloudy season
-**** Deep Blue data preforms very well in some areas and as bad as maiac in other areas
-             [,1]
-2002 0.0002253763
-2003 0.0280230180
-2004 0.0704596668
-2005 0.0868770078
-2006 0.1596479966
-2007 0.0704473002
-2008 0.0888712746
-2009 0.0613804048
-2010 0.1683572408
-2011 0.0761252117
-2012 0.2537268439
-2013 0.4461787647
-
-*** ask Allan about gam plot Y-axisdep
-downscale DB to 1x1k by smoothing 
-or show DB data regression 
-regress PM+maiac as 
-regression calibration of obs vs pred predited
-flag for diff between days with bad data and surrouning 
--label aod pixel and surrounding pixels that are really bad and mark that bad
-also can use that in CV pred and tak out that data.
-get DB data for italy , mexico
-readshow some slides in lombardy
-send france pm to qian
 
 ** TODO check Italy Mexico Trip reutrns from BGU
 :PROPERTIES:

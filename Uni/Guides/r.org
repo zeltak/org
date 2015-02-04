@@ -5375,22 +5375,24 @@ Influential Observations
 
 Outliers are observations that aren't predicted well by the model. They
 have either unusually large positive or negative residuals
-[[R_files/img/Image_DG4NxsIy7Uhco1C12LiMUw_0007.png]] . *Positive
-residuals* indicate that the *model is underestimating* the response
-value, while *negative residuals* indicate an o*verestimation*.
- You've already seen one way to identify outliers. Points in the Q-Q
-plot of figure 8.9
- [[R_files/img/Image_DG4NxsIy7Uhco1C12LiMUw_0008.png]]
- that lie outside the confidence band are considered outliers. A rough
-rule of thumb is that standardized residuals that are larger than 2 or
-less than --2 are worth attention.
- The car package also provides a statistical test for outliers. The
-*outlierTest()* function reports the Bonferroni adjusted p-value for the
-largest absolute studentized residual:
- [[R_files/img/Image_DG4NxsIy7Uhco1C12LiMUw_0009.png]]
- Nevada is identified as an outlier (p=0.048). if it isn't significant,
-there are no outliers in the dataset. If it is *significant, you must
-delete it and rerun the test to see if others are present.*
+
+[[R_files/img/Image_DG4NxsIy7Uhco1C12LiMUw_0007.png]] 
+
+`Positive residuals` 
+indicate that the *model is underestimating* the response value, while *negative residuals* indicate an overestimation.
+You've already seen one way to identify outliers. Points in the Q-Q plot of figure 8.9
+
+[[R_files/img/Image_DG4NxsIy7Uhco1C12LiMUw_0008.png]]
+
+that lie outside the confidence band are considered outliers. A rough rule of thumb is that standardized residuals that are larger than 2 or
+less than --2 are worth attention. 
+
+The car package also provides a statistical test for outliers. The
+
+*outlierTest()* function reports the Bonferroni adjusted p-value for the largest absolute studentized residual:
+[[R_files/img/Image_DG4NxsIy7Uhco1C12LiMUw_0009.png]]
+Nevada is identified as an outlier (p=0.048). if it isn't significant,there are no outliers in the dataset. If it is significant, you must
+delete it and rerun the test to see if others are present.
 
 **** High leverage points
 
@@ -7931,6 +7933,16 @@ setkey(y,stn,day)
 head(y[stn=="ANT"],n=10)
 #+END_SRC
 
+** colorout 
+http://www.lepem.ufc.br/jaa/colorout.html
+
+to install:
+
+#+BEGIN_SRC R
+download.file("http://www.lepem.ufc.br/jaa/colorout_1.1-0.tar.gz", destfile = "colorout_1.1-0.tar.gz")
+install.packages("colorout_1.1-0.tar.gz", type = "source", repos = NULL)
+#+END_SRC
+
 * data.table
 *** basics
 **** into
@@ -9469,7 +9481,6 @@ then issues this
 mutate_if(bwfull.ptvl,birthyear==2003|birthyear==2004,yearb=2004)
 #+END_SRC
 where for DT bwfull.ptvl, for years 2003 and 2004 rows the variable yearb will get 2004
-
 
 
 ** aggregate/summary
