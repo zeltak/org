@@ -9396,6 +9396,10 @@ ugrid <-data.m3 %>%
     summarise(lat_aod = mean(lat_aod, na.rm=TRUE),  long_aod = mean(long_aod, na.rm=TRUE),x_aod_ITM = mean(x_aod_ITM, na.rm=TRUE),  y_aod_ITM = mean(y_aod_ITM, na.rm=TRUE))
 
 #aggregate and write to csv
+write.csv (x <-PM25 %>%
+    group_by(stn) %>%
+    summarise(lat_aod = mean(y_stn_ITM, na.rm=TRUE),  long_aod = mean(x_stn_ITM, na.rm=TRUE)) , "/home/zeltak/ZH_tmp/m7tst.csv")
+#other 
 write.csv (x <-m7.m2 %>%
     group_by(aodid) %>%
     summarise(lat_aod = mean(lat_aod, na.rm=TRUE),  long_aod = mean(long_aod, na.rm=TRUE),x_aod_ITM = mean(x_aod_ITM, na.rm=TRUE),  y_aod_ITM = mean(y_aod_ITM, na.rm=TRUE)) , "/home/zeltak/ZH_tmp/m7tst.csv")
