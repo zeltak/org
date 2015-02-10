@@ -609,8 +609,10 @@ describe(f)
 setkey(f,aodid)
 setkey(m9.m2,aodid)
 m9.m2<-merge(m9.m2,f)
-m9.m2$laflag<-0
-m9.m2<-m9.m2[numadata < 2000, laflag :=1]
+m9.m2$flag1000<-0
+m9.m2<-m9.m2[numadata < 1000, flag1000 :=1]
+m9.m2$flag500<-0
+m9.m2<-m9.m2[numadata < 500, flag500 :=1]
 
 saveRDS(m9.m2,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod2.AQ.rds")
 

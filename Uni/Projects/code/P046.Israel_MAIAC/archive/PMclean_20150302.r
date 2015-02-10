@@ -39,21 +39,11 @@ colnames(res) <- c(
 res$type <- c("PM25","PM10")
 
 
-
 #m1.all <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.PM25.TR.rds")
 m1.all <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.PM25.AQ.rds")
-
-# neveruse <- c("AZB","BIL","BSV","NSH","PTR","TMM","YLB")
-# myetar <- m1.all[stn %in% neveruse]
-# write.csv(myetar,"/media/NAS/Uni/Projects/P000_TMP_PROJECTS/meytar_phd/Ratio/m1ration.csv")
-
-# #add stn elev
-# estn <- fread("/media/NAS/Uni/Data/Israel/IPA_stations/PMstnASL.csv")
-# estn<-estn[!is.na(Long)]
-# setkey(estn,stn)
-# setkey(m1.all,stn)
-# m1.all <- merge(m1.all, estn[,list(stn,ASLm)], all.x = T)
-
+#take out station with wildly diff PM from surrounding stations
+neveruse <- c("TMM","ASH")
+m1.all <- m1.all[!stn %in% neveruse]
 
 # take out stn with co located PM10/25 with very high ratios
 #calculate meanPM per grid per day to each station (excluding first station)
@@ -93,24 +83,6 @@ PM.j<- PM.j[ratio > 0.95]
 ####Take out bad stations
 m1.all <- m1.all[!(m1.all$badstn %in% PM.j$badstn), ] 
 
-# #cal prev/post day
-# #read PM data
-# setkey(PM25,stn,day)
-# PM25<-as.data.frame(PM25)
-# 
-# Data1 <- slide(PM25, Var = "PM25", GroupVar = "stn",
-#                slideBy = 1)
-# Data2 <- slide(Data1, Var = "PM25", GroupVar = "stn",
-#                slideBy = -1)
-# 
-# data2<-as.data.table(Data2)
-# setkey(data2,day,stn)
-# setnames(data2,"PM251","PM25_pre")
-# setnames(data2,"PM25-1","PM25_post")
-# setkey(m1.all,day,stn)
-# m1.all <- merge(m1.all, data2[,list(stn,day, PM25_pre, PM25_post)], all.x = T)
-# summary(m1.all)
-
 m1.all[,elev.s:= scale(elev)]
 m1.all[,tden.s:= scale(tden)]
 m1.all[,pden.s:= scale(pden)]
@@ -134,31 +106,6 @@ m1.all[,Raina.s:= scale(Rain.im)]
 m1.all[,NOa.s:= scale(NO.im)]
 m1.all[,O3a.s:= scale(O3.im)]
 m1.all[,SO2a.s:= scale(SO2.im)]
-# #logs
-# m1.all[,elev.log:= log(elev+000000000001)]
-# m1.all[,tden.log:= log(tden+000000000001)]
-# m1.all[,pden.log:= log(pden+000000000001)]
-# m1.all[,dist2A1.log:= log(dist2A1+000000000001)]
-# m1.all[,dist2water.log:= log(dist2water+000000000001)]
-# m1.all[,dist2rail.log:= log(dist2rail+000000000001)]
-# m1.all[,Dist2road.log:= log(Dist2road+000000000001)]
-# m1.all[,ndvi.log:= log(ndvi+000000000001)]
-# m1.all[,MeanPbl.log:= log(MeanPbl+000000000001)]
-# m1.all[,p_ind.log:= log(p_ind+000000000001)]
-# m1.all[,p_for.log:= log(p_for+000000000001)]
-# m1.all[,p_farm.log:= log(p_farm+000000000001)]
-# m1.all[,p_dos.log:= log(p_dos+000000000001)]
-# m1.all[,p_dev.log:= log(p_dev+000000000001)]
-# m1.all[,p_os.log:= log(p_os+000000000001)]
-# m1.all[,tempa.log:= log(Temp.im+000000000001)]
-# m1.all[,WDa.log:= log(WD.im+000000000001)]
-# m1.all[,WSa.log:= log(WS.im+000000000001)]
-# m1.all[,RHa.log:= log(RH.im+000000000001)]
-# m1.all[,Raina.log:= log(Rain.im+000000000001)]
-# m1.all[,NOa.log:= log(NO.im+000000000001)]
-# m1.all[,O3a.log:= log(O3.im+000000000001)]
-# m1.all[,SO2a.log:= log(SO2.im+000000000001)]
-
 
 ################# clean BAD STN PM25 and check if improved model?
 raWDaf <- ddply(m1.all, c("stn","m"), 
@@ -176,85 +123,18 @@ m1.all[,badid := paste(stn,m,sep="-")]
 ####Take out bad stations
 m1.all <- m1.all[!(m1.all$badid %in% bad$badid), ] 
 
-summary(m1.all)
-#clear missings
-# m1.all<- m1.all[!is.na(ASLm)]
-# m1.all<- m1.all[!is.na(aodpre)]
-# m1.all<- m1.all[!is.na(aodpost)]
-# m1.all[,aod.log:= log(aod+1)]
-# m1.all[,PM25.log:= log(PM25+1)]
-m1.all<- m1.all[!is.na(pbldag)]
-describe(m1.all$Cpm)
-describe(m1.all$PM25)
-#m1.all<- m1.all[PM25 < 100]
-#m1.all<- m1.all[aod < 1.2]
-neveruse <- c("TMM","ASH")
-m1.all <- m1.all[!stn %in% neveruse]
-
-# use pipe for OR condition
-#m1.all <- filter(m1.all, PM25 > 30 & aod < 0.5)
-
-# > names(m1.all)
-#  [1] "stn"           "day"           "PM25"          "closest"       "c"             "m"             "aod"           "UN"            "WV"           
-# [10] "dist2rail"     "dist2A1"       "dist2water"    "Dist2road"     "elev"          "tden"          "pden"          "reg_num"       "p_os"         
-# [19] "p_dev"         "p_dos"         "p_farm"        "p_for"         "p_ind"         "lat_aod.x"     "long_aod.x"    "x_aod_ITM"     "y_aod_ITM"    
-# [28] "metreg"        "MeanPbl"       "season"        "seasonSW"      "ndvi"          "Dust"          "Temp.im"       "WD.im"         "WS.im"        
-# [37] "SR.im"         "O3.im"         "NO.im"         "Rain.im"       "SO2.im"        "RH.im"         "obs"           "normwt"        "meanPM"       
-# [46] "meanPM10"      "closest5kmean" "pbldag"        "m1.mpm"        "m1.mpm10"      "badstn"        "elev.s"        "tden.s"        "pden.s"       
-# [55] "dist2A1.s"     "dist2water.s"  "dist2rail.s"   "Dist2road.s"   "ndvi.s"        "MeanPbl.s"     "p_ind.s"       "p_for.s"       "p_farm.s"     
-# [64] "p_dos.s"       "p_dev.s"       "p_os.s"        "tempa.s"       "WDa.s"         "WSa.s"         "RHa.s"         "Raina.s"       "NOa.s"        
-# [73] "O3a.s"         "SO2a.s"        "badid"   
-
 #added met region
 xreg<-fread("/media/NAS/Uni/ztmp/treg.csv")
 setkey(xreg,stn)
 setkey(m1.all,stn)
 m1.all <- merge(m1.all,xreg[,list(stn,reg5=metreg_1)],all.x = T)
-m1.all <- m1.all %>% mutate(Caod = aod/pbldag)
-m1.all <- m1.all %>% mutate(Cpm = PM25*(1/(1-RH.im/100)))
-m1.all<- m1.all %>% filter(Cpm < 7416)  
-
-
-#for paper
-#m1.formula <- as.formula(PM25~ aod+(1+aod|day))
-m1.formula <- as.formula(PM25~ aod
-                        +pbldag
-                        +(1+aod|day))
-
-m1.formula <- as.formula(PM25~ aod
-                        +tempa.s+WSa.s
-                        +pbldag
-                        +RHa.s+O3a.s+Raina.s+NOa.s 
-                        +elev.s+tden.s
-                        +pden.s
-                        +ndvi.s 
-                        +dist2rail.s +dist2water.s +dist2A1.s+Dist2road.s
-                        +p_os.s+p_dev.s+p_dos.s+p_farm.s+p_for.s+p_ind.s  
-                        #+as.factor(metreg)+as.factor(reg_num)
-                        +as.factor(season)
-                        +as.factor(season)*aod
-                         #                        +closest5kmean
-                         #      +aodpre #+aodpost
-                         #+meanPM10
-                         # + aod:Dust 
-                        #+aod*lat_aod.x
-                        #+Dust*lat_aod.x#+MeanPbl.s
-                        #=+pbldag*lat_aod.x
-                        +as.factor(reg5)
-                        +(1+aod|day/reg5))#+(0+tempa.s|day)) #+(1|stn) !!! stn screws up mod3 
-#--------->mod1  .0.803, CV=.64
-
-
+#residuals
+m1.formula <- as.formula(PM25~ aod+(1+aod|day))
 #full fit
-m1_sc <- lmer(m1.formula,data=m1.all,weights=normwt)
-#summary(m1_sc)
-#AIC(m1_sc) 
+m1_sc <- lmer(m1.formula,data=m1.all)
 
-m1.all[,pred.m1 := NULL]
-m1.all$pred.m1 <- predict(m1_sc)
-res[res$type=="PM25", 'm1.R2'] <- print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
-#RMSPE
-res[res$type=="PM25", 'm1.PE'] <- print(rmse(residuals(m1_sc)))
+res <- resid(m1_sc)
+
 
 
 
@@ -329,9 +209,6 @@ print(summary(lm(PM25~pred.m1,data=r4))$r.squared)
 ## raWDaf<-as.data.table(raWDaf)
 
 
-
-s
-
 #spatial
 ###to check
 spatialall<-m1.all %>%
@@ -363,7 +240,7 @@ test_s1$iter<-"s1"
 splits_s2 <- splitdf(m1.all)
 test_s2 <- splits_s2$testset
 train_s2 <- splits_s2$trainset
-oasut_train_s2 <- lmer(m1.formula,data =  train_s2,weights=normwt)
+out_train_s2 <- lmer(m1.formula,data =  train_s2,weights=normwt)
 test_s2$pred.m1.cv <- predict(object=out_train_s2 ,newdata=test_s2,allow.new.levels=TRUE,re.form=NULL )
 test_s2$iter<-"s2"
 #s3
@@ -387,6 +264,14 @@ train_s5 <- splits_s5$trainset
 out_train_s5 <- lmer(m1.formula,data =  train_s5,weights=normwt)
 test_s5$pred.m1.cv <- predict(object=out_train_s5 ,newdata=test_s5,allow.new.levels=TRUE,re.form=NULL )
 test_s5$iter<-"s5"
+
+
+m1.all.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5))
+m1.fit.all.cv<-lm(PM25~pred.m1.cv,data=m1.all.cv)
+res[res$type=="PM25", 'm1cv.R2'] <- print(summary(lm(PM25~pred.m1.cv,data=m1.all.cv))$r.squared)
+
+
+
 #s6
 splits_s6 <- splitdf(m1.all)
 test_s6 <- splits_s6$testset
@@ -426,6 +311,7 @@ test_s10$iter<-"s10"
 #BIND 1 dataset
 m1.all.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s6,test_s7,test_s8,test_s9, test_s10))
 
+g 
 # cleanup (remove from WS) objects from CV
 #rm(list = ls(pattern = "train_|test_"))
 #table updates

@@ -157,4 +157,4 @@ m1.all.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s6,tes
 
 #table updates
 m1.fit.all.cv<-lm(PM25~pred.m1.cv,data=m1.all.cv)
-res[res$type=="PM25", 'm1cv.R2'] <- print(summary(lm(PM25~pred.m1.cv,data=m1.all.cv))$r.squared)
+print(summary(lm(PM25~pred.m1.cv,data=m1.all.cv))$r.squared)

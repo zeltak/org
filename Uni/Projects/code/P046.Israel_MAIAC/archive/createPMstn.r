@@ -17,7 +17,7 @@ x <-PM25 %>%
     group_by(stn) %>%
     summarise(lat_aod = mean(y_stn_ITM, na.rm=TRUE),  long_aod = mean(x_stn_ITM, na.rm=TRUE)) 
  
-
+write.csv(x,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/stnpm25.csv")
 
 #calculate meanPM per grid per day to each station (excluding first station)
 PM10 <- fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/0.raw/PM/PM10_D.csv")
@@ -35,6 +35,8 @@ setnames(PM10,"Y","y_stn_ITM")
 y <-PM10 %>%
     group_by(stn) %>%
     summarise(lat_aod = mean(y_stn_ITM, na.rm=TRUE),  long_aod = mean(x_stn_ITM, na.rm=TRUE))
+
+write.csv(y,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/stnpm10.csv")
 
 
 z<-rbindlist(list(x,y))

@@ -189,7 +189,7 @@ ilgreen <- fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data
 
 ###load Aqua
 #load aod data
-aqua<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/AOD_AQ_0014.RDS")
+aqua<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN003_AOd_allyears/AOD_TR_0014.RDS")
 aqua <- aqua[aqua$aodid %in% ilgreen$aodid, ] 
 #aqua<- aqua[yr == "2003"]
 #system.time(aqua[, MaskLandWaterSnow := as.factor(sapply(QA, function(x){paste(rev(as.integer(intToBits(x))[4:5]), collapse = "")}))])
@@ -575,8 +575,8 @@ m9 <- merge(m9,pb[,list(day,pbldag=V4)],all.x = T)
 #---------> save mods 2+3
 #clean
 m9[,c("ndviid","pblid","pop","area","date","month","lat_ndvi","long_ndvi","lat_aod.y","long_aod.y"):=NULL]
-saveRDS(m9,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.rds")
-#m9<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.rds")
+saveRDS(m9,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.TR.rds")
+#m9<- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.TR.rds")
 #mod2
 m9.m2 <- m9[!is.na(aod)]
 #calculate  prev/post day
@@ -609,10 +609,12 @@ describe(f)
 setkey(f,aodid)
 setkey(m9.m2,aodid)
 m9.m2<-merge(m9.m2,f)
-m9.m2$laflag<-0
-m9.m2<-m9.m2[numadata < 2000, laflag :=1]
+m9.m2$flag1000<-0
+m9.m2<-m9.m2[numadata < 1000, flag1000 :=1]
+m9.m2$flag500<-0
+m9.m2<-m9.m2[numadata < 500, flag500 :=1]
 
-saveRDS(m9.m2,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod2.AQ.rds")
+saveRDS(m9.m2,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod2.TR.rds")
 
 
 #--------->mod1
@@ -701,7 +703,7 @@ PM25.m1 <- merge(PM25.m1, PM10[,list(stn,day,m1.mpm10 )] , all.x = T)
 
 
 #save mod 1
-saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.PM25.AQ.rds")
+saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.PM25.TR.rds")
 
 
 ########### join aod to PM10
@@ -741,4 +743,4 @@ setkey(PM10.m1,stn,day)
 PM10.m1 <- merge(PM10.m1, PM10[,list(stn,day,m1.mpm10 )] , all.x = T)
 
 #save mod 1
-saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.PM10.AQ.rds")
+saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.PM10.TR.rds")
