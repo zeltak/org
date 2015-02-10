@@ -28053,7 +28053,8 @@ just add this in your config:
 That is technically all you need in order to get things up and running.
 
 ********* add non elpa packages from git
-If I find a new package I want, whether it's on github, elpa, or otherwise, I first check if the package info already exists in el-get's huge list of recipes, or I write it up myself. As an example, install an elpa package is as simple as:
+
+If I find a new package I want, whether its on github, elpa, or otherwise, I first check if the package info already exists in el-get's huge list of recipes, or I write it up myself. As an example, install an elpa package is as simple as:
 
 #+BEGIN_SRC emacs-lisp
 (:name rainbow-mode :type elpa)
@@ -28203,6 +28204,18 @@ Auto-Activation of Mode When Opening File
 This is usually setup by the package, but not always. Here's the basics:
  ;; setup files ending in ".js" to open in js2-mode
  (add-to-list 'auto-mode-alist'("\\.js\\'" . js2-mode))c
+********* How to save a list of all the installed packages in Emacs 24
+if you do ~C-h v~ 
+`package-activated-list`
+
+you can copy the output there with all non built in packages installed
+
+#+BEGIN_EXAMPLE
+package-activated-list is a variable defined in `package.el'.
+Its value is
+(el-get hydra cl-lib hydra cl-lib el-get ace-isearch helm-swoop helm async ace-jump-mode ace-window ace-jump-mode auctex auto-complete popup back-button pcache persistent-soft list-utils pcache list-utils ucs-utils list-utils pcache persistent-soft list-utils pcache smartrep nav-flash bbdb bbyac browse-kill-ring bookmark+ browse-kill-ring company dired+ dired-details+ dired-details dired-details dired-rainbow dired-hacks-utils dash dash dired-sort easy-kill ebib parsebib dash edit-server-htmlize edit-server evil goto-chg undo-tree evil-nerd-commenter expand-region flx-ido flx god-mode google-contacts oauth2 goto-chg guide-key s popwin dash helm-bibtex f dash s dash s parsebib helm async helm-chrome helm async helm-cmd-t helm-swoop helm async hydra key-chord lentic f dash s dash m-buffer dash m-buffer dash magit git-rebase-mode git-commit-mode manage-minor-mode nav-flash oauth2 openwith parsebib popup popwin rainbow-mode rich-minority s smartrep smex switch-window ucs-utils list-utils pcache persistent-soft list-utils pcache undo-tree xmlgen yasnippet zenburn)
+#+END_EXAMPLE
+
 ********* disable elpa check on startup
 add this to config
 #+BEGIN_SRC emacs-lisp :results none
@@ -28212,6 +28225,183 @@ add this to config
 (setq package-enable-at-startup nil)
 #+END_SRC 
 ******** plugins
+********* Use package
+********** simplest use-package declaration
+The idea of use-package is to wrap all initialisation and configuration of a package in a top-level form. 
+#+BEGIN_EXAMPLE
+(use-package foo)
+#+END_EXAMPLE
+
+This loads in the package foo, but only if foo is available on your system. If not, a warning is logged to your *Messages* buffer. If it succeeds a message about "Loading foo" is logged, along with the time it took to load, if that time is over 0.01s.
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-02-06 08:31:20
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2015/screenshot_2015-02-06_08:31:20.png]]
+
+A typical use in my configuration looks like this:
+
+#+BEGIN_SRC emacs-lisp :results none
+(use-package whitespace
+  :bind (("C-c T w" . whitespace-mode))
+  :init
+  (dolist (hook '(prog-mode-hook text-mode-hook conf-mode-hook))
+    (add-hook hook #'whitespace-mode))
+  :config (setq whitespace-line-column nil)
+  :diminish whitespace-mode)
+#+END_SRC
+
+This form binds Whitespace Mode to C-c T w globally, enables it automatically for certain modes, and configures it. :bind and :init are evaluated immediately, whereas :config is deferred until after the package is loaded, similar to with-eval-after-load1. :diminish is just a shortcut for the diminish utility which removes minor modes from the mode line.
+********** init 
+
+Use the `:init` keyword to do some stuff to initialize foo. If loading was deferred, the code is run immediately; otherwise the package is required before running the code. See below for options that defer loading of the package.
+
+#+BEGIN_SRC emacs-lisp :results none
+(use-package foo
+  :init
+  (progn
+    (setq foo-variable t)
+    (foo-mode 1)))
+#+END_SRC
+
+********** Config - describe the setting of library
+`:Config` keyword describes settings, etc. after you have loaded the library.
+
+A companion to the :init keyword is :config. Although :init always happens in the case of deferred modules (which are likely to be the most common kind), :config form only run after the module has been loaded by Emacs:
+
+#+BEGIN_SRC emacs-lisp :results none
+(use-package ace-jump-mode
+  :bind ("C-." . ace-jump-mode)
+  :config
+  (message "Yay, ace-jump-mode was actually loaded!"))
+
+#+END_SRC
+
+********** both config and init 
+You can have both :init and :config:
+
+#+BEGIN_SRC emacs-lisp :results none
+(use-package haskell-mode
+  :commands haskell-mode
+  :init
+  (add-to-list 'auto-mode-alist '("\\.l?hs$" . haskell-mode))
+  :config
+  (progn
+    (use-package inf-haskell)
+    (use-package hs-lint)))
+#+END_SRC
+
+In this case, I want to autoload the command haskell-mode from "haskell-mode.el", add it to auto-mode-alist at the time ".emacs" is loaded, but wait until after I've opened a Haskell file before loading "inf-haskell.el" and "hs-lint.el".
+
+
+********** bind 
+A very common thing to do when loading a module is to bind a key to primary commands within that module:
+
+#+BEGIN_SRC emacs-lisp :results none
+(use-package ace-jump-mode
+  :bind ("C-." . ace-jump-mode))
+#+END_SRC
+
+This does two things: first, it creates autoload for the ace-jump-mode command, and defers loading of ace-jump-mode until you actually use it. Second, it binds the key C-. to that command. After loading, you can use M-x describe-personal-keybindings to see all such bindings you've set throughout your Emacs.
+
+A more literal way to do the exact same thing is:
+
+#+BEGIN_SRC emacs-lisp :results none
+(use-package ace-jump-mode
+  :commands ace-jump-mode
+  :init
+  (bind-key "C-." 'ace-jump-mode))
+#+END_SRC
+********** disabled 
+The :disabled keyword can be used to turn off a module that you're having difficulties with, or to stop loading something you're not really using at the present time:
+
+#+BEGIN_SRC emacs-lisp :results none
+(use-package ess-site
+  :disabled t
+  :commands R)
+#+END_SRC
+********** load path 
+If your package needs a directory added to the load-path in order to load, use :load-path. It takes a string or a list of strings. If the path is relative, it will be expanded within user-emacs-directory:
+
+#+BEGIN_SRC emacs-lisp :results none
+(use-package ess-site
+  :disabled t
+  :load-path "site-lisp/ess/lisp/"
+  :commands R)
+#+END_SRC
+
+********** diminish 
+use-package also provides built-in support for the diminish utility, if you have that installed. It's purpose is to remove strings from your mode-line that would otherwise always be there and provide no useful information. It is invoked with the :diminish keyword, which is passed either the minor mode symbol, a cons of the symbol and a replacement string, or just a replacement string in which case the minor mode symbol is guessed to be the package name with "-mode" at the end:
+
+#+BEGIN_SRC emacs-lisp :results none
+(use-package abbrev
+  :diminish abbrev-mode
+  :init
+  (if (file-exists-p abbrev-file-name)
+      (quietly-read-abbrev-file))
+
+  :config
+  (add-hook 'expand-load-hook
+            (lambda ()
+              (add-hook 'expand-expand-hook 'indent-according-to-mode)
+              (add-hook 'expand-jump-hook 'indent-according-to-mode))))
+#+END_SRC
+********** ensure (intsall from melpa if missing)
+You can use use-package to load packages from ELPA with package.el. This is particularly useful if you share your .emacs between several machines; the relevant packages will download automatically once placed in your .emacs. The :ensure key will install the package automatically if it is not already present:
+
+#+BEGIN_SRC emacs-lisp :results none
+(use-package magit
+  :ensure t)
+#+END_SRC
+
+If you need to install a different package from the one named by use-package, you can specify it like this:
+
+#+BEGIN_SRC emacs-lisp :results none
+(use-package tex-site
+  :ensure auctex)
+#+END_SRC
+********** “Local” packages
+While I try to use packages as much as possible, and also release most of my custom code as packages to melpa, I still have some code in my configuration that is too small or too specific to my own workflow and my personal preferences to be released independently.
+use-package makes it easy to maintain this code. I can keep it in separate libraries, pretending that they are proper packages installed with the package manager, and use use-package as usual to load my custom code. For example, I have a lunaryorn-simple library which contains many small helper functions for editing. It sits in the lisp/ subdirectory of my Emacs directory and is never installed with the package manager, but use-package lets me configure as if it were:
+
+#+BEGIN_SRC emacs-lisp :results none
+(use-package lunaryorn-simple
+  :load-path "lisp/"
+  :bind (([remap kill-whole-line]        . lunaryorn-smart-kill-whole-line)
+         ([remap move-beginning-of-line] . lunaryorn-back-to-indentation-or-beginning-of-line)
+         …
+         ("C-c u d"                      . lunaryorn-insert-current-date)))
+#+END_SRC
+
+The only special thing is :load-path, which adds the containing directory to Emacs’ load-path so that it can find my personal library. But I don’t need to care for autoloads and lazy loading: use-package automatically adds autoloads for all commands bound to keys in :bind. My library is loaded lazily when I invoke any of these commands, just like a regular package installed via the package manager.
+With this feature I can keep my init file (almost) free of any code. It only contains package configuration now. My custom code is neatly tucked away in separate libraries that look just like regular Emacs packages. This does not only make my configuration easier to understand, it has also fundamentally changed my package development workflow.
+Most of my packages are born out of small customisation and personal functions that grow as I extend them, until they are large and stable enough to be released as separate packages. Previously, making a package out of these was painful: I had to manually extract all the required code form my init file and fix various compiler warnings and errors, naturally making many mistakes on the way.
+Now I start with a separate library right away, which is a proper package on its own. All code goes through flycheck to make sure that there are no errors or warnings. Once the package is suitable for an independent release, there’s no special work left: It’s all already there, and all that I still need to do is to move the file to a dedicated repository, add a README, and push it to MELPA. I think you can expect quite some new packages from me over the next time!
+
+********** If - conditional branch
+: If keyword describes the conditions under which to load the library. Condition is nil if that is evaluated with use-package macro does not do anything.
+
+A typical use case is when you switch you can either load the library by the OS that Emacs is running. For example cygwin-mount.el is a library that allows you to interpret the Cygwin path in the Windows of Emacs. If this operation OS is Windows to load only is written as follows.
+
+#+BEGIN_SRC emacs-lisp :results none
+( use-package  Cygwin-Mount 
+  : if  ( eq  System-type  'windows-NT ) 
+  : config 
+  setting of ;; Cygwin-Mount 
+  )
+#+END_SRC
+
+********** idle 
+Idle initialisation
+
+use-package also helps me to keep my Emacs startup fast with “idle initialisation”, which initialises packages after Emacs was started and has been idle for some time. I use this feature mainly for global modes that are slow to load and enable.
+company for instance is a powerful completion package, but it also large and takes time to load and enable. On the other hand, completion is not so important for me that I need it immediately, so I delay its initialisation:
+(use-package company
+  :ensure t
+  :defer t
+  :idle (global-company-mode))
+With this configuration global-company-mode is delayed until Emacs has been idle. As a result, Emacs starts faster: Packages of less importance do not contribute to startup time anymore. They are initialised later, when Emacs doesn’t have to do anything else anyway.
+
 ********* Elpa
 ********** to uprade all packages
 issue this:
@@ -28321,10 +28511,10 @@ use this function (stick it in your config file)
  I have this set to <f7>:
  (global-set-key (kbd "<f7>") 'minimap-toggle)
 
-********* YASnippet
+********* TODO yasnippet
 ********** install and configure Yasnippet
+*********** melpa install 
 The best way to install is through the emacs package manager, if not you need to initialize yas/root-directory. 
-
 #+BEGIN_SRC emacs-lisp
 (require 'yasnippet)
 (setq yas-snippet-dirs
@@ -28333,8 +28523,57 @@ The best way to install is through the emacs package manager, if not you need to
         ))
 (yas-global-mode 1)
 #+END_SRC
-
 !note!-the yas-snippet-dirs option is used to specify where the directories are located.
+*********** where do snippets appear and when (yas modes)
+this is set by the name of the folder (in your custom snippet folder defined in the `yas-snippet-dirs`
+₆In example₆ to get snippets to appear in ess-mode (r and sas snippets) you would create a folder named:
+
+file:~/.emacs.d/snippets/ess-mode/
+
+and put all you .snippets there
+
+you can use folder names like org-mode, python-mode etc etc.
+
+%Tip- you can get other modes snippets in you current mode by using the following tips:%
+
+1. use a `text-mode` folder and this will make sure it will appear in many modes
+
+2. issue the command `yas-activate-extra-mode` which can activate arbitrary "yas-only" modes corresponding to the names of snippet subdirectories, and not necessarily actual major-mode names
+₆In example₆ if I am in org-mode and issue `yas-activate-extra-mode` >> ess-mode. I will get my ess snippets in org-mode 
+
+3. use a folder named `fundamental-mode` and add this snippet to you config
+
+https://github.com/capitaomorte/yasnippet/issues/557
+
+#+BEGIN_SRC emacs-lisp :results none
+(add-hook 'yas-minor-mode-hook
+          (lambda ()
+            (yas-activate-extra-mode 'fundamental-mode)))
+#+END_SRC
+
+this will load all `fundamental-mode` snippet 
+
+4. The .yas-parents file
+
+It's very useful to have certain modes share snippets between themselves. To do this, choose a mode subdirectory and place a `.yas-parents` file  containing a whitespace-separated list of other mode names.
+When you reload those modes become parents of the original mode.
+
+#+BEGIN_EXAMPLE
+
+|-- c-mode
+|   |-- .yas-parents    # contains "cc-mode text-mode"
+|   `-- printf
+|-- cc-mode
+|   |-- for
+|   `-- while
+|-- java-mode
+|   |-- .yas-parents    # contains "cc-mode text-mode"
+|   `-- println
+`-- text-mode
+    |-- email
+    `-- time
+#+END_EXAMPLE
+
 
 ********** Quickly finding snippets
 
@@ -28366,6 +28605,13 @@ test$1
 test$2
 etc
 #+END_SRC
+
+The `name` of the snippet, function is more like a comment than anything else.
+On the other hand, `key` is very important: it's what I have to insert in the buffer to get the expansion with M-x yas-expand.
+Everything after # -- is the snippet body.
+This particular snippet has two fields, in places of $1 and $2.
+$0 is where the point will be when the snippet expansion is finished
+As I expand, pressing TAB will move from field to field until the expansion is finished.
 
 ********** Expand Whole hyphenated-word as Input
 
@@ -28965,10 +29211,12 @@ Then you can use TAB to go to complete e-mail addresses in the header fields.
 ********* edit sever 
 in the config add config options
 then in chrome in editable areas launch with edit with Emacs 
-********* Hydra
+********* TODO Hydra
 ********** The full defhydra syntax
 *********** base 
 http://oremacs.com/2015/02/02/colorful-hydrae/
+
+https://github.com/abo-abo/hydra
 
 Note that `defhydra` looks intentionally like a defun, ₆In example₆ :
 
@@ -29033,6 +29281,27 @@ optional hint
 optional plist.
 Again, the plist recognizes only :color currently. The color is inherited from the body, if you don't specify it. In turn, the body color is red if you dont specify it.
 
+*********** colors 
+Since version 0.5.0, Hydra's heads all have a color associated with them:
+
+`red` (default) means the calling this head will *not* vanquish the Hydra
+`blue` means that the Hydra will be vanquished after calling this head
+`amaranth` Hydras with amaranth body are impossible to quit with any binding except a blue head. A check for at least one blue head exists in defhydra, so that you don't get stuck by accident.
+
+remembert that heads can inherit the color from the body, the following is equivalent:
+
+#+BEGIN_SRC emacs-lisp :results none
+(global-set-key
+ (kbd "C-c C-v")
+ (defhydra toggle (:color blue)
+   "toggle"
+   ("a" abbrev-mode "abbrev")
+   ("d" toggle-debug-on-error "debug")
+   ("f" auto-fill-mode "fill")
+   ("t" toggle-truncate-lines "truncate")
+   ("w" whitespace-mode "whitespace")
+   ("q" nil "cancel")))
+#+END_SRC
 
 ********** Hydra example and recipes
 *********** helm-related functions
@@ -29110,7 +29379,6 @@ For that case, I would get the hint immediately after C-M-s and would be able to
 
 The code above would give the error "Key sequence C-M-s z starts with non-prefix key C-M-s". So you can pick the method that you prefer, the choice is there.
 
-
 *********** gnus
 
 #+BEGIN_EXAMPLE
@@ -29125,50 +29393,6 @@ The code above would give the error "Key sequence C-M-s z starts with non-prefix
   ("q" nil "quit"))
 (define-key gnus-summary-mode-map "r" 'hydra-gnus-reply/body)
 #+END_EXAMPLE
-*********** The ultimate window switching setup
-
-#+BEGIN_EXAMPLE
-(global-set-key
- (kbd "C-M-o")
- (defhydra hydra-window ()
-   "window"
-   ("h" windmove-left)
-   ("j" windmove-down)
-   ("k" windmove-up)
-   ("l" windmove-right)
-   ("a" (lambda ()
-          (interactive)
-          (ace-window 1)
-          (add-hook 'ace-window-end-once-hook
-                    'hydra-window/body))
-        "ace")
-   ("v" (lambda ()
-          (interactive)
-          (split-window-right)
-          (windmove-right))
-        "vert")
-   ("x" (lambda ()
-          (interactive)
-          (split-window-below)
-          (windmove-down))
-        "horz")
-   ("s" (lambda ()
-          (interactive)
-          (ace-window 4)
-          (add-hook 'ace-window-end-once-hook
-                    'hydra-window/body))
-        "swap")
-   ("d" (lambda ()
-          (interactive)
-          (ace-window 16)
-          (add-hook 'ace-window-end-once-hook
-                    'hydra-window/body))
-        "del")
-   ("o" delete-other-windows "1" :color blue)
-   ("i" ace-maximize-window "a1" :color blue)
-   ("q" nil "cancel")))
-#+END_EXAMPLE
-
 ********* ace-isearch
 ********** install 
 https://github.com/tam17aki/ace-isearch	  

@@ -111,7 +111,6 @@ teom at 50 celsius  may over measure and introduce noise to pm25.
 look at average residual in monitors 
 put that in the paper teom is limited
 *** TODO talking to alexei about size distribution
-
 tried latley:
 kernel machine approach
 PLS
@@ -119,8 +118,12 @@ a mean 20km mpm excluding the actual monitoring data. works very well as predict
 Tried prev/post AOD as predictor
 tried mean of surrounding AOD as predictor. works almost as well as monitor AOD but both linerly don't improve much in model.
 both didn't imporve R2 by much 
+code 
+check email from 26.1.2015 joel 
+all vars in log scale , check which one was dropped 
 
-Lasso 
+*** NEXT ask joel
+even simple pm-aod models show this sharp CV drop
 
 ** TODO France temperature paper
    :PROPERTIES:
@@ -297,6 +300,8 @@ later if we get grant money we can build a server+NAS some centralized location
 **** kees points
 swiss 200m resolution point source emision
 
+*** NEXT Kees talk
+**** ask about type I vs type II for noise measurments
 
 ** italy temperature models
 *** Ideas
@@ -1133,6 +1138,39 @@ doch shemot with rachel
 by years with no emails!
 one that shivok will send the email for us
 go to mador rishom for poetntial canidates- revital zamir
+** TODO ask tal about layers from MAPI
+** TODO Ask marina zusman $$$ back on sept and feb meetins
+
+** TODO meeting with Alexei
+*** TODO PM10 and Pm25
+the differences are huge
+over fitting isn't the issue since also in a prasimonous model we still get this drop
+histogram on dust days of AOD
+raw lm corr aod and pm25/10 on dust vs non dust days 
+look at time series analysis
+raw correlation with regions
+in general raw correlations aren't great- 0.001-0.3 in good areas
+there are specifc station in speific seasons that have a base correlation of 0
+UN and adjancecny mask werent helping that much
+-alexei raw correlations in california from slides
+we saw in table and el segundo bad correlations in the range that we saw, whats the pysical explenation for this
+-lets take one year 2004 and focus on this. we will send you pm data. lets try to debug this
+issues we hypothesis: humidity and salt along the near shore area.
+
+if time available: 
+talk about Austraila
+talk about ratio and sea and land preformance
+composition 
+
+** TODO meytar schedule
+in R- gbm analylis- check model with only highest variables.
+1.ratio
+2.france PM
+3.cooperation with Austrailia
+4.data fusion
+5.composition 
+
+
 ** TODO lab website
 See what shiran has made out of it 
 * long term Misc
