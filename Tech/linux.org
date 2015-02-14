@@ -29211,7 +29211,7 @@ Then you can use TAB to go to complete e-mail addresses in the header fields.
 ********* edit sever 
 in the config add config options
 then in chrome in editable areas launch with edit with Emacs 
-********* TODO Hydra
+********* Hydra
 ********** The full defhydra syntax
 *********** base 
 http://oremacs.com/2015/02/02/colorful-hydrae/
@@ -29281,6 +29281,18 @@ optional hint
 optional plist.
 Again, the plist recognizes only :color currently. The color is inherited from the body, if you don't specify it. In turn, the body color is red if you dont specify it.
 
+*********** launch a different hydra from a hydra
+to do so you would want to issue the name/body command of the new hydra, ₆In example₆
+#+BEGIN_SRC emacs-lisp :results none
+(global-set-key
+ (kbd "C-M-o")
+ (defhydra hydra-org-edit ()
+   "yas command "
+   ("t" org-insert-todo-heading-respect-content "insert TODO" :color blue)
+   ("d" org-cut-subtree  "org cut" :color blue)
+   ("x" hydra-org2/body   "ins date" :color blue)
+#+END_SRC
+here we call on a different hydra `hydra-org/body` via keybind x
 *********** colors 
 Since version 0.5.0, Hydra's heads all have a color associated with them:
 

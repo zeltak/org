@@ -168,7 +168,7 @@ dim (DATA)
 
 *** Head/Tail
 show the first/last parts of a vector/matrix
-%Tip one can use the n=X option to specify the amount shows%
+Tip one can use the n=X option to specify the amount shows
 
 #+begin_src R
 head(VECTOR)
@@ -8458,6 +8458,22 @@ DT[, summary(lm(Rev~predbrand))$r.squared]
 #+end_src
 
 **** regression by monitor
+exmaple 1:
+
+#+BEGIN_SRC R
+################# clean BAD STN PM25 and check if improved model?
+raWDaf <- ddply(m1.all, c("stn","m"), 
+      function(x) {
+        mod1 <- lm(PM25 ~ aod, data=x)
+        data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                   nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+#+END_SRC
+
+example 2
+
 #+begin_src R
  # by mon
  monsummary <- ddply(pm1[yr > 2006], .(mon), function(df) {
