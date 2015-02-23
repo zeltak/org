@@ -188,6 +188,46 @@ Set the TARGET LAYER = Taiwan_CARMA_Xian80.shp, set the JOIN LAYER = TW_POP_NEW
 Click on the OUTPUT SHAPEFILE BROWSE button to set output location and filename, like: "test_join", and set encoding = big5, then click SAVE
 Click OK and you will be prompted to add the new join shapefile to the TOC (table of contents), click YES
 Open the Attribute Table of the new join layer, "test_join." Scroll to the right, and you should now see that the all the columns from the TW_POP_NEW layer have been added to the table, and each point feature now includes the attributes for the polygon that the point was located in.
+*** Cut/Split a polygon feature with a digitized line in QGIS
+%Tip-it's important to start and end your splitting line outside of the target layer%
+
+Start QGIS 2.0. Load and display a vector layer e.g. mask.shp.
+
+Select View | Toolbars. Toggle on Advanced Digitizing.
+
+The Advanced Digitizing tool bar is displayed.
+
+In the Layers pane, select the polygon layer. Then select Layer | Toggle Editing.
+
+The polygon layer is enabled for editing.
+Click the Split Feature icon.
+
+Digitize a line over a polygon feature.
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-02-19 09:05:02
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2015/screenshot_2015-02-19_09:05:02.png]]s
+
+Right click to complete the line.
+
+The polygon feature is divided into parts according to the digitized line.
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-02-19 09:05:13
+#+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2015/screenshot_2015-02-19_09:05:13.png]]
+
+To make the change permanent, toggle off Editing mode.
+
+** selection
+*** select by expression
+**** select squares above X size
+#+BEGIN_EXAMPLE
+$area / $perimeter > 400
+#other example
+abs(($perimeter / 4) - sqrt($area)) < 22
+#+END_EXAMPLE
+
 ** Expressions
 *** base
 QGIS has some support for parsing of SQL-like expressions. Only a small subset of SQL syntax is supported. The expressions can be evaluated either as boolean predicates (returning True or False) or as functions (returning a scalar value).
