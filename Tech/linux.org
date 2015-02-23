@@ -21140,6 +21140,51 @@ Developing your own citation styles is also possible.
 #+attr_html: :width 300px
  [[/home/zeltak/org/attach/images_2015/screenshot_2015-02-02_11:13:51.png]]
 
+**** Why does “Creating Citation…” appear when I want to add a reference?
+
+https://www.docear.org/faqs/why-does-creating-citation-not-disappear-when-i-want-to-add-a-reference/
+
+If you add a new reference in your Word document and receive the message “Creating Citation…” (see image below), there are three potential reasons.
+1. You tried to add a reference at an invalid location. For instance, Docear4Word cannot insert references in footnotes or text-fields. If you try to do, the message “Creating Citation…” will appear. We know, this is annoying, and we are planning to fix it, but we cannot yet say when this will have enough time for this. For now, the only solution is to not add a reference in a footnote or text-field, or to add it manually, i.e. to just write the string such as [1] or Smith (2012) manually.
+
+2. You activated “track changes” in MS Word. In this case, Docear cannot add new references and the “Creating Citation…” message appears. We plan to fix this issue, but we cannot tell you when this will be. Meanwhile, the best workaround is to accept all changes in MS Word, and then to add the reference. Alternatively, open a new document, add the reference in that document, and then copy the reference to your working document. It might be that the numbering of the references is not correct, and the reference is not added to your bibliography. To correct this, click the Docear4Word “refresh” icon after you are done with your work and accepted all changes.
+
+
+
+3.  The problem might also be caused by a corrupted reference. Docear4Word adds reference data such as author, title, etc. as invisible field codes to your document. If this reference data is modified for whatever reason, the reference becomes corrupted and Docear4Word might have troubles to add further references, which results in the “Creating Citation…” error. The below picture illustrates the problem: If you do a right mouse click on a reference and select “Toggle Field Codes”, you will see the exact code that Docear4Word added to your document (do a right mouse click on the code and select “Toggle Field Codes” to switch back to the “normal” view).
+
+
+
+Assuming that some field code of a reference has been changed, there is only one solution: You need to find the corrupted reference, delete it, and add the reference again. This can only be accomplished by a systematic trial-and-error search. We would suggest one of the following two options to find the corrputed reference
+
+Option i)
+
+Create a backup of your document
+Open your document in MS Word, ensure that the cursor is at the beginning of your document
+Click the “Next” button in Docear4Word (this will select your first/next reference in the text)
+
+ Click the “Edit Reference” button.
+
+ If the normal dialog appears to add/edit references, your currently selected reference is ok. Repeat steps c. and d. until the following error message appears.
+
+ The message indicates that something is wrong with the reference. Hence, you need to replace it. In the dialog, click “No”. Then, remove the reference from the text.
+Try to add a new reference. If still the message “Creating Citation…” appears, there are more corrupt references. Identify them as described, delete them all and when you deleted them all, you can add the references again.
+Option ii)
+
+Create a copy of your document
+Open that copy in MS Word
+Select about half your text (e.g. all text including images, tables, etc., on pages 1-23 if your document contains 46 pages)
+Cut the text (CTRL+X)
+Try to add a reference
+If you still receive the error, start again with c. (select half your remaining text, cut it, until you can add a reference)
+If you can add a reference, this means that the corrupted reference was in the text that you just cut. Continue with h.
+Select all the remaining text in your document and delete it (you don’t need it any more for the coming analysis because it only contains valid references).
+Paste (CTRL+V) the text that you previously cut, so it’s back in your document (and contains the corrupted reference)
+Again select half your text and cut it, until you can add a reference, paste the remaining text back to your document, etc. and repeat the process until you have only a single reference left in your text
+This single reference is the corrupted one.
+Open your original document, find the location were the corrupted reference is, delete it, and re-add it with the “Add Reference” icon in Docear4Word.
+Now, everything should be fine
+If none of the proposed solution works, please send us your BibTeX file and your MS Word document (either the original, or an example file) to help@docear.org. 
 *** cb2Bib
 http://www.molspaces.com/d_cb2bib-overview.php
 
