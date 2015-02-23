@@ -7761,6 +7761,17 @@ x <- citation()
 toBibtex(x)
 #+END_SRC
 
+** calculate RMSPE per group 
+#+BEGIN_SRC R
+rmse.p10 <- ddply(m1.all, c("stn"), 
+      function(x) {
+        sqrt(mean((x$PM10-x$pred.m1)^2))
+                      })
+rmse.p10<-as.data.table(rmse.p10)
+setnames(rmse.p10,"V1","RMSPE")
+setkey(rmse.p10,RMSPE)
+rmse.p10
+#+END_SRC
 * Packages specific
 ** Hemisc
 *** mtable
@@ -9096,6 +9107,26 @@ m2_agg<- ggplot(m2_agg, aes(long_aod,lat_aod, color = LTPM.m2)) +
 ggsave(file="/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/LTPM.m2.png")
 #+end_src
 #+END_EXAMPLE
+*** Color
+**** add custom color ramp
+#+BEGIN_SRC R
+# The palette with grey:
+cbPalette <- c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")
+
+#predperyear
+m3d_agg <- (xplot[, list(LTPM =mean(aod, na.rm = TRUE), 
+                        utmx = x_aod_ITM[1], #use the first long and lat (by aodid)
+                        utmy = y_aod_ITM[1]),by = aodid])  
+P1 <- ggplot(m3d_agg, aes(utmx, utmy, color = LTPM)) + 
+  geom_point(size = 4, shape = 15) + 
+  xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
+  scale_colour_gradientn("long term PM2.5 prediction-2013", colours = cbPalette) + #c("purple", "blue", "white", "red", "orange")) + 
+  theme_bw() + 
+  ggtitle("Long term predictions")
+P1
+
+#+END_SRC
+
 *** ggmap
 **** create map rectangle (bounding box) by markingpoints
 
@@ -9859,7 +9890,9 @@ $Note the use of the '.' pronoun to refer to the data in the current group.$
 
 #+BEGIN_SRC R
 library(dplyr)
-models <- mtcars %>% group_by(cyl) %>% do(lm = lm(mpg ~ wt, data = .))
+models <- mtcars %>%
+group_by(cyl) %>%
+do(lm = lm(mpg ~ wt, data = .))
 models %>% summarise(rsq = summary(lm)$r.squared)
 #+END_SRC
 

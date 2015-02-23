@@ -703,7 +703,7 @@ PM25.m1 <- merge(PM25.m1, PM10[,list(stn,day,m1.mpm10 )] , all.x = T)
 
 
 #save mod 1
-saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.PM25.TR.rds")
+saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.TR.PM25.rds")
 
 
 ########### join aod to PM10
@@ -743,4 +743,4 @@ setkey(PM10.m1,stn,day)
 PM10.m1 <- merge(PM10.m1, PM10[,list(stn,day,m1.mpm10 )] , all.x = T)
 
 #save mod 1
-saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.PM10.TR.rds")
+saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.TR.PM10.rds")

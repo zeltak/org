@@ -21,9 +21,9 @@ library(DataCombine)
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
-m1.all <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.PM25.AQ.rds")
+m1.all <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.AQ.PM25.rds")
 #take out station with wildly diff PM from surrounding stations
-neveruse <- c("TMM","ASH","KV9","BIL","REM")
+neveruse <- c("REM","HEF","AGR") 
 m1.all <- m1.all[!stn %in% neveruse]
 
 # take out stn with co located PM10/25 with very high ratios
@@ -131,5 +131,11 @@ write.csv(resmon,"~/ZH_tmp/resmon.csv")
 summary(m1.all)
 m1.all<- m1.all[!is.na(pbldag)]
 
-saveRDS(m1.all,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1C.PM25.AQ.rds")
+saveRDS(m1.all,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1C.AQ.PM25.rds")
+
+
+
+
+
+
 

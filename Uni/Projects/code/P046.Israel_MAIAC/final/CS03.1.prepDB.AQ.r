@@ -614,6 +614,31 @@ m9.m2<-m9.m2[numadata < 1000, flag1000 :=1]
 m9.m2$flag500<-0
 m9.m2<-m9.m2[numadata < 500, flag500 :=1]
 
+#prepare mod2 scale
+
+m9.m2[,tden.s:= scale(tden)]
+m9.m2[,elev.s:= scale(elev)]
+m9.m2[,pden.s:= scale(pden)]
+m9.m2[,dist2A1.s:= scale(dist2A1)]
+m9.m2[,dist2water.s:= scale(dist2water)]
+m9.m2[,dist2rail.s:= scale(dist2rail)]
+m9.m2[,Dist2road.s:= scale(Dist2road)]
+m9.m2[,ndvi.s:= scale(ndvi)]
+m9.m2[,MeanPbl.s:= scale(MeanPbl)]
+m9.m2[,p_ind.s:= scale(p_ind)]
+m9.m2[,p_for.s:= scale(p_for)]
+m9.m2[,p_farm.s:= scale(p_farm)]
+m9.m2[,p_dos.s:= scale(p_dos)]
+m9.m2[,p_dev.s:= scale(p_dev)]
+m9.m2[,p_os.s:= scale(p_os)]
+m9.m2[,tempa.s:= scale(Temp.im)]
+m9.m2[,WDa.s:= scale(WD.im)]
+m9.m2[,WSa.s:= scale(WS.im)]
+m9.m2[,RHa.s:= scale(RH.im)]
+m9.m2[,Raina.s:= scale(Rain.im)]
+m9.m2[,NOa.s:= scale(NO.im)]
+m9.m2[,O3a.s:= scale(O3.im)]
+m9.m2[,SO2a.s:= scale(SO2.im)]
 saveRDS(m9.m2,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod2.AQ.rds")
 
 
@@ -703,7 +728,7 @@ PM25.m1 <- merge(PM25.m1, PM10[,list(stn,day,m1.mpm10 )] , all.x = T)
 
 
 #save mod 1
-saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.PM25.AQ.rds")
+saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.AQ.PM25.rds")
 
 
 ########### join aod to PM10
@@ -743,4 +768,4 @@ setkey(PM10.m1,stn,day)
 PM10.m1 <- merge(PM10.m1, PM10[,list(stn,day,m1.mpm10 )] , all.x = T)
 
 #save mod 1
-saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.PM10.AQ.rds")
+saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1.AQ.PM10.rds")
