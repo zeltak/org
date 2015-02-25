@@ -2498,8 +2498,63 @@ of, the portion after the slash, e.g: 12345678
 archive it knows about:
  sudo apt-get update
 
-*** Tips
+*** applications
+**** install Emacs 24.4 from source
+http://ubuntuhandbook.org/index.php/2014/10/emacs-24-4-released-install-in-ubuntu-14-04/
 
+1. If have the old Emacs 24.3 installed, you may first remove it from Ubuntu Software Center so that you can install the new version over it.
+
+2. Press Ctrl+Alt+T on keyboard to open terminal, or open it from the Unity Dash.
+
+Open Terminal to run commands
+
+3. Run command below to install the build-essential:
+
+sudo apt-get install build-essential
+4. Install the required dependencies:
+
+sudo apt-get build-dep emacs24
+While the installing process, you’ll be asked to configure the Postfix.
+
+5. Now download Emacs 24.4 from its official FTP download page.
+
+Emacs FTP download Page
+
+6. Extract the source and go into the result folder in terminal:
+
+cd ~/Downloads && tar -xf emacs-24.4.tar.* && cd emacs-24.4
+7. Finally compile the package by running commands below one by one.
+
+./configure
+
+make
+
+sudo make install
+Once done, you should be able to launch Emacs by running emacs or emacs-24.4 in terminal and lock the shortcut to the Unity Launcher.
+
+To create a launcher for Emacs 24.4. Thanks to Emad Khoury, run command to create a .desktop file and edit it with Gedit text editor:
+
+sudo gedit /usr/share/applications/Emacs-24.desktop
+When the file opens, paste below into it and save the file.
+
+#+BEGIN_EXAMPLE
+[Desktop Entry]
+Version=1.0
+Name=Emacs-24
+Exec=env UBUNTU_MENUPROXY=0 /usr/local/bin/emacs
+Terminal=false
+Icon=emacs
+Type=Application
+Categories=IDE
+X-Ayatana-Desktop-Shortcuts=NewWindow
+[NewWindow Shortcut Group]
+Name=New Window
+TargetEnvironment=Unity
+#+END_EXAMPLE
+
+
+
+*** Tips
 **** Remove only open office in ubuntu
 
 Remove only open office in ubuntu
@@ -21124,8 +21179,9 @@ select the keywords you want and right click> manage keywords
 ***** cleanup entries/rename pdf
 this tool (under tools>cleanup entries)
 **** read (TODO) system
-mark in notes with TODO
-this will auto move it to the TODO dynamic group 
+I create a dynamic group that looks for TODO in 'keywords' field
+when I add a TODO string to that field it will auto move it to the TODO dynamic group 
+
 *** docear4word
 **** install custom styles
 Docear4Word is based on the citation style language which is also used by many other popular reference mangers (e.g. Zotero, Mendeley, and Papers).
