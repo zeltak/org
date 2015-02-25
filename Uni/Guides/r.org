@@ -7772,6 +7772,15 @@ setnames(rmse.p10,"V1","RMSPE")
 setkey(rmse.p10,RMSPE)
 rmse.p10
 #+END_SRC
+** load a file only if dosent exist
+#+BEGIN_SRC R
+# load mod2 if not already loaded
+if(!exists("m2.all")){
+m2.all <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod2.AQ.rds")
+m2.all <- m2.all[!m2.all$aodid %in% badaod$aodid]
+}
+#+END_SRC
+
 * Packages specific
 ** Hemisc
 *** mtable

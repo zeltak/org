@@ -22,7 +22,12 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
 
-m1.all <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1C.AQ.PM25.rds")
+m1.all <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod1C.AQ.PM10.rds")
+m1.all$aodid<-paste(m1.all$long_aod,m1.all$lat_aod,sep="-")
+badaod<-fread("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN007_Key_tables/bad_AOD_IL.csv")
+badaod<-select(badaod,aodid)
+m1.all <- m1.all[!m1.all$aodid %in% badaod$aodid]
+
 
 #-------------------->> RES TABLE
 res <- matrix(nrow=1, ncol=48)
@@ -36,201 +41,45 @@ colnames(res) <- c(
 ,"m3.t31","m3.t33" #mod3 tests
 ,"m3.R2","m3.rmspe","m3.R2.space","m3.R2.time","m3.rmspe.space" #mod3
 ,"m3.I","m3.Ise","m3.slope","m3.slopese")#Extra
-res$type <- c("PM25")
+res$type <- c("PM10")
 
-#for paper raw
-m1.formula <- as.formula(PM25~ aod+(1+aod|day))
-m1_sc <- lmer(m1.formula,data=m1.all,weights=normwt)
-m1.all[,pred.m1 := NULL]
-m1.all$pred.m1 <- predict(m1_sc)
-print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
-res[res$type=="PM25", 'm1.raw'] <- print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
-
-
-#spatial
-spatialall<-m1.all %>%
-    group_by(stn) %>%
-    summarise(barpm = mean(PM25, na.rm=TRUE), barpred = mean(pred.m1, na.rm=TRUE)) 
-m1.fit.all.s <- lm(barpm ~ barpred, data=spatialall)
-print(summary(lm(barpm ~ barpred, data=spatialall))$r.squared)
-res[res$type=="PM25", 'm1.raw.space'] <- print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
-
-#temporal
-tempoall<-left_join(m1.all,spatialall)
-tempoall$delpm <-tempoall$PM25-tempoall$barpm
-tempoall$delpred <-tempoall$pred.m1-tempoall$barpred
-mod_temporal <- lm(delpm ~ delpred, data=tempoall)
-res[res$type=="PM25", 'm1.raw.time'] <-print(summary(lm(delpm ~ delpred, data=tempoall))$r.squared)
-
-
-
-#for paper space
-m1.formula <- as.formula(PM25~ aod
-                           +elev.s+tden.s
-                        +pden.s
-                        +dist2rail.s +dist2water.s +dist2A1.s+Dist2road.s
-                        +p_os.s+p_dev.s+p_dos.s+p_farm.s+p_for.s+p_ind.s 
-                           +(1+aod|day))
-m1_sc <- lmer(m1.formula,data=m1.all)
-m1.all[,pred.m1 := NULL]
-m1.all$pred.m1 <- predict(m1_sc)
-print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
-res[res$type=="PM25", 'm1.space'] <- print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
-
-#spatial
-spatialall<-m1.all %>%
-    group_by(stn) %>%
-    summarise(barpm = mean(PM25, na.rm=TRUE), barpred = mean(pred.m1, na.rm=TRUE)) 
-m1.fit.all.s <- lm(barpm ~ barpred, data=spatialall)
-res[res$type=="PM25", 'm1.space.space'] <-print(summary(lm(barpm ~ barpred, data=spatialall))$r.squared)
-
-#temporal
-tempoall<-left_join(m1.all,spatialall)
-tempoall$delpm <-tempoall$PM25-tempoall$barpm
-tempoall$delpred <-tempoall$pred.m1-tempoall$barpred
-mod_temporal <- lm(delpm ~ delpred, data=tempoall)
-res[res$type=="PM25", 'm1.space.time'] <-print(summary(lm(delpm ~ delpred, data=tempoall))$r.squared)
-
-
-
-#for paper temporal
-m1.formula <- as.formula(PM25~ aod
-                          +tempa.s+WSa.s
-                        +pbldag
-                        +RHa.s+O3a.s+Raina.s+NOa.s 
-                         +ndvi.s 
-                           +(1+aod|day))
-m1_sc <- lmer(m1.formula,data=m1.all)
-m1.all[,pred.m1 := NULL]
-m1.all$pred.m1 <- predict(m1_sc)
-res[res$type=="PM25", 'm1.time'] <- print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
-#spatial
-spatialall<-m1.all %>%
-    group_by(stn) %>%
-    summarise(barpm = mean(PM25, na.rm=TRUE), barpred = mean(pred.m1, na.rm=TRUE)) 
-m1.fit.all.s <- lm(barpm ~ barpred, data=spatialall)
-res[res$type=="PM25", 'm1.time.space'] <- print(summary(lm(barpm ~ barpred, data=spatialall))$r.squared)
-#temporal
-tempoall<-left_join(m1.all,spatialall)
-tempoall$delpm <-tempoall$PM25-tempoall$barpm
-tempoall$delpred <-tempoall$pred.m1-tempoall$barpred
-mod_temporal <- lm(delpm ~ delpred, data=tempoall)
-res[res$type=="PM25", 'm1.time.time'] <- print(summary(lm(delpm ~ delpred, data=tempoall))$r.squared)
-
-
-#for paper noaod
-m1.formula <- as.formula(PM25~ +tempa.s+WSa.s
-                        +pbldag
-                        +RHa.s+O3a.s+Raina.s+NOa.s 
-                         +ndvi.s 
-                        +elev.s+tden.s
-                        +pden.s
-                        +dist2rail.s +dist2water.s +dist2A1.s+Dist2road.s
-                        +p_os.s+p_dev.s+p_dos.s+p_farm.s+p_for.s+p_ind.s 
-                           +(1|day))
-m1_sc <- lmer(m1.formula,data=m1.all)
-m1.all[,pred.m1 := NULL]
-m1.all$pred.m1 <- predict(m1_sc)
-res[res$type=="PM25", 'm1.noaod'] <- print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
-#spatial
-spatialall<-m1.all %>%
-    group_by(stn) %>%
-    summarise(barpm = mean(PM25, na.rm=TRUE), barpred = mean(pred.m1, na.rm=TRUE)) 
-m1.fit.all.s <- lm(barpm ~ barpred, data=spatialall)
-res[res$type=="PM25", 'm1.noaod.space'] <- print(summary(lm(barpm ~ barpred, data=spatialall))$r.squared)
-#temporal
-tempoall<-left_join(m1.all,spatialall)
-tempoall$delpm <-tempoall$PM25-tempoall$barpm
-tempoall$delpred <-tempoall$pred.m1-tempoall$barpred
-mod_temporal <- lm(delpm ~ delpred, data=tempoall)
-res[res$type=="PM25", 'm1.noaod.time'] <- print(summary(lm(delpm ~ delpred, data=tempoall))$r.squared)
-
-# #for paper space-temporal
-# m1.formula <- as.formula(PM25~ tempa.s
-#                         +pbldag
-#                           +elev.s+tden.s
-#                         +pden.s
-#                         +ndvi.s 
-#                       +p_os.s
-#                       +(1|day))
-# m1_sc <- lmer(m1.formula,data=m1.all,weights=normwt)
-# m1.all[,pred.m1 := NULL]
-# m1.all$pred.m1 <- predict(m1_sc)
-# print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
-# #spatial
-# spatialall<-m1.all %>%
-#     group_by(stn) %>%
-#     summarise(barpm = mean(PM25, na.rm=TRUE), barpred = mean(pred.m1, na.rm=TRUE)) 
-# m1.fit.all.s <- lm(barpm ~ barpred, data=spatialall)
-# print(summary(lm(barpm ~ barpred, data=spatialall))$r.squared)
-# #temporal
-# tempoall<-left_join(m1.all,spatialall)
-# tempoall$delpm <-tempoall$PM25-tempoall$barpm
-# tempoall$delpred <-tempoall$pred.m1-tempoall$barpred
-# mod_temporal <- lm(delpm ~ delpred, data=tempoall)
-# print(summary(lm(delpm ~ delpred, data=tempoall))$r.squared)
-
-# 
-# #for data current model
-# m1.formula <- as.formula(PM25~ aod
-#                         +tempa.s+WSa.s
-#                         +pbldag
-#                         +RHa.s+O3a.s+Raina.s+NOa.s 
-#                         +elev.s+tden.s
-#                         +pden.s
-#                         +ndvi.s 
-#                         +dist2rail.s +dist2water.s +dist2A1.s+Dist2road.s
-#                         +p_os.s+p_dev.s+p_dos.s+p_farm.s+p_for.s+p_ind.s  
-#                         +as.factor(season)
-#                         +as.factor(season)*aod
-#                         +aod*lat_aod.x
-#                         +Dust*lat_aod.x
-#                         +pbldag*lat_aod.x
-#                         +(1+aod|day/reg_num)) 
-
-
-#for data
-#m1.formula <- as.formula(PM25~ aod+tempa.s+pbldag+elev.s+tden.s+pden.s+ndvi.s +p_os.s +(1+aod|day/reg_num)) 
-
-
-
-#for data
-m1.formula <- as.formula(PM25~ aod+tempa.s
+#BEST SO FAR
+m1.formula <- as.formula(PM10~ aod+tempa.s
                         +pbldag
                         +RHa.s+O3a.s+Raina.s+NOa.s 
                         +elev.s+tden.s+pden.s+ndvi.s +p_os.s
-                        +dist2rail.s +dist2water.s +dist2A1.s+Dist2road.s
-                       +p_dev.s+p_dos.s+p_farm.s+p_for.s+p_ind.s  
-                       +aod*lat_aod.x
-                       +Dust*lat_aod.x
-                      +pbldag*lat_aod.x
+                        #+dist2rail.s 
+                        +dist2water.s 
+                        #+dist2A1.s+Dist2road.s
+                       #+p_dev.s+p_dos.s+p_farm.s+p_for.s+p_ind.s  
+#                        +aod*lat_aod.x
+#                        +Dust*lat_aod.x
+#                       +pbldag*lat_aod.x
                       +(1+aod|day/reg_num)) 
-
-
 
 m1_sc <- lmer(m1.formula,data=m1.all,weights=normwt)
 m1.all[,pred.m1 := NULL]
 m1.all$pred.m1 <- predict(m1_sc)
-res[res$type=="PM25", 'm1.R2'] <- print(summary(lm(PM25~pred.m1,data=m1.all))$r.squared)
+res[res$type=="PM10", 'm1.R2'] <- print(summary(lm(PM10~pred.m1,data=m1.all))$r.squared)
 #RMSPE
-res[res$type=="PM25", 'm1.rmspe'] <- print(rmse(residuals(m1_sc)))
+res[res$type=="PM10", 'm1.rmspe'] <- print(rmse(residuals(m1_sc)))
 
 #spatial
 spatialall<-m1.all %>%
     group_by(stn) %>%
-    summarise(barpm = mean(PM25, na.rm=TRUE), barpred = mean(pred.m1, na.rm=TRUE)) 
+    summarise(barpm = mean(PM10, na.rm=TRUE), barpred = mean(pred.m1, na.rm=TRUE)) 
 m1.fit.all.s <- lm(barpm ~ barpred, data=spatialall)
-res[res$type=="PM25", 'm1.R2.space'] <-print(summary(lm(barpm ~ barpred, data=spatialall))$r.squared)
-res[res$type=="PM25", 'm1.rmspe.space'] <- print(rmse(residuals(m1.fit.all.s)))
+res[res$type=="PM10", 'm1.R2.space'] <-print(summary(lm(barpm ~ barpred, data=spatialall))$r.squared)
+res[res$type=="PM10", 'm1.rmspe.space'] <- print(rmse(residuals(m1.fit.all.s)))
        
 #temporal
 tempoall<-left_join(m1.all,spatialall)
-tempoall$delpm <-tempoall$PM25-tempoall$barpm
+tempoall$delpm <-tempoall$PM10-tempoall$barpm
 tempoall$delpred <-tempoall$pred.m1-tempoall$barpred
 mod_temporal <- lm(delpm ~ delpred, data=tempoall)
-res[res$type=="PM25", 'm1.R2.time']<- print(summary(lm(delpm ~ delpred, data=tempoall))$r.squared)
+res[res$type=="PM10", 'm1.R2.time']<- print(summary(lm(delpm ~ delpred, data=tempoall))$r.squared)
 
-saveRDS(m1.all,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1C.AQ.PM25.pred.rds")
+saveRDS(m1.all,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod1C.AQ.PM10.pred.rds")
 
 #---------------->>>> CV
 #s1
@@ -307,44 +156,44 @@ test_s10$iter<-"s10"
 #BIND 1 dataset
 m1.all.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s6,test_s7,test_s8,test_s9, test_s10))
 #m1.all.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s8,test_s9))
-saveRDS(m1.all.cv,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1cv.AQ.PM25.rds")
+saveRDS(m1.all.cv,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod1cv.AQ.PM10.rds")
 # cleanup (remove from WS) objects from CV
 #rm(list = ls(pattern = "train_|test_"))
 #table updates
-m1.fit.all.cv<-lm(PM25~pred.m1.cv,data=m1.all.cv)
-res[res$type=="PM25", 'm1cv.R2'] <- print(summary(lm(PM25~pred.m1.cv,data=m1.all.cv))$r.squared)
-res[res$type=="PM25", 'm1cv.I'] <-print(summary(lm(PM25~pred.m1.cv,data=m1.all.cv))$coef[1,1])
-res[res$type=="PM25", 'm1cv.Ise'] <-print(summary(lm(PM25~pred.m1.cv,data=m1.all.cv))$coef[1,2])
-res[res$type=="PM25", 'm1cv.slope'] <-print(summary(lm(PM25~pred.m1.cv,data=m1.all.cv))$coef[2,1])
-res[res$type=="PM25", 'm1cv.slopese'] <-print(summary(lm(PM25~pred.m1.cv,data=m1.all.cv))$coef[2,2])
+m1.fit.all.cv<-lm(PM10~pred.m1.cv,data=m1.all.cv)
+res[res$type=="PM10", 'm1cv.R2'] <- print(summary(lm(PM10~pred.m1.cv,data=m1.all.cv))$r.squared)
+res[res$type=="PM10", 'm1cv.I'] <-print(summary(lm(PM10~pred.m1.cv,data=m1.all.cv))$coef[1,1])
+res[res$type=="PM10", 'm1cv.Ise'] <-print(summary(lm(PM10~pred.m1.cv,data=m1.all.cv))$coef[1,2])
+res[res$type=="PM10", 'm1cv.slope'] <-print(summary(lm(PM10~pred.m1.cv,data=m1.all.cv))$coef[2,1])
+res[res$type=="PM10", 'm1cv.slopese'] <-print(summary(lm(PM10~pred.m1.cv,data=m1.all.cv))$coef[2,2])
 #RMSPE
-res[res$type=="PM25", 'm1cv.rmspe'] <- print(rmse(residuals(m1.fit.all.cv)))
+res[res$type=="PM10", 'm1cv.rmspe'] <- print(rmse(residuals(m1.fit.all.cv)))
 
 #spatial
 spatialall.cv<-m1.all.cv %>%
     group_by(stn) %>%
-    summarise(barpm = mean(PM25, na.rm=TRUE), barpred = mean(pred.m1, na.rm=TRUE)) 
+    summarise(barpm = mean(PM10, na.rm=TRUE), barpred = mean(pred.m1, na.rm=TRUE)) 
 m1.fit.all.cv.s <- lm(barpm ~ barpred, data=spatialall.cv)
-res[res$type=="PM25", 'm1cv.R2.space'] <-  print(summary(lm(barpm ~ barpred, data=spatialall.cv))$r.squared)
-res[res$type=="PM25", 'm1cv.rmspe.space'] <- print(rmse(residuals(m1.fit.all.cv.s)))
+res[res$type=="PM10", 'm1cv.R2.space'] <-  print(summary(lm(barpm ~ barpred, data=spatialall.cv))$r.squared)
+res[res$type=="PM10", 'm1cv.rmspe.space'] <- print(rmse(residuals(m1.fit.all.cv.s)))
        
 #temporal
 tempoall.cv<-left_join(m1.all.cv,spatialall.cv)
-tempoall.cv$delpm <-tempoall.cv$PM25-tempoall.cv$barpm
+tempoall.cv$delpm <-tempoall.cv$PM10-tempoall.cv$barpm
 tempoall.cv$delpred <-tempoall.cv$pred.m1.cv-tempoall.cv$barpred
 mod_temporal.cv <- lm(delpm ~ delpred, data=tempoall.cv)
-res[res$type=="PM25", 'm1cv.R2.time'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.cv))$r.squared)
+res[res$type=="PM10", 'm1cv.R2.time'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.cv))$r.squared)
 
 
 # #by season
-# print(summary(lm(PM25~pred.m1.cv,data=m1.all.cv[seasonSW==1]))$r.squared)
-# print(summary(lm(PM25~pred.m1.cv,data=m1.all.cv[seasonSW==2]))$r.squared)
+# print(summary(lm(PM10~pred.m1.cv,data=m1.all.cv[seasonSW==1]))$r.squared)
+# print(summary(lm(PM10~pred.m1.cv,data=m1.all.cv[seasonSW==2]))$r.squared)
 # # seasons
-# print(summary(lm(PM25~pred.m1.cv,data=m1.all.cv[season==1]))$r.squared)
-# print(summary(lm(PM25~pred.m1.cv,data=m1.all.cv[season==2]))$r.squared)
-# print(summary(lm(PM25~pred.m1.cv,data=m1.all.cv[season==3]))$r.squared)
-# print(summary(lm(PM25~pred.m1.cv,data=m1.all.cv[season==4]))$r.squared)
-# print(summary(lm(PM25~pred.m1.cv,data=m1.all.cv[Dust==1]))$r.squared)
+# print(summary(lm(PM10~pred.m1.cv,data=m1.all.cv[season==1]))$r.squared)
+# print(summary(lm(PM10~pred.m1.cv,data=m1.all.cv[season==2]))$r.squared)
+# print(summary(lm(PM10~pred.m1.cv,data=m1.all.cv[season==3]))$r.squared)
+# print(summary(lm(PM10~pred.m1.cv,data=m1.all.cv[season==4]))$r.squared)
+# print(summary(lm(PM10~pred.m1.cv,data=m1.all.cv[Dust==1]))$r.squared)
 
 
 ### alternate LOOCV
@@ -387,12 +236,12 @@ res[res$type=="PM25", 'm1cv.R2.time'] <-  print(summary(lm(delpm ~ delpred, data
 #   test$predcv <- predict(object=trainmod,newdata=test,allow.new.levels=TRUE,re.form=NULL )
 #   test$itercv <- i  
 #   # export these results
-#   test[, list(day, stn, PM25, predcv, itercv)]
+#   test[, list(day, stn, PM10, predcv, itercv)]
 # }# end of cross-validation loop
 # })
-# summary(lm(PM25 ~ predcv, data = iter.out))
+# summary(lm(PM10 ~ predcv, data = iter.out))
 # # compute root mean squared error
-# iter.out[, sqrt(mean((PM25 - predcv)^2))]
+# iter.out[, sqrt(mean((PM10 - predcv)^2))]
 
 
 
@@ -409,7 +258,7 @@ m1.all.cv.loc <- merge(m1.all.cv, luf, all.x = T)
 #m1.all.cv.loc<-na.omit(m1.all.cv.loc)
 
 #create residual mp3 variable
-m1.all.cv.loc$res.m1<-m1.all.cv.loc$PM25-m1.all.cv.loc$pred.m1.cv
+m1.all.cv.loc$res.m1<-m1.all.cv.loc$PM10-m1.all.cv.loc$pred.m1.cv
 
 #The GAM model
 gam.out<-gam(res.m1~s(loc.tden)+s(tden,MeanPbl)+s(loc.tden,WS.im)+s(loc_p_os,fx=FALSE,k=4,bs='cr')+s(loc.elev,fx=FALSE,k=4,bs='cr')+s(dA1,fx=FALSE,k=4,bs='cr')+s(dsea,fx=FALSE,k=4,bs='cr'),data=m1.all.cv.loc)
@@ -421,54 +270,67 @@ gam.out<-gam(res.m1~s(loc.tden)+s(tden)+s(loc_p_os)+s(loc.elev)+s(dA1)+s(dsea)+s
 ## reg
 m1.all.cv.loc$pred.m1.loc <-predict(gam.out)
 m1.all.cv.loc$pred.m1.both <- m1.all.cv.loc$pred.m1.cv + m1.all.cv.loc$pred.m1.loc
-res[res$type=="PM25", 'm1cvloc.R2'] <- print(summary(lm(PM25~pred.m1.both,data=m1.all.cv.loc))$r.squared)
-res[res$type=="PM25", 'm1cvloc.I'] <-print(summary(lm(PM25~pred.m1.both,data=m1.all.cv.loc))$coef[1,1])
-res[res$type=="PM25", 'm1cvloc.Ise'] <-print(summary(lm(PM25~pred.m1.both,data=m1.all.cv.loc))$coef[1,2])
-res[res$type=="PM25", 'm1cvloc.slope'] <-print(summary(lm(PM25~pred.m1.both,data=m1.all.cv.loc))$coef[2,1])
-res[res$type=="PM25", 'm1cvloc.slopese'] <-print(summary(lm(PM25~pred.m1.both,data=m1.all.cv.loc))$coef[2,2])
+res[res$type=="PM10", 'm1cvloc.R2'] <- print(summary(lm(PM10~pred.m1.both,data=m1.all.cv.loc))$r.squared)
+res[res$type=="PM10", 'm1cvloc.I'] <-print(summary(lm(PM10~pred.m1.both,data=m1.all.cv.loc))$coef[1,1])
+res[res$type=="PM10", 'm1cvloc.Ise'] <-print(summary(lm(PM10~pred.m1.both,data=m1.all.cv.loc))$coef[1,2])
+res[res$type=="PM10", 'm1cvloc.slope'] <-print(summary(lm(PM10~pred.m1.both,data=m1.all.cv.loc))$coef[2,1])
+res[res$type=="PM10", 'm1cvloc.slopese'] <-print(summary(lm(PM10~pred.m1.both,data=m1.all.cv.loc))$coef[2,2])
 #RMSPE
-res[res$type=="PM25", 'm1cvloc.rmspe'] <- print(rmse(residuals(m1.fit.all.cv)))
+res[res$type=="PM10", 'm1cvloc.rmspe'] <- print(rmse(residuals(m1.fit.all.cv)))
 
 #spatial
 spatialall.cv.loc<-m1.all.cv.loc %>%
     group_by(stn) %>%
-    summarise(barpm = mean(PM25, na.rm=TRUE), barpred = mean(pred.m1.both, na.rm=TRUE)) 
+    summarise(barpm = mean(PM10, na.rm=TRUE), barpred = mean(pred.m1.both, na.rm=TRUE)) 
 m1.fit.all.cv.loc.s <- lm(barpm ~ barpred, data=spatialall.cv.loc)
-res[res$type=="PM25", 'm1cvloc.R2.space'] <-  print(summary(lm(barpm ~ barpred, data=spatialall.cv.loc))$r.squared)
-res[res$type=="PM25", 'm1cvloc.R2.time'] <- print(rmse(residuals(m1.fit.all.cv.loc.s)))
+res[res$type=="PM10", 'm1cvloc.R2.space'] <-  print(summary(lm(barpm ~ barpred, data=spatialall.cv.loc))$r.squared)
+res[res$type=="PM10", 'm1cvloc.R2.time'] <- print(rmse(residuals(m1.fit.all.cv.loc.s)))
        
 #temporal
 tempoall.loc.cv<-left_join(m1.all.cv.loc,spatialall.cv.loc)
-tempoall.loc.cv$delpm <-tempoall.loc.cv$PM25-tempoall.loc.cv$barpm
+tempoall.loc.cv$delpm <-tempoall.loc.cv$PM10-tempoall.loc.cv$barpm
 tempoall.loc.cv$delpred <-tempoall.loc.cv$pred.m1.both-tempoall.loc.cv$barpred
 mod_temporal.loc.cv <- lm(delpm ~ delpred, data=tempoall.loc.cv)
-res[res$type=="PM25", 'm1cv.R2.time'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.loc.cv))$r.squared)
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resm1.AQ.PM25.rds")
+res[res$type=="PM10", 'm1cv.R2.time'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.loc.cv))$r.squared)
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/resm1.AQ.PM10.rds")
 
 #### mod2 
-m2.all <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod2.AQ.rds")
-
+m2.all <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod2.AQ.rds")
+m2.all <- m2.all[!m2.all$aodid %in% badaod$aodid]
 
 #generate predictions
 m2.all[, pred.m2 := predict(object=m1_sc,newdata=m2.all,allow.new.levels=TRUE,re.form=NULL)]
 summary(m2.all$pred.m2)
 #delete implossible values
 m2.all <- m2.all[pred.m2 > 0.00000000000001 , ]
-m2.all <- m2.all[pred.m2 < 200   , ]
+m2.all <- m2.all[pred.m2 < 300   , ]
 
-saveRDS(m2.all,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod2.AQ.PM25.pred.rds")
+saveRDS(m2.all,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod2.AQ.PM10.pred.rds")
 
 
 #check R2
-m1.all <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1C.AQ.PM25.rds")
+m1.all <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod1C.AQ.PM10.rds")
 m1.all[,aodid:= paste(m1.all$long_aod.x,m1.all$lat_aod.x,sep="-")]
-m1.all<-m1.all[,c("aodid","day","PM25","stn","c"),with=FALSE]
+m1.all<-m1.all[,c("aodid","day","PM10","stn","c"),with=FALSE]
 #R2.m3
 setkey(m2.all,day,aodid)
 setkey(m1.all,day,aodid)
 m1.all <- merge(m1.all,m2.all[, list(day,aodid,pred.m2)], all.x = T)
-m3.fit.all<- summary(lm(PM25~pred.m2,data=m1.all))
-res[res$type=="PM25", 'm2.R2'] <- print(summary(lm(PM25~pred.m2,data=m1.all))$r.squared)
+m3.fit.all<- summary(lm(PM10~pred.m2,data=m1.all))
+res[res$type=="PM10", 'm2.R2'] <- print(summary(lm(PM10~pred.m2,data=m1.all))$r.squared)
+
+#map
+m3d_agg <- (m2.all[, list(LTPM =mean(pred.m2, na.rm = TRUE), 
+                        x = x_aod_ITM[1], #use the first long and lat (by aodid)
+                        y = y_aod_ITM[1]),by = aodid])  
+P1 <- ggplot(m3d_agg, aes(x, y, color = LTPM)) + 
+  geom_point(size = 4, shape = 15) + 
+  xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
+  scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(10)) + #c("purple", "blue", "white", "red", "orange")) + 
+  theme_bw() + 
+  ggtitle("Long term predictions")
+P1
+write.csv(m3d_agg,"~/ZH_tmp/R.tmp/qtrans.csv")
 
 
 #-------------->prepare for mod3
@@ -488,6 +350,7 @@ m2.smooth = lme(pred.m2 ~ meanPM,random = list(aodid= ~1 + meanPM),control=lmeCo
 m2.all.2003[, pred.t31 := predict(m2.smooth)]
 m2.all.2003[, resid  := residuals(m2.smooth)]
 print(summary(lm(pred.m2~pred.t31,data=m2.all.2003))$r.squared)
+
 
 
 #split the files to the separate bi monthly datsets
@@ -524,13 +387,27 @@ setkey(m2.all.2003,day, aodid)
 Final_pred_all <- lme(pred.t32 ~ meanPM ,random = list(aodid= ~1 + meanPM ),control=lmeControl(opt = "optim"),data= m2.all.2003  )
 m2.all.2003[, pred.t33 := predict(Final_pred_all)]
 #check correlations
-res[res$type=="PM25", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2003))$r.squared) 
+res[res$type=="PM10", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2003))$r.squared) 
+# 
+# #map
+# m3d_agg <- (m2.all.2003[, list(LTPM =mean(pred.t33, na.rm = TRUE), 
+#                         x = x_aod_ITM[1], #use the first long and lat (by aodid)
+#                         y = y_aod_ITM[1]),by = aodid])  
+# P1 <- ggplot(m3d_agg, aes(x, y, color = LTPM)) + 
+#   geom_point(size = 4, shape = 15) + 
+#   xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
+#   scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(10)) + #c("purple", "blue", "white", "red", "orange")) + 
+#   theme_bw() + 
+#   ggtitle("Long term predictions")
+# P1
+# m3d_agg<-filter(m3d_agg,!is.na(LTPM))
+# write.csv(m3d_agg,"~/ZH_tmp/R.tmp/qtrans.csv")
 
 #------------------------>>>
 #import mod3 
-data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.rds")
+data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod3.AQ.rds")
 data.m3.2003 <-data.m3[c ==2003]
-#for PM25
+#for PM10
 data.m3.2003 <- select(data.m3.2003,day,aodid,m,meanPM,x_aod_ITM,y_aod_ITM)
 data.m3.2003[, bimon := (m + 1) %/% 2]
 setkey(data.m3.2003,day, aodid)
@@ -601,7 +478,7 @@ hist(mod3$pred.m3)
 #describe(mod3$pred.m3)
 #recode negative into zero
 #mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2003.pred3.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2003.pred3.rds")
 
 #clean
 keep(m2.all,data.m3,mod3,res,rmse, sure=TRUE) 
@@ -653,13 +530,13 @@ setkey(m2.all.2004,day, aodid)
 Final_pred_all <- lme(pred.t32 ~ meanPM ,random = list(aodid= ~1 + meanPM ),control=lmeControl(opt = "optim"),data= m2.all.2004  )
 m2.all.2004[, pred.t33 := predict(Final_pred_all)]
 #check correlations
-res[res$type=="PM25", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2004))$r.squared) 
+res[res$type=="PM10", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2004))$r.squared) 
 
 #------------------------>>>
 #import mod3 
-data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.rds")
+data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod3.AQ.rds")
 data.m3.2004 <-data.m3[c ==2004]
-#for PM25
+#for PM10
 data.m3.2004 <- select(data.m3.2004,day,aodid,m,meanPM,x_aod_ITM,y_aod_ITM)
 data.m3.2004[, bimon := (m + 1) %/% 2]
 setkey(data.m3.2004,day, aodid)
@@ -730,7 +607,7 @@ hist(mod3$pred.m3)
 #describe(mod3$pred.m3)
 #recode negative into zero
 #mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2004.pred3.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2004.pred3.rds")
 
 #clean
 keep(m2.all,data.m3,mod3,res,rmse, sure=TRUE) 
@@ -784,13 +661,13 @@ setkey(m2.all.2005,day, aodid)
 Final_pred_all <- lme(pred.t32 ~ meanPM ,random = list(aodid= ~1 + meanPM ),control=lmeControl(opt = "optim"),data= m2.all.2005  )
 m2.all.2005[, pred.t33 := predict(Final_pred_all)]
 #check correlations
-res[res$type=="PM25", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2005))$r.squared) 
+res[res$type=="PM10", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2005))$r.squared) 
 
 #------------------------>>>
 #import mod3 
-data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.rds")
+data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod3.AQ.rds")
 data.m3.2005 <-data.m3[c ==2005]
-#for PM25
+#for PM10
 data.m3.2005 <- select(data.m3.2005,day,aodid,m,meanPM,x_aod_ITM,y_aod_ITM)
 data.m3.2005[, bimon := (m + 1) %/% 2]
 setkey(data.m3.2005,day, aodid)
@@ -862,7 +739,7 @@ hist(mod3$pred.m3)
 #recode negative into zero
 #mod3 <- mod3[pred.m3 >= 0]
 
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2005.pred3.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2005.pred3.rds")
 #clean
 keep(m2.all,data.m3,mod3,res,rmse, sure=TRUE) 
 gc()
@@ -913,13 +790,13 @@ setkey(m2.all.2006,day, aodid)
 Final_pred_all <- lme(pred.t32 ~ meanPM ,random = list(aodid= ~1 + meanPM ),control=lmeControl(opt = "optim"),data= m2.all.2006  )
 m2.all.2006[, pred.t33 := predict(Final_pred_all)]
 #check correlations
-res[res$type=="PM25", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2006))$r.squared) 
+res[res$type=="PM10", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2006))$r.squared) 
 
 #------------------------>>>
 #import mod3 
-data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.rds")
+data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod3.AQ.rds")
 data.m3.2006 <-data.m3[c ==2006]
-#for PM25
+#for PM10
 data.m3.2006 <- select(data.m3.2006,day,aodid,m,meanPM,x_aod_ITM,y_aod_ITM)
 data.m3.2006[, bimon := (m + 1) %/% 2]
 setkey(data.m3.2006,day, aodid)
@@ -990,7 +867,7 @@ hist(mod3$pred.m3)
 #describe(mod3$pred.m3)
 #recode negative into zero
 #mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2006.pred3.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2006.pred3.rds")
 
 #clean
 keep(m2.all,data.m3,mod3,res,rmse, sure=TRUE) 
@@ -1042,13 +919,13 @@ setkey(m2.all.2007,day, aodid)
 Final_pred_all <- lme(pred.t32 ~ meanPM ,random = list(aodid= ~1 + meanPM ),control=lmeControl(opt = "optim"),data= m2.all.2007  )
 m2.all.2007[, pred.t33 := predict(Final_pred_all)]
 #check correlations
-res[res$type=="PM25", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2007))$r.squared) 
+res[res$type=="PM10", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2007))$r.squared) 
 
 #------------------------>>>
 #import mod3 
-data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.rds")
+data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod3.AQ.rds")
 data.m3.2007 <-data.m3[c ==2007]
-#for PM25
+#for PM10
 data.m3.2007 <- select(data.m3.2007,day,aodid,m,meanPM,x_aod_ITM,y_aod_ITM)
 data.m3.2007[, bimon := (m + 1) %/% 2]
 setkey(data.m3.2007,day, aodid)
@@ -1119,7 +996,7 @@ hist(mod3$pred.m3)
 #describe(mod3$pred.m3)
 #recode negative into zero
 #mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2007.pred3.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2007.pred3.rds")
 
 #clean
 keep(m2.all,data.m3,mod3,res,rmse, sure=TRUE) 
@@ -1171,13 +1048,13 @@ setkey(m2.all.2008,day, aodid)
 Final_pred_all <- lme(pred.t32 ~ meanPM ,random = list(aodid= ~1 + meanPM ),control=lmeControl(opt = "optim"),data= m2.all.2008  )
 m2.all.2008[, pred.t33 := predict(Final_pred_all)]
 #check correlations
-res[res$type=="PM25", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2008))$r.squared) 
+res[res$type=="PM10", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2008))$r.squared) 
 
 #------------------------>>>
 #import mod3 
-data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.rds")
+data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod3.AQ.rds")
 data.m3.2008 <-data.m3[c ==2008]
-#for PM25
+#for PM10
 data.m3.2008 <- select(data.m3.2008,day,aodid,m,meanPM,x_aod_ITM,y_aod_ITM)
 data.m3.2008[, bimon := (m + 1) %/% 2]
 setkey(data.m3.2008,day, aodid)
@@ -1248,7 +1125,7 @@ hist(mod3$pred.m3)
 #describe(mod3$pred.m3)
 #recode negative into zero
 #mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2008.pred3.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2008.pred3.rds")
 
 #clean
 keep(m2.all,data.m3,mod3,res,rmse, sure=TRUE) 
@@ -1300,13 +1177,13 @@ setkey(m2.all.2009,day, aodid)
 Final_pred_all <- lme(pred.t32 ~ meanPM ,random = list(aodid= ~1 + meanPM ),control=lmeControl(opt = "optim"),data= m2.all.2009  )
 m2.all.2009[, pred.t33 := predict(Final_pred_all)]
 #check correlations
-res[res$type=="PM25", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2009))$r.squared) 
+res[res$type=="PM10", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2009))$r.squared) 
 
 #------------------------>>>
 #import mod3 
-data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.rds")
+data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod3.AQ.rds")
 data.m3.2009 <-data.m3[c ==2009]
-#for PM25
+#for PM10
 data.m3.2009 <- select(data.m3.2009,day,aodid,m,meanPM,x_aod_ITM,y_aod_ITM)
 data.m3.2009[, bimon := (m + 1) %/% 2]
 setkey(data.m3.2009,day, aodid)
@@ -1377,7 +1254,7 @@ hist(mod3$pred.m3)
 #describe(mod3$pred.m3)
 #recode negative into zero
 #mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2009.pred3.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2009.pred3.rds")
 
 #clean
 keep(m2.all,data.m3,mod3,res,rmse, sure=TRUE) 
@@ -1429,13 +1306,13 @@ setkey(m2.all.2010,day, aodid)
 Final_pred_all <- lme(pred.t32 ~ meanPM ,random = list(aodid= ~1 + meanPM ),control=lmeControl(opt = "optim"),data= m2.all.2010  )
 m2.all.2010[, pred.t33 := predict(Final_pred_all)]
 #check correlations
-res[res$type=="PM25", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2010))$r.squared) 
+res[res$type=="PM10", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2010))$r.squared) 
 
 #------------------------>>>
 #import mod3 
-data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.rds")
+data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod3.AQ.rds")
 data.m3.2010 <-data.m3[c ==2010]
-#for PM25
+#for PM10
 data.m3.2010 <- select(data.m3.2010,day,aodid,m,meanPM,x_aod_ITM,y_aod_ITM)
 data.m3.2010[, bimon := (m + 1) %/% 2]
 setkey(data.m3.2010,day, aodid)
@@ -1506,7 +1383,7 @@ hist(mod3$pred.m3)
 #describe(mod3$pred.m3)
 #recode negative into zero
 #mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2010.pred3.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2010.pred3.rds")
 
 #clean
 keep(m2.all,data.m3,mod3,res,rmse, sure=TRUE) 
@@ -1558,13 +1435,13 @@ setkey(m2.all.2011,day, aodid)
 Final_pred_all <- lme(pred.t32 ~ meanPM ,random = list(aodid= ~1 + meanPM ),control=lmeControl(opt = "optim"),data= m2.all.2011  )
 m2.all.2011[, pred.t33 := predict(Final_pred_all)]
 #check correlations
-res[res$type=="PM25", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2011))$r.squared) 
+res[res$type=="PM10", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2011))$r.squared) 
 
 #------------------------>>>
 #import mod3 
-data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.rds")
+data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod3.AQ.rds")
 data.m3.2011 <-data.m3[c ==2011]
-#for PM25
+#for PM10
 data.m3.2011 <- select(data.m3.2011,day,aodid,m,meanPM,x_aod_ITM,y_aod_ITM)
 data.m3.2011[, bimon := (m + 1) %/% 2]
 setkey(data.m3.2011,day, aodid)
@@ -1635,7 +1512,7 @@ hist(mod3$pred.m3)
 #describe(mod3$pred.m3)
 #recode negative into zero
 #mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2011.pred3.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2011.pred3.rds")
 
 #clean
 keep(m2.all,data.m3,mod3,res,rmse, sure=TRUE) 
@@ -1687,13 +1564,13 @@ setkey(m2.all.2012,day, aodid)
 Final_pred_all <- lme(pred.t32 ~ meanPM ,random = list(aodid= ~1 + meanPM ),control=lmeControl(opt = "optim"),data= m2.all.2012  )
 m2.all.2012[, pred.t33 := predict(Final_pred_all)]
 #check correlations
-res[res$type=="PM25", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2012))$r.squared) 
+res[res$type=="PM10", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2012))$r.squared) 
 
 #------------------------>>>
 #import mod3 
-data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.rds")
+data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod3.AQ.rds")
 data.m3.2012 <-data.m3[c ==2012]
-#for PM25
+#for PM10
 data.m3.2012 <- select(data.m3.2012,day,aodid,m,meanPM,x_aod_ITM,y_aod_ITM)
 data.m3.2012[, bimon := (m + 1) %/% 2]
 setkey(data.m3.2012,day, aodid)
@@ -1764,7 +1641,7 @@ hist(mod3$pred.m3)
 #describe(mod3$pred.m3)
 #recode negative into zero
 #mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2012.pred3.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2012.pred3.rds")
 
 #clean
 keep(m2.all,data.m3,mod3,res,rmse, sure=TRUE) 
@@ -1816,13 +1693,13 @@ setkey(m2.all.2013,day, aodid)
 Final_pred_all <- lme(pred.t32 ~ meanPM ,random = list(aodid= ~1 + meanPM ),control=lmeControl(opt = "optim"),data= m2.all.2013  )
 m2.all.2013[, pred.t33 := predict(Final_pred_all)]
 #check correlations
-res[res$type=="PM25", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2013))$r.squared) 
+res[res$type=="PM10", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2013))$r.squared) 
 
 #------------------------>>>
 #import mod3 
-data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.rds")
+data.m3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod3.AQ.rds")
 data.m3.2013 <-data.m3[c ==2013]
-#for PM25
+#for PM10
 data.m3.2013 <- select(data.m3.2013,day,aodid,m,meanPM,x_aod_ITM,y_aod_ITM)
 data.m3.2013[, bimon := (m + 1) %/% 2]
 setkey(data.m3.2013,day, aodid)
@@ -1893,7 +1770,7 @@ hist(mod3$pred.m3)
 #describe(mod3$pred.m3)
 #recode negative into zero
 #mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2013.pred3.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2013.pred3.rds")
 
 #clean
 keep(m2.all,data.m3,mod3,res,rmse, sure=TRUE) 
@@ -1901,17 +1778,17 @@ gc()
 
 
 #create full database
-data.m3.2003<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2003.pred3.rds")
-data.m3.2004<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2004.pred3.rds")
-data.m3.2005<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2005.pred3.rds")
-data.m3.2006<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2006.pred3.rds")
-data.m3.2007<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2007.pred3.rds")
-data.m3.2008<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2008.pred3.rds")
-data.m3.2009<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2009.pred3.rds")
-data.m3.2010<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2010.pred3.rds")
-data.m3.2011<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2011.pred3.rds")
-data.m3.2012<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2012.pred3.rds")
-data.m3.2013<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2013.pred3.rds")
+data.m3.2003<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2003.pred3.rds")
+data.m3.2004<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2004.pred3.rds")
+data.m3.2005<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2005.pred3.rds")
+data.m3.2006<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2006.pred3.rds")
+data.m3.2007<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2007.pred3.rds")
+data.m3.2008<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2008.pred3.rds")
+data.m3.2009<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2009.pred3.rds")
+data.m3.2010<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2010.pred3.rds")
+data.m3.2011<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2011.pred3.rds")
+data.m3.2012<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2012.pred3.rds")
+data.m3.2013<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/mod3.AQ.PM10.2013.pred3.rds")
 mod3<-rbindlist(list(data.m3.2003,data.m3.2004,data.m3.2005,data.m3.2006,data.m3.2007,data.m3.2008,data.m3.2009,data.m3.2010,data.m3.2011,data.m3.2012,data.m3.2013))
 
 
@@ -1919,45 +1796,45 @@ mod3<-rbindlist(list(data.m3.2003,data.m3.2004,data.m3.2005,data.m3.2006,data.m3
 #prepare for m3.R2
 #########################
 #load mod1
-m1.all <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1C.AQ.PM25.pred.rds")
+m1.all <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod1C.AQ.PM10.pred.rds")
 m1.all[,aodid:= paste(m1.all$long_aod.x,m1.all$lat_aod.x,sep="-")]
-m1.all<-m1.all[,c("aodid","day","PM25","pred.m1","stn","c"),with=FALSE]
+m1.all<-m1.all[,c("aodid","day","PM10","pred.m1","stn","c"),with=FALSE]
 #R2.m3
 setkey(mod3,day,aodid)
 setkey(m1.all,day,aodid)
 m1.all <- merge(m1.all,mod3[, list(day,aodid,pred.m3)], all.x = T)
-m3.fit.all<- summary(lm(PM25~pred.m3,data=m1.all))
-res[res$type=="PM25", 'm3.R2'] <- print(summary(lm(PM25~pred.m3,data=m1.all))$r.squared)    
-res[res$type=="PM25", 'm3.I'] <-print(summary(lm(PM25~pred.m3,data=m1.all))$coef[1,1])
-res[res$type=="PM25", 'm3.Ise'] <-print(summary(lm(PM25~pred.m3,data=m1.all))$coef[1,2])
-res[res$type=="PM25", 'm3.slope'] <-print(summary(lm(PM25~pred.m3,data=m1.all))$coef[2,1])
-res[res$type=="PM25", 'm3.slopese'] <-print(summary(lm(PM25~pred.m3,data=m1.all))$coef[2,2])
+m3.fit.all<- summary(lm(PM10~pred.m3,data=m1.all))
+res[res$type=="PM10", 'm3.R2'] <- print(summary(lm(PM10~pred.m3,data=m1.all))$r.squared)    
+res[res$type=="PM10", 'm3.I'] <-print(summary(lm(PM10~pred.m3,data=m1.all))$coef[1,1])
+res[res$type=="PM10", 'm3.Ise'] <-print(summary(lm(PM10~pred.m3,data=m1.all))$coef[1,2])
+res[res$type=="PM10", 'm3.slope'] <-print(summary(lm(PM10~pred.m3,data=m1.all))$coef[2,1])
+res[res$type=="PM10", 'm3.slopese'] <-print(summary(lm(PM10~pred.m3,data=m1.all))$coef[2,2])
 #RMSPE
-res[res$type=="PM25", 'm3.rmspe'] <- print(rmse(residuals(m3.fit.all)))
+res[res$type=="PM10", 'm3.rmspe'] <- print(rmse(residuals(m3.fit.all)))
 
 
 #spatial
 ###to check
 spatialall<-m1.all %>%
     group_by(stn) %>%
-    summarise(barpm = mean(PM25, na.rm=TRUE), barpred = mean(pred.m3, na.rm=TRUE)) 
+    summarise(barpm = mean(PM10, na.rm=TRUE), barpred = mean(pred.m3, na.rm=TRUE)) 
 m1.fit.all.spat<- lm(barpm ~ barpred, data=spatialall)
-res[res$type=="PM25", 'm3.R2.space'] <-  print(summary(lm(barpm ~ barpred, data=spatialall))$r.squared)
-res[res$type=="PM25", 'm3.rmspe.space'] <- print(rmse(residuals(m1.fit.all.spat)))
+res[res$type=="PM10", 'm3.R2.space'] <-  print(summary(lm(barpm ~ barpred, data=spatialall))$r.squared)
+res[res$type=="PM10", 'm3.rmspe.space'] <- print(rmse(residuals(m1.fit.all.spat)))
        
 #temporal
 tempoall<-left_join(m1.all,spatialall)
-tempoall$delpm <-tempoall$PM25-tempoall$barpm
+tempoall$delpm <-tempoall$PM10-tempoall$barpm
 tempoall$delpred <-tempoall$pred.m3-tempoall$barpred
 mod_temporal <- lm(delpm ~ delpred, data=tempoall)
-res[res$type=="PM25", 'm3.R2.time'] <-  print(summary(lm(delpm ~ delpred, data=tempoall))$r.squared)
+res[res$type=="PM10", 'm3.R2.time'] <-  print(summary(lm(delpm ~ delpred, data=tempoall))$r.squared)
 
 
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.PM25.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/resALL.AQ.PM10.rds")
 
 #########################
 #import mod2
-mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod2.AQ.PM25.pred.rds")
+mod2<- readRDS( "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod2.AQ.PM10.pred.rds")
 mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
 
 #----------------> store the best available
@@ -1966,7 +1843,7 @@ setkey(mod3best, day, aodid)
 setkey(mod2, day, aodid)
 mod3best <- merge(mod3best, mod2[,list(aodid, day, pred.m2)], all.x = T)
 #reload mod1
-mod1<-m1.all[,c("aodid","day","PM25","pred.m1"),with=FALSE]
+mod1<-m1.all[,c("aodid","day","PM10","pred.m1"),with=FALSE]
 setkey(mod1,day,aodid)
 mod3best <- merge(mod3best, mod1, all.x = T)
 mod3best[,bestpred := pred.m3]
@@ -1976,7 +1853,7 @@ summary(mod3best$bestpred)
 mod3best[bestpred < 0 , bestpred  := 0.5]
 
 #save
-saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.PM25.bestpred.rds")
+saveRDS(mod3best,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod3.AQ.PM10.bestpred.rds")
 
 mod3best<-filter(mod3best,!is.na(bestpred))
 
@@ -1985,13 +1862,14 @@ write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T),
                           npred.m1 = sum(!is.na(pred.m1)),
                           npred.m2 = sum(!is.na(pred.m2)),
                           npred.m3 = sum(!is.na(pred.m3)),
-                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.PM25.LTPM.csv", row.names = F)
+                          x_aod_ITM =  x_aod_ITM[1], y_aod_ITM = y_aod_ITM[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/Xmod3.AQ.PM10.LTPM.csv", row.names = F)
 
 #export res to csv
 
-write.csv(res,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.PM25.csv")
+write.csv(res,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/resALL.AQ.PM10.csv")
 
 
+#alt expo gis
 #bestprmap
 m3d_agg <- (mod3best[, list(LTPM =mean(bestpred, na.rm = TRUE), 
                         utmx = x_aod_ITM[1], #use the first long and lat (by aodid)
@@ -2003,161 +1881,7 @@ P1 <- ggplot(m3d_agg, aes(utmx, utmy, color = LTPM)) +
   theme_bw() + 
   ggtitle("Long term predictions")
 P1
-
-#predperyear
-mod3best[, c := as.numeric(format(day, "%Y")) ]
-mod3best.2003<-mod3best[c==2003]
-m3d_agg <- (mod3best.2003[, list(LTPM =mean(bestpred, na.rm = TRUE), 
-                        utmx = x_aod_ITM[1], #use the first long and lat (by aodid)
-                        utmy = y_aod_ITM[1]),by = aodid])  
-P1 <- ggplot(m3d_agg, aes(utmx, utmy, color = LTPM)) + 
-  geom_point(size = 4, shape = 15) + 
-  xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
-  scale_colour_gradientn("long term PM2.5 prediction-2003", colours = rainbow(10)) + #c("purple", "blue", "white", "red", "orange")) + 
-  theme_bw() + 
-  ggtitle("Long term predictions")
-P1
-
-#predperyear
-mod3best[, c := as.numeric(format(day, "%Y")) ]
-mod3best.2004<-mod3best[c==2004]
-m3d_agg <- (mod3best.2004[, list(LTPM =mean(bestpred, na.rm = TRUE), 
-                        utmx = x_aod_ITM[1], #use the first long and lat (by aodid)
-                        utmy = y_aod_ITM[1]),by = aodid])  
-P1 <- ggplot(m3d_agg, aes(utmx, utmy, color = LTPM)) + 
-  geom_point(size = 4, shape = 15) + 
-  xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
-  scale_colour_gradientn("long term PM2.5 prediction-2004", colours = rainbow(10)) + #c("purple", "blue", "white", "red", "orange")) + 
-  theme_bw() + 
-  ggtitle("Long term predictions")
-P1
-
-#predperyear
-mod3best[, c := as.numeric(format(day, "%Y")) ]
-mod3best.2005<-mod3best[c==2005]
-m3d_agg <- (mod3best.2005[, list(LTPM =mean(bestpred, na.rm = TRUE), 
-                        utmx = x_aod_ITM[1], #use the first long and lat (by aodid)
-                        utmy = y_aod_ITM[1]),by = aodid])  
-P1 <- ggplot(m3d_agg, aes(utmx, utmy, color = LTPM)) + 
-  geom_point(size = 4, shape = 15) + 
-  xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
-  scale_colour_gradientn("long term PM2.5 prediction-2005", colours = rainbow(10)) + #c("purple", "blue", "white", "red", "orange")) + 
-  theme_bw() + 
-  ggtitle("Long term predictions")
-P1
-
-#predperyear
-mod3best[, c := as.numeric(format(day, "%Y")) ]
-mod3best.2006<-mod3best[c==2006]
-m3d_agg <- (mod3best.2006[, list(LTPM =mean(bestpred, na.rm = TRUE), 
-                        utmx = x_aod_ITM[1], #use the first long and lat (by aodid)
-                        utmy = y_aod_ITM[1]),by = aodid])  
-P1 <- ggplot(m3d_agg, aes(utmx, utmy, color = LTPM)) + 
-  geom_point(size = 4, shape = 15) + 
-  xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
-  scale_colour_gradientn("long term PM2.5 prediction-2006", colours = rainbow(10)) + #c("purple", "blue", "white", "red", "orange")) + 
-  theme_bw() + 
-  ggtitle("Long term predictions")
-P1
-
-#predperyear
-mod3best[, c := as.numeric(format(day, "%Y")) ]
-mod3best.2007<-mod3best[c==2007]
-m3d_agg <- (mod3best.2007[, list(LTPM =mean(bestpred, na.rm = TRUE), 
-                        utmx = x_aod_ITM[1], #use the first long and lat (by aodid)
-                        utmy = y_aod_ITM[1]),by = aodid])  
-P1 <- ggplot(m3d_agg, aes(utmx, utmy, color = LTPM)) + 
-  geom_point(size = 4, shape = 15) + 
-  xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
-  scale_colour_gradientn("long term PM2.5 prediction-2007", colours = rainbow(10)) + #c("purple", "blue", "white", "red", "orange")) + 
-  theme_bw() + 
-  ggtitle("Long term predictions")
-P1
-
-#predperyear
-mod3best[, c := as.numeric(format(day, "%Y")) ]
-mod3best.2008<-mod3best[c==2008]
-m3d_agg <- (mod3best.2008[, list(LTPM =mean(bestpred, na.rm = TRUE), 
-                        utmx = x_aod_ITM[1], #use the first long and lat (by aodid)
-                        utmy = y_aod_ITM[1]),by = aodid])  
-P1 <- ggplot(m3d_agg, aes(utmx, utmy, color = LTPM)) + 
-  geom_point(size = 4, shape = 15) + 
-  xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
-  scale_colour_gradientn("long term PM2.5 prediction-2008", colours = rainbow(10)) + #c("purple", "blue", "white", "red", "orange")) + 
-  theme_bw() + 
-  ggtitle("Long term predictions")
-P1
-
-#predperyear
-mod3best[, c := as.numeric(format(day, "%Y")) ]
-mod3best.2009<-mod3best[c==2009]
-m3d_agg <- (mod3best.2009[, list(LTPM =mean(bestpred, na.rm = TRUE), 
-                        utmx = x_aod_ITM[1], #use the first long and lat (by aodid)
-                        utmy = y_aod_ITM[1]),by = aodid])  
-P1 <- ggplot(m3d_agg, aes(utmx, utmy, color = LTPM)) + 
-  geom_point(size = 4, shape = 15) + 
-  xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
-  scale_colour_gradientn("long term PM2.5 prediction-2009", colours = rainbow(10)) + #c("purple", "blue", "white", "red", "orange")) + 
-  theme_bw() + 
-  ggtitle("Long term predictions")
-P1
-
-#predperyear
-mod3best[, c := as.numeric(format(day, "%Y")) ]
-mod3best.2010<-mod3best[c==2010]
-m3d_agg <- (mod3best.2010[, list(LTPM =mean(bestpred, na.rm = TRUE), 
-                        utmx = x_aod_ITM[1], #use the first long and lat (by aodid)
-                        utmy = y_aod_ITM[1]),by = aodid])  
-P1 <- ggplot(m3d_agg, aes(utmx, utmy, color = LTPM)) + 
-  geom_point(size = 4, shape = 15) + 
-  xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
-  scale_colour_gradientn("long term PM2.5 prediction-2010", colours = rainbow(10)) + #c("purple", "blue", "white", "red", "orange")) + 
-  theme_bw() + 
-  ggtitle("Long term predictions")
-P1
-
-#predperyear
-mod3best[, c := as.numeric(format(day, "%Y")) ]
-mod3best.2011<-mod3best[c==2011]
-m3d_agg <- (mod3best.2011[, list(LTPM =mean(bestpred, na.rm = TRUE), 
-                        utmx = x_aod_ITM[1], #use the first long and lat (by aodid)
-                        utmy = y_aod_ITM[1]),by = aodid])  
-P1 <- ggplot(m3d_agg, aes(utmx, utmy, color = LTPM)) + 
-  geom_point(size = 4, shape = 15) + 
-  xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
-  scale_colour_gradientn("long term PM2.5 prediction-2011", colours = rainbow(10)) + #c("purple", "blue", "white", "red", "orange")) + 
-  theme_bw() + 
-  ggtitle("Long term predictions")
-P1
-
-#predperyear
-mod3best[, c := as.numeric(format(day, "%Y")) ]
-mod3best.2012<-mod3best[c==2012]
-m3d_agg <- (mod3best.2012[, list(LTPM =mean(bestpred, na.rm = TRUE), 
-                        utmx = x_aod_ITM[1], #use the first long and lat (by aodid)
-                        utmy = y_aod_ITM[1]),by = aodid])  
-P1 <- ggplot(m3d_agg, aes(utmx, utmy, color = LTPM)) + 
-  geom_point(size = 4, shape = 15) + 
-  xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
-  scale_colour_gradientn("long term PM2.5 prediction-2012", colours = rainbow(10)) + #c("purple", "blue", "white", "red", "orange")) + 
-  theme_bw() + 
-  ggtitle("Long term predictions")
-P1
-
-#predperyear
-mod3best[, c := as.numeric(format(day, "%Y")) ]
-mod3best.2013<-mod3best[c==2013]
-m3d_agg <- (mod3best.2013[, list(LTPM =mean(bestpred, na.rm = TRUE), 
-                        utmx = x_aod_ITM[1], #use the first long and lat (by aodid)
-                        utmy = y_aod_ITM[1]),by = aodid])  
-P1 <- ggplot(m3d_agg, aes(utmx, utmy, color = LTPM)) + 
-  geom_point(size = 4, shape = 15) + 
-  xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
-  scale_colour_gradientn("long term PM2.5 prediction-2013", colours = rainbow(10)) + #c("purple", "blue", "white", "red", "orange")) + 
-  theme_bw() + 
-  ggtitle("Long term predictions")
-P1
-
+write.csv(m3d_agg,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIRx/bestpred.AQ.PM10.LTPM.csv")
 
 #mod3map
 
@@ -2171,92 +1895,92 @@ P1 <- ggplot(m3d_agg, aes(utmx, utmy, color = LTPM)) +
   theme_bw() + 
   ggtitle("Long term predictions")
 P1
-
-# rmse by monitor
-neveruse <- c("")
-m1.all[!stn %in% neveruse, list(rmse = sqrt(mean((pred.m3 - PM25)^2))),by=c("stn", "c")][order(rmse)]
-
-#alt method
-rmse.p25 <- ddply(m1.all, c("stn"), 
-      function(x) {
-        sqrt(mean((x$PM25-x$pred.m1)^2))
-                      })
-rmse.p25<-as.data.table(rmse.p25)
-setnames(rmse.p25,"V1","RMSPE")
-setkey(rmse.p25,RMSPE)
-rmse.p25
-
-
-out<-m1.all[c==2008] %>%
-  group_by(stn) %>%
-  summarise (n = n()) 
-setkey(out,stn,c)
-head(out,n=550)
-
-
-
-# plot a single year by day- KMR- North
-ggplot(m1.all[stn %in% c("KMR") & c == 2008,], aes(x = day)) + 
-#overall line
-  geom_line(aes(y = PM25), color = "black", alpha = 0.15) + 
-  #points
-  geom_point(aes(y = PM25), color = "blue", alpha = 0.7, size = 0.8) + 
-  geom_point(aes(y = pred.m3), color = "red", alpha = 0.7, size = 0.8) + 
-  #smoothers
-  geom_smooth(aes(y = pred.m3), color = "red", linetype = "dashed", width = 1.4, se = F, size=0.9) + 
-  geom_smooth(aes(y = PM25), color = "blue", se = F, size=0.9) + 
-  ylab(expression(paste(PM[2.5], "concentration (ug/", m^3, ")"))) + 
-  theme_bw() + theme(axis.title.x = element_blank())
-ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/KMR.PM25.2008.svg", width = 5.5, height = 3)
-ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/KMR.PM25.2008.png", width = 5.5, height = 3)
-
-
-# plot a single year by day- TIV- North
-ggplot(m1.all[stn %in% c("TIV") & c == 2008,], aes(x = day)) + 
-#overall line
-  geom_line(aes(y = PM25), color = "black", alpha = 0.15) + 
-  #points
-  geom_point(aes(y = PM25), color = "blue", alpha = 0.7, size = 0.8) + 
-  geom_point(aes(y = pred.m3), color = "red", alpha = 0.7, size = 0.8) + 
-  #smoothers
-  geom_smooth(aes(y = pred.m3), color = "red", linetype = "dashed", width = 1.4, se = F, size=0.9) + 
-  geom_smooth(aes(y = PM25), color = "blue", se = F, size=0.9) + 
-  ylab(expression(paste(PM[2.5], "concentration (ug/", m^3, ")"))) + 
-  theme_bw() + theme(axis.title.x = element_blank())
-ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/TIV.PM25.2008.svg", width = 5.5, height = 3)
-ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/TIV.PM25.2008.png", width = 5.5, height = 3)
-
-
-# plot a single year by day- SYO- south
-ggplot(m1.all[stn %in% c("SYO") & c == 2008,], aes(x = day)) + 
-#overall line
-  geom_line(aes(y = PM25), color = "black", alpha = 0.15) + 
-  #points
-  geom_point(aes(y = PM25), color = "blue", alpha = 0.7, size = 0.8) + 
-  geom_point(aes(y = pred.m3), color = "red", alpha = 0.7, size = 0.8) + 
-  #smoothers
-  geom_smooth(aes(y = pred.m3), color = "red", linetype = "dashed", width = 1.4, se = F, size=0.9) + 
-  geom_smooth(aes(y = PM25), color = "blue", se = F, size=0.9) + 
-  ylab(expression(paste(PM[2.5], "concentration (ug/", m^3, ")"))) + 
-  theme_bw() + theme(axis.title.x = element_blank())
-ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/SYO.PM25.2008.svg", width = 5.5, height = 3)
-ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/SYO.PM25.2008.png", width = 5.5, height = 3)
-
-
-# plot a single year by day- GDR- south
-ggplot(m1.all[stn %in% c("GDR") & c == 2008,], aes(x = day)) + 
-#overall line
-  geom_line(aes(y = PM25), color = "black", alpha = 0.15) + 
-  #points
-  geom_point(aes(y = PM25), color = "blue", alpha = 0.7, size = 0.8) + 
-  geom_point(aes(y = pred.m3), color = "red", alpha = 0.7, size = 0.8) + 
-  #smoothers
-  geom_smooth(aes(y = pred.m3), color = "red", linetype = "dashed", width = 1.4, se = F, size=0.9) + 
-  geom_smooth(aes(y = PM25), color = "blue", se = F, size=0.9) + 
-  ylab(expression(paste(PM[2.5], "concentration (ug/", m^3, ")"))) + 
-  theme_bw() + theme(axis.title.x = element_blank())
-ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/GDR.PM25.2008.svg", width = 5.5, height = 3)
-ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/GDR.PM25.2008.png", width = 5.5, height = 3)
-
-
-
+# 
+# # rmse by monitor
+# neveruse <- c("")
+# m1.all[!stn %in% neveruse, list(rmse = sqrt(mean((pred.m3 - PM10)^2))),by=c("stn", "c")][order(rmse)]
+# 
+# #alt method
+# rmse.p10 <- ddply(m1.all, c("stn"), 
+#       function(x) {
+#         sqrt(mean((x$PM10-x$pred.m1)^2))
+#                       })
+# rmse.p10<-as.data.table(rmse.p10)
+# setnames(rmse.p10,"V1","RMSPE")
+# setkey(rmse.p10,RMSPE)
+# rmse.p10
+# 
+# 
+# out<-m1.all[c==2008] %>%
+#   group_by(stn) %>%
+#   summarise (n = n()) 
+# setkey(out,stn,c)
+# head(out,n=550)
+# 
+# 
+# 
+# # plot a single year by day- KMR- North
+# ggplot(m1.all[stn %in% c("KMR") & c == 2008,], aes(x = day)) + 
+# #overall line
+#   geom_line(aes(y = PM10), color = "black", alpha = 0.15) + 
+#   #points
+#   geom_point(aes(y = PM10), color = "blue", alpha = 0.7, size = 0.8) + 
+#   geom_point(aes(y = pred.m3), color = "red", alpha = 0.7, size = 0.8) + 
+#   #smoothers
+#   geom_smooth(aes(y = pred.m3), color = "red", linetype = "dashed", width = 1.4, se = F, size=0.9) + 
+#   geom_smooth(aes(y = PM10), color = "blue", se = F, size=0.9) + 
+#   ylab(expression(paste(PM[2.5], "concentration (ug/", m^3, ")"))) + 
+#   theme_bw() + theme(axis.title.x = element_blank())
+# ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/KMR.PM10.2008.svg", width = 5.5, height = 3)
+# ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/KMR.PM10.2008.png", width = 5.5, height = 3)
+# 
+# 
+# # plot a single year by day- TIV- North
+# ggplot(m1.all[stn %in% c("TIV") & c == 2008,], aes(x = day)) + 
+# #overall line
+#   geom_line(aes(y = PM10), color = "black", alpha = 0.15) + 
+#   #points
+#   geom_point(aes(y = PM10), color = "blue", alpha = 0.7, size = 0.8) + 
+#   geom_point(aes(y = pred.m3), color = "red", alpha = 0.7, size = 0.8) + 
+#   #smoothers
+#   geom_smooth(aes(y = pred.m3), color = "red", linetype = "dashed", width = 1.4, se = F, size=0.9) + 
+#   geom_smooth(aes(y = PM10), color = "blue", se = F, size=0.9) + 
+#   ylab(expression(paste(PM[2.5], "concentration (ug/", m^3, ")"))) + 
+#   theme_bw() + theme(axis.title.x = element_blank())
+# ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/TIV.PM10.2008.svg", width = 5.5, height = 3)
+# ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/TIV.PM10.2008.png", width = 5.5, height = 3)
+# 
+# 
+# # plot a single year by day- SYO- south
+# ggplot(m1.all[stn %in% c("SYO") & c == 2008,], aes(x = day)) + 
+# #overall line
+#   geom_line(aes(y = PM10), color = "black", alpha = 0.15) + 
+#   #points
+#   geom_point(aes(y = PM10), color = "blue", alpha = 0.7, size = 0.8) + 
+#   geom_point(aes(y = pred.m3), color = "red", alpha = 0.7, size = 0.8) + 
+#   #smoothers
+#   geom_smooth(aes(y = pred.m3), color = "red", linetype = "dashed", width = 1.4, se = F, size=0.9) + 
+#   geom_smooth(aes(y = PM10), color = "blue", se = F, size=0.9) + 
+#   ylab(expression(paste(PM[2.5], "concentration (ug/", m^3, ")"))) + 
+#   theme_bw() + theme(axis.title.x = element_blank())
+# ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/SYO.PM10.2008.svg", width = 5.5, height = 3)
+# ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/SYO.PM10.2008.png", width = 5.5, height = 3)
+# 
+# 
+# # plot a single year by day- GDR- south
+# ggplot(m1.all[stn %in% c("GDR") & c == 2008,], aes(x = day)) + 
+# #overall line
+#   geom_line(aes(y = PM10), color = "black", alpha = 0.15) + 
+#   #points
+#   geom_point(aes(y = PM10), color = "blue", alpha = 0.7, size = 0.8) + 
+#   geom_point(aes(y = pred.m3), color = "red", alpha = 0.7, size = 0.8) + 
+#   #smoothers
+#   geom_smooth(aes(y = pred.m3), color = "red", linetype = "dashed", width = 1.4, se = F, size=0.9) + 
+#   geom_smooth(aes(y = PM10), color = "blue", se = F, size=0.9) + 
+#   ylab(expression(paste(PM[2.5], "concentration (ug/", m^3, ")"))) + 
+#   theme_bw() + theme(axis.title.x = element_blank())
+# ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/GDR.PM10.2008.svg", width = 5.5, height = 3)
+# ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/GDR.PM10.2008.png", width = 5.5, height = 3)
+# 
+# 
+# 
