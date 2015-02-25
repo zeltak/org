@@ -29865,13 +29865,9 @@ M-g TAB allows you to go to a specific column. You could write a macro using C-x
  
 ******** How to findreplace for all files in a dir
 
-
-
 How to findreplace for all files in a dir?
 
- 1.
-
-Type Ctrl+x
+ 1.Type Ctrl+x
  and type
  dired
  2. type dir path (there is completion with tab)
@@ -29905,6 +29901,66 @@ How to highlight all occurrences of word in a file?
 
 Call highlight-phrase, highlight-regexp,
 highlight-lines-matching-regexp.
+
+******** Interactively Find/Replace String Patterns on Multiple Files
+http://ergoemacs.org/emacs/find_replace_inter.html
+
+summary:
+
+#+BEGIN_EXAMPLE
+Call dired to list files in dir, or call find-dired if you need all subdirectories.
+Mark the files you want. You can mark by regex by typing 【% m】.
+Type Q to call dired-do-query-replace-regexp.
+Type your find regex and replace string. 〔➤ common elisp regex pattern〕
+For each occurrence, type y to replace, n to skip. Type 【Ctrl+g】 to abort the whole operation.
+Type ! to replace all occurrences in current file without asking, N to skip all possible replacement for rest of the current file. (N is emacs 23 only)
+To do the replacement on all files without further asking, type Y. (Emacs 23 only)
+Call ibuffer to list all opened files.
+Type 【* u】 to mark all unsaved files, type S to save all marked files, type D to close them all.
+#+END_EXAMPLE
+
+Step-by-Step Guide for Emacs Beginners
+
+Select Target Files
+Start emacs by typing “emacs” in the command line interface prompt. (Or, double click the Emacs icon if you are in a Graphics User Interface environment)
+
+Selecting Files in a Directory
+
+First you need to select the files you want to do the replace. Use the graphical menu 〖File ▸ Open Directory〗. Emacs will ask you for a directory path. Type the directory path, then press Enter.
+
+Now, you will be shown the list of files, and now you need to mark the files you want the regex find/replace to work on. You mark a file by moving the cursor to the file you want, then press m. Unmark it by pressing u. (To list subdirectories, move your cursor to the directory and press i. The sub-directory's content will be listed at the bottom.) To mark all files by a regex, type 【% m】, then type your regex pattern. For example, if you want to mark all HTML files, then type 【% m】 then \.html$. (You can find a list of the mark commands in the graphical menu “Mark” (this menu appears when you are in the dired mode).)
+
+Selecting Files in a Directory and All Its Sub-Directories
+
+If you want to do find/replace on files inside a directory, including hundreds of subdirectories, here's a method to select all these files.
+
+Call find-dired. (you call a command by pressing 【Alt+x】) Then, type a directory name, ⁖ /Users/mary/myfiles
+
+Note: if you are using emacs on a unix non-graphical text terminal, and if 【Alt+x】 does not work, the equivalent key stroke is 【Esc x】.
+
+Emacs will ask you with the prompt “Run find (with args): ”. If you need to do the replacement on all HTML files, then type -name "*html". If you don't care about what kind of file but simply all files under that dir, then give “-type f”.
+
+Now, mark the files as described above.
+
+Interactive Find/Replace
+
+Now, you are ready to do the interactive find replace. For simplicity, let's say you just want to replace the word “quick” by “super”. Now, call dired-do-query-replace-regexp. It will prompt you for the regex string and the replacement string. Type “quick”, enter, then “super”.
+
+Now, emacs will use your pattern and check the files, and stop and show you whenever a match occurred. When this happens, emacs will prompt you, and you have a choice of making the change or skip the change. To make the change, type y. To skip, type n. If you simply want emacs to go ahead and make all such changes to the current file, type !.
+
+If you want to cancel the whole operation without saving any changes you've made, type 【Ctrl+g】, then exit emacs using the menu 〖File ▸ Exit Emacs〗.
+
+Saving the Changed Files
+
+Now, after you went through the above ordeal, there is one more step you need to do, and that is saving the changed files.
+
+If you are using emacs version 22 or later, then call ibuffer to go into a buffer listing mode, then type 【* u】 to mark all unsaved files, then type S to save them all. (that's shift-s)
+
+If you are using a emacs version 21, then you can do this: call list-buffers, then move the cursor to the file you want to save and type s. It will mark the file for later save action. Type u to unmark. Once you are done, type x to execute the saving of all files marked for save. (in emacs, opened file is called “buffer”. Disregard other things there.)
+
+Alternative to the above options, you can also call save-some-buffers 【Ctrl+x s】. Then emacs will display each unsaved file and ask if you want it saved.
+
+Note: emacs's regex is not the same as Perl or Python's, but similar. For a summary and common patterns, see: Emacs Regex.
 
 ******* setting (lisp)
 ******** setting common variables at once (setq)
@@ -30036,15 +30092,13 @@ Call delete-trailing-whitespace does it to the whole buffer.
 also one can try sed:
  for i in $(seq 2000 2015); do sed 
  s/2000/$i/g myinput > userinput_$i ; done                                                    
-
-
 ******** create a horizonatl/vertical list
 Press and hold Enter to create several empty lines.
 Now, select those empty lines.
 Call ~rectangle-number-line~
 it'll insert verticak numbers.
 Now to create horizontal numbers, just select the region, and call ~fill-region~, to compact them.
-******** replace all  signs with empty space but EXCLUDE org headlines
+******** replace all signs with empty space but EXCLUDE org headlines
 paste the elisp code on the first line and eval it.
 
 #+BEGIN_SRC emacs-lisp :results none
