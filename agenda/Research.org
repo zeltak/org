@@ -438,6 +438,19 @@ so the ones with the 2 should have higher numbers of hospitalizations
 
 * Future Research Ideas
 ** PM model (NEXT BRANCH)
+*** MAIAC next stages
+**** TODO call with Alexei
+ cloud cover issue in Mexico; grid cells being masked because of bright surfaces (false clouds) and dropping of clear days
+ (long time series with no scene coverage)
+Israel data subsets with no raw correlation - Itai will send examples to Alexei (related: not certain why we have big differences
+ in R2 from year to year in Israel and Mexico)
+dust days not caught by MAIAC (in Israel); Itai and Meytar sending a few examples
+(both areas) focus on improving a single year to speed iteration - we nominate 2004 - hopefully this lets us communicate back
+ and forth.
+
+We also heard some great suggestions that I am eager to try about TEOM recalibration; characterizing diurnal monitor patterns; comparing aeronet versus the closest monitors; attempting inverse variance weights on AOD; and carefully using both Aqua and Terra.
+
+*** explore Callipso sattelite 
 *** NEW ideas
 **** Future models ideas
 ***** TODO supplementing AOD by space and time
@@ -682,6 +695,124 @@ round(mod1table$', i, '_', j, ', 2)', sep='')))
 }
 #+END_SRC
 
+** meytar research topics 
+1. PM-MAIAC model in Israel
+
+Predict PM2.5 /PM10 based on MAIAC AOD using mixed effects model following I.Kloogs 
+
+extended model with occurrence of dust events. 
+
+In process
+
+o Examine the relation between PBL measurements from Beit-Dagan and the modeled 
+
+o Examine the use of AIC/BIC tests that take into account the DF to compare model 
+
+PBL. Calibrate the model with AOD, date, temperature and PBL.
+
+results.
+
+2. Analysis of the Spatial coverage of dust events in Israel
+
+- Define dust event in each area based on ground PM10 data and compositional data (?)
+
+- Use satellite data to apply dust classification model on the data
+
+- Analyze the spatial coverage of each event (main goal: showing that not every dust event 
+
+affects the whole country)
+
+In process
+
+3. Analyze the relation between PM hourly (overpass) data and daily data 
+
+- Create a global dataset of all ground data from the overpass hours of Terra(10:30) and 
+
+Aqua(13:30) from (Israel, USA, Europe).
+
+- Analyze diurnal cycles per station and compare daily to hourly PM values. 
+
+- Compare results between correlation to MAIAC/MODIS C06 AOD data with overpass data 
+
+(i.e. mixed effect model).
+
+- Analyze relation between overpass time and daily mean concentrations for all ground 
+
+variables (also dust events) for each station separately and maybe aggregated to regions.
+
+- Discuss the use of daily data and how the overpass data represents the daily mean per 
+
+station ?
+
+Israel part is done, need data from other areas to finish analysis.
+
+4. Understanding the causativeness between the PM2.5/PM10 ratio to the goodness of fit of 
+
+the AOD>>PM model to each PM fraction.
+
+Understanding if different ratios in different areas that are affected from different sources 
+
+reveal different fits. Global database: Israel, USA, Italy, Mexico, Spain etc. 
+
+The hypothesis is that the final graph will look schematically like this:
+
+PM10 PM2.5 
+
+5. 
+
+R2 
+
+PM2.5/PM10 Ratio 
+
+6. Deep Blue over Israel
+
+Analyze DB data over Israel using collection 6 data (e.g. 10km, combined aod_dt-db) and 
+
+examine PM estimation model using the db especially over bright surfaces. Maybe use dt in 
+
+certain regions and db in others based on a surface reflectance threshold (e.g. optimization 
+
+model that will choose for each pixel what is the best dataset to use, 
+
+DT/DB/Combined/MAIAC, in order to represent PM with the minimum error).
+
+Will it be possible to create DB data in a higher resolution (by ourselves/to receive from 
+
+NASA-A.Sayer/B.Ridgway) ?
+
+7. Understanding the local PM vertical profile
+
+Data from:
+
+(1) Calipso
+
+(2) MPL - Nes Ziona (Karnieli/Smadar - David Please check with her)
+
+(3) Is there any vertical data from Aeronet?
+
+8. PM composition detection using Satellite observations (Israel, Arizona, Spain, Italy, 
+
+Cyprus and more)
+
+- Using PM composition ground measurements as an evaluation.
+
+- Broad cooperation, Large Grant needed 
+
+9. Understanding the limitations of satellite remote sensing over coastal areas
+
+Compare PM estimation ability by AOD over land with data over coastal areas, examine the 
+
+coastal flag in MODIS/MAIAC algorithms.
+
+10. Humidity profile from satellite observations
+
+As the difference in RH between the ground and satellite measurements may derive the 
+
+discrepancies between these measurements, it's worth analyzing the contribution of the 
+
+satellite-borne RH profile and maybe find a RH correction factor to use in PM prediction 
+
+models.
 ** Future exposure models 
    :PROPERTIES:
    :ID:       03c79a3e-10b4-4295-b91f-d0c4f38e9497
