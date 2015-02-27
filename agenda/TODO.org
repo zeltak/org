@@ -37,6 +37,16 @@ check tarman
 org habits 
 ** tmux
 *** why isn't TAB working in Emacs (org mode)
+** set all mime related to web to chromium
+#+BEGIN_SRC sh
+for mime in $(awk -F'=' '/Mime/ {print $2}' /usr/share/applications/chromium.desktop |  
+tr ';' ' '); do xdg-mime default chromium.desktop $mime; gvfs-mime --set $mime          
+chromium.desktop; done                                                                  
+#sets chromium as default handler for all protocols it supports                          
+
+
+#+END_SRC
+
 ** org sparese
 punchagan | zeltak: it looks like properties need to be all upper case. 
  punchagan | zeltak: for instance I changed Ammount to AMMOUNT
@@ -417,6 +427,7 @@ Twitter    : http://twitter.com/sdf_pubnix
 ** filbot qnap
 http://www.filebot.net/forums/viewtopic.php?f=8&t=2335&p=13416&hilit=qnap#p13416
 ** flexget  
+
 
 * Linux
 ** Org
