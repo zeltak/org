@@ -126,13 +126,11 @@ all vars in log scale , check which one was dropped
 even simple pm-aod models show this sharp CV drop
 
 *** talk with david
+
 | mod                      |   r2 | space | time |
 | aod                      | 0.77 |   .76 | 0.78 |
 | lu+met+intercept for day |   75 |  0.61 | 0.76 |
 | aod+all                  | 0.84 |  0.89 | 0.84 |
-
-
-
 
 the use of physical measuremtns gives us the ability to predict in areas far from physics monitors (such as >30km etc) and reach rural area
 use of AOD gives us daily predctions over space where LUR cannot
@@ -308,7 +306,7 @@ compare euro wide model with localized model
 *** compare osm and euromaps
 *** kees talk 28.1.15     
 **** MAIAC Data- they found a bug over bright surfaces and snow-will process again so data only in a few weeks
-**** Massimo analysis in lombardy- very encouraging CV ~ 0.8
+**** Massimo anlalysis in lombardy- very encouraging CV ~ 0.8
 
 **** we need to clip our grid to exclude points over water areas (MAIAC AOD over water body is very biased)
 **** centralized repositoary
@@ -713,6 +711,8 @@ round(mod1table$', i, '_', j, ', 2)', sep='')))
 #+END_SRC
 
 ** meytar research topics 
+
+
 1. PM-MAIAC model in Israel
 
 Predict PM2.5 /PM10 based on MAIAC AOD using mixed effects model following I.Kloogs 
@@ -775,7 +775,7 @@ The hypothesis is that the final graph will look schematically like this:
 
 PM10 PM2.5 
 
-5. 
+5. class of where dust came and outcome 
 
 R2 
 
@@ -1381,6 +1381,12 @@ composition
 dataset for bad 0.00 R2 aod-pm 
 pm-aeronet
 email quan di about geoschem and send him PM monitors 
+
+*** TODO prepare
+for 2004 only:
+dataset with aod point with bad <0.1 cord
+send meytar all hdf for aLL 2004 and send myetar
+send days with low PM /low aod >
 
 ** TODO meytar schedule
 in R- gbm analylis- check model with only highest variables.
