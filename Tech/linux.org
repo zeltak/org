@@ -27146,6 +27146,142 @@ ledermaus | exactly.
 #+END_EXAMPLE
 
 ******* ELISP
+******** Introduction to lisp
+********* Functions
+The symbol after ( is usually a function name, unless its part of a list of literals (numbers, strings, etc.). You'll learn how to recognize literal lists later.
+
+In math, operators like + and * go between the numbers they will work on. In Emacs Lisp, the operator (or the "function") is at the start of the expression, followed by the things it's going to operate on ("arguments").
+
+#+BEGIN_EXAMPLE
+( ( 1 + 2 ) * 3 )    Math expression
+( * ( + 1 2 ) 3 )    Emacs Lisp expression
+#+END_EXAMPLE
+
+To find out if something is a function, what it does, what arguments it takes, and if it has any keyboard shortcuts, use the C-h f (describe-function) command. Give it the function name. For example, C-h f add-hook will show you the documentation for add-hook, and C-h f show-paren-mode will show you the documentation for that.
+********* variables
+
+Variables are containers that can hold different values. In Emacs Lisp, you can change the value of a variable as many times as you want, and you can change it to different types of data as needed.
+
+Like the way you can use C-h f (describe-function) to learn more about a function, you can use C-h v (describe-variable) to learn more about a variable by name. For example, use C-h v to look up the documentation for visible-bell. It says:
+
+Non-nil means try to flash the frame to represent a bell.
+A non-nil value is anything that isn't nil, such as t or 1. If you would like to configure your Emacs to flash instead of ringing the bell, you could add the following code to your ~/.emacs.d/init.el:
+
+#+BEGIN_EXAMPLE
+(setq visible-bell t)
+#+END_EXAMPLE
+
+Many variables have the same value no matter what youre looking at. Some variables change depending on the buffer you're in, and are called "buffer-local" variables. Use C-h v to find out if a variable is buffer-local. For example, the documentation for tab-width includes:
+#+BEGIN_EXAMPLE
+Automatically becomes buffer-local when set.
+#+END_EXAMPLE
+This means you can't globally set it with setq, because any changes you make will only be applied to the current buffer. However, you can set the default value with setq-default like this:
+#+BEGIN_EXAMPLE
+(setq-default tab-width 2)
+#+END_EXAMPLE
+********* single qoute (')
+Let's take a closer look at this example.
+
+#+BEGIN_EXAMPLE
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+#+END_EXAMPLE
+add-hook is a function
+both:
+'emacs-lisp-mode-hook​  
+'turn-on-eldoc-mode​
+
+have single quotes, which tells Emacs to skip evaluating them. They refer to the name of the thing instead of its value. 
+
+emacs-lisp-mode-hook is a variable that contains a list of functions to run, and turn-on-eldoc-mode is a function that were adding to that list.
+
+The single quote means take it literally - treat it as the name of something. If you remove the quote from emacs-lisp-mode-hook, Emacs will look up the value in that variable and use that as the name of the variable to actually set, and you'll probably get an error.
+********* setq
+Not everything is quoted. You'll often see lines like this in Emacs configuration files:
+
+#+BEGIN_EXAMPLE
+(setq delete-old-versions -1)
+#+END_EXAMPLE
+
+
+setq stands for "set quoted". This is actually the same code as:
+#+BEGIN_SRC emacs-lisp :results none
+(set 'delete-old-versions -1)
+; or
+(set (quote delete-old-versions) -1)
+#+END_SRC
+but setq is shorter, so it's more common.
+
+********* Work with lists
+
+You can set the value of a variable to multiple things. In Emacs configuration files, youll often see ' used for lists. For example,
+
+#+BEGIN_SRC emacs-lisp :results none
+(setq diff-switches '("-b" "-u"))
+#+END_SRC
+
+sets the options for the diff command to a list containing two items, -b and -u. Quoting the list creates a list and quotes all the content in it as needed. You can create lists with the list function instead. The code above is the same as:
+
+#+BEGIN_SRC emacs-lisp :results none
+(setq diff-switches (list "-b" "-u"))
+#+END_SRC
+
+The code above sets the value of the variable to a list, ignoring any previous values it had.
+
+`Add to a list`
+
+Most of the time, though, you want to add to a list instead of completely replacing it. Youll often see something like this in people's configuration files:
+
+#+BEGIN_SRC emacs-lisp :results none
+(add-to-list 'load-path "~/elisp")
+#+END_SRC
+
+This adds the ~/elisp directory to the beginning of the list of directories that Emacs checks when loading libraries. If the directory is already in the list, add-to-list does nothing.
+
+`Deleting from a list`
+
+If you need to delete something from a list, you can use the delete function like this:
+
+#+BEGIN_SRC emacs-lisp :results none
+(setq load-path (delete "~/elisp" load-path))
+#+END_SRC
+
+This deletes the specified member from the list. Note that the second argument for delete is not quoted, so Emacs Lisp uses the value instead of treating it as the name of a list.
+
+Hooks are lists of functions, so you can delete items using delete. Alternatively, a cleaner way to remove a hook is to use remove-hook like this:
+
+#+BEGIN_SRC emacs-lisp :results none
+(remove-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+#+END_SRC
+
+********* Hooks
+
+Hooks are lists of functions that are called from Emacs Lisp in order to modify the behaviour of something. For example, different modes have their own hooks so that you can add functions that will run when that mode is initialized. You saw this example earlier in the module:
+
+#+BEGIN_SRC emacs-lisp :results none
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+#+END_SRC
+
+
+This is equivalent to:
+
+#+BEGIN_SRC emacs-lisp :results none
+(add-to-list 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+#+END_SRC
+
+It adds the turn-on-eldoc-mode function to the list of functions when a buffer is initialized with emacs-lisp-mode.
+********* Dot notation
+
+Some things look like lists, but theres a dot between the first element and the last element. Whether something should have a dot or not depends on what's expected by the function that uses the data. For example:
+
+#+BEGIN_SRC emacs-lisp :results none
+(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+#+END_SRC
+
+This calls the add-to-list function with two arguments. The first argument (​'package-archives​) specifies the list to add an item to
+and the second argument (​'("melpa" . "http://melpa.milkbox.net/packages/")​) is the data to add.
+
+The dot (x . y) shows that this is a cons cell, which is something that has two parts. These parts are called the car and the cdr, and can contain symbols, values, lists, and so on. A cons cell like ("abc" . "def") looks like this:
+
 ******** hooks
 ********* add a hook
 a simple hook EXAMPLE
@@ -27726,6 +27862,14 @@ use this function (stick it in your config file)
  I have this set to <f7>:
  (global-set-key (kbd "<f7>") 'minimap-toggle)
 
+******** bind a key with a prefix (like C-u) 
+#+BEGIN_SRC emacs-lisp :results none
+(global-set-key (kbd "<f12>")                                    
+                #'(lambda ()                                     
+                    (interactive)                                
+                    (let ((current-prefix-arg '(4)))             
+                      (call-interactively #'org-refile))))
+#+END_SRC
 ******** TODO Toggle-Map
 The following keymap toggles some options which tend to be useful throughout a session.
 
@@ -29416,6 +29560,24 @@ remembert that heads can inherit the color from the body, the following is equiv
    ("q" nil "cancel")))
 #+END_SRC
 
+*********** Can Hydras can be helpful?
+They can, if
+
+
+#+BEGIN_SRC emacs-lisp :results none
+(setq hydra-is-helpful t)
+#+END_SRC
+
+This is the default setting. In this case, you'll get a hint in the echo area consisting of current Hydra's base comment and heads. You can even add comments to the heads like this:
+
+#+BEGIN_SRC emacs-lisp :results none
+(defhydra hydra-zoom (global-map "<f2>")
+  "zoom"
+  ("g" text-scale-increase "in")
+  ("l" text-scale-decrease "out"))
+#+END_SRC
+
+With this, you'll see zoom: [g]: in, [l]: out. in your echo area, once the zoom Hydra becomes active.
 ********** Hydra example and recipes
 *********** helm-related functions
 #+BEGIN_EXAMPLE
@@ -29492,6 +29654,43 @@ For that case, I would get the hint immediately after C-M-s and would be able to
 
 The code above would give the error "Key sequence C-M-s z starts with non-prefix key C-M-s". So you can pick the method that you prefer, the choice is there.
 
+*********** rectangle selector 
+#+BEGIN_SRC emacs-lisp :results none
+(defun ora-ex-point-mark ()
+  (interactive)
+  (if rectangle-mark-mode
+      (exchange-point-and-mark)
+    (let ((mk (mark)))
+      (rectangle-mark-mode 1)
+      (goto-char mk))))
+
+(defhydra hydra-rectangle (:body-pre (rectangle-mark-mode 1)
+                           :color pink
+                           :post (deactivate-mark))
+  "
+  ^_k_^     _d_elete    _s_tring     |\\     _,,,--,,_
+_h_   _l_   _o_k        _y_ank       /,`.-'`'   ._  \-;;,_
+  ^_j_^     _n_ew-copy  _r_eset     |,4-  ) )_   .;.(  `'-'
+^^^^        _e_xchange  _u_ndo     '---''(_/._)-'(_\_)
+^^^^        ^ ^         _p_aste
+"
+  ("h" backward-char nil)
+  ("l" forward-char nil)
+  ("k" previous-line nil)
+  ("j" next-line nil)
+  ("e" ora-ex-point-mark nil)
+  ("n" copy-rectangle-as-kill nil)
+  ("d" delete-rectangle nil)
+  ("r" (if (region-active-p)
+           (deactivate-mark)
+         (rectangle-mark-mode 1)) nil)
+  ("y" yank-rectangle nil)
+  ("u" undo nil)
+  ("s" string-rectangle nil)
+  ("p" kill-rectangle nil)
+  ("o" nil nil))
+(global-set-key (kbd "C-x SPC") 'hydra-rectangle/body)
+#+END_SRC
 *********** gnus
 
 #+BEGIN_EXAMPLE
@@ -29612,6 +29811,23 @@ Sample Configuration
 
 (ace-isearch-set-ace-jump-after-isearch-exit t)
 #+END_SRC
+
+********* ace-jump-zap
+https://github.com/waymondo/ace-jump-zap
+ace-jump-zap provides the functionality of zap-to-char and zap-up-to-char using ace-jump-mode. In a nutshell, you may trigger a key-binding to launch ace-jump-char-mode to vaporize all characters between the cursor and the selected character.
+
+Bind (ace-jump-zap-to-char) or (ace-jump-zap-up-to-char) to the key-binding of your heart's desire and zap away.
+
+Alternatively, you can bind the helper functions (ace-jump-zap-to-char-dwim) and (ace-jump-zap-up-to-char-dwim). Calling them interactively will trigger (zap-to-char) and (zap-up-to-char) respectively, but with a prefix it will call the ace-jump-zap version.
+
+ajz/zap-function
+
+This is the function used for zapping between point and char. The default is 'delete-region
+but it could also be 'kill-region.
+
+ajz/forward-only
+
+Set to non-nil to choose to only zap forward from the point. Default will zap in both directions from the point in the current window.
 
 ********* key chord 
 ********** base
@@ -31489,6 +31705,11 @@ to start the refile process, then type something to get some matching targets, t
 to restrict the matches to the current list, then continue searching with some other text to find the target I need.
 ?C-j? also selects the current completion as the final target. I like this a lot. I show full outline paths in the targets so I can have the same heading in multiple subtrees or projects and still tell them apart while refiling.
 
+********* org-refile can do different things depending on how you call it:
+
+By default, it moves the current subtree to the specified location.
+If you call it with the prefix argument C-u (like so: C-u C-c C-w), it jumps to the specified location instead of moving the current subtree.
+If you call it as C-u C-u C-c C-w, it jumps to the previous refiling location.
 ******* Code blocks 
 ******** higlighted code blocks inside org-mode
 make sure you have this in your config:
