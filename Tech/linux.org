@@ -26443,12 +26443,19 @@ use ?C-h k? , followed by the keybind
 (org-todo "COOK") 
 #+END_SRC
 ******* Functions
+******** fset
+define a function for the symbol using the fset, example
+
+#+BEGIN_SRC emacs-lisp :results none
+(fset 'z/prefix-org-refile (C-u M-x org-refile))   
+#+END_SRC
+
 ******** simple food template Function
 here is an anotated version
 #+BEGIN_SRC emacs-lisp :results none
 ;name of the functiom
-(defun recipe-template ()
-;make it interactive
+(defun recipe-templat
+;maken recipe-template ()
         (interactive)
 ;       this will move the cursor to a 0 poistion so the "search forward from point" command below will work
          (goto-line 0)
@@ -27863,6 +27870,8 @@ use this function (stick it in your config file)
  (global-set-key (kbd "<f7>") 'minimap-toggle)
 
 ******** bind a key with a prefix (like C-u) 
+you could use this self contained code:
+
 #+BEGIN_SRC emacs-lisp :results none
 (global-set-key (kbd "<f12>")                                    
                 #'(lambda ()                                     
@@ -27870,6 +27879,32 @@ use this function (stick it in your config file)
                     (let ((current-prefix-arg '(4)))             
                       (call-interactively #'org-refile))))
 #+END_SRC
+
+or %better% eval this macro and use it in all future binds
+
+#+BEGIN_SRC emacs-lisp :results none
+(defmacro C-u (&rest args)
+  (let ((prefix (list 4)))
+    (while (cdr args)
+      (cond
+       ((eq (car args) 'C-u)
+        (setf (car prefix) (* 4 (car prefix))))
+       ((eq (car args) 'M-x)
+        ;; ignore
+        t)
+       (t
+        (error "Unknown arg %S" (car args))))
+      (setq args (cdr args)))
+    (unless (functionp (car args))
+      (error "%S is not a function" (car args)))
+    `(lambda ()
+       (interactive)
+       (let ((current-prefix-arg ',prefix))
+         (call-interactively ',(car args))))))
+
+(global-set-key (kbd "<f12>") (C-u M-x org-refile))
+#+END_SRC
+
 ******** TODO Toggle-Map
 The following keymap toggles some options which tend to be useful throughout a session.
 
@@ -30567,7 +30602,7 @@ The easiest way to create that directory is to use a free Dropbox.com account. W
 the mobile-org android app will put all the captured syncs in that folder under this file:
 
 file:/home/zeltak/Dropbox/MobileOrg/mobileorg.org
-!Note! above file may be empty ^^^^
+!Note! above file may be empty!
 !Note2! the captures disappears from the mobile app after sync and are transferred to the above file
 
 the second step involves telling org-mode where to transfer the 'pulled' files to (after issues a org-mobile-pull) ,that is from the mobileorg.org file to the file defined here:
@@ -31279,7 +31314,36 @@ to fix this disable linium mode in org with the following hook
 
 #+END_SRC
 ******* capture
+******** setup
+make sure you have 
+#+BEGIN_SRC emacs-lisp :results none
+(require 'org-protocol)
+#+END_SRC
+
+in your init file before you start capturing
+
+
+******** keybinds
+use ~C-c C-s~ (org-schedule) to schedule it for a particular day
+set the deadline with ~C-c C-d~ (org-deadline),
+use ~C-c C-w~ to refile it
 ******** launch org capture from command line (for quick WM binds)
+	 :PROPERTIES:
+	 :END:
+********* new method 
+issue this line:
+#+BEGIN_SRC sh
+emacsclient -nw org-protocol:/capture:/URL/TITLE/BODY
+#+END_SRC
+
+you can also execute a specific capture templeate by adding the shortcut after the capture:/ like this :
+
+#+BEGIN_SRC sh
+emacsclient -nw org-protocol:/capture:/x/URL/TITLE/BODY
+#+END_SRC
+
+********* old method (still works but more cumbersome)
+
 1.add this code in your .emacs
 
 #+BEGIN_SRC emacs-lisp
