@@ -26443,6 +26443,18 @@ use ?C-h k? , followed by the keybind
 (org-todo "COOK") 
 #+END_SRC
 ******* Functions
+******** basic info
+only interactive functions are available with ~M-x~
+to make a function interactive issue something like this
+
+#+BEGIN_SRC emacs-lisp :results none
+(defun z/hydra-wrap-elisp () (interactive) (z/wrap-in-elisp-block))
+#+END_SRC
+******** create a new function to be used with binds and m-x from a base function 
+#+BEGIN_SRC emacs-lisp :results none
+(defun z/hydra-wrap-elisp () (interactive) (beginning-of-line) (z/wrap-in-elisp-block))
+#+END_SRC
+
 ******** fset
 define a function for the symbol using the fset, example
 
@@ -26497,6 +26509,21 @@ here is an anotated version
          (yas-insert-snippet)
 )
 
+#+END_SRC
+******** sample function with interactive lines 
+#+BEGIN_SRC emacs-lisp :results none
+(global-set-key (kbd "C-c w e")
+                    (lambda ()
+                      (interactive)
+;;jump to the start of the line 
+                      (beginning-of-line)
+;issue the function below z/wrap...
+                      (z/wrap-in-elisp-block)
+;;again jump to start of line 
+                      (beginning-of-line)
+;;since the function leaves an empty gap delete the first 2 caracters (white-space)
+                      (delete-char 2)
+                                           ))
 #+END_SRC
 ******* Dired
 ******** basic keys
@@ -29962,6 +29989,13 @@ Examples:
  that are frequently performed while the hands are in writing position.
 
  Key chords might not work well over a slow network.
+********* org-dp
+tips when buliding scripts with org-dp
+
+:preserve-indent 1
+
+mnake sure its '1' other wise you will get indents
+
 ******* registers
 ******** basics
 
@@ -38815,6 +38849,11 @@ exclude anything with "autumn" in the name
  ./Pictures/iPhoto Library/brothers.jpg
  ...
 
+**** find by extension 
+#+BEGIN_SRC sh
+find $directory -type f -name "*.in"
+#+END_SRC
+
 **** find by user
 
 Find by User
@@ -38925,7 +38964,6 @@ In this example, delete empty files from ~/Downloads/
 #+BEGIN_SRC sh
 find ~/Downloads/ -empty -type -f -delete
 #+END_SRC
-
 
 **** Combinations
 
