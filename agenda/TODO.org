@@ -265,23 +265,23 @@ tried this but didn't send the command (its waiting for a password)
 **** configure dunst notification colors specifacly for worker commands including short timeout
 
 ** ,----[ C-h f helm-do-grep RET ]
-| helm-do-grep is an interactive autoloaded Lisp function in
-| `helm-grep.el'.
-|
-| It is bound to C-x c M-g s, <menu-bar> <tools> <Helm> <Tools> <Grep>.
-|
-| (helm-do-grep)
-|
-| Preconfigured helm for grep.
-| Contrarily to Emacs `grep', no default directory is given, but
-| the full path of candidates in ONLY.
-| That allow to grep different files not only in `default-directory' but anywhere
-| by marking them (C-<SPACE>). If one or more directory is selected
-| grep will search in all files of these directories.
-| You can also use wildcard in the base name of candidate.
-| If a prefix arg is given use the -r option of grep (recurse).
-| The prefix arg can be passed before or after start file selection.
-| See also `helm-do-grep-1'.
+| helm-do-grep is an interactive autoloaded Lisp function in                      |
+| `helm-grep.el'.                                                                 |
+|                                                                                 |
+| It is bound to C-x c M-g s, <menu-bar> <tools> <Helm> <Tools> <Grep>.           |
+|                                                                                 |
+| (helm-do-grep)                                                                  |
+|                                                                                 |
+| Preconfigured helm for grep.                                                    |
+| Contrarily to Emacs `grep', no default directory is given, but                  |
+| the full path of candidates in ONLY.                                            |
+| That allow to grep different files not only in `default-directory' but anywhere |
+| by marking them (C-<SPACE>). If one or more directory is selected               |
+| grep will search in all files of these directories.                             |
+| You can also use wildcard in the base name of candidate.                        |
+| If a prefix arg is given use the -r option of grep (recurse).                   |
+| The prefix arg can be passed before or after start file selection.              |
+| See also `helm-do-grep-1'.                                                      |
 ** Emacs
 jabref-ebib etc
 bbdb
@@ -991,11 +991,29 @@ Small long handle mazmera 110
 
 
 * Emacs vim replace
-
 d >> c-s-BK (with ESC- -1/1 arguments)
-C-BK kill line back
-A-BK kills like forward 
+  C-BK kill line back
+      A-BK kills like forward 
 C-k kill line forward 
 C-d kill charater forward
 M-d kill forward 
+
+
+#+BEGIN_SRC emacs-lisp 
+(nth 7 (macroexpand '(defhydra hydra-commenting (:color blue :hint nil)
+                      "
+comment _;_ // comment _t_o line // comment para_g_raph // co_p_y-paste-comment
+"
+                      (";" evilnc-comment-or-uncomment-lines)
+                      ("t" evilnc-quick-comment-or-uncomment-to-the-line)
+                      ("g" evilnc-comment-or-uncomment-paragraphs)q
+                      ("p" evilnc-copy-and-comment-lines)
+                      ("d" downcase-region "downcase")
+                      ("q" nil "cancel"))))
+#+END_SRC
+
+#+RESULTS:
+| defun | hydra-commenting/hint | nil | (if hydra-lv (lv-message (concat (format comment _;_ // comment %so line // comment para%sraph // co%sy-paste-comment |
+t g p) [d]: downcase, [q]: cancel)) (message (concat (format comment _;_ // comment %so line // comment para%sraph // co%sy-paste-comment
+t g p) [d]: downcase, [q]: cancel))) |
 

@@ -27179,6 +27179,16 @@ ledermaus | the final ! is once again a simple atom, so is replaced the same way
 ledermaus | exactly.                                                                                                            
 #+END_EXAMPLE
 
+******** Regex tips and tricks
+********* replace all numbers with space
+use the regex syntax [0-9]
+or in a command 
+#+BEGIN_SRC emacs-lisp :results none
+(progn (goto-char (point-min)) (replace-regexp "[0-9]" ""))      
+#+END_SRC
+
+you can also create a function from that 
+
 ******* ELISP
 ******** Introduction to lisp
 ********* Functions
