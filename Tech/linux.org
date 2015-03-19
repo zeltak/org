@@ -42,7 +42,7 @@ dd bs=4M if=/path/to/archlinux.iso of=/dev/sdx
 
 %Tip it may be easier if you have issues/erorrs to use fdisk/gparted to create the partitions. you can also use a livecd tool to do it with gparted%
 
-use cfdisk (or gparted from a resuce cd like systemrescuecd) to partition the drives create a / partition a swap partition and a /home partiton see
+use cgdisk (or gparted from a resuce cd like systemrescuecd) to partition the drives create a / partition a swap partition and a /home partiton see
 [[https://wiki.archlinux.org/index.php/Partitioning][https://wiki.archlinux.org/index.php/Partitioning]]
 for info on partitioning
 
@@ -58,7 +58,10 @@ see
 
 To display the current partition layout:
 
+#+BEGIN_SRC emacs-lisp :results none
 lsblk /dev/sda
+#+END_SRC
+
 
 ***** mount the root partition in /mnt
 
@@ -67,10 +70,13 @@ mount /dev/sda1 /mnt
 
 #then create /mnt/home
 mkdir /mnt/home
-
 #then mount your home there
-
 mount /dev/sda2/ /mnt/home
+
+#then for UEFI create /mnt/boot 
+mkdir /mnt/boot 
+#then mount your home there
+mount /dev/sda3/ /mnt/boot
 
 #+END_SRC
 
@@ -256,25 +262,57 @@ userdel -r archie
 #+END_SRC
 
 ***** Install and configure a bootloader
-(For BIOS motherboards)
-For BIOS systems, there are three bootloaders - Syslinux, GRUB, and LILO. Choose the bootloader as per your convenience.
-Install the syslinux package and then use the syslinux-install\_update script to automatically install the files (-i), mark the partition
-active by setting the boot flag (-a), and install the MBR boot code (-m):
+****** for Uefi (for newer hardware)
+$Note$ make sure you mounted the uefi boot partition @before@ you chrooted when you mounted /mnt and /mnt/home
 
-#+BEGIN_SRC sh
-pacman -S syslinux
-syslinux-install_update -i -a -m
+Install the gummiboot package and run the automated installation script, replacing $esp with the location of your EFI System Partiton, usually /boot:
+
+#+BEGIN_SRC emacs-lisp :results none
+pacman -S gummiboot
+# then issue gummiboot --path=$esp installel, ₆In example₆ : 
+gummiboot --path=/boot install
 #+END_SRC
 
-@Warning-if you get an error: FAILED to set attribute Legacy BIOS Bootable on /dev/XXX@
-install  gdisk and re-issue command
+create $esp/loader/entries/arch.conf and add the following, replacing /dev/sdaX with your root partition (most likely /dev/sda2 if /dev/sda1 is the ESP):
+# nano $esp/loader/entries/arch.conf
 
-#+BEGIN_SRC sh
-pacman -S gdisk
-syslinux-install_update  -i -a -m
+#+BEGIN_SRC emacs-lisp :results none
+title          Arch Linux
+linux          /vmlinuz-linux
+initrd         /initramfs-linux.img
+options        root=/dev/sdaX rw
+#+END_SRC
+Second, create $esp/loader/loader.conf and add the following, replacing the timeout value (in seconds) with your own choice:
+
+# nano $esp/loader/loader.conf
+#+BEGIN_SRC emacs-lisp :results none
+default  arch
+timeout  5
 #+END_SRC
 
-***** Configure syslinux.cfg
+finally reinstall linux
+
+#+BEGIN_SRC emacs-lisp :results none
+pacman -S linux 
+#+END_SRC
+
+****** (For BIOS motherboard)  for !older! hardware
+    For BIOS systems, there are three bootloaders - Syslinux, GRUB, and LILO. Choose the bootloader as per your convenience.
+    Install the syslinux package and then use the syslinux-install\_update script to automatically install the files (-i), mark the partition
+    active by setting the boot flag (-a), and install the MBR boot code (-m):
+
+    #+BEGIN_SRC sh
+    pacman -S syslinux
+    syslinux-install_update -i -a -m
+    #+END_SRC
+
+    @Warning-if you get an error: FAILED to set attribute Legacy BIOS Bootable on /dev/XXX@
+    install  gdisk and re-issue command
+
+    #+BEGIN_SRC sh
+    pacman -S gdisk
+    syslinux-install_update  -i -a -m
+    #+END_SRC
 
 !This step is vital!
 to point to the right root partition. If it points to the wrong partition, Arch Linux will not boot. Change /dev/sda3 to reflect your root partition (if you partitioned your drive as in the example, your root partition is sda1). Do the same for the fallback entry.
@@ -289,8 +327,6 @@ nano /boot/syslinux/syslinux.cfg
  ...
  APPEND root=/dev/sda3 ro
  ...
-
-
 
 #+END_SRC
 
