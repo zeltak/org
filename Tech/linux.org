@@ -364,6 +364,11 @@ The useradd command will prompt for information interactively:
 useradd -m -g users -s /bin/bash archie
 #+END_SRC
 
+you may need to define password:
+#+BEGIN_SRC emacs-lisp :results none
+passwd username
+#+END_SRC
+
 ***** network
 enable systemd network dhcp by issuing this
 
@@ -414,6 +419,8 @@ lspci | grep VGA
 then install correct drivers
 
 #+BEGIN_SRC sh
+sudo pacman -S xorg xorg-xinit
+#then:
 #for nvidia cards
 sudo pacman -S nvidia
 #Intel integrated graphics:
@@ -474,84 +481,7 @@ file:~/.config/fontconfig/fonts.conf
 </fontconfig>
 #+END_SRC
 
-**** Installs client
-
-%Pacman%
-
-#+BEGIN_SRC sh
-pacman -S tree ncdu nfs-utils rpcbind terminator r mc artwiz-fonts
-ttf-ms-fonts flac lame smplayer smplayer-themes abiword keepassx dzen2
-zip unzip unrar mtpaint krename gmrun aspell aspell-en findutils digikam
-kipi-plugins inkscape python-lxml gcolor2 easytag gmrun kdiff3 vimpager
-htop p7zip vlc smb4k screen speedcrunch sudo mlocate krusader vim gvim
-mpc alsa-utils conky atool lynx profont fb-client feh keychain picard
-powerpill strace gdb mpd mp3gain monaco-linux-font pacgraph sqliteman
-grep awk leafpad less lxappearance lxdm zotero sxiv geeqie pavucontrol
-net-tools sshfs xterm zsh samba xclip alsa-utils lxtask pydf autojump
-xorg-xkill nmap acpi lib32alsa-plugins lib32-libpulse audacity nmon
-dstat glances pacgraph gnome-schedule cgrep powertop ttf-inconsolata
-#+END_SRC
-
-!Special repo for laptops:!
-laptop-mode-tools
-
-%AUR%
-
-$NOTE: Before starting with aur installs make sure the /etc/makepkg.conf is configured correctly >>> $  [[prerequisites][prerequisites]]
-
-#+BEGIN_SRC sh
-yaourt (or other aur wrapper)
-caudec
-termite-git
-gmailchecker
-ncmpcpp-git
-mpdcron-git
-ttf-droid
-monaco\_linux
-autokey-qt
-lxtask
-dropbox
-gmpc-git
-gmpc-plugins-git
-terminus-font-ttf
-puddletag
-culmus
-Yeganesh
-abcde
-metamorphose2
-ffcast
-cdargs
-boxfs ( needs also libapp-git)
-soundkonverter-git
-xsvg
-albumbler
-flacon
-tuxboot-unet bootin like app
-ttf-oxygen-git
-synapse
-ttf-droid
-worker
-xbindkeys
-xbindkeys config
-xdotool
-xdotool-gui
-xchainkeys
-jmtpfs
-dzen2-gadgets-svn
-teamviwer
-mpd control
-gmailchecker
-albumbler
-loliclip
-xoris #command line color picker
-dtrx
-xshowkeys #show keycodes
-freetype2-infinality
-ttf-vista-fonts
-pacmixer
-#+END_SRC
-
-systemd
+***** systemd toggles
 
 #+BEGIN_EXAMPLE
 systemctl enable avahi-daemon.service
@@ -561,6 +491,25 @@ systemctl enable webmin.service
 systemctl enable smbd.service
 systemctl enable cronie
 #+END_EXAMPLE
+
+**** Installs client
+***** pacman 
+
+#+BEGIN_SRC sh
+pacman -S emacs tree ncdus nfs-utils rpcbind terminator r mc  flac lame abiword keepassx dzen2 zip unzip unrar mtpaint krename gmrun aspell aspell-en findutils inkscape python-lxml gcolor2 easytag kdiff3  htop p7zip vlc smb4k screen tmux speedcrunch mlocate vim gvim mpd mpc atool lynx profont fb-client feh keychain picard  gdb mp3gain pacgraph sqliteman grep awk leafpad less lxappearance pavucontrol net-tools sshfs xterm zsh samba xclip lxtask pydf xorg-xkill nmap acpi audacity nmon  powertop ttf-inconsolata sxhkd git zsh firefox chromium ncmpcpp gmpc gcc filezilla gimp jre7-openjdk kdegraphics-okular
+meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  
+#+END_SRC
+!Special repo for laptops:!
+laptop-mode-tools
+
+***** AUR
+
+$NOTE: Before starting with aur installs make sure the /etc/makepkg.conf is configured correctly >>> $  [[prerequisites][prerequisites]] and the gpg issues
+ 
+
+#+BEGIN_SRC sh
+pacaur -S rofi-git clerk-git teiler-git caudec termite-git mpdcron-git ttf-droid dropbox  teamviewer xshowkeys terminus-font-ttf puddletag culmus ffcast  flacon worker xdotool xdotool-gui xchainkeys jmtpfs acroread android-sdk copyq dunst gpodder3 i3blocks ranger-git surfraw-git termite-git 
+#+END_SRC
 
 **** Installs Server
 
@@ -1020,6 +969,10 @@ sudo pacman -Sql > /tmp/test2.txt
 
 3)use diff to create a file where you can see the user installed files and the core files
 
+#+BEGIN_SRC sh
+diff /tmp/test.txt /tmp/test2.txt > /tmp/ftest.txt
+#+END_SRC
+
 ***** query files over X characters long
 IE:
 
@@ -1117,7 +1070,6 @@ remove:
 
 **** aur
 ***** prerequisites
-
 make sure you have sudo and base-devel installed before using AUR
 
 #+BEGIN_SRC sh
@@ -1125,10 +1077,39 @@ pacman -S base-devel
 #+END_SRC
 
 and make sure makeflag is configured:
-open and edit /etc/makepkg.conf
-in general the MAKEFLAGS="-j+1" that is number of cores plus one as the
-number so for my x200 dual core laptop it would be:
+
+open and edit file:/etc/makepkg.conf
+
+in general the MAKEFLAGS="-j+1" that is number of cores plus one as the number so for my x200 dual core laptop it would be:
+#+BEGIN_EXAMPLE
 MAKEFLAGS="-j3"
+#+END_EXAMPLE
+
+`Signature checking`
+
+To show the current list of GPG keys, use the gpg command:
+#+BEGIN_SRC emacs-lisp :results none
+gpg --list-keys
+#+END_SRC
+
+If the pubring.gpg file does not exist, it will be created for you immediately.
+
+The GPG keys are expected to be stored in the user's ~/.gnupg/pubring.gpg file. In case it does not contain the given signature, makepkg will abort the installation:
+#+BEGIN_EXAMPLE
+$ makepkg
+[...]
+==> Verifying source file signatures with gpg...
+pkgname-pkgver.tar.gz ... FAILED (unknown public key 1234567890)
+==> ERROR: One or more PGP signatures could not be verified!
+#+END_EXAMPLE
+To import the key, use either this command 
+#+BEGIN_SRC sh :results none
+$ gpg --recv-keys 1234567890
+#+END_SRC
+Or to automate for all future installs edit the file:~/.gnupg/gpg.conf and check this line is uncommented
+#+BEGIN_EXAMPLE
+keyserver-options auto-key-retrieve
+#+END_EXAMPLE
 
 ***** installing packages from the aur
 
@@ -1149,25 +1130,6 @@ Pacman
  # makepkg -isc
  which will install the package after creating it
  /home/zeltak/AUR/mutt-sidebar/sidebar-5302767aa6aa.gz
-
-***** script to automate aur (rasi) 2
-
-1. Create a script with this inside
- #bash
- cd ~/pkgs && wget http://aur.archlinux.org/packages/$1/$1.tar.gz && tar
--xvf $1.tar.gz && cd $1 && makepkg -cfis
- change the location of the pkgs to where you want
- zeltak example: /home/zeltak/AUR/
- 2. make it executable
- # chmod +X SCRIPT
- and move it to /usr/bin/
- then you can run
- # aur PACKAGE NAME
- and it will cd to your pkgbuilds directory, download the pkgbuild,
-extract it, install all needed deps from the repos (not ones from aur
-thogh), build it and install it
- This works well with the package
- [[#P222XjJVziR.8bLaYUB1hg][slurpy]]
 
 ***** fix outdated packages (validty error)
 find outdated versions?
@@ -5916,7 +5878,7 @@ After installation try ipkg list | less to test the less command.
 
 Updating installed applications
 
-ipkg update && ipkg upgrade will update any IPKG-installed applications to the latest ported versions.  
+ipkg update && ipkg upgrade will update any IPKG-installed applications to the latest ported versions.
 
 * Software
 ** CLI
@@ -36364,54 +36326,48 @@ enter expert mode, and check the option "-rescue" in the relevant screen
 if not succesful its recommended to try ddrescue or gddrescue (Gui) as a last resort.
 ** admin
 *** sudo
-**** adding user to sudo list
-Configuration
-
+**** configuring sudo and visudo
 to quick view current settings for sudo Run
 
+#+BEGIN_SRC sh
 sudo -ll
-to print out the current sudo configuration.
+#+END_SRC
+
 Using visudo
-The configuration file for sudo is /etc/sudoers. It should always be
-edited with the visudo command. visudo locks the sudoers file, saves
-edits to a temporary file, and checks that file's grammar before copying
-it to /etc/sudoers.
- Warning: It is imperative that sudoers be free of syntax errors! Any
-error makes sudo unusable. Always edit it with visudo to prevent errors.
- The default editor for visudo is vi. It will be used if you do not
-specify another editor, by setting either VISUAL or EDITOR environment
-variables (used in that order) to the desired editor, e.g. vim. The
-command is run as root:
 
- VISUAL="/usr/bin/vim -p -X" visudo
+The configuration file for sudo is file:/etc/sudoers
+@It should always be edited with the visudo command@
+visudo locks the sudoers file, saves edits to a temporary file, and checks that file's grammar before copying it to /etc/sudoers.
 
- You can permanently change the setting system-wide to e.g. vim by
-appending:
+@Warning: It is imperative that sudoers be free of syntax errors! Any error makes sudo unusable. Always edit it with visudo to prevent errors.@
 
- export VISUAL="/usr/bin/vim -p -X"
+The default editor for visudo is vi. It will be used if you do not specify another editor, by setting either VISUAL or EDITOR environment
+variables (used in that order) to the desired editor, e.g. vim. The command is run as root:
+#+BEGIN_SRC sh :results none
+VISUAL="/usr/bin/vim -p -X" visudo
+#+END_SRC
 
- to your ~/.bashrc file. Note that this won't take effect for
-already-running shells.
- To change the editor of choice permanently only for visudo, add the
-following line to /etc/sudoers where vim is your prefered editor:
- # Reset environment by default
- Defaults env reset
- # Set default EDITOR to vim, and do not allow visudo to use
-EDITOR/VISUAL.
- Defaults editor="/usr/bin/vim -p -X", !env editor
- Example Entries
- To allow a user to gain full root privileges when he/she precedes a
-command with sudo, add the following line:
- USER NAME ALL=(ALL) ALL
- uncommon options:
+You can permanently change the setting system-wide to e.g. vim by appending: export VISUAL="/usr/bin/vim -p -X"  to your ~/.bashrc file.
+Note that this won't take effect for already-running shells.
 
- To allow a user to run all commands as any user but only the machine
-with hostname HOST NAME:
- USER NAME HOST NAME=(ALL) ALL
- To allow members of group wheel sudo access:
- %wheel ALL=(ALL) ALL
- To disable asking for a password for user USER NAME:
- Defaults:USER NAME !authenticate
+To change the editor of choice permanently only for visudo, add the following line to /etc/sudoers where vim is your prefered editor:
+
+#+BEGIN_EXAMPLE
+# Reset environment by default
+Defaults env reset
+# Set default EDITOR to vim, and do not allow visudo to use EDITOR/VISUAL.
+Defaults editor="/usr/bin/vim -p -X", !env editor
+#+END_EXAMPLE 
+
+**** adding user to sudo list  
+
+To allow a user to gain full root privileges when he/she precedes a command with sudo, add the following line:
+
+#+BEGIN_SRC sh :results none
+USER NAME ALL=(ALL) ALL
+#₆In example₆
+zeltak ALL=(ALL) ALL
+#+END_SRC
 
 **** no password sudo operation
 
