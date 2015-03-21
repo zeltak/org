@@ -2933,14 +2933,6 @@ Click on “+ Add”
 Name: Application Name
 Command: Application command e.g: skype
 Click “+ Add” and you are done.
-**** How to Get Rid of Huge Window Borders in Gnome 3
-cd /usr/share/themes/Adwaita/metacity-1/
-sudo vim metacity-theme-3.xml
-
-replace all instances of 
-title_scale="medium"
-with
-title_scale="small" 
 **** top bar
 ***** Show date in top bar
 
@@ -2971,21 +2963,6 @@ After appearance tweaks you are often asked to restart the GNOME shell. You coul
 # pkill -HUP gnome-shell
 
 **** windows
-***** Reduce title bar height
-Reduce title bar height
-
-global - edit:
-file:/usr/share/themes/Adwaita/metacity-1/metacity-theme-3.xml
-search for title_vertical_pad and reduce its value to a minimum of 0.
-user-only- copy:
-file:/usr/share/themes/Adwaita/metacity-1/metacity-theme-3.xml
-to
-file:/home/$USER/.local/share/themes/Adwaita/metacity-1/metacity-theme-3.xml
-search for title_vertical_pad and reduce its value to a minimum of 0.
-Then restart the GNOME shell.
-
-To restore the original values, install the package gnome-themes-standard from the official repositories or remove /home/$USER/.local/share/themes/Adwaita/metacity-1/metacity-theme-3.xml.
- 
 ***** Hide titlebar when maximized
 
 To hide titlebar when windows are maximised, open file:
@@ -3029,6 +3006,17 @@ NoUpgrade = usr/share/themes/Adwaita/metacity-1/metacity-theme-3.xml    # Do not
 ... more lines ...
 
 To restore original Adwaita theme values, install the gnome-themes-standard package. 
+***** How to Get Rid of Huge Window Borders in Gnome 3
+#+BEGIN_SRC sh :results none
+cd /usr/share/themes/Adwaita/metacity-1/
+sudo vim metacity-theme-3.xml
+#+END_SRC
+
+replace all instances of 
+
+title_scale="medium"
+with
+title_scale="small" 
 **** dconf
 ***** search dconf
       #+NAME: 
