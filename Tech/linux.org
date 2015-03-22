@@ -508,7 +508,7 @@ $NOTE: Before starting with aur installs make sure the /etc/makepkg.conf is conf
  
 
 #+BEGIN_SRC sh
-pacaur -S rofi-git clerk-git teiler-git caudec termite-git mpdcron-git ttf-droid dropbox  teamviewer xshowkeys terminus-font-ttf puddletag culmus ffcast  flacon worker xdotool xdotool-gui xchainkeys jmtpfs acroread android-sdk copyq dunst gpodder3 i3blocks ranger-git surfraw-git termite-git 
+pacaur -S rofi-git clerk-git teiler-git caudec termite-git mpdcron-git ttf-droid dropbox  teamviewer xshowkeys terminus-font-ttf puddletag culmus ffcast  flacon worker xdotool xdotool-gui xchainkeys jmtpfs acroread android-sdk copyq dunst gpodder3 i3blocks ranger-git surfraw-git termite-git chromium-pepper-flash 
 #+END_SRC
 
 **** Installs Server
@@ -1067,6 +1067,13 @@ remove:
  IE:
 
  sudo rm /var/lib/pacman/db.lck
+
+***** ignore a package on upgrade (don't upgrade a specific package)
+add the package name in the pacman.conf file, ₆In example₆ 
+
+#+BEGIN_EXAMPLE
+IgnorePkg = firefox
+#+END_EXAMPLE
 
 **** aur
 ***** prerequisites
@@ -19246,6 +19253,7 @@ http://beets.readthedocs.org/en/latest/reference/config.html#id3v23
 ***** dependecies needed
 python2-requests
 enum34 
+python2-flask
 ***** define a file structure with top level first letters
 use this in your config:
 
