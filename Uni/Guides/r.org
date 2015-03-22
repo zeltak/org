@@ -4116,10 +4116,9 @@ the best way is to use the table function
 *** get basic IQR of variable
 
 issue the internal command:
- IQR(x) #Interquartile range of x
- IE:
- IQR(DATA$VARIABLE)
-
+IQR(x) #Interquartile range of x
+IE:
+IQR(DATA$VARIABLE)
 ** create a discripitive stat table for multiple years
 
 *see this example code:*
@@ -8018,7 +8017,6 @@ will import only the first 1000 rows
 fread's drop, select and NULL in colClasses are implemented. To drop or select columns by name or by number. See examples in ?fread.
 
 The examples in ?fread are
-
 #+begin_src R
 data = "A,B,C,D\n1,3,5,7\n2,4,6,8\n"
 
@@ -8043,6 +8041,10 @@ fread(data, select=c(1,4))        # same using column numbers
 #+BEGIN_SRC R
 loc<-fread("/media/NAS/Uni/Projects/P011.BirthW_NE/3.1.11.4.Work/3.Analysis/2.R_analysis/bw_diab37.csv",colClasses=c(FIPS="character",tract="character"))
 #+END_SRC
+**** skip number of line
+skip=1
+**** create  NA based on string
+na.strings = c("nan", "", "-")
 *** Merge/Join
 **** Normal join
 #+begin_src R
