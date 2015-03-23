@@ -485,6 +485,7 @@ file:~/.config/fontconfig/fonts.conf
 
 #+BEGIN_EXAMPLE
 systemctl enable avahi-daemon.service
+systemctl enable NetworkManager
 systemctl start sshd.service
 systemctl enable rpc-mountd.service
 systemctl enable webmin.service
@@ -496,7 +497,7 @@ systemctl enable cronie
 ***** pacman 
 
 #+BEGIN_SRC sh
-pacman -S emacs tree ncdus nfs-utils rpcbind terminator r mc  flac lame abiword keepassx dzen2 zip unzip unrar mtpaint krename gmrun aspell aspell-en findutils inkscape python-lxml gcolor2 easytag kdiff3  htop p7zip vlc smb4k screen tmux speedcrunch mlocate vim gvim mpd mpc atool lynx profont fb-client feh keychain picard  gdb mp3gain pacgraph sqliteman grep awk leafpad less lxappearance pavucontrol net-tools sshfs xterm zsh samba xclip lxtask pydf xorg-xkill nmap acpi audacity nmon  powertop ttf-inconsolata sxhkd git zsh firefox chromium ncmpcpp gmpc gcc filezilla gimp jre7-openjdk kdegraphics-okular
+pacman -S emacs rsync tree ncdus nfs-utils rpcbind terminator r mc  flac lame abiword keepassx dzen2 zip unzip unrar mtpaint krename gmrun aspell aspell-en findutils inkscape python-lxml gcolor2 easytag kdiff3  htop p7zip vlc smb4k screen tmux speedcrunch mlocate vim gvim mpd mpc atool lynx profont fb-client feh keychain picard  gdb mp3gain pacgraph sqliteman grep awk leafpad less lxappearance pavucontrol net-tools sshfs xterm zsh samba xclip lxtask pydf xorg-xkill nmap acpi audacity nmon  powertop ttf-inconsolata sxhkd git zsh firefox chromium ncmpcpp gmpc gcc filezilla gimp jre7-openjdk kdegraphics-okular
 meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  
 #+END_SRC
 !Special repo for laptops:!
@@ -508,7 +509,7 @@ $NOTE: Before starting with aur installs make sure the /etc/makepkg.conf is conf
  
 
 #+BEGIN_SRC sh
-pacaur -S rofi-git clerk-git teiler-git caudec termite-git mpdcron-git ttf-droid dropbox  teamviewer xshowkeys terminus-font-ttf puddletag culmus ffcast  flacon worker xdotool xdotool-gui xchainkeys jmtpfs acroread android-sdk copyq dunst gpodder3 i3blocks ranger-git surfraw-git termite-git chromium-pepper-flash 
+pacaur -S rofi-git clerk-git teiler-git caudec termite-git mpdcron-git ttf-droid dropbox  teamviewer xshowkeys terminus-font-ttf puddletag culmus ffcast  flacon worker xdotool xdotool-gui xchainkeys jmtpfs acroread android-sdk copyq dunst gpodder3 i3blocks ranger-git surfraw-git termite-git chromium-pepper-flash ttf-ms-fonts 
 #+END_SRC
 
 **** Installs Server
