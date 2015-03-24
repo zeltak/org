@@ -563,11 +563,20 @@ pacman -S oss
 install ossxmix and issue ossxmix from GUI run command (not command
 line) to run in tray
 
-**** enable REISUB magic key
+**** enable sysrq REISUB magic key
 
-edit /etc/sysctl.conf
- nano /etc/sysctl.conf
- and change 0 to 1 in the kernel.sysrq = line
+There are several low level shortcuts that are implemented in the kernel which can be used for debugging and recovering from an unresponsive system. Whenever possible, it is recommended that you use these shortcuts instead of doing a hard shutdown (holding down the power button to completely power off the system).
+
+To use these, they must first be activated with either
+
+#+BEGIN_SRC emacs-lisp :results none
+sudo sysctl kernel.sysrq=1
+#or
+echo "1" > /proc/sys/kernel/sysrq
+#+END_SRC
+
+If you wish to have it enabled during boot, edit /etc/sysctl.d/99-sysctl.conf and set kernel.sysrq = 1.
+
 
 **** run gui as root
 
