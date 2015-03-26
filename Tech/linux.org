@@ -498,7 +498,7 @@ systemctl enable cronie
 
 #+BEGIN_SRC sh
 pacman -S emacs rsync tree ncdus nfs-utils rpcbind terminator r mc  flac lame abiword keepassx dzen2 zip unzip unrar mtpaint krename gmrun aspell aspell-en findutils inkscape python-lxml gcolor2 easytag kdiff3  htop p7zip vlc smb4k screen tmux speedcrunch mlocate vim gvim mpd mpc atool lynx profont fb-client feh keychain picard  gdb mp3gain pacgraph sqliteman grep awk leafpad less lxappearance pavucontrol net-tools sshfs xterm zsh samba xclip lxtask pydf xorg-xkill nmap acpi audacity nmon  powertop ttf-inconsolata sxhkd git zsh firefox chromium ncmpcpp gmpc gcc filezilla gimp jre7-openjdk kdegraphics-okular
-meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  
+meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  mosh 
 #+END_SRC
 !Special repo for laptops:!
 laptop-mode-tools
@@ -2921,28 +2921,6 @@ install libcurl4-gnutls-dev
 
 ** gnome
 *** Gnome 3
-**** Enable the logout option 
-to check state of logout:
-#+BEGIN_SRC sh
-dconf read /org/gnome/shell/always-show-log-out
-#+END_SRC
-
-to enable it:
-#+BEGIN_SRC sh
-dconf write /org/gnome/shell/always-show-log-out true
-#+END_SRC
-
-Then just restart the system and “Log out” is present after login.
-
-you can also use the gui:
-
-To make the logout option always appear:
-
-First open up the dconf editor (fedora package “dconf-editor”), and navigate to the org > gnome > shell key.
-Check the option “always-show-log-out” (pictured below in the screenshot), to always show the logout option. Note, however, that a restart of the shell or a reboot may be required for this option to start working.
-
-#+DOWNLOADED: http://www.ryanlerch.org/blog/wp-content/uploads/2012/11/dconf.png @ 2013-10-21 21:02:53
- [[/home/zeltak/org/attach/images_2013/dconf_2013-10-21_21:02:53.png]]
 **** Auto start a program on Gnome 3
 press: alt + F2
 Type: gnome-session-properties
@@ -2969,6 +2947,29 @@ This dialog normally appears when you log out with the status menu. This tweak a
 #+BEGIN_SRC sh
 gsettings set org.gnome.SessionManager logout-prompt 'false'
 #+END_SRC
+
+***** Enable the logout option
+ to check state of logout:
+ #+BEGIN_SRC sh
+ dconf read /org/gnome/shell/always-show-log-out
+ #+END_SRC
+
+ to enable it:
+ #+BEGIN_SRC sh
+ dconf write /org/gnome/shell/always-show-log-out true
+ #+END_SRC
+
+ Then just restart the system and “Log out” is present after login.
+
+ you can also use the gui:
+
+ To make the logout option always appear:
+
+ First open up the dconf editor (fedora package “dconf-editor”), and navigate to the org > gnome > shell key.
+ Check the option “always-show-log-out” (pictured below in the screenshot), to always show the logout option. Note, however, that a restart of the shell or a reboot may be required for this option to start working.
+
+ #+DOWNLOADED: http://www.ryanlerch.org/blog/wp-content/uploads/2012/11/dconf.png @ 2013-10-21 21:02:53
+  [[/home/zeltak/org/attach/images_2013/dconf_2013-10-21_21:02:53.png]]
 
 **** shell
 ***** Restarting the shell
@@ -3049,17 +3050,25 @@ gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Super>1
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 "['<Super>2']"
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 "['<Super>3']"
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 "['<Super>4']"
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-5 "['<Super>5']"
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-6 "['<Super>6']"
-gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-7 "['<Super>7']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-5 "['<Super>q']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-6 "['<Super>w']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-7 "['<Super>e']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-8 "['<Super>a']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-9 "['<Super>s']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-10 "['<Super>d']"
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-11 "['<Super>z']"
 
 gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-1 "['<Super><shift>1']"
 gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-2 "['<Super><shift>2']"
 gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-3 "['<Super><shift>3']"
 gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-4 "['<Super><shift>4']"
-gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-5 "['<Super><shift>5']"
-gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-6 "['<Super><shift>6']"
-gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-7 "['<Super><shift>7']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-5 "['<Super><shift>q']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-6 "['<Super><shift>w']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-7 "['<Super><shift>e']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-8 "['<Super><shift>a']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-9 "['<Super><shift>s']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-10 "['<Super><shift>d']"
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-11 "['<Super><shift>z']"
 
 gsettings set org.gnome.desktop.wm.keybindings close "['<Super>k']"     
       #+END_EXAMPLE
@@ -24796,6 +24805,11 @@ sudo systemctl stop syncthing@zeltak
 then use the webgui to use at:
 
 http://localhost:8080/
+
+*** copyq
+**** shortcuts
+~F2~ edit selected text (issue F2 again to save text)
+~C-n~ create new item 
 
 ** virtualizations
 *** virtualbox
