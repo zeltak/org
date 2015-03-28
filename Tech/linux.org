@@ -506,10 +506,10 @@ laptop-mode-tools
 ***** AUR
 
 $NOTE: Before starting with aur installs make sure the /etc/makepkg.conf is configured correctly >>> $  [[prerequisites][prerequisites]] and the gpg issues
- 
+
 
 #+BEGIN_SRC sh
-pacaur -S rofi-git clerk-git teiler-git caudec termite-git mpdcron-git ttf-droid dropbox  teamviewer xshowkeys terminus-font-ttf puddletag culmus ffcast  flacon worker xdotool xdotool-gui xchainkeys jmtpfs acroread android-sdk copyq dunst gpodder3 i3blocks ranger-git surfraw-git termite-git chromium-pepper-flash ttf-ms-fonts 
+pacaur -S rofi-git clerk-git teiler-git caudec vte3-select-text termite-git mpdcron-git ttf-droid dropbox  teamviewer xshowkeys terminus-font-ttf puddletag culmus ffcast  flacon worker xdotool xdotool-gui xchainkeys jmtpfs acroread android-sdk copyq dunst gpodder3 i3blocks ranger-git surfraw-git termite-git chromium-pepper-flash ttf-ms-fonts 
 #+END_SRC
 
 **** Installs Server
@@ -3035,6 +3035,35 @@ replace all instances of
 title_scale="medium"
 with
 title_scale="small" 
+***** How to set Focus-Follows-Mouse in GNOME 3 The Schema you need is the
+launch dconf-editor
+then go to 
+
+#+BEGIN_EXAMPLE
+org.gnome.desktop.wm.preferencese
+#+END_EXAMPLE
+
+
+`auto Raise`: If set to true, and the focus mode is either “sloppy” or “mouse” then the focused window will be automatically raised after a delay specified by the auto-raise-delay key. This is not related to clicking on a window to raise it, nor to entering a window during drag-and-drop.
+
+`Auto Raise Delay`: The time delay before raising a window if auto-raise is set to true. The delay is given in thousandths of a second.
+
+`Focus Mode`: The window focus mode indicates how windows are activated. It has three possible values; “click” means windows must be clicked in order to focus them, “sloppy” means windows are focused when the mouse enters the window, and “mouse” means windows are focused when the mouse enters the window and unfocused when the mouse leaves the window.
+
+`Focus New Windows`: This option provides additional control over how newly created windows get focus. It has two possible values; “smart” applies the user’s normal focus mode, and “strict” results in windows started from a terminal not being given focus.
+
+***** move windows to grid areas 
+in org.gnome.desktop.wm.keybindings
+
+look for move to corener X (se,nw etc) 
+**** workspaces
+***** set names to workspaces
+us the following
+
+#+BEGIN_EXAMPLE
+gsettings set org.gnome.wm.preferences workspace-names "['name1', 'name2']"
+#+END_EXAMPLE
+
 **** dconf
 ***** search dconf
       #+NAME: 
