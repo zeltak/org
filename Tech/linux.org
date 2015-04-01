@@ -21076,23 +21076,149 @@ bibtex field.
 3)attach it to the entry
 use the cleanup in tools to auto rename 
 **** Export filters
-***** use a plugin to create the filter via gui
+***** built in jabref export 
+****** General
+ Your layout files must be prepared in a text editor outside of JabRef.
+ %Tip while the export filter only needs to consist of a single .layout file usually there are two files called html.begin.layout and html.end.layout that are also needed.%
+ there are 3 ways to export your files
+ 1. File -> Export menu
+ 2. File -> Export selected  menu
+ 4. right click on entries and choose export to clipboard 
+
+****** Adding a custom export filter
+
+ The only requirement for a valid export filter is the existence of a file with the extension .layout.
+ To add a new custom export filter, open the dialog box Options -> Manage custom exports, and click Add new. A new dialog box will appear, allowing you to specify a name for the export filter (which will appear as one of the choices in the File type dropdown menu of the file dialog when you use the File -> Export menu choice in the JabRef window), the path to the .layout file, and the preferred file extension for the export filter (which will be the suggested extension in the file dialog when you use the export filter).
+
+****** Layout files
+
+ Let us assume that we are creating an HTML export filter. While the export filter only needs to consist of a single .layout file, which in this case could be called html.layout, you may also want to add two files called html.begin.layout and html.end.layout. The former contains the header part of the output, and the latter the footer part. JabRef will look for these two files whenever the export filter is used, and if found, either of these will be copied verbatim to the output before or after the individual entries are written.
+
+ Note that these files must reside in the same directory as html.layout, and must be named by inserting .begin and .end, respectively. In our example export filter, these could look like the following:
+
+ html.begin.layout:
+ <!DOCTYPE html>
+ <html>
+ <body style="color:#275856; font-family: Arial, sans-serif;">
+
+ html.end.layout:
+ </body>
+ </html>
+
+ The file html.layout provides the default template for exporting one single entry. If you want to use different templates for different entry types, you can do this by adding entry-specific .layout files. These must also reside in the same directory as the main layout file, and are named by inserting .entrytype into the name of the main layout file. The entry type name must be in all lowercase. In our example, we might want to add a template for book entries, and this would go into the file html.book.layout. For a PhD thesis we would add the file html.phdthesis.layout, and so on. These files are similar to the default layout file, except that they will only be used for entries of the matching type. Note that the default file can easily be made general enough to cover most entry types in most export filters.
+
+****** The layout file format
+
+ Layout files are created using a simple markup format where commands are identified by a preceding backslash. All text not identified as part of a command will be copied verbatim to the output file.
+
+ Field commands
+
+ An arbitrary word preceded by a backslash, e.g. \author, \editor, \title or \year, will be interpreted as a reference to the corresponding field, which will be copied directly to the output.
+
+ Field formatters
+
+ Often there will be a need for some preprocessing of the field contents before output. This is done using a field formatter - a java class containing a single method that manipulates the contents of a field.
+
+ A formatter is used by inserting the \format command followed by the formatter name in square braces, and the field command in curly braces, e.g.:
+
+ \format[ToLowerCase]{\author}
+
+ You can also specify multiple formatters separated by commas. These will be called sequentially, from left to right, e.g.
+
+ \format[ToLowerCase,HTMLChars]{\author}
+
+ will cause the formatter ToLowerCase to be called first, and then HTMLChars will be called to format the result. You can list an arbitrary number of formatters in this way.
+
+ The argument to the formatters, withing the curly braces, does not have to be a field command. Instead, you can insert normal text, which will then be passed to the formatters instead of the contents of any field. This can be useful for some fomatters, e.g. the CurrentDate formatter (described below).
+
+ Some formatters take an extra argument, given in parentheses immediately after the formatter name. The argument can be enclosed in quotes, which is necessary if it includes the parenthesis characters. For instance, \format[Replace("\s,_")]{\journal} calls the Replace formatter with the argument \s,_ (which results in the "journal" field after replacing all whitespace by underscores).
+
+ See below for a list of built-in export formatters.
+
+ Conditional output
+
+ Some static output might only make sense if a specific field is set. For instance, say we want to follow the editor names with the text (Ed.). This can be done with the following text:
+
+ \format[HTMLChars,AuthorFirstFirst]{\editor} (Ed.)
+
+ However, if the editor field has not been set - it might not even make sense for the entry being exported - the (Ed.) would be left hanging. This can be prevented by instead using the \begin and \end commands:
+
+ \begin{editor}
+ \format[HTMLChars,AuthorFirstFirst]{\editor} (Ed.)
+ \end{editor}
+
+ The \begin and \end commands make sure the text in between is printed if and only if the field referred in the curly braces is defined for the entry being exported.
+
+ A conditional block can also be dependent on more than one field, and the content is only printed when simple boolean conditions are satisfied. Two boolean operator are provided:
+
+ AND operator : &, &&
+ OR operator : |, ||
+ To output text only if both year and month are set, use a block like the following:
+
+ \begin{year&&month}Month: \format[HTMLChars]{\month}\end{year&&month}
+
+ which will print "Month: " plus the contents of the month field, but only if also the year field is defined.
+
+ Note: Use of the \begin and \end commands is a key to creating layout files that work well with a variety of entry types.
+
+ Grouped output
+
+ If you wish to separate your entries into groups based on a certain field, use the grouped output commands. Grouped output is very similar to conditional output, except that the text in between is printed only if the field referred in the curly braces has changed value.
+
+ For example, let's assume I wish to group by keyword. Before exporting the file, make sure you have sorted your entries based on keyword. Now use the following commands to group by keyword:
+
+ \begingroup{keywords}New Category: \format[HTMLChars]{\keywords}
+ \endgroup{keywords}
+
+***** using the jabref java exporter app (a plugin to create the filter via gui)
 one can use a java based gui (cross platform) to create basic export options via a gui:
 
 http://sourceforge.net/projects/efe/
 
-files are saved as either rtf/html layout files
+to save the template to work on this later and modify you need to save it as a fdat file (its binary)
+to save files as export layouts for jabref you need to save it as a html/rtf format (specify extension)
+$Note-make sure the each entry type is specified , that is aritcle book etc. this is whats used to export in jabref by type$
+%Tip-when you edit the layouts later to add bold etc you need to edit the correct layout, mostly the .article type%  
 
-$Note- the exporter creates several layout files (including end/start etc) all of the files are needed$
+$Note$  the exporter creates several layout files (including end/start etc) all of the files are needed$
+the exported files look like this:
+`kloog.BGU.html.article.layout`
+above you can see this is the `atricle` layout.
+
+
+
+
 ***** mark specific author in BOLD/OTHER
 you can do that with editing the layout files.
-for example for rtf
+$Note$ the syntax is very picky so look in detail for every ,[] etc symbols and make sure they are in place
+
+the replace to bold takes place in the `\format` section. make sure that after the format the openning bracket [ is closed at the end with a ] before the close.
+$Note$ before the edit the [ is after the RTF/HTML char word.
+
+\format[Authors(LastFirstFirstFirst,FirstInitial,NoPunc,sep=\,,LastSep= & ,EtAl= et al.,55,9),RTFChars,Replace(Kloog I,{\\\b Kloog I}), Replace(I Kloog,{\\\b I Kloog})]{\author}
+
+****** for rtf
  
 #+BEGIN_EXAMPLE
 \begin{author}\format[Authors(LastFirstFirstFirst,FirstInitial,NoPunc,sep=\,,LastSep= & ,EtAl= et al.,inf,9),RTFChars, Replace(Kloog I,{\\\b Kloog I}), Replace(I Kloog,{\\\b I Kloog})]{\author} \end{author}\begin{year}(\format[RTFChars]{\year}): \end{year}\begin{title}"\format[RTFChars]{\title}."\end{title}{\\i \begin{journal}, \format[RTFChars]{\journal}:\end{journal}}{\\b \begin{volume}\format[RTFChars]{\volume}\end{volume}}\begin{pages},\format[RTFChars,FormatPagesForHTML]{\pages}.\end{pages}\\par 
 #+END_EXAMPLE
 
 the Replace sections are where the author (Kloog I) gets marked as bold
+
+****** for html 
+to make bold use the following syntax: <strong>Kloog I</strong ₆In example₆ 
+
+#+BEGIN_EXAMPLE
+\begin{author}\format[Authors(LastFirstFirstFirst,FirstInitial,NoPunc,sep=\,,LastSep= & ,EtAl= et al.,55,9),HTMLChars,Replace(Kloog I,<strong>Kloog I</strong>)]{\author} \end{author}\begin{year}(\format[HTMLChars]{\year}): \end{year}\begin{title}"\format[HTMLChars]{\title}."\end{title}<i>\begin{journal}, \format[HTMLChars]{\journal}:\end{journal}</i><b>\begin{volume}\format[HTMLChars]{\volume}\end{volume}</b>\begin{pages},\format[HTMLChars,FormatPagesForHTML]{\pages}.\end{pages}(X citations, IF X ; X/X; QX)<br>
+#+END_EXAMPLE
+
+to replace 2 different name strings:
+
+#+BEGIN_EXAMPLE
+\begin{author}\format[Authors(LastFirstFirstFirst,FirstInitial,NoPunc,sep=\,,LastSep= & ,EtAl= et al.,55,9),HTMLChars,Replace(Kloog I,<strong>Kloog I</strong>),Replace(I Kloog,<strong>I Kloog</strong>)]{\author} \end{author}\begin{year}(\format[HTMLChars]{\year}): \end{year}\begin{title}"\format[HTMLChars]{\title}."\end{title}<i>\begin{journal}, \format[HTMLChars]{\journal}:\end{journal}</i><b>\begin{volume}\format[HTMLChars]{\volume}\end{volume}</b>\begin{pages},\format[HTMLChars,FormatPagesForHTML]{\pages}.\end{pages}(X citations, IF X ; X/X; QX)<br>
+#+END_EXAMPLE
+
+
 ***** sort criteria 
 the sort criteria are a matter of jabref - not the export filter. (preferences->file)
 there is an option how exported entries are sorted there
