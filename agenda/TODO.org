@@ -5,6 +5,8 @@
 
 
 * @TODAY@
+** ask rasi for clerk 2 listen menu entry where it would go over a 2play playlist 
+
 ** create org task to go over org refile every week 
 ** paste as a code block
 ask about pasting clipbored text as a codeblock
@@ -697,6 +699,7 @@ func org_protocol_capture (w) {
     encodeURIComponent(sel) +
     "2f6d720053b5240c19cc9c7b35feef5d846ba3a6quot;'";
     em.spawn(cmd + " " + args);
+
 }
 
 bind", org_protocol_store_link, "orgstring");
@@ -942,13 +945,6 @@ Ahmhed:
 08-9912099
 050-4566004  
 
-*** price for some tools
-Mazmera 70
-Telescope 170
-Small long handle mazmera 110
-
-
-
 *** renting equipment
   http://www.brener.co.il/
 
@@ -957,20 +953,6 @@ Small long handle mazmera 110
   באר שבע, רח. מורדי הגיטאות 70, טל. בעבודה: 08-6277737 נייד שמעון: 050-5284031 
   נייד משה: 050-5408724 * טלפון חינם: 1-800-200-330 * פקס: 08-6278249
 *** שתילי בזיליקום תאי אפשר לקנות ברוב המשתלות שמחזיקות צמחי תבלין, לפעמים תחת השם מלכת סיאם.
-*** Pini
-**** last piece of deck+painting
-**** make water tap permanent on the wall
-**** ceramics all around the road 
-**** pest grass keep coming back time and time again, also under Hipoi (palrig)
-**** pest greass in the spice plant rows, grow very fast, what can be done?
-**** the lichi tree, make it grow staight
-**** taftafot in adaniot
-**** fix the ugly black seperator 
-**** grass is totally not leveld, fix it and make permemnant with nails
-**** take old shoe adanit
-**** check taftafot bear pomela
-
-*** home paint color is 016
 ** Pikod haoref
   הנך משוייך לאזור התרעה: באר שבע 286 (45 שניו
 ** menaka from company: amira   
@@ -991,13 +973,15 @@ Small long handle mazmera 110
 
 
 * Emacs vim replace
+  :PROPERTIES:
+  :ID:       9a91cdd7-c89b-4499-835b-e37c4ed1b420
+  :END:
 d >> c-s-BK (with ESC- -1/1 arguments)
   C-BK kill line back
       A-BK kills like forward 
 C-k kill line forward 
 C-d kill charater forward
 M-d kill forward 
-
 
 #+BEGIN_SRC emacs-lisp 
 (nth 7 (macroexpand '(defhydra hydra-commenting (:color blue :hint nil)
@@ -1015,5 +999,4 @@ comment _;_ // comment _t_o line // comment para_g_raph // co_p_y-paste-comment
 #+RESULTS:
 | defun | hydra-commenting/hint | nil | (if hydra-lv (lv-message (concat (format comment _;_ // comment %so line // comment para%sraph // co%sy-paste-comment |
 t g p) [d]: downcase, [q]: cancel)) (message (concat (format comment _;_ // comment %so line // comment para%sraph // co%sy-paste-comment
-t g p) [d]: downcase, [q]: cancel))) |
 

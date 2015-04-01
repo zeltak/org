@@ -5913,7 +5913,7 @@ is going to be bypassed and you'll get to iPhone's House screen.
 <[[http://www.unlockboot.com/2012/05/how-to-bypass-iphone-activation-screan.html][http://www.unlockboot.com/2012/05/how-to-bypass-iphone-activation-screan.html]]>
 ** D30
 **** Bios startup key
-     ?F1?-get to bios
+     ?F1?-get to bios 
 ** Qnap ts-670 pro
 *** reach Bios
 connect hdmi
@@ -5940,4 +5940,32 @@ export PATH=/opt/bin:$PATH
 # if you get no erros:
 make
 make install 
+#+END_SRC
+** X1 carbon
+*** fix clickpad buttons (until kernel 4.0 is released)
+for a fix that lasts until a reboot
+#+BEGIN_SRC sh 
+sudo modprobe -r psmouse
+sudo modprobe psmouse proto=imps
+#+END_SRC
+
+`to make this permenant`
+
+#+BEGIN_SRC sh
+sudo vim /etc/modprobe.d/touchpad.conf:
+
+#then 
+options psmouse proto=imps
+#save 
+update-initramfs -u
+#+END_SRC
+
+*** verical and horizontal scrolling
+http://www.thinkwiki.org/wiki/How_to_configure_the_TrackPoint#Configuration_using_xinput create user/share/xsessions/mouse.sh (sudo chmod +x mouse.sh)
+
+#+BEGIN_SRC sh :results none
+xinput set-prop "PS/2 Synaptics TouchPad" "Evdev Wheel Emulation" 1
+xinput set-prop "PS/2 Synaptics TouchPad" "Evdev Wheel Emulation Button" 2
+xinput set-prop "PS/2 Synaptics TouchPad" "Evdev Wheel Emulation Timeout" 200
+xinput set-prop "PS/2 Synaptics TouchPad" "Evdev Wheel Emulation Axes" 6 7 4 5
 #+END_SRC
