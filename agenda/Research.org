@@ -175,6 +175,23 @@ My affiliations are :
 Temperature and wind speed data came from measurements operated by Météo-France. I think Annick Auffray from Météo-France should be a co-author. Note that we need them to approve the paper before submission (it was explicitly written in our contract).
 Planetary boundary layer data came from CNRS, Robert Vautard. If needed, he will add something in the paper about the model from which these data come from (50km resolution).
 I’ve got population density, hydrology, and traffic data from the IGN (Institut national de l'information géographique et forestière (IGN)) website but I will need to check how we should acknowledge them.
+**** variables used
+Hi,
+I found all the data we need to run the model.
+The folder is: Y:\France LAST in the drobo.
+I think we need to run everything from the beginning because I don't remember what we decided.
+I don't remember how many monitors we used. Do you remember that we had more than 1000 monitors? 
+I can come here Saturday but I guess I need your help with GIS at certain point.
+
+
+Assuming that the stage1 data we have in the drobo are correct, it seems to me that in the final model we used night_temp, elevation, pcturban and NDVI. Attached you can find the results of Stage 1.
+
+proc mixed data = Modis.Ep_Final_s1_&year method=reml;
+ class date;
+  model tm = &Type elev_m pcturb NDVI/  s outpred = Pred_&year;
+   random intercept &Type / subject = date type = UN;
+run;
+quit;
 ** SUBMITTED DVT admissions and PM
    :PROPERTIES:
    :ID:       2668bdf2-f4de-40cd-b57f-101a88076ba7
@@ -1083,6 +1100,15 @@ I would also consider the hypothesis that social context is important and that i
 - create a propensity  score regressing epxo vs all variables get a predictive modelt
 - advanimcg epi in israel taking acasuel moel appraoch coming up with estimates wich are not just casuel and advance methods
 
+** TODO MOST: Infrastructures Program in Space Research
+משרד המדע: תשתיות מדעיות בתחום החלל – קול קורא להצעות מחקר (מועד ההגשה לרשות המחקר 10.5, למשרד המדע: 14.5)
+הצעות מחקר למימון מחקרים, הכוללים מגמות יישומיות, הצפויות להוביל, בהמשך, לפיתוח מוצרים בתחום החלל, בנושאים הבאים:
+*תצפיות מהחלל לעבר כדור הארץ
+*פיתוח מכשור, רכיבים, תתי מערכות ומכלולים לפלטפורמות חלליות ולמקטעי קרקע תומכי חלל
+*תצפיות מהחלל למעמקי היקום
+מימון: 600 אלף ₪ ל-3 שנים למוסד יחיד, עד 1.2 מיליון ₪ ל-3 שנים למחקר רב קבוצתי מטעם שני מוסדות או יותר.
+http://most.gov.il/Information/Calls/Pages/Space2015.aspx
+תשובות לשאלות נפוצות בנושא מערכת ההגשה האלקטרונית: http://www.technion.ac.il/~research/MOST_ FAQ.pdf
 * Students
 ** maayan
 *** Phd topics
@@ -1638,11 +1664,20 @@ Salar2121
 * Today
 ** start NE LU additions
 ** finalize israel paper
-** alexei
-*** south area :
-low yearly aod values and compared to DB which is higher
-aod and dust, does aod captuers all vertical profile while dust is concentrated in the surace are$
-basic raw zero correlation with PM stations 
+** alexei talk 31.3.2105
+*** low yearly aod values and compared to DB which is higher
+we should look at wind speed from reanalysis data/station to see if these areas have low or high ws values
+*** basic raw zero correlation with PM stations 
+send alexei the the full ts pm data so he check this
+*** look at aod azimuths
+use data with 30 degree azimuths that should be better:
+either subset data by that or play with these azimuths as weights in a model 
+** itzik dust I south
+main dust season: dec-march
+main non dust season: jul-aug 
+** chronic vs accute variablity in exposure assesmnt 
+for chronic we care about spatial variability
+for acute we care about temporal variability 
 * EOF settings
 #+BEGIN_EXAMPLE
 Local variables:

@@ -1744,6 +1744,268 @@ options(scipen=999)
 #+END_EXAMPLE
 
 this can also be written to your .rprofile to be permanent
+** lists
+*** Constructing a list
+Let’s start with what lists are and how to construct them. A list is a data structure that can hold any number of any types of other data structures. If you have vector, a dataframe, and a character object, you can put all of those into one list object like so:
+
+#+BEGIN_SRC R 
+# create three different classes of objects
+vec <- 1:4
+df <- data.frame(y = c(1:3), x = c("m", "m", "f"))
+char <- "Hello!"
+
+# add all three objects to one list using list() function
+list1 <- list(vec, df, char)
+
+# print list
+list1
+## [[1]]
+## [1] 1 2 3 4
+## 
+## [[2]]
+##   y x
+## 1 1 m
+## 2 2 m
+## 3 3 f
+## 
+## [[3]]
+## [1] "Hello!"
+
+#+END_SRC
+
+We can also turn an object into a list by using the as.list() function. Notice how every element of the vector becomes a different component of the list.
+
+#+BEGIN_SRC R :results none
+# coerce vector into a list
+as.list(vec)
+## [[1]]
+## [1] 1
+## 
+## [[2]]
+## [1] 2
+## 
+## [[3]]
+## [1] 3
+## 
+## [[4]]
+## [1] 4
+#+END_SRC
+
+*** Manipulating a list
+
+We can put names on the components of a list using the names() function. This is useful for extracting components. We could have also named the components when we created the list. See below:
+
+#+BEGIN_SRC R :results none
+# name the components of the list
+names(list1) <- c("Numbers", "Some.data", "Letters")
+list1
+## $Numbers
+## [1] 1 2 3 4
+## 
+## $Some.data
+##   y x
+## 1 1 m
+## 2 2 m
+## 3 3 f
+## 
+## $Letters
+## [1] "Hello!"
+# could have named them when we created list
+another.list <- list(Numbers = vec, Letters = char)
+#+END_SRC
+
+Extract components from a list (many ways): the first is using the `[[]]` operator (notice two brackets, not just one). Note that we can use the single [ ] operator on a list, but it will return a list rather than the data structure that is the component of the list, which is normally not what we would want to do. See what I mean here:
+
+#+BEGIN_SRC R :results none
+# extract 3rd component using [[]] -> this returns a *string*
+list1[[3]]
+## [1] "Hello!"
+# print a list containing the 3rd component -> this returns a *list*
+list1[3]
+## $Letters
+## [1] "Hello!"
+#+END_SRC
+
+It is also possible to extract components using the component’s name as we see below. Again, be careful about the [ ] vs  `[[]]` operator in the second way. You need the `[[]]` o return the data structure of the component.
+
+#+BEGIN_SRC R :results none
+# extract 3rd component using $
+list1$Letters
+## [1] "Hello!"
+# extract 3rd component using [[ ]] and the name of the component
+list1[["Letters"]]
+## [1] "Hello!"
+Subsetting a list - use the single [ ] operator and c() to choose the components
+# subset the first and third components
+list1[c(1, 3)]
+## $Numbers
+## [1] 1 2 3 4
+## 
+## $Letters
+## [1] "Hello!"
+#+END_SRC
+
+We can also add a new component to the list or replace a component using the $ or [[ ]] operators. This time I’ll add a linear model to the list (remember we can put anything into a list).
+
+#+BEGIN_SRC R :results none
+# add new component to existing list using $
+list1$newthing <- lm(y ~ x, data = df)
+# add a new component to existing list using [[ ]]
+list1[[5]] <- "new component"
+
+#Finally, we can delete a component of a list by setting it equal to NULL.
+
+# delete a component of existing list
+list1$Letters <- NULL
+list1
+## $Numbers
+## [1] 1 2 3 4
+## 
+## $Some.data
+##   y x
+## 1 1 m
+## 2 2 m
+## 3 3 f
+## 
+## $newthing
+## 
+## Call:
+## lm(formula = y ~ x, data = df)
+## 
+## Coefficients:
+## (Intercept)           xm  
+##         3.0         -1.5  
+## 
+## 
+## [[4]]
+## [1] "new component"
+#+END_SRC
+
+The Letters component is gone, so there are now only 4. Notice how the 4th component doesn’t have a name because we didn’t assign it one when we added it in.
+
+More extracting: If we want to extract the dataframe we have in the list, and just look at it’s first row, we would do list1[[2]][1,]. This code would take the second component in the list using the [[ ]] operator (which is the dataframe) and once it has the dataframe, it subsets the first row and all columns using only the [ ] operator since that is what is used to subset dataframes (or matrices).
+
+For help on subsetting matrices and dataframes, check out this post.
+#+BEGIN_SRC R :results none
+# extract first row of dataframe that is in a list
+list1[[2]][1, ]
+##   y x
+## 1 1 m
+#+END_SRC
+
+*** Describing a list
+
+To describe a list, we may want to know the following:
+
+the class of the list (which is a list class!) and the class of the first component of the list.
+
+#+BEGIN_SRC R :results none
+# describe class of the whole list
+class(list1)
+## [1] "list"
+# describe the class of the first component of the list
+class(list1[[1]])
+## [1] "integer"
+#the number of components in the list - use the length function()
+# find out how many components are in the list
+length(list1)
+## [1] 4
+#a short summary of each component in the list - use str(). (I take out the model because the output is really long)
+# take out the model from list and then show summary of what's in the list
+list1$newthing <- NULL
+str(list1)
+## List of 3
+##  $ Numbers  : int [1:4] 1 2 3 4
+##  $ Some.data:'data.frame':   3 obs. of  2 variables:
+##   ..$ y: int [1:3] 1 2 3
+##   ..$ x: Factor w/ 2 levels "f","m": 2 2 1
+##  $          : chr "new component"
+#+END_SRC
+
+Now we can combine these functions to append a component to the end of the list, by assigning it to the length of the list plus 1:
+# construct new list of two components
+new.list <- list(vec, char)
+
+# notice that it has two components
+length(new.list)
+## [1] 2
+# append a component to the end and print
+new.list[[length(new.list) + 1]] <- "Appended"
+
+new.list
+## [[1]]
+## [1] 1 2 3 4
+## 
+## [[2]]
+## [1] "Hello!"
+## 
+## [[3]]
+## [1] "Appended"
+Notice you could keep doing this as the length is now 3. You could also use the $ operator to name a new component and that would append it at the end, as we saw above.
+
+Initializing a list
+
+To initialize a list to a certain number of null components, we use the vector function like this:
+
+# initialize list to have 3 null components and print
+list2 <- vector("list", 3)
+list2
+## [[1]]
+## NULL
+## 
+## [[2]]
+## NULL
+## 
+## [[3]]
+## NULL
+Converting a list into matrix or dataframe
+
+Finally, we can convert a list into a matrix, dataframe, or vector in a number of different ways. The first, most basic way is to use unlist(), which just turns the whole list into one long vector:
+
+# convert to one long string - use unlist
+unlist(list1)
+##        Numbers1        Numbers2        Numbers3        Numbers4 
+##             "1"             "2"             "3"             "4" 
+##    Some.data.y1    Some.data.y2    Some.data.y3    Some.data.x1 
+##             "1"             "2"             "3"             "2" 
+##    Some.data.x2    Some.data.x3                 
+##             "2"             "1" "new component"
+But often we have matrices or dataframes as components of a list and we would like to combind them or stack them into one dataframe. The following shows the two good ways I’ve found to do this (from this StackOverflow page) using ldply() from the plyr package or rbind().
+
+First, we create a list of matrices and then convert the list of matrices into a dataframe.
+
+#create list of matrices and print
+mat.list <- list(mat1=matrix(c(1,2,3,4), nrow=2), mat2=matrix(c(5,6,7,8), nrow=2))
+mat.list
+## $mat1
+##      [,1] [,2]
+## [1,]    1    3
+## [2,]    2    4
+## 
+## $mat2
+##      [,1] [,2]
+## [1,]    5    7
+## [2,]    6    8
+#convert to data frame
+#1. use ldply
+require(plyr)
+ldply(mat.list, data.frame)
+##    .id X1 X2
+## 1 mat1  1  3
+## 2 mat1  2  4
+## 3 mat2  5  7
+## 4 mat2  6  8
+#2. use rbind
+do.call(rbind.data.frame, mat.list)
+##        V1 V2
+## mat1.1  1  3
+## mat1.2  2  4
+## mat2.1  5  7
+## mat2.2  6  8
+Get ready for part 2 next time, when we’ll see what we can use lists for and why we should use them at all.
+
+
+
 * Data Management
 ** Operators/functions/Math
 *** Arithmetic operators
@@ -7809,10 +8071,18 @@ use arrange
 df <- arrange(df, date, mh)
 #+end_src
 
-*** run multiple model with by 
+*** run multiple model with by statement (lm) 
 #+BEGIN_SRC R
 modelList <- dlply(pm25.m1.c[A_T==1], "stn", function(x) lm(m1.formula, data=x))
 lapply(modelList, function(x) summary(x)$r.squared)
+#+END_SRC
+*** run multiple model with by statement (lme/r) 
+#+BEGIN_SRC R
+library("plyr")
+dlply(Orthodont,.(Sex),
+       lmer,formula=distance~age+(1|Subject))
+
+detach("package:plyr")
 #+END_SRC
 
 *** Alternative way>> run models on subset with plyr
@@ -7950,6 +8220,80 @@ dd<-slideMA(data =x , Var = "PM25", GroupVar = "stn", periodBound = -3, offset =
 y<-as.data.table(dd)
 setkey(y,stn,day)
 head(y[stn=="ANT"],n=10)
+#+END_SRC
+
+** ztable 
+http://cran.rstudio.com/web/packages/ztable/vignettes/ztable.html
+
+*** set output type
+The default output format of ztable is RStudio::viewer or web-browser format:
+#+BEGIN_SRC R
+options(ztable.type="viewer")
+#+END_SRC
+So if you want to use ztable in a “html” format, you should change the parameter ztable.type to “html”. If you want to use ztable in latex format, you should change the parameter ztable.type to “latex”.
+#+BEGIN_SRC R
+options(ztable.type="html")
+#+END_SRC
+*** make headers bold
+#+BEGIN_SRC R
+options(ztable.colnames.bold=TRUE)
+#+END_SRC
+*** add vlines 
+#+BEGIN_SRC R
+vlines(z,type="all") 
+#to make to vlines
+z=vlines(z,type="none")      # type=0 gets same result
+#+END_SRC
+*** Merge two tables
+
+You can bind two or more data.frame by cbind function.
+#+BEGIN_SRC R :results none
+t1=head(iris,10)[,c(1,3,5)]
+t2=tail(iris,10)[,c(1,3,5)]
+t=cbind(t1,t2)
+z=ztable(t,caption="Table 1. Top 10 and Last 10 Data from iris",align="ccccccc")
+z
+#+END_SRC
+*** base use
+It’s use is very simple. Just use ‘ztable()’ function. You can get the zebra stripig table by set the parameter zebra=1 (default value is NULL)
+
+#+BEGIN_SRC R
+require(ztable)
+options(ztable.type="html")
+options(ztable.zebra=1)
+options(ztable.zebra.color="platinum")
+options(ztable.colnames.bold=TRUE)
+ztable(head(mtcars))
+#+END_SRC
+*** Customize the caption and the font size
+
+You can change the position of table by using parameter position. You can use “r” for right position, “l” for left position and “c” for center position(default). You can change the color of zebra striping by change the parameter zebra.color. You can also change the size of font from 1 to 10(default is 5). You can change the caption.placement(“top” or “bottom”) and caption.position(“c” for center / “r” for right/ “l” for left).
+
+#+BEGIN_SRC R :results none
+ztable(head(mtcars[c(1:7)]),zebra=2,zebra.color="lightcyan",size=7,
+       caption="Table 2. Left-sided caption at botom with large font",
+       caption.placement="bottom",caption.position="l") 
+#+END_SRC
+*** use with lm object
+Linear model : ‘lm’ object
+
+‘ztable()’ can be used for ‘lm’ object. When used for ‘lm’ object, the function call is added as footer to the table, too.
+
+#+BEGIN_SRC R :results none
+fit <- lm(mpg ~ cyl + disp + wt + drat + am, data=mtcars)
+ztable(fit)
+#+END_SRC
+*** Generalized linear model ; ‘glm’ object
+‘ztable()’ can be used for ‘glm’(generalized linear model) object. In this time, ‘ztable()’ shows the odds ratio(OR) and 95% confidence interval as well as atandard R output.
+
+#+BEGIN_SRC R :results none
+require(survival)
+## Loading required package: survival
+## Loading required package: splines
+data(colon)
+attach(colon)
+out <- glm(status ~ rx+obstruct+adhere+nodes+extent, data=colon, family=binomial)
+ztable(out)
 #+END_SRC
 
 ** colorout 
@@ -10100,6 +10444,22 @@ left_join(df2, df1)
 left_join(test_data, kantrowitz, by = c("first_name" = "name"))
 #+END_SRC
     
+** run models with by statement
+#+BEGIN_SRC R
+#You could do this:
+ lmer_sum <- function(x,...) {
+      m <- lmer(x,...)
+      c(fixef(m),unlist(VarCorr(m)))
+        data.frame(rbind(c(fixef(m),unlist(VarCorr(m)))),
+                   check.names=FALSE)
+ }
+
+#(unlist(VarCorr(m)) gives the RE variance of the single scalar random effect; the whole data.frame(rbind(...)) thing is needed to convert a numeric vector into a one-row data frame; check.names=FALSE preserves the column name (Intercept))
+
+Orthodont %>% group_by(Sex) %>%
+    do(lmer_sum(.,formula=distance~age+(1|Subject)))
+#+END_SRC
+
 * Testing grounds 
 ** create horizontal column exposure days per case
 # export from 60 days before a period of 390 days (for Leon for P50)

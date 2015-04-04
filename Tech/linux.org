@@ -512,6 +512,16 @@ $NOTE: Before starting with aur installs make sure the /etc/makepkg.conf is conf
 pacaur -S rofi-git clerk-git teiler-git caudec vte3-select-text termite-git mpdcron-git ttf-droid dropbox  teamviewer xshowkeys terminus-font-ttf puddletag culmus ffcast  flacon worker xdotool xdotool-gui xchainkeys jmtpfs acroread android-sdk copyq dunst gpodder3 i3blocks ranger-git surfraw-git termite-git chromium-pepper-flash ttf-ms-fonts 
 #+END_SRC
 
+***** unoffical repos
+****** kps repo 
+Maintainer: kps
+Description: gmt, catalyst-test, ttf-ms-win8, rstudio, meshlab, gcc-gcj, vlc-git, ffmpeg-git (k10 & intel opt.), docear, maperitive, libressl, bkchem ...
+
+#+BEGIN_EXAMPLE
+[kps]
+Server = http://kps.bplaced.net/repo/$arch
+#+END_EXAMPLE
+
 **** Installs Server
 
 #+BEGIN_SRC sh
@@ -25486,6 +25496,9 @@ Some terminal emulators under X support mouse clicks in the terminal window. In 
 
 to enable simple use of the mouse--only single clicks are supported. The normal xterm mouse functionality is still available by holding down the SHIFT key when you press the mouse button. The Linux console supports this mode if it has support for the mouse enabled, e.g. using the gpm daemon.
 
+******** start with systemd 
+look at the systemd entery [[id:6e5c769c-0f97-4001-8ce7-c19acdd8ce89][setup emacsclient as a systemd unit in Arch]]
+
 ******* saving/closing emacs
 ******** base 
 Save To save file: press Ctrl+x, then Ctrl+s.
@@ -30613,7 +30626,7 @@ Call delete-trailing-whitespace does it to the whole buffer.
 
 3.The resulting process will open a all-code buffer with the results
 
-#+BEGIN_SRC emacs-lisp
+#+BEGIN_SRC emacs-lisp :results none 
 (defun take-code-in-a-buffer-and-change-the-year-and-magic-happens (buffer max-year)
   (interactive "b\nsMax year (yy): ")
   (setq max-year (string-to-number max-year))
@@ -32682,6 +32695,27 @@ $Note$ you can also use this in the config and then the copied id's will appear 
 docview:papers/last.pdf::NNN              open in doc-view mode at page 
 ********* general open by Emacs
  file+emacs:/path/to/file                  force opening by Emacs
+******** link to a gmail mail
+
+http://permalink.gmane.org/gmane.emacs.orgmode/48056
+
+1. Open your gmail account (log-in)
+2. Open the mail you like to refer too.
+3. Copy the URL
+4. Add the URL as a link (C-c C-l) to your org-file
+
+
+After that, clicking on the link will open the mail directly in your standard webbrowser. If you logged out from google mail in between, you are ask to log-in first, after that select the link again.
+
+But it is getting even better. You are not only able to link to particular mails within org-mode, but also to google mail labels (folders) or search results.
+
+To make it even more org-mode friendly one can set-up org-capture in your webbrowser:
+I added the following to the org-capture-templates list
+
+("g" "Gmail-link" entry (file+headline "~/org/work.org" "Gmail-links") "%A")
+
+Thus, pressing the assigned button in your browser and emacs will ask you what kind of link you want to add to your file. Press g for gmail and enter the description for the link (this could be done automatically, but I find it to long and not helpful). You will find the link in your capture buffer in emacs for further processing
+
 ******* attach
 ******** set default dir
  #+BEGIN_EXAMPLE
@@ -36198,7 +36232,6 @@ Reload systemd, scanning for new or changed units:
  systemctl daemon-reload
 #+END_SRC
 
-
 ***** If services do not have an Install section:
 it usually means they are called automatically by other services. But if you need to install them manually, use the following command, replacing foo with the name of the service.
 
@@ -36211,13 +36244,17 @@ it usually means they are called automatically by other services. But if you nee
 systemctl disable <unit>
 #+END_SRC
 
-
 **** journalctl (logs)
 ***** basics
 To read the log, use:
 
 #+BEGIN_SRC sh
 journalctl
+#+END_SRC
+
+follow and print latest logs
+#+BEGIN_SRC sh
+journalctl -f 
 #+END_SRC
 
 you can add arguments to the command (see man journalctl) such as :
@@ -36323,6 +36360,40 @@ is: d /run/transmission - [user] [group] -
 
  sudo chmod 777 /run/transmission
 ***** Emacs
+***** setup emacsclient as a systemd unit in Arch 
+      :PROPERTIES:
+      :ID:       6e5c769c-0f97-4001-8ce7-c19acdd8ce89
+      :END:
+
+The old system unit method had some caveats. It gave a limited shell environment which restricted shell calls, so we'll be using a user unit, which tends to work a lot better than naively calling emacs --daemon.
+Create a systemd unit for emacs:
+
+#+BEGIN_SRC sh :results none
+#~/.config/systemd/user/emacs.service
+
+[Unit]
+Description=Emacs: the extensible, self-documenting text editor
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/emacs --daemon
+ExecStop=/usr/bin/emacsclient --eval "(kill-emacs)"
+Restart=always
+
+[Install]
+WantedBy=default.target
+#+END_SRC
+
+You need to enable the unit so that it gets started on every boot (note - DO NOT run these commands as root - we want them for our user, not for the root user):
+
+#+BEGIN_SRC sh :results none
+$ systemctl --user enable emacs
+#To actually use the unit, either reboot or start the unit manually:
+$ systemctl --user start emacs
+#To restart 
+$ systemctl --user restart emacs
+#+END_SRC
+
 ****** emacs fails to start error
 if you get this error:
 
@@ -36333,6 +36404,51 @@ Job for emacs@zeltak.service failed. See 'systemctl status emacs@zeltak.service'
 make sure there are no other instances of emacs running (you can use killall emacs)
 
 and stop/start emacs again via systemd
+
+***** offlineimap 
+
+I run systemd with the --user switch inside my user session, allowing me to configure services (like OfflineIMAP) very conveniently. Creating the following unit file in ~/.config/systemd/user allows you to start a single synchronization.
+
+#+BEGIN_SRC sh :results none
+# offlineimap.service
+
+[Unit]
+Description=OfflineIMAP Quicksync
+After=network.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/offlineimap -o -q -u quiet
+TimeoutStartSec=1min30s
+#+END_SRC
+
+Additionally, a second .timer unit is needed to run the service every 30 seconds:
+
+#+BEGIN_SRC sh :results none
+# offlineimap.timer
+
+[Unit]
+Description=OfflineIMAP Quicksync timer
+
+[Timer]
+OnCalendar=*:*:0/30
+Unit=offlineimap.service
+
+[Install]
+WantedBy=default.target
+#+END_SRC
+
+You can now enable mail synchronization by executing
+
+#+BEGIN_SRC sh :results none
+systemctl --user enable offlineimap.timer
+#+END_SRC
+
+See if OfflineIMAP is working correctly by following the journal:
+
+#+BEGIN_SRC sh :results none
+journalctl -f
+#+END_SRC
 
 **** query service names
 

@@ -4701,123 +4701,170 @@ GNU/Linux 4.0 system I wrote the file:
  xvattr -a XV\_COLORKEY -v 66048
 
 ** internet-web
-*** Google
-**** gmail\_lifehacker\_tips.pdf
+**** Google
+***** gmail 
+****** search 
+******* attachents over x size
+Searching by size is very simple. You just type size: and then the minimum number of you want each message to be. For example, you'd type size:1000000 for messages greater than 1MB. 
 
-[[tech_files/attach/gmail_lifehacker_tips.pdf][Attachment #03
-(gmail\_lifehacker\_tips.pdf)]]
+#+BEGIN_EXAMPLE
+size:25000000 
+#+END_EXAMPLE
+or use these links
 
-**** unmute an email
+for attachment over 25mb: 
+https://mail.google.com/mail/u/0/#search/size%3A25000000
 
-to see all the convo's you've got muted, type is:muted into the Gmail
-search box. Select the conversation you want to unmute (demute?), and
-from the drop-down choose "Move to inbox." That will restore new message
-notifications on that thread from there on out.
+for attachment over 5mb:
+https://mail.google.com/mail/u/0/#search/size%3A5000000 
 
-**** Sort GMail Messages by Size of Attachments
+******* filter out and delete crap 
+from social sites
+#+BEGIN_EXAMPLE
+from:(@facebookmail.com| @linkedin.com | @facebookmail.com | @plus.google.com | @twitter.com | @researchgate.net ) 
+#+END_EXAMPLE
 
-﻿*Sort GMail Messages by Size of Attachments*
+impersonal crap
 
-The idea is that your Google Docs will connect to your Gmail account and
-compute the size of every message that's present in your mailbox. If it
-finds a bulky message (size > 1 MB), it will make a note of it in the
-spreadsheet.Once the sheet has a list of all the bulky message, you can
-sort the sheet by the Size column to find the big ones. Or use the
-Filter option (the Funnel icon) to find messages that are within a
-particular range (5 MB < size < 10 MB). Click the "View" link to open
-the corresponding message in Gmail, forward it to a secondary email
-address and delete it from the primary Inbox to recover space.That's all
-the theory you should know, let's now put this program into action:
 
-Create a copy of
-[[https://docs.google.com/spreadsheet/ccc?key=0Aofk8L6brI_edDJMeXBoRTNTdzA4RVE4MzUtTlV0cmc&newcopy=true][this
-sheet]] in your Google Docs account.
+#+BEGIN_EXAMPLE
+"hello sir" | "hello webmaster" | "hello admin" | "dear sir" | "dear webmaster" | "dear admin"
+#+END_EXAMPLE
 
-A new Gmail Menu will appear in the sheet after about a minute. Select
-"Reset Canvas" from the Gmail menu to initialize your sheet.
 
-Accept the
-[[http://img.labnol.org/files/authorization_required.png][authorization]]
-screen and then choose
-[[http://img.labnol.org/files/grant_access.png][Grant Access]] to let
-Google Docs access your Gmail Inbox. This is completely safe because
-your own Google Docs account is requesting access to your own Gmail
-account (see [[http://ctrlq.org/code/19040-gmail-size-search][source
-code]]).
+academia crap 
 
-Once the permissions have been granted, choose "Scan Mailbox" from the
-Gmail menu to start the scanning process.
 
-Sit back and relax as the last step may take time depending on how big
-your Gmail mailbox is. Also, if the program is stuck or if you
-accidentally close the browser tab, open the same Google sheet, choose
-"Scan Mailbox" again and the script will resume scanning from where it
-left off.
+#+BEGIN_EXAMPLE
+israeligeoassoc@  | 
+#+END_EXAMPLE
 
- *Scan Gmail Messages with a trigger*
 
-If your Gmail mailbox is large, you can also set up a time-driven
-trigger to let the script automatically without manual intervention. In
-this case, you can even close the browser tab and the script will run in
-the background. Here's how:
 
-While the Google sheet is open, go to Tools -> Script Editor. On the
-next screen, choose Resources -> Current Script Triggers.
+general crap 
 
-Click "Add a New Trigger," change the Event from "Spreadsheet" to "Time
-Driven" and set a minutes timer that triggers every 10 minutes.
+#+BEGIN_EXAMPLE
+"to view this email as a web page, go here" |"having trouble reading this email" | "having trouble viewing this email" | "email not displaying correctly" | "unsubscribe | change subscriber options" | "unsubscribe from this list" | "unsubscribe instantly"| "please unsubscribe" | "update subscription preferences" | "email preferences" | "follow the URL below to update your preferences or opt-out" | "if you would rather not receive future communications from" | "if you would like to unsubscribe"| "to ensure that you continue receiving our emails, please add us to your address book or safe list."| "safe unsubscribe" |"to unsubscribe" | "unsubscribe from these emails" | "unsubscribe from our emails" | "unsubscribe |  please click" |  "unsubscribe from future" |  "you can unsubscribe here" |  "to unsubscribe or change subscriber options" |  "this |  message was sent to leilaniana@gmail.com" (replace with your email address) |  "this email has been sent to you by" | "to opt out" | "opt out using TrueRemove" | "one-click unsubscribe" | "do not reply to this email" 
 
-Save the trigger, authorize the script if it requires and close the
-sheet.
- Pasted from
-<[[http://www.labnol.org/internet/sort-gmail-by-size/21191/][http://www.labnol.org/internet/sort-gmail-by-size/21191/]]>
 
-**** configure mail clients with gmail
+#part 2
+"view this email in a browser"| "please do not reply to this message." | "if you no longer wish to receive our emails" | "if you do not wish to receive email from"|
+"no longer receive this newsletter"| "do not want to receive any newsletters"| "to remove this e-mail address from" | "removed from this mailing list" | "manage your email settings" | "edit your subscription" | "you may unsubscribe" | "you can unsubscribe" | 
+"powered by YMLP" | "update your contact information" | "update your contact details" | "change your subscription settings" | "manage your subscription"| "manage your subscriptions"|  "update Email Address or Unsubscribe"| "this email was sent by" | "this email was intended for" | "you received this email because"| "you received this e-mail because" | "you are receiving this message" | "prefer not to receive invites from"
 
-*Configuring mail clients with Gmail
-*
- You can use the following information to configure IMAP with many mail
-clients. If you encounter difficulties, we suggest contacting your mail
-client's customer support department for further instructions -- we're
-unable to provide assistance with configuring mail clients not listed
-here.
- Incoming Mail (IMAP) Server - requires SSL: imap.gmail.com
- Use SSL: Yes
- Port: 993
- Outgoing Mail (SMTP) Server - requires TLS: smtp.gmail.com (use
-authentication)
- Use Authentication: Yes
- Use STARTTLS: Yes (some clients call this SSL)
- Port: 465 or 587
- Account Name: your full email address (including @gmail.com) Google
-Apps users, please enter username@your\_domain.com
- Email Address: your full Gmail email address (username@gmail.com)
-Google Apps users, please enter username@your\_domain.com
- Password: your Gmail password
- Please note that if your client does not support SMTP authentication,
-you won't be able to send mail through your client using your Gmail
-address.
- Also, if you're having trouble sending mail but you've confirmed that
-encyrption is active for SMTP in your mail client, try to configure your
-SMTP server on a different port: 465 or 587.
+#+END_EXAMPLE
 
-[[http://mail.google.com/support/bin/answer.py?answer=78799Search][http://mail.google.com/support/bin/answer.py?answer=78799*Search
-operators in Gmail
-*
-]]
+****** unmute an email
 
-**** google search cheatsheet
+  to see all the convo's you've got muted, type is:muted into the Gmail
+  search box. Select the conversation you want to unmute (demute?), and
+  from the drop-down choose "Move to inbox." That will restore new message
+  notifications on that thread from there on out.
 
-[[tech_files/img/Image.png]]
+****** Sort GMail Messages by Size of Attachments
 
-**** search only unread mails in gmail
+  ﻿*Sort GMail Messages by Size of Attachments*
 
-use:
- is:unread label:inbox
+  The idea is that your Google Docs will connect to your Gmail account and
+  compute the size of every message that's present in your mailbox. If it
+  finds a bulky message (size > 1 MB), it will make a note of it in the
+  spreadsheet.Once the sheet has a list of all the bulky message, you can
+  sort the sheet by the Size column to find the big ones. Or use the
+  Filter option (the Funnel icon) to find messages that are within a
+  particular range (5 MB < size < 10 MB). Click the "View" link to open
+  the corresponding message in Gmail, forward it to a secondary email
+  address and delete it from the primary Inbox to recover space.That's all
+  the theory you should know, let's now put this program into action:
 
-**** google plus
-***** leave a community
-use the phone g+ app and go to the specific community, then in the menu press 'leave' community 
+  Create a copy of
+  [[https://docs.google.com/spreadsheet/ccc?key=0Aofk8L6brI_edDJMeXBoRTNTdzA4RVE4MzUtTlV0cmc&newcopy=true][this
+  sheet]] in your Google Docs account.
+
+  A new Gmail Menu will appear in the sheet after about a minute. Select
+  "Reset Canvas" from the Gmail menu to initialize your sheet.
+
+  Accept the
+  [[http://img.labnol.org/files/authorization_required.png][authorization]]
+  screen and then choose
+  [[http://img.labnol.org/files/grant_access.png][Grant Access]] to let
+  Google Docs access your Gmail Inbox. This is completely safe because
+  your own Google Docs account is requesting access to your own Gmail
+  account (see [[http://ctrlq.org/code/19040-gmail-size-search][source
+  code]]).
+
+  Once the permissions have been granted, choose "Scan Mailbox" from the
+  Gmail menu to start the scanning process.
+
+  Sit back and relax as the last step may take time depending on how big
+  your Gmail mailbox is. Also, if the program is stuck or if you
+  accidentally close the browser tab, open the same Google sheet, choose
+  "Scan Mailbox" again and the script will resume scanning from where it
+  left off.
+
+   *Scan Gmail Messages with a trigger*
+
+  If your Gmail mailbox is large, you can also set up a time-driven
+  trigger to let the script automatically without manual intervention. In
+  this case, you can even close the browser tab and the script will run in
+  the background. Here's how:
+
+  While the Google sheet is open, go to Tools -> Script Editor. On the
+  next screen, choose Resources -> Current Script Triggers.
+
+  Click "Add a New Trigger," change the Event from "Spreadsheet" to "Time
+  Driven" and set a minutes timer that triggers every 10 minutes.
+
+  Save the trigger, authorize the script if it requires and close the
+  sheet.
+   Pasted from
+  <[[http://www.labnol.org/internet/sort-gmail-by-size/21191/][http://www.labnol.org/internet/sort-gmail-by-size/21191/]]>
+
+****** configure mail clients with gmail
+
+  *Configuring mail clients with Gmail
+  *
+   You can use the following information to configure IMAP with many mail
+  clients. If you encounter difficulties, we suggest contacting your mail
+  client's customer support department for further instructions -- we're
+  unable to provide assistance with configuring mail clients not listed
+  here.
+   Incoming Mail (IMAP) Server - requires SSL: imap.gmail.com
+   Use SSL: Yes
+   Port: 993
+   Outgoing Mail (SMTP) Server - requires TLS: smtp.gmail.com (use
+  authentication)
+   Use Authentication: Yes
+   Use STARTTLS: Yes (some clients call this SSL)
+   Port: 465 or 587
+   Account Name: your full email address (including @gmail.com) Google
+  Apps users, please enter username@your\_domain.com
+   Email Address: your full Gmail email address (username@gmail.com)
+  Google Apps users, please enter username@your\_domain.com
+   Password: your Gmail password
+   Please note that if your client does not support SMTP authentication,
+  you won't be able to send mail through your client using your Gmail
+  address.
+   Also, if you're having trouble sending mail but you've confirmed that
+  encyrption is active for SMTP in your mail client, try to configure your
+  SMTP server on a different port: 465 or 587.
+
+  [[http://mail.google.com/support/bin/answer.py?answer=78799Search][http://mail.google.com/support/bin/answer.py?answer=78799*Search
+  operators in Gmail
+  *
+  ]]
+
+****** google search cheatsheet
+
+  [[tech_files/img/Image.png]]
+
+****** search only unread mails in gmail
+
+  use:
+   is:unread label:inbox
+
+****** google plus
+******* leave a community
+  use the phone g+ app and go to the specific community, then in the menu press 'leave' community 
 *** isp
 
 *Info (dns servers. ip stuff etc...) for Israeli ISP
