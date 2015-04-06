@@ -498,7 +498,7 @@ systemctl enable cronie
 
 #+BEGIN_SRC sh
 pacman -S emacs rsync tree ncdus nfs-utils rpcbind terminator r mc  flac lame abiword keepassx dzen2 zip unzip unrar mtpaint krename gmrun aspell aspell-en findutils inkscape python-lxml gcolor2 easytag kdiff3  htop p7zip vlc smb4k screen tmux speedcrunch mlocate vim gvim mpd mpc atool lynx profont fb-client feh keychain picard  gdb mp3gain pacgraph sqliteman grep awk leafpad less lxappearance pavucontrol net-tools sshfs xterm zsh samba xclip lxtask pydf xorg-xkill nmap acpi audacity nmon  powertop ttf-inconsolata sxhkd git zsh firefox chromium ncmpcpp gmpc gcc filezilla gimp jre7-openjdk kdegraphics-okular
-meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  mosh 
+meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  mosh w3m imagemagick graphicsmagick
 #+END_SRC
 !Special repo for laptops:!
 laptop-mode-tools
@@ -8531,7 +8531,6 @@ issue ffcast and start the screencast
 youtube-dl -x URL
 #+end_src
 *** office
-
 **** Mutt
 
 ***** colors
@@ -21425,7 +21424,70 @@ http://www.molspaces.com/d_cb2bib-overview.php
 launch via
 `cb2bib`
 
+*** isync (mbsync)
+**** To install 
+#+BEGIN_SRC sh
+pacman  -S isync
+#+END_SRC
+**** example config
+example config:
 
+#+BEGIN_EXAMPLE
+The isync configuration file is named .mbsyncrc
+
+edit ~/.mbsyncrc
+IMAPAccount gmail
+# Address to connect to
+Host imap.gmail.com
+User yourname@gmail.com
+#Pass ***************
+# To store the password in an encrypted file use PassCmd instead of Pass
+#PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d ~/.mailpass.gpg"
+#
+# Use SSL
+UseIMAPS yes
+# The following line should work. If get certificate errors, uncomment the two following lines and read the "Troubleshooting" section.
+CertificateFile /etc/ssl/certs/ca-certificates.crt
+#CertificateFile ~/.cert/imap.gmail.com.pem
+#CertificateFile ~/.cert/Equifax_Secure_CA.pem
+
+IMAPStore gmail-remote
+Account gmail
+
+MaildirStore gmail-local
+# The trailing "/" is important
+Path ~/mail/
+Inbox ~/mail/Inbox
+
+Channel gmail
+Master :gmail-remote:
+Slave :gmail-local:
+# Exclude everything under the internal [Gmail] folder, except the interesting folders
+Patterns * ![Gmail]* "[Gmail]/Sent Mail" "[Gmail]/Starred" "[Gmail]/All Mail"
+# Or include everything
+#Patterns *
+# Automatically create missing mailboxes, both locally and on the server
+Create Both
+# Save the synchronization state files in the relevant directory
+SyncState *
+#+END_EXAMPLE
+**** passord config 
+crreate a gpg file (you can use Emacs) names ~/.mailpass.gpg and put the password there in plain text
+₆In example₆ 
+
+#+BEGIN_EXAMPLE
+password 
+#+END_EXAMPLE
+
+**** Pattern[s]
+[!]pattern ...
+
+Instead of synchronizing only one mailbox pair, synchronize all mailboxes that match the pattern(s). The mailbox names are the same on both Master and Slave. Patterns are IMAP4 patterns, i.e., * matches anything and % matches anything up to the next hierarchy delimiter. 
+
+Prepending ! to a pattern makes it an exclusion. Multiple patterns can be specified (either by supplying multiple arguments or by using Pattern multiple times); later matches take precedence. 
+Note that INBOX is not matched by wildcards, unless it lives under Path. 
+The mailbox list selected by Patterns can be overridden by a mailbox list in a channel reference (a Group specification or the command line). 
+Example: "Patterns % !Trash"
 ** System
 *** java
 
@@ -26296,6 +26358,29 @@ AND)
  T u ~ +- Unmark bookmarks not having any tags in a set (NOT OR)
  T u ~ - Unmark bookmarks not having all tags in a set (NOT AND)
 
+******** bookmark and jump to specific org-goto link 
+₆In example₆ 
+#+BEGIN_SRC emacs-lisp :results none
+;  emacs
+  (global-set-key (kbd "<f9> <f9> e ")
+    (lambda ()
+      (interactive)
+        (widen)
+        (org-id-goto "38a15adf-f505-4a54-b1d9-f76b22ce1147")
+        (org-narrow-to-subtree)
+))
+
+  ;org
+  (global-set-key (kbd "<f9> <f9> o")
+    (lambda ()
+      (interactive)
+        (widen)
+        (org-id-goto "be4759e1-2951-4c91-a155-056bc2a16d9f")
+        (org-narrow-to-subtree)
+))
+
+
+#+END_SRC
 ******* buffers,windows,frames
 
 ******** what is a window and a frame?
@@ -27711,36 +27796,152 @@ use the function below and bind it to a key of your liking
  #+END_SRC 
 
 ******* gnus
+http://www.emacswiki.org/emacs/GnusGmail
+
 ******** terms
 article-one information piece-email,article etc terms
 backend-a way to get article, mailbox , rss, news backends
 gnus has its own .el file but you can use an org mode config file and stick the config there
 
-******** keybinds
-|---------+------------------------|
-| keybind | Info                   |
-|---------+------------------------|
-| '^'     | show news sources      |
-| M-`     | show menu              |
-| U       | subscribe to newsgroup |
-|         |                        |
-|         |                        |
-|         |                        |
-******** Setup
-********* base setup
-first thing you would config in gnus is your main source
-
-#+BEGIN_SRC emacs-lisp
-(setq gnus-select-method '(nntp "news.gmane.org"))
-#+END_SRC
-
-this shows the gmane mailing list gateway as main source
-********* Subscribe to a group
-issue U and then enter gmane.TAB to use completion
 ******** Errors 
 ********* gnus hangs at startup
 if gnus hanges, one possibility is this: if you just commented out a previous setup for Gmail and replaced it with one for  
 an NNTP server, Gnus will now be confused and stuck trying to get those previously-subscribed Gmail IMAP folders. just delete .newsrc and try again
+******** setup
+********* A quick guide
+********** start 
+when Gnus is properly set up, you will come to the "Group Buffer" window. The "Group Buffer" lists the email folders. In Gnus, the folder is named "Group". By default, the groups (email folders) are invisible!
+
+You need subscribe the groups to make it visible. For example, my Gmail folder "Inbox" is a group named "nnimap+gmail:INBOX" in "Group Buffer" and its invisible by default!. If I dont subscribe that group, I can't read email in my INBOX. I know this is confusing. But this is the way of Gnus.
+
+Check section "Subscribe groups" for details. After subscribing the group INBOX, the INBOX could still be invisible if INBOX does not contain unread emails. That makes no sense for an email client (It does make sense for a stone age news reader)! Anyway, the solution is simple, `C-u 5 gnus-group-list-all-groups` will get desired result. 
+I assigned hotkey "o" to it. Here is my elisp code you could paste into your .emacs.
+********** group buffer 
+In the "Group Buffer", you can select a group (email folder) by pressing "RET" to check emails in that folder.
+%Tip I strongly suggest pressing "C-u RET" instead because your true intention is to see ALL the emails instead of the emails filtered by "smart" Gnus.%
+
+After selecting a group and pressing "RET", you reach the "Summary Buffer" which is, as I said before, a list of your emails.
+
+Now everything is simple, you can press "RET" to see the email and use normail Emacs hotkeys for navigation. Hotkey "q" is for quitting "Summary Buffer".
+
+In summary, you only need remember "Group Buffer" is the list of mail folders and "Summary Buffer" is the list of mails.
+********** Search emails
+"G G" to search email at server side in "Group Buffer". 
+You can use "#" ("M-#" to unmark)to mark the group you want to search. If you don't mark the groups, the curent group under cursor is searched. 
+If you put the cursor at the first line above any group, all the groups will be searched. You could use more advanced syntax instead of simple keyword. I suggest not doing so.
+
+"/ /" to limit the emails by subject at "Summary Buffer". "Limiting" is means searching mail locally.
+
+"/ a" to limit the emails by author at "Summary Buffer".
+
+"/ w" to cancel the current filter.
+
+You can apply the limits sequentially and cancel them one by one using "/ w"
+
+BTW, I love "Limiting" in Gnus. See http://www.gnu.org/software/emacs/manual/html_mono/gnus.html#Limiting for more limiting tricks.
+
+See http://sachachua.com/blog/2008/05/emacs-gnus-searching-mail/ for details.
+********** Subscribe group (email folder)
+
+"A A" in "Group Buffer" to list all groups on all the connected server. @It may take a while@.
+%Tip- I suggest pressing "L" to avoid querying data from all the servers if possible.%
+
+After getting the list of all subscribed/unsubscribed groups, press "u" to subscribe/unsubscribe specific group.
+
+I repeat, in order to see the emails in "INBOX" folder/group, you need MANUALLY subscribe the group "INBOX"!
+
+"l" to navigate back the default view of group buffer which you may find confusing, as I mentioned before. Press "o" is much better if you uses my elisp code to show all the subscribed groups.
+
+"g" to refresh groups list.
+
+********** composing and sending 
+"R" to reply with quoted text. "r" to reply without quoted.
+"S W" (press S then press W) to reply all (It's named "wide reply" in Emacs) with quoted text. "S w" to reply all without quoted.
+
+to Compose new email: The hot key is "a" or "m" in "Summary Buffer".
+
+BTW, you don't need open Gnus to compose a mail. You can type "C-x m" anywhere in Emacs.
+
+Attach a file- The hot key is "C-c C-a"
+
+Download attachment- The hot key is "o". See "Using Mime" in Emacs manual for details.
+
+Send email- "C-c C-c"
+
+
+Forward mail-"C-c C-f" or "M-x gnus-summary-mail-forward" in "Summary Buffer".
+
+BTW, you can mark several emails you want to forward (hot key is "#") and then forward them all at once (Holger Schauer provided this tip).
+
+After the forwarded email is created, you may copy the body of that email without sending it. The copied content could be inserted into any other email.
+
+********** Refresh "Summary Buffer" in Gnus (check new emails)
+Hot key "/ N" or command "M-x gnus-summary-insert-new-articles"
+
+********** Make ALL emails in "Summary Buffer" visible (IMPORTANT)
+
+"C-u RET" on the selected group (email folder) in "Group Buffer", or "C-u M-g" in "Summary Buffer".
+
+Thats the most important part of this article! Gnus only display unread emails. Kind of stupid for an email client. Say my client call me to discuss his proposal in his old emails. I open my Gnus but client's emails are invisible in "Summary Buffer" because they are marked expired by Gnus. Can I ask my client hang on for five minutes because I cannot find the emails he sent?
+
+Check http://stackoverflow.com/questions/4982831/i-dont-want-to-expire-mail-in-gnus for the details.
+
+********** Mark emails read
+
+Press "c" is enough. Either in summary buffer or group buffer. This is the most useful Gnus command because Gmail sucks.
+
+********** How to read email offline
+
+Go to the "Summary Buffer". "Summary Buffer" list the emails in one email folder.
+
+You need mark the emails you want to read offline by "M-x gnus-summary-tick-article-forward".
+
+The marked article will enter the disk cache.
+
+You can remove the article from the disk cache by "M-x gnus-summary-put-mark-as-read".
+
+The disk cache is actually the directory "~/News/cache/". I suggest backing up it with Github's private repository.
+
+You also need insert below code into ~/.emacs,
+
+#+BEGIN_SRC emacs-lisp :results none
+(setq gnus-use-cache t)
+#+END_SRC
+
+********** How to use multiple Gmail accounts
+
+Here is a sample
+
+#+BEGIN_SRC emacs-lisp :results none
+(add-to-list 'gnus-secondary-select-methods
+             '(nnimap "gmail-second"
+                      (nnimap-address "imap.gmail.com")
+                      (nnimap-server-port 993)
+                      (nnimap-stream ssl)
+                      (nnir-search-engine imap)
+                      (nnimap-authinfo-file "~/.authinfo-second.gpg")
+                      ; @see http://www.gnu.org/software/emacs/manual/html_node/gnus/Expiring-Mail.html
+                      ;; press 'E' to expire email
+                      (nnmail-expiry-target "nnimap+gmail:[Gmail]/Trash")
+                      (nnmail-expiry-wait 90)
+                      ))
+#+END_SRC
+
+"gnus-secondary-select-methods" means the list of your email accounts.
+********** Archiving mails
+What is the equivalent Gnus command to the „Archive“ button? (Remove from „Inbox“ and stay in „All mail“)
+Remove the “Inbox” tag by deleting from the “INBOX” folder with:
+~B DEL~
+
+********** Deleting mails
+How can you delete a mail in Gnus so that it disappears from your Inbox in gmail and goes to Trash?
+
+B m does gnus-summary-move-article. Invoke it, then type “[Gmail]/Trash”. In Gmail terms, this will remove the “Inbox” label and apply the “Trash” label. Messages in the trash don’t show up in other folders, even though they may have other labels.
+
+To really delete, type B DEL (gnus-summary-delete-article), but beware: you’ll have to delete it from the Trash or Spam folder for it to really delete it. Otherwise, it will only remove the label from the message. I suggest writing a script (probably relying on Message-ID) to find the same message in the trash and delete that copy.
+
+Moving an email to the trash will fail to remove the Inbox label[1]. The solution is to make Gnus locate the message in [Gmail]/All Mail with the same Message-ID as the one in INBOX. Delete the one in the Inbox and move the one in All Mail to the trash. Crocky, but the only solution unless Gmail fixes this on their end. Anyone who has the skill to write this script is welcome to do it.
+
 ******* images
 ******** turn on image mode
 
@@ -28729,6 +28930,8 @@ add this to config
 #+END_SRC 
 ******** plugins
 ********* Use package
+https://github.com/jwiegley/use-package
+
 ********** simplest use-package declaration
 The idea of use-package is to wrap all initialisation and configuration of a package in a top-level form. 
 #+BEGIN_EXAMPLE
@@ -28797,13 +29000,18 @@ You can have both :init and :config:
 In this case, I want to autoload the command haskell-mode from "haskell-mode.el", add it to auto-mode-alist at the time ".emacs" is loaded, but wait until after I've opened a Haskell file before loading "inf-haskell.el" and "hs-lint.el".
 
 
-********** bind 
+********** TODO bind
+TODO-play with binds and describe-perosnal...see %Tip% below 
 A very common thing to do when loading a module is to bind a key to primary commands within that module:
 
 #+BEGIN_SRC emacs-lisp :results none
 (use-package ace-jump-mode
   :bind ("C-." . ace-jump-mode))
 #+END_SRC
+
+%Tip-after you do that you can run a command describe-personal-keybindings% to get all your binds  
+
+%Tip- bind* will make the bind override all modes % 
 
 This does two things: first, it creates autoload for the ace-jump-mode command, and defers loading of ace-jump-mode until you actually use it. Second, it binds the key C-. to that command. After loading, you can use M-x describe-personal-keybindings to see all such bindings you've set throughout your Emacs.
 
@@ -30210,6 +30418,29 @@ tips when buliding scripts with org-dp
 
 mnake sure its '1' other wise you will get indents
 
+********* mu4e
+********** org mode integration
+http://www.djcbsoftware.nl/code/mu/mu4e/Creating-org_002dmode-links.html
+
+It can be useful to include links to e-mail messages or even search queries in your org-mode files. mu4e supports this with the org-mu4e module; you can set it up by adding it to your configuration:
+
+#+BEGIN_SRC emacs-lisp :results none
+(require 'org-mu4e)
+#+END_SRC
+
+this expects org-mode 8.x
+
+After this, you can use the normal org-mode mechanisms to store links: M-x org-store-link stores a link to a particular message when you’re in Message view, and a link to a query when you are in Headers view.
+
+You can insert this link later with M-x org-insert-link. From org-mode, you can go to the query or message the link points to with either M-x org-agenda-open-link in agenda buffers, or M-x org-open-at-point elsewhere - both typically bound to C-c C-o.
+********** common keybinds
+You can then retrieve your e-mail using M-x mu4e-update-mail-and-index, or C-S-u in all mu4e-views; alternatively, you can use C-c C-u, which may be more convenient if you use emacs in a terminal.
+
+~s~ sart search
+
+~C~ compose  
+
+~O~ sort 
 ******* registers
 ******** basics
 
@@ -36406,6 +36637,8 @@ make sure there are no other instances of emacs running (you can use killall ema
 and stop/start emacs again via systemd
 
 ***** offlineimap 
+@General Note: Please be careful when you shutdown your computer. If offlineimap is running, there is a high probability that one of the databases become corrupted.@
+
 
 I run systemd with the --user switch inside my user session, allowing me to configure services (like OfflineIMAP) very conveniently. Creating the following unit file in ~/.config/systemd/user allows you to start a single synchronization.
 
