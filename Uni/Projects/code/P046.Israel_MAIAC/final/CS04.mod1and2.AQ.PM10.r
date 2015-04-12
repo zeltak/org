@@ -2054,12 +2054,49 @@ ggplot(m1.all[stn %in% c("REH") & c == 2008,], aes(x = day)) +
 out<-m1.all[c==2008] %>%
   group_by(stn) %>%
   summarise (n = n()) 
-setkey(out,stn,c)
+setkey(out,stn)
 head(out,n=550)
 
 
+#with no smoother
+
 # plot a single year by day- KMR- North
-ggplot(m1.all[stn %in% c("BHD") & c == 2008,], aes(x = day)) + 
+ggplot(m1.all[stn %in% c("KRY") & c == 2008,], aes(x = day)) + 
+  #overall line
+  geom_line(aes(y = PM10), color = "black", alpha = 0.15) + 
+  #points
+  geom_point(aes(y = PM10), color = "blue", alpha = 0.7, size = 1.7) + 
+  geom_point(aes(y = pred.m3), color = "red", alpha = 0.7, size = 1.7) + 
+  #smoothers
+#   geom_smooth(aes(y = pred.m3), color = "red", linetype = "dashed", width = 1.4, se = F, size=0.9) + 
+#   geom_smooth(aes(y = PM10), color = "blue", se = F, size=0.9) + 
+  ylab(expression(paste(PM[2.5], "concentration (ug/", m^3, ")"))) + 
+  theme_bw() + theme(axis.title.x = element_blank())
+ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/F4/KRY.PM10.2008.ns.svg", width = 5.5, height = 3)
+ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/F4/KRY.PM10.2008.ns.png", width = 5.5, height = 3)
+
+
+#with no smoother
+
+# plot a single year by day- KMR- North
+ggplot(m1.all[stn %in% c("BSV") & c == 2008,], aes(x = day)) + 
+  #overall line
+  geom_line(aes(y = PM10), color = "black", alpha = 0.15) + 
+  #points
+  geom_point(aes(y = PM10), color = "blue", alpha = 0.7, size = 1.7) + 
+  geom_point(aes(y = pred.m3), color = "red", alpha = 0.7, size = 1.7) + 
+  #smoothers
+#   geom_smooth(aes(y = pred.m3), color = "red", linetype = "dashed", width = 1.4, se = F, size=0.9) + 
+#   geom_smooth(aes(y = PM10), color = "blue", se = F, size=0.9) + 
+  ylab(expression(paste(PM[2.5], "concentration (ug/", m^3, ")"))) + 
+  theme_bw() + theme(axis.title.x = element_blank())
+ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/F4/BSV.PM10.2008.ns.svg", width = 5.5, height = 3)
+ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/F4/BSV.PM10.2008.ns.png", width = 5.5, height = 3)
+
+
+
+#with smoohter
+ggplot(m1.all[stn %in% c("KRY") & c == 2008,], aes(x = day)) + 
   #overall line
   geom_line(aes(y = PM10), color = "black", alpha = 0.15) + 
   #points
@@ -2070,10 +2107,11 @@ ggplot(m1.all[stn %in% c("BHD") & c == 2008,], aes(x = day)) +
   geom_smooth(aes(y = PM10), color = "blue", se = F, size=0.9) + 
   ylab(expression(paste(PM[2.5], "concentration (ug/", m^3, ")"))) + 
   theme_bw() + theme(axis.title.x = element_blank())
-ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/BHD.PM10.2008.svg", width = 5.5, height = 3)
-ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/BHD.PM10.2008.png", width = 5.5, height = 3)
+ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/F4/KRY.PM10.2008.svg", width = 5.5, height = 3)
+ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/F4/KRY.PM10.2008.png", width = 5.5, height = 3)
 
-# plot a single year by day- KMR- North
+
+
 ggplot(m1.all[stn %in% c("BSV") & c == 2008,], aes(x = day)) + 
   #overall line
   geom_line(aes(y = PM10), color = "black", alpha = 0.15) + 
@@ -2085,5 +2123,5 @@ ggplot(m1.all[stn %in% c("BSV") & c == 2008,], aes(x = day)) +
   geom_smooth(aes(y = PM10), color = "blue", se = F, size=0.9) + 
   ylab(expression(paste(PM[2.5], "concentration (ug/", m^3, ")"))) + 
   theme_bw() + theme(axis.title.x = element_blank())
-ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/BSV.PM10.2008.svg", width = 5.5, height = 3)
-ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/BSV.PM10.2008.png", width = 5.5, height = 3)
+ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/F4/BSV.PM10.2008.svg", width = 5.5, height = 3)
+ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/F4/BSV.PM10.2008.png", width = 5.5, height = 3)

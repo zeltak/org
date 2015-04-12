@@ -2235,8 +2235,8 @@ ggplot(m1.all[stn %in% c("SYO") & c == 2008,], aes(x = day)) +
   geom_point(aes(y = PM25), color = "blue", alpha = 0.7, size = 0.8) + 
   geom_point(aes(y = pred.m3), color = "red", alpha = 0.7, size = 0.8) + 
   #smoothers
-  geom_smooth(aes(y = pred.m3), color = "red", linetype = "dashed", width = 1.4, se = F, size=0.9) + 
-  geom_smooth(aes(y = PM25), color = "blue", se = F, size=0.9) + 
+  #geom_smooth(aes(y = pred.m3), color = "red", linetype = "dashed", width = 1.4, se = F, size=0.9) + 
+  #geom_smooth(aes(y = PM25), color = "blue", se = F, size=0.9) + 
   ylab(expression(paste(PM[2.5], "concentration (ug/", m^3, ")"))) + 
   theme_bw() + theme(axis.title.x = element_blank())
 ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/SYO.PM25.2008.svg", width = 5.5, height = 3)
@@ -2259,4 +2259,41 @@ ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/GDR.PM25.
 ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/f4/GDR.PM25.2008.png", width = 5.5, height = 3)
 
 
+
+
+
+
+
+
+# plot a single year by day- KMR- North
+ggplot(m1.all[stn %in% c("TIV") & c == 2008,], aes(x = day)) + 
+  #overall line
+  geom_line(aes(y = PM25), color = "black", alpha = 0.15) + 
+  #points
+  geom_point(aes(y = PM25), color = "blue", alpha = 0.7, size = 1.7) + 
+  geom_point(aes(y = pred.m3), color = "red", alpha = 0.7, size = 1.7) + 
+  #smoothers
+#   geom_smooth(aes(y = pred.m3), color = "red", linetype = "dashed", width = 1.4, se = F, size=0.9) + 
+#   geom_smooth(aes(y = PM25), color = "blue", se = F, size=0.9) + 
+  ylab(expression(paste(PM[2.5], "concentration (ug/", m^3, ")"))) + 
+  theme_bw() + theme(axis.title.x = element_blank())
+ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/F4/TIV.PM25.2008.ns.svg", width = 5.5, height = 3)
+ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/F4/TIV.PM25.2008.ns.png", width = 5.5, height = 3)
+
+
+
+# plot a single year by day- KMR- North
+ggplot(m1.all[stn %in% c("SYO") & c == 2008,], aes(x = day)) + 
+  #overall line
+  geom_line(aes(y = PM25), color = "black", alpha = 0.15) + 
+  #points
+  geom_point(aes(y = PM25), color = "blue", alpha = 0.7, size = 1.7) + 
+  geom_point(aes(y = pred.m3), color = "red", alpha = 0.7, size = 1.7) + 
+  #smoothers
+#   geom_smooth(aes(y = pred.m3), color = "red", linetype = "dashed", width = 1.4, se = F, size=0.9) + 
+#   geom_smooth(aes(y = PM25), color = "blue", se = F, size=0.9) + 
+  ylab(expression(paste(PM[2.5], "concentration (ug/", m^3, ")"))) + 
+  theme_bw() + theme(axis.title.x = element_blank())
+ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/F4/SYO.PM25.2008.ns.svg", width = 5.5, height = 3)
+ggsave("/media/NAS/Uni/Projects/P046_Israel_MAIAC/4.Results/figures/F4/SYO.PM25.2008.ns.png", width = 5.5, height = 3)
 

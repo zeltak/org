@@ -45,6 +45,18 @@ lux <- merge(lux,poplu ,all.x = T)
 
 names(lux)
 
-luxf<-select(lux,GUID,Lat ,Lon ,dist_PE ,   pm25stge30_15k    ,  pm25stlt30_3k  , pm10stge30_15k    ,  pm10stlt30_3k    ,   noxstge30_15k ,      noxstlt30_3k,        so2stge30_15k ,      so2stlt30_3k       , pcthd_1km ,  pctpa_1km    ,       pctsh_1km         ,  pctgr_1km    ,       elev_m          ,    Mjrrdden_1km ,       State_Abbreviation,  NOXsum,   PM10sum    ,         SO2sum    ,          nei05nonpntcntypm25, pcturb_1km  ,        SumOfEMISS ,         pop_sqkm              )
+luxf<-select(lux,GUID,Lat ,Lon ,dist_PE ,   pm25stge30_15k    ,  pm25stlt30_3k  , pm10stge30_15k    ,  pm10stlt30_3k    ,   noxstge30_15k ,      noxstlt30_3k,        so2stge30_15k ,      so2stlt30_3k       , pcthd_1km ,  pctpa_1km    ,       pctsh_1km         ,  pctgr_1km    ,       elev_m          ,    Mjrrdden_1km ,   
+pctmd_1km    ,       pctld_1km           ,pctop_1km     ,      pctdf_1km  ,         pctmf_1km   ,pctev_1km    ,       pctcr_1km   ,                 
+             State_Abbreviation,  NOXsum,   PM10sum    ,         SO2sum    ,          nei05nonpntcntypm25, pcturb_1km  ,        SumOfEMISS ,         pop_sqkm      )
+
+summary(luxf)
+names(luxf)
+
+#base model for stage 1
+#PM25 aod,tempc,WDSP,NDVI,ah_gm3,visib,pbl
+saveRDS(luxf,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/full_LU_v2_ALL.rds")
+
+
+luxf<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/full_LU_v2_ALL.rds")
 
 
