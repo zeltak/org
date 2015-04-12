@@ -287,7 +287,7 @@ This may have implications for Italy, where there is dust transport, even when t
 ** MAIAC EURO
 *** kees talk 18.12.15
 **** DONE we have all the grids in HDF formatting. I need to extract lat/long from the rasters. will send it over in the next few days
-**** TODO land use gathering project
+**** land use gathering project
 m1.2007[,elev.s:= scale(elev)]- we have for whole of europe 
 m1.2007[,tden.s:= scale(tden)]-
 high detail in swiss and holland
@@ -340,12 +340,57 @@ campgin  in canada monteal using type II
 **** Next moves
 **** $$ for workshop
 **** TODO meytar to ask about NetCDF
-*** Kees talk 13.8
-**** TODO netCDF- use a qgis plug-in to extract
+*** Kees talk 13.3
+**** netCDF- use a qgis plug-in to extract
 **** TODO talk to qian on how he progressed with osm data
 **** TODO osm data and road density
 -focus on environemtal health
 -mexico vs swiss
+
+*** kees talk 8.4.15
+**** euro data 
+spoke to yujie, saw the email, we hope to get the data real soon
+
+**** TODO OSM project
+
+kees:
+look into getting africa data
+for euro we can get uk and swiss data
+
+
+
+***** lit review 
+perliminary lit review on OSM use in environmental health resulted in little to no studies
+there are some stuides using OSM as data sources in public health in general but no comparios or quantative examples on OSM vs traditinal traffic/road use data
+however there are many studies looking at OSM and OSM use in studies in terms of valididty, accuracy coverage etc:
+
+http://koenigstuhl.geog.uni-heidelberg.de/publications/2010/Zielstra/AGILE2010_Zielstra_Zipf_final5.pdf
+
+http://link.springer.com/chapter/10.1007/978-3-319-14280-7_15
+
+http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=6822226&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D6822226
+
+http://wiki.openstreetmap.org/wiki/OSM_and_OSL_differences_analysis
+
+***** our focus
+should be on:
+- OSM use as a valid and readly avilable data/exposure source in envrinonmental health 
+- sepcifically in underdevloped areas such as africa/etc where traditional road data isn't avilable
+
+***** study
+show how well OSM and Euro tden data correlates over "good" coverage areas such as swiss?
+compare then how they work in "bad" areas such as africa?
+comparisons: 
+
+- [ ] subtracting OpenStreetMap data from tden data?
+- [ ] create line density maps- Calculates a magnitude per unit area from polyline features
+create suraces and look at correlation 
+- [ ] compare road type classifications 
+
+health outcomes available:
+
+- [ ] access to health care centers based on roads? 
+
 
 ** italy temperature models
 *** Ideas
@@ -1679,18 +1724,10 @@ main non dust season: jul-aug
 for chronic we care about spatial variability
 for acute we care about temporal variability 
 * Mails
-** TODO Respond to nil <geomr@nus.edu.sg> on JOC-15-0007 - Decision on Manuscript
-   SCHEDULED: <2015-04-06 Mon>
- [2015-04-06 Mon 09:19]
- [[mu4e:msgid:3025526.141951428215845214.JavaMail.wladmin@c551nrhs1as.int.thomsonreuters.com][JOC-15-0007 - Decision on Manuscript]]
 ** TODO Respond to Maayan Yitshak-Sade <maayan845@gmail.com> on DM and PM analysis for the EHF grant
    SCHEDULED: <2015-04-07 Tue>
  [2015-04-06 Mon 10:21]
  [[mu4e:msgid:7e1736c5016a4351be9a937fad9e0a34@buzzard3.auth.ad.bgu.ac.il][DM and PM analysis for the EHF grant]]
-** TODO Respond to Meytar Sorek-Hamer <sorek.hamer@gmail.com> on MAIAC PAPER#1
-SCHEDULED: <2015-04-08 Wed>
-
-[[mu4e:msgid:CAB+XKf=vfWz-14F7N0JCoB3=q_n6Pu_t8vChamrEy6koOqCigA@mail.gmail.com][MAIAC PAPER#1]]
 ** TODO Respond to Eliahu Stern <elistern@bgu.ac.il> on [Geog-Council] FW: יתרות במחלקה לגאוגרפיה
    SCHEDULED: <2015-04-13 Mon>
 

@@ -498,7 +498,7 @@ systemctl enable cronie
 
 #+BEGIN_SRC sh
 pacman -S emacs rsync tree ncdus nfs-utils rpcbind terminator r mc  flac lame abiword keepassx dzen2 zip unzip unrar mtpaint krename gmrun aspell aspell-en findutils inkscape python-lxml gcolor2 easytag kdiff3  htop p7zip vlc smb4k screen tmux speedcrunch mlocate vim gvim mpd mpc atool lynx profont fb-client feh keychain picard  gdb mp3gain pacgraph sqliteman grep awk leafpad less lxappearance pavucontrol net-tools sshfs xterm zsh samba xclip lxtask pydf xorg-xkill nmap acpi audacity nmon  powertop ttf-inconsolata sxhkd git zsh firefox chromium ncmpcpp gmpc gcc filezilla gimp jre7-openjdk kdegraphics-okular
-meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  mosh w3m imagemagick graphicsmagick
+meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  mosh w3m imagemagick graphicsmagick thunar pinta 
 #+END_SRC
 !Special repo for laptops:!
 laptop-mode-tools
@@ -2106,6 +2106,22 @@ one casue could be a faulty plasmoid
 one that is known to cause problems is:
 `gmail-plasmoid`
 
+*** kde 5
+**** restart plasma 
+in krunner, you type 
+
+#+BEGIN_EXAMPLE
+kquitapp5 plasmashell
+
+#+END_EXAMPLE
+
+to stop it, and simply
+
+#+BEGIN_EXAMPLE
+plasmashell
+#+END_EXAMPLE
+
+to start it
 ** general
 *** fonts
 
