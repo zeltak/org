@@ -1007,7 +1007,15 @@ that R would look in, so that we didn't have to type in the whole path
 variable names are included in the header at the top of the file.
 
 *** importing from SAS
+*** use sas7bdat library
 
+#+BEGIN_SRC R :results none
+library(sas7bdat)
+#Read PM data
+PM25It<-read.sas7bdat ("C:\\Users\\MEYTAR\\Documents\\POSTDOC\\BGU\\Italy\\Italy_pm10_pm25_2009_2011.sas7bdat",debug=FALSE)
+#+END_SRC
+
+**** old
 #+BEGIN_SRC R
 #in SAS
 # save SAS dataset in trasport format
@@ -8306,6 +8314,13 @@ download.file("http://www.lepem.ufc.br/jaa/colorout_1.1-0.tar.gz", destfile = "c
 install.packages("colorout_1.1-0.tar.gz", type = "source", repos = NULL)
 #+END_SRC
 
+** pryr- size of objects 
+#+BEGIN_SRC R :results none
+library(pryr)
+mem_used()
+object_size(stage3_2000)
+#+END_SRC
+
 * data.table
 *** basics
 **** into
@@ -10476,3 +10491,4 @@ gestwide[1,1:10, with = F]
 
 
  
+

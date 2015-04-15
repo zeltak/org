@@ -1146,14 +1146,29 @@ I would also consider the hypothesis that social context is important and that i
 - advanimcg epi in israel taking acasuel moel appraoch coming up with estimates wich are not just casuel and advance methods
 
 ** TODO MOST: Infrastructures Program in Space Research
+   SCHEDULED: <2015-05-10 Sun> DEADLINE: <2015-05-03 Sun>
+
 משרד המדע: תשתיות מדעיות בתחום החלל – קול קורא להצעות מחקר (מועד ההגשה לרשות המחקר 10.5, למשרד המדע: 14.5)
-הצעות מחקר למימון מחקרים, הכוללים מגמות יישומיות, הצפויות להוביל, בהמשך, לפיתוח מוצרים בתחום החלל, בנושאים הבאים:
-*תצפיות מהחלל לעבר כדור הארץ
-*פיתוח מכשור, רכיבים, תתי מערכות ומכלולים לפלטפורמות חלליות ולמקטעי קרקע תומכי חלל
-*תצפיות מהחלל למעמקי היקום
-מימון: 600 אלף ₪ ל-3 שנים למוסד יחיד, עד 1.2 מיליון ₪ ל-3 שנים למחקר רב קבוצתי מטעם שני מוסדות או יותר.
 http://most.gov.il/Information/Calls/Pages/Space2015.aspx
-תשובות לשאלות נפוצות בנושא מערכת ההגשה האלקטרונית: http://www.technion.ac.il/~research/MOST_ FAQ.pdf
+
+aims:
+
+use of sattelite data for improving predicting air pollution 
+management of environmental resources speciffacly air pollution
+
+use of deep blue over ocean for better use of aod 
+
+A1: data fusion and calman
+fusion CMAQ VIIRS deep blue
+A2: methods improvments
+use of moving windows to asses daily aod quality at each point
+better use of higher resolution tmeporal met variables using WRF data integration
+combining aqua and terra
+space-time smoothing; nearby cells weighted for missing and previous day (if gone, use today)
+does relationship of Aqua and Terra give us info? early pollutant build-up vs continuous across the day?
+A3: 
+
+
 * Students
 ** maayan
 *** Phd topics
@@ -1489,12 +1504,6 @@ dataset for bad 0.00 R2 aod-pm
 pm-aeronet
 email quan di about geoschem and send him PM monitors 
 
-*** TODO prepare
-for 2004 only:
-dataset with aod point with bad <0.1 cord
-send meytar all hdf for aLL 2004 and send myetar
-send days with low PM /low aod >
-
 ** TODO meytar schedule
 in R- gbm analylis- check model with only highest variables.
 1.ratio
@@ -1706,13 +1715,20 @@ big lemonade
 ** hfsp website
 ikloog@bgu.ac.il
 Salar2121
+** TODO my ftp
+add to keepass
+
+address: 132.72.152.204
+User: zftp
+pass:hsphbgu2014
+
 * Today
 ** start NE LU additions 
 ** finalize israel paper
 ** alexei talk 31.3.2105
 *** low yearly aod values and compared to DB which is higher
 we should look at wind speed from reanalysis data/station to see if these areas have low or high ws values
-*** basic raw zero correlation with PM stations 
+*** TODO basic raw zero correlation with PM stations
 send alexei the the full ts pm data so he check this
 *** look at aod azimuths
 use data with 30 degree azimuths that should be better:
@@ -1724,10 +1740,6 @@ main non dust season: jul-aug
 for chronic we care about spatial variability
 for acute we care about temporal variability 
 * Mails
-** TODO Respond to Maayan Yitshak-Sade <maayan845@gmail.com> on DM and PM analysis for the EHF grant
-   SCHEDULED: <2015-04-07 Tue>
- [2015-04-06 Mon 10:21]
- [[mu4e:msgid:7e1736c5016a4351be9a937fad9e0a34@buzzard3.auth.ad.bgu.ac.il][DM and PM analysis for the EHF grant]]
 ** TODO Respond to Eliahu Stern <elistern@bgu.ac.il> on [Geog-Council] FW: יתרות במחלקה לגאוגרפיה
    SCHEDULED: <2015-04-13 Mon>
 

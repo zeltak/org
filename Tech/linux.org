@@ -509,7 +509,9 @@ $NOTE: Before starting with aur installs make sure the /etc/makepkg.conf is conf
 
 
 #+BEGIN_SRC sh
-pacaur -S rofi-git clerk-git teiler-git caudec vte3-select-text termite-git mpdcron-git ttf-droid dropbox  teamviewer xshowkeys terminus-font-ttf puddletag culmus ffcast  flacon worker xdotool xdotool-gui xchainkeys jmtpfs acroread android-sdk copyq dunst gpodder3 i3blocks ranger-git surfraw-git termite-git chromium-pepper-flash ttf-ms-fonts 
+pacaur -S rofi-git clerk-git teiler-git caudec vte3-select-text termite-git mpdcron-git ttf-droid dropbox  teamviewer xshowkeys terminus-font-ttf puddletag culmus ffcast  flacon worker xdotool xdotool-gui xchainkeys jmtpfs acroread android-sdk copyq dunst gpodder3 i3blocks ranger-git surfraw-git termite-git chromium-pepper-flash ttf-ms-fonts
+#for bgu vpn support
+lib32-pam snx
 #+END_SRC
 
 ***** unoffical repos
@@ -26097,6 +26099,31 @@ And then you just need to use the previous function in the specific configuratio
 (if (system-is-my-workpc)
 (setq user-mail-address "my.name@workplace.com")
 )
+
+********* algternative OS specfic method
+
+put OS-specific code in your initialization file but use the same file everywhere,  you might find this sample code useful.
+
+On Windows, use dired+ and set the default font to Consolas.
+On Linux, configure Emacs to play well with the X clipboard and use Inconsolata as the default font.
+
+You can use system-type "darwin" to test for OS X.
+
+#+BEGIN_SRC emacs-lisp :results none
+(cond
+    ((string-equal system-type "windows-nt") ; Microsoft Windows
+        (progn
+            (require 'dired+)         
+            (set-default-font "Consolas")                
+        )
+    )
+    ((string-equal system-type "gnu/linux") ; linux
+        (progn
+            (setq x-select-enable-clipboard t)
+            (set-default-font "Inconsolata")
+        )
+    )
+#+END_SRC
 
 ******** Remove welcome screen/splash from emacs
 add to init.el/.emcas file:
