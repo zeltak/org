@@ -498,7 +498,7 @@ systemctl enable cronie
 
 #+BEGIN_SRC sh
 pacman -S emacs rsync tree ncdus nfs-utils rpcbind terminator r mc  flac lame abiword keepassx dzen2 zip unzip unrar mtpaint krename gmrun aspell aspell-en findutils inkscape python-lxml gcolor2 easytag kdiff3  htop p7zip vlc smb4k screen tmux speedcrunch mlocate vim gvim mpd mpc atool lynx profont fb-client feh keychain picard  gdb mp3gain pacgraph sqliteman grep awk leafpad less lxappearance pavucontrol net-tools sshfs xterm zsh samba xclip lxtask pydf xorg-xkill nmap acpi audacity nmon  powertop ttf-inconsolata sxhkd git zsh firefox chromium ncmpcpp gmpc gcc filezilla gimp jre7-openjdk kdegraphics-okular
-meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  mosh w3m imagemagick graphicsmagick
+meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  mosh w3m imagemagick graphicsmagick thunar pinta 
 #+END_SRC
 !Special repo for laptops:!
 laptop-mode-tools
@@ -509,7 +509,9 @@ $NOTE: Before starting with aur installs make sure the /etc/makepkg.conf is conf
 
 
 #+BEGIN_SRC sh
-pacaur -S rofi-git clerk-git teiler-git caudec vte3-select-text termite-git mpdcron-git ttf-droid dropbox  teamviewer xshowkeys terminus-font-ttf puddletag culmus ffcast  flacon worker xdotool xdotool-gui xchainkeys jmtpfs acroread android-sdk copyq dunst gpodder3 i3blocks ranger-git surfraw-git termite-git chromium-pepper-flash ttf-ms-fonts 
+pacaur -S rofi-git clerk-git teiler-git caudec vte3-select-text termite-git mpdcron-git ttf-droid dropbox  teamviewer xshowkeys terminus-font-ttf puddletag culmus ffcast  flacon worker xdotool xdotool-gui xchainkeys jmtpfs acroread android-sdk copyq dunst gpodder3 i3blocks ranger-git surfraw-git termite-git chromium-pepper-flash ttf-ms-fonts
+#for bgu vpn support
+lib32-pam snx
 #+END_SRC
 
 ***** unoffical repos
@@ -2106,6 +2108,22 @@ one casue could be a faulty plasmoid
 one that is known to cause problems is:
 `gmail-plasmoid`
 
+*** kde 5
+**** restart plasma 
+in krunner, you type 
+
+#+BEGIN_EXAMPLE
+kquitapp5 plasmashell
+
+#+END_EXAMPLE
+
+to stop it, and simply
+
+#+BEGIN_EXAMPLE
+plasmashell
+#+END_EXAMPLE
+
+to start it
 ** general
 *** fonts
 
@@ -26088,6 +26106,31 @@ And then you just need to use the previous function in the specific configuratio
 (if (system-is-my-workpc)
 (setq user-mail-address "my.name@workplace.com")
 )
+
+********* algternative OS specfic method
+
+put OS-specific code in your initialization file but use the same file everywhere,  you might find this sample code useful.
+
+On Windows, use dired+ and set the default font to Consolas.
+On Linux, configure Emacs to play well with the X clipboard and use Inconsolata as the default font.
+
+You can use system-type "darwin" to test for OS X.
+
+#+BEGIN_SRC emacs-lisp :results none
+(cond
+    ((string-equal system-type "windows-nt") ; Microsoft Windows
+        (progn
+            (require 'dired+)         
+            (set-default-font "Consolas")                
+        )
+    )
+    ((string-equal system-type "gnu/linux") ; linux
+        (progn
+            (setq x-select-enable-clipboard t)
+            (set-default-font "Inconsolata")
+        )
+    )
+#+END_SRC
 
 ******** Remove welcome screen/splash from emacs
 add to init.el/.emcas file:
