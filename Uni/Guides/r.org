@@ -2641,7 +2641,7 @@ use the 'cut' command:
 ff1$popfac <- as.factor(cut(ff1$pop06,breaks=c(0,500,1000,2000,10000),include.lowest = TRUE))
 #+end_src
 
-*** Recode missing (9,99 etc) to NA (r sys default)
+*** Recode missing (9,99, -999) to NA (r sys default)
 
 To recode missing (9,99 etc) to NA (r sys default), You must recode the value (IE 99) for the Variable to missing with code
 
@@ -2656,6 +2656,16 @@ leadership$age[leadership$age == 99] <- NA
 #+END_EXAMPLE
 
 The statement variable[condition] <- expression will only make the assignment  when condition is TRUE.
+
+
+to recode the whole data frame:
+₆In example₆ convert all -999 in dataset to NA
+
+#+BEGIN_SRC R
+DF[DF == -999] <- NA
+stage3_2000[stage3_2000 == -999] <- NA
+#+END_SRC
+$Note$  you adress the whole DF and not a specific variable 
 
 *** Recoding a continuous variable into categorical variable
 
@@ -8145,6 +8155,17 @@ all.equal(lapply(aodf.2003.tmp.s9.m2,class),lapply(aodf.2004.tmp.s9.m2,class))
 
 ** nearestbyday
 
+@note-the id variable in the matirx must be character!!!@
+
+₆In example₆ 
+#+BEGIN_SRC R
+s2x$GUID<-as.character(s2x$GUID)
+aod.m <- makepointsmatrix(s2x[s2x[,unique(GUID)], list(Long, Lat, GUID), mult = "first"], "Long", "Lat", "GUID")
+#+END_SRC
+
+function explained:
+
+
 #+BEGIN_SRC R
 nearestbyday <- function(matrix_target, matrix_join, dt_target, dt_join, dt_target_varname, dt2_join_varname, 
                          closestname = "closestmet", varstoget = "avewsp", 
@@ -8167,7 +8188,8 @@ example: if you set knearest if 5 and max dist of 20000 (20km) it will look for 
 - nearestmean: To calculate the mean (and not just the first point) use nearestmean= TRUE.
 
 if set to False it will only get knreaset and get closest one available by distance
-Please note knearest runs before maxdist, the maxdist is an additional screen
+
+$Note$  knearest runs before maxdist, the maxdist is an additional screen
 
 - dt-target_varname- the string of the variable name for the units in the target dt
 

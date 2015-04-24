@@ -2598,6 +2598,13 @@ TargetEnvironment=Unity
 #+END_EXAMPLE
 
 
+**** Enable usb on virtualbox
+Set up USB for Virtualbox
+#+BEGIN_EXAMPLE
+sudo adduser yourusername vboxusers
+#+END_EXAMPLE
+
+$Note$ You HAVE to logout/login from your session, NOT just restart Virtual Box, after the group change.
 
 *** Tips
 **** Remove only open office in ubuntu
