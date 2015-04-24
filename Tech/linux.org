@@ -498,7 +498,7 @@ systemctl enable cronie
 
 #+BEGIN_SRC sh
 pacman -S emacs rsync tree ncdus nfs-utils rpcbind terminator r mc  flac lame abiword keepassx dzen2 zip unzip unrar mtpaint krename gmrun aspell aspell-en findutils inkscape python-lxml gcolor2 easytag kdiff3  htop p7zip vlc smb4k screen tmux speedcrunch mlocate vim gvim mpd mpc atool lynx profont fb-client feh keychain picard  gdb mp3gain pacgraph sqliteman grep awk leafpad less lxappearance pavucontrol net-tools sshfs xterm zsh samba xclip lxtask pydf xorg-xkill nmap acpi audacity nmon  powertop ttf-inconsolata sxhkd git zsh firefox chromium ncmpcpp gmpc gcc filezilla gimp jre7-openjdk kdegraphics-okular
-meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  mosh w3m imagemagick graphicsmagick thunar pinta 
+meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  mosh w3m imagemagick graphicsmagick thunar pinta dconf-editor
 #+END_SRC
 !Special repo for laptops:!
 laptop-mode-tools
@@ -512,6 +512,8 @@ $NOTE: Before starting with aur installs make sure the /etc/makepkg.conf is conf
 pacaur -S rofi-git clerk-git teiler-git caudec vte3-select-text termite-git mpdcron-git ttf-droid dropbox  teamviewer xshowkeys terminus-font-ttf puddletag culmus ffcast  flacon worker xdotool xdotool-gui xchainkeys jmtpfs acroread android-sdk copyq dunst gpodder3 i3blocks ranger-git surfraw-git termite-git chromium-pepper-flash ttf-ms-fonts
 #for bgu vpn support
 lib32-pam snx
+#for beets
+pip python-requests
 #+END_SRC
 
 ***** unoffical repos
@@ -2947,17 +2949,16 @@ fc-cache -f -v
 **** curl errors
 install libcurl4-gnutls-dev 
 
-** gnome
-*** Gnome 3
-**** Auto start a program on Gnome 3
+** Gnome 3			
+*** Auto start a program on Gnome 3
 press: alt + F2
 Type: gnome-session-properties
 Click on “+ Add”
 Name: Application Name
 Command: Application command e.g: skype
 Click “+ Add” and you are done.
-**** top bar
-***** Show date in top bar
+*** top bar
+**** Show date in top bar
 
 By default GNOME displays only the weekday and time in the top bar. This can be changed with the following command. Changes take effect immediately.
 
@@ -2965,8 +2966,8 @@ By default GNOME displays only the weekday and time in the top bar. This can be 
 gsettings set org.gnome.desktop.interface clock-show-date true
 #+END_SRC
 
-**** logging out
-***** Eliminate delay when logging out
+*** logging out
+**** Eliminate delay when logging out
 
 The following tweak removes the confirmation dialog and sixty second delay for logging out.
 
@@ -2976,40 +2977,45 @@ This dialog normally appears when you log out with the status menu. This tweak a
 gsettings set org.gnome.SessionManager logout-prompt 'false'
 #+END_SRC
 
-***** Enable the logout option
- to check state of logout:
- #+BEGIN_SRC sh
- dconf read /org/gnome/shell/always-show-log-out
- #+END_SRC
+**** Enable the logout option
+to check state of logout:
+#+BEGIN_SRC sh
+dconf read /org/gnome/shell/always-show-log-out
+#+END_SRC
 
- to enable it:
- #+BEGIN_SRC sh
- dconf write /org/gnome/shell/always-show-log-out true
- #+END_SRC
+to enable it:
+#+BEGIN_SRC sh
+dconf write /org/gnome/shell/always-show-log-out true
+#+END_SRC
 
- Then just restart the system and “Log out” is present after login.
+Then just restart the system and “Log out” is present after login.
 
- you can also use the gui:
+you can also use the gui:
 
- To make the logout option always appear:
+To make the logout option always appear:
 
- First open up the dconf editor (fedora package “dconf-editor”), and navigate to the org > gnome > shell key.
- Check the option “always-show-log-out” (pictured below in the screenshot), to always show the logout option. Note, however, that a restart of the shell or a reboot may be required for this option to start working.
+First open up the dconf editor (fedora package “dconf-editor”), and navigate to the org > gnome > shell key.
+Check the option “always-show-log-out” (pictured below in the screenshot), to always show the logout option. Note, however, that a restart of the shell or a reboot may be required for this option to start working.
 
- #+DOWNLOADED: http://www.ryanlerch.org/blog/wp-content/uploads/2012/11/dconf.png @ 2013-10-21 21:02:53
-  [[/home/zeltak/org/attach/images_2013/dconf_2013-10-21_21:02:53.png]]
+#+DOWNLOADED: http://www.ryanlerch.org/blog/wp-content/uploads/2012/11/dconf.png @ 2013-10-21 21:02:53
+ [[/home/zeltak/org/attach/images_2013/dconf_2013-10-21_21:02:53.png]]
 
-**** shell
-***** Restarting the shell
-After appearance tweaks you are often asked to restart the GNOME shell. You could log out and log back in, but it is simpler and faster to issue the following keyboard command. Restart the shell by pressing Alt + F2 then r then Enter 
+*** shell
+**** Restarting the shell
+After appearance tweaks you are often asked to restart the GNOME shell. You could log out and log back in, but it is simpler and faster to issue the following keyboard command. Restart the shell by pressing
+~Alt + F2~ 
+then
+~r~
+then Enter 
+**** restart shell from console (CLI)
+Sometimes shell extensions freeze the GNOME Shell. In this case a possible strategy is to switch to another terminal via Ctrl+Alt+F2 through Ctrl+Alt+F6, log in, and restart gnome-shell with:
 
-***** restart shell from console (CLI)
- Sometimes shell extensions freeze the GNOME Shell. In this case a possible strategy is to switch to another terminal via Ctrl+Alt+F2 through Ctrl+Alt+F6, log in, and restart gnome-shell with:
+#+BEGIN_SRC sh
+pkill -HUP gnome-shell
+#+END_SRC
 
-# pkill -HUP gnome-shell
-
-**** windows
-***** Hide titlebar when maximized
+*** windows
+**** Hide titlebar when maximized
 
 To hide titlebar when windows are maximised, open file:
 file:/usr/share/themes/Adwaita/metacity-1/metacity-theme-3.xml
@@ -3052,18 +3058,26 @@ NoUpgrade = usr/share/themes/Adwaita/metacity-1/metacity-theme-3.xml    # Do not
 ... more lines ...
 
 To restore original Adwaita theme values, install the gnome-themes-standard package. 
-***** How to Get Rid of Huge Window Borders in Gnome 3
+**** How to Get Rid of Huge Window Borders in Gnome 3
+create a file
+
+file:~/.config/gtk-3.0/gtk.css
+
+then enter this 
+
 #+BEGIN_SRC sh :results none
-cd /usr/share/themes/Adwaita/metacity-1/
-sudo vim metacity-theme-3.xml
+.header-bar.default-decoration {
+    padding-top: 0.1px;
+    padding-bottom: 0.1px;
+}
+
+.header-bar.default-decoration .button.titlebutton {
+    padding-top: 0.1px;
+    padding-bottom: 0.1px;
+}
 #+END_SRC
 
-replace all instances of 
-
-title_scale="medium"
-with
-title_scale="small" 
-***** How to set Focus-Follows-Mouse in GNOME 3 The Schema you need is the
+**** How to set Focus-Follows-Mouse in GNOME 3 The Schema you need is the
 launch dconf-editor
 then go to 
 
@@ -3080,27 +3094,30 @@ org.gnome.desktop.wm.preferencese
 
 `Focus New Windows`: This option provides additional control over how newly created windows get focus. It has two possible values; “smart” applies the user’s normal focus mode, and “strict” results in windows started from a terminal not being given focus.
 
-***** move windows to grid areas 
+**** move windows to grid areas 
 in org.gnome.desktop.wm.keybindings
 
 look for move to corener X (se,nw etc) 
-**** workspaces
-***** set names to workspaces
+*** workspaces
+**** set names to workspaces
 us the following
 
 #+BEGIN_EXAMPLE
 gsettings set org.gnome.wm.preferences workspace-names "['name1', 'name2']"
 #+END_EXAMPLE
 
-**** dconf
-***** search dconf
+*** dconf
+**** search dconf
       #+NAME: 
       #+BEGIN_SRC sh
 dconf dump / | grep SEARCH-TERM      
       #+END_SRC
-
-**** keybinds
-***** map change workspaces
+**** disable extension version check 
+#+BEGIN_SRC bash
+gsettings set org.gnome.shell disable-extension-version-validation "true"
+#+END_SRC
+*** keybinds
+**** map change workspaces
 
 #+BEGIN_EXAMPLE
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Super>1']"
@@ -3130,236 +3147,8 @@ gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-11 "['<Super><s
 gsettings set org.gnome.desktop.wm.keybindings close "['<Super>k']"     
       #+END_EXAMPLE
 
-***** map grave key
+**** map grave key
 Certain hotkeys cannot be changed directly via the System Settings panel. In order to change these keys, use dconf-editor. An example of particular note is the hotkey Alt-Above_Tab. On US keyboards, this is Alt-`: is a hotkey often used in the Emacs editor. It can be changed by opening dconf-editor and modifying the switch-group key found in org.gnome.desktop.wm.keybindings. 
-*** general
-**** enable key shortcuts on menus
-
-enable key shortcuts on menus
-on Linux, in order to use customized key shortcuts, the GTK
-configuration file ~/.gtkrc-2.0 should contain the following line:
- gtk-can-change-accels = 1
-
-**** aspell
-
-Aspell user added word location
- Q: hi. when you add your own words to aspell (IE "add environment to
-dictionary option when right clicking) where is it stored? how do you
-back that up on a comp upgrade?
- A: the build in spell checker for gnome is enchant. the files are
-located at~/.config/enchant in case you want to back up your defined
-user added words
-
-**** gnome related sofwtare
-
-Reset Evolution
- delete /home/.evolution
- delete /.gconf/apps/evolution
- issue this command:
- gconftool-2 --recursive-unset /apps/evolution
- 
- PCMan as GNOME default file manager
-
- sudo mv /usr/bin/nautilus /usr/bin/nautilus.old
- 
- to rename nautilus to nautilus old and
- 
- sudo ln -s /usr/bin/pcmanfm /usr/bin/nautilus
- 
- to create a symlink which will call pcmanfm instead of nautilus.
- 
- NOTE: Replace /usr/bin/pcmanfm with the place where you have pcmanfm
-installed. The default location is /usr/bin/local/pcmanfm
- Installing Aurora Gtk Engine
- 1. Install build tools and all of the dependencies:
- sudo aptitude install build-essential libgtk2.0-dev
- 2. Download Aurora Gtk Engine 1.3 from here and save it to ~/Desktop
-folder.
- 3. Extract the tarball files:
- cd ~/Desktop
- tar jxvf Aurora-1.3.tar.bz2
- tar zxvf aurora-1.3.tar.gz
- 4. Configure, make and install:
- cd aurora-1.3/
- ./configure --prefix=/usr --enable-animation
- make
- sudo make install
-
-**** system
-
-How to enable Ctrl+Alt+Del to open System Monitor in GNOME
- gconftool-2 -t str --set
-/apps/metacity/global keybindings/run command 9 <Control><Alt>Delete
- gconftool-2 -t str --set /apps/metacity/keybinding commands/command 9
-gnome-system-monitor
- Special icons placements
- keepass /usr/share/keepass
- gpodder svg in /usr/share/icons/hicolor/scalabe/apps/gpooder.svg
- Smplayer /usr/share/smplayer/themes
- Pidgin /usr/share/pixmaps/pidgin
- 
- Run a program as root Gnome!
- gksudo k3b
- OR
- Alt-F2 and then inside the launch menu:
- gksudo k3b
- 
-How to refresh GNOME panel
- killall gnome-panel
- How can I install an Hebrew dictionary in gnome
-
- Firstly, install the Hebrew dictionary package by executing the
-following command in a terminal:
- sudo apt-get install aspell-he
- Next, in Evolution go to Edit - Preferences - Composer Preferences,
-select the Spell Checker tab, and ensure that the Hebrew language is
-ticked.
- Gnome Autostart menu
- ~/.gnome2/session-manual
- Gconf keyboard shortcuts
- # ext double click the "apps" folder
- # Next double click the "metacity" folder
- # Finally click the global keybindings folder
- 
- Disable autoplay in gnome
- Code:
- gconf-editor
- Navigate to desktop>gnome and highlight volume manager. In the
-right-hand pane scroll down to autoplay vcd and clear that checkbox.
-You can then close the editor and test to see if VCD autoplay has
-stopped. If this works (it should), you can then re-enable autoplay for
-the rest of your media.
- Delay startup programs gnome
- create a text file thats executable with this
- sleep 15; xmms
- placed the code in a file then added it to System -> Prefs -> Sessions
-as sh <filename>
- 
- create keyboard shortcut gnome
- open gconf-editor
- then
- Configuration Editor > Apps > Metacity
- You'll see two menu entries there:
- Global keybindings
- Keybinding commands
- In Keybinding Commands, pick an empty command--let's say it's
-Command 1.
- Double-click the empty space next to it and type
- Code:
- 3ddesk
- Then, in global Keybindings, pick the same command, Command 1 and
-double-click on the empty space there, and type your keyboard shortcut.
-You can't just press Control-Shift-3, for example. You have to actually
-type the words
- Code:
- <Control><Shift>3
- keyboard layout Alt+Shift in Ubuntu?
- You can choose the key combination in System>Preferences>Keyboard,
-Layout Option tab>Group Shift/Lock Behavior. Find 'Alt+Shift changes
-group' and tick it.
- I think it is Alt+Alt by default.
- 
-
-**** get rid of system proxy in gnome
-
-delete this file
- /home/zeltak/.gconf/system/http proxy/%gconf.xml
- to erase all previous proxies
-*** nautilus
-
-**** disable auto start media gnome
-
-Disable auto start media gnome
- Nautilus => Edit => Preferences => Media and you should be able to
-disable the behavior
-
-*** gnome panel
-
-**** tray icons
-
-***** icons locations to change
-
-Here are the places to change program icons for the traykeepassx:
- move png's to:
- /usr/share/keepassx/icons
- Fusion-Icon:
- 1. Copy the icon to /usr/share/icons/Humanity/apps/24/ (ALT+F2 : gksu
-nautilus)
- 2. In terminal, run "sudo gtk-update-icon-cache
-/usr/share/icons/Humanity"
- 3. Restart Fusion-Icon
- gmpc
- change in the /usr/share/gmpc/icons folderkeepnote
- replace all icons in:
- /usr/share/pyshared/keepnote/images
- NOTE:when using a smaller panel, for best result replace 32x32 with a
-22x22 icon size.klipper
- replace icons named klipper.png in:
- /usr/share/icons/oxygen/22x22/apps/klipper.png
- and
- /usr/share/icons/oxygen/16x16/apps/klipper.png
- issue
- sudo update-icon-caches /usr/share/icons/oxygen/
- and then open klipper again
- Weather:
-
- 1. Copy the icons from 16 to /usr/share/icons/Humanity/status/16/
-(ALT+F2 : gksu nautilus)
- 2. Copy the icons from 48 to /usr/share/icons/Humanity/status/48/
-(ALT+F2 : gksu nautilus)
- 3. In terminal, run "sudo gtk-update-icon-cache
-/usr/share/icons/Humanity"
- 4. In terminal, run "killall gnome-panel"Shutter
- change
- /usr/share/pixmaps/
- keyring icons
-/usr/share/icons/Humanity/apps/24/
- Autokey
-change
- /usr/share/pixmaps/
- (both svg and png)X-tile
-
- change
- /usr/share/pixmaps/
- (both svg and png)
-
-**** chnage panel clock to custom view
-
-The default clock set up is, quite frankly, lame. You can turn it into
-something of beauty with a few basic tweaks.
- Run gconf-editor
- (ALT+F2 > gconf-editor)
- Open up
- apps> panel> applets> clock screen> prefs
-  this may be called something else; open up any applet until you see
-the correct 'values' in the right-hand screen.
- [[nixx_files/Image_sX.png]]
- 1) Double click on theformat and change it to 'custom'
- 2) Then paste one of the 'styles' below into the custom format field.
- <sup><span font desc="Droid Sans 10" color="#FFFFFF"
-weight="bold">%I:%M %p</span></sup>%n<sub><span rise="3000"
-font desc="Droid Sans 9.5" color="#FFFFFF" weight="bold">%a %d
-%b</span></sub>
- or for grey (humanity):
- <sup><span font desc="Droid Sans 10" color="#606060"
-weight="bold">%I:%M %p</span></sup>%n<sub><span rise="3000"
-font desc="Droid Sans 9.5" color="#606060" weight="bold">%a %d
-%b</span></sub>
- [[nixx_files/Image_sX_002.png]]
- or for smaller panels
- <sup><span rise="1000" font desc="Droid Sans 6.5" color="#878787"
-weight="normal">%a %d %b</span></sup>%n<sub><span rise="6000"
-font desc="Droid Sans 7.5" color="#878787" weight="bold">%I:%M
-%p</span></sub>
-
-**** how can i reset to default panel
-
-how can I reset to default panel
-
- gconftool-2 --recursive-unset /apps/panel
- rm -rf ~/.gconf/apps/panel
- pkill gnome-panel
-
 ** openbox
 
 *** irssi style window switch
@@ -18187,6 +17976,18 @@ MPD HOST=localhost mpc listall | grep -Ev '.flac' >
 #+BEGIN_SRC sh
 mpc clear && mpc sticker / find rating | grep -E "|rating=4|rating=5" | awk -F ':' '{print $1}' | shuf -n 11 | mpc add &&  mpc play      
 #+END_SRC
+***** add 1 song from each artist to playlist
+use something like this
+
+#+BEGIN_SRC sh
+mpc find track "1" | sort -u -t'/' -k1,1 | mpc add 
+#+END_SRC
+
+$Note- the -k3,3 part must match the field- ₆In example₆ if the first field is the artist then it should be k1,1. if the 2nd field is the artist then k2,2 etc ₆In example₆ 
+#+BEGIN_EXAMPLE
+mp3/Star Anna/2012 Keep On/01-Keep On.mp3
+#+END_EXAMPLE
+
 **** errors
 ***** see verbose output when mpd is broken
 sudo mpd --verbose --no-daemon --stdout
@@ -45400,6 +45201,7 @@ To unmount the filesystem:
 
  fusermount -u /home/zeltak/mounts/raid
 
+umount a stuck system 
 ***** use under ubuntu
 
 Simply install the following package: sshfs

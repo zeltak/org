@@ -162,3 +162,247 @@ C-M-o jllk
 yyjllk
 Although every other shortcut except the Hydra heads will vanquish the Hydra, sometimes I have nothing on my mind that needs doing. For that case, as you can see above, I enter o in its own list without a function, so that o will dismiss the Hydra without doing anything.
 
+
+* gnome panel
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-04-22 Wed 17:25
+  :ARCHIVE_FILE: ~/org/files/Tech/linux.org
+  :ARCHIVE_OLPATH: distros/WM/gnome
+  :ARCHIVE_CATEGORY: linux
+  :END:
+** tray icons
+*** icons locations to change
+
+Here are the places to change program icons for the traykeepassx:
+ move png's to:
+ /usr/share/keepassx/icons
+ Fusion-Icon:
+ 1. Copy the icon to /usr/share/icons/Humanity/apps/24/ (ALT+F2 : gksu
+nautilus)
+ 2. In terminal, run "sudo gtk-update-icon-cache
+/usr/share/icons/Humanity"
+ 3. Restart Fusion-Icon
+ gmpc
+ change in the /usr/share/gmpc/icons folderkeepnote
+ replace all icons in:
+ /usr/share/pyshared/keepnote/images
+ NOTE:when using a smaller panel, for best result replace 32x32 with a
+22x22 icon size.klipper
+ replace icons named klipper.png in:
+ /usr/share/icons/oxygen/22x22/apps/klipper.png
+ and
+ /usr/share/icons/oxygen/16x16/apps/klipper.png
+ issue
+ sudo update-icon-caches /usr/share/icons/oxygen/
+ and then open klipper again
+ Weather:
+
+ 1. Copy the icons from 16 to /usr/share/icons/Humanity/status/16/
+(ALT+F2 : gksu nautilus)
+ 2. Copy the icons from 48 to /usr/share/icons/Humanity/status/48/
+(ALT+F2 : gksu nautilus)
+ 3. In terminal, run "sudo gtk-update-icon-cache
+/usr/share/icons/Humanity"
+ 4. In terminal, run "killall gnome-panel"Shutter
+ change
+ /usr/share/pixmaps/
+ keyring icons
+/usr/share/icons/Humanity/apps/24/
+ Autokey
+change
+ /usr/share/pixmaps/
+ (both svg and png)X-tile
+
+ change
+ /usr/share/pixmaps/
+ (both svg and png)
+
+** chnage panel clock to custom view
+
+The default clock set up is, quite frankly, lame. You can turn it into
+something of beauty with a few basic tweaks.
+ Run gconf-editor
+ (ALT+F2 > gconf-editor)
+ Open up
+ apps> panel> applets> clock screen> prefs
+  this may be called something else; open up any applet until you see
+the correct 'values' in the right-hand screen.
+ [[nixx_files/Image_sX.png]]
+ 1) Double click on theformat and change it to 'custom'
+ 2) Then paste one of the 'styles' below into the custom format field.
+ <sup><span font desc="Droid Sans 10" color="#FFFFFF"
+weight="bold">%I:%M %p</span></sup>%n<sub><span rise="3000"
+font desc="Droid Sans 9.5" color="#FFFFFF" weight="bold">%a %d
+%b</span></sub>
+ or for grey (humanity):
+ <sup><span font desc="Droid Sans 10" color="#606060"
+weight="bold">%I:%M %p</span></sup>%n<sub><span rise="3000"
+font desc="Droid Sans 9.5" color="#606060" weight="bold">%a %d
+%b</span></sub>
+ [[nixx_files/Image_sX_002.png]]
+ or for smaller panels
+ <sup><span rise="1000" font desc="Droid Sans 6.5" color="#878787"
+weight="normal">%a %d %b</span></sup>%n<sub><span rise="6000"
+font desc="Droid Sans 7.5" color="#878787" weight="bold">%I:%M
+%p</span></sub>
+
+** how can i reset to default panel
+
+how can I reset to default panel
+
+ gconftool-2 --recursive-unset /apps/panel
+ rm -rf ~/.gconf/apps/panel
+ pkill gnome-panel
+
+
+* nautilus
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-04-22 Wed 17:26
+  :ARCHIVE_FILE: ~/org/files/Tech/linux.org
+  :ARCHIVE_OLPATH: distros/WM/gnome
+  :ARCHIVE_CATEGORY: linux
+  :END:
+** disable auto start media gnome
+
+Disable auto start media gnome
+ Nautilus => Edit => Preferences => Media and you should be able to
+disable the behavior
+
+
+* general
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-04-22 Wed 17:26
+  :ARCHIVE_FILE: ~/org/files/Tech/linux.org
+  :ARCHIVE_OLPATH: distros/WM/gnome
+  :ARCHIVE_CATEGORY: linux
+  :END:
+** enable key shortcuts on menus
+enable key shortcuts on menus
+on Linux, in order to use customized key shortcuts, the GTK
+configuration file ~/.gtkrc-2.0 should contain the following line:
+ gtk-can-change-accels = 1
+
+** aspell
+
+Aspell user added word location
+ Q: hi. when you add your own words to aspell (IE "add environment to
+dictionary option when right clicking) where is it stored? how do you
+back that up on a comp upgrade?
+ A: the build in spell checker for gnome is enchant. the files are
+located at~/.config/enchant in case you want to back up your defined
+user added words
+
+** gnome related sofwtare
+
+Reset Evolution
+ delete /home/.evolution
+ delete /.gconf/apps/evolution
+ issue this command:
+ gconftool-2 --recursive-unset /apps/evolution
+ 
+ PCMan as GNOME default file manager
+
+ sudo mv /usr/bin/nautilus /usr/bin/nautilus.old
+ 
+ to rename nautilus to nautilus old and
+ 
+ sudo ln -s /usr/bin/pcmanfm /usr/bin/nautilus
+ 
+ to create a symlink which will call pcmanfm instead of nautilus.
+ 
+ NOTE: Replace /usr/bin/pcmanfm with the place where you have pcmanfm
+installed. The default location is /usr/bin/local/pcmanfm
+ Installing Aurora Gtk Engine
+ 1. Install build tools and all of the dependencies:
+ sudo aptitude install build-essential libgtk2.0-dev
+ 2. Download Aurora Gtk Engine 1.3 from here and save it to ~/Desktop
+folder.
+ 3. Extract the tarball files:
+ cd ~/Desktop
+ tar jxvf Aurora-1.3.tar.bz2
+ tar zxvf aurora-1.3.tar.gz
+ 4. Configure, make and install:
+ cd aurora-1.3/
+ ./configure --prefix=/usr --enable-animation
+ make
+ sudo make install
+
+** system
+
+How to enable Ctrl+Alt+Del to open System Monitor in GNOME
+ gconftool-2 -t str --set
+/apps/metacity/global keybindings/run command 9 <Control><Alt>Delete
+ gconftool-2 -t str --set /apps/metacity/keybinding commands/command 9
+gnome-system-monitor
+ Special icons placements
+ keepass /usr/share/keepass
+ gpodder svg in /usr/share/icons/hicolor/scalabe/apps/gpooder.svg
+ Smplayer /usr/share/smplayer/themes
+ Pidgin /usr/share/pixmaps/pidgin
+ 
+ Run a program as root Gnome!
+ gksudo k3b
+ OR
+ Alt-F2 and then inside the launch menu:
+ gksudo k3b
+ 
+How to refresh GNOME panel
+ killall gnome-panel
+ How can I install an Hebrew dictionary in gnome
+
+ Firstly, install the Hebrew dictionary package by executing the
+following command in a terminal:
+ sudo apt-get install aspell-he
+ Next, in Evolution go to Edit - Preferences - Composer Preferences,
+select the Spell Checker tab, and ensure that the Hebrew language is
+ticked.
+ Gnome Autostart menu
+ ~/.gnome2/session-manual
+ Gconf keyboard shortcuts
+ # ext double click the "apps" folder
+ # Next double click the "metacity" folder
+ # Finally click the global keybindings folder
+ 
+ Disable autoplay in gnome
+ Code:
+ gconf-editor
+ Navigate to desktop>gnome and highlight volume manager. In the
+right-hand pane scroll down to autoplay vcd and clear that checkbox.
+You can then close the editor and test to see if VCD autoplay has
+stopped. If this works (it should), you can then re-enable autoplay for
+the rest of your media.
+ Delay startup programs gnome
+ create a text file thats executable with this
+ sleep 15; xmms
+ placed the code in a file then added it to System -> Prefs -> Sessions
+as sh <filename>
+ 
+ create keyboard shortcut gnome
+ open gconf-editor
+ then
+ Configuration Editor > Apps > Metacity
+ You'll see two menu entries there:
+ Global keybindings
+ Keybinding commands
+ In Keybinding Commands, pick an empty command--let's say it's
+Command 1.
+ Double-click the empty space next to it and type
+ Code:
+ 3ddesk
+ Then, in global Keybindings, pick the same command, Command 1 and
+double-click on the empty space there, and type your keyboard shortcut.
+You can't just press Control-Shift-3, for example. You have to actually
+type the words
+ Code:
+ <Control><Shift>3
+ keyboard layout Alt+Shift in Ubuntu?
+ You can choose the key combination in System>Preferences>Keyboard,
+Layout Option tab>Group Shift/Lock Behavior. Find 'Alt+Shift changes
+group' and tick it.
+ I think it is Alt+Alt by default.
+ 
+** get rid of system proxy in gnome
+
+delete this file
+ /home/zeltak/.gconf/system/http proxy/%gconf.xml
+ to erase all previous proxies
