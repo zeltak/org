@@ -46079,6 +46079,15 @@ in this example we want to downlaod all files containing 'AOD'
 #+BEGIN_SRC sh
 wget -r  -np ftp://maiac:@dataportal.nccs.nasa.gov/DataRelease/NorthAmerica/  -A "*AOT*.hdf"  
 #+END_SRC
+**** skip already downloaded files
+use 
+-nc or  --no-clobber 
+it skip downloads that would download to existing files.
+₆In example₆ 
+#+BEGIN_SRC sh
+wget -nc http://example.com/pic.png
+#+END_SRC
+
 *** Curl
 **** Save the cURL Output to a file
 We can save the result of the curl command to a file by using -o/-O options.
