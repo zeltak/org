@@ -1007,7 +1007,7 @@ that R would look in, so that we didn't have to type in the whole path
 variable names are included in the header at the top of the file.
 
 *** importing from SAS
-*** use sas7bdat library
+use sas7bdat library
 
 #+BEGIN_SRC R :results none
 library(sas7bdat)
@@ -2784,12 +2784,15 @@ use:
  metxy <- rename.vars(metxy, c("LONG\_DD","LAT\_DD"), c("xmet","ymet"))
 
 *** rename columns
-
 For matrices use:
- colnames((aggf) <- c("SITECODE", "barpm", "barpred")
- for *already defined dataframes*:
+colnames((aggf) <- c("SITECODE", "barpm", "barpred")
+for *already defined dataframes*:
  names(aggf) <- c("SITECODE", "barpm", "barpred")
+₆In example₆ 
 
+#+BEGIN_SRC R
+colnames(stage3)<-c("Year","Month","Day","DOY","GUID","Lat","Long","AOD","hpbl","NDVI","dist_PE","pm25stge30_15k","pm25stlt30_3k","pm10stge30_15k","pm10stlt30_3k","noxstge30_15k","noxstlt30_3k","so2stge30_15k","so2stlt30_3k","pcthd_1km","pctpa_1km","pctsh_1km","pctgr_1km","elev_m","Mjrrdden_1km","pctmd_1km","pctld_1km","pctop_1km","pctdf_1km","pctmf_1km","pctev_1km","pctcr_1km","NOXsum","PM10sum","SO2sum","nei05nonpntcntypm25","pcturb_1km","SumOfEMISS","pop_sqkm","nearest_NCDC_stn","slp","visib","wdsp","RH","AH","lat_met","long_met","Temp_C","Dewp_C","PM25","SiteID","mean_pm25_100km")
+#+END_SRC
 *** rename using a GUI (fix)
 
 You can use the statement

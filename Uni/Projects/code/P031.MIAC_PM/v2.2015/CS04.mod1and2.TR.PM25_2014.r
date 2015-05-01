@@ -22,7 +22,7 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
 
-m1.all <-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/m3rds/Xmod1.Tr.2008.rds")
+m1.all <-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/m3rds/Xmod1.Tr.2014.rds")
 
 #-------------------->> RES TABLE
 res <- matrix(nrow=1, ncol=48)
@@ -70,7 +70,7 @@ tempoall$delpred <-tempoall$pred.m1-tempoall$barpred
 mod_temporal <- lm(delpm ~ delpred, data=tempoall)
 res[res$type=="PM25", 'm1.R2.time']<- print(summary(lm(delpm ~ delpred, data=tempoall))$r.squared)
 
-saveRDS(m1.all,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/m3rds/Xmod1C.TR.PM25.pred.2008.rds")
+saveRDS(m1.all,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/m3rds/Xmod1C.TR.PM25.pred.2014.rds")
 
 #---------------->>>> CV
 #s1
@@ -146,7 +146,7 @@ test_s10$iter<-"s10"
 
 #BIND 1 dataset
 m1.all.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s6,test_s7,test_s8,test_s9, test_s10))
-saveRDS(m1.all.cv,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/m3rds/Xmod1cv.TR.PM25.2008.rds")
+saveRDS(m1.all.cv,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/m3rds/Xmod1cv.TR.PM25.2014.rds")
 # cleanup (remove from WS) objects from CV
 rm(list = ls(pattern = "train_|test_"))
 #table updates
@@ -178,7 +178,7 @@ gc()
 
 #### mod2 
 
-m2.all <- readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/m3rds/Xmod2.Tr.2008.rds")
+m2.all <- readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/m3rds/Xmod2.Tr.2014.rds")
 #generate predictions
 m2.all$logroad<-log(m2.all$Mjrrdden_1 +.1)
 m2.all<-filter(m2.all,!is.na(Temp_C))
@@ -189,33 +189,33 @@ summary(m2.all$pred.m2)
 m2.all <- m2.all[pred.m2 > 0.00000000000001 , ]
 m2.all <- m2.all[pred.m2 < 200   , ]
 
-saveRDS(m2.all,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/m3rds/Xmod2.AQ.PM25.pred.rds")
+saveRDS(m2.all,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/m3rds/Xmod2.AQ.PM25.pred.2014.rds")
 
 
 #-------------->prepare for mod3
 m2.all[, bimon := (Month + 1) %/% 2]
 setkey(m2.all,day, GUID)
-m2.all.2008<-m2.all[!is.na(meanPM)]
+m2.all.2014<-m2.all[!is.na(meanPM)]
 rm(m2.all)
 gc()
 
-#2008
+#2014
 #run the lmer part regressing stage 2 pred Vs mean pm
 #in israel check per month, also check 30km band and other methods for meanpm
-m2.smooth <- lme(pred.m2 ~ meanPM,random = list(GUID= ~1 + meanPM),control=lmeControl(opt = "optim"), data= m2.all.2008 )
+m2.smooth <- lme(pred.m2 ~ meanPM,random = list(GUID= ~1 + meanPM),control=lmeControl(opt = "optim"), data= m2.all.2014 )
 #correlate to see everything from mod2 and the mpm works
-m2.all.2008[, pred.t31 := predict(m2.smooth)]
-m2.all.2008[, resid  := residuals(m2.smooth)]
-print(summary(lm(pred.m2~pred.t31,data=m2.all.2008))$r.squared)
+m2.all.2014[, pred.t31 := predict(m2.smooth)]
+m2.all.2014[, resid  := residuals(m2.smooth)]
+print(summary(lm(pred.m2~pred.t31,data=m2.all.2014))$r.squared)
 
 
 #split the files to the separate bi monthly datsets
-Tall_bimon1 <- subset(m2.all.2008 ,m2.all.2008$bimon == "1")
-Tall_bimon2 <- subset(m2.all.2008 ,m2.all.2008$bimon == "2")
-Tall_bimon3 <- subset(m2.all.2008 ,m2.all.2008$bimon == "3")
-Tall_bimon4 <- subset(m2.all.2008 ,m2.all.2008$bimon == "4")
-Tall_bimon5 <- subset(m2.all.2008 ,m2.all.2008$bimon == "5")
-Tall_bimon6 <- subset(m2.all.2008 ,m2.all.2008$bimon == "6")
+Tall_bimon1 <- subset(m2.all.2014 ,m2.all.2014$bimon == "1")
+Tall_bimon2 <- subset(m2.all.2014 ,m2.all.2014$bimon == "2")
+Tall_bimon3 <- subset(m2.all.2014 ,m2.all.2014$bimon == "3")
+Tall_bimon4 <- subset(m2.all.2014 ,m2.all.2014$bimon == "4")
+Tall_bimon5 <- subset(m2.all.2014 ,m2.all.2014$bimon == "5")
+Tall_bimon6 <- subset(m2.all.2014 ,m2.all.2014$bimon == "6")
 
 #run the separate splines (smooth) for x and y for each bimon
 #whats the default band (distance) that the spline goes out and uses
@@ -235,41 +235,41 @@ Xpred_5 <- (Tall_bimon5$pred.t31 - fit2_5$fitted)
 Xpred_6 <- (Tall_bimon6$pred.t31 - fit2_6$fitted)
 
 #remerge to 1 file
-m2.all.2008$pred.t32 <- c( Xpred_1,Xpred_2, Xpred_3, Xpred_4, Xpred_5, Xpred_6)
+m2.all.2014$pred.t32 <- c( Xpred_1,Xpred_2, Xpred_3, Xpred_4, Xpred_5, Xpred_6)
 #this is important so that its sorted as in the first gamm
-setkey(m2.all.2008,day, GUID)
+setkey(m2.all.2014,day, GUID)
 
 #rerun the lme on the predictions including the spatial spline (smooth)
-Final_pred_all <- lme(pred.t32 ~ meanPM ,random = list(GUID= ~1 + meanPM ),control=lmeControl(opt = "optim"),data= m2.all.2008  )
-m2.all.2008[, pred.t33 := predict(Final_pred_all)]
+Final_pred_all <- lme(pred.t32 ~ meanPM ,random = list(GUID= ~1 + meanPM ),control=lmeControl(opt = "optim"),data= m2.all.2014  )
+m2.all.2014[, pred.t33 := predict(Final_pred_all)]
 #check correlations
-res[res$type=="PM25", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2008))$r.squared) 
+res[res$type=="PM25", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=m2.all.2014))$r.squared) 
 
 #------------------------>>>foo
 #import mod3 
-data.m3.2008  <- readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/m3rds/Xmod3.Tr.2008.rds")
+data.m3.2014  <- readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/m3rds/Xmod3.Tr.2014.rds")
 #for PM25
-data.m3.2008 <- select(data.m3.2008,day,GUID,Month,meanPM,Long,Lat)
-data.m3.2008[, bimon := (Month + 1) %/% 2]
-setkey(data.m3.2008,day, GUID)
-data.m3.2008<-data.m3.2008[!is.na(meanPM)]
+data.m3.2014 <- select(data.m3.2014,day,GUID,Month,meanPM,Long,Lat)
+data.m3.2014[, bimon := (Month + 1) %/% 2]
+setkey(data.m3.2014,day, GUID)
+data.m3.2014<-data.m3.2014[!is.na(meanPM)]
 #generate m.3 initial pred
-data.m3.2008$pred.m3.mix <-  predict(Final_pred_all,data.m3.2008)
+data.m3.2014$pred.m3.mix <-  predict(Final_pred_all,data.m3.2014)
 
 #create unique grid
-ugrid <-data.m3.2008 %>%
+ugrid <-data.m3.2014 %>%
     group_by(GUID) %>%
     summarise(Long = mean(Long, na.rm=TRUE),  Lat = mean(Lat, na.rm=TRUE)) 
 
 
 #### PREDICT Gam part
 #split back into bimons to include the gam prediction in final prediction        
-data.m3.2008_bimon1 <- data.m3.2008[bimon == 1, ]
-data.m3.2008_bimon2 <- data.m3.2008[bimon == 2, ]
-data.m3.2008_bimon3 <- data.m3.2008[bimon == 3, ]
-data.m3.2008_bimon4 <- data.m3.2008[bimon == 4, ]
-data.m3.2008_bimon5 <- data.m3.2008[bimon == 5, ]
-data.m3.2008_bimon6 <- data.m3.2008[bimon == 6, ]
+data.m3.2014_bimon1 <- data.m3.2014[bimon == 1, ]
+data.m3.2014_bimon2 <- data.m3.2014[bimon == 2, ]
+data.m3.2014_bimon3 <- data.m3.2014[bimon == 3, ]
+data.m3.2014_bimon4 <- data.m3.2014[bimon == 4, ]
+data.m3.2014_bimon5 <- data.m3.2014[bimon == 5, ]
+data.m3.2014_bimon6 <- data.m3.2014[bimon == 6, ]
 
 
 #addin unique grid to each bimon           
@@ -293,33 +293,39 @@ uniq_gid_bimon6$gpred <- predict.gam(fit2_6,uniq_gid_bimon6)
 #merge things back togheter
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> merges
 setkey(uniq_gid_bimon1,GUID)
-setkey(data.m3.2008_bimon1,GUID)
-data.m3.2008_bimon1 <- merge(data.m3.2008_bimon1, uniq_gid_bimon1[,list(GUID,gpred)], all.x = T)
+setkey(data.m3.2014_bimon1,GUID)
+data.m3.2014_bimon1 <- merge(data.m3.2014_bimon1, uniq_gid_bimon1[,list(GUID,gpred)], all.x = T)
 setkey(uniq_gid_bimon2,GUID)
-setkey(data.m3.2008_bimon2,GUID)
-data.m3.2008_bimon2 <- merge(data.m3.2008_bimon2, uniq_gid_bimon2[,list(GUID,gpred)], all.x = T)
+setkey(data.m3.2014_bimon2,GUID)
+data.m3.2014_bimon2 <- merge(data.m3.2014_bimon2, uniq_gid_bimon2[,list(GUID,gpred)], all.x = T)
 setkey(uniq_gid_bimon3,GUID)
-setkey(data.m3.2008_bimon3,GUID)
-data.m3.2008_bimon3 <- merge(data.m3.2008_bimon3, uniq_gid_bimon3[,list(GUID,gpred)], all.x = T)
+setkey(data.m3.2014_bimon3,GUID)
+data.m3.2014_bimon3 <- merge(data.m3.2014_bimon3, uniq_gid_bimon3[,list(GUID,gpred)], all.x = T)
 setkey(uniq_gid_bimon4,GUID)
-setkey(data.m3.2008_bimon4,GUID)
-data.m3.2008_bimon4 <- merge(data.m3.2008_bimon4, uniq_gid_bimon4[,list(GUID,gpred)], all.x = T)
+setkey(data.m3.2014_bimon4,GUID)
+data.m3.2014_bimon4 <- merge(data.m3.2014_bimon4, uniq_gid_bimon4[,list(GUID,gpred)], all.x = T)
 setkey(uniq_gid_bimon5,GUID)
-setkey(data.m3.2008_bimon5,GUID)
-data.m3.2008_bimon5 <- merge(data.m3.2008_bimon5, uniq_gid_bimon5[,list(GUID,gpred)], all.x = T)
+setkey(data.m3.2014_bimon5,GUID)
+data.m3.2014_bimon5 <- merge(data.m3.2014_bimon5, uniq_gid_bimon5[,list(GUID,gpred)], all.x = T)
 setkey(uniq_gid_bimon6,GUID)
-setkey(data.m3.2008_bimon6,GUID)
-data.m3.2008_bimon6 <- merge(data.m3.2008_bimon6, uniq_gid_bimon6[,list(GUID,gpred)], all.x = T)
+setkey(data.m3.2014_bimon6,GUID)
+data.m3.2014_bimon6 <- merge(data.m3.2014_bimon6, uniq_gid_bimon6[,list(GUID,gpred)], all.x = T)
 
 #reattach all parts        
-mod3 <- rbind(data.m3.2008_bimon1,data.m3.2008_bimon2,data.m3.2008_bimon3,data.m3.2008_bimon4,data.m3.2008_bimon5,data.m3.2008_bimon6)
+mod3 <- rbind(data.m3.2014_bimon1,data.m3.2014_bimon2,data.m3.2014_bimon3,data.m3.2014_bimon4,data.m3.2014_bimon5,data.m3.2014_bimon6)
 # create pred.m3
 mod3$pred.m3 <-mod3$pred.m3.mix+mod3$gpred
 hist(mod3$pred.m3)
 #describe(mod3$pred.m3)
 #recode negative into zero
 #mod3 <- mod3[pred.m3 >= 0]
-saveRDS(mod3,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/m3rds/mod3.TR.PM25.2008.pred3.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/m3rds/mod3.TR.PM25.2014.pred3.rds")
+saveRDS(res,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/m3rds/res.2014.rds")
+
+rm(list = ls(all = TRUE))
+gc()
+
+
 
 
 

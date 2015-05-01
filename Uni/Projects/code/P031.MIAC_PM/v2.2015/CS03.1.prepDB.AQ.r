@@ -2049,11 +2049,13 @@ s3[,DOY :=NULL]
 s3[,datex :=NULL]
 setnames(s3,"AOD","aod")
 s3$GUID<-as.character(s3$GUID)
+s3<-filter(s3,day < "2014-07-01")
+
 
 #-------> meanPM25  for mod 2+3
 #subset PM
 PM25.2014<-filter(PM25,year==2014)
-
+PM25.2014<-filter(PM25.2014,day < "2014-07-01")
 
 ########### join aod to PM25
 #create PM matrix
@@ -2158,10 +2160,10 @@ aod.m <- makepointsmatrix(s2[s2[,unique(GUID)], list(Long, Lat, GUID), mult = "f
 closestaod <- nearestbyday(pm.m, aod.m, 
                            PM25.2014[day %in% m9days,], s2, 
                            "SiteCode", "GUID", "closest", "aod", knearest = 6, maxdistance = 1500)
-
-setkey(PM25,SiteCode,day)
+closestaod<-filter(closestaod,!is.na(Lat))
+setkey(PM25.2014,SiteCode,day)
 setkey(closestaod,SiteCode,day)
-PM25.m1 <- merge(PM25[,list(SiteCode,day,PM25)], closestaod, all.x = T)
+PM25.m1 <- merge(PM25.2014[,list(SiteCode,day,PM25)], closestaod, all.x = T, allow.cartesian=T)
 PM25.m1<-PM25.m1[!is.na(aod)]
 #save mod 1
 saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/m3rds/Xmod1.Tr.2014.rds")
