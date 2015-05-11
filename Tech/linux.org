@@ -25024,6 +25024,19 @@ note: the new size is in MB
 
 then use gparted live to enlarge the drive for the OS to see it
 
+**** create custom resolutions
+use the following syntax
+
+vboxmanage setextradata VMNAME CustomVideoMode1 1600x900x32
+
+₆In example₆
+
+
+#+BEGIN_SRC sh
+vboxmanage setextradata win10 CustomVideoMode1 1600x900x32
+#+END_SRC
+You can add a second resolution by replacing “CustomVideoMode1” with “CustomVideoMode2” in the command above.
+
 *** vmware
 
 **** tips

@@ -16,8 +16,8 @@ library(gdata)
 ###########2003
 
 
-monlpm<-fread("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/pmID_guid_lpmid.csv")
-test2<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
+monlpm<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/pmID_guid_lpmid.csv")
+test2<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
 
 
 setkey(monlpm,lpmid)
@@ -26,7 +26,7 @@ test2<- merge(monlpm,test2,all.x=TRUE)
 
 #since we subsetted the data to only NE+NY we need to get rid of monitors outside of clipped study area
 if(!exists("m2_agg")){
-    m2_agg<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2003.rds")
+    m2_agg<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2003.rds")
   }
 test2.se <- test2[test2$guid %in% m2_agg$guid, ] 
 
@@ -48,7 +48,7 @@ test4.se$m <- as.numeric(format(test4.se$day, "%m"))
 
 ##########################################################################3
 #met
-met <- fread ("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
+met <- fread ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
 #convert date from 01JAN2000 format
 met <- met [, day:=as.Date(strptime(date, "%d%b%Y"))]
 met[, c := as.numeric(format(day, "%Y")) ]
@@ -109,7 +109,7 @@ setkey(test4.se.ndv.pb, day, stn)
 test4.se.ndv.pb.met <- merge(test4.se.ndv.pb, met2003 , all.x = T)
 test4.se.ndv.pb.met[, c("date", "lat_met.y","long_met.y","c","TEMP") := NULL]
 
-saveRDS(test4.se.ndv.pb.met,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2003.rds")
+saveRDS(test4.se.ndv.pb.met,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2003.rds")
 
 
 
@@ -117,8 +117,8 @@ saveRDS(test4.se.ndv.pb.met,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031
 ###########2004
 
 
-monlpm<-fread("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/pmID_guid_lpmid.csv")
-test2<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
+monlpm<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/pmID_guid_lpmid.csv")
+test2<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
 
 
 setkey(monlpm,lpmid)
@@ -127,7 +127,7 @@ test2<- merge(monlpm,test2,all.x=TRUE)
 
 #since we subsetted the data to only NE+NY we need to get rid of monitors outside of clipped study area
 if(!exists("m2_agg")){
-  m2_agg<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2004.rds")
+  m2_agg<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2004.rds")
 }
 test2.se <- test2[test2$guid %in% m2_agg$guid, ] 
 
@@ -149,7 +149,7 @@ test4.se$m <- as.numeric(format(test4.se$day, "%m"))
 
 ##########################################################################3
 #met
-met <- fread ("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
+met <- fread ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
 #convert date from 01JAN2000 format
 met <- met [, day:=as.Date(strptime(date, "%d%b%Y"))]
 met[, c := as.numeric(format(day, "%Y")) ]
@@ -210,7 +210,7 @@ setkey(test4.se.ndv.pb, day, stn)
 test4.se.ndv.pb.met <- merge(test4.se.ndv.pb, met2004 , all.x = T)
 test4.se.ndv.pb.met[, c("date", "lat_met.y","long_met.y","c","TEMP") := NULL]
 
-saveRDS(test4.se.ndv.pb.met,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2004.rds")
+saveRDS(test4.se.ndv.pb.met,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2004.rds")
 
 
 
@@ -218,8 +218,8 @@ saveRDS(test4.se.ndv.pb.met,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031
 ###########2005
 
 
-monlpm<-fread("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/pmID_guid_lpmid.csv")
-test2<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
+monlpm<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/pmID_guid_lpmid.csv")
+test2<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
 
 
 setkey(monlpm,lpmid)
@@ -228,7 +228,7 @@ test2<- merge(monlpm,test2,all.x=TRUE)
 
 #since we subsetted the data to only NE+NY we need to get rid of monitors outside of clipped study area
 if(!exists("m2_agg")){
-  m2_agg<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2005.rds")
+  m2_agg<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2005.rds")
 }
 test2.se <- test2[test2$guid %in% m2_agg$guid, ] 
 
@@ -250,7 +250,7 @@ test4.se$m <- as.numeric(format(test4.se$day, "%m"))
 
 ##########################################################################3
 #met
-met <- fread ("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
+met <- fread ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
 #convert date from 01JAN2000 format
 met <- met [, day:=as.Date(strptime(date, "%d%b%Y"))]
 met[, c := as.numeric(format(day, "%Y")) ]
@@ -311,7 +311,7 @@ setkey(test4.se.ndv.pb, day, stn)
 test4.se.ndv.pb.met <- merge(test4.se.ndv.pb, met2005 , all.x = T)
 test4.se.ndv.pb.met[, c("date", "lat_met.y","long_met.y","c","TEMP") := NULL]
 
-saveRDS(test4.se.ndv.pb.met,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2005.rds")
+saveRDS(test4.se.ndv.pb.met,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2005.rds")
 
 
 
@@ -319,8 +319,8 @@ saveRDS(test4.se.ndv.pb.met,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031
 ###########2006
 
 
-monlpm<-fread("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/pmID_guid_lpmid.csv")
-test2<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
+monlpm<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/pmID_guid_lpmid.csv")
+test2<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
 
 
 setkey(monlpm,lpmid)
@@ -329,7 +329,7 @@ test2<- merge(monlpm,test2,all.x=TRUE)
 
 #since we subsetted the data to only NE+NY we need to get rid of monitors outside of clipped study area
 if(!exists("m2_agg")){
-  m2_agg<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2006.rds")
+  m2_agg<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2006.rds")
 }
 test2.se <- test2[test2$guid %in% m2_agg$guid, ] 
 
@@ -351,7 +351,7 @@ test4.se$m <- as.numeric(format(test4.se$day, "%m"))
 
 ##########################################################################3
 #met
-met <- fread ("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
+met <- fread ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
 #convert date from 01JAN2000 format
 met <- met [, day:=as.Date(strptime(date, "%d%b%Y"))]
 met[, c := as.numeric(format(day, "%Y")) ]
@@ -412,7 +412,7 @@ setkey(test4.se.ndv.pb, day, stn)
 test4.se.ndv.pb.met <- merge(test4.se.ndv.pb, met2006 , all.x = T)
 test4.se.ndv.pb.met[, c("date", "lat_met.y","long_met.y","c","TEMP") := NULL]
 
-saveRDS(test4.se.ndv.pb.met,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2006.rds")
+saveRDS(test4.se.ndv.pb.met,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2006.rds")
 
 
 
@@ -420,8 +420,8 @@ saveRDS(test4.se.ndv.pb.met,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031
 ###########2007
 
 
-monlpm<-fread("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/pmID_guid_lpmid.csv")
-test2<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
+monlpm<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/pmID_guid_lpmid.csv")
+test2<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
 
 
 setkey(monlpm,lpmid)
@@ -430,7 +430,7 @@ test2<- merge(monlpm,test2,all.x=TRUE)
 
 #since we subsetted the data to only NE+NY we need to get rid of monitors outside of clipped study area
 if(!exists("m2_agg")){
-  m2_agg<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2007.rds")
+  m2_agg<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2007.rds")
 }
 test2.se <- test2[test2$guid %in% m2_agg$guid, ] 
 
@@ -452,7 +452,7 @@ test4.se$m <- as.numeric(format(test4.se$day, "%m"))
 
 ##########################################################################3
 #met
-met <- fread ("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
+met <- fread ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
 #convert date from 01JAN2000 format
 met <- met [, day:=as.Date(strptime(date, "%d%b%Y"))]
 met[, c := as.numeric(format(day, "%Y")) ]
@@ -513,7 +513,7 @@ setkey(test4.se.ndv.pb, day, stn)
 test4.se.ndv.pb.met <- merge(test4.se.ndv.pb, met2007 , all.x = T)
 test4.se.ndv.pb.met[, c("date", "lat_met.y","long_met.y","c","TEMP") := NULL]
 
-saveRDS(test4.se.ndv.pb.met,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2007.rds")
+saveRDS(test4.se.ndv.pb.met,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2007.rds")
 
 
 
@@ -521,8 +521,8 @@ saveRDS(test4.se.ndv.pb.met,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031
 ###########2008
 
 
-monlpm<-fread("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/pmID_guid_lpmid.csv")
-test2<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
+monlpm<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/pmID_guid_lpmid.csv")
+test2<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
 
 
 setkey(monlpm,lpmid)
@@ -531,7 +531,7 @@ test2<- merge(monlpm,test2,all.x=TRUE)
 
 #since we subsetted the data to only NE+NY we need to get rid of monitors outside of clipped study area
 if(!exists("m2_agg")){
-  m2_agg<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2008.rds")
+  m2_agg<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2008.rds")
 }
 test2.se <- test2[test2$guid %in% m2_agg$guid, ] 
 
@@ -553,7 +553,7 @@ test4.se$m <- as.numeric(format(test4.se$day, "%m"))
 
 ##########################################################################3
 #met
-met <- fread ("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
+met <- fread ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
 #convert date from 01JAN2000 format
 met <- met [, day:=as.Date(strptime(date, "%d%b%Y"))]
 met[, c := as.numeric(format(day, "%Y")) ]
@@ -614,7 +614,7 @@ setkey(test4.se.ndv.pb, day, stn)
 test4.se.ndv.pb.met <- merge(test4.se.ndv.pb, met2008 , all.x = T)
 test4.se.ndv.pb.met[, c("date", "lat_met.y","long_met.y","c","TEMP") := NULL]
 
-saveRDS(test4.se.ndv.pb.met,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2008.rds")
+saveRDS(test4.se.ndv.pb.met,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2008.rds")
 
 
 
@@ -622,8 +622,8 @@ saveRDS(test4.se.ndv.pb.met,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031
 ###########2009
 
 
-monlpm<-fread("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/pmID_guid_lpmid.csv")
-test2<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
+monlpm<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/pmID_guid_lpmid.csv")
+test2<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
 
 
 setkey(monlpm,lpmid)
@@ -632,7 +632,7 @@ test2<- merge(monlpm,test2,all.x=TRUE)
 
 #since we subsetted the data to only NE+NY we need to get rid of monitors outside of clipped study area
 if(!exists("m2_agg")){
-  m2_agg<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2009.rds")
+  m2_agg<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2009.rds")
 }
 test2.se <- test2[test2$guid %in% m2_agg$guid, ] 
 
@@ -654,7 +654,7 @@ test4.se$m <- as.numeric(format(test4.se$day, "%m"))
 
 ##########################################################################3
 #met
-met <- fread ("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
+met <- fread ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
 #convert date from 01JAN2000 format
 met <- met [, day:=as.Date(strptime(date, "%d%b%Y"))]
 met[, c := as.numeric(format(day, "%Y")) ]
@@ -715,7 +715,7 @@ setkey(test4.se.ndv.pb, day, stn)
 test4.se.ndv.pb.met <- merge(test4.se.ndv.pb, met2009 , all.x = T)
 test4.se.ndv.pb.met[, c("date", "lat_met.y","long_met.y","c","TEMP") := NULL]
 
-saveRDS(test4.se.ndv.pb.met,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2009.rds")
+saveRDS(test4.se.ndv.pb.met,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2009.rds")
 
 
 
@@ -723,8 +723,8 @@ saveRDS(test4.se.ndv.pb.met,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031
 ###########2010
 
 
-monlpm<-fread("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/pmID_guid_lpmid.csv")
-test2<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
+monlpm<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/pmID_guid_lpmid.csv")
+test2<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
 
 
 setkey(monlpm,lpmid)
@@ -733,7 +733,7 @@ test2<- merge(monlpm,test2,all.x=TRUE)
 
 #since we subsetted the data to only NE+NY we need to get rid of monitors outside of clipped study area
 if(!exists("m2_agg")){
-  m2_agg<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2010.rds")
+  m2_agg<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2010.rds")
 }
 test2.se <- test2[test2$guid %in% m2_agg$guid, ] 
 
@@ -755,7 +755,7 @@ test4.se$m <- as.numeric(format(test4.se$day, "%m"))
 
 ##########################################################################3
 #met
-met <- fread ("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
+met <- fread ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
 #convert date from 01JAN2000 format
 met <- met [, day:=as.Date(strptime(date, "%d%b%Y"))]
 met[, c := as.numeric(format(day, "%Y")) ]
@@ -816,7 +816,7 @@ setkey(test4.se.ndv.pb, day, stn)
 test4.se.ndv.pb.met <- merge(test4.se.ndv.pb, met2010 , all.x = T)
 test4.se.ndv.pb.met[, c("date", "lat_met.y","long_met.y","c","TEMP") := NULL]
 
-saveRDS(test4.se.ndv.pb.met,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2010.rds")
+saveRDS(test4.se.ndv.pb.met,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2010.rds")
 
 
 
@@ -824,8 +824,8 @@ saveRDS(test4.se.ndv.pb.met,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031
 ###########2011
 
 
-monlpm<-fread("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/pmID_guid_lpmid.csv")
-test2<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
+monlpm<-fread("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN007_Key_tables/pmID_guid_lpmid.csv")
+test2<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN004_LU_full_dataset/GRID_lu200_IDS.rds")
 
 
 setkey(monlpm,lpmid)
@@ -834,7 +834,7 @@ test2<- merge(monlpm,test2,all.x=TRUE)
 
 #since we subsetted the data to only NE+NY we need to get rid of monitors outside of clipped study area
 if(!exists("m2_agg")){
-  m2_agg<-readRDS("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2011.rds")
+  m2_agg<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN008_model_prep/m2_agg_2011.rds")
 }
 test2.se <- test2[test2$guid %in% m2_agg$guid, ] 
 
@@ -856,7 +856,7 @@ test4.se$m <- as.numeric(format(test4.se$day, "%m"))
 
 ##########################################################################3
 #met
-met <- fread ("/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
+met <- fread ("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN002_NCDC_allyears/ncdc00_12.csv")
 #convert date from 01JAN2000 format
 met <- met [, day:=as.Date(strptime(date, "%d%b%Y"))]
 met[, c := as.numeric(format(day, "%Y")) ]
@@ -917,7 +917,7 @@ setkey(test4.se.ndv.pb, day, stn)
 test4.se.ndv.pb.met <- merge(test4.se.ndv.pb, met2011 , all.x = T)
 test4.se.ndv.pb.met[, c("date", "lat_met.y","long_met.y","c","TEMP") := NULL]
 
-saveRDS(test4.se.ndv.pb.met,"/home/zeltak/smb4k/ZUNISYN/ZUraid/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2011.rds")
+saveRDS(test4.se.ndv.pb.met,"/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2011.rds")
 
 
 
