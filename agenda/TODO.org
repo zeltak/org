@@ -823,6 +823,17 @@ For normal Emacs setups you might use the set-frame-font function like so:
 
 
 
+** devils pie
+*** set a window to open on a specific screen
+I believe you are forced to use a method where you place the
+windows non-dynamically on the required screen - if you have two
+screens both with 1280 width, placing a window at 1280 should put it on
+the right screen. (That's not very dynamic, but it could be a start to
+work on something at least).
+
+You should be able to get the total screen area (All screens added),
+and via that calculate if you have one or two screens attached. Not
+much for this kind of thing is implemented in devilspie2 though.
 
 ** cvim
   visual mode, act start visual block/line option
