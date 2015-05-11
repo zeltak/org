@@ -1114,26 +1114,6 @@ trips abroad goes under remarks
 ** K_TRACK Seed money
 account number 87347711 saif 40 
 
-** Mara mexican grant 
-
-1. A paragraph on how the hybrid satellite model is an advancement on previous exposure methods:
-Previous exposure methods have primarily used either assignment of exposure from central site monitors or parameterization of estimates based on land use regression (LUR) using spatial covariates. Individuals that live further from central site monitors may be assigned estimates with more error in this first approach which also does not account for spatial determinants of exposure such as living in an area with heavy traffic. Land use regression may better capture this spatial variability but typically doesn't include short term temporal variation. Error in assigning exposures can bias effect estimates (likely towards the null) and decrease the power to detect true associations. The hybrid satellite model uses the strengths of both exposure modeling approaches and adds in physical measurements of aerosol optical depth calibrated against the trusted ground monitoring network of central sites while accounting for local variability in spatial determinants of exposure such as roadway density.
- 
-2. A short statement on how we can collaborate with the geospatial institute:
-Because vehicular emissions are a large contributor to PM2.5 concentrations, we will work with the Geospatial  Institute to develop measures of traffic that can serve as proxies for vehicular emissions to augment future iterations of the exposure model. In particular, metrics of roadway usage and fleet composition (e.g. diesel buses and trucks) that reflect historic and present patterns of traffic and that vary in both space and time are expected to improve on our currently implemented roadway density measures.
- 
-3. A summary of what GIS info/help we could use right away that can be forwarded to Martine?
-We need some help with finding GIS data for political boundaries since we are currently building our models for an arbitrarily selected rectangular area. In particular, it would be very helpful to get a GIS shapefile delineating the boundaries of the Mexico City Metropolitan Area (particularly if it clarified the boundaries of the DF vs included municipios from outlying areas like in the State of Mexico). Also, it would be great in the future to know the boundaries of the "megalopolis" and include the boundaries of the component states. 
- 
-We already have a shapefile with the AGEBs from the INEGI which has been joined to the 2010 census population counts so perhaps we are okay on that for now.
- 
-here is a quick paragraph on some epi methods for different kinds of health data.
-
-Associations between air pollution and individual level health outcomes will be tested with generalized linear mixed models that account for the potential unexplained correlation of survey participants coming from the same census units. Count based (ecologic) data will be fit with negative binomial regression allowing for overdispersion and using a population offset. Models for dichotomous outcomes will be fit using relative risk regression with modified poisson links in order to estimate risk ratios rather than odds ratios and to avoid apparent interaction in the odds ratio that can be due to differences in outcome prevalence between socioeconomic strata. Interaction will be assessed as departure from additivity and thus, in multiplicative models will be assessed using the relative excess risk due to interaction. Potential confounders will be derived from previous literature on the health impacts of air pollution and considered for inclusion after the construction of directed acyclic graphs. ### PUT SOME EXAMPLES HERE - PERHAPS I WOULD CONSIDER SEASON AND LONG TERM TIME TREND IN ADDITION TO THE INDIVIDUAL LEVEL CHARACTERISTICS LIKE SEX AGE EDUCATION AND SMOKING DEPENDING ON WHAT YOU HAVE ###
-
-
-I would also consider the hypothesis that social context is important and that individual SES responses on the health survey could be augmented with census based SES about the neighborhood and accommodated in this mixed model framework - for example, is it the same thing to be poor in a wealthy neighborhood than it is to be of lower means but similar to everyone around you? That could be another area where you work with the geospatial institute to derive neighborhood metrics.
--Allan
 **  BSF grant
     :PROPERTIES:
     :ID:       46751f92-a1d4-4d1c-a1f2-5565da630550
@@ -1739,6 +1719,42 @@ main non dust season: jul-aug
 for chronic we care about spatial variability
 for acute we care about temporal variability 
 ** TODO create new fig 1 for mexico with bad monitors included.
+** Andrea/Bob talk
+*** ellena uk model with kees, come to rome this summer?
+ 
+*** temperature modeling: showing heat island effects, there could be several degrees c in spatial variblity at night time
+*** "greenes" :- use sattelite NDVI (modis/lansat/other) as an exposure (1km-30m) as a proxy for green spaces/areas and
+*** walkability
+there are several ways of addressing walkability
+
+1) simple method gis based method- intersection count, business count, and population density
+
+residence-level measures of population density
+
+business counts (as a proxy for accessibility)-Business counts were measured by the counts of all stores, facilities, and services in a participant’s network buffer
+points of interest”, which includes grocery stores, restaurants, banks, hotels, hospitals, libraries, 
+
+intersection counts (as a proxy for street connectivity)-network buffers around each home address
+Intersection counts were quantified by the number of intersections that were 3-way or greater within each network buffer (Figure 2). A greater intersection count increases the efficiency of walking to destinations. 
+
+2) developing a more complex model taking into account traffic lanes, traffic direction, walking obstacles, intersections counts etc etc
+
+*** light at night
+
+DMSP satellite allows 600m resolution. new satellite (NASA-NOAA Suomi National Polar-orbiting Partnership (NPP) satellite) can produce higher res data
+LAN as a exposure and as a potential proxy to residence level pop density
+
+*** web data social/location based services
+
+whats available in Mexico city/around?
+could be used for: 
+mapping traffic density
+mapping access to health, healthy food, business counts
+
+*** perhaps noise exposure modeling? I have a student that is working on this- tis very hard to model, need a "moitoring campagin", height, buliding material etc
+
+
+*** crime-data availability?
 * Mails
 ** TODO Respond to Eliahu Stern <elistern@bgu.ac.il> on [Geog-Council] FW: יתרות במחלקה לגאוגרפיה
    SCHEDULED: <2015-04-13 Mon>
