@@ -40074,6 +40074,11 @@ lot faster:
 backups, and have too many copies of the same files littering my backup
 servers.
 
+*** output (pipe/list) all file and files in subdirectories into a text file
+cd into desired dir
+#+BEGIN_SRC sh
+find "$(pwd)" > /PATH/text.txt
+#+END_SRC
 ** hardware
 *** xset
 
