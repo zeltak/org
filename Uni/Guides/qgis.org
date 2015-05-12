@@ -219,6 +219,10 @@ The polygon feature is divided into parts according to the digitized line.
 
 To make the change permanent, toggle off Editing mode.
 
+*** calculate percent of intersecting polygons (for exposure calucluations for SSA etc)
+I used intersect from geoprocessing tools, worked fine
+then I created a new field calcualting the area of each new polygon ($area)
+finally I created a new field calculating the portion of the area of the new polygon from the area of the CT it belongs to (the last 2 fields of the layer). Then I export to csv and from there to R and use this % to weight this grid point when building the weighted average for each census tract. 
 ** selection
 *** select by expression
 **** select squares above X size

@@ -6,7 +6,90 @@
 #+PRIORITIES: A
 #+OPTIONS: toc:nil 
 
+* Today
+** start NE LU additions 
+** finalize israel paper
+** alexei talk 31.3.2105
+*** low yearly aod values and compared to DB which is higher
+we should look at wind speed from reanalysis data/station to see if these areas have low or high ws values
+*** TODO basic raw zero correlation with PM stations
+send alexei the the full ts pm data so he check this
+*** look at aod azimuths
+use data with 30 degree azimuths that should be better:
+either subset data by that or play with these azimuths as weights in a model 
+** itzik dust I south
+main dust season: dec-march
+main non dust season: jul-aug 
+** chronic vs accute variablity in exposure assesmnt 
+for chronic we care about spatial variability
+for acute we care about temporal variability 
+** TODO create new fig 1 for mexico with bad monitors included.
+** Andrea/Bob talk
+*** ellena uk model with kees, come to rome this summer?
+ 
+*** temperature modeling: showing heat island effects, there could be several degrees c in spatial variblity at night time
+*** "greenes" :- use sattelite NDVI (modis/lansat/other) as an exposure (1km-30m) as a proxy for green spaces/areas and
+*** walkability
+there are several ways of addressing walkability
 
+1) simple method gis based method- intersection count, business count, and population density
+
+residence-level measures of population density
+
+business counts (as a proxy for accessibility)-Business counts were measured by the counts of all stores, facilities, and services in a participant’s network buffer
+points of interest”, which includes grocery stores, restaurants, banks, hotels, hospitals, libraries, 
+
+intersection counts (as a proxy for street connectivity)-network buffers around each home address
+Intersection counts were quantified by the number of intersections that were 3-way or greater within each network buffer (Figure 2). A greater intersection count increases the efficiency of walking to destinations. 
+
+2) developing a more complex model taking into account traffic lanes, traffic direction, walking obstacles, intersections counts etc etc
+
+*** light at night
+
+DMSP satellite allows 600m resolution. new satellite (NASA-NOAA Suomi National Polar-orbiting Partnership (NPP) satellite) can produce higher res data
+LAN as a exposure and as a potential proxy to residence level pop density
+
+*** web data social/location based services
+
+whats available in Mexico city/around?
+could be used for: 
+mapping traffic density
+mapping access to health, healthy food, business counts
+
+*** perhaps noise exposure modeling? I have a student that is working on this- tis very hard to model, need a "moitoring campagin", height, buliding material etc
+
+
+*** crime-data availability?
+
+** TODO maayan 12.5.15
+**** case crossover
+whats the N?
+simplest way is to take first admission
+if N is small lets see in litrature how other people dealt with this
+**** the Stat zone file
+what are these variables
+HOUSEHOLDS	?
+AVERAGE_HH	?
+ASIRON1_3	?
+ASIRON7_10	?
+DIROG	?
+MADD_SOC	?
+INCOME	?
+ZOBJECT	Zone Number
+ESHKOL_NUM	?
+**** Behzad paper
+mind taking a look? authorship is problematic we need to see what can be done
+**** meeting with ofer and erez
+** TODO Joel talk 12.05.15
+**** use of aqua and terra as 2 separate exposure:
+instead of calibrating: one would be a peak level exposure and one a "background" exposure
+
+** TODO send massimo AOD italy
+** TODO send massimo AOD Sweededn
+** send KEES AOD swiss
+** TODO check if I got back money for haifa GEO conference
+** follow order for noise metric
+order number 3918261
 * @Ongoing@
 ** PAUSED PM2.5 1kmx1km NEMIA					    :ucurent:
 *** Brainstorm
@@ -794,6 +877,9 @@ round(mod1table$', i, '_', j, ', 2)', sep='')))
 ***** combine aqua and terra 
 I have an idea for combining the satellites but we need to get NE done quickly and I thought we should save it for your Midwest paper. You should expect half or more of the observations to be missing. What is your missing percentage?
 Regarding the two satellites you need to remember some stuff from Petros' air pollution course. In the morning the mixing height is low. Local pollution is trapped near the ground, an is a large fraction of particles. It is mostly from traffic or from oil heat in the winter, and so a lot of the particles are black, and a lot are fresh, and hence small. I n the afternoon the mixing height is high, transported particles mix down, and the color and size distribution change. Therefore, the calibration changes. So we need to do the stage 1 calibration separately for each satellite, and then combine, since one is in the morning and one in the afternoon. 
+***** Aeosol from OMI
+second, I do not know if people burn wood for heat in Stockholm county, but if so, the frequency that MAIAC uses is not optimal for detecting organic aerosols from biomass combustion. The Aerosol Index from the OMI satellite is measured in the UV range where there is little ozone interference and could be added as a supplementary predictor. AI is also sensitive to dust, so it may be useful in Italy to better detect that as well as biomass smoke.OMI also measures ozone. That is on a larger grid (I think 12x12) but if we calibrate it to monitors and then spatially smooth it, it should be possible to generate an ozone surface as well.
+ 
 ** Ta model (next branch) 
 *** stage 3 regression by grid cell
 You do not need to run a model with a random effect for each grid cell. Instead, you can run a separate regression for each gridcell, regressing the non-missing predicted Ta against the mean of monitored Ta within 100km. This gives you 1 million regressions to do, but you can divide the gridcells into 100 groups and run 100 jobs on the cluster and it will run in an hour. We do this when we regress the 5000,000 methylation sites against predictors in the NAS.  Also, we need some of the land use terms.
@@ -1159,9 +1245,6 @@ A3:
   :PROPERTIES:
   :ID:       248dff94-3c3f-4b05-b9d3-4c25addf746b
   :END:
-** budgeting students "manot"
-in 2014 1 "mana" is 514 NIS
-for a post-doc the $$ is between 4-20
 ** Trips Abroad info
 *** Eshel 
 for days you don't ask for hotel 
@@ -1169,6 +1252,14 @@ the per day is $123
 for days with hotel 
 the sum is $74
 ** Budget
+*** running budgets 
+| name      |   Number |
+|-----------+----------|
+| CIG       | 87361211 |
+| sal klita | 87347711 |
+|           |          | 
+
+  
 *** BGU budget glossary
 department sections starts with '5'
 grant money sections starts with '3'
@@ -1176,6 +1267,10 @@ other research sections starts with '8'
 to see how much is left you need to check in "מחקרים"
 *** Move budget that is unused
 check how to move unused budget to department/faculty to pay for other students ans somehow get the money back
+*** budgeting students "manot"
+ in 2014 1 "mana" is 514 NIS
+ for a post-doc the $$ is between 4-20
+
 ** Office Hardware info
 *** IP
 Beast IP: 132.72.155.204
@@ -1200,10 +1295,6 @@ use id BGU-USERS\ikloog
 -buy DSLR?
 -buy projector?
 -buy LAN meters
-** DONE hire a student for 90 hours of work
-   :PROPERTIES:
-   :ID:       5ebfa8b5-7816-453a-8e53-59402db2b3df
-   :END:
 ** fill in sick days etc
    DEADLINE: <2014-07-29 Tue +1m>
    - State "SUBMITTED"  from "NEXT"       [2014-07-29 Tue 10:55]
@@ -1213,20 +1304,7 @@ use id BGU-USERS\ikloog
    :ID:       6026376b-de51-4adf-a7a4-762887ceb426
    :LAST_REPEAT: [2014-07-29 Tue 10:55]
    :END:
-** TODO Buy Laptop
-   :PROPERTIES:
-   :ID:       d8da2a30-f5f0-46d7-8a45-c80e1e72fc27
-   :END:
-extra battery 6 cell
-extra powercord
-docking station
-warrenty?
-Intel wifi card (strongly recommended for Linux)
-** DONE buy fridge and micro from seed money?
-   :PROPERTIES:
-   :ID:       e0ac04b4-c871-40d0-8427-7c80eac94ccb
-   :END:
-** TODO mechanical keyboard
+** TODO get reimbursement for  mechanical keyboard
    :PROPERTIES:
    :ID:       cebeff91-1ddc-4c63-b53e-45ef37f48ab5
    :END:
@@ -1241,41 +1319,8 @@ Intel wifi card (strongly recommended for Linux)
 @you need to mark "הקדשתי"@
 
 you get the bonus in salary for hakdashat zman in Nov/Feb/May/Augment
-*** "criterionim"
+***  קריטריונים "criterionim"
 you get the bonus in salary for this in Oct/Janurary/April/July
-
-
-** TODO refund cellphone
-   :PROPERTIES:
-   :ID:       75644e8e-69ea-47fe-b011-81b0b9d82c3b
-   :END:
-use wither bug or dv com:
-
-אהובה קדם
-מנהלת מחלקה עסקית – באג מולטיסיטם בע"מ
-טל:08-6222769  פקס:08-9202410 נייד:052-3122265
-אימייל:ahuva@bug.co.il
-
-
-Felix Tzigelman
-Purchasing and Logistics Manager
-dvcom_logo_s
- 
-Lazarov 33,Rishon Lezion 75654
-Israel
- 
-Tel. +972-72-2203300 ext.3
-Fax. +972-72-2203307
-M.   +972-52-4058888
-
-
-internet from home
-שלוחה   	08-6461743
-
-אמיר צפנת
-
-שלוחה   	08-6479449
-
 
 * Short term Misc
 ** TODO make sense of all kopot gemel
@@ -1492,8 +1537,9 @@ in R- gbm analylis- check model with only highest variables.
 
 ** TODO lab website
 See what shiran has made out of it 
-** CALL nili greenberg when zipcode data comes over
-052-9465-391
+** TODO new GIS presentation
+expand and talk about each course with slides
+
 * long term Misc
 ** GIS Trac k
     :PROPERTIES:
@@ -1633,7 +1679,6 @@ also allows one to experience what is learned in MA
 
 
 ** Journal statistics IF etc
-** TODO tal excel file and some slides on novel GIT program
 *** 2014
 **** chronobiology international
 (IF= 2.8 ; Q1 biology, 19 of 85 )
@@ -1672,6 +1717,33 @@ also allows one to experience what is learned in MA
 **** american journal of Epidemiology 
 (IF= 4.9 ; Q1 public, environmental & occupational health, 11  of 162 )
 
+** GIT program
+*** BA
+| course                                 | nakaz |
+| intro                                  |     3 |
+| Lab                                    |     3 |
+| 3d                                     |     3 |
+| Qgis                                   |     3 |
+| image proccesing                       |     3 |
+| Macam                                  |     3 |
+| arnon karnieli- into to remote sensing |     3 |
+| virtual geog                           |     3 |
+
+*** MA
+| course                             | nakaz |
+| spatial editing (gis for planners) |     3 |
+| geostatistics                      |     3 |
+| python                             |     3 |
+| gis modeling                       |     3 |
+| sql                                |     2 |
+| hyperspectral                      |     3 |
+| avinoam                            |     2 |
+| JS                                 |     3 |
+
+
+** MA publishing award
+-every MA student that will submit to a international journal will get 1750 NIS (within the 2 offical MA years)
+- among students that got the paper published within the 2 years there will be a comitee which will award t\he best paper another 1750 NIS
 * misc
 ** TODO check if we need to pay harel or healthy life insurance (see docs) and if we payed them already
 ** Mount sainai
@@ -1702,60 +1774,12 @@ address: 132.72.152.204
 User: zftp
 pass:hsphbgu2014
 
-* Today
-** start NE LU additions 
-** finalize israel paper
-** alexei talk 31.3.2105
-*** low yearly aod values and compared to DB which is higher
-we should look at wind speed from reanalysis data/station to see if these areas have low or high ws values
-*** TODO basic raw zero correlation with PM stations
-send alexei the the full ts pm data so he check this
-*** look at aod azimuths
-use data with 30 degree azimuths that should be better:
-either subset data by that or play with these azimuths as weights in a model 
-** itzik dust I south
-main dust season: dec-march
-main non dust season: jul-aug 
-** chronic vs accute variablity in exposure assesmnt 
-for chronic we care about spatial variability
-for acute we care about temporal variability 
-** TODO create new fig 1 for mexico with bad monitors included.
-** Andrea/Bob talk
-*** ellena uk model with kees, come to rome this summer?
- 
-*** temperature modeling: showing heat island effects, there could be several degrees c in spatial variblity at night time
-*** "greenes" :- use sattelite NDVI (modis/lansat/other) as an exposure (1km-30m) as a proxy for green spaces/areas and
-*** walkability
-there are several ways of addressing walkability
-
-1) simple method gis based method- intersection count, business count, and population density
-
-residence-level measures of population density
-
-business counts (as a proxy for accessibility)-Business counts were measured by the counts of all stores, facilities, and services in a participant’s network buffer
-points of interest”, which includes grocery stores, restaurants, banks, hotels, hospitals, libraries, 
-
-intersection counts (as a proxy for street connectivity)-network buffers around each home address
-Intersection counts were quantified by the number of intersections that were 3-way or greater within each network buffer (Figure 2). A greater intersection count increases the efficiency of walking to destinations. 
-
-2) developing a more complex model taking into account traffic lanes, traffic direction, walking obstacles, intersections counts etc etc
-
-*** light at night
-
-DMSP satellite allows 600m resolution. new satellite (NASA-NOAA Suomi National Polar-orbiting Partnership (NPP) satellite) can produce higher res data
-LAN as a exposure and as a potential proxy to residence level pop density
-
-*** web data social/location based services
-
-whats available in Mexico city/around?
-could be used for: 
-mapping traffic density
-mapping access to health, healthy food, business counts
-
-*** perhaps noise exposure modeling? I have a student that is working on this- tis very hard to model, need a "moitoring campagin", height, buliding material etc
-
-
-*** crime-data availability?
+** Eran vanger layer- check chezch passport
+054-7525243
+where was grandpa born
+all documents available
+degrees
+place and time of marriage and documents
 * Mails
 ** TODO Respond to Eliahu Stern <elistern@bgu.ac.il> on [Geog-Council] FW: יתרות במחלקה לגאוגרפיה
    SCHEDULED: <2015-04-13 Mon>
