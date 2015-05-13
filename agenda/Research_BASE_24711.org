@@ -6,91 +6,7 @@
 #+PRIORITIES: A
 #+OPTIONS: toc:nil 
 
-* Today
-** start NE LU additions 
-** finalize israel paper
-** alexei talk 31.3.2105
-*** low yearly aod values and compared to DB which is higher
-we should look at wind speed from reanalysis data/station to see if these areas have low or high ws values
-*** TODO basic raw zero correlation with PM stations
-send alexei the the full ts pm data so he check this
-*** look at aod azimuths
-use data with 30 degree azimuths that should be better:
-either subset data by that or play with these azimuths as weights in a model 
-** itzik dust I south
-main dust season: dec-march
-main non dust season: jul-aug 
-** chronic vs accute variablity in exposure assesmnt 
-for chronic we care about spatial variability
-for acute we care about temporal variability 
-** TODO create new fig 1 for mexico with bad monitors included.
-** Andrea/Bob talk
-*** ellena uk model with kees, come to rome this summer?
- 
-*** temperature modeling: showing heat island effects, there could be several degrees c in spatial variblity at night time
-*** "greenes" :- use sattelite NDVI (modis/lansat/other) as an exposure (1km-30m) as a proxy for green spaces/areas and
-*** walkability
-there are several ways of addressing walkability
 
-1) simple method gis based method- intersection count, business count, and population density
-
-residence-level measures of population density
-
-business counts (as a proxy for accessibility)-Business counts were measured by the counts of all stores, facilities, and services in a participant’s network buffer
-points of interest”, which includes grocery stores, restaurants, banks, hotels, hospitals, libraries, 
-
-intersection counts (as a proxy for street connectivity)-network buffers around each home address
-Intersection counts were quantified by the number of intersections that were 3-way or greater within each network buffer (Figure 2). A greater intersection count increases the efficiency of walking to destinations. 
-
-2) developing a more complex model taking into account traffic lanes, traffic direction, walking obstacles, intersections counts etc etc
-
-*** light at night
-
-DMSP satellite allows 600m resolution. new satellite (NASA-NOAA Suomi National Polar-orbiting Partnership (NPP) satellite) can produce higher res data
-LAN as a exposure and as a potential proxy to residence level pop density
-
-*** web data social/location based services
-
-whats available in Mexico city/around?
-could be used for: 
-mapping traffic density
-mapping access to health, healthy food, business counts
-
-*** perhaps noise exposure modeling? I have a student that is working on this- tis very hard to model, need a "moitoring campagin", height, buliding material etc
-
-
-*** crime-data availability?
-
-** TODO maayan 12.5.15
-**** case crossover
-whats the N?
-simplest way is to take first admission
-if N is small lets see in litrature how other people dealt with this
-**** the Stat zone file
-what are these variables
-HOUSEHOLDS	ownership of houses
-AVERAGE_HH	
-ASIRON1_3	% of population in eshkol 1-3
-ASIRON7_10	% of population in eshkol 7-10
-DIROG	 method of ranking SES
-MADD_SOC	alternative method to rank SES
-INCOME	mean income 
-ZOBJECT	Zone Number
-ESHKOL_NUM	eshol rank from 1-10 (or 1-20 for moatzot)
-**** Behzad paper
-mind taking a look? authorship is problematic we need to see what can be done
-**** meeting with ofer and erez
-**** TODO check distribution for pm for seasons
-** TODO Joel talk 12.05.15
-**** use of aqua and terra as 2 separate exposure:
-instead of calibrating: one would be a peak level exposure and one a "background" exposure
-
-** TODO send massimo AOD italy
-** TODO send massimo AOD Sweededn
-** send KEES AOD swiss
-** TODO check if I got back money for haifa GEO conference
-** follow order for noise metric
-order number 3918261
 * @Ongoing@
 ** PAUSED PM2.5 1kmx1km NEMIA					    :ucurent:
 *** Brainstorm
@@ -276,8 +192,6 @@ proc mixed data = Modis.Ep_Final_s1_&year method=reml;
    random intercept &Type / subject = date type = UN;
 run;
 quit;
-**** TODO paper
-Yes, I think dynamic buffering is fine. Regarding the France paper, I think the emphasis should be 1) existing health studies of temperature effect only capture temporal variation and not spatial variation, and a model for every day and km sq can help address this; 2) while modeled temperature data does exist, it mostly has not taken advantage of the rich satellite remote sensing resource; 3) While we were successful in developing such a model in the Northeast, performance in Europe is unknown where land use patterns are different, and where there are sharp climate gradients such as mountainous areas, cold Atlantic shores Mediterranean climate, etc such as in France. I would also point out that the model has shown its advantages over nearby temperature monitors in health effect studies already.  I would try Atmospheric Environment. 
 ** SUBMITTED DVT admissions and PM
    :PROPERTIES:
    :ID:       2668bdf2-f4de-40cd-b57f-101a88076ba7
@@ -615,13 +529,6 @@ beysian kriging- nox sox pm2.5 (used in some station from imputin from pm10 via 
 *** checking deltas of change in air pollution and changes in outcome
 look at change in delta air pollution vs delta of change in outcome 
 
-** France Pm models
-*** todo data management
-*** TODO Itai
-check ndvi>> /media/NAS/Uni/Data/Europe/NDVI
-create france aod grid
-talk to kees PBL Euro
-
 
 * Future Research Ideas
 ** PM model (NEXT BRANCH)
@@ -884,20 +791,9 @@ round(mod1table$', i, '_', j, ', 2)', sep='')))
 
 ***** using WRF data for met.pbl etc data (see AE I reviewed)- also look at sattelite derived column no2-from same paper 
 
-***** TODO combine aqua and terra
+***** combine aqua and terra 
 I have an idea for combining the satellites but we need to get NE done quickly and I thought we should save it for your Midwest paper. You should expect half or more of the observations to be missing. What is your missing percentage?
 Regarding the two satellites you need to remember some stuff from Petros' air pollution course. In the morning the mixing height is low. Local pollution is trapped near the ground, an is a large fraction of particles. It is mostly from traffic or from oil heat in the winter, and so a lot of the particles are black, and a lot are fresh, and hence small. I n the afternoon the mixing height is high, transported particles mix down, and the color and size distribution change. Therefore, the calibration changes. So we need to do the stage 1 calibration separately for each satellite, and then combine, since one is in the morning and one in the afternoon. 
-
-
-I asked Mihye to run separate stage one models for aqua and terra, predict the PM2.5, average the predicted and they do the CV R2, and it was higher than either. While this may not matter for the Northeast, for the Southeast we need all the gain we can get, and I expect it would help for Italy, and possibly France as well. I think it is important to do the averaging after converting to PM2.5, because they measure AOD at different times. The aqua measurements are in the afternoon, and will be less impacted by the morning peak in local pollution, and the model will depend more on local land use surrogates to capture that contribution. In contrast, much of the transported pollution has mixed down by then, and the AOD will capture that better. For terra, it is the reverse. So I expect different coefficients both for AOD and for the other terms. Once we have the best PM2.5 predictions from each, averaging should eliminate some noise in the prediction. She is doing this now for the Southeast. 
-
-***** Aerosol index
-Getting back to Aerosol Index, which is computed in the UV band not visible light, it seems to be sensitive to two types of particles: desert dust, and organic particles from biomass burning. It seems to be available on OMI and some European Satellites, and interestingly for Israel, seems to go back much further. The resolution is coarse, 25km, but it certainly will give a continuous measure of how much dust is around, and for dust from Sahara or Arabia, 25km may not be too bad a resolution. So it could help correct models using MAIAC data on "non dust storm" days when there is still some dust around. It should also help for Italy and the south of France which get hit by Saharan dust. It might improve predictions in winter where wood is burned for heat in Italy and France.
-
-
-http://disc.sci.gsfc.nasa.gov/data-holdings/PIP/aerosol_index.shtml
-http://www.temis.nl/airpollution/absaai/
-
 ** Ta model (next branch) 
 *** stage 3 regression by grid cell
 You do not need to run a model with a random effect for each grid cell. Instead, you can run a separate regression for each gridcell, regressing the non-missing predicted Ta against the mean of monitored Ta within 100km. This gives you 1 million regressions to do, but you can divide the gridcells into 100 groups and run 100 jobs on the cluster and it will run in an hour. We do this when we regress the 5000,000 methylation sites against predictors in the NAS.  Also, we need some of the land use terms.
@@ -1273,14 +1169,6 @@ the per day is $123
 for days with hotel 
 the sum is $74
 ** Budget
-*** running budgets 
-| name      |   Number |
-|-----------+----------|
-| CIG       | 87361211 |
-| sal klita | 87347711 |
-|           |          | 
-
-  
 *** BGU budget glossary
 department sections starts with '5'
 grant money sections starts with '3'
@@ -1288,10 +1176,6 @@ other research sections starts with '8'
 to see how much is left you need to check in "מחקרים"
 *** Move budget that is unused
 check how to move unused budget to department/faculty to pay for other students ans somehow get the money back
-*** budgeting students "manot"
- in 2014 1 "mana" is 514 NIS
- for a post-doc the $$ is between 4-20
-
 ** Office Hardware info
 *** IP
 Beast IP: 132.72.155.204
@@ -1608,9 +1492,8 @@ in R- gbm analylis- check model with only highest variables.
 
 ** TODO lab website
 See what shiran has made out of it 
-** TODO new GIS presentation
-expand and talk about each course with slides
-
+** CALL nili greenberg when zipcode data comes over
+052-9465-391
 * long term Misc
 ** GIS Trac k
     :PROPERTIES:
@@ -1735,7 +1618,6 @@ phone: 604-822-9585
 fax: 604-822-4994
 michael.brauer@ubc.ca
 *** Jeremy SarnatJeremy Sarnat
-
 Emory, Rollins school of public health  
 Contact: 
 404-727-5692 (Melva Robertson, media relations) office
@@ -1789,33 +1671,6 @@ also allows one to experience what is learned in MA
 **** american journal of Epidemiology 
 (IF= 4.9 ; Q1 public, environmental & occupational health, 11  of 162 )
 
-** GIT program
-*** BA
-| course                                 | nakaz |
-| intro                                  |     3 |
-| Lab                                    |     3 |
-| 3d                                     |     3 |
-| Qgis                                   |     3 |
-| image proccesing                       |     3 |
-| Macam                                  |     3 |
-| arnon karnieli- into to remote sensing |     3 |
-| virtual geog                           |     3 |
-
-*** MA
-| course                             | nakaz |
-| spatial editing (gis for planners) |     3 |
-| geostatistics                      |     3 |
-| python                             |     3 |
-| gis modeling                       |     3 |
-| sql                                |     2 |
-| hyperspectral                      |     3 |
-| avinoam                            |     2 |
-| JS                                 |     3 |
-
-
-** MA publishing award
--every MA student that will submit to a international journal will get 1750 NIS (within the 2 offical MA years)
-- among students that got the paper published within the 2 years there will be a comitee which will award t\he best paper another 1750 NIS
 * misc
 ** TODO check if we need to pay harel or healthy life insurance (see docs) and if we payed them already
 ** Mount sainai
@@ -1846,12 +1701,60 @@ address: 132.72.152.204
 User: zftp
 pass:hsphbgu2014
 
-** Eran vanger layer- check chezch passport
-054-7525243
-where was grandpa born
-all documents available
-degrees
-place and time of marriage and documents
+* Today
+** start NE LU additions 
+** finalize israel paper
+** alexei talk 31.3.2105
+*** low yearly aod values and compared to DB which is higher
+we should look at wind speed from reanalysis data/station to see if these areas have low or high ws values
+*** TODO basic raw zero correlation with PM stations
+send alexei the the full ts pm data so he check this
+*** look at aod azimuths
+use data with 30 degree azimuths that should be better:
+either subset data by that or play with these azimuths as weights in a model 
+** itzik dust I south
+main dust season: dec-march
+main non dust season: jul-aug 
+** chronic vs accute variablity in exposure assesmnt 
+for chronic we care about spatial variability
+for acute we care about temporal variability 
+** TODO create new fig 1 for mexico with bad monitors included.
+** Andrea/Bob talk
+*** ellena uk model with kees, come to rome this summer?
+ 
+*** temperature modeling: showing heat island effects, there could be several degrees c in spatial variblity at night time
+*** "greenes" :- use sattelite NDVI (modis/lansat/other) as an exposure (1km-30m) as a proxy for green spaces/areas and
+*** walkability
+there are several ways of addressing walkability
+
+1) simple method gis based method- intersection count, business count, and population density
+
+residence-level measures of population density
+
+business counts (as a proxy for accessibility)-Business counts were measured by the counts of all stores, facilities, and services in a participant’s network buffer
+points of interest”, which includes grocery stores, restaurants, banks, hotels, hospitals, libraries, 
+
+intersection counts (as a proxy for street connectivity)-network buffers around each home address
+Intersection counts were quantified by the number of intersections that were 3-way or greater within each network buffer (Figure 2). A greater intersection count increases the efficiency of walking to destinations. 
+
+2) developing a more complex model taking into account traffic lanes, traffic direction, walking obstacles, intersections counts etc etc
+
+*** light at night
+
+DMSP satellite allows 600m resolution. new satellite (NASA-NOAA Suomi National Polar-orbiting Partnership (NPP) satellite) can produce higher res data
+LAN as a exposure and as a potential proxy to residence level pop density
+
+*** web data social/location based services
+
+whats available in Mexico city/around?
+could be used for: 
+mapping traffic density
+mapping access to health, healthy food, business counts
+
+*** perhaps noise exposure modeling? I have a student that is working on this- tis very hard to model, need a "moitoring campagin", height, buliding material etc
+
+
+*** crime-data availability?
 * Mails
 ** TODO Respond to Eliahu Stern <elistern@bgu.ac.il> on [Geog-Council] FW: יתרות במחלקה לגאוגרפיה
    SCHEDULED: <2015-04-13 Mon>
@@ -1859,4 +1762,3 @@ place and time of marriage and documents
  [2015-04-06 Mon 18:39]
 
  [[mu4e:msgid:73e44f845a16439baa0968bb4090e3db@buzzard3.auth.ad.bgu.ac.il][{Geog-Council} FW: יתרות במחלקה לגאוגרפיה]]
-

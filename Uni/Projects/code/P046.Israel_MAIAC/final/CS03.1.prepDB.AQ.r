@@ -275,6 +275,8 @@ m3<-merge(m3,grid[,list(aodid,lat_aod, long_aod)],all.x = T)
 l=seq(names(m3));names(l)=names(m3);l
 m3x<-m3[,c(1:4,29,30),with=FALSE]
 
+#if full time series isnt available use the nearest by day function
+
 #Temp
 met.m <- makepointsmatrix(Temp, "X", "Y", "stn")
 setkey(m3x, aodid)

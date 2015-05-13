@@ -887,6 +887,7 @@ round(mod1table$', i, '_', j, ', 2)', sep='')))
 ***** TODO combine aqua and terra
 I have an idea for combining the satellites but we need to get NE done quickly and I thought we should save it for your Midwest paper. You should expect half or more of the observations to be missing. What is your missing percentage?
 Regarding the two satellites you need to remember some stuff from Petros' air pollution course. In the morning the mixing height is low. Local pollution is trapped near the ground, an is a large fraction of particles. It is mostly from traffic or from oil heat in the winter, and so a lot of the particles are black, and a lot are fresh, and hence small. I n the afternoon the mixing height is high, transported particles mix down, and the color and size distribution change. Therefore, the calibration changes. So we need to do the stage 1 calibration separately for each satellite, and then combine, since one is in the morning and one in the afternoon. 
+<<<<<<< HEAD
 
 
 I asked Mihye to run separate stage one models for aqua and terra, predict the PM2.5, average the predicted and they do the CV R2, and it was higher than either. While this may not matter for the Northeast, for the Southeast we need all the gain we can get, and I expect it would help for Italy, and possibly France as well. I think it is important to do the averaging after converting to PM2.5, because they measure AOD at different times. The aqua measurements are in the afternoon, and will be less impacted by the morning peak in local pollution, and the model will depend more on local land use surrogates to capture that contribution. In contrast, much of the transported pollution has mixed down by then, and the AOD will capture that better. For terra, it is the reverse. So I expect different coefficients both for AOD and for the other terms. Once we have the best PM2.5 predictions from each, averaging should eliminate some noise in the prediction. She is doing this now for the Southeast. 
@@ -898,6 +899,11 @@ Getting back to Aerosol Index, which is computed in the UV band not visible ligh
 http://disc.sci.gsfc.nasa.gov/data-holdings/PIP/aerosol_index.shtml
 http://www.temis.nl/airpollution/absaai/
 
+=======
+***** Aeosol from OMI
+second, I do not know if people burn wood for heat in Stockholm county, but if so, the frequency that MAIAC uses is not optimal for detecting organic aerosols from biomass combustion. The Aerosol Index from the OMI satellite is measured in the UV range where there is little ozone interference and could be added as a supplementary predictor. AI is also sensitive to dust, so it may be useful in Italy to better detect that as well as biomass smoke.OMI also measures ozone. That is on a larger grid (I think 12x12) but if we calibrate it to monitors and then spatially smooth it, it should be possible to generate an ozone surface as well.
+ 
+>>>>>>> fbefe9e128b65833feb38dffb5ab71534abff081
 ** Ta model (next branch) 
 *** stage 3 regression by grid cell
 You do not need to run a model with a random effect for each grid cell. Instead, you can run a separate regression for each gridcell, regressing the non-missing predicted Ta against the mean of monitored Ta within 100km. This gives you 1 million regressions to do, but you can divide the gridcells into 100 groups and run 100 jobs on the cluster and it will run in an hour. We do this when we regress the 5000,000 methylation sites against predictors in the NAS.  Also, we need some of the land use terms.
@@ -1074,14 +1080,6 @@ about this
 
 http://oiswww.eumetsat.org/IPPS/html/MSG/RGB/DUST/WESTERNAFRICA/
 
-** France Pm models
-*** TODO johanna
-PM seems to be full numbers, is that correct or has that been rounded up
-ask about PM10 stations
-*** TODO Itai
-check ndvi>> /media/NAS/Uni/Data/Europe/NDVI
-create france aod grid
-talk to kees PBL Euro
 ** OMI sattelite for NO2 and O3 callibration models
 develop no2 and/or O3 sattelite models (look at omi sattelite)
 http://aura.gsfc.nasa.gov/instruments/omi.html
@@ -1263,9 +1261,6 @@ A3:
   :PROPERTIES:
   :ID:       248dff94-3c3f-4b05-b9d3-4c25addf746b
   :END:
-** budgeting students "manot"
-in 2014 1 "mana" is 514 NIS
-for a post-doc the $$ is between 4-20
 ** Trips Abroad info
 *** Eshel 
 for days you don't ask for hotel 
@@ -1316,10 +1311,6 @@ use id BGU-USERS\ikloog
 -buy DSLR?
 -buy projector?
 -buy LAN meters
-** DONE hire a student for 90 hours of work
-   :PROPERTIES:
-   :ID:       5ebfa8b5-7816-453a-8e53-59402db2b3df
-   :END:
 ** fill in sick days etc
    DEADLINE: <2014-07-29 Tue +1m>
    - State "SUBMITTED"  from "NEXT"       [2014-07-29 Tue 10:55]
@@ -1329,20 +1320,7 @@ use id BGU-USERS\ikloog
    :ID:       6026376b-de51-4adf-a7a4-762887ceb426
    :LAST_REPEAT: [2014-07-29 Tue 10:55]
    :END:
-** TODO Buy Laptop
-   :PROPERTIES:
-   :ID:       d8da2a30-f5f0-46d7-8a45-c80e1e72fc27
-   :END:
-extra battery 6 cell
-extra powercord
-docking station
-warrenty?
-Intel wifi card (strongly recommended for Linux)
-** DONE buy fridge and micro from seed money?
-   :PROPERTIES:
-   :ID:       e0ac04b4-c871-40d0-8427-7c80eac94ccb
-   :END:
-** TODO mechanical keyboard
+** TODO get reimbursement for  mechanical keyboard
    :PROPERTIES:
    :ID:       cebeff91-1ddc-4c63-b53e-45ef37f48ab5
    :END:
@@ -1357,41 +1335,8 @@ Intel wifi card (strongly recommended for Linux)
 @you need to mark "הקדשתי"@
 
 you get the bonus in salary for hakdashat zman in Nov/Feb/May/Augment
-*** "criterionim"
+***  קריטריונים "criterionim"
 you get the bonus in salary for this in Oct/Janurary/April/July
-
-
-** TODO refund cellphone
-   :PROPERTIES:
-   :ID:       75644e8e-69ea-47fe-b011-81b0b9d82c3b
-   :END:
-use wither bug or dv com:
-
-אהובה קדם
-מנהלת מחלקה עסקית – באג מולטיסיטם בע"מ
-טל:08-6222769  פקס:08-9202410 נייד:052-3122265
-אימייל:ahuva@bug.co.il
-
-
-Felix Tzigelman
-Purchasing and Logistics Manager
-dvcom_logo_s
- 
-Lazarov 33,Rishon Lezion 75654
-Israel
- 
-Tel. +972-72-2203300 ext.3
-Fax. +972-72-2203307
-M.   +972-52-4058888
-
-
-internet from home
-שלוחה   	08-6461743
-
-אמיר צפנת
-
-שלוחה   	08-6479449
-
 
 * Short term Misc
 ** TODO make sense of all kopot gemel
@@ -1750,7 +1695,6 @@ also allows one to experience what is learned in MA
 
 
 ** Journal statistics IF etc
-** TODO tal excel file and some slides on novel GIT program
 *** 2014
 **** chronobiology international
 (IF= 2.8 ; Q1 biology, 19 of 85 )

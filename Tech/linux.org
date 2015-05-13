@@ -25025,6 +25025,19 @@ note: the new size is in MB
 
 then use gparted live to enlarge the drive for the OS to see it
 
+**** create custom resolutions
+use the following syntax
+
+vboxmanage setextradata VMNAME CustomVideoMode1 1600x900x32
+
+₆In example₆
+
+
+#+BEGIN_SRC sh
+vboxmanage setextradata win10 CustomVideoMode1 1600x900x32
+#+END_SRC
+You can add a second resolution by replacing “CustomVideoMode1” with “CustomVideoMode2” in the command above.
+
 *** vmware
 
 **** tips
@@ -40062,6 +40075,11 @@ lot faster:
 backups, and have too many copies of the same files littering my backup
 servers.
 
+*** output (pipe/list) all file and files in subdirectories into a text file
+cd into desired dir
+#+BEGIN_SRC sh
+find "$(pwd)" > /PATH/text.txt
+#+END_SRC
 ** hardware
 *** xset
 
