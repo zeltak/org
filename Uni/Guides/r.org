@@ -762,6 +762,12 @@ Then I get:
 [2] "/Users/davidwinsemius/Downloads"  
 #+END_EXAMPLE
 
+*** list all your non default installed packages
+#+BEGIN_SRC R :results none
+#list all your non default installed packages
+installed.packages(priority = "NA")
+#+END_SRC
+
 ** extract info
 *** from summary
 In general, use:
@@ -884,6 +890,91 @@ system("zenity --title=\"R script info\" --text=\"Script has finished with zero 
 You can check zenity manual if you prefer alert in, say, notification area... But, with system function, you can do pretty much anything: send an email, run some other script, reboot the machine, sudo rm -rf *.*, etc. anything... and I mean it.
 
 But this stands only IF you're running GNU/Linux (or UNIX) distribution, otherwise, stick to Windows specific commands, though in that case, I can't give you much info...
+*** beepr
+
+Install it from CRAN with
+
+#+BEGIN_SRC R :results none
+install.packages("beepr")
+#+END_SRC
+
+Then, at the bottom of your script, load the package and have it beep.
+
+#+BEGIN_SRC R :results none
+library(beepr)
+beep()
+#+END_SRC
+
+beepr comes with a bunch of different sounds (e.g., try beep("facebook")), or use a path to any wav file. I tried these cat sounds, but they came out (with my computer’s speaker) sounding more like a really unhappy electronic lion…not very pleasant.
+
+beepr is cool, but most of my long-running jobs are on a distant server. It could be useful for local jobs on my Mac, but most of the time my computer is muted or the sound goes to my headphones (and my headphones are not always on my head). So I’m instead having my scripts send me a text or a notification via pushbullet.
+
+*** TODO RPushbullet
+Another alternative (suggested to me by Peter Hickey and Jared Knowles) is to use Dirk Eddelbuettel’s RPushbullet package to send yourself a notification via pushbullet.
+The main advantage of this, in my mind, is that there’s no gmail password sitting around on your system anywhere, but rather just your pushbullet “Access Token”, sitting in the file ~/.rpushbullet.json, so this is less of a security issue.
+
+Sign up for pushbullet; you’ll need a Google account.
+Install the pushbullet app on your phone or other device, or install the chrome extension.
+Go to your pushbullet account page to get your “Access Token”.
+Install the RPushbullet package from CRAN.
+
+#+BEGIN_SRC R :results none
+install.packages("RPushbullet")
+
+#+END_SRC
+
+Create a ~/.rpushbullet.json file with your api key and not much else.
+
+
+#+BEGIN_EXAMPLE
+{
+    "key": "your_api_key",
+    "devices": [],
+    "names": []
+}
+#+END_EXAMPLE
+
+Install jsonlite and use RPushbullet‘s pbGetDevices() function to get the identifiers for the devices you’ve registered with pushbullet.
+
+#+BEGIN_SRC R :results none
+install.packages("jsonlite")
+library(jsonlite)
+library(RPushbullet)
+fromJSON(pbGetDevices())$devices[,c("iden", "nickname")]
+#+END_SRC
+
+
+Insert those device identifiers into your ~/.rpushbullet.json file.
+
+#+BEGIN_EXAMPLE
+{
+    "key": "your_api_key",
+ 
+    "devices": [
+        "your_phone_device_id",
+        "your_tablet_device_id",
+        "your_chrome_device_id";
+    ],
+ 
+    "names": [
+        "phone",
+        "tablet",
+        "Chrome";
+    ]
+}
+#+END_EXAMPLE
+
+Now you’re set! Use the pbPost() function to post a message to yourself.
+
+#+BEGIN_SRC R :results none
+library(RPushbullet)
+pbPost("note", "Title of note", "Body of message")
+#+END_SRC
+
+By default, the message is posted to the first device listed in your ~/.rpushbullet.json file; to post it to a different device, use the argument deviceind, which takes a positive integer.
+
+I’m still somewhat inclined towards using gmailR and mygmailR to send myself a text, but RPushbullet seems more secure.
+
 ** History
 *** show history of commands window
 #+begin_src R

@@ -192,6 +192,8 @@ proc mixed data = Modis.Ep_Final_s1_&year method=reml;
    random intercept &Type / subject = date type = UN;
 run;
 quit;
+**** TODO paper
+Yes, I think dynamic buffering is fine. Regarding the France paper, I think the emphasis should be 1) existing health studies of temperature effect only capture temporal variation and not spatial variation, and a model for every day and km sq can help address this; 2) while modeled temperature data does exist, it mostly has not taken advantage of the rich satellite remote sensing resource; 3) While we were successful in developing such a model in the Northeast, performance in Europe is unknown where land use patterns are different, and where there are sharp climate gradients such as mountainous areas, cold Atlantic shores Mediterranean climate, etc such as in France. I would also point out that the model has shown its advantages over nearby temperature monitors in health effect studies already.  I would try Atmospheric Environment. 
 ** SUBMITTED DVT admissions and PM
    :PROPERTIES:
    :ID:       2668bdf2-f4de-40cd-b57f-101a88076ba7
@@ -529,6 +531,13 @@ beysian kriging- nox sox pm2.5 (used in some station from imputin from pm10 via 
 *** checking deltas of change in air pollution and changes in outcome
 look at change in delta air pollution vs delta of change in outcome 
 
+** France Pm models
+*** todo data management
+*** TODO Itai
+check ndvi>> /media/NAS/Uni/Data/Europe/NDVI
+create france aod grid
+talk to kees PBL Euro
+
 
 * Future Research Ideas
 ** PM model (NEXT BRANCH)
@@ -791,9 +800,20 @@ round(mod1table$', i, '_', j, ', 2)', sep='')))
 
 ***** using WRF data for met.pbl etc data (see AE I reviewed)- also look at sattelite derived column no2-from same paper 
 
-***** combine aqua and terra 
+***** TODO combine aqua and terra
 I have an idea for combining the satellites but we need to get NE done quickly and I thought we should save it for your Midwest paper. You should expect half or more of the observations to be missing. What is your missing percentage?
 Regarding the two satellites you need to remember some stuff from Petros' air pollution course. In the morning the mixing height is low. Local pollution is trapped near the ground, an is a large fraction of particles. It is mostly from traffic or from oil heat in the winter, and so a lot of the particles are black, and a lot are fresh, and hence small. I n the afternoon the mixing height is high, transported particles mix down, and the color and size distribution change. Therefore, the calibration changes. So we need to do the stage 1 calibration separately for each satellite, and then combine, since one is in the morning and one in the afternoon. 
+
+
+I asked Mihye to run separate stage one models for aqua and terra, predict the PM2.5, average the predicted and they do the CV R2, and it was higher than either. While this may not matter for the Northeast, for the Southeast we need all the gain we can get, and I expect it would help for Italy, and possibly France as well. I think it is important to do the averaging after converting to PM2.5, because they measure AOD at different times. The aqua measurements are in the afternoon, and will be less impacted by the morning peak in local pollution, and the model will depend more on local land use surrogates to capture that contribution. In contrast, much of the transported pollution has mixed down by then, and the AOD will capture that better. For terra, it is the reverse. So I expect different coefficients both for AOD and for the other terms. Once we have the best PM2.5 predictions from each, averaging should eliminate some noise in the prediction. She is doing this now for the Southeast. 
+
+***** Aerosol index
+Getting back to Aerosol Index, which is computed in the UV band not visible light, it seems to be sensitive to two types of particles: desert dust, and organic particles from biomass burning. It seems to be available on OMI and some European Satellites, and interestingly for Israel, seems to go back much further. The resolution is coarse, 25km, but it certainly will give a continuous measure of how much dust is around, and for dust from Sahara or Arabia, 25km may not be too bad a resolution. So it could help correct models using MAIAC data on "non dust storm" days when there is still some dust around. It should also help for Italy and the south of France which get hit by Saharan dust. It might improve predictions in winter where wood is burned for heat in Italy and France.
+
+
+http://disc.sci.gsfc.nasa.gov/data-holdings/PIP/aerosol_index.shtml
+http://www.temis.nl/airpollution/absaai/
+
 ** Ta model (next branch) 
 *** stage 3 regression by grid cell
 You do not need to run a model with a random effect for each grid cell. Instead, you can run a separate regression for each gridcell, regressing the non-missing predicted Ta against the mean of monitored Ta within 100km. This gives you 1 million regressions to do, but you can divide the gridcells into 100 groups and run 100 jobs on the cluster and it will run in an hour. We do this when we regress the 5000,000 methylation sites against predictors in the NAS.  Also, we need some of the land use terms.
@@ -970,14 +990,6 @@ about this
 
 http://oiswww.eumetsat.org/IPPS/html/MSG/RGB/DUST/WESTERNAFRICA/
 
-** France Pm models
-*** TODO johanna
-PM seems to be full numbers, is that correct or has that been rounded up
-ask about PM10 stations
-*** TODO Itai
-check ndvi>> /media/NAS/Uni/Data/Europe/NDVI
-create france aod grid
-talk to kees PBL Euro
 ** OMI sattelite for NO2 and O3 callibration models
 develop no2 and/or O3 sattelite models (look at omi sattelite)
 http://aura.gsfc.nasa.gov/instruments/omi.html
