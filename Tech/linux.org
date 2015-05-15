@@ -46390,8 +46390,15 @@ run the following:
  wmctrl -r Firefox -e '0,6,0,1040,708'
 
 *** Xrandr
-
 Dynamically testing different resolutions
+
+to get the info/details on cutrrent connected screen issue
+
+#+BEGIN_SRC sh
+xrandr
+#+END_SRC
+
+
 
 xrandr shows you the names of different outputs available on your system (LVDS, VGA-0, etc.) and resolutions available on each: Screen 0: minimum 320 x 200, current 1400 x 1050, maximum 1400 x 1400 VGA disconnected (normal left inverted right x axis y axis) LVDS connected 1400x1050+0+0 (normal left inverted right x axis y axis) 286mm x 214mm 1400x1050 60.0+ 50.0 [...]
 You can direct xrandr to set a different resolution like this:

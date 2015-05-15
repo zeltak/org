@@ -7,8 +7,6 @@
 #+OPTIONS: toc:nil 
 
 * Today
-** start NE LU additions 
-** finalize israel paper
 ** alexei talk 31.3.2105
 *** low yearly aod values and compared to DB which is higher
 we should look at wind speed from reanalysis data/station to see if these areas have low or high ws values
@@ -17,13 +15,12 @@ send alexei the the full ts pm data so he check this
 *** look at aod azimuths
 use data with 30 degree azimuths that should be better:
 either subset data by that or play with these azimuths as weights in a model 
-** itzik dust I south
+** dust seasons in the south of israel
 main dust season: dec-march
 main non dust season: jul-aug 
 ** chronic vs accute variablity in exposure assesmnt 
 for chronic we care about spatial variability
 for acute we care about temporal variability 
-** TODO create new fig 1 for mexico with bad monitors included.
 ** Andrea/Bob talk
 *** ellena uk model with kees, come to rome this summer?
  
@@ -61,37 +58,37 @@ mapping access to health, healthy food, business counts
 
 *** crime-data availability?
 
-** TODO maayan 12.5.15
-**** case crossover
-whats the N?
-simplest way is to take first admission
-if N is small lets see in litrature how other people dealt with this
-**** the Stat zone file
-what are these variables
-HOUSEHOLDS	ownership of houses
-AVERAGE_HH	
-ASIRON1_3	% of population in eshkol 1-3
-ASIRON7_10	% of population in eshkol 7-10
-DIROG	 method of ranking SES
-MADD_SOC	alternative method to rank SES
-INCOME	mean income 
-ZOBJECT	Zone Number
-ESHKOL_NUM	eshol rank from 1-10 (or 1-20 for moatzot)
-**** Behzad paper
-mind taking a look? authorship is problematic we need to see what can be done
-**** meeting with ofer and erez
-**** TODO check distribution for pm for seasons
 ** TODO Joel talk 12.05.15
-**** use of aqua and terra as 2 separate exposure:
-instead of calibrating: one would be a peak level exposure and one a "background" exposure
+**** LPM
+code needed is on FTP
+shi: what else is needed on top of the drobo files?
+use WRF for stage 4-
+talsk to shi
 
+**** TODO use of aqua and terra as 2 separate exposure:
+instead of calibrating: one would be a peak level exposure and one a "background" exposure
+calibrate with hourly 
+terra > 9:30
+aqua > 14:30 
+talk to petros
+compare EC and OC from speciation and compare
+we want to show that one picks up traffic well while the other picks up transported PM mainly
+**** updates
+-swiss, sweeden  project coming along
+-italy is ready for run- I will come a few days earlier to rome to finalize the model with massimo
+-VIIRS update 
+**** antonellas grant
+do we need to prepare for the grant in anyway
+when does it start
+who will do what?
+- MA student here
 ** TODO send massimo AOD italy
 ** TODO send massimo AOD Sweededn
-** send KEES AOD swiss
+** TODO send KEES AOD swiss
 ** TODO check if I got back money for haifa GEO conference
 ** follow order for noise metric
 order number 3918261
-* @Ongoing@
+* 'Ongoing'
 ** PAUSED PM2.5 1kmx1km NEMIA					    :ucurent:
 *** Brainstorm
 -there may be degredation in data quality in Terra from 2000-2008 may introduce noide, we may need to address this at some stage in the future
@@ -164,17 +161,6 @@ maybe try a mixed model, relationship between resif ~ met variables changes dail
 *** Model run
 **** reg calibaration instead of CV for stage 3
 run the reg with some left out monitors and see if the slope is different then '0' to see if we have Bias 
-*** DONE 'PAPER'
-    :PROPERTIES:
-    :ID:       a28683f4-25c5-4a99-84bc-6ebee9d6078b
-    :END:
-for the paper: the adv of 1x1km aod data is it allows for a simpler model
-in the discussion compare our model to the liu paper and the seattle's group paper, one advantage of ours is the ability to get daily predictions for acute studies
-*** Expand years 2000-2014
-**** DONE ask alexei for data for 2000-2002 and 2012-2014
-:PROPERTIES:
-:ID:       e84a25e6-a915-42dd-83f8-f038e20c2bc2
-:END:
 ** Israel pm models
    :PROPERTIES:
    :ID:       599074f7-2550-40ab-ba04-782947688ce0
@@ -229,10 +215,6 @@ using Aod results in more parsimonious models then LUR- leaves out some Land use
    :PROPERTIES:
    :ID:       661912dc-74af-472a-ad07-f57affd87b96
    :END:
-**** DONE arrange a skype call with Fran about this
-     :PROPERTIES:
-     :ID:       3269f05c-e808-40aa-8927-c5c43c5d41de
-     :END:
 **** how will we diffrantiate it from NE paper:
 -emphasize how the performance is not known in Europe, and in more mountainous areas, and can allow studies of temperature and health to include people not in big cities. 
 
@@ -248,17 +230,6 @@ seasoanlity
 ***** add to the methods section the regression calibration part :
 we did it to reduce the noise etc etc 
 
-**** add to paper
-Good news !
-My affiliations are :
-1. Univ. Grenoble Alpes, IAB, Team of Environmental Epidemiology applied to Reproduction and Respiratory Health, F-38000 Grenoble, France.
-2. INSERM, IAB, Team of Environmental Epidemiology applied to Reproduction and Respiratory Health, F-38000 Grenoble, France.
-3. CHU de Grenoble, IAB, Team of Environmental Epidemiology applied to Reproduction and Respiratory Health, F-38000 Grenoble, France.
-4. Exposure, Epidemiology, and Risk Program, Department of Environmental Health, Harvard School of Public Health, Boston, Massachusetts, U.S.A.
-
-Temperature and wind speed data came from measurements operated by Météo-France. I think Annick Auffray from Météo-France should be a co-author. Note that we need them to approve the paper before submission (it was explicitly written in our contract).
-Planetary boundary layer data came from CNRS, Robert Vautard. If needed, he will add something in the paper about the model from which these data come from (50km resolution).
-I’ve got population density, hydrology, and traffic data from the IGN (Institut national de l'information géographique et forestière (IGN)) website but I will need to check how we should acknowledge them.
 **** variables used
 Hi,
 I found all the data we need to run the model.
@@ -278,7 +249,55 @@ run;
 quit;
 **** TODO paper
 Yes, I think dynamic buffering is fine. Regarding the France paper, I think the emphasis should be 1) existing health studies of temperature effect only capture temporal variation and not spatial variation, and a model for every day and km sq can help address this; 2) while modeled temperature data does exist, it mostly has not taken advantage of the rich satellite remote sensing resource; 3) While we were successful in developing such a model in the Northeast, performance in Europe is unknown where land use patterns are different, and where there are sharp climate gradients such as mountainous areas, cold Atlantic shores Mediterranean climate, etc such as in France. I would also point out that the model has shown its advantages over nearby temperature monitors in health effect studies already.  I would try Atmospheric Environment. 
-** SUBMITTED DVT admissions and PM
+** TODO OSM project
+*** paper focus
+**** TODO talk to Lara on working on paper
+**** 1st paper
+should be on:
+ OSM use as a valid and readly avilable data/exposure source in envrinonmental health 
+show how well OSM and Euro tden data correlates over "good" coverage areas such as swiss?
+
+show how we use all Qgis and floss data/software
+-start focusing on comparing the 50mx50m euro street In parts of europe and OSM data
+
+- [ ] subtracting OpenStreetMap data from tden data?
+- [ ] create line density maps- Calculates a magnitude per unit area from polyline features
+create suraces and look at correlation 
+- [ ] compare road type classifications 
+
+- use the traffic as an exposure scores 
+**** 2nd paper - africa?
+sepcifically in underdevloped areas such as africa/etc where traditional road data isn't available
+compare then how they work in "bad" areas such as africa?
+- [ ] access to health care centers based on roads? 
+**** literature
+  perliminary lit review on OSM use in environmental health resulted in little to no studies
+  there are some stuides using OSM as data sources in public health in general but no comparios or quantative examples on OSM vs traditinal traffic/road use data
+  however there are many studies looking at OSM and OSM use in studies in terms of valididty, accuracy coverage etc:
+
+  http://koenigstuhl.geog.uni-heidelberg.de/publications/2010/Zielstra/AGILE2010_Zielstra_Zipf_final5.pdf
+
+  http://link.springer.com/chapter/10.1007/978-3-319-14280-7_15
+
+  http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=6822226&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D6822226
+
+  http://wiki.openstreetmap.org/wiki/OSM_and_OSL_differences_analysis
+
+**** data 
+***** Africa data:
+ we are focus tanzania and then zoom area round dar el salam in spcifacly
+ OSM-data OSM
+ road data isn't there from govermental agencies
+
+
+ What is available
+ Which country are we comparing?
+***** Euro (swiss)
+ what data is available:
+ send the road network data
+ eurodata at 50m comapre to OSM data
+
+** DVT admissions and PM
    :PROPERTIES:
    :ID:       2668bdf2-f4de-40cd-b57f-101a88076ba7
    :END:
@@ -306,35 +325,21 @@ if (icd11 in (415, 451, 453)) then thromb=1;
 Try running a survival anlysis or maybe a posion survival analyis (SA) (look at johana 6 city paper)
 if running a posion SA we can extract the random slopes fro every zipcode and with smoothing create a spatial map showing risk areas
 *** Smooth the random slopes to create risk maps
-*** DONE send paper when ready to coauthors <2014-03-12 Wed>
-    :PROPERTIES:
-    :ID:       fe0074ba-f87f-4f0c-88c4-74cd3bf5d5a5
-    :END:
-*** DONE submit DVT paper
-    :PROPERTIES:
-    :ID:       3d179259-c23a-40d4-bf58-471987418313
-    :END:
-** PAUSED Greg Willenius RI temperature study <2014-03-16 Sun>
-   :PROPERTIES:
-   :ID:       609c383c-bbda-4910-8fb7-a0fcee7fd0bc
-   :END:
-*** Prepare Exposure
-Greg will send over the tract and i will assign exposure per tract, if the tracts are very big we will can calculate a weighted average for each tract
-** SUBMITTED Ta-Bw EHP
-   :PROPERTIES:
-   :ID:       58b0d767-b470-4bbf-907f-ed977ca0b55d
-   :END:
-*** DONE Revise paper <2014-03-23 Sun>
-    :PROPERTIES:
-    :ID:       a4d12737-b033-4032-bc15-6591c7f2e9ce
-    :END:
-**  Mexico
+*** peripheral artery disease (Andrea) and AE
+**** idea
+By reading this paper it came back to my mind that there is another orphan cardiovascular disease in air pollution research: peripheral artery disease. This is usually due to atherosclerosis and narrowing of the arteries in the limbs and an lead to severe outcomes such as amputation.
+ It makes sense to be affected by air pollution, but last time I checked no one had published anything on this. With a large database and geospatial resolution, PAD would be an obvious one to look at.
+**** data from antonella
+when there is no 2, it means that they are created form first diagnosis, when there is the 2 it means that are created based on 1 and up to 5 secondary diagnosis
+so the ones with the 2 should have higher numbers of hospitalizations    
+
+** Mexico PM model 
    :PROPERTIES:
    :ID:       6bbf7400-720f-437e-bbbc-213154482dd2
    :END:
 *** mexico joels ideas
-*** 
--consider using other pollutants around the city specifacly indicators for high traffic, use n02 and co and create an indicator where co/pm and no/pm is in the top third and create a high traffic indicator
+
+consider using other pollutants around the city specifacly indicators for high traffic, use n02 and co and create an indicator where co/pm and no/pm is in the top third and create a high traffic indicator
 -similarly try to make an indicator for partical color composition, look at ratio for pm10 and pm2.5
 -filter for spatial pattern-cloud contaminated days
 -concnerd using teoms Vs filter based (like in the usa) 
@@ -344,6 +349,163 @@ Greg will send over the tract and i will assign exposure per tract, if the tract
  pm~aod+aod01
 if prev day isnt avilable we use the same day twice
 -to borrow information across space create a variable that weights and down weights low aod observations per day
+*** Top pri
+**** TODO [#A] weight sites in Mod1 by inverse of nearby missing AOD (downweight sites near clouds)	 	
+**** TODO Joel suggests we put time interactions on almost everything
+  which interaction
+  file:/home/acjust/projects/airmex/code/LUR_Mex_1b_clean_local.R
+
+**** if no points to calibrate against - maybe don't use mean slope/intercept for mod2 prediction
+  what about instead clustering to find characteristics of days that predict the AOD-pm relationship
+  and substituting slopes/intercepts from those instead for the many days when no calibration is occuring because mod1 is empty on that day (no aod near monitors)
+
+**** TODO add high res local smoothing in mod1 
+  in mod1 file, join the monitor to average of nearby AOD
+
+**** Workflow and fixes
+**** TODO Discover patterns of bad AOD data using spatstat to check for contiguous regions
+
+***** create paths so S:/ and S:/EOME taken care of automatically
+***** TODO Fix KNN function
+
+***** joel and Bernt talk
+****** Dynamic threshold of high aod (exclude high aod if monitor are low)
+****** Or substitute nearby Monitor pm if aod high but Mon is low (bad ground measure).
+****** Look at diurnal pattern (pm, pbl) to predict when build up occurs. Use both aqua and terra as predictors?
+****** Cross validation: bootstrap prediction after leaving out two monitors with replacement, make predictions, check r2
+****** Try aod divided by pbl. Or cluster groups of days (by pbl profile). Fit different models for subsets?
+****** Handle data as a matrix, smooth with a weighted kernel. Strip off measures near edges.
+
+**** TODO add flag to exclude closest in mean calc in geomerge/nearestbyday
+
+*** lower pri
+**** TODO [#A] LUR; space-time smoothing; nearby cells weighted for missing and previous day (if gone, use today)
+**** is the ground monitoring data under a cloud otherwise the same as when not clouded (apart from precip events)?
+**** does relationship of Aqua and Terra give us info? early pollutant build-up vs continuous across the day? :newdata:
+**** can I extract cloudiness from NOAA dataset?
+**** can we construct a surrogate for particle color composition?
+**** pick satellite (Aqua vs Terra) based on which one has lower uncertainty in gridcells that join to monitors :newdata:
+**** validate at schools
+  To show that AOD is helping
+  compare mod3 predictions with measures at schools
+  how does this compare to assigning the closest real mon?
+
+**** LUR-Mex: Why is our mod1 dropping UIZ and SJA in much of 2007 - it looks like there was daymean measured there before
+**** compare two approaches to imputing at sites missing all AOD (in a year)
+    - after stage 3, assign the closest grid cell prediction (or average the near ones)
+    - fill in those grid cells with stage 2 predictions and then run the smooth mod3 part
+    - add land use terms later on to improve these predictions further
+
+**** transform elevation so that it isn't correlated with intercept (subtract min before log)
+
+**** running all years at once vs 1 year at a time (mod1 in particular)
+**** are there temporal trends? 
+**** look at a plot of the random slopes and intercepts as a function of time
+**** can we get traffic data from google
+**** if points are completely missing				    :newdata:
+  wait and see if after the new data we still have missing grids
+  take average of closest non-missing bestpred by day - to smooth over them
+
+**** use OpenStreetMap roadways (downloaded July 31, 2013)
+**** show relation of PBL height and how well AOD agrees with monitor (is this unique to MCMA?)
+**** show importance of roadway network as a source - maybe fit model without a rden and show how gridcell estimates differ as a function of the proportion of heavy roadways
+
+**** stage 4 model (local PM)t					  :coremodel:
+  take residuals from stage 3 model and then regress that with 
+  very fine resolution (50 or 100 or 200m) spatial and temporal terms
+  this could be added back to overall prediction - much more detail because not just on 1x1 scale
+
+**** Try removing (in mod1&2) aodid gridcells that have very few passable days (<100) :newdata:
+  since they may have ground conditions that are weird
+
+**** incorporate MODIS characteristics for aodid grid cells (or other landcover dataset)
+  especially since these could change over the decade
+
+
+**** Checking new data						  :coremodel:
+  aeronet: AOT_440 in 2003 2004 vs schools PM
+  look at REDMA (filter based PM2.5) 
+  look hour of flyover PM2.5 (could diurnal throw us off) using dat.hr
+  interaction with rain (rain scatter looks like particles)
+  Redo time series plot dropping points on rain days
+
+**** some monitors are poorly correlated with aod:		    :newdata:
+  why is this? geography (notheast of the city); 
+   political boundaries (outside df run by different agency)?; 
+   elevation? proximity to local sources?
+**** additional covs. 
+  Data to integrate/other data sources:
+
+  Use spatially distributed precipitation data (but maybe only DF, see also conagua?)
+
+  Add in some representation of point sources (layer in GIS)
+
+  Use land use/greenspace
+    
+**** Use aeronet - maybe as a super-monitor (weighted?) Use other satellite data?
+
+
+**** Use a latent class linear mixed model (LCLMM) to generate PBL patterns as predictors (see ?lcmm::hlme); 
+  See also Schafer et al.
+
+**** Proportion of the day with wind from the north (if point sources matter)?
+**** Andrew Ng's strategy for assessing bias vs variance in prediction algorithms (see coursera videos)
+****  Should we try to impute missing PBL (especially runs of multiple missing days) 
+**** Construct directional buffers and intersect these with road density for each point;
+  consider upwind traffic on each day (directional road density weighted by daily wind)
+
+**** TODO spatial join to best close point
+  Instead of taking the closest AOD point to each monitor for each day, what if we took each of the points within some distance and ran a regression then preferentially weight our selection AOD points to pick those sites with best agreement to monitor (likely a function of local land use features). The best agreement could be not the closest point, but the one downwind the most, or with the most similar amount of roadway, etc... This could really impact calibration in Mod1.
+  see also LUR_Mex_4b_2_vignette_spatialjoin.R
+
+****  Are there better predictions at stations with their own met monitoring?
+  does it matter if you have the spatial/temporal covs from your own monitor Vs. borrowing it from nearby
+****  Does open streetmap give the same predictions as municipal GIS
+**** TODO For any pair of monitors, what is their correlation as a function of distance (manual semivariogram)
+****  Are seasonal patterns driven by rain alone or rain + other factors
+****  If there are temporal patterns (decreases) are any particular predictors major drivers of these trends (interaction by time)
+****  If we compare school monitor stations with closest SIMAT monitor - how good are they?
+**** Fix R code to convert latlon to UTM 14N
+****  Why is our mod1 dropping UIZ and SJA in much of 2007 - it looks like there was daymean measured there before :newdata:
+**** Add no2 and co; indicator for days with high co to pm ratio (top third), same with no2	 	
+  using additional monitoring data (co-pollutants) as an indicator of the composition (daily or by sub-region&day)
+**** Add pressure to data from noaa	 	
+**** Air mex Pm 10 to pm2.5 ratio, could that change how well it fits	 	
+
+ 		
+**** Calibrate TEOM against filter-based PM2.5 measure - could burn off volatiles and under-report PM2.5, maybe varying by seasons/locations	 	
+**** import from HDF4 using R: maybe recompile rgdal from source? see link	 	
+**** impute missing pbl	 	
+ 	  check out Amelia, maybe single impute time-series?
+	  http://cran.r-project.org/web/packages/Amelia/vignettes/amelia.pdf
+**** TODO leave one monitor out cross-validation	  :coremodel:newdata:
+****  RH modifies particle size distribution - need to include	 	
+****  scraping google or bing road traffic	 	
+****  use lots of spatial terms with PLS regression a la Sampson paper 
+****  seasonal patterns - are these just due to rain?	 	
+
+*** Health outcome studies
+***** Birth outcome analysis
+****** Derive predictions for different lag times/prenatal periods 
+****** and plot bweight~airpollution parameter as a function of prenatal windows
+****** distribuated lag model
+****** Assign participant addresses to ageb as a proxy for neighborhood?
+*** papers 
+**** methods paper
+***** draft methods - ask Mara about GPS devices used by drivers	 	
+*** exposure paper #1
+**** critical path to be done for paper
+***** fix CV convergance errors/fix approach in general
+  update local datasets 
+    RAMA, precip, pbl
+  recast data to Yuji's centroids
+    AOD
+    road density
+    elevation
+  handle missing pbl
+  run three stages again
+  minimal additional cloud cleaning
+  draft results
 ** Italy PM models
 *** Diffrances then NE paper:
 - in in europe
@@ -362,7 +524,6 @@ exposure paper-massimo first/last
 *** TODO OMI OC
 how well the maiac algo does with high OC (organic carbon) in southern italy.
 aerosol index OMI- second iteration
-
 from email:
 
 #+BEGIN_EXAMPLE
@@ -370,111 +531,23 @@ I want to report an interesting discussion I had last week with Daniel Jacob. We
 This may have implications for Italy, where there is dust transport, even when there is not a peak event, and where there is wood smoke in the winter. I wonder if we could look at AOD in the 400nm range, or make use of the AI to help with the model?
 #+END_EXAMPLE
 
-** MAIAC EURO
-*** kees talk 18.12.15
-**** DONE we have all the grids in HDF formatting. I need to extract lat/long from the rasters. will send it over in the next few days
-**** land use gathering project
-m1.2007[,elev.s:= scale(elev)]- we have for whole of europe 
-m1.2007[,tden.s:= scale(tden)]-
-high detail in swiss and holland
-traffic classifications for roads at high res 100m for europe
-weight the roads by classification for road density maps, weight themselves in a model 
-m1.2007[,pden.s:= scale(pden)]- avilable either on 1km or 100m level 
-point sources - EEA has datasets on point source emessions 
-area emssions- emap- emsiiosn are levels 
-m1.2007[,dist2A1.s:= scale(dist2A1)]
-m1.2007[,dist2water.s:= scale(dist2water)]
-m1.2007[,dist2rail.s:= scale(dist2rail)]
-m1.2007[,Dist2road.s:= scale(Dist2road)]
-m1.2007[,ndvi.s:= scale(ndvi)] -dowload from MODIS
-m1.2007[,MeanPbl.s:= scale(MeanPbl)]- extend the temporal coverage of PBL, talk to Johanna
-m1.2007[,p_ind.s:= scale(p_ind)]- corine dataset
-m1.2007[,p_for.s:= scale(p_for)]
-m1.2007[,p_farm.s:= scale(p_farm)]
-m1.2007[,p_dos.s:= scale(p_dos)]
-m1.2007[,p_dev.s:= scale(p_dev)]
-m1.2007[,p_os.s:= scale(p_os)]
-m1.2007[,tempa.s:= scale(tempa)]
-m1.2007[,WDa.s:= scale(WDa)]
-m1.2007[,WSa.s:= scale(WSa)]
-m1.2007[,RHa.s:= scale(RHa)]
-m1.2007[,Raina.s:= scale(Raina)]
-m1.2007[,NO2a.s:= scale(NO2a)]
-pm2.5/pm10- data from euro database 
-which sources from where
-ETRS 89 for euro projection 
-ask chirra
-TODO: NDVI for swiss ?
-*** grant ideas : supplementing PM2.5 with PM10-25 relationshipnm that year
-compare euro wide model with localized model
-*** compare osm and euromaps
-*** kees talk 28.1.15     
-**** MAIAC Data- they found a bug over bright surfaces and snow-will process again so data only in a few weeks
-**** Massimo anlalysis in lombardy- very encouraging CV ~ 0.8
-
-**** we need to clip our grid to exclude points over water areas (MAIAC AOD over water body is very biased)
-**** centralized repositoary
+** MAIAC EURO Consurtium 
+*** grant ideas
+**** supplementing PM2.5 with PM10-25 relationshipnm that year
+**** compare euro wide model with localized model
+**** centralized repositoary and data sharing
 for my NAS, with FTP access to project members?
 later if we get grant money we can build a server+NAS some centralized location
-**** kees points
-swiss 200m resolution point source emision
-
-*** Kees talk 14.2.15
-**** ask about type I vs type II for noise measurements
-paper from kees colleauge
-campgin  in canada monteal using type II
-**** Next moves
-**** $$ for workshop
-**** TODO meytar to ask about NetCDF
-*** Kees talk 13.3
-**** netCDF- use a qgis plug-in to extract
-**** TODO talk to qian on how he progressed with osm data
-**** TODO osm data and road density
--focus on environemtal health
--mexico vs swiss
-
-*** kees talk 8.4.15
-**** euro data 
-spoke to yujie, saw the email, we hope to get the data real soon
-
-**** TODO OSM project
-kees:
-look into getting africa data
-for euro we can get uk and swiss data
-
-***** lit review 
-perliminary lit review on OSM use in environmental health resulted in little to no studies
-there are some stuides using OSM as data sources in public health in general but no comparios or quantative examples on OSM vs traditinal traffic/road use data
-however there are many studies looking at OSM and OSM use in studies in terms of valididty, accuracy coverage etc:
-
-http://koenigstuhl.geog.uni-heidelberg.de/publications/2010/Zielstra/AGILE2010_Zielstra_Zipf_final5.pdf
-
-http://link.springer.com/chapter/10.1007/978-3-319-14280-7_15
-
-http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=6822226&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D6822226
-
-http://wiki.openstreetmap.org/wiki/OSM_and_OSL_differences_analysis
-
-***** our focus
-should be on:
-- OSM use as a valid and readly avilable data/exposure source in envrinonmental health 
-- sepcifically in underdevloped areas such as africa/etc where traditional road data isn't avilable
-
-***** study
-show how well OSM and Euro tden data correlates over "good" coverage areas such as swiss?
-compare then how they work in "bad" areas such as africa?
-comparisons: 
-
-- [ ] subtracting OpenStreetMap data from tden data?
-- [ ] create line density maps- Calculates a magnitude per unit area from polyline features
-create suraces and look at correlation 
-- [ ] compare road type classifications 
-
-health outcomes available:
-
-- [ ] access to health care centers based on roads? 
-
-
+*** Kees talk 13.5.2015
+**** elena 
+john goliver 
+**** data AOD is being processed for Swiss
+should be ready by next 48h
+will send via FTP 
+**** skype call to discuss meeting agenda
+**** OSM project 
+see [[*OSM project][OSM project]]
+**** TODO create a pan euro dataset
 ** italy temperature models
 *** Ideas
 tmin tmax
@@ -483,7 +556,6 @@ talk to brent of a method to to a sophisticated way to impute t from aqua and te
 ** Israel temperature models (LST-ta)- Aaar Rozenfeld
 *** different calibration methids 
 *** comparing the wrf model in israel to our model as part of the methods paper
-
 ** Sulfate analysis-explore calibrating the data we have with Sulfate instead of PM2.5
     :PROPERTIES:
     :ID:       d458a94c-40a6-4b76-9ebe-020f7b9a3fa8
@@ -525,21 +597,10 @@ fig 1: 10x10 vs 1x1km for 2003-2008
 fig 2: box plot city/pop vs pm
 fig 3- going further from A1 roads and PM levels
 
-**** NEXT MAIAC
-     :PROPERTIES:
-     :ID:       9e059ff6-569c-4b02-adad-7e153e9cff0a
-     :END:
-2010 co located tel aviv 
-angstorm component for dust Storm
-17.04.2010--20.04.2010 in tel aviv
-
 *** 2004-current OMI 
 **** no2 modles
 **** O3 models
 **** So2 models
-*** check spatial need for health studies for these exposures 
-*** WRF tel aviv shai
-*** deeep blue with meeytar 
 ** Multi Pollutant project-living in the modern environment (with Jamie)
 *** meeting with jamie
 **** 15.7.2013 prepare MA datasets of temp,PM,NDVI,SES stuff and other perhaps to prepare to the regression tree
@@ -596,15 +657,7 @@ access to healthy food,access to health centers
 *** sources
 **** israel contacts
 Shuki Cohen from Matat, or Shlomo may also be able to help you
-     
-** peripheral artery disease (Andrea)
-*** idea
-By reading this paper it came back to my mind that there is another orphan cardiovascular disease in air pollution research: peripheral artery disease. This is usually due to atherosclerosis and narrowing of the arteries in the limbs and can lead to severe outcomes such as amputation.
-It makes sense to be affected by air pollution, but last time I checked no one had published anything on this. With a large database and geospatial resolution, PAD would be an obvious one to look at.
-*** data from antonella
-when there is no 2, it means that they are created form first diagnosis, when there is the 2 it means that are created based on 1 and up to 5 secondary diagnosis
-so the ones with the 2 should have higher numbers of hospitalizations    
-
+    
 ** haifa project
 *** map of mean BW, height and circumfernace compared the delta of these variables (change over year)
 compare this to tel aviv and hadera
@@ -617,11 +670,10 @@ look at change in delta air pollution vs delta of change in outcome
 
 ** France Pm models
 *** todo data management
-*** TODO Itai
-check ndvi>> /media/NAS/Uni/Data/Europe/NDVI
-create france aod grid
-talk to kees PBL Euro
-
+*** info on data sources for paper
+Temperature and wind speed data came from measurements operated by Météo-France. I think Annick Auffray from Météo-France should be a co-author. Note that we need them to approve the paper before submission (it was explicitly written in our contract).
+Planetary boundary layer data came from CNRS, Robert Vautard. If needed, he will add something in the paper about the model from which these data come from (50km resolution).
+I’ve got population density, hydrology, and traffic data from the IGN (Institut national de l'information géographique et forestière (IGN)) website but I will need to check how we should acknowledge them.
 
 * Future Research Ideas
 ** PM model (NEXT BRANCH)
@@ -638,9 +690,8 @@ dust days not caught by MAIAC (in Israel); Itai and Meytar sending a few example
 We also heard some great suggestions that I am eager to try about TEOM recalibration; characterizing diurnal monitor patterns; comparing aeronet versus the closest monitors; attempting inverse variance weights on AOD; and carefully using both Aqua and Terra.
 
 *** explore Callipso sattelite 
-*** NEW ideas
-**** Future models ideas
-***** TODO supplementing AOD by space and time
+*** Future models ideas
+**** TODO supplementing AOD by space and time
      :PROPERTIES:
      :ID:       bd374907-316e-4494-bbb1-f877ef09e627
      :END:
@@ -648,23 +699,23 @@ space: perhaps taking aod from n (~ 9) adjacent cells
 time: take from prev/next day if no AOD avilable today
 also we can maybe weight nearby cells by missingness/distance
 
-***** TODO use calman filter to merge 1x1km to 3x3km
-      :PROPERTIES:
-      :ID:       162c23d1-7d21-4026-ac93-bbe20193c975
-      :END:
+**** TODO use calman filter to merge 1x1km to 3x3km
+     :PROPERTIES:
+     :ID:       162c23d1-7d21-4026-ac93-bbe20193c975
+     :END:
 we can supplment 1k data with 3k data where we preform lousy and dont do so well
-***** look at interactions with wind 
+**** look at interactions with wind 
 random slope for each slopes for each wind direction
 use wind speed to choose the best 9 grid cell aod 
 reanalysis data set for wind direction
-***** LPM- rule if you habe a spline it should stop in distance X etc (₆In example₆ for A1 1500km).
-***** Try removing (in mod1&2) aodid gridcells that have very few passable days (<100) :newdata:
+**** LPM- rule if you have a spline it should stop in distance X etc (₆In example₆ for A1 1500km).
+**** Try removing (in mod1&2) aodid gridcells that have very few passable days (<100) :newdata:
      :PROPERTIES:
      :ID:       31731f52-2f71-4a2c-80e8-31e664617df3
      :END:
 since they may have ground conditions that are weird
 
-***** NEXT calculate for each day the corr between monitor and surronding AOD point in a X defined distance and take the highest correlation:
+**** NEXT calculate for each day the corr between monitor and surronding AOD point in a X defined distance and take the highest correlation:
      :PROPERTIES:
      :ID:       4a7af949-7755-4087-87d4-d711815d260c
      :END:
@@ -672,26 +723,26 @@ modis isn't fixed and we are getting the centroid of the grid
 it may be that the closest AOD point does not neccesarly correlate the best in a given point/day due to:
 there maybe LU/temporal variables that are not centroid specific 
 
-***** cover less densly populated areas across USA with 3x3 data 
-***** smoothing of the residuals-lucas neas suggestion
+**** cover less densly populated areas across USA with 3x3 data 
+**** smoothing of the residuals-lucas neas suggestion
 #+BEGIN_SRC sh
 resid~ LU+MET+Interactions+ s(x,y)
 #+END_SRC
-***** Take those smoothed surfaces from stage 3 and put them into stage 1 as another predictor, and if CV R2 goes up, use them?
-***** Use aeronet - maybe as a super-monitor (weighted?) Use other satellite data
-      :PROPERTIES:
-      :ID:       5ce7437b-68c9-4227-928e-5e222f7cb922
-      :END:
-***** penelized spline/n.s for dist to point emission
-      :PROPERTIES:
-      :ID:       e7798cf3-03ab-4c67-be81-1dba135623ec
-      :END:
+**** Take those smoothed surfaces from stage 3 and put them into stage 1 as another predictor, and if CV R2 goes up, use them?
+**** Use aeronet - maybe as a super-monitor (weighted?) Use other satellite data
+     :PROPERTIES:
+     :ID:       5ce7437b-68c9-4227-928e-5e222f7cb922
+     :END:
+**** penelized spline/n.s for dist to point emission
+     :PROPERTIES:
+     :ID:       e7798cf3-03ab-4c67-be81-1dba135623ec
+     :END:
 
       
-***** Better error estimation
+**** Better error estimation
 I have one other idea regarding error estimation. What I previously proposed samples spatial variability in error. We take the annual error in each monitoring location and do a LUR. But there is also temporal variability in at least the GEOS-Chem output, because the chemistry is not perfect and on some days that will matter more. For this I propose the following. On each day, for a region, e.g. New England, we compute the daily rmse. We can then regress these against temporal factors, mostly meteorological. 
 
-***** mihyee weighted CV
+**** mihyee weighted CV
 #+BEGIN_SRC R
 #remove.packages('lme4');
 install.packages('c:/test/lme4_1.0-6.tar.gz', repos=NULL,
@@ -882,29 +933,49 @@ round(mod1table$', i, '_', j, ', 2)', sep='')))
 }
 #+END_SRC
 
-***** using WRF data for met.pbl etc data (see AE I reviewed)- also look at sattelite derived column no2-from same paper 
+**** using WRF data for met.pbl etc data (see AE I reviewed)- also look at sattelite derived column no2-from same paper 
 
-***** TODO combine aqua and terra
+**** TODO combine aqua and terra
 I have an idea for combining the satellites but we need to get NE done quickly and I thought we should save it for your Midwest paper. You should expect half or more of the observations to be missing. What is your missing percentage?
 Regarding the two satellites you need to remember some stuff from Petros' air pollution course. In the morning the mixing height is low. Local pollution is trapped near the ground, an is a large fraction of particles. It is mostly from traffic or from oil heat in the winter, and so a lot of the particles are black, and a lot are fresh, and hence small. I n the afternoon the mixing height is high, transported particles mix down, and the color and size distribution change. Therefore, the calibration changes. So we need to do the stage 1 calibration separately for each satellite, and then combine, since one is in the morning and one in the afternoon. 
 
 
 I asked Mihye to run separate stage one models for aqua and terra, predict the PM2.5, average the predicted and they do the CV R2, and it was higher than either. While this may not matter for the Northeast, for the Southeast we need all the gain we can get, and I expect it would help for Italy, and possibly France as well. I think it is important to do the averaging after converting to PM2.5, because they measure AOD at different times. The aqua measurements are in the afternoon, and will be less impacted by the morning peak in local pollution, and the model will depend more on local land use surrogates to capture that contribution. In contrast, much of the transported pollution has mixed down by then, and the AOD will capture that better. For terra, it is the reverse. So I expect different coefficients both for AOD and for the other terms. Once we have the best PM2.5 predictions from each, averaging should eliminate some noise in the prediction. She is doing this now for the Southeast. 
 
-***** Aerosol index
+**** Aerosol index
 Getting back to Aerosol Index, which is computed in the UV band not visible light, it seems to be sensitive to two types of particles: desert dust, and organic particles from biomass burning. It seems to be available on OMI and some European Satellites, and interestingly for Israel, seems to go back much further. The resolution is coarse, 25km, but it certainly will give a continuous measure of how much dust is around, and for dust from Sahara or Arabia, 25km may not be too bad a resolution. So it could help correct models using MAIAC data on "non dust storm" days when there is still some dust around. It should also help for Italy and the south of France which get hit by Saharan dust. It might improve predictions in winter where wood is burned for heat in Italy and France.
 
 
 http://disc.sci.gsfc.nasa.gov/data-holdings/PIP/aerosol_index.shtml
 http://www.temis.nl/airpollution/absaai/
 
+**** data fusion in North America
+combining the 3k and 1k data which have different algorithms and hence different errors
+**** TODO use calman filter to merge 1x1km to 3x3km, 10k
+      :PROPERTIES:
+      :ID:       51e638d4-a837-4689-b3cd-56d46777b576
+      :END:
+****** we can supplment 1k data with 3k data where we preform lousy and dont do so well
+****** different resolution for different areas in the USA based on pop density/avilable health data
+**** Brent ideas 
+latent variable model 
+trying to estimate latent value
+smooth surface of 10x10 
+autocorrelation over time to interpolate missing data 
+brents idea:
+we need to fill missingness by interpolate to any given grid and that interpolation where we have monitors will be a predictor
+R package by lauren hunn
+-geoschem combine with aod qian 
+**** sattelite humidity
+lowest level
+
+
 ** Ta model (next branch) 
 *** stage 3 regression by grid cell
 You do not need to run a model with a random effect for each grid cell. Instead, you can run a separate regression for each gridcell, regressing the non-missing predicted Ta against the mean of monitored Ta within 100km. This gives you 1 million regressions to do, but you can divide the gridcells into 100 groups and run 100 jobs on the cluster and it will run in an hour. We do this when we regress the 5000,000 methylation sites against predictors in the NAS.  Also, we need some of the land use terms.
 
 ** meytar research topics 
-
-
+   
 1. PM-MAIAC model in Israel
 
 Predict PM2.5 /PM10 based on MAIAC AOD using mixed effects model following I.Kloogs 
@@ -1056,9 +1127,6 @@ black particles are going to observer and scatter roughly the same ammount vs ot
 arange a skype call with alexie
 ** smoking and particle exposure 
 block group level data in block groups and exposre 
-
-** MIT tracking project with petros
-** Neuro outcomes and pm exposure
 ** Mortality and Ta 
 ** NAS temperature analyis
 *** DONE create exposure datasets
@@ -1074,14 +1142,6 @@ about this
 
 http://oiswww.eumetsat.org/IPPS/html/MSG/RGB/DUST/WESTERNAFRICA/
 
-** France Pm models
-*** TODO johanna
-PM seems to be full numbers, is that correct or has that been rounded up
-ask about PM10 stations
-*** TODO Itai
-check ndvi>> /media/NAS/Uni/Data/Europe/NDVI
-create france aod grid
-talk to kees PBL Euro
 ** OMI sattelite for NO2 and O3 callibration models
 develop no2 and/or O3 sattelite models (look at omi sattelite)
 http://aura.gsfc.nasa.gov/instruments/omi.html
@@ -1102,11 +1162,9 @@ maybe use living near highways (A1 vs parkways vs low density roads)
 *** light at night in Georgia- W/Joel
 Joel has mortality data
    
-
 ** LAN ideas Boris
 *** create a model to predict LAN wave lenght models
 *** use LAN maps to describe Land Use
-** associations of antenatal exposure to ambient air pollution with newborn systolic blood pressure (BP) blood preasure in babies and exposure to pm2.5/temp/BC
 ** Sara addar project
    Start running the models for these areas
    places include:
@@ -1203,7 +1261,6 @@ will look into it for next round (~june)
 maybe leveraging Open source application/stat programs (R,Octovo etc) for big data proccesing)
 bringing in Data set from differnet sources both spatilly and temporally differnt resolutions
 ** SUBMITTED WAITING Andrea padwan LAN-Prostate Italian SIR grant
-** R21 with Sara Adar
 ** R21 with Allan Mexico
 ** K_TRACK CIG
 *** gen info
@@ -1226,7 +1283,7 @@ account number 87347711 saif 40
 - create a propensity  score regressing epxo vs all variables get a predictive modelt
 - advanimcg epi in israel taking acasuel moel appraoch coming up with estimates wich are not just casuel and advance methods
 
-** TODO MOST: Infrastructures Program in Space Research
+** SUBMITTED MOST: Infrastructures Program in Space Research
    SCHEDULED: <2015-05-10 Sun> DEADLINE: <2015-05-03 Sun>
 
 משרד המדע: תשתיות מדעיות בתחום החלל – קול קורא להצעות מחקר (מועד ההגשה לרשות המחקר 10.5, למשרד המדע: 14.5)
@@ -1258,6 +1315,37 @@ A3:
 ***** outcomes MI,IHD,CVA (cardio cerrebro vascular attach-head)
 ***** dislipedemia (blood lipids)
 ***** hypertension 
+
+*** maayan 12.5.15
+***** case crossover
+ whats the N?
+ simplest way is to take first admission
+ if N is small lets see in litrature how other people dealt with this
+***** the Stat zone file
+ what are these variables
+ HOUSEHOLDS	ownership of houses
+ AVERAGE_HH	
+ ASIRON1_3	% of population in eshkol 1-3
+ ASIRON7_10	% of population in eshkol 7-10
+ DIROG	 method of ranking SES
+ MADD_SOC	alternative method to rank SES
+ INCOME	mean income 
+ ZOBJECT	Zone Number
+ ESHKOL_NUM	eshol rank from 1-10 (or 1-20 for moatzot)
+***** TODO Behzad paper
+ mind taking a look? authorship is problematic we need to see what can be done
+***** TODO arrange meeting with ofer and erez
+***** TODO check distribution for pm for seasons
+
+** meytar schedule
+in R- gbm analylis- check model with only highest variables.
+1.ratio
+2.france PM
+3.cooperation with Austrailia
+4.data fusion
+5.composition 
+
+
 
 * Office/Budgets
   :PROPERTIES:
@@ -1410,71 +1498,6 @@ http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_t
 :ID:       08d89d98-7330-4d4e-894f-3792bd24a115
 :END:
 *** talk to oren tal about sharepoint access
-** TODO call joel 2.10.2014
-:PROPERTIES:
-:ID:       942c598a-5d2c-47d8-ad63-fe8c555accb4
-:END:
-*** Joel
-**** data fusion in North America
-combining the 3k and 1k data which have different algorithms and hence different errors
-***** TODO use calman filter to merge 1x1km to 3x3km, 10k
-      :PROPERTIES:
-      :ID:       51e638d4-a837-4689-b3cd-56d46777b576
-      :END:
-****** we can supplment 1k data with 3k data where we preform lousy and dont do so well
-****** different resolution for different areas in the USA based on pop density/avilable health data
-***** talk:
-latent variable model 
-trying to estimate latent value
-smooth surface of 10x10 
-autocorrelation over time to interpolate missing data 
-brents idea:
-we need to fill missingness by interpolate to any given grid and that interpolation where we have monitors will be a predictor
-R package by lauren hunn
--geoschem combine with aod qian 
-***** sattelite humidity
-lowest level
-
-
-
-
-
-** TODO check Italy Mexico Trip reutrns from BGU
-:PROPERTIES:
-:ID:       4c360b55-aa81-4a3b-b470-af689a3347e4
-:END:
-*** Italy
-
-|   day | hotel | transport | eshel |      sum |
-| 14.11 |   200 |        50 |    74 |          |
-| 15.11 |   200 |        50 |    74 |          |
-| 16.11 |   200 |        50 |    74 |          |
-| 17.11 |   200 |        50 |    74 |          |
-| 18.11 |       |        50 |    74 |          |
-|   sum |   800 |       250 |   370 | 1420+470 |
-|       |       |           |       |          |
-#+TBLFM: $5=sum
-
-*** mexico
-
-|   day | hotel | transport | eshel |  sum |
-| 21.11 |       |        50 |   123 |      |
-| 22.11 |       |        50 |   123 |      |
-| 23.11 |       |        50 |   123 |      |
-| 24.11 |       |        50 |   123 |      |
-| 25.11 |       |        50 |   123 |      |
-| 26.11 |       |        50 |   123 |      |
-| 27.11 |       |        50 |   123 |      |
-|   sum |       |       350 |   861 | 1211 |
-|       |       |           |       |      |
-
-25/12	אוניברסיטת בן	
-16996209
- 	4,707.60	82,122.71
-25/12	אוניברסיטת בן	
-16996209
- 	3,530.70
-** TODO Check mexico reimbursement mount Sinai
 ** TODO publications comitee
 *** monetary benefits for publications- see examples below- always when accepted in all places
     should the money be awarded on start of MA or after the paper is accepted- always when accepted
@@ -1523,15 +1546,8 @@ one that shivok will send the email for us
 go to mador rishom for poetntial canidates- revital zamir
 ** TODO ask tal about layers from MAPI
 ** TODO Ask marina zusman $$$ back on sept and feb meetins
-
+   
 ** TODO meeting with Alexei
-*** intro
--thanks everyone for making the time, we really appreciate it
--everyone know everyone I think so no need for intro
-meeting:
--to update on what we have been working on last year or social
--discuss sone remaining issues in MAIAC data
--forward plans
 *** past year
 -initial mexico model-paper sent
 -initial israel model-paper coming in the next few days
@@ -1596,15 +1612,6 @@ composition
 dataset for bad 0.00 R2 aod-pm 
 pm-aeronet
 email quan di about geoschem and send him PM monitors 
-
-** TODO meytar schedule
-in R- gbm analylis- check model with only highest variables.
-1.ratio
-2.france PM
-3.cooperation with Austrailia
-4.data fusion
-5.composition 
-
 
 ** TODO lab website
 See what shiran has made out of it 
@@ -1688,7 +1695,6 @@ add some propaganda, Waze, python, work in high tech
 - talk to student in the geoinformatics group that MA
 ** Mapi Maagal project 
 Zipcode proxy
-** porgress with the virtual geography Library
 ** List of reviwers
 *** jaime madrigano
 Madrigano, Jaime
@@ -1742,15 +1748,7 @@ Contact:
 melva.robertson@emory.edu
 ** How to write BGU in papers
 Ben Gurion University of the Negev
-** GIT seminar preparations
-*** what to say opening day
-this seminar will bring togheter all the things they learned over the BA and make use of these skills for a basic reasearch project
-also allows one to experience what is learned in MA 
-
-
-
 ** Journal statistics IF etc
-** TODO tal excel file and some slides on novel GIT program
 *** 2014
 **** chronobiology international
 (IF= 2.8 ; Q1 biology, 19 of 85 )
@@ -1812,7 +1810,6 @@ also allows one to experience what is learned in MA
 | avinoam                            |     2 |
 | JS                                 |     3 |
 
-
 ** MA publishing award
 -every MA student that will submit to a international journal will get 1750 NIS (within the 2 offical MA years)
 - among students that got the paper published within the 2 years there will be a comitee which will award t\he best paper another 1750 NIS
@@ -1828,14 +1825,6 @@ also allows one to experience what is learned in MA
 ** WD drive
 admin
 salar21
-** home bbq
-pitot-20 pitot 
-thina
-humus
-matobucha
-hatzil
-mayo
-big lemonade
 ** hfsp website
 ikloog@bgu.ac.il
 Salar2121
@@ -1853,10 +1842,3 @@ all documents available
 degrees
 place and time of marriage and documents
 * Mails
-** TODO Respond to Eliahu Stern <elistern@bgu.ac.il> on [Geog-Council] FW: יתרות במחלקה לגאוגרפיה
-   SCHEDULED: <2015-04-13 Mon>
-
- [2015-04-06 Mon 18:39]
-
- [[mu4e:msgid:73e44f845a16439baa0968bb4090e3db@buzzard3.auth.ad.bgu.ac.il][{Geog-Council} FW: יתרות במחלקה לגאוגרפיה]]
-

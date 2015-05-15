@@ -2162,3 +2162,525 @@ Intel wifi card (strongly recommended for Linux)
   :ARCHIVE_TODO: DONE
   :END:
 >>>>>>> fbefe9e128b65833feb38dffb5ab71534abff081
+
+* kees talk 8.4.15
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 08:47
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/MAIAC EURO
+  :ARCHIVE_CATEGORY: work
+  :END:
+** euro data 
+spoke to yujie, saw the email, we hope to get the data real soon
+
+** TODO OSM project
+kees:
+look into getting africa data
+for euro we can get uk and swiss data
+
+*** lit review 
+perliminary lit review on OSM use in environmental health resulted in little to no studies
+there are some stuides using OSM as data sources in public health in general but no comparios or quantative examples on OSM vs traditinal traffic/road use data
+however there are many studies looking at OSM and OSM use in studies in terms of valididty, accuracy coverage etc:
+
+http://koenigstuhl.geog.uni-heidelberg.de/publications/2010/Zielstra/AGILE2010_Zielstra_Zipf_final5.pdf
+
+http://link.springer.com/chapter/10.1007/978-3-319-14280-7_15
+
+http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=6822226&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D6822226
+
+http://wiki.openstreetmap.org/wiki/OSM_and_OSL_differences_analysis
+
+*** our focus
+should be on:
+- OSM use as a valid and readly avilable data/exposure source in envrinonmental health 
+- sepcifically in underdevloped areas such as africa/etc where traditional road data isn't avilable
+
+*** study
+show how well OSM and Euro tden data correlates over "good" coverage areas such as swiss?
+compare then how they work in "bad" areas such as africa?
+comparisons: 
+
+- [ ] subtracting OpenStreetMap data from tden data?
+- [ ] create line density maps- Calculates a magnitude per unit area from polyline features
+create suraces and look at correlation 
+- [ ] compare road type classifications 
+
+health outcomes available:
+
+- [ ] access to health care centers based on roads? 
+
+
+* euro data 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 08:47
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/MAIAC EURO/kees talk 8.4.15
+  :ARCHIVE_CATEGORY: work
+  :END:
+spoke to yujie, saw the email, we hope to get the data real soon
+
+
+* TODO osm data and road density
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 08:48
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/MAIAC EURO/Kees talk 13.3
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: TODO
+  :END:
+-focus on environemtal health
+-mexico vs swiss
+
+
+* TODO talk to qian on how he progressed with osm data
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 08:48
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/MAIAC EURO/Kees talk 13.3
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: TODO
+  :END:
+
+* TODO meytar to ask about NetCDF
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 08:48
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/MAIAC EURO/Kees talk 14.2.15
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: TODO
+  :END:
+
+* $$ for workshop
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 08:48
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/MAIAC EURO/Kees talk 14.2.15
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* Next moves
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 08:48
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/MAIAC EURO/Kees talk 14.2.15
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* Kees talk 14.2.15
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 08:48
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/MAIAC EURO
+  :ARCHIVE_CATEGORY: work
+  :END:
+** ask about type I vs type II for noise measurements
+paper from kees colleauge
+campgin  in canada monteal using type II
+
+* DONE we have all the grids in HDF formatting. I need to extract lat/long from the rasters. will send it over in the next few days
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 08:48
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/MAIAC EURO/kees talk 18.12.15
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: DONE
+  :END:
+
+* kees talk 18.12.15
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 08:48
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/MAIAC EURO
+  :ARCHIVE_CATEGORY: work
+  :END:
+** land use gathering project
+m1.2007[,elev.s:= scale(elev)]- we have for whole of europe 
+m1.2007[,tden.s:= scale(tden)]-
+high detail in swiss and holland
+traffic classifications for roads at high res 100m for europe
+weight the roads by classification for road density maps, weight themselves in a model 
+m1.2007[,pden.s:= scale(pden)]- avilable either on 1km or 100m level 
+point sources - EEA has datasets on point source emessions 
+area emssions- emap- emsiiosn are levels 
+m1.2007[,dist2A1.s:= scale(dist2A1)]
+m1.2007[,dist2water.s:= scale(dist2water)]
+m1.2007[,dist2rail.s:= scale(dist2rail)]
+m1.2007[,Dist2road.s:= scale(Dist2road)]
+m1.2007[,ndvi.s:= scale(ndvi)] -dowload from MODIS
+m1.2007[,MeanPbl.s:= scale(MeanPbl)]- extend the temporal coverage of PBL, talk to Johanna
+m1.2007[,p_ind.s:= scale(p_ind)]- corine dataset
+m1.2007[,p_for.s:= scale(p_for)]
+m1.2007[,p_farm.s:= scale(p_farm)]
+m1.2007[,p_dos.s:= scale(p_dos)]
+m1.2007[,p_dev.s:= scale(p_dev)]
+m1.2007[,p_os.s:= scale(p_os)]
+m1.2007[,tempa.s:= scale(tempa)]
+m1.2007[,WDa.s:= scale(WDa)]
+m1.2007[,WSa.s:= scale(WSa)]
+m1.2007[,RHa.s:= scale(RHa)]
+m1.2007[,Raina.s:= scale(Raina)]
+m1.2007[,NO2a.s:= scale(NO2a)]
+pm2.5/pm10- data from euro database 
+which sources from where
+ETRS 89 for euro projection 
+ask chirra
+TODO: NDVI for swiss ?
+
+* compare osm and euromaps
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 08:49
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/MAIAC EURO
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* kees talk 28.1.15     
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 08:49
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/MAIAC EURO
+  :ARCHIVE_CATEGORY: work
+  :END:
+** MAIAC Data- they found a bug over bright surfaces and snow-will process again so data only in a few weeks
+** Massimo anlalysis in lombardy- very encouraging CV ~ 0.8
+
+** we need to clip our grid to exclude points over water areas (MAIAC AOD over water body is very biased)
+** kees points
+swiss 200m resolution point source emision
+
+
+* Kees talk 13.3
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 08:50
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/MAIAC EURO
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* kees talk 8.4.15
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 08:50
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/MAIAC EURO
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* finalize israel paper
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 13:32
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Today
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* start NE LU additions 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 13:32
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Today
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* TODO create new fig 1 for mexico with bad monitors included.
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 13:33
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Today
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: TODO
+  :END:
+
+* DONE 'PAPER'
+  :PROPERTIES:
+  :ID:       a28683f4-25c5-4a99-84bc-6ebee9d6078b
+  :ARCHIVE_TIME: 2015-05-13 Wed 13:36
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/PM2.5 1kmx1km NEMIA
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: DONE
+  :END:
+for the paper: the adv of 1x1km aod data is it allows for a simpler model
+in the discussion compare our model to the liu paper and the seattle's group paper, one advantage of ours is the ability to get daily predictions for acute studies
+
+* Expand years 2000-2014
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 13:36
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/PM2.5 1kmx1km NEMIA
+  :ARCHIVE_CATEGORY: work
+  :END:
+** DONE ask alexei for data for 2000-2002 and 2012-2014
+   :PROPERTIES:
+   :ID:       e84a25e6-a915-42dd-83f8-f038e20c2bc2
+   :END:
+
+* DONE arrange a skype call with Fran about this
+  :PROPERTIES:
+  :ID:       3269f05c-e808-40aa-8927-c5c43c5d41de
+  :ARCHIVE_TIME: 2015-05-13 Wed 13:38
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/France temperature paper
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: DONE
+  :END:
+
+* DONE submit DVT paper
+  :PROPERTIES:
+  :ID:       3d179259-c23a-40d4-bf58-471987418313
+  :ARCHIVE_TIME: 2015-05-13 Wed 13:54
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/DVT admissions and PM
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: DONE
+  :END:
+
+* DONE send paper when ready to coauthors <2014-03-12 Wed>
+  :PROPERTIES:
+  :ID:       fe0074ba-f87f-4f0c-88c4-74cd3bf5d5a5
+  :ARCHIVE_TIME: 2015-05-13 Wed 13:54
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/DVT admissions and PM
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: DONE
+  :END:
+
+* PAUSED Greg Willenius RI temperature study <2014-03-16 Sun>
+  :PROPERTIES:
+  :ID:       609c383c-bbda-4910-8fb7-a0fcee7fd0bc
+  :ARCHIVE_TIME: 2015-05-13 Wed 13:58
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: PAUSED
+  :END:
+** Prepare Exposure
+Greg will send over the tract and i will assign exposure per tract, if the tracts are very big we will can calculate a weighted average for each tract
+
+* SUBMITTED Ta-Bw EHP
+  :PROPERTIES:
+  :ID:       58b0d767-b470-4bbf-907f-ed977ca0b55d
+  :ARCHIVE_TIME: 2015-05-13 Wed 13:58
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: SUBMITTED
+  :END:
+** DONE Revise paper <2014-03-23 Sun>
+   :PROPERTIES:
+   :ID:       a4d12737-b033-4032-bc15-6591c7f2e9ce
+   :END:
+
+* NEXT MAIAC
+  :PROPERTIES:
+  :ID:       9e059ff6-569c-4b02-adad-7e153e9cff0a
+  :ARCHIVE_TIME: 2015-05-13 Wed 14:18
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/alexandra/Alexandra meetings
+  :ARCHIVE_CATEGORY: work
+  :END:
+2010 co located tel aviv 
+angstorm component for dust Storm
+17.04.2010--20.04.2010 in tel aviv
+
+
+* deeep blue with meeytar 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 14:18
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/alexandra
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* WRF tel aviv shai
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 14:18
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/alexandra
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* check spatial need for health studies for these exposures 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 14:18
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/alexandra
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* TODO Itai
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 14:20
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Ongoing'/France Pm models
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: TODO
+  :END:
+
+* MIT tracking project with petros
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 14:28
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Future Research Ideas
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* Neuro outcomes and pm exposure
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 14:29
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Future Research Ideas
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* France Pm models
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 14:29
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Future Research Ideas
+  :ARCHIVE_CATEGORY: work
+  :END:
+** TODO johanna
+PM seems to be full numbers, is that correct or has that been rounded up
+ask about PM10 stations
+** TODO Itai
+check ndvi>> /media/NAS/Uni/Data/Europe/NDVI
+create france aod grid
+talk to kees PBL Euro
+
+* associations of antenatal exposure to ambient air pollution with newborn systolic blood pressure (BP) blood preasure in babies and exposure to pm2.5/temp/BC
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 14:30
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Future Research Ideas
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* Sara addar project
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 14:30
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Future Research Ideas
+  :ARCHIVE_CATEGORY: work
+  :END:
+  Start running the models for these areas
+  places include:
+      ohio
+      illinoy
+      indiana
+
+* R21 with Sara Adar
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 14:39
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Grants
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* TODO check Italy Mexico Trip reutrns from BGU
+  :PROPERTIES:
+  :ID:       4c360b55-aa81-4a3b-b470-af689a3347e4
+  :ARCHIVE_TIME: 2015-05-13 Wed 14:43
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Short term Misc
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: TODO
+  :END:
+** Italy
+
+|   day | hotel | transport | eshel |      sum |
+| 14.11 |   200 |        50 |    74 |          |
+| 15.11 |   200 |        50 |    74 |          |
+| 16.11 |   200 |        50 |    74 |          |
+| 17.11 |   200 |        50 |    74 |          |
+| 18.11 |       |        50 |    74 |          |
+|   sum |   800 |       250 |   370 | 1420+470 |
+|       |       |           |       |          |
+#+TBLFM: $5=sum
+
+** mexico
+
+|   day | hotel | transport | eshel |  sum |
+| 21.11 |       |        50 |   123 |      |
+| 22.11 |       |        50 |   123 |      |
+| 23.11 |       |        50 |   123 |      |
+| 24.11 |       |        50 |   123 |      |
+| 25.11 |       |        50 |   123 |      |
+| 26.11 |       |        50 |   123 |      |
+| 27.11 |       |        50 |   123 |      |
+|   sum |       |       350 |   861 | 1211 |
+|       |       |           |       |      |
+
+25/12	אוניברסיטת בן	
+16996209
+ 	4,707.60	82,122.71
+25/12	אוניברסיטת בן	
+16996209
+ 	3,530.70
+
+* TODO Check mexico reimbursement mount Sinai
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 14:43
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Short term Misc
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: TODO
+  :END:
+
+* porgress with the virtual geography Library
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 14:46
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: long term Misc
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* GIT seminar preparations
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 14:46
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: long term Misc
+  :ARCHIVE_CATEGORY: work
+  :END:
+** what to say opening day
+this seminar will bring togheter all the things they learned over the BA and make use of these skills for a basic reasearch project
+also allows one to experience what is learned in MA 
+
+
+* home bbq
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 14:47
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: misc
+  :ARCHIVE_CATEGORY: work
+  :END:
+pitot-20 pitot 
+thina
+humus
+matobucha
+hatzil
+mayo
+big lemonade
+
+* TODO Respond to Eliahu Stern <elistern@bgu.ac.il> on [Geog-Council] FW: יתרות במחלקה לגאוגרפיה
+  SCHEDULED: <2015-04-13 Mon>
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 14:47
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Mails
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: TODO
+  :END:
+
+[2015-04-06 Mon 18:39]
+
+[[mu4e:msgid:73e44f845a16439baa0968bb4090e3db@buzzard3.auth.ad.bgu.ac.il][{Geog-Council} FW: יתרות במחלקה לגאוגרפיה]]
+
+
+* sulfate analysis..still relavant?
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-05-13 Wed 17:03
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Today/Joel talk 12.05.15
+  :ARCHIVE_CATEGORY: work
+  :END:
