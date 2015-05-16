@@ -26689,7 +26689,24 @@ Use ?a? (dired-find-alternate-file) instead of Enter
 use m-x customize-mode
 then search for image-dired and set the locations of :
 `image-dired-db-file` and `image-dired-dir`
- 
+******** How can I open files externally in Emacs dired mode 
+Use ! while in dired to run a shell command on a file.
+In the case of evince, it's smarter to use &, though, which will run the command asynchronously, so emacs will still be usable while you have the PDF open.
+
+for long term use the open with library
+
+Setup for your case may look like that:
+
+#+BEGIN_SRC emacs-lisp :results none
+(setq openwith-associations '(("\\.pdf\\'" "evince" (file))))
+(openwith-mode t)
+#+END_SRC
+
+It sets file handler that will work from both dired and find-file.
+
+******** How to hide some files
+Call dired-do-kill-lines 【k】 to hide marked files
+
 ******* copy,cut,paste
 
 ******** kill-rectangle  replace-rectangle

@@ -3,6 +3,20 @@
 #+STARTUP: overview  inlineimages eval: (org-columns)
 
 * @TODAY@
+** list of known laptop issues
+*** network drops
+happnes both with LAN and wifi
+happens with dock connected and with local laptop adaptor
+could be just internet and not network related? maybe the internet drops and not network..
+*** multi screen
+xrandr works :
+
+xrandr --output eDP1 --off ; xrandr --output DP2-1 --mode 800x600 ; xrandr  --output DP2-2 --mode 2560x1440 --right-of DP2-1               
+xrandr --output eDP1 --off ; xrandr --output DP2-1 --mode 1024x768 ; xrandr  --output DP2-2 --mode 2560x1440 --right-of DP2-1 
+
+
+
+
 ** bind keys at debian PC to ssh and control MPD
 ** reinstall seahorse after trying out kde 
 ** create a daily agenda in orgmode somwhow
@@ -450,7 +464,9 @@ http://www.filebot.net/forums/viewtopic.php?f=8&t=2335&p=13416&hilit=qnap#p13416
 ** flexget  
 
 
-
+** djiet
+** 16.5 
+83.3
 * Linux
 ** Org
 *** TODO Chain babel blocks, ₆In example₆ launch multiple blocks togheter 
