@@ -26707,6 +26707,29 @@ It sets file handler that will work from both dired and find-file.
 ******** How to hide some files
 Call dired-do-kill-lines 【k】 to hide marked files
 
+******** use 2 different dired buffer in splits ('dual pane')
+zeltak: what you are seeing is because the two windows have the same dired buffer in them; if you do C-x 3 C-x d the behavior will be what you are looking for better I think
+
+******** dired omit 
+Omitting a file means removing it from the directory listing. Omitting is useful for keeping Dired buffers free of “uninteresting” files (for instance, auto-save, auxiliary, backup, and revision control files) so that the user can concentrate on the interesting files.
+To activate it, add this to your .emacs
+
+     #+BEGIN_SRC emacs-lisp :results none
+     (setq-default dired-omit-mode t)
+     #+END_SRC
+
+     To toggle the mode, bind it to a keystroke that you like
+
+     (define-key dired-mode-map (kbd "C-o") 'dired-omit-mode)
+
+     dired-omit-files contains the regex of the files to hide in Dired Mode. For example, if you want to hide the files that begin with . and #, set that variable like this
+
+     (setq-default dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\.")
+
+     The variable dired-omit-extensions holds the list of all file extensions to hide in Dired Omit Mode. You can modify the list to add more file extensions to hide or remove the ones that you would like to show.
+
+     (add-to-list 'dired-omit-extension ".example")
+     (delete 'dired-omit-extension ".example")
 ******* copy,cut,paste
 
 ******** kill-rectangle  replace-rectangle
@@ -28553,8 +28576,26 @@ In any future emacs session, you can call your kmacro by name just like any emac
 ********* edit a macro while its running
 when your recored a macro press ~c-x q~ while its running to specify a stop in the macro
 when you run that macro and it stops emacs will present a menu and you can enter 'recursive editing' to enter text 
-******* minor modes
-********* define in .emacs
+******* modes
+******** Associate a File with a Major Mode
+http://ergoemacs.org/emacs/emacs_auto-activate_a_major-mode.html
+
+Associate by File Name Suffix
+
+Use auto-mode-alist to associate a major mode with file name extension.
+
+#+BEGIN_SRC emacs-lisp :results none
+;; setup files ending in “.js” to open in js2-mode
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+#+END_SRC
+
+auto-mode-alist is a built-in variable. Its value is a list of pairs. ((info "(elisp) Association Lists")) First element is a regex string. The second element is a mode name.
+
+Note: in the elisp code above, the double backslash in the string \\.js\\' is used to escape the backslash. So, the regex engine just got \.js\'. The \. is to match a period. The \' is one of emacs special regex syntax, to match end of a string (not including end of a line that's not end of string. End of line is $). (See also: emacs regex tutorial.) (info "(elisp) Regexp Backslash")
+
+You can see the value of auto-mode-alist by calling describe-variable.
+
+******** define in .emacs
 
 minor mode examples are blink-cursor-mode and column-number-mode
  As a rule, minor-modes can be enabled given positive argument or
@@ -28565,8 +28606,8 @@ the scroll bars, menu-bar and tool-bar, respectively.
  (scroll-bar-mode -1)
  (menu-bar-mode -1)
  (tool-bar-mode -1)
-********* cua mode
-********** columnd edit mode
+******** cua mode
+********* columnd edit mode
 to start 
 
 press ~C-Enter~
@@ -31717,8 +31758,65 @@ make sure you have
 #+BEGIN_SRC emacs-lisp :results none
 (require 'org-protocol)
 #+END_SRC
-
 in your init file before you start capturing
+******** setup capture from chrome-Registering Org-Protocol with XDG-open
+http://tech.memoryimprintstudio.com/?p=160
+
+This method should work with other browsers (e.g. Chrome) and applications (e.g. Acrobat), and it is a clean way of getting xdg-open (a tool for configuring default applications in Linux) to open org-protocol links and pass them to emacs. adopted and modified from those two links link1 , link2 and Registering Custom URI Handler
+
+1.Add .desktop file, Create and save a file `called org-protocol.desktop` to 
+file:~/.local/share/applications/org-protocol.desktop containing:
+
+#+BEGIN_EXAMPLE
+[Desktop Entry]
+Name=org-protocol
+Exec=emacsclient %u
+Type=Application
+Terminal=false
+Categories=System;
+MimeType=x-scheme-handler/org-protocol;
+#+END_EXAMPLE
+
+2. Add org-protocol handler
+
+#+BEGIN_SRC sh :results none
+vim  ~/.local/share/applications/mimeapps.list 
+#+END_SRC
+
+then add to the  [Added Associations] section
+
+#+BEGIN_SRC sh :results none
+x-scheme-handler/org-protocol=org-protocol.desktop
+#+END_SRC
+
+3. run
+
+#+BEGIN_SRC sh :results none
+update-desktop-database ~/.local/share/applications/
+#+END_SRC
+
+This step makes Firefox/chrome  aware that “org-protocol” is a valid scheme-handler or protocol (by updating ~/.local/share/applications/mimeinfo.cache), and causes the borwser to prompt for a program to use when opening these kinds of links.
+4. Add config settings to dot-emacs file
+$Note-this may already be present in your config. also if you start Emacs as a server-client the first line is uneeded$ 
+#+BEGIN_SRC emacs-lisp :results none
+(server-start)
+(require 'org-protocol)
+#+END_SRC
+5. create a capture template for this
+#+BEGIN_SRC emacs-lisp :results none
+("w" "web Capture Template" entry (file+headline "refile.org" "Web")  "* BOOKMARKS %T\n%c\%a\n%i\n Tan's Note:%?" :prepend t :jump-to-captured t :empty-lines-after 1 :unnarrowed t)
+#+END_SRC
+
+6. Right click the Bookmark Toolbar and click `Add a page` to add a Bookmarklet
+give it a name and as a URL use this
+
+#+BEGIN_EXAMPLE
+javascript:location.href='org-protocol://capture://w/'+encodeURIComponent(location.href)+'/'+encodeURIComponent(document.title)+'/'+encodeURIComponent(window.getSelection())
+#+END_EXAMPLE
+
+7. Select some text in a website and click on the Boolmarklet you just created
+$Note- add the “/usr/bin/emacsclient” program if prompted$
+8. You should see the pop up capture pane in one of the emacsclients open
 
 
 ******** keybinds
