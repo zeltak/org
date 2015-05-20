@@ -1238,6 +1238,14 @@ library(data.table)
 T2003<- fread("f:/Uni/Projects/AN004_mod2pred/T2003_m2_pred_mpm.csv")
 #+end_src
 
+*** Import from Matlab
+#+BEGIN_SRC R
+library(R.matlab)
+data <- readMat("/media/NAS/Uni/Data/MV3/Out/MAIAC_Aq.h00v02.2003.mat")
+head(data) # to see which component to extract 
+d2<-data$TableAq
+#+END_SRC
+
 ** Export
 
 *** Export csv
@@ -10154,9 +10162,10 @@ the '.' is a placeholder for the data your placing in
 ₆In example₆ 
 *** create single aod point per aodid per day
 #+BEGIN_SRC R
-aqua <-aqua %>%
-    group_by(aodid,day) %>%
-    summarise_each(funs(mean),lat_aod,aod,aod,UN,WV,day,x_aod_ITM, y_aod_ITM ,MaskAdjacency)
+aqua <-out %>%
+     group_by(aodid,day) %>%
+      summarise(long_aod=mean(long_aod),lat_aod=mean(lat_aod),aod=mean(aod),UN=mean(UN),QA=mean(QA),Year=mean(Year) )
+
 #+END_SRC
 
 *** counts the number of rows in a group: n()

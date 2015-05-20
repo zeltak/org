@@ -1284,3 +1284,46 @@ autoIncrement()
 #+END_SRC
 
 Click OK.
+* spatial analysis
+** cluster analysis process
+*** A.look at global statistics
+  scan for presence of clustering in the data or spatial auto correlation:
+  1. global morans I
+  2. global Getis-Ord General G
+
+ this step doesn't tell you where but rather whether to peruse this further 
+
+*** B.Determine scale at which clustering occurs in spatial dataset
+ you can use 2 tools for that
+ 1.ripleys K function
+ 2.incremental Globals Morans I
+
+ these will find the distance at which feature has at least one neighbor count 
+
+ $Note- one can also use the scale based on theoretical understanding of the phenomenon$ 
+
+*** C. Aplly appropriate local statistics to identify hot/cold spots
+1.local morans I
+2. Local getis ord GI*
+
+`global` gives you 1 number for all dataset 
+`local` will give you a number for each feature in the dataset- allows to visually inspect the data to determine where the hotspot is
+you will identify statistically significant areas where the clustering occur
+*** D. Control for (or compare to) other relevant spatial phenomena 
+1. compare results to other phenomena 
+2. control for underlying factors by computing rates or proportions 
+** local morans I
+is a cluster and outlier analysis 
+rule of thumb is that at least 30 features
+each point has to have a numeric value like rate, count etc
+allows to identify cluster with of and colds spots
+hot spots are feature that have similarly high values
+cold spots are feature that have similarly low values
+outliers are features that differ significantly from features around it
+
+-you need to define appropriate spatial relationship: how neighbors relate to one another. ₆In example₆ IDW means that features that are closer to each other will have a greater influence than feature further away.
+
+-select appropriate distance band: all features should have at least one neighbor so you want to accommodate that with distance. to big of a distance will cause all features to have same features of neighbors.
+
+
+

@@ -332,6 +332,8 @@ Click Web from the top menu and -> Open Layers plugins
 click on "vector", scroll down to "geometry tools", and then click on "voronoi polygons"
 3.clip the voronoi layer if needed with other shape file of study region (vector>geomtery tools> clip...)
 4.convert the clipped voronoi layer into rasters
+*** wrap long lines in legend titles
+
 ** plugins
 *** table manager plug-in 
 used to delete columns and other DB editing operations
@@ -347,3 +349,4 @@ sudo apt-get install  python-qt4-sql
 and ref plug-in
 
 *** netCDF- use a qgis plug-in to extract
+Although it is not possible to have multiple columns, it is still possible to have the text of the layer or item on multiple lines to avoid long lines of text. This is found in the tab 'General', last item (you have to scroll down), with 'Wrap'. To use '/', enter '/' in the field and then in the tab 'Legend items', when you modify the layer or item name enter something like 'Natural and semi natural/urban greenspaces': the text will break to the next line. 

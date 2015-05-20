@@ -24865,6 +24865,78 @@ http://localhost:8080/
 ~F2~ edit selected text (issue F2 again to save text)
 ~C-n~ create new item 
 
+*** password-store
+**** setup
+***** install 
+get it from cimmunity repo
+
+#+BEGIN_SRC sh
+sudo pacman -S pass 
+#+END_SRC
+***** import from keepass (inf needed)
+      :PROPERTIES:
+      :ID:       cdbf7499-83c4-416e-be7f-11e04271c3cb
+      :END:
+$Note-importing WONT work if you don't have gnupg setup$ see [[id:b0a7359a-33c6-4325-b774-0801b6800a83][setting up]] to setup gpg 
+
+http://git.zx2c4.com/password-store/tree/contrib/importers/keepass2pass.py
+
+download the following script: file:/home/zeltak/scripts/utils/keepass2pass.py
+
+open keepass and export the current database to keepass XML format
+
+load you gpg user via your prefferd gpg manager 
+
+then issue the following command:
+
+#+BEGIN_SRC sh
+python2 keepass2pass.py -f zpass.xml  
+#+END_SRC
+
+this will generate a file:/home/zeltak/.password-store folder with password in it 
+$Note- pass will always use ~/.password-store$
+***** autofill passwords in web browser 
+here we will use chrome , this method may *untested* work in other borwsers
+use the following script file:/home/zeltak/bin/pass.sh and bind a hotkey to it (you need rofi/dmenu and xdotool).
+then in a webpage that has login details fire up the script
+you should be able to choose the password needed which will auto fill the user/pass for you
+
+$Note- the magic wont happen before you focused the field so if you use cvim etc focuse the field first to autofill $
+
+**** android support
+https://play.google.com/store/apps/details?id=com.zeapo.pwdstore
+[http://is.gd/oAxoPS]
+
+first export your key ₆In example₆ 
+
+#+BEGIN_SRC sh
+gpg --export-secret-key -a "your@email.bla" > private.key
+#+END_SRC
+then put it on your android
+and import it into the gpg app (the password-store android app will prompt you to install that one)
+
+then in pwdstore app config ssh and pull from main PC repo
+
+**** backup
+Because the password files are all encrypted only to your GnuPG key, you can relatively safely back up the store on remote and third-party sites simply by copying the ~/.password-store directory.
+
+If the filenames themselves contain sensitive information, such as private usernames or sites, you might like to back up an encrypted tarball of the store instead:
+#+BEGIN_SRC sh :results none
+tar -cz .password-store | gpg --sign --encrypt -r 0x77BB8872 
+#+END_SRC
+results: 
+password-store-backup.tar.gz.gpg
+This directory can be restored in a similar way:
+#+BEGIN_SRC sh :results none
+$ gpg --decrypt < password-store-backup.tar.gz.gpg  | tar -xz 
+#+END_SRC
+
+*** synergy
+on server (in my case the beast) configure as server. then press the configure server button and define position if the client and enter the name `screen name` (in my case `x1`)
+
+on client- make sure client is marked in gui. in settings menu give it a screen name (again `x1` in my case). and check auto config
+
+start both server and client synergys and your good to go
 ** virtualizations
 *** virtualbox
 **** vbox on arch
@@ -38663,6 +38735,43 @@ on it.
 3.and symlink back from the new folder to original location
 ideally ~/dotfiles is a git repo :)which is pushed remotely and run a
 cronjob for that
+
+*** gnupg
+**** setting up
+     :PROPERTIES:
+     :ID:       b0a7359a-33c6-4325-b774-0801b6800a83
+     :END:
+https://wiki.archlinux.org/index.php/GnuPG#Create_key
+
+first  you need to generate a gpg key,in a process similar to generating ssh keys
+
+#+BEGIN_SRC sh
+gpg --full-gen-key  
+#+END_SRC
+
+$Note-its common practice to use your email as your ket user$ 
+
+this will launch a wizard which will end up creating a .gnupg foder and related files in it
+list which keys are available 
+
+#+BEGIN_SRC sh :results none
+gpg --list-secret-keys                                                   
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+/home/zeltak/.gnupg/pubring.kbx
+-------------------------------
+sec   rsa2048/860187CD 2015-05-17
+uid       [ultimate] itai kloog <ikloog@gmail.com>
+ssb   rsa2048/A1B4A4F7 2015-05-17
+#+END_EXAMPLE
+
+**** export/impor keys
+#+BEGIN_SRC sh
+gpg --export-secret-key -a "your@email.bla" > private.key
+#+END_SRC
+
+you can also import a key similarly
 
 ** bash
 *** shortcuts
