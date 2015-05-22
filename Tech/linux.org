@@ -24873,19 +24873,24 @@ get it from cimmunity repo
 #+BEGIN_SRC sh
 sudo pacman -S pass 
 #+END_SRC
-***** import from keepass (inf needed)
+***** import from keepass (if needed)
       :PROPERTIES:
       :ID:       cdbf7499-83c4-416e-be7f-11e04271c3cb
       :END:
 $Note-importing WONT work if you don't have gnupg setup$ see [[id:b0a7359a-33c6-4325-b774-0801b6800a83][setting up]] to setup gpg 
 
-http://git.zx2c4.com/password-store/tree/contrib/importers/keepass2pass.py
-
-download the following script: file:/home/zeltak/scripts/utils/keepass2pass.py
+download the following script: file:/home/zeltak/scripts/utils/keepass2passRASI.py
 
 open keepass and export the current database to keepass XML format
 
-load you gpg user via your prefferd gpg manager 
+issue this command prior to import to initialize a password-store folder
+
+
+#+BEGIN_SRC sh
+pass init USER
+#example
+pass init user@gmail.com 
+#+END_SRC
 
 then issue the following command:
 
@@ -24898,6 +24903,26 @@ $Note- pass will always use ~/.password-store$
 ***** autofill passwords in web browser 
 here we will use chrome , this method may *untested* work in other borwsers
 use the following script file:/home/zeltak/bin/pass.sh and bind a hotkey to it (you need rofi/dmenu and xdotool).
+the script has 2 configurations:
+
+#+BEGIN_SRC sh :results none
+script ROOT #to launch regular mode
+script ROOT show_entry  #to launch the other one
+#+END_SRC
+where `ROOT` is the main directory of password inside file:~/.password-store
+
+if you have a website that needs more than one field, you need to name them in the password file accordingly:
+#+BEGIN_EXAMPLE
+PASS
+1 FIELD 1
+2 FIELD 2
+#the numbers make sure the correct order is used so ie
+2323342
+1 User: bla  
+2 SomeField: blub
+#+END_EXAMPLE
+$Note-password is always the first field in passwroed-store syntax WITHOUT a field name$ 
+
 then in a webpage that has login details fire up the script
 you should be able to choose the password needed which will auto fill the user/pass for you
 
@@ -27607,6 +27632,54 @@ Emacs lisp's module system is a primitive system, centered on loading file, with
 |                 |                           |                                     |                                     |
 |-----------------+---------------------------+-------------------------------------+-------------------------------------|
 
+******** lisp example library
+********* insert text around (start/end) of region
+      #+BEGIN_SRC emacs-lisp :results none
+      (defun z/wrap-markup-region (start end)
+	"Insert a markup <b></b> around a region."
+	(interactive "r")
+	(save-excursion
+	  (goto-char end) (insert "</b>")
+	  (goto-char start) (insert "<b>")
+	  ))
+      #+END_SRC
+
+********* Find/Replace Text Region- good for cleaning up scripts 
+This code illustrates how to do text replacements on a region. Very useful. For example:
+
+#+BEGIN_SRC emacs-lisp :results none
+(defun replace-greek-region (start end)
+  "Replace “alpha” to “α” and other greek letters in current region."
+  (interactive "r")
+  (save-restriction
+    (narrow-to-region start end)
+    (goto-char (point-min))
+    (while (search-forward " alpha" nil t) (replace-match " α" nil t))
+    (goto-char (point-min))
+    (while (search-forward " beta" nil t) (replace-match " β" nil t))
+    (goto-char (point-min))
+    (while (search-forward " gamma" nil t) (replace-match " γ" nil t))
+    )
+  )
+#+END_SRC
+********* Highlighting Lines
+
+This example shows you how to make lines containing the words “ERROR:” or “NOTE:” highlighted, whenever a file ending in “log” is opened.
+#+BEGIN_SRC emacs-lisp :results none
+(defun highlite-it ()
+  "Highlight certain lines…"
+  (interactive)
+  (if (equal "log" (file-name-extension (buffer-file-name)))
+      (progn
+        (highlight-lines-matching-regexp "ERROR:" 'hi-red-b)
+        (highlight-lines-matching-regexp "NOTE:" 'hi-blue-b))))
+
+(add-hook 'find-file-hook 'highlite-it)
+#+END_SRC
+
+The add-hook line will make emacs call “highlite-it” whenever a file is opened. It works by adding the function “highlite-it” to the list in the variable find-file-hook.
+
+find-file is the function that open files. find-file-hook is a variable containing list of functions that will run when find-file is run.
 ******* Emacs on MS windows
 ******** how to launch emacs in windows (with no command prompt)
 Note that GNU Emacs for Windows comes with two executables to start Emacs:
