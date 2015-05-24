@@ -509,7 +509,7 @@ $NOTE: Before starting with aur installs make sure the /etc/makepkg.conf is conf
 
 
 #+BEGIN_SRC sh
-pacaur -S rofi-git clerk-git teiler-git caudec vte3-select-text termite-git mpdcron-git ttf-droid dropbox  teamviewer xshowkeys terminus-font-ttf puddletag culmus ffcast  flacon worker xdotool xdotool-gui xchainkeys jmtpfs acroread android-sdk copyq dunst gpodder3 i3blocks ranger-git surfraw-git termite-git chromium-pepper-flash ttf-ms-fonts
+pacaur -S rofi-git clerk-git teiler-git caudec vte3-select-text termite-git mpdcron-git ttf-droid dropbox  teamviewer xshowkeys terminus-font-ttf puddletag culmus ffcast  flacon worker xdotool xdotool-gui xchainkeys jmtpfs acroread android-sdk copyq dunst gpodder3 i3blocks ranger-git surfraw-git termite-git chromium-pepper-flash ttf-ms-fonts jmtpfs
 #for bgu vpn support
 lib32-pam snx
 #for beets
@@ -24865,7 +24865,10 @@ http://localhost:8080/
 ~F2~ edit selected text (issue F2 again to save text)
 ~C-n~ create new item 
 
-*** password-store
+*** password-store 
+    :PROPERTIES:
+    :ID:       d57aa1cc-33ce-4081-9811-c6f2782b8eee
+    :END:
 **** setup
 ***** install 
 get it from cimmunity repo
@@ -24889,7 +24892,7 @@ issue this command prior to import to initialize a password-store folder
 #+BEGIN_SRC sh
 pass init USER
 #example
-pass init user@gmail.com 
+pass init USER@gmail.com 
 #+END_SRC
 
 then issue the following command:
@@ -24902,14 +24905,15 @@ this will generate a file:/home/zeltak/.password-store folder with password in i
 $Note- pass will always use ~/.password-store$
 ***** autofill passwords in web browser 
 here we will use chrome , this method may *untested* work in other borwsers
-use the following script file:/home/zeltak/bin/pass.sh and bind a hotkey to it (you need rofi/dmenu and xdotool).
-the script has 2 configurations:
+Download rofi-pass from AUR and bind a hotkey to it (you need rofi/dmenu and xdotool).
+the script has CLI arguments like
 
 #+BEGIN_SRC sh :results none
-script ROOT #to launch regular mode
-script ROOT show_entry  #to launch the other one
+rofi-pass show_entry  #to launch the other one
 #+END_SRC
-where `ROOT` is the main directory of password inside file:~/.password-store
+
+also it can be configured s:
+
 
 if you have a website that needs more than one field, you need to name them in the password file accordingly:
 #+BEGIN_EXAMPLE
@@ -24927,6 +24931,14 @@ then in a webpage that has login details fire up the script
 you should be able to choose the password needed which will auto fill the user/pass for you
 
 $Note- the magic wont happen before you focused the field so if you use cvim etc focuse the field first to autofill $
+
+***** enable git
+to enable passwd to act as a git repo issue this command while in file:~/.password-store 
+#+BEGIN_SRC sh
+pass git init
+#+END_SRC
+
+then you can use all normal git operations
 
 **** android support
 https://play.google.com/store/apps/details?id=com.zeapo.pwdstore
@@ -36885,6 +36897,155 @@ Storage=none
 #+END_EXAMPLE
 Then reload systemd's configuration.
 # systemctl daemon-reload
+**** timers (Cron replacment)
+***** base 
+Timers are systemd unit files with a suffix of .timer. Timers are like other unit configuration files and are loaded from the same paths but include a [Timer] section. The [Timer] section defines when and how the timer activates. Timers are defined as one of two types:
+`Monotonic timers`-  activate after a time span relative to a varying starting point. There are number of different monotonic timers but all have the form of: OnTypeSec=. OnBootSec and OnActiveSec are common monotonic timers.
+`Realities timers`-  (a.k.a. wallclock timers) activate on a calendar event (like cronjobs). The option OnCalendar= is used to define them.
+***** list available system timers 
+issue:
+#+BEGIN_SRC sh :results none
+systemctl list-timers
+#To list all timers (including inactive), use 
+systemctl list-timers --all
+#+END_SRC
+***** Timer services
+The following is an example on how to make a simple timer that runs in the context of a user.
+It will even run if the user is not logged in. Every timed service needs a timer and a service file that is activated by the timer as follows:
+
+`Example of a timer running every working day`
+
+file:~/.local/share/systemd/user/zbackup.timer
+#+BEGIN_EXAMPLE
+[Unit]
+Description=daily backup work
+RefuseManualStart=no
+RefuseManualStop=no
+ 
+[Timer]
+Persistent=false
+OnCalendar=Mon-Fri *-*-* 11:30:00
+Unit=backup-work.service
+ 
+[Install]
+WantedBy=default.target
+
+#+END_EXAMPLE
+
+`Example of a service triggering backup:`
+
+file:~/.local/share/systemd/user/zbackup.service
+#+BEGIN_EXAMPLE
+[Unit]
+Description=daily backup work
+RefuseManualStart=no
+RefuseManualStop=yes
+ 
+[Service]
+Type=oneshot
+ExecStart=/home/<user>/scripts/backup-work.sh
+#+END_EXAMPLE
+
+Firstly, tell systemd to rescan the service files:
+
+#+BEGIN_SRC sh :results none
+systemctl --user daemon-reload
+#+END_SRC
+
+It is possible to trigger the backup manually by running the following command:
+
+#+BEGIN_SRC sh :results none
+systemctl --user start backup-work.service
+#+END_SRC
+
+Start and stop the timer manually as follows:
+
+user $systemctl --user start backup-work.timer
+user $systemctl --user stop backup-work.timer
+Finally, to activate the timer at every system start, run:
+
+user $systemctl --user enable backup-work.timer
+To check the last results of running the service:
+
+user $systemctl --user list-timers
+
+
+
+
+
+
+
+
+
+
+
+
+
+A timer is just like any other unit file except it has a [Timer] section. It looks a little bit like this:
+
+file:/etc/systemd/system/minute-timer.timer
+
+$Note-the name minute-timer above can be anything$
+ 
+#+BEGIN_EXAMPLE
+
+A timer which starts once a week (at 12:00am on Monday). It starts immediately if it missed the last start time (option Persistent=true), for example due to the system being powered off:
+/etc/systemd/system/foo.timer
+[Unit]
+Description=Run foo weekly
+
+[Timer]
+OnCalendar=weekly
+Persistent=true     
+ 
+[Install]
+WantedBy=timers.target
+
+#+END_EXAMPLE
+
+%Tip- Special event expressions like daily and weekly refer to specific start times and thus any timers sharing such calendar events will start simultaneously. Timers sharing start events can cause poor system performance if the timers' services compete for system resources. Consider manually staggering such timers using specific events e.g. OnCalendar=Wed 23:15 %
+
+***** setting up taget
+Now that we have a timer, we need to create a target that will be used by our actual services.
+
+file://etc/systemd/system/minute-timer.target
+
+$Note-the name minute-timer.target corresponds to the minute-target.timer$
+
+#+BEGIN_EXAMPLE
+[Unit]
+Description=Minute Timer Target
+StopWhenUnneeded=yes
+
+#+END_EXAMPLE
+
+***** Service unit
+For each .timer file, a matching .service file exists (e.g. foo.timer and foo.service). The .timer file activates and controls the .service file. The .service does not require an [Install] section as it is the timer units that are enabled. If necessary, it is possible to control a differently-named unit using the Unit= option in the timer's [Timer] section.
+
+***** start/stop timers
+Now that we have our timers and test service created, we need to start everything using systemctl
+
+#+BEGIN_SRC sh :results none
+systemctl enable /etc/systemd/system/minute-timer.timer
+systemctl start  /etc/systemd/system/minute-timer.timer
+systemctl enable /etc/systemd/system/testservice.service
+#+END_SRC
+
+Now if everything goes as planned, we can watch the logs of our service print the date every minute
+
+#+BEGIN_SRC sh :results none
+journalctl -f -u testservice.service
+
+Jul 07 21:24:00 ip-10-10-10-10 systemd[1]: Starting Prints the date every minute...
+Jul 07 21:24:00 ip-10-10-10-10 systemd[1]: Started Prints the date every minute.
+Jul 07 21:24:00 ip-10-10-10-10 date[20887]: Mon Jul  7 21:24:00 UTC 2014
+Jul 07 21:25:00 ip-10-10-10-10 systemd[1]: Starting Prints the date every minute...
+Jul 07 21:25:00 ip-10-10-10-10 systemd[1]: Started Prints the date every minute.
+Jul 07 21:25:00 ip-10-10-10-10 date[20889]: Mon Jul  7 21:25:00 UTC 2014
+Jul 07 21:26:00 ip-10-10-10-10 systemd[1]: Starting Prints the date every minute...
+Jul 07 21:26:00 ip-10-10-10-10 systemd[1]: Started Prints the da
+#+END_SRC
+
 ** Recovery
 *** System rescue CD
 **** General
@@ -38846,6 +39007,45 @@ gpg --export-secret-key -a "your@email.bla" > private.key
 
 you can also import a key similarly
 
+**** gpg-agent
+***** info and install
+gpg-agent is mostly used as daemon to request and cache the password for the keychain. This is useful if GnuPG is used from an external program like a mail client. It can be activated by adding following line in gpg.conf:
+file:~/.gnupg/gpg.conf
+and add this line
+#+BEGIN_EXAMPLE
+use-agent
+#+END_EXAMPLE
+
+This tells GnuPG to use the agent whenever it needs the password. However, the agent needs to be already running. To autostart it, add the following entry to your .xinitrc or .bash_profile. Remember to change the envfile path if you changed your $GNUPGHOME.
+
+#+BEGIN_SRC sh :results none
+~/.bash_profile
+envfile="$HOME/.gnupg/gpg-agent.env"
+if [[ -e "$envfile" ]] && kill -0 $(grep GPG_AGENT_INFO "$envfile" | cut -d: -f 2) 2>/dev/null; then
+    eval "$(cat "$envfile")"
+else
+    eval "$(gpg-agent --daemon --enable-ssh-support --write-env-file "$envfile")"
+fi
+export GPG_AGENT_INFO  # the env file does not contain the export statement
+export SSH_AUTH_SOCK   # enable gpg-agent for ssh
+#+END_SRC
+Log out of the session and log back in. Check if gpg-agent is activated:
+#+BEGIN_SRC sh :results none
+pgrep gpg-agent
+#+END_SRC
+
+***** Configuration
+gpg-agent can be configured via file:~/.gnupg/gpg-agent.conf file. 
+The configuration options are listed in man gpg-agent. For example you can change cache ttl for unused keys:
+#+BEGIN_EXAMPLE
+default-cache-ttl 3600
+#+END_EXAMPLE
+***** Reload the agent
+After changing the configuration, reload the agent by piping the RELOADAGENT string to gpg-connect-agent.
+#+BEGIN_SRC sh :results none
+echo RELOADAGENT | gpg-connect-agent
+#+END_SRC
+The shell should print OK.
 ** bash
 *** shortcuts
 

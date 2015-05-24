@@ -53,7 +53,7 @@ idealy: a function to copy current line, ask which file to copy to (like refile)
 change stow so no more common
 check patst.sh in ZH_tmp
 check tarman
-org habits 
+org habit s
 ** tmux
 *** why isn't TAB working in Emacs (org mode)
 ** set all mime related to web to chromium
@@ -104,7 +104,7 @@ punchagan | zeltak: it looks like properties need to be all upper case.
 | Linux Laptop | 132.72.154.204 | github                                                                           |          |
 |              |                |                                                                                  |          |
 
-*** Sync     
+*** Sync methods     
 **** for all textfile-git
 ***** what is currently synced
 -dotfiles (including my linux scripts under bin/scripts)
@@ -184,9 +184,14 @@ file:/~/org/attach/
  #+END_SRC
 **** browser related
 user chrome/firefox built in sync mechanisms
+**** passwords
+using password-store. more info [[id:d57aa1cc-33ce-4081-9811-c6f2782b8eee][password-store]]
 *** Backup 
 **** family photos 
 **** daily backups
+     :PROPERTIES:
+     :ID:       7b98d815-4327-4f65-8c60-dfd9711859bd
+     :END:
 ***** rsync 
 ****** TODO rsync to push data from laptop to synology nas (use urs.sh)
        :PROPERTIES:
@@ -204,17 +209,11 @@ rsync -aRPz --delete -e ssh /home/zeltak/dotfiles/  root@132.72.152.204:/volume1
 use this script created in ~bin:
 file:/home/zeltak/bin/lrs
 
-**** keepass
-save to ftp site (NAS)
-add rsync at uni/laptop to overwrite local file each type
 *** TODO CRON!!! talk to rasi
     :PROPERTIES:
     :ID:       8638e3da-4bdb-41dc-a980-c7c02dc3dddb
     :END:
     
-*** keepass
-ftp://132.72.152.204/rsync/keepass/zpass.kbsx
-
 ** explore memacs
 *** http://shelve.sourceforge.net/
 ** fix wraps
@@ -461,7 +460,7 @@ Webmail    : https://sdfeu.org/webmail             (after validation)
 Twitter    : http://twitter.com/sdf_pubnix
 
 ** filbot qnap
-http://www.filebot.net/forums/viewtopic.php?f=8&t=2335&p=13416&hilit=qnap#p13416
+http://www.filebot.net/forums/viewtopic.php?f=8&t=2335&p=13416&hiilt=qnap#p13416
 ** flexget  
 
 
