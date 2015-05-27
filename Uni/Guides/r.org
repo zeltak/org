@@ -768,6 +768,11 @@ Then I get:
 installed.packages(priority = "NA")
 #+END_SRC
 
+*** remove packages
+#+BEGIN_SRC R
+remove.packages(PKGNAME)
+#+END_SRC
+
 ** extract info
 *** from summary
 In general, use:
@@ -3688,7 +3693,12 @@ paste(myDummy$country)
 #+END_SRC
 
 
- 
+*** replace a string with empty/other in R variable
+#+BEGIN_SRC R
+PM25.2013$latx <- gsub("\t", "",PM25.2013$lat)
+#+END_SRC
+where the first argument is the string to be replaced followed by the replaced string (in this case a empty string)
+
 ** Functions
 
 *** Character Functions
@@ -4344,8 +4354,6 @@ there are no empty cells when the grouping variables are crossed
 $Note$-this uses data.table syntax
 #group by station
 table_temp<-ddply(na.omit(temp[,c("Temp","stn","c"),with=F]),.(stn,c),nrow)
-
-
 #group by station and year
 table_temp<-ddply(na.omit(temp[,c("Temp","stn","c"),with=F]),.(stn,c),nrow)
 #+end_src
@@ -8255,7 +8263,7 @@ $Note$ this may also be done to some extent with native R code
 all.equal(lapply(aodf.2003.tmp.s9.m2,class),lapply(aodf.2004.tmp.s9.m2,class))
 #+END_SRC
 
-** nearestbyday
+** geomerge (nearestbyday)
 
 @note-the id variable in the matirx must be character!!!@
 
@@ -8266,7 +8274,6 @@ aod.m <- makepointsmatrix(s2x[s2x[,unique(GUID)], list(Long, Lat, GUID), mult = 
 #+END_SRC
 
 function explained:
-
 
 #+BEGIN_SRC R
 nearestbyday <- function(matrix_target, matrix_join, dt_target, dt_join, dt_target_varname, dt2_join_varname, 
@@ -8447,7 +8454,13 @@ object_size(stage3_2000)
 
 * data.table
 *** basics
-**** into
+**** install dev version
+#+BEGIN_SRC R
+# To install development version
+library(devtools)
+install_github("Rdatatable/data.table", build_vignettes = FALSE)
+#+END_SRC
+**** intro
 We can easily convert existing data.frame objects to data.table.
 CARS = data.table(cars)
 head(CARS)

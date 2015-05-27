@@ -1253,10 +1253,30 @@ alexandra schnider
 -run a poisson regression where we regress counts by zipcode and day (like 10x10 NE) ~1 year lags of the pollutants, and a spline for date (See 10x10 code). this will be run togheter for 10 years
 -also to check if the association changed from year to year we will run these exact models by year (IE each year speratley in a seperate model) !note! remember to change the DF for the dats spline for 1 year
 !note! once can run the same model instead of yearly in 1 model with all year with interactions so that each pollutant interacts with a year variable, but you need a very large N`
-** SUBMITTED Antonella whole USA 1x1km grant
+** TODO Antonella whole USA 1x1km grant
    :PROPERTIES:
    :ID:       5a8c67d0-bd9b-4eff-9d5b-8ae444153490
    :END:
+*** TODO grant r01 ideas talk 26.5.2015
+To summarize our talk today we agreed to have a framework in place which will include the following:
+1.we will start in the next few weeks to build a nationwide dataset with all the temporal and spatial predictor needed for modelling the entire country:
+I will create over the next few days a document of all needed data (including sources and will send it over soon (to mihyee and Anna as well))
+
+2. We will create soon a overall nationwide 1km grid which will be used for all our modeling in all area.
+we agreed that areas inhabited mainly by coyotes (that is with population of less then X per 1kmsq) will be flagged and later on dropped from the individual modles
+
+3. We will try to use the same overall modeling methodology in all areas but with slight tweaks for each region (based on the changing geo-climatic conditions)
+This will also allow testing different methods in each region to enhance the fits.
+
+4. we will make an effort to acquire actual emissions for all point sources across the country (from EPA?)
+
+5. once we get the nation wide spatial-temporal dataset going we will try and see region each student works on, but this can be discussed further down the road
+
+thanks!
+
+itai
+
+
 ** Big data grant
 will look into it for next round (~june)
 maybe leveraging Open source application/stat programs (R,Octovo etc) for big data proccesing)

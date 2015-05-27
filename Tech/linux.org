@@ -24918,14 +24918,23 @@ also it can be configured s:
 if you have a website that needs more than one field, you need to name them in the password file accordingly:
 #+BEGIN_EXAMPLE
 PASS
-1 FIELD 1
-2 FIELD 2
-#the numbers make sure the correct order is used so ie
-2323342
-1 User: bla  
-2 SomeField: blub
+FIELD1
+FIELD2
+#then add a `CustomOrder` line
+CustomOrder: FIELD1 FIELD2
 #+END_EXAMPLE
+
 $Note-password is always the first field in passwroed-store syntax WITHOUT a field name$ 
+
+in example 
+
+
+#+BEGIN_EXAMPLE
+12345
+id: 0772226
+code: EN3243223
+CustomOrder: id code
+#+END_EXAMPLE
 
 then in a webpage that has login details fire up the script
 you should be able to choose the password needed which will auto fill the user/pass for you
@@ -25316,7 +25325,7 @@ $Note$ you can skip VNC and try this if it works:
 
 #+NAME: 
 #+BEGIN_SRC sh
-DISPLAY=:0 teamviwer
+DISPLAY=:0 teamviewer
 #+END_SRC
 
 with VNC connect to debian machine:
