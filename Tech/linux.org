@@ -4096,12 +4096,26 @@ for_window [class="KeePass2"] move to scratchpad
 #+END_SRC
 
 *** bind keys
+http://i3wm.org/docs/userguide.html#keybindings
 
-one can use either keycode (see [[#1j48GzRPTGBvo.qeYq0t1w][xev]] on how
-to get key codes) and then in config use bindcode
- bindcode $mod+49 workspace 1:H1
- the same can be done using names instead of codes
- bindsym $mod+1 workspace 2:Terms
+A keyboard binding makes i3 execute a command (see below) upon pressing a specific key. i3 allows you to bind either on keycodes or on keysyms (you can also mix your bindings, though i3 will not protect you from overlapping ones).
+A keysym (key symbol) is a description for a specific symbol, like "a" or "b", but also more strange ones like "underscore" instead of "_". These are the ones you use in Xmodmap to remap your keys. To get the current mapping of your keys, use xmodmap -pke. To interactively enter a key and see what keysym it is configured to, use xev.
+Keycodes do not need to have a symbol assigned (handy for custom vendor hotkeys on some notebooks) and they will not change their meaning as you switch to a different keyboard layout (when using xmodmap).
+My recommendation is: If you often switch keyboard layouts but you want to keep your bindings in the same physical location on the keyboard, use keycodes. If you don’t switch layouts, and want a clean and simple config file, use keysyms.
+Some tools (such as import or xdotool) might be unable to run upon a KeyPress event, because the keyboard/pointer is still grabbed. For these situations, the --release flag can be used, which will execute the command after the keys have been released.
+
+Syntax:
+bindsym [--release] [Modifiers+]keysym command
+bindcode [--release] [Modifiers+]keycode command
+s
+%Tip% use xmodmap -pke to see what keys on your current layouts are named 
+
+one can use either keycode (see [[#1j48GzRPTGBvo.qeYq0t1w][xev]] on how to get key codes) and then in config use bindcode
+#+BEGIN_SRC sh :results none
+bindcode $mod+49 workspace 1:H1 
+#the same can be done using names instead of codes 
+bindsym $mod+1 workspace 2:Terms
+#+END_SRC
 
 *** scripts
 ***** i3 scripts
@@ -46896,15 +46910,12 @@ run the following:
  wmctrl -r Firefox -e '0,6,0,1040,708'
 
 *** Xrandr
+**** base
 Dynamically testing different resolutions
-
 to get the info/details on cutrrent connected screen issue
-
 #+BEGIN_SRC sh
 xrandr
 #+END_SRC
-
-
 
 xrandr shows you the names of different outputs available on your system (LVDS, VGA-0, etc.) and resolutions available on each: Screen 0: minimum 320 x 200, current 1400 x 1050, maximum 1400 x 1400 VGA disconnected (normal left inverted right x axis y axis) LVDS connected 1400x1050+0+0 (normal left inverted right x axis y axis) 286mm x 214mm 1400x1050 60.0+ 50.0 [...]
 You can direct xrandr to set a different resolution like this:
@@ -46927,6 +46938,16 @@ details. the best way is to install a gui xrandr app that ouptuts a script you
 can then use in your .xinitrc
 
 %Tip% arandr is a good gui frontend%
+
+**** use cases
+***** clone x1 laptop (eDP1) to HDMI output 
+This is the simple case. You connect your computer to the video projector, turn on both (computer and video projector) and configure your X server to clone the internal flat panel of the laptop to the video output:
+#+BEGIN_SRC sh
+xrandr --output HDMI2 --mode 1920x1080i --same-as eDP1
+#+END_SRC
+
+`Here`: HDMI2 is the video projector and eDP1 is the internal laptop screen
+it uses the lowest common subset of screen resolutions, the rest of your screen will be left untouched (it will show the X background). 
 
 *** Xsel (x-clipboard)
 **** worker
