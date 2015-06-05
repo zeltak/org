@@ -498,7 +498,7 @@ systemctl enable cronie
 
 #+BEGIN_SRC sh
 pacman -S emacs rsync tree ncdus nfs-utils rpcbind terminator r mc  flac lame abiword keepassx dzen2 zip unzip unrar mtpaint krename gmrun aspell aspell-en findutils inkscape python-lxml gcolor2 easytag kdiff3  htop p7zip vlc smb4k screen tmux speedcrunch mlocate vim gvim mpd mpc atool lynx profont fb-client feh keychain picard  gdb mp3gain pacgraph sqliteman grep awk leafpad less lxappearance pavucontrol net-tools sshfs xterm zsh samba xclip lxtask pydf xorg-xkill nmap acpi audacity nmon  powertop ttf-inconsolata sxhkd git zsh firefox chromium ncmpcpp gmpc gcc filezilla gimp jre7-openjdk kdegraphics-okular
-meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  mosh w3m imagemagick graphicsmagick thunar pinta dconf-editor icedtea-web remmina tigervnc 
+meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  mosh w3m imagemagick graphicsmagick thunar pinta dconf-editor icedtea-web remmina tigervnc  android-tools
 #+END_SRC
 !Special repo for laptops:!
 laptop-mode-tools
@@ -514,6 +514,8 @@ pacaur -S rofi-git clerk-git teiler-git caudec vte3-select-text termite-git mpdc
 lib32-pam snx
 #for beets
 pip python-requests
+#show keyboard layouts
+xkblayout-state
 #+END_SRC
 
 ***** unoffical repos
@@ -4482,6 +4484,37 @@ then copy paste to your config. it will look like this:
 set $w1  (1)
 set $w2 (2)
 #+END_EXAMPLE
+
+*** tray area
+i3bar by default provides a system tray area where programs such as NetworkManager, VLC, Pidgin, etc. can place little icons.
+
+You can configure on which output (monitor) the icons should be displayed or you can turn off the functionality entirely.
+
+Syntax:
+
+tray_output <none|primary|output>
+Example:
+
+#+BEGIN_SRC sh :results none
+# disable system tray
+bar {
+    tray_output none
+}
+
+# show tray icons on the primary monitor
+tray_output primary
+
+# show tray icons on the big monitor
+bar {
+    tray_output HDMI2
+}
+#+END_SRC
+
+$Note$  that you might not have a primary output configured yet. To do so, run:
+
+#+BEGIN_SRC sh :results none
+xrandr --output <output> --primary
+#+END_SRC
 
 ** xfce
 *** how to get desktop icons on xubuntu
@@ -46924,6 +46957,7 @@ You can direct xrandr to set a different resolution like this:
 xrandr --output LVDS --mode 1024x768
 #+END_SRC
 
+$Note-make sure that you assign a primary monitor when use multi monitor using the --primary switch$ 
 
 The refresh rate may also be changed, either at the same time or
 independently:
