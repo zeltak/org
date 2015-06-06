@@ -280,6 +280,18 @@ fastboot flash cache C:/image-shamu-XXXXXX/cache.img
 
  - Reboot. Your phone should be stock.
 
+*** nexus shows 23G instead of 64G after reflash 
+So, after following instructions fully, not skipping any step from method 2, my 64Gb shows up as a 32Gb. Any ideas?
+
+Reboot into the bootloader and type this:
+
+#+BEGIN_SRC sh :results none
+fastboot format userdata
+fastboot format cache
+fastboot reboot
+#+END_SRC
+
+That will obviously wipe all your data again, but it should return back to 64GB
 ** apps
 *** install obb files
 install the apk then copy the folder containing the .obb files to file:android/obb/

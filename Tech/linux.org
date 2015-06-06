@@ -32030,8 +32030,6 @@ javascript:location.href='org-protocol://capture://w/'+encodeURIComponent(locati
 7. Select some text in a website and click on the Boolmarklet you just created
 $Note- add the “/usr/bin/emacsclient” program if prompted$
 8. You should see the pop up capture pane in one of the emacsclients open
-
-
 ******** keybinds
 use ~C-c C-s~ (org-schedule) to schedule it for a particular day
 set the deadline with ~C-c C-d~ (org-deadline),
@@ -32340,6 +32338,13 @@ add as text between 2 :, ₆In example₆
 ("O" "dl_movie_prerelease" entry (file+headline "~/org/files/agenda/dl.org" "Movies")
  "  %x :Pre_Release: " )
 #+END_EXAMPLE
+
+********** add a elips  function (Sexp) as part of capture
+use %(sexp) ₆In example₆ 
+#+BEGIN_SRC emacs-lisp :results none
+("F" "food" entry (file+headline "/home/zeltak/org/files/agenda/food.org" "Inbox")
+                 "* COOK %?  %^g %(z/recipe-template-cc)"
+#+END_SRC
 
 ******** capture from gmail
 
