@@ -25005,8 +25005,12 @@ first export your key ₆In example₆
 #+BEGIN_SRC sh
 gpg --export-secret-key -a "your@email.bla" > private.key
 #+END_SRC
+
 then put it on your android
+
 and import it into the gpg app (the password-store android app will prompt you to install that one)
+
+make sure to add the key manually to the gpg app on android before using in it mobile password-store
 
 then in pwdstore app config ssh and pull from main PC repo
 
@@ -39060,6 +39064,15 @@ sec   rsa2048/860187CD 2015-05-17
 uid       [ultimate] itai kloog <ikloog@gmail.com>
 ssb   rsa2048/A1B4A4F7 2015-05-17
 #+END_EXAMPLE
+
+**** change password 
+run 
+#+BEGIN_SRC sh :results none
+gpg --edit-key <user-id> 
+#+END_SRC
+this command enables you to do most of your key management related tasks.
+
+issue 'passwd' to start the passphrase change
 
 **** export/impor keys
 #+BEGIN_SRC sh
