@@ -32472,6 +32472,15 @@ A few other are used exclusively by the html exporter:
 #+LINK_UP: http://home.fnal.gov/~neilsen/notebook
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="../css/notebook.css" />
 #+END_EXAMPLE
+******** add more exporter options
+********* add ODT export 
+There are generally two ways: 
+use the customize interface to customize `org-export-backends' (I think you *need* to use customize for that? Orat least, you do if you want it to take immediate effect)
+or just %better% add something like this
+#+BEGIN_SRC emacs-lisp :results none
+(require 'ox-odt)
+#+END_SRC
+its better to just have a bunch of (require 'ox-*) statements in your el files
 ******* refile
 ********* base 
 To refile tasks in org you need to tell it where you want to refile things.
