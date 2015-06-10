@@ -2599,7 +2599,6 @@ Name=New Window
 TargetEnvironment=Unity
 #+END_EXAMPLE
 
-
 **** Enable usb on virtualbox
 Set up USB for Virtualbox
 #+BEGIN_EXAMPLE
@@ -2607,6 +2606,17 @@ sudo adduser yourusername vboxusers
 #+END_EXAMPLE
 
 $Note$ You HAVE to logout/login from your session, NOT just restart Virtual Box, after the group change.
+
+**** qgis
+follow instructions here
+http://www.qgis.org/en/site/forusers/alldownloads.html#qgis-debian-testing
+
+$Note- If you use one of our ubuntugis based repositories you also need to add following line:$
+
+#+BEGIN_SRC sh :results none
+deb     http://ppa.launchpad.net/ubuntugis/ubuntugis-unstable/ubuntu *codename* main
+#+END_SRC
+
 
 *** Tips
 **** Remove only open office in ubuntu
@@ -2628,6 +2638,16 @@ uninstall all previous flash instances (check for a script to auto do it
 online)
  then issue this:
  sudo apt-get install flashplugin-nonfree
+*** R under ubuntu
+**** install rgdal
+ before trying to install the package run these:
+
+ #+BEGIN_SRC sh
+ sudo apt-get install libgdal-dev
+ sudo apt-get install libproj-dev
+ #+END_SRC
+
+ $Note-it is VERY likley you will get conflicts between lingdal-deb and QGIS. to solve this remove QGIS, install rgdal, remove libgdal and reintsall qgis :( $ 
 
 ** Debian
 *** Fresh install
@@ -32923,6 +32943,9 @@ to
 file:1.images/gis10052003p2.png
 
 ******* Latex
+******** config
+********* define export latex font 
+ #+LaTeX_CLASS_OPTIONS: [garamond]
 ******** writing
 ********* super/sub script
 Just like in LaTeX, ‘^’ and ‘_’ are used to indicate super- and subscripts.

@@ -1,0 +1,177 @@
+#+Title: GIT_lesson
+#+BEAMER_THEME: Rochester [height=20pt]
+#+BEAMER_COLOR_THEME: spruce
+
+*** to check your settings, you can use
+
+#+BEGIN_SRC sh
+git config --list
+#+END_SRC
+
+#+RESULTS:
+| user.email=zeltak@gmail.com                             |
+| user.name=zeltak                                        |
+| push.default=simple                                     |
+| core.repositoryformatversion=0                          |
+| core.filemode=true                                      |
+| core.bare=false                                         |
+| core.logallrefupdates=true                              |
+| remote.origin.url=[[https://github.com/zeltak/zdot.git]]    |
+| remote.origin.fetch=+refs/heads/*:refs/remotes/origin/* |
+| branch.master.remote=origin                             |
+| branch.master.merge=refs/heads/master                   |
+
+*** base got init
+#+BEGIN_SRC sh
+cd /home/zeltak/ZH_tmp/
+mkdir project
+cd project
+git init
+#+END_SRC
+
+#+RESULTS:
+: Reinitialized existing Git repository in /home/zeltak/ZH_tmp/project/.git/
+
+*** add file 
+
+#+BEGIN_SRC sh
+cd /home/zeltak/ZH_tmp/project/
+touch test1.txt
+# to add all files
+git add .
+#+END_SRC
+
+#+RESULTS:
+
+*** do a inital commit
+
+#+BEGIN_SRC sh
+cd /home/zeltak/ZH_tmp/project/
+git commit -m 'initial commit'
+#+END_SRC
+
+*** Remote Repos
+**** To Clone remote repo
+checkout a repository:
+#+BEGIN_SRC sh
+#create a working copy of a local repository by running the command
+git clone /path/to/repository
+#when using a remote server, your command will be
+git clone username@host:/path/to/repository
+#+END_SRC
+**** get extended info on remote repo
+
+#+BEGIN_SRC sh
+git remote -v
+#+END_SRC
+
+**** push to remote
+after you add and commit your changes are now in the HEAD of your local working copy. To send those changes to your remote repository, execute 
+
+#+BEGIN_SRC sh
+#git push [remote-name] [branch-name]
+git push origin master
+#+END_SRC
+
+Change `master` to whatever branch you want to push your changes to.
+*** update, merge, replace
+**** update and merge
+to update your local repository to the newest commit, execute 
+#+BEGIN_SRC sh
+git pull
+#+END_SRC
+a
+*** Viewing the Commit History
+After you have created several commits, or if you have cloned a repository with an existing commit history, you'll probably want to look
+back to see what has happened. The most basic and powerful tool to do this is the git log command:
+#+BEGIN_SRC sh
+git log
+#+END_SRC
+
+#+RESULTS:
+| commit       | 06d495c9f233014ea4eb7dcc8cd17fb792b33c57 |                    |         |          |       |       |
+| Author:      | zeltak                                   | <zeltak@gmail.com> |         |          |       |       |
+| Date:        | Mon                                      | May                |      11 | 17:40:18 |  2015 | +0300 |
+|              |                                          |                    |         |          |       |       |
+| Synchronized | attachments                              |                    |         |          |       |       |
+|              |                                          |                    |         |          |       |       |
+| commit       | 0d3545009f9cfc3cbfe630a0edeefb1c8ada9010 |                    |         |          |       |       |
+| Author:      | zeltak                                   | <zeltak@gmail.com> |         |          |       |       |
+| Date:        | Sun                                      | Apr                |       5 | 08:15:22 |  2015 | +0300 |
+|              |                                          |                    |         |          |       |       |
+| Synchronized | attachments                              |                    |         |          |       |       |
+|              |                                          |                    |         |          |       |       |
+| commit       | 0d36c3bbdb997391dfd792e8bcbd57fdae190f37 |                    |         |          |       |       |
+| Author:      | zeltak                                   | <zeltak@gmail.com> |         |          |       |       |
+| Date:        | Tue                                      | Feb                |       3 | 20:23:10 |  2015 | +0200 |
+|              |                                          |                    |         |          |       |       |
+| Synchronized | attachments                              |                    |         |          |       |       |
+|              |                                          |                    |         |          |       |       |
+| commit       | 542f4c2eb57f8ff82fc89d53155f6c1e6b8dd738 |                    |         |          |       |       |
+| Author:      | zeltak                                   | <zeltak@gmail.com> |         |          |       |       |
+| Date:        | Sat                                      | Jun                |       1 | 20:15:37 |  2013 |  -400 |
+|              |                                          |                    |         |          |       |       |
+| june         | changes                                  |                    |         |          |       |       |
+|              |                                          |                    |         |          |       |       |
+| commit       | f02562c8a44202dc1bd2ecde64725c9272a436e7 |                    |         |          |       |       |
+| Author:      | zeltak                                   | <zeltak@gmail.com> |         |          |       |       |
+| Date:        | Sat                                      | May                |      25 | 07:19:55 |  2013 |  -400 |
+|              |                                          |                    |         |          |       |       |
+| before       | wNT                                      |                    |         |          |       |       |
+|              |                                          |                    |         |          |       |       |
+| commit       | 6bcf89bd887d4d02dea27c86cf86eba128ca2c71 |                    |         |          |       |       |
+| Author:      | zeltak                                   | <zeltak@gmail.com> |         |          |       |       |
+| Date:        | Fri                                      | May                |      10 | 22:12:55 |  2013 |  -400 |
+|              |                                          |                    |         |          |       |       |
+| before       | wNT                                      |                    |         |          |       |       |
+|              |                                          |                    |         |          |       |       |
+| commit       | 234da9b4701989b1b00796684afe0c56851d8445 |                    |         |          |       |       |
+| Author:      | zeltak                                   | <zeltak@gmail.com> |         |          |       |       |
+| Date:        | Thu                                      | May                |       9 | 08:12:00 |  2013 |  -400 |
+|              |                                          |                    |         |          |       |       |
+| updated      | keybinds                                 | and                |     org |   config |       |       |
+|              |                                          |                    |         |          |       |       |
+| commit       | 7b751d203bc72c00a1764184b71b09abb67c3842 |                    |         |          |       |       |
+| Author:      | zeltak                                   | <zeltak@gmail.com> |         |          |       |       |
+| Date:        | Thu                                      | May                |       2 | 08:25:56 |  2013 |  -400 |
+|              |                                          |                    |         |          |       |       |
+| fixed        | #                                        | error              |         |          |       |       |
+|              |                                          |                    |         |          |       |       |
+| commit       | 244233e73a7e2fff8a82a3dc95d3861732797b7a |                    |         |          |       |       |
+| Author:      | zeltak                                   | <zeltak@gmail.com> |         |          |       |       |
+| Date:        | Wed                                      | May                |       1 | 21:12:33 |  2013 |  -400 |
+|              |                                          |                    |         |          |       |       |
+| bm+          | and                                      | find               |    file |          |       |       |
+|              |                                          |                    |         |          |       |       |
+| commit       | 25553bc2fd2ee078a526f9a7acbe93807c2eab39 |                    |         |          |       |       |
+| Author:      | zeltak                                   | <zeltak@gmail.com> |         |          |       |       |
+| Date:        | Tue                                      | Apr                |      23 | 10:54:50 |  2013 |  -400 |
+|              |                                          |                    |         |          |       |       |
+| fixing       | windows                                  | paths              |     and |   leuven | theme |       |
+|              |                                          |                    |         |          |       |       |
+| commit       | 093a3ccde4314bb4238d86eea04bec06e71eeb57 |                    |         |          |       |       |
+| Author:      | zeltak                                   | <zeltak@gmail.com> |         |          |       |       |
+| Date:        | Thu                                      | Apr                |      18 | 09:06:25 |  2013 |  -400 |
+|              |                                          |                    |         |          |       |       |
+| emacs        | and                                      | i3                 | updates |          |       |       |
+|              |                                          |                    |         |          |       |       |
+| commit       | d4e7b0d0afb8d57a5954a310d59a20c1f1d7c234 |                    |         |          |       |       |
+| Author:      | zeltak                                   | <zeltak@gmail.com> |         |          |       |       |
+| Date:        | Tue                                      | Apr                |       9 | 17:39:51 |  2013 |  -400 |
+|              |                                          |                    |         |          |       |       |
+| added        | emacs                                    |                    |         |          |       |       |
+|              |                                          |                    |         |          |       |       |
+| commit       | 30d43652a1f225d9379e8d06c3f9fdbec580b242 |                    |         |          |       |       |
+| Author:      | zeltak                                   | <zeltak@gmail.com> |         |          |       |       |
+| Date:        | Tue                                      | Apr                |       9 | 17:20:53 |  2013 |  -400 |
+|              |                                          |                    |         |          |       |       |
+| first        | commit                                   |                    |         |          |       |       |
+
+*** ssh 
+
+#+BEGIN_SRC sh
+ssh user@`192.122.122.399
+#+END_SRC
+
+#+RESULTS:
+

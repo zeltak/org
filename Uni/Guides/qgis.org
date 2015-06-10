@@ -223,6 +223,32 @@ To make the change permanent, toggle off Editing mode.
 I used intersect from geoprocessing tools, worked fine
 then I created a new field calcualting the area of each new polygon ($area)
 finally I created a new field calculating the portion of the area of the new polygon from the area of the CT it belongs to (the last 2 fields of the layer). Then I export to csv and from there to R and use this % to weight this grid point when building the weighted average for each census tract. 
+*** Select by location (the spatial query plug-in)
+first make sure the plug-in is installed
+http://docs.qgis.org/2.2/en/docs/user_manual/plugins/plugins_spatial_query.html
+
+then in the vector menu>> spatial plug-in launch the plug-in 
+
+choose the source layer and reference layer and the geo proces (within etc)
+
+then click apply $Note- this will take a long time with large datasets$
+
+when finished you will be presented with the results @ DO NOT click apply again or it will run again@ 
+
+instead save the layer while that result window is open and make sure `save selected features` is checked
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-06-09 10:11:28
+#+attr_html: :width 300px
+ [[~/org/attach/images_2015/screenshot_2015-06-09_10:11:28.png]]
+*** Shortest distance from point to line (for very big datasets)
+**** TODO Rasterize line layer
+in qgis use:
+Raster>>Conversion>>Rasterize
+for input file choose the line layer
+in the attribute field choose the ID for the lines output file doesn't exist. You must set up the output size or resolution to create it.
+**** Convert to Proximity (Raster/Analysis/Proximity...)
+**** Use plugin Point sampling tool to get values for all your point from raster
 ** selection
 *** select by expression
 **** select squares above X size
