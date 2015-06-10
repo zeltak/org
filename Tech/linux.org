@@ -8635,7 +8635,7 @@ executable and put this inside
 
 Esc-m reload muttrc (source muttrc file)
 
-***** offlineimap
+***** mutt with offlineimap
 ****** default config example
 
 #+BEGIN_SRC emacs-lisp :results none
@@ -36355,7 +36355,6 @@ is: d /run/transmission - [user] [group] -
  change permissions to 777 on folder '/run/transmission'.
 
  sudo chmod 777 /run/transmission
-***** Emacs
 ***** setup emacsclient as a systemd unit in Arch 
       :PROPERTIES:
       :ID:       6e5c769c-0f97-4001-8ce7-c19acdd8ce89
@@ -36404,50 +36403,46 @@ and stop/start emacs again via systemd
 ***** offlineimap 
 @General Note: Please be careful when you shutdown your computer. If offlineimap is running, there is a high probability that one of the databases become corrupted.@
 
+make sure to configure background jobs as shown in 
 
-I run systemd with the --user switch inside my user session, allowing me to configure services (like OfflineIMAP) very conveniently. Creating the following unit file in ~/.config/systemd/user allows you to start a single synchronization.
+https://wiki.archlinux.org/index.php/OfflineIMAP#Running_offlineimap_in_the_background
 
-#+BEGIN_SRC sh :results none
-# offlineimap.service
+Write a systemd service runnable as a user.
 
+file:/etc/systemd/system/offlineimap@.service
+
+#+BEGIN_EXAMPLE
 [Unit]
-Description=OfflineIMAP Quicksync
+Description=Start offlineimap as a daemon
+Requires=network-online.target
 After=network.target
 
 [Service]
-Type=oneshot
-ExecStart=/usr/bin/offlineimap -o -q -u quiet
-TimeoutStartSec=1min30s
-#+END_SRC
-
-Additionally, a second .timer unit is needed to run the service every 30 seconds:
-
-#+BEGIN_SRC sh :results none
-# offlineimap.timer
-
-[Unit]
-Description=OfflineIMAP Quicksync timer
-
-[Timer]
-OnCalendar=*:*:0/30
-Unit=offlineimap.service
+User=%i
+ExecStart=/usr/bin/offlineimap
+KillSignal=SIGUSR2
+Restart=always
 
 [Install]
-WantedBy=default.target
-#+END_SRC
+WantedBy=multi-user.target
+#+END_EXAMPLE
 
-You can now enable mail synchronization by executing
-
-#+BEGIN_SRC sh :results none
-systemctl --user enable offlineimap.timer
-#+END_SRC
-
-See if OfflineIMAP is working correctly by following the journal:
+Then enable offlineimap:
+You want the %i to expand to your $user, so call the template with 
 
 #+BEGIN_SRC sh :results none
-journalctl -f
+systemctl enable offlineimap@zeltak.service
+#and
+systemctl start  offlineimap@esquire70.service
 #+END_SRC
 
+to check the status of offlineimap
+#+BEGIN_SRC sh :results none
+systemctl status offlineimap@zeltak.service 
+#+END_SRC
+
+
+...
 **** query service names
 
 to search for ntp for example:
