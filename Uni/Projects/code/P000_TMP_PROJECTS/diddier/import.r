@@ -21,6 +21,7 @@ library(sas7bdat)
 
 
 out<-as.data.table(read.sas7bdat ("/media/NAS/Uni/Projects/P000_TMP_PROJECTS/diddier/foritai.sas7bdat",debug=FALSE))
+out<-as.data.table(read.sas7bdat ("/media/NAS/Uni/Projects/P000_TMP_PROJECTS/diddier/rates.sas7bdat",debug=FALSE))
 zipxy<-fread ("/media/NAS/Uni/Projects/P000_TMP_PROJECTS/diddier/zipXY.csv")
 zipxy<-fread ("/media/NAS/Uni/Data/GIS/USA/zipcodes_xy/zipxy.csv")
 setkey(out, zipcode)
