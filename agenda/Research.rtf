@@ -1,0 +1,1463 @@
+{\rtf1\ansi\deff0{\fonttbl{\f0 \fswiss Helvetica;}{\f1 Courier;}}
+{\colortbl;\red255\green0\blue0;\red0\green0\blue255;}
+\widowctrl\hyphauto
+
+{\pard \qc \f0 \sa180 \li0 \fi0 \b \fs36 Research\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 Today\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO discuss with qian di\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 geoschem model vertical profile - put into a europe wide pm dataset disucss that with qian di vertical talk about mysql datasets\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 alexei talk 31.3.2105\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 low yearly aod values and compared to DB which is higher\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 we should look at wind speed from reanalysis data/station to see if these areas have low or high ws values\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 TODO basic raw zero correlation with PM stations\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 send alexei the the full ts pm data so he check this\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 look at aod azimuths\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 use data with 30 degree azimuths that should be better: either subset data by that or play with these azimuths as weights in a model\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 dust seasons in the south of israel\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 main dust season: dec-march main non dust season: jul-aug\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 chronic vs accute variablity in exposure assesmnt\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 for chronic we care about spatial variability for acute we care about temporal variability\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Andrea/Bob talk\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 ellena uk model with kees, come to rome this summer?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 temperature modeling: showing heat island effects, there could be several degrees c in spatial variblity at night time\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 "greenes" :- use sattelite NDVI (modis/lansat/other) as an exposure (1km-30m) as a proxy for green spaces/areas and\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 walkability\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 there are several ways of addressing walkability\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab simple method gis based method- intersection count, business count, and population density\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 residence-level measures of population density\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 business counts (as a proxy for accessibility)-Business counts were measured by the counts of all stores, facilities, and services in a participant\u8217's network buffer points of interest\u8221", which includes grocery stores, restaurants, banks, hotels, hospitals, libraries,\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 intersection counts (as a proxy for street connectivity)-network buffers around each home address Intersection counts were quantified by the number of intersections that were 3-way or greater within each network buffer (Figure 2). A greater intersection count increases the efficiency of walking to destinations.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab developing a more complex model taking into account traffic lanes, traffic direction, walking obstacles, intersections counts etc etc\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 light at night\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 DMSP satellite allows 600m resolution. new satellite (NASA-NOAA Suomi National Polar-orbiting Partnership (NPP) satellite) can produce higher res data LAN as a exposure and as a potential proxy to residence level pop density\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 web data social/location based services\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 whats available in Mexico city/around? could be used for: mapping traffic density mapping access to health, healthy food, business counts\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 perhaps noise exposure modeling? I have a student that is working on this- tis very hard to model, need a "moitoring campagin", height, buliding material etc\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 crime-data availability?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO Joel talk 12.05.15\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 LPM\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 code needed is on FTP shi: what else is needed on top of the drobo files? use WRF for stage 4- talsk to shi\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO use of aqua and terra as 2 separate exposure:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 instead of calibrating: one would be a peak level exposure and one a "background" exposure calibrate with hourly terra > 9:30 aqua > 14:30 talk to petros compare EC and OC from speciation and compare we want to show that one picks up traffic well while the other picks up transported PM mainly\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 updates\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -swiss, sweeden project coming along -italy is ready for run- I will come a few days earlier to rome to finalize the model with massimo -VIIRS update\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 antonellas grant\par}
+{\pard \ql \f0 \sa0 \li0 \fi0 do we need to prepare for the grant in anyway when does it start who will do what?\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab MA student here\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO send massimo AOD italy\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO send massimo AOD Sweededn\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO send KEES AOD swiss\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO check if I got back money for haifa GEO conference\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 follow order for noise metric\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 order number 3918261\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 rahcel- ask about lab services like tal, how do I open this\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Cardiovascular Health and Air Pollution: A National Study- PM2.5 modeling preliminary talk (6.4.2014)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Dear all,\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 As discussed in our talk a few days ago, here is the compiled document of the topics we discussed during our meeting last Thursday and additional data on each variable we discussed.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Our overall goal as agreed is to initially create a spatio temporal database across the USA to serve of a standardized base for running the MAIAC based PM2.5 models across the USA.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 We also agreed that it would probably be a good idea to buy a NAS and store all the data in a centralized location there. We can ask for recommendation from microway when you order the new high end PC (Antonella you can contact me if you consulting on that)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Database predictors\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 PM2.5\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab We will gather PM data from both EPA and IMPROVE sources\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab mihye has experience with collection of such data and can collect the data across the USA\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab mihye: could you send us all the link to the new site replacing the Views website?\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab these websites were used before to download the data is: {\field{\*\fldinst{HYPERLINK "http://views.cira.colostate.edu/web/DataWizard/"}}{\fldrslt{\ul
+http://views.cira.colostate.edu/web/DataWizard/
+}}}
+ {\field{\*\fldinst{HYPERLINK "http://www.epa.gov/ttn/airs/airsaqs/detaildata/downloadaqsdata.htm"}}{\fldrslt{\ul
+http://www.epa.gov/ttn/airs/airsaqs/detaildata/downloadaqsdata.htm
+}}}
+\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Also we should contact Qian (cced) and coordinate this with him, since he will also be running USA wide GEOSCHEM models and we don't want to duplicate our data collection efforts\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab We also need to check the different measurement type (that is teom vs other methods) since this could effect the calibrations\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 AOD\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab AOD MAIAC based data is available on DROBO after mihye downloaded it from my FTP server.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab We need to convert the hdf files to csv/MATLAB files\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab check data availability for all years on USA data\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab The latest code to extract these hdf via matlab is attached to this email\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab When shi has time we should discuss Matlab use and how to optimize the code\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Meteorology (NCDC/EPA data)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab We will collect data from NCDC and EPA site and collect the following met data:\sa180\par}
+{\pard \ql \f0 \sa0 \li0 \fi0 Temp,wdsp,RH,Visibility\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab this is the link to download the NCDC data\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\field{\*\fldinst{HYPERLINK "http://www7.ncdc.noaa.gov/CDO/cdoselect.cmd?datasetabbv=GSOD&countryabbv=&georegionabbv"}}{\fldrslt{\ul
+http://www7.ncdc.noaa.gov/CDO/cdoselect.cmd?datasetabbv=GSOD&countryabbv=&georegionabbv
+}}}
+=\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 NDVI\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab NDVI data is freely available from the reverb website:\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\field{\*\fldinst{HYPERLINK "http://reverb.echo.nasa.gov/reverb/#utf8=%E2%9C%93&spatial_map=satellite&spatial_type=rectangle"}}{\fldrslt{\ul
+http://reverb.echo.nasa.gov/reverb/#utf8=%E2%9C%93&spatial_map=satellite&spatial_type=rectangle
+}}}
+\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab We use 1 month time scales since NDVI does not vary dramitccly from day to day\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 TODO We should also talk to peter james since he may already have NDVI data on a national scale and we can save use the download and proccesing time.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 PBL\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab I already have PBL data from 2000-2012 across the USA\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab we will need to download 2013-2014 data from North American Regional Reanalysis dataset\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab This is the NARR website for PBL\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\field{\*\fldinst{HYPERLINK "http://nomads.ncdc.noaa.gov/data.php?name=access#narr_datasets"}}{\fldrslt{\ul
+http://nomads.ncdc.noaa.gov/data.php?name=access#narr_datasets
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 rain/percipitation\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab we may want to also get rain data from the above reanalysis data\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\field{\*\fldinst{HYPERLINK "http://nomads.ncdc.noaa.gov/data.php?name=access#narr_datasets"}}{\fldrslt{\ul
+http://nomads.ncdc.noaa.gov/data.php?name=access#narr_datasets
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Roads\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab We can use ESRI or TIGER road data classified into (classified 'A' roads) and create surfaces to calculate "road density" as a proxy for traffic density. This has worked well in the past yet it is time invariant.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab we excluded A5 (vehicular tracks), A65 (ferry crossings) and A7(other thoroughfares, walkways, alleys, driveways).\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab We use ArcGIS Spatial Analyst Line Density tool was used to calculate density of roads per sq km within 1 km for 1 km grid.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Another approach would be to look into national road density data (either observed data or modeled). here is a link to investigate\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\field{\*\fldinst{HYPERLINK "http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_transportation_atlas_database/index.html"}}{\fldrslt{\ul
+http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_transportation_atlas_database/index.html
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 fire indicator from modis\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab We will try to investigate fire indicators from MODIS to try to incorperate as a predictor in specific areas across the USA\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\field{\*\fldinst{HYPERLINK "http://modis.gsfc.nasa.gov/data/dataprod/nontech/MOD14.php"}}{\fldrslt{\ul
+http://modis.gsfc.nasa.gov/data/dataprod/nontech/MOD14.php
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 dust\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab The same will go for Dust , this is important in the south-western areas and arid places.\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 omi data\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab We will investigate the Aerosol index and ultra violet index of the OMI satellite.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Below is in depth details on the OMI satellite\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 OMI - Ozone Monitoring Instrument\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 OMI, onboard NASA\u8217's EOS-Aura (Earth Observing System-Aura), measures the Earth reflectance spectra in both the VIS and UV spectral bands (270\u8211-500 nm) and has been used to distinguish between UV-absorbing aerosols, such as desert dust, and weakly UV-absorbing aerosols and clouds (Kazadzis et al. 2009; Stammes and Noordhoek 2002). Aura was launched into a sun-synchronous orbit on July 15, 2004, and globally observes e earth between 13:00-14:00 UTC with a nearly daily pass. The Aura satellite orbits at an altitude of 705 km in a sun-synchronous polar orbit with an exact 16-day repeat cycle. There is an approximate ~8 min time lapse between the Aqua and Aura overpasses. The orbital inclination is 98.1 degrees, providing latitudinal coverage from 82\u176? N to 82\u176? S The OMI is an imaging spectrometer that measures solar light backscattered by the Earth\u8217's atmosphere and surface (Bucsela et al., 2006). The instrument consists of two spectrometers, one measuring the UV spectral range from 270 to 365 nm in two sub-ranges (UV1: 270\u8211-314 nm, resolution: 0.42 nm, sampling: 0.32 nm; UV2: 306\u8211-380 nm, resolution: 0.45 nm, sampling: 0.15 nm), the other measuring the UV-visible spectrum from 350 to 500 nm (resolution: 0.63 nm; sampling: 0.21 nm). OMI uses a CCD array with one dimension resolving the spectral features and the other dimension allowing a 114\u186? field of view, providing a 2600-km viewing swath transverse to the orbit track. Its nadir spatial resolution ranges from 13x24 to 24x48 km2, depending on the instrument\u8217's operating mode and observing geometry.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Products: UV-AAI /VIS-AAI - The absorbing aerosol index (AAI) is derived from the change in the spectral dependence of backscattered UV radiance by aerosols relative to Rayleigh scattering in the 354-388 nm spectral range. The AAI was found to be a useful indicator of elevated concentrations of UV absorbing aerosols, such as dust, taking a near zero value for clouds and weakly absorbing aerosols and a positive value for desert aerosols.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 The measured I is the intensity of light observed by the satellite-sensor while the calculated I is based on radiative transfer model results. The advantages of using the UV-based data for aerosol properties are that in this spectral range most surfaces (except for snow) have very low scattering therefore a good separation with the aerosol-signal is possible. As mentioned earlier, dust particles show positive AAI values while urban fine particles usually have AAI values near.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 AAOD- The Aerosol Absorbing Optical Depth (AAOD), retrieved from the OMI platform, apparently represents the absorbing fraction of particles dependent on the AOD and the SSA in a certain wavelength.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 NO2 - integrated column data (80km vertical resolution) as a proxy to particles created mainly by fossil fuel burning and agriculture sources. It is retrieved in the blue wavelength range (420-450nm) of the OMI platform .\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Obtaining data examples: {\field{\*\fldinst{HYPERLINK "http://disc.sci.gsfc.nasa.gov/Aura/data-holdings/OMI"}}{\fldrslt{\ul
+http://disc.sci.gsfc.nasa.gov/Aura/data-holdings/OMI
+}}}
+ {\field{\*\fldinst{HYPERLINK "http://mirador.gsfc.nasa.gov/cgi-bin/mirador/LocationTimeAttribute_Search.pl?tree=project&project=OMI&&dataGroup=L2_V003&dataset=OMAERUV.003&version=003&CGISESSID=d5b768a67f81f0d3cef6a509eb98f524"}}{\fldrslt{\ul
+http://mirador.gsfc.nasa.gov/cgi-bin/mirador/LocationTimeAttribute_Search.pl?tree=project&project=OMI&&dataGroup=L2_V003&dataset=OMAERUV.003&version=003&CGISESSID=d5b768a67f81f0d3cef6a509eb98f524
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 point emmisons and Area emssions\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Data will be obtained from EPA\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab include PM25,PM10,NoX,SO2\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab we will calculate total sum of each pollutant,distance to point source emission, total emissions per area, and buffers of 3k,10k,15k around point sources\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 from NLCD raster\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab data will be downloaded from the National Land Cover Database (NLCD)\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\field{\*\fldinst{HYPERLINK "http://www.mrlc.gov/nlcd06_data.php"}}{\fldrslt{\ul
+http://www.mrlc.gov/nlcd06_data.php
+}}}
+ several LU classifications on can be calculated to the 1km resolution We should check we peter james if they already have such data These are the values and method we used in previous analysis\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Op Value:21 Developed, Open Space - Includes areas with a mixture of some constructed materials, but mostly vegetation in the form of lawn grasses. Impervious surfaces account for less than 20 percent of total cover. These areas most commonly include large-lot single-family housing units, parks, golf courses, and vegetation planted in developed settings for recreation, erosion control, or aesthetic purposes. Ld Value: 22 Developed, Low Intensity -Includes areas with a mixture of constructed materials and vegetation. Impervious surfaces account for 20-49 percent of total cover. These areas most commonly include single-family housing units. Md Value: 23 Developed, Medium Intensity - Includes areas with a mixture of constructed materials and vegetation. Impervious surfaces account for 50-79 percent of the total cover. These areas most commonly include single-family housing units. Hd Value: 24 Developed, High Intensity - Includes highly developed areas where people reside or work in high numbers. Examples include apartment complexes, row houses and commercial/industrial. Impervious surfaces account for 80 to100 percent of the total cover. Df Value: 41 Deciduous Forest - Areas dominated by trees generally greater than 5 meters tall, and greater than 20% of total vegetation cover. More than 75 percent of the tree species shed foliage simultaneously in response to seasonal change. Ev Value: 42 Evergreen Forest - Areas dominated by trees generally greater than 5 meters tall, and greater than 20% of total vegetation cover. More than 75 percent of the tree species maintain their leaves all year. Canopy is never without green foliage. Mf Value: 43 Mixed Forest - Areas dominated by trees generally greater than 5 meters tall, and greater than 20% of total vegetation cover. Neither deciduous nor evergreen species are greater than 75 percent of total tree cover. Sh Value: 52 Shrub/Scrub - Areas dominated by shrubs; less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions. Gr Value: 71 Grassland/Herbaceous - Areas dominated by grammanoid or herbaceous vegetation, generally greater than 80% of total vegetation. These areas are not subject to intensive management such as tilling, but can be utilized for grazing. Pa Value: 81 Pasture/Hay - Areas of grasses, legumes, or grass-legume mixtures planted for livestock grazing or the production of seed or hay crops, typically on a perennial cycle. Pasture/hay vegetation accounts for greater than 20 percent of total vegetation. Cr Value: 82 Cultivated Crops - Areas used for the production of annual crops, such as corn, soybeans, vegetables, tobacco, and cotton, and also perennial woody crops such as orchards and vineyards. Crop vegetation accounts for greater than 20 percent of total vegetation. This class also includes all land being actively tilled.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 NLCD 2006 30 m resolution rasters was reclassified as rasters for each of the individual land uses listed above. In each raster cells with the specified land use were given the value 1 all other cells were set to 0\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 ArcGIS Focal statistics tool was used to sum up the 33 X 33 neighboring 30 m cells and the result divided by 1089 to give an approximate value of percent of each land use within 1 km of center point of each 30 m cell. Missing values, for example along the coast and boundaries of the study region were treated as zero. The focal statistics tool used a mask extending 5 km beyond the state boundaries for the eastern US states defining the study area.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 dividing USA into sub regions\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Traditionally we have clustered ares based on the geo-climatic characteristics of regions across the USA. We will look at taking PM monitors and look at correlations between them we will then try and cluster these by regions to try and compare that to our traditional way of clustering regions by geo-climatic characteristics. We should contact brent regarding the clustering method.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 pop density\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 We can use ESRI data on population per census/tract to get at population density for each 1km gridcell mihye already has a system in place and she will be in charge of doing that previously we have done this: Census block group boundaries from ESRI Data and Maps provided with ArcGIS 10 were used. Area of block groups in square miles was an attribute in this data and was converted to square kilometers. This appears to be total square miles not dry land square miles. Census block group population per square kilometer has been used for the BC model. The median block group area in MA is 16 sq km, so block group level data seems an appropriate scale for a 1 km resolution model. For the 50 m spatial resolution lpm variable block population data was used to estimate population density at a finer spatial scale. A disadvantage of this approach is that it assumes population is uniformly distributed within a census block and noise is introduced by small blocks with 0 population and neighboring blocks with very different populations. Population density could represent the effects of home heating sources on air pollution or air pollution from traffic at a neighborhood scale.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 elevation\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -We can get freely available national DEM data across the USA via USGS: {\field{\*\fldinst{HYPERLINK "http://ned.usgs.gov/"}}{\fldrslt{\ul
+http://ned.usgs.gov/
+}}}
+ -Elevation is in meters and can be interpolated from a 30 m resolution raster created from 1/3 arc second elevation data downloaded from USGS -we can use that to extract elevation to each 1km grid cell -We should also look at deriving slopes for each grid cell -This can be done with using ArcGis and mihye already has experience of doing that\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Meris satellite\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Data from european sattelite - We here in my Lab are looking into this and possible future applications\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 'Ongoing'\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 PAUSED PM2.5 1kmx1km NEMIA\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\field{\*\fldinst{HYPERLINK "id:b967025d-dec5-468a-afa4-2922cc2532da"}}{\fldrslt{\ul
+id:b967025d-dec5-468a-afa4-2922cc2532da
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Brainstorm\par}
+{\pard \ql \f0 \sa0 \li0 \fi0 -there may be degredation in data quality in Terra from 2000-2008 may introduce noide, we may need to address this at some stage in the future -AOD values: 0-1 indicates normal AOD days 0.7-1.2 Days where heavy PM concentrations are transported from elsewhere 2-4 HEavy sand stroms days, days in Africa etc When you see values of 1.2 in Western counties (IE MA) it is most likley clouds aod-PM convesion table, is that avilable?\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab masking algoryhtm :\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 for dayswith "." calculate distance to pixel with cloud , then use distance to cloud and maybe a histogram (tail of histogram)? -LPM- interact lpm with z scores to get spatio-temporal stuff working. -weights in gamm 3rd stage? -for non pm2.5 countries perhaps calculate a ratio of Pm10/2.5 by season> imputation> convert pm10 to pm 2.5\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Decompose local/area\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\field{\*\fldinst{HYPERLINK "http://svitsrv25.epfl.ch/R-doc/library/quantreg/html/predict.rqss.html"}}{\fldrslt{\ul
+http://svitsrv25.epfl.ch/R-doc/library/quantreg/html/predict.rqss.html
+}}}
+ -smooth of top 5%\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \f1   xmat <- ns(x,y)\line
+  quantreg(pred~xmat)\line
+  #vqss?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -decompose: 1)smooth geo components 2)deviance from smooth will give us the local contribution\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 brent/joel meetings\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 meeting 04.09.13\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 General\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 maybe try differnet land use and different buffers for LUR terms, like have 2 buffers for a term like tden and try in the model humidty makes particles grow-interact with aod interact wdsp*mjrd penelized spline/n.s for dist to point emission interactions with pbl/wdsp with source/are emissions\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 LPM\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 1.normal LPM but with temporal and spatio-temporal interactions -also talk to steve to make effort to get traffic density by day/week etc, the mesa project maybe bought from someone. -ask steve about traffic modeling, nescam -check out Nldas data set (the North American Land Data Assimilation System) {\field{\*\fldinst{HYPERLINK "http://ldas.gsfc.nasa.gov/nldas/NLDAS2forcing.php"}}{\fldrslt{\ul
+http://ldas.gsfc.nasa.gov/nldas/NLDAS2forcing.php
+}}}
+ 2.smoothing of the residuals-lucas neas suggestion\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \f1   vresid~ LU+MET+Interactions+ s(x,y)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 meet 04.10.2013 with joel\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -pls and kernel not working well running just LU variables Spatial R2=~0.83 forward stepwise regression put in a mix of important LU as fixed and the rest as randomf\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 meeting 11.11.2013\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 in stage 4 things to check check: pbl interaction with wdsp season interaction with LU variables tden*year poden*years s(tden, by-year)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 meeting 23.1.2014\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 show results\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 next steps\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 mi-hyees models\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 CV of stage 3 impossible, what i did was leave 5 monitors out in stage 3 and look at the slopes , the slopes and R2 were still very similar\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 stage 4 s-t\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 ideas to further improve this part? maybe try a mixed model, relationship between resif ~ met variables changes daily/\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Model run\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 reg calibaration instead of CV for stage 3\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 run the reg with some left out monitors and see if the slope is different then '0' to see if we have Bias\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Israel pm models\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Weekly TODOS\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -why do we correlate 24h and not by overpass -better regions -go over PM25 and see if it looks\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 improvment\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 run by season ask california group whats the raw pm-aod correlations create yearly nox etc variables\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 TODO check in Israel for next iteration\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 composition of PM in israel, teom at 50 celsius may over measure and introduce noise to pm25. look at average residual in monitors put that in the paper teom is limited\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 TODO talking to alexei about size distribution\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 tried latley: kernel machine approach PLS a mean 20km mpm excluding the actual monitoring data. works very well as predictor but we have mod 2 problem. Also David dosent like it. Tried prev/post AOD as predictor tried mean of surrounding AOD as predictor. works almost as well as monitor AOD but both linerly don't improve much in model. both didn't imporve R2 by much code check email from 26.1.2015 joel all vars in log scale , check which one was dropped\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 ask joel\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 even simple pm-aod models show this sharp CV drop\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 talk with david\par}
+{
+\trowd \trgaph120
+\cellx2160\cellx4320\cellx6480\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 mod\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 r2\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 space\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 time\par}
+\cell}
+}
+\intbl\row}
+{
+\trowd \trgaph120
+\cellx2160\cellx4320\cellx6480\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 aod\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 0.77\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 .76\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 0.78\par}
+\cell}
+}
+\intbl\row}
+{
+\trowd \trgaph120
+\cellx2160\cellx4320\cellx6480\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 lu+met+intercept for day\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 75\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 0.61\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 0.76\par}
+\cell}
+}
+\intbl\row}
+{
+\trowd \trgaph120
+\cellx2160\cellx4320\cellx6480\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 aod+all\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 0.84\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 0.89\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 0.84\par}
+\cell}
+}
+\intbl\row}
+{\pard \ql \f0 \sa180 \li0 \fi0 \par}
+{\pard \ql \f0 \sa180 \li0 \fi0 the use of physical measuremtns gives us the ability to predict in areas far from physics monitors (such as >30km etc) and reach rural area use of AOD gives us daily predctions over space where LUR cannot monitors in modest numbers some areas may be under or unrepresented in calibrating the land use regression.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 using Aod results in more parsimonious models then LUR- leaves out some Land use terms used in later health outcome models that can create bias since they are included in the exposure\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO France temperature paper\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 how will we diffrantiate it from NE paper:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -emphasize how the performance is not known in Europe, and in more mountainous areas, and can allow studies of temperature and health to include people not in big cities.\par}
+{\pard \ql \f0 \sa0 \li0 \fi0 -completely different geographic region with med climate in south ,alpine in east and north-european in north -focus perhaps on paris and spatial variation across the city map urban heat island seasoanlity -we used regression calibration (ask fran) in stage 1 -Submit to a Euro journal -compare the model to avilable models in europe.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab epi people still using monitors\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Fran tasks\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 add to the methods section the regression calibration part :\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 we did it to reduce the noise etc etc\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 variables used\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Hi, I found all the data we need to run the model. The folder is: Y:LAST in the drobo. I think we need to run everything from the beginning because I don't remember what we decided. I don't remember how many monitors we used. Do you remember that we had more than 1000 monitors? I can come here Saturday but I guess I need your help with GIS at certain point.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Assuming that the stage1 data we have in the drobo are correct, it seems to me that in the final model we used night{\sub temp}, elevation, pcturban and NDVI. Attached you can find the results of Stage 1.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 proc mixed data = Modis.Ep{\sub Finals1}_&year method=reml; class date; model tm = &Type elev{\sub m} pcturb NDVI/ s outpred = Pred_&year; random intercept &Type / subject = date type = UN; run; quit;\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO paper\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Yes, I think dynamic buffering is fine. Regarding the France paper, I think the emphasis should be 1) existing health studies of temperature effect only capture temporal variation and not spatial variation, and a model for every day and km sq can help address this; 2) while modeled temperature data does exist, it mostly has not taken advantage of the rich satellite remote sensing resource; 3) While we were successful in developing such a model in the Northeast, performance in Europe is unknown where land use patterns are different, and where there are sharp climate gradients such as mountainous areas, cold Atlantic shores Mediterranean climate, etc such as in France. I would also point out that the model has shown its advantages over nearby temperature monitors in health effect studies already. I would try Atmospheric Environment.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO OSM project\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 paper focus\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO talk to Lara on working on paper\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 1st paper\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 should be on: OSM use as a valid and readly avilable data/exposure source in envrinonmental health show how well OSM and Euro tden data correlates over "good" coverage areas such as swiss?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 show how we use all Qgis and floss data/software -start focusing on comparing the 50mx50m euro street In parts of europe and OSM data\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab [ ] subtracting OpenStreetMap data from tden data?\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab [ ] create line density maps- Calculates a magnitude per unit area from polyline features\sa180\par}
+{\pard \ql \f0 \sa0 \li0 \fi0 create suraces and look at correlation\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab [ ] compare road type classifications\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab use the traffic as an exposure scores\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 2nd paper - africa?\par}
+{\pard \ql \f0 \sa0 \li0 \fi0 sepcifically in underdevloped areas such as africa/etc where traditional road data isn't available compare then how they work in "bad" areas such as africa?\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab [ ] access to health care centers based on roads?\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 literature\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 perliminary lit review on OSM use in environmental health resulted in little to no studies there are some stuides using OSM as data sources in public health in general but no comparios or quantative examples on OSM vs traditinal traffic/road use data however there are many studies looking at OSM and OSM use in studies in terms of valididty, accuracy coverage etc:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\field{\*\fldinst{HYPERLINK "http://koenigstuhl.geog.uni-heidelberg.de/publications/2010/Zielstra/AGILE2010_Zielstra_Zipf_final5.pdf"}}{\fldrslt{\ul
+http://koenigstuhl.geog.uni-heidelberg.de/publications/2010/Zielstra/AGILE2010_Zielstra_Zipf_final5.pdf
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\field{\*\fldinst{HYPERLINK "http://link.springer.com/chapter/10.1007/978-3-319-14280-7_15"}}{\fldrslt{\ul
+http://link.springer.com/chapter/10.1007/978-3-319-14280-7_15
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\field{\*\fldinst{HYPERLINK "http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=6822226&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D6822226"}}{\fldrslt{\ul
+http://ieeexplore.ieee.org/xpl/login.jsp?tp=&arnumber=6822226&url=http%3A%2F%2Fieeexplore.ieee.org%2Fxpls%2Fabs_all.jsp%3Farnumber%3D6822226
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\field{\*\fldinst{HYPERLINK "http://wiki.openstreetmap.org/wiki/OSM_and_OSL_differences_analysis"}}{\fldrslt{\ul
+http://wiki.openstreetmap.org/wiki/OSM_and_OSL_differences_analysis
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 data\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 Africa data:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 we are focus tanzania and then zoom area round dar el salam in spcifacly OSM-data OSM road data isn't there from govermental agencies\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 What is available Which country are we comparing?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 Euro (swiss)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 what data is available: send the road network data eurodata at 50m comapre to OSM data\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 DVT admissions and PM\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 info\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 The variable thromb is based on the first main diagnosis of admission, while thromb2 is based on primary and secondary admissions. The ICD are below thromb=0; if (icd11 in (415, 451, 453)) then thromb=1;\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 secondary stage\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Ask antonella about medical history, prev admisons, causes\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -look into weather had cancer yes/no -hospitalized last 90 days\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 add interactions\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab for c-xover try individual level and zip level SES, sex, urban-rural\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab interact with ndvi/percet of open space in both short and long term (CXover and Ts)\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -look at interacting with season (winter vs summer)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Survival analysis\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Try running a survival anlysis or maybe a posion survival analyis (SA) (look at johana 6 city paper) if running a posion SA we can extract the random slopes fro every zipcode and with smoothing create a spatial map showing risk areas\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Smooth the random slopes to create risk maps\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 peripheral artery disease (Andrea) and AE\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 idea\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 By reading this paper it came back to my mind that there is another orphan cardiovascular disease in air pollution research: peripheral artery disease. This is usually due to atherosclerosis and narrowing of the arteries in the limbs and an lead to severe outcomes such as amputation. It makes sense to be affected by air pollution, but last time I checked no one had published anything on this. With a large database and geospatial resolution, PAD would be an obvious one to look at.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 data from antonella\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 when there is no 2, it means that they are created form first diagnosis, when there is the 2 it means that are created based on 1 and up to 5 secondary diagnosis so the ones with the 2 should have higher numbers of hospitalizations\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Mexico PM model\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 mexico joels ideas\par}
+{\pard \ql \f0 \sa0 \li0 \fi0 consider using other pollutants around the city specifacly indicators for high traffic, use n02 and co and create an indicator where co/pm and no/pm is in the top third and create a high traffic indicator -similarly try to make an indicator for partical color composition, look at ratio for pm10 and pm2.5 -filter for spatial pattern-cloud contaminated days -concnerd using teoms Vs filter based (like in the usa) -use aeronet site in city to check maiac aod\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab interactions for time for almost anything if you run a full model: interact with aod, all LU, all met. each one interacting\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab lag terms for every day well have lags: pm~aod+aod01\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 if prev day isnt avilable we use the same day twice -to borrow information across space create a variable that weights and down weights low aod observations per day\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Top pri\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO weight sites in Mod1 by inverse of nearby missing AOD (downweight sites near clouds)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO Joel suggests we put time interactions on almost everything\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 which interaction {\field{\*\fldinst{HYPERLINK "/home/acjust/projects/airmex/code/LUR_Mex_1b_clean_local.R"}}{\fldrslt{\ul
+file:/home/acjust/projects/airmex/code/LUR_Mex_1b_clean_local.R
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 if no points to calibrate against - maybe don't use mean slope/intercept for mod2 prediction\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 what about instead clustering to find characteristics of days that predict the AOD-pm relationship and substituting slopes/intercepts from those instead for the many days when no calibration is occuring because mod1 is empty on that day (no aod near monitors)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO add high res local smoothing in mod1\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 in mod1 file, join the monitor to average of nearby AOD\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Workflow and fixes\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO Discover patterns of bad AOD data using spatstat to check for contiguous regions\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 create paths so S:/ and S:/EOME taken care of automatically\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 TODO Fix KNN function\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 joel and Bernt talk\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs16 Dynamic threshold of high aod (exclude high aod if monitor are low)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs16 Or substitute nearby Monitor pm if aod high but Mon is low (bad ground measure).\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs16 Look at diurnal pattern (pm, pbl) to predict when build up occurs. Use both aqua and terra as predictors?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs16 Cross validation: bootstrap prediction after leaving out two monitors with replacement, make predictions, check r2\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs16 Try aod divided by pbl. Or cluster groups of days (by pbl profile). Fit different models for subsets?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs16 Handle data as a matrix, smooth with a weighted kernel. Strip off measures near edges.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO add flag to exclude closest in mean calc in geomerge/nearestbyday\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 lower pri\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO LUR; space-time smoothing; nearby cells weighted for missing and previous day (if gone, use today)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 is the ground monitoring data under a cloud otherwise the same as when not clouded (apart from precip events)?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 does relationship of Aqua and Terra give us info? early pollutant build-up vs continuous across the day?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 can I extract cloudiness from NOAA dataset?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 can we construct a surrogate for particle color composition?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 pick satellite (Aqua vs Terra) based on which one has lower uncertainty in gridcells that join to monitors\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 validate at schools\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 To show that AOD is helping compare mod3 predictions with measures at schools how does this compare to assigning the closest real mon?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 LUR-Mex: Why is our mod1 dropping UIZ and SJA in much of 2007 - it looks like there was daymean measured there before\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 compare two approaches to imputing at sites missing all AOD (in a year)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab after stage 3, assign the closest grid cell prediction (or average the near ones)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab fill in those grid cells with stage 2 predictions and then run the smooth mod3 part\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab add land use terms later on to improve these predictions further\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 transform elevation so that it isn't correlated with intercept (subtract min before log)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 running all years at once vs 1 year at a time (mod1 in particular)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 are there temporal trends?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 look at a plot of the random slopes and intercepts as a function of time\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 can we get traffic data from google\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 if points are completely missing\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 wait and see if after the new data we still have missing grids take average of closest non-missing bestpred by day - to smooth over them\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 use OpenStreetMap roadways (downloaded July 31, 2013)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 show relation of PBL height and how well AOD agrees with monitor (is this unique to MCMA?)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 show importance of roadway network as a source - maybe fit model without a rden and show how gridcell estimates differ as a function of the proportion of heavy roadways\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 stage 4 model (local PM)t\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 take residuals from stage 3 model and then regress that with very fine resolution (50 or 100 or 200m) spatial and temporal terms this could be added back to overall prediction - much more detail because not just on 1x1 scale\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Try removing (in mod1&2) aodid gridcells that have very few passable days (<100)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 since they may have ground conditions that are weird\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 incorporate MODIS characteristics for aodid grid cells (or other landcover dataset)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 especially since these could change over the decade\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Checking new data\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 aeronet: AOT{\sub 440} in 2003 2004 vs schools PM look at REDMA (filter based PM2.5) look hour of flyover PM2.5 (could diurnal throw us off) using dat.hr interaction with rain (rain scatter looks like particles) Redo time series plot dropping points on rain days\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 some monitors are poorly correlated with aod:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 why is this? geography (notheast of the city); political boundaries (outside df run by different agency)?; elevation? proximity to local sources?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 additional covs.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Data to integrate/other data sources:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Use spatially distributed precipitation data (but maybe only DF, see also conagua?)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Add in some representation of point sources (layer in GIS)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Use land use/greenspace\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Use aeronet - maybe as a super-monitor (weighted?) Use other satellite data?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Use a latent class linear mixed model (LCLMM) to generate PBL patterns as predictors (see ?lcmm::hlme);\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 See also Schafer et al.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Proportion of the day with wind from the north (if point sources matter)?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Andrew Ng's strategy for assessing bias vs variance in prediction algorithms (see coursera videos)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Should we try to impute missing PBL (especially runs of multiple missing days)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Construct directional buffers and intersect these with road density for each point;\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 consider upwind traffic on each day (directional road density weighted by daily wind)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO spatial join to best close point\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Instead of taking the closest AOD point to each monitor for each day, what if we took each of the points within some distance and ran a regression then preferentially weight our selection AOD points to pick those sites with best agreement to monitor (likely a function of local land use features). The best agreement could be not the closest point, but the one downwind the most, or with the most similar amount of roadway, etc... This could really impact calibration in Mod1. see also LUR{\sub Mex4b2vignettespatialjoin}.R\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Are there better predictions at stations with their own met monitoring?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 does it matter if you have the spatial/temporal covs from your own monitor Vs. borrowing it from nearby\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Does open streetmap give the same predictions as municipal GIS\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO For any pair of monitors, what is their correlation as a function of distance (manual semivariogram)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Are seasonal patterns driven by rain alone or rain + other factors\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 If there are temporal patterns (decreases) are any particular predictors major drivers of these trends (interaction by time)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 If we compare school monitor stations with closest SIMAT monitor - how good are they?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Fix R code to convert latlon to UTM 14N\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Why is our mod1 dropping UIZ and SJA in much of 2007 - it looks like there was daymean measured there before\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Add no2 and co; indicator for days with high co to pm ratio (top third), same with no2\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 using additional monitoring data (co-pollutants) as an indicator of the composition (daily or by sub-region&day)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Add pressure to data from noaa\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Air mex Pm 10 to pm2.5 ratio, could that change how well it fits\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Calibrate TEOM against filter-based PM2.5 measure - could burn off volatiles and under-report PM2.5, maybe varying by seasons/locations\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 import from HDF4 using R: maybe recompile rgdal from source? see link\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 impute missing pbl\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 check out Amelia, maybe single impute time-series? {\field{\*\fldinst{HYPERLINK "http://cran.r-project.org/web/packages/Amelia/vignettes/amelia.pdf"}}{\fldrslt{\ul
+http://cran.r-project.org/web/packages/Amelia/vignettes/amelia.pdf
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO leave one monitor out cross-validation\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 RH modifies particle size distribution - need to include\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 scraping google or bing road traffic\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 use lots of spatial terms with PLS regression a la Sampson paper\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 seasonal patterns - are these just due to rain?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Health outcome studies\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 Birth outcome analysis\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs16 Derive predictions for different lag times/prenatal periods\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs16 and plot bweight~airpollution parameter as a function of prenatal windows\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs16 distribuated lag model\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs16 Assign participant addresses to ageb as a proxy for neighborhood?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 papers\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 methods paper\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 draft methods - ask Mara about GPS devices used by drivers\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 exposure paper #1\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 critical path to be done for paper\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 fix CV convergance errors/fix approach in general\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 update local datasets RAMA, precip, pbl recast data to Yuji's centroids AOD road density elevation handle missing pbl run three stages again minimal additional cloud cleaning draft results\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Italy PM models\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Diffrances then NE paper:\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab in in europe\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab mountanius regions in north mediteranian climate in south\sa180\par}
+{\pard \ql \f0 \sa0 \li0 \fi0 -Submit to a Euro journal -compare the model to the ESCAPE LUR models, show how we do much better -compare in Brecsia- the town with and without smellter, talk to Brent about this\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab aod in upwind squere is excellent predictor for a specifc grid cell\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 avg Per day, weighted average per grid cell\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Bob Wright italian Grant\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 grant reports,how do we publish so the grant doesent get annoyed, first author where, etc\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 exposure paper- france -last or first exposure paper-massimo first/last\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 TODO OMI OC\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 how well the maiac algo does with high OC (organic carbon) in southern italy. aerosol index OMI- second iteration from email:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \f1 I want to report an interesting discussion I had last week with Daniel Jacob. We have a Indonesian Smoke project, where Daniel's group runs nested GEOS-Chem models for Southeast Asia with fire emissions estimates from a group at Columbia (Ruth DeFries) and I do a health impact assessment. There was one seasonally unusual air pollution peak in Singapore which was due to fires in Indonesia, but AOD did not pick it up. However, the OMI Aerosol Index did. Daniel's group came up with two contributing factors. One is that there was some sand transport from Arabia and and the look up tables do very poorly when dust is mixed with organic carbon. The other is that the AI from OMI is in the near ultraviolet, and organic aerosols are picked up better in that frequency. \line
+This may have implications for Italy, where there is dust transport, even when there is not a peak event, and where there is wood smoke in the winter. I wonder if we could look at AOD in the 400nm range, or make use of the AI to help with the model?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 MAIAC EURO Consurtium\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 grant ideas\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 supplementing PM2.5 with PM10-25 relationshipnm that year\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 compare euro wide model with localized model\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 centralized repositoary and data sharing\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 for my NAS, with FTP access to project members? later if we get grant money we can build a server+NAS some centralized location\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Kees talk 13.5.2015\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 elena\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 john goliver\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 data AOD is being processed for Swiss\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 should be ready by next 48h will send via FTP\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 skype call to discuss meeting agenda\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 OSM project\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 see {\i OSM project}\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO create a pan euro dataset\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Kees talk 03.06.2015\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 hired a ma student to work on OSM project\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 perhaps organize a skype call soon between us? or start with getting her data\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 AOD data is proccesing..\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 took long time but should be ready in next few days\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO rome meeting 07/2015\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 grant aim data for whole europe including osm data impute pm2.5 from pm10 data in low pm2.5 years\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 italy temperature models\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Ideas\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 tmin tmax use 4 measuremtns per day and use aqua and terra talk to brent of a method to to a sophisticated way to impute t from aqua and terra\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Israel temperature models (LST-ta)- Aaar Rozenfeld\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 different calibration methids\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 comparing the wrf model in israel to our model as part of the methods paper\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Sulfate analysis-explore calibrating the data we have with Sulfate instead of PM2.5\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Get and use 3X3 km data?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 get sulfate data from EPA\par}
+{\pard \ql \f0 \sa0 \li0 \fi0 antonella dosent have sulfate data, is it from EPA data website?\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab specification data from antonella\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -also email choon min\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 alexandra\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 TODO assign shiran to download data\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 ask alexandra about this in next weeks meeting\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Alexandra meetings\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 methods paper 10x10 Vs 1x1k etc\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 comparing multiple resolution models to better charecterize fine particulate matter in urban Environments: years 2003-2008 Boston, Worcster, NYC, Newark 4 rural\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -fig 1: 10x10 NE usa 10x10 and 1x1km NE USA -plot 2: box plot of true pm and pm 10km vs 1km per ( and maybe 200) city and by season range of true PM, pred 10, pred 1-check ranges in each -plot 3: distances from main roads and/or urban rings and levels of PM: take NYC and boston and see how much the levels of pm go down for each few km's from the city: downtown, surrondings area, outer core , rural -plot 4: transported pm by trajectories and thresholds -discussion: show how you might underestimate the health effect (exposure bias) maiac is similar to modis but much more obsrv with more variability\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 comparing rural vs urban areas, comparing cities by decreasing populations comparing 10x10,3x3,1x1,200x200 X-city size or popultaion and scale Y-PM and create 3 box plots 10,1,200 season-same as above range of variablilty of 1x1m pixels within a 10x10km model. figures: fig 1: 10x10 vs 1x1km for 2003-2008 fig 2: box plot city/pop vs pm fig 3- going further from A1 roads and PM levels\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 2004-current OMI\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 no2 modles\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 O3 models\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 So2 models\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Multi Pollutant project-living in the modern environment (with Jamie)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 meeting with jamie\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 15.7.2013 prepare MA datasets of temp,PM,NDVI,SES stuff and other perhaps to prepare to the regression tree\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -look into Ozone (O3) and sat. data for possible future modeling -So2 is very low in the usa, better to look at NO2 -NDVI as an exposure -Noise is very hard to model, no noise data, height, buliding material etc -walkabilty -comapre urban vs rural and citiy vs city (Boston Vs New York) -access to food places (such as supermarket etc) - can use google maps for that maybe -maps to create shape files -mcast scores in MA (standerized tests), this test is taken by all MA students> can be used as an outcome -conn health data (birth weight)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 stat metoods\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 regression tree speciffacly random forest\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -regression trees (usually run in R) are like informative clustering with health end points> exposure -the theory is to put all exousre variables (with temporal variation not SES etc) and it will give you for the specific outcome what the most important one is. its like running all these interactions for ll the exposuresi -the random forst is an attempty to make it more robust, and see which Variable (exposres in our case) is most important\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Check Mboost R package for regression trees\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 things to look at as exposures\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -urban form -wakability -prox to hospitals -socio economic disatvanteges measures -urban classification\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 meeting with Allan and Jamie\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 TODO prepare <2014-09-30 Tue>\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO prepare exposure dataset\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 prepare for the MA birth from 2003-2008: PM Ta SES NDVI/Ospace walkabilty access to healthy food,access to health centers\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 Temperature\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 Wakability\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 SES variables\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 PM\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 open space/ NDVI (greeness)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 DONE arrange a skype call with Jaime\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Noise pollution Israel- omer harovi\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 sources\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 israel contacts\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Shuki Cohen from Matat, or Shlomo may also be able to help you\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 haifa project\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 map of mean BW, height and circumfernace compared the delta of these variables (change over year)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 compare this to tel aviv and hadera this is done per SSA in haifa and tel aviv and hadera for the whole city\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 main exposure-outcome\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 double kernel exposure (will be as contour)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 beysian kriging- nox sox pm2.5 (used in some station from imputin from pm10 via a 0.45 ratio)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 checking deltas of change in air pollution and changes in outcome\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 look at change in delta air pollution vs delta of change in outcome\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 France Pm models\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 todo data management\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 info on data sources for paper\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Temperature and wind speed data came from measurements operated by M\u233?t\u233?o-France. I think Annick Auffray from M\u233?t\u233?o-France should be a co-author. Note that we need them to approve the paper before submission (it was explicitly written in our contract). Planetary boundary layer data came from CNRS, Robert Vautard. If needed, he will add something in the paper about the model from which these data come from (50km resolution). I\u8217've got population density, hydrology, and traffic data from the IGN (Institut national de l'information g\u233?ographique et foresti\u232?re (IGN)) website but I will need to check how we should acknowledge them.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 Future Research Ideas\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 PM model (NEXT BRANCH)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 MAIAC next stages\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO call with Alexei\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 cloud cover issue in Mexico; grid cells being masked because of bright surfaces (false clouds) and dropping of clear days (long time series with no scene coverage) Israel data subsets with no raw correlation - Itai will send examples to Alexei (related: not certain why we have big differences in R2 from year to year in Israel and Mexico) dust days not caught by MAIAC (in Israel); Itai and Meytar sending a few examples (both areas) focus on improving a single year to speed iteration - we nominate 2004 - hopefully this lets us communicate back and forth.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 We also heard some great suggestions that I am eager to try about TEOM recalibration; characterizing diurnal monitor patterns; comparing aeronet versus the closest monitors; attempting inverse variance weights on AOD; and carefully using both Aqua and Terra.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 explore Callipso sattelite\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Future models ideas\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO supplementing AOD by space and time\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 space: perhaps taking aod from n (~ 9) adjacent cells time: take from prev/next day if no AOD avilable today also we can maybe weight nearby cells by missingness/distance\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO use calman filter to merge 1x1km to 3x3km\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 we can supplment 1k data with 3k data where we preform lousy and dont do so well\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 look at interactions with wind\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 random slope for each slopes for each wind direction use wind speed to choose the best 9 grid cell aod reanalysis data set for wind direction\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 LPM- rule if you have a spline it should stop in distance X etc (\u8326?In example\u8326? for A1 1500km).\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Try removing (in mod1&2) aodid gridcells that have very few passable days (<100)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 since they may have ground conditions that are weird\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 NEXT calculate for each day the corr between monitor and surronding AOD point in a X defined distance and take the highest correlation:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 modis isn't fixed and we are getting the centroid of the grid it may be that the closest AOD point does not neccesarly correlate the best in a given point/day due to: there maybe LU/temporal variables that are not centroid specific\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 cover less densly populated areas across USA with 3x3 data\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 smoothing of the residuals-lucas neas suggestion\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \f1   resid~ LU+MET+Interactions+ s(x,y)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Take those smoothed surfaces from stage 3 and put them into stage 1 as another predictor, and if CV R2 goes up, use them?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Use aeronet - maybe as a super-monitor (weighted?) Use other satellite data\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 penelized spline/n.s for dist to point emission\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Better error estimation\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 I have one other idea regarding error estimation. What I previously proposed samples spatial variability in error. We take the annual error in each monitoring location and do a LUR. But there is also temporal variability in at least the GEOS-Chem output, because the chemistry is not perfect and on some days that will matter more. For this I propose the following. On each day, for a region, e.g. New England, we compute the daily rmse. We can then regress these against temporal factors, mostly meteorological.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 mihyee weighted CV\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \f1   #remove.packages('lme4');\line
+  install.packages('c:/test/lme4_1.0-6.tar.gz', repos=NULL,\line
+  type='source')\line
+  #http://cran.r-project.org/src/contrib/Archive/lme4/\line
+  #If error, install R developer tool (Rtools31.exe default installation\line
+  at http://cran.r-project.org/bin/windows/Rtools/)\line
+  #After lme4_1.1-5, produces error like random coeff >= obs.\line
+  :options(lmerControl=list(check.nobs.vs.rankZ = "ignore"))\line
+  #https://github.com/lme4/lme4/issues/175\line
+  library(data.table); library(plyr); library(lme4); library(mgcv)\line
+  #Making a grand report table\line
+  #colnames(mod1table) <- c('Year', 'Group', 'OA_R2', 'CV_R2', 'CV_int',\line
+  'CV_int_se', 'CV_slope', 'CV_slope_se', 'RMSPE', 'spatial',\line
+  'temporal', 'RMSPE_spatial', 'LPM_CV_R2', 'LPM_CV_int',\line
+  'LPM_CV_int_se', 'LPM_CV_slope', 'LPM_CV_slope_se', 'LPM_RMSPE',\line
+  'LPM_spatial', 'LPM_temporal', 'LPM_RMSPE_spatial')\line
+  mod1table <- matrix(nrow=27, ncol=22); mod1table <- data.frame(mod1table)\line
+  colnames(mod1table) <- c('Year', 'Group', 'OA_R2', 'CV_R2', 'CV_int',\line
+  'CV_int_se', 'CV_slope', 'CV_slope_se', 'RMSPE', 'spatial',\line
+  'temporal', 'RMSPE_spatial', 'LPM_CV_R2', 'LPM_CV_int',\line
+  'LPM_CV_int_se', 'LPM_CV_slope', 'LPM_CV_slope_se', 'LPM_RMSPE',\line
+  'LPM_spatial', 'LPM_temporal', 'LPM_RMSPE_spatial', 'LPM_CV_2')\line
+  mod1table$Year <- rep(2003:2011, each=3); mod1table$Group <- rep(1:3, 9)\line
+  lu <- read.csv('C:/Data/Thesis/Topic 2/Data/Local\line
+  PM/pm_stations_lpmvariables_2_7_14.csv')\line
+  lu$dist_pemis[is.na(lu$dist_pemis)] <- 15; lu$dist_A1[is.na(lu$dist_A1)] <- 50\line
+  lu$elev_m <- NULL\line
+  m1.formula1 <- as.formula(PM25_2 ~ aod + TEMP.x + DEWP.x + SLP.x +\line
+  WDSP.x + VISIB.x + ah_gm3.x + NDVI + elev_m + pbl\line
+              + pcturb_1km + Emsn_Pt + PM10_Pt + NOX + (1\line
+  + aod|Date/Region2))\line
+  m1.formula2 <- as.formula(PM25_2 ~ aod + TEMP.x + DEWP.x + SLP.x +\line
+  WDSP.x + VISIB.x + ah_gm3.x + NDVI + elev_m + pbl\line
+              + pcturb_1km + Emsn_Pt + (1 + aod|Date/Region2))\line
+  m1.formula3 <- as.formula(PM25_2 ~ aod + TEMP.x + DEWP.x + SLP.x +\line
+  WDSP.x + VISIB.x + ah_gm3.x + (1 + aod|Date/Region2))\line
+  m10.formula1 <- as.formula(PM25.y ~ AOD + TEMP.y + DEWP.y + SLP.y +\line
+  WDSP.y + VISIB.y + ah_gm3.x + Ave_Elev\line
+              + p_open + Ems_Pts + Ems_Cnty + A1_dist_km +\line
+  Sum_DISTAN + (1 + AOD|Date))\line
+  m10.formula2 <- as.formula(PM25.y ~ AOD + TEMP.y + DEWP.y + SLP.y +\line
+  WDSP.y + VISIB.y + ah_gm3.y + Ave_Elev\line
+              + p_open + Ems_Pts + (1 + AOD|Date/Region))\line
+  m10.formula3 <- as.formula(PM25.y ~ AOD + TEMP.y + DEWP.y + SLP.y +\line
+  WDSP.y + VISIB.y + ah_gm3.y + (1 + AOD|Date/Region))\line
+  ctrl <- lmerControl(optCtrl=list(maxfun=50000))\line
+  cv.records.year <- list()\line
+  options(warn=1) #Produce warnings right away where it occurs (if 2, stops)\line
+  for (i in 2003:2011)  \{\line
+\line
+    for (j in 1:3)  \{\line
+\line
+      print(paste(i, j))\line
+\line
+      m1 <- read.csv(paste('C:/Data/Thesis/Topic 2/Results/Stage\line
+  1/Pred/Pred1 CSV/Pred1_', i, '_', j, '.csv', sep=''),\line
+  colClasses=c('SiteCode'='character')) #To keep leading zeros in\line
+  sitecode\line
+      m10 <- read.csv(paste('C:/Data/Thesis/Topic 2/Deep Blue 10 Km/Data\line
+  in CSV/Stage1_', i, '_', j, '.csv', sep=""),\line
+  colClasses=c('SiteCode'='character')) #To keep leading zeros in\line
+  sitecode\line
+\line
+      ####\line
+      #M1<-PART OF SOCKET?\line
+      #M1<-ONLY THE COMMON?\line
+      ####\line
+\line
+      combi <- merge(m1, m10, by=c('Date', 'SiteCode'))\line
+      #load CV data for each aod resolution\line
+      CV10.1 <- read.csv('C:/Data/Thesis/Topic 2/Results/Stage 1/Stage1_CV10.csv')\line
+      CV10.10 <- read.csv('C:/Data/Thesis/Topic 2/Deep Blue 10\line
+  Km/Stage1_CV10.csv')\line
+      #extract the RSMPE\line
+      RMSPE.spatial.1 <- CV10.1[CV10.1$Year==i & CV10.1$Group==j, 'RMSPE_spatial']\line
+      RMSPE.spatial.10 <- CV10.10[CV10.10$Year==i & CV10.10$Group==j,\line
+  'RMSPE_spatial']\line
+      #create weights based on RMSPE\line
+      w1 <- 1/(RMSPE.spatial.1)^2\line
+      w2 <- 1/(RMSPE.spatial.10)^2\line
+      #the j is for every region\line
+      if (j==1) \{m1.formula <- m1.formula1; m10.formula <- m10.formula1\}\line
+      if (j==2) \{m1.formula <- m1.formula2; m10.formula <- m10.formula2\}\line
+      if (j==3) \{m1.formula <- m1.formula3; m10.formula <- m10.formula3\}\line
+\line
+      out.m1 <- lmer(m1.formula, data=combi)\line
+      combi$prednew <- predict(out.m1)\line
+      mod1d_reg <- lm(combi$PM25_2 ~ combi$prednew)\line
+      eval(parse(text=paste("mod1table[mod1table$Year==", i, " &\line
+  mod1table$Group==", j, ", 'OA_R2'] <- summary(mod1d_reg)$r.squared",\line
+  sep="")))\line
+\line
+      #Site sHUFFLING- CV  per Site\line
+\line
+      index <- unique(combi[, 'SiteCode']) #List monitoring sites\line
+      suffled.sites <- sample(index) #Shuffle them\line
+      quotient <- trunc(length(suffled.sites)/10) #Divide them by 10\line
+      remainder10 <- ((length(suffled.sites)/10)%%1)*10\line
+      series <- rep(quotient, 10)# take 10% of sites\line
+      series[0:remainder10] <- series[0:remainder10]+1\line
+\line
+      for (k in 1:10) \{ #set k-th CV\line
+        if (k==1) \{start <- 1; end <- series[k]\} else \{start <- end+1;\line
+  end <- start+series[k]-1\}\line
+        site.ith <- suffled.sites[start:end]\line
+        combi$CVSetID[combi$SiteCode%in%site.ith] <- k\line
+      \}\line
+      #Site sHUFFLING\line
+\line
+      cv.results <- list()\line
+      for (m in 1:10)  \{\line
+\line
+        trainset <- combi[!combi$CVSetID==m, ]\line
+        testset <- combi[combi$CVSetID==m, ]\line
+\line
+        out_90.1 <- lmer(m1.formula, data=trainset, control=ctrl)\line
+        testset$prednew10.1 <- predict(object=out_90.1, newdata=testset,\line
+  allow.new.levels=TRUE, REform=NULL)\line
+\line
+        out_90.10 <- lmer(m10.formula, data=trainset, control=ctrl)\line
+        testset$prednew10.2 <- predict(object=out_90.10,\line
+  newdata=testset, allow.new.levels=TRUE, REform=NULL)\line
+\line
+        #add the weights to the CV results\line
+        testset$pmnew <- (w1*testset$prednew10.1 +\line
+  w2*testset$prednew10.2)/(w1 + w2)\line
+\line
+        cv.results[[m]] <- testset\line
+      \}\line
+\line
+      mod1d_all <- do.call(rbind, cv.results)\line
+      mod1d_reg <- lm(mod1d_all$PM25_2 ~ mod1d_all$pmnew)\line
+\line
+      eval(parse(text=paste("mod1table[mod1table$Year==", i, " &\line
+  mod1table$Group==", j, ", 'CV_R2'] <- summary(mod1d_reg)$r.squared",\line
+  sep="")))\line
+      eval(parse(text=paste("mod1table[mod1table$Year==", i, " &\line
+  mod1table$Group==", j, ", 'CV_int'] <- summary(mod1d_reg)$coef[1,1]",\line
+  sep="")))\line
+      eval(parse(text=paste("mod1table[mod1table$Year==", i, " &\line
+  mod1table$Group==", j, ", 'CV_int_se'] <-\line
+  summary(mod1d_reg)$coef[1,2]", sep="")))\line
+      eval(parse(text=paste("mod1table[mod1table$Year==", i, " &\line
+  mod1table$Group==", j, ", 'CV_slope'] <-\line
+  summary(mod1d_reg)$coef[2,1]", sep="")))\line
+      eval(parse(text=paste("mod1table[mod1table$Year==", i, " &\line
+  mod1table$Group==", j, ", 'CV_slope_se'] <-\line
+  summary(mod1d_reg)$coef[2,2]", sep="")))\line
+\line
+      #rmspe\line
+      eval(parse(text=paste("mod1table[mod1table$Year==", i, " &\line
+  mod1table$Group==", j, ", 'RMSPE'] <-\line
+  sqrt(mean(mod1d_reg$residual^2))", sep="")))\line
+\line
+      #spatial\line
+      aggf<- ddply(mod1d_all, c("SiteCode"), function(df)\line
+  return(c(barpm=mean(df$PM25_2),barpred=mean(df$pmnew))))\line
+      mod_spatial <- lm(barpm ~ barpred, data=aggf)\line
+      eval(parse(text=paste("mod1table[mod1table$Year==", i, " &\line
+  mod1table$Group==", j, ", 'spatial'] <-\line
+  summary(mod_spatial)$r.squared", sep="")))\line
+      aggfdt <- data.table(aggf)\line
+\line
+      #temporal\line
+      dat <- merge(mod1d_all, aggf, by='SiteCode', all.x=T)\line
+      dat$delpm <-dat$PM25_2 - dat$barpm\line
+      dat$delpred <- dat$pmnew - dat$barpred\line
+      mod_temporal <- lm(delpm ~ delpred, data=dat)\line
+      eval(parse(text=paste("mod1table[mod1table$Year==", i, " &\line
+  mod1table$Group==", j, ", 'temporal'] <-\line
+  summary(mod_temporal)$r.squared", sep="")))\line
+\line
+      #rmspe_spatial (RMSPE of spatial predictions)\line
+      dat$spatresid <- dat$barpm - dat$barpred\line
+      eval(parse(text=paste("mod1table[mod1table$Year==", i, " &\line
+  mod1table$Group==", j, ", 'RMSPE_spatial'] <-\line
+  sqrt(mean(dat$spatresid^2))", sep="")))\line
+\line
+      write.csv(mod1table, 'C:/Data/Thesis/Topic 2/Deep Blue 10\line
+  Km/Stage1_CV10_pmnew2.csv', row.names=F)\line
+\line
+      #Just round to 2 decimal places\line
+      #eval(parse(text=paste('mod1table$', i, '_', j, ' <-\line
+  round(mod1table$', i, '_', j, ', 2)', sep='')))\line
+\line
+    \}\line
+  \}\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 using WRF data for met.pbl etc data (see AE I reviewed)- also look at sattelite derived column no2-from same paper\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO combine aqua and terra\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 I have an idea for combining the satellites but we need to get NE done quickly and I thought we should save it for your Midwest paper. You should expect half or more of the observations to be missing. What is your missing percentage? Regarding the two satellites you need to remember some stuff from Petros' air pollution course. In the morning the mixing height is low. Local pollution is trapped near the ground, an is a large fraction of particles. It is mostly from traffic or from oil heat in the winter, and so a lot of the particles are black, and a lot are fresh, and hence small. I n the afternoon the mixing height is high, transported particles mix down, and the color and size distribution change. Therefore, the calibration changes. So we need to do the stage 1 calibration separately for each satellite, and then combine, since one is in the morning and one in the afternoon.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 I asked Mihye to run separate stage one models for aqua and terra, predict the PM2.5, average the predicted and they do the CV R2, and it was higher than either. While this may not matter for the Northeast, for the Southeast we need all the gain we can get, and I expect it would help for Italy, and possibly France as well. I think it is important to do the averaging after converting to PM2.5, because they measure AOD at different times. The aqua measurements are in the afternoon, and will be less impacted by the morning peak in local pollution, and the model will depend more on local land use surrogates to capture that contribution. In contrast, much of the transported pollution has mixed down by then, and the AOD will capture that better. For terra, it is the reverse. So I expect different coefficients both for AOD and for the other terms. Once we have the best PM2.5 predictions from each, averaging should eliminate some noise in the prediction. She is doing this now for the Southeast.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Aerosol index\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Getting back to Aerosol Index, which is computed in the UV band not visible light, it seems to be sensitive to two types of particles: desert dust, and organic particles from biomass burning. It seems to be available on OMI and some European Satellites, and interestingly for Israel, seems to go back much further. The resolution is coarse, 25km, but it certainly will give a continuous measure of how much dust is around, and for dust from Sahara or Arabia, 25km may not be too bad a resolution. So it could help correct models using MAIAC data on "non dust storm" days when there is still some dust around. It should also help for Italy and the south of France which get hit by Saharan dust. It might improve predictions in winter where wood is burned for heat in Italy and France.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\field{\*\fldinst{HYPERLINK "http://disc.sci.gsfc.nasa.gov/data-holdings/PIP/aerosol_index.shtml"}}{\fldrslt{\ul
+http://disc.sci.gsfc.nasa.gov/data-holdings/PIP/aerosol_index.shtml
+}}}
+ {\field{\*\fldinst{HYPERLINK "http://www.temis.nl/airpollution/absaai/"}}{\fldrslt{\ul
+http://www.temis.nl/airpollution/absaai/
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 data fusion in North America\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 combining the 3k and 1k data which have different algorithms and hence different errors\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO use calman filter to merge 1x1km to 3x3km, 10k\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs16 we can supplment 1k data with 3k data where we preform lousy and dont do so well\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs16 different resolution for different areas in the USA based on pop density/avilable health data\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Brent ideas\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 latent variable model trying to estimate latent value smooth surface of 10x10 autocorrelation over time to interpolate missing data brents idea: we need to fill missingness by interpolate to any given grid and that interpolation where we have monitors will be a predictor R package by lauren hunn -geoschem combine with aod qian\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 sattelite humidity\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 lowest level\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Ta model (next branch)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 stage 3 regression by grid cell\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 You do not need to run a model with a random effect for each grid cell. Instead, you can run a separate regression for each gridcell, regressing the non-missing predicted Ta against the mean of monitored Ta within 100km. This gives you 1 million regressions to do, but you can divide the gridcells into 100 groups and run 100 jobs on the cluster and it will run in an hour. We do this when we regress the 5000,000 methylation sites against predictors in the NAS. Also, we need some of the land use terms.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 meytar research topics\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab PM-MAIAC model in Israel\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Predict PM2.5 /PM10 based on MAIAC AOD using mixed effects model following I.Kloogs\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 extended model with occurrence of dust events.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 In process\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 o Examine the relation between PBL measurements from Beit-Dagan and the modeled\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 o Examine the use of AIC/BIC tests that take into account the DF to compare model\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 PBL. Calibrate the model with AOD, date, temperature and PBL.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 results.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 1.\tx360\tab Analysis of the Spatial coverage of dust events in Israel\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 2.\tx360\tab Define dust event in each area based on ground PM10 data and compositional data (?)\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 3.\tx360\tab Use satellite data to apply dust classification model on the data\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 4.\tx360\tab Analyze the spatial coverage of each event (main goal: showing that not every dust event\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 affects the whole country)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 In process\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 1.\tx360\tab Analyze the relation between PM hourly (overpass) data and daily data\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 2.\tx360\tab Create a global dataset of all ground data from the overpass hours of Terra(10:30) and\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Aqua(13:30) from (Israel, USA, Europe).\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Analyze diurnal cycles per station and compare daily to hourly PM values.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Compare results between correlation to MAIAC/MODIS C06 AOD data with overpass data\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (i.e. mixed effect model).\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Analyze relation between overpass time and daily mean concentrations for all ground\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 variables (also dust events) for each station separately and maybe aggregated to regions.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab Discuss the use of daily data and how the overpass data represents the daily mean per\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 station ?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Israel part is done, need data from other areas to finish analysis.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab Understanding the causativeness between the PM2.5/PM10 ratio to the goodness of fit of\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 the AOD>>PM model to each PM fraction.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Understanding if different ratios in different areas that are affected from different sources\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 reveal different fits. Global database: Israel, USA, Italy, Mexico, Spain etc.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 The hypothesis is that the final graph will look schematically like this:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 PM10 PM2.5\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab class of where dust came and outcome\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 R2\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 PM2.5/PM10 Ratio\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab Deep Blue over Israel\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Analyze DB data over Israel using collection 6 data (e.g. 10km, combined aod{\sub dt}-db) and\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 examine PM estimation model using the db especially over bright surfaces. Maybe use dt in\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 certain regions and db in others based on a surface reflectance threshold (e.g. optimization\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 model that will choose for each pixel what is the best dataset to use,\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 DT/DB/Combined/MAIAC, in order to represent PM with the minimum error).\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Will it be possible to create DB data in a higher resolution (by ourselves/to receive from\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 NASA-A.Sayer/B.Ridgway) ?\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab Understanding the local PM vertical profile\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Data from:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (1) Calipso\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (2) MPL - Nes Ziona (Karnieli/Smadar - David Please check with her)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (3) Is there any vertical data from Aeronet?\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab PM composition detection using Satellite observations (Israel, Arizona, Spain, Italy,\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Cyprus and more)\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Using PM composition ground measurements as an evaluation.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Broad cooperation, Large Grant needed\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 \bullet \tx360\tab Understanding the limitations of satellite remote sensing over coastal areas\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Compare PM estimation ability by AOD over land with data over coastal areas, examine the\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 coastal flag in MODIS/MAIAC algorithms.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab Humidity profile from satellite observations\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 As the difference in RH between the ground and satellite measurements may derive the\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 discrepancies between these measurements, it's worth analyzing the contribution of the\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 satellite-borne RH profile and maybe find a RH correction factor to use in PM prediction\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 models.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Future exposure models\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO Order of importance\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 N02-eurpoe issue more disel O3-Is worth having models light at night\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO noise pollution models- based on traffic counts/density, blding geometries, Z's etc\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 TODO LAN models based on sattelite data, traffic etc\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 urabn plan-climate change paper\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab \u1502?\u1506?\u1512?\u1499?\u1493?\u1514? \u1495?\u1489?\u1512?\u1514?\u1497?\u1493?\u1514?-\u1499?\u1500?\u1499?\u1500?\u1497?\u1493?\u1514? \u1492?\u1503? \u1499?\u1488?\u1493?\u1496?\u1497?\u1493?\u1514? \u1489?\u1502?\u1492?\u1493?\u1514?\u1503? \u1493?\u1502?\u1488?\u1491? \u1491?\u1497?\u1504?\u1502?\u1497?\u1493?\u1514?, \u1489?\u1500?\u1514?\u1497? \u1504?\u1497?\u1514?\u1504?\u1493?\u1514? \u1500?\u1514?\u1495?\u1494?\u1497?\u1514? \u1493?\u1500?\u1514?\u1499?\u1504?\u1493?\u1503?. \u1492?\u1514?\u1497?\u1488?\u1493?\u1512?\u1497?\u1497?\u1492? \u1492?\u1514?\u1499?\u1504?\u1493?\u1504?\u1497?\u1514? \u1505?\u1508?\u1490?\u1492? \u1489?\u1497?\u1511?\u1493?\u1512?\u1514? \u1512?\u1489?\u1492? \u1489?\u1502?\u1513?\u1498? \u1513?\u1504?\u1497?\u1501? - \u1506?\u1500? \u1499?\u1498? \u1513?\u1492?\u1497?\u1488? \u1502?\u1489?\u1493?\u1505?\u1505?\u1514? \u1506?\u1500? \u1514?\u1495?\u1494?\u1497?\u1493?\u1514? \u1488?\u1512?\u1493?\u1499?\u1493?\u1514? \u1496?\u1493?\u1493?\u1495? \u1493?\u1506?\u1500? \u1514?\u1497?\u1488?\u1493?\u1512?\u1497?\u1493?\u1514? "\u1511?\u1489?\u1493?\u1506?\u1493?\u1514?".\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 2.\tx360\tab \u1506?\u1500? \u1512?\u1511?\u1506? \u1494?\u1492?, \u1492?\u1514?\u1499?\u1504?\u1493?\u1503? \u1492?\u1493?\u1500?\u1498? \u1493?\u1494?\u1493?\u1504?\u1495? \u1488?\u1514? \u1492?\u1492?\u1514?\u1489?\u1493?\u1504?\u1504?\u1493?\u1514? \u1489?\u1514?\u1495?\u1494?\u1497?\u1493?\u1514? \u1488?\u1512?\u1493?\u1499?\u1493?\u1514? \u1496?\u1493?\u1493?\u1495? \u1493?\u1488?\u1514? \u1492?\u1492?\u1514?\u1489?\u1505?\u1505?\u1493?\u1514? \u1506?\u1500? \u1514?\u1493?\u1499?\u1504?\u1497?\u1493?\u1514? \u1488?\u1512?\u1493?\u1499?\u1493?\u1514? \u1496?\u1493?\u1493?\u1495?. \u1492?\u1513?\u1497?\u1504?\u1493?\u1497? \u1512?\u1500?\u1493?\u1493?\u1504?\u1496?\u1497? \u1492?\u1503? \u1500?\u1514?\u1497?\u1488?\u1493?\u1512?\u1497?\u1497?\u1492? \u1492?\u1514?\u1499?\u1504?\u1493?\u1504?\u1497?\u1514? \u1493?\u1492?\u1503? \u1500?\u1508?\u1512?\u1511?\u1496?\u1497?\u1511?\u1492?.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 3.\tx360\tab \u1489?\u1513?\u1493?\u1504?\u1492? \u1502?\u1492?\u1502?\u1506?\u1512?\u1499?\u1493?\u1514? \u1492?\u1495?\u1489?\u1512?\u1514?\u1497?\u1493?\u1514?-\u1499?\u1500?\u1499?\u1500?\u1497?\u1493?\u1514?, \u1502?\u1506?\u1512?\u1499?\u1493?\u1514? \u1505?\u1489?\u1497?\u1489?\u1514?\u1497?\u1493?\u1514? \u1492?\u1503? \u1488?\u1502?\u1504?\u1501? \u1499?\u1488?\u1493?\u1496?\u1497?\u1493?\u1514? \u1488?\u1489?\u1500? \u1492?\u1512?\u1489?\u1492? \u1508?\u1495?\u1493?\u1514? \u1491?\u1497?\u1504?\u1502?\u1497?\u1493?\u1514?. \u1502?\u1488?\u1495?\u1512? \u1493?\u1492?\u1503? \u1490?\u1491?\u1493?\u1500?\u1493?\u1514? \u1502?\u1488?\u1491?, \u1514?\u1492?\u1500?\u1497?\u1499?\u1497? \u1492?\u1513?\u1497?\u1504?\u1493?\u1497? \u1513?\u1500?\u1492?\u1503? \u1492?\u1501? \u1488?\u1497?\u1496?\u1497?\u1497?\u1501?. \u1492?\u1502?\u1513?\u1502?\u1506?\u1493?\u1514? \u1492?\u1497?\u1488? \u1513?\u1504?\u1497?\u1514?\u1503? \u1489?\u1512?\u1502?\u1492? \u1490?\u1489?\u1493?\u1492?\u1492? \u1513?\u1500? \u1493?\u1493?\u1491?\u1488?\u1493?\u1514? \u1500?\u1497?\u1497?\u1510?\u1512? \u1514?\u1495?\u1494?\u1497?\u1493?\u1514? \u1496?\u1493?\u1489?\u1493?\u1514? \u1493?\u1488?\u1508?\u1497?\u1500?\u1493? \u1496?\u1493?\u1489?\u1493?\u1514? \u1502?\u1488?\u1491? \u1500?\u1499?\u1502?\u1492? \u1506?\u1513?\u1512?\u1493?\u1514? \u1513?\u1504?\u1497?\u1501? \u1511?\u1491?\u1497?\u1502?\u1492?.\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 4.\tx360\tab \u1492?\u1489?\u1506?\u1497?\u1497?\u1492?: \u1492?\u1514?\u1497?\u1488?\u1493?\u1512?\u1497?\u1497?\u1492? \u1492?\u1514?\u1499?\u1504?\u1493?\u1504?\u1497?\u1514? \u1508?\u1505?\u1500?\u1492? \u1488?\u1514? \u1492?\u1492?\u1514?\u1489?\u1505?\u1505?\u1493?\u1514? \u1506?\u1500? \u1514?\u1493?\u1499?\u1504?\u1497?\u1493?\u1514? \u1488?\u1512?\u1493?\u1499?\u1493?\u1514? \u1496?\u1493?\u1493?\u1495?, \u1493?\u1492?\u1508?\u1512?\u1511?\u1496?\u1497?\u1511?\u1492? \u1492?\u1514?\u1499?\u1504?\u1493?\u1504?\u1497?\u1514? \u1488?\u1497?\u1504?\u1492? \u1489?\u1504?\u1493?\u1497?\u1497?\u1492? \u1500?\u1492?\u1514?\u1495?\u1513?\u1489?\u1493?\u1514? \u1489?\u1514?\u1495?\u1494?\u1497?\u1493?\u1514? \u1488?\u1512?\u1493?\u1499?\u1493?\u1514? \u1496?\u1493?\u1493?\u1495?. \u1499?\u1498? \u1511?\u1493?\u1512?\u1492?, \u1513?\u1489?\u1497?\u1513?\u1512?\u1488?\u1500? \u1488?\u1504?\u1495?\u1504?\u1493? \u1492?\u1493?\u1500?\u1499?\u1497?\u1501? \u1500?\u1511?\u1512?\u1488?\u1514? \u1511?\u1496?\u1505?\u1496?\u1512?\u1493?\u1508?\u1492? \u1488?\u1511?\u1500?\u1497?\u1502?\u1497?\u1514? \u1510?\u1508?\u1493?\u1497?\u1492? \u1493?\u1493?\u1491?\u1488?\u1497?\u1514? - \u1493?\u1488?\u1497?\u1503? \u1499?\u1500?\u1497?\u1501? \u1513?\u1497?\u1506?\u1494?\u1512?\u1493? \u1500?\u1514?\u1499?\u1504?\u1493?\u1503? \u1500?\u1492?\u1497?\u1502?\u1504?\u1506? \u1502?\u1499?\u1498?. \u1492?\u1499?\u1500?\u1497?\u1501? \u1492?\u1511?\u1497?\u1497?\u1502?\u1497?\u1501? \u1502?\u1514?\u1489?\u1493?\u1504?\u1504?\u1497?\u1501? \u1489?\u1502?\u1510?\u1497?\u1488?\u1493?\u1514? \u1492?\u1504?\u1493?\u1499?\u1495?\u1497?\u1514?, \u1493?\u1500?\u1488? \u1502?\u1505?\u1493?\u1490?\u1500?\u1497?\u1501? \u1500?\u1492?\u1514?\u1502?\u1493?\u1491?\u1491? \u1506?\u1501? \u1502?\u1492? \u1513?\u1497?\u1492?\u1497?\u1492? (\u1489?\u1493?\u1493?\u1491?\u1488?\u1493?\u1514? \u1512?\u1489?\u1492? \u1502?\u1488?\u1491?) \u1489?\u1506?\u1493?\u1491? 50 \u1513?\u1504?\u1492?.\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Black body radiation\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 black particles are going to observer and scatter roughly the same ammount vs other particles wont. it might be possible in NEW-England at least to use that information on how to use the diff on wave lenghts in aod for BC model.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 arange a skype call with alexie\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 smoking and particle exposure\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 block group level data in block groups and exposre\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Mortality and Ta\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 NAS temperature analyis\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 DONE create exposure datasets\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 test various previous temp-nas studies\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Re-run previous studies with NAS and TEMP using a central monitor and see wheather this improves things. if not its also ok to write a paper about this -try using the same models used in the paper with our NAS data\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 look into Eumetsat for met data over EU/Israel\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\field{\*\fldinst{HYPERLINK "http://oiswww.eumetsat.org/IPPS/html/MSG/RGB/DUST/WESTERNAFRICA/"}}{\fldrslt{\ul
+http://oiswww.eumetsat.org/IPPS/html/MSG/RGB/DUST/WESTERNAFRICA/
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 OMI sattelite for NO2 and O3 callibration models\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 develop no2 and/or O3 sattelite models (look at omi sattelite) {\field{\*\fldinst{HYPERLINK "http://aura.gsfc.nasa.gov/instruments/omi.html"}}{\fldrslt{\ul
+http://aura.gsfc.nasa.gov/instruments/omi.html
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 LAN project with Joel\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 LAN in NEW-England\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Email DMSP regarding data purchuse\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Send email to chris/DMSP to check calibrated LAN avilabilty\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 joels ideas\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 look at areas with low LAN measurements and effect to lower LAN\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 look at a way to break the LAN-popden correlation\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 maybe use living near highways (A1 vs parkways vs low density roads)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 light at night in Georgia- W/Joel\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Joel has mortality data\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 LAN ideas Boris\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 create a model to predict LAN wave lenght models\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 use LAN maps to describe Land Use\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Sara addar project\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Start running the models for these areas places include: ohio illinoy indiana\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Michelle bell colaboration-Conn data, maybe other world areas brasil etc\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Wants to use 1x1km temp data for health studies that we are not going to persue very intrested in other parts of the world as well: Brasil (sau paolo -lots of monitors but spatialy all clustered) Nepal- few monitos, only specific years and then they stopped Asia- Japan etc study of nursing home cases, dont move much good for 1x1 km data\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Joel NAS paper about no correlation with SES and PM, try with 1km data\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Look into developing spatio temporal ozone (O3) modles from sattelite in USA\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Compare our BW study with low "western world" effetcs to a high polluted (mexico city) area\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Temerature model results and Liu CMAQ results\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -look at mortality cases and temperature (short term, acute temprature days), and compare results with our model and CMAQ\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 go back to the ICAM/VCAM reanalysis\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -stacey re-analysis with 1kmx1km data :: We should say that we see an effect for both the year lag and medium term but the longer lag is more important -calculate the residuals between our model and the BC model create moving averages of the 4,8,12 weeks and try that in the model> will capture only non traffic exposures when we get the 1x1km data ready go back to the icam/vcam reanalysis by marie-able and the stacey BC paper and see if that changes things\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 Grants\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 SUBMITTED EHF grant: birth weight outcomes (defects, Ultra sound measurements and Ta,PM2.5\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Grant details\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 The grant has to focus on Israel, the data has to be collected here I have to be the PI Joel can be a CI (maybe victor as well)? the guide for applicants is here {\field{\*\fldinst{HYPERLINK "http://www.ehf.org.il/sites/default/files/shared_content/Returnning%20Postdocs%20-%20Guidelines%20for%20Applicants,%202012.pdf"}}{\fldrslt{\ul
+http://www.ehf.org.il/sites/default/files/shared_content/Returnning%20Postdocs%20-%20Guidelines%20for%20Applicants,%202012.pdf
+}}}
+ the grant can be submitted directly to the EHF anytime up to July 2014\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Proposal\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 preperation\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 use the GIF for birthweight stuff\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 use the CIG/ISF for exposure\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 DONE speak to Dr. victor novack, we can get all birth outcomes, geocoded including birth defects for whole southern Israel\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 TODO Contact head of Tel-hashomer hospital gynocology department to get same data for central israel\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Grant Aims\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 A1:develop a spatio-tepmoral Ta exposure model in israel\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 A2:look at Ta and outcomes:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -Birth weight -Lbw -Preterm -Defects -Ultrasound tracking fetal growth -effect modification and mediation analysis -Joel: Placental abruption , acute effect that can happen {\field{\*\fldinst{HYPERLINK "http://en.wikipedia.org/wiki/Placental_abruption"}}{\fldrslt{\ul
+http://en.wikipedia.org/wiki/Placental_abruption
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 A3:look at interactions between PM and Ta exposures and birth outcomes\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 account number\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 874304 meytal drori\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 PAUSED Resubmit ISF grant\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 TODO convert region to Israel and add data fusion with 3 and 1 km data\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 ESCAPE project with PM for horizon 2020\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 DONE Resubmit Young GIF\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 alexandra schnider\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 K{\sub TRACK} Boris Haifa\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 stats section\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -run a poisson regression where we regress counts by zipcode and day (like 10x10 NE) ~1 year lags of the pollutants, and a spline for date (See 10x10 code). this will be run togheter for 10 years -also to check if the association changed from year to year we will run these exact models by year (IE each year speratley in a seperate model) !note! remember to change the DF for the dats spline for 1 year !note! once can run the same model instead of yearly in 1 model with all year with interactions so that each pollutant interacts with a year variable, but you need a very large N`\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO Antonella whole USA 1x1km grant\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 TODO grant r01 ideas talk 26.5.2015\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 To summarize our talk today we agreed to have a framework in place which will include the following: 1.we will start in the next few weeks to build a nationwide dataset with all the temporal and spatial predictor needed for modelling the entire country: I will create over the next few days a document of all needed data (including sources and will send it over soon (to mihyee and Anna as well))\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab We will create soon a overall nationwide 1km grid which will be used for all our modeling in all area.\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 we agreed that areas inhabited mainly by coyotes (that is with population of less then X per 1kmsq) will be flagged and later on dropped from the individual modles\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 1.\tx360\tab We will try to use the same overall modeling methodology in all areas but with slight tweaks for each region (based on the changing geo-climatic conditions)\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 This will also allow testing different methods in each region to enhance the fits.\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 1.\tx360\tab we will make an effort to acquire actual emissions for all point sources across the country (from EPA?)\par}
+{\pard \ql \f0 \sa180 \li360 \fi-360 2.\tx360\tab once we get the nation wide spatial-temporal dataset going we will try and see region each student works on, but this can be discussed further down the road\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 thanks!\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 itai\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Big data grant\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 will look into it for next round (~june) maybe leveraging Open source application/stat programs (R,Octovo etc) for big data proccesing) bringing in Data set from differnet sources both spatilly and temporally differnt resolutions\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 SUBMITTED WAITING Andrea padwan LAN-Prostate Italian SIR grant\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 R21 with Allan Mexico\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 K{\sub TRACK} CIG\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 gen info\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 can be dynamic, that is i can move money from each budget section to another\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 reports\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 every 3 months we need to put out a reports you cant supress 200 hours of work (?a month) cant incl. friday/saturday no more then 9h a days teaching etc is > 'other activities' trips abroad goes under remarks\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 K{\sub TRACK} Seed money\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 account number 87347711 saif 40\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 BSF grant\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab propensity score analysis of TA and PM\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab create a propensity score regressing epxo vs all variables get a predictive modelt\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab advanimcg epi in israel taking acasuel moel appraoch coming up with estimates wich are not just casuel and advance methods\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 SUBMITTED MOST: Infrastructures Program in Space Research\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \u1502?\u1513?\u1512?\u1491? \u1492?\u1502?\u1491?\u1506?: \u1514?\u1513?\u1514?\u1497?\u1493?\u1514? \u1502?\u1491?\u1506?\u1497?\u1493?\u1514? \u1489?\u1514?\u1495?\u1493?\u1501? \u1492?\u1495?\u1500?\u1500? \u8211- \u1511?\u1493?\u1500? \u1511?\u1493?\u1512?\u1488? \u1500?\u1492?\u1510?\u1506?\u1493?\u1514? \u1502?\u1495?\u1511?\u1512? (\u1502?\u1493?\u1506?\u1491? \u1492?\u1492?\u1490?\u1513?\u1492? \u1500?\u1512?\u1513?\u1493?\u1514? \u1492?\u1502?\u1495?\u1511?\u1512? 10.5, \u1500?\u1502?\u1513?\u1512?\u1491? \u1492?\u1502?\u1491?\u1506?: 14.5) {\field{\*\fldinst{HYPERLINK "http://most.gov.il/Information/Calls/Pages/Space2015.aspx"}}{\fldrslt{\ul
+http://most.gov.il/Information/Calls/Pages/Space2015.aspx
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 aims:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 use of sattelite data for improving predicting air pollution management of environmental resources speciffacly air pollution\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 use of deep blue over ocean for better use of aod\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 A1: data fusion and calman fusion CMAQ VIIRS deep blue A2: methods improvments use of moving windows to asses daily aod quality at each point better use of higher resolution tmeporal met variables using WRF data integration combining aqua and terra space-time smoothing; nearby cells weighted for missing and previous day (if gone, use today) does relationship of Aqua and Terra give us info? early pollutant build-up vs continuous across the day? A3:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 Students\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 maayan\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Phd topics\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 overall topic association between PM and cardio vascular diseases and risk factos\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 DM and air pollution\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 outcomes MI,IHD,CVA (cardio cerrebro vascular attach-head)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 dislipedemia (blood lipids)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 hypertension\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 maayan 12.5.15\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 case crossover\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 whats the N? simplest way is to take first admission if N is small lets see in litrature how other people dealt with this\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 the Stat zone file\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 what are these variables HOUSEHOLDS ownership of houses AVERAGE{\sub HH} ASIRON1{\sub 3} % of population in eshkol 1-3 ASIRON7{\sub 10} % of population in eshkol 7-10 DIROG method of ranking SES MADD{\sub SOC} alternative method to rank SES INCOME mean income ZOBJECT Zone Number ESHKOL{\sub NUM} eshol rank from 1-10 (or 1-20 for moatzot)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 TODO Behzad paper\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 mind taking a look? authorship is problematic we need to see what can be done\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 TODO arrange meeting with ofer and erez\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 TODO check distribution for pm for seasons\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 meytar schedule\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 in R- gbm analylis- check model with only highest variables. 1.ratio 2.france PM 3.cooperation with Austrailia 4.data fusion 5.composition\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 Office/Budgets\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 budgeting students "manot"\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 in 2014 1 "mana" is 514 NIS for a post-doc the $$ is between 4-20
+** Trips Abroad info
+*** Eshel
+for days you don't ask for hotel 
+the per day is $123
+for days with hotel 
+the sum is $74
+** Budget
+*** running budgets
+| name      |   Number |
+|-----------+----------|
+| CIG       | 87361211 |
+| sal klita | 87347711 |
+|           |          |
+
+
+*** BGU budget glossary
+department sections starts with '5'
+grant money sections starts with '3'
+other research sections starts with '8'
+to see how much is left you need to check in "\u1502?\u1495?\u1511?\u1512?\u1497?\u1501?"
+*** Move budget that is unused
+check how to move unused budget to department/faculty to pay for other students ans somehow get the money back
+*** budgeting students "manot"
+in 2014 1 "mana" is 514 NIS
+for a post-doc the $$ is between 4-20\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Office Hardware info\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 IP\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Beast IP: 132.72.155.204 NAS BGU: 132.72.154.204 (main) 132.72.152.204\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Phone\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 bgu wifi network\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 use id BGU-USERS* PAUSED maabadot budget\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 another scanner?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 fridge?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 micro?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 UPS\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Speakers\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 \u1502?\u1505?\u1498? \u1502?\u1495?\u1513?\u1489? Dell UltraSharp P2815Q 28'' UltraHD 4K\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Proffesional camera\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -buy DSLR? -buy projector? -buy LAN meters\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 DONE hire a student for 90 hours of work\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 fill in sick days etc\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab State "SUBMITTED" from "NEXT" [2014-07-29 Tue 10:55]\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab State "SUBMITTED" from "NEXT" [2014-07-29 Tue 10:55]\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab State "SUBMITTED" from "NEXT" [2014-07-29 Tue 10:55]\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO Buy Laptop\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 extra battery 6 cell extra powercord docking station warrenty? Intel wifi card (strongly recommended for Linux)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 DONE buy fridge and micro from seed money?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO mechanical keyboard\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO backup drive usb\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 salary\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 \u1492?\u1511?\u1491?\u1513?\u1514? \u1494?\u1502?\u1503?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \u1489?\u1495?\u1497?\u1512?\u1514? \u1513?\u1504?\u1492? \u1505?\u1502?\u1505?\u1496?\u1512? \u1500?\u1491?\u1497?\u1493?\u1493?\u1495? \u1492?\u1511?\u1491?\u1513?\u1514? \u1494?\u1502?\u1503?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 @you need to mark "\u1492?\u1511?\u1491?\u1513?\u1514?\u1497?"@\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 you get the bonus in salary for hakdashat zman in Nov/Feb/May/Augment\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 "criterionim"\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 you get the bonus in salary for this in Oct/Janurary/April/July\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO refund cellphone\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 use wither bug or dv com:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \u1488?\u1492?\u1493?\u1489?\u1492? \u1511?\u1491?\u1501? \u1502?\u1504?\u1492?\u1500?\u1514? \u1502?\u1495?\u1500?\u1511?\u1492? \u1506?\u1505?\u1511?\u1497?\u1514? \u8211- \u1489?\u1488?\u1490? \u1502?\u1493?\u1500?\u1496?\u1497?\u1505?\u1497?\u1496?\u1501? \u1489?\u1506?"\u1502? \u1496?\u1500?:08-6222769 \u1508?\u1511?\u1505?:08-9202410 \u1504?\u1497?\u1497?\u1491?:052-3122265 \u1488?\u1497?\u1502?\u1497?\u1497?\u1500?:ahuva@bug.co.il\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Felix Tzigelman Purchasing and Logistics Manager dvcom{\sub logos}\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Lazarov 33,Rishon Lezion 75654 Israel\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Tel. +972-72-2203300 ext.3 Fax. +972-72-2203307 M. +972-52-4058888\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 internet from home \u1513?\u1500?\u1493?\u1495?\u1492? 08-6461743\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \u1488?\u1502?\u1497?\u1512? \u1510?\u1508?\u1504?\u1514?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \u1513?\u1500?\u1493?\u1495?\u1492? 08-6479449\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 Short term Misc\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO make sense of all kopot gemel\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO investigate national transportation model\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\field{\*\fldinst{HYPERLINK "http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_transportation_atlas_database/2014/index.html"}}{\fldrslt{\ul
+http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_transportation_atlas_database/2014/index.html
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO Build Lab website\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 talk to oren tal about sharepoint access\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO publications comitee\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 monetary benefits for publications- see examples below- always when accepted in all places\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 should the money be awarded on start of MA or after the paper is accepted- always when accepted\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 report china\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 rewarded with cash, and the more prestigious the journal, the larger the sum\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Indexed in ISTP \u8212- $92 Indexed in EI \u8212- $275 Impact factor < 1 \u8212- $306 1 \u8805? IF < 3 \u8211-$458 3 \u8805? IF < 5 \u8212- $611 5 \u8805? IF < 10 \u8212- $764 IF \u8805? 10 \u8212- $2,139 Published in Science or Nature \u8211- $30,562 Europe\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 University of Bayreuth-University in Bayreuth, Germany: supervisor to assess the publication according to the criteria (accepted) gives supplement to the budget\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Denmark : graduate students may be entitled to receive a publication bonus of up to DKK 15000. must be published in peer review with university affiliation\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -other instituations with no specific examples that hand out money per publications all have various programs that give graduate students incentives for publishing papers the ammount is hard to get to via web\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 common in Russia\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -leeds university\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 many Austrailian universites\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 USA\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -bonuses for publishing in high impact journals in some universites/departments\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -some universities even give undergrad pubication bonuses!: Beloit College is a private liberal arts college in Beloit, Wisconsin israel haifa\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \u1514?\u1500?\u1502?\u1497?\u1491? \u1497?\u1511?\u1489?\u1500? \u1502?\u1506?\u1504?\u1511? \u1502?\u1497?\u1493?\u1495?\u1491? \u1489?\u1488?\u1501? \u1489?\u1502?\u1492?\u1500?\u1498? \u1492?\u1513?\u1504?\u1492? \u1492?\u1488?\u1511?\u1491?\u1502?\u1497?\u1514? \u1497?\u1490?\u1497?\u1513? \u1500?\u1508?\u1512?\u1505?\u1493?\u1501? \u1505?\u1508?\u1512? \u1502?\u1491?\u1506?\u1497?/\u1502?\u1511?\u1510?\u1493?\u1506?\u1497?, \u1488?\u1493? \u1508?\u1512?\u1511? \u1500?\u1505?\u1508?\u1512? \u1502?\u1491?\u1506?\u1497?/\u1502?\u1511?\u1510?\u1493?\u1506?\u1497?, \u1488?\u1493? \u1502?\u1488?\u1502?\u1512? \u1502?\u1491?\u1506?\u1497?/\u1502?\u1511?\u1510?\u1493?\u1506?\u1497? \u1500?\u1499?\u1514?\u1489?-\u1506?\u1514?, \u1488?\u1513?\u1512? \u1497?\u1514?\u1511?\u1489?\u1500? \u1500?\u1508?\u1512?\u1505?\u1493?\u1501? \u1506?\u1500? \u1489?\u1505?\u1497?\u1505? \u1512?\u1508?\u1512?\u1504?\u1496?\u1493?\u1512?\u1492? \u1502?\u1511?\u1510?\u1493?\u1506?\u1497?\u1514?. \u1492?\u1502?\u1506?\u1504?\u1511? \u1502?\u1497?\u1493?\u1506?\u1491? \u1500?\u1514?\u1500?\u1502?\u1497?\u1491?\u1497? \u1502?\u1495?\u1511?\u1512? \u1513?\u1504?\u1492? \u1488?\u8217' \u8211- \u1491?\u8217', \u1506?\u1489?\u1493?\u1512? \u1508?\u1506?\u1497?\u1500?\u1493?\u1514? \u1502?\u1495?\u1511?\u1512?\u1497?\u1514? \u1513?\u1504?\u1506?\u1513?\u1514?\u1492? \u1489?\u1502?\u1492?\u1500?\u1498? \u1500?\u1497?\u1502?\u1493?\u1491?\u1497? \u1492?\u1514?\u1493?\u1488?\u1512? \u1492?\u1513?\u1500?\u1497?\u1513?\u1497?.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \u1490?\u1493?\u1489?\u1492? \u1492?\u1502?\u1506?\u1504?\u1511? \u1497?\u1497?\u1511?\u1489?\u1506? \u1502?\u1512?\u1488?\u1513? \u1499?\u1500? \u1513?\u1504?\u1492? \u1489?\u1492?\u1514?\u1488?\u1501? \u1500?\u1488?\u1508?\u1513?\u1512?\u1493?\u1497?\u1493?\u1514? \u1492?\u1514?\u1511?\u1510?\u1497?\u1489?\u1497?\u1493?\u1514?. huji\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \u1508?\u1512?\u1505? \u1489?\u1490?\u1497?\u1503? \u1508?\u1512?\u1505?\u1493?\u1501? \u1502?\u1488?\u1502?\u1512? \u1489?\u1499?\u1514?\u1489? \u1506?\u1514? \u1488?\u1511?\u1491?\u1502?\u1497?: \u1508?\u1512?\u1505? \u1493?\u1489?\u1512? \u1490?\u8217'\u1493?\u1512?\u1490?\u8217': \u1506?\u1500? \u1508?\u1512?\u1505?\u1493?\u1501? \u1502?\u1488?\u1502?\u1512? \u1502?\u1510?\u1496?\u1497?\u1497?\u1503? \u1489?\u1488?\u1495?\u1491? \u1502?\u1499?\u1514?\u1489?\u1497? \u1492?\u1506?\u1514? \u1492?\u1488?\u1511?\u1491?\u1502?\u1497?\u1497?\u1501? \u1513?\u1500? \u1492?\u1508?\u1511?\u1493?\u1500?\u1496?\u1492?. \u1492?\u1508?\u1512?\u1505? \u1497?\u1493?\u1506?\u1504?\u1511? \u1489?\u1490?\u1497?\u1503? \u1502?\u1488?\u1502?\u1512? \u1513?\u1492?\u1514?\u1511?\u1489?\u1500? \u1500?\u1508?\u1512?\u1505?\u1493?\u1501? (\u1488?\u1507? \u1488?\u1501? \u1496?\u1512?\u1501? \u1492?\u1514?\u1508?\u1512?\u1505?\u1501? \u1489?\u1508?\u1493?\u1506?\u1500?) \u1489?\u1502?\u1492?\u1500?\u1498? \u1513?\u1504?\u1514? \u1492?\u1500?\u1497?\u1502?\u1493?\u1491?\u1497?\u1501? \u1492?\u1511?\u1493?\u1491?\u1502?\u1514?. \u1497?\u1513? \u1500?\u1510?\u1512?\u1507? \u1500?\u1489?\u1511?\u1513?\u1492? \u1506?\u1493?\u1514?\u1511? \u1502?\u1503? \u1492?\u1502?\u1488?\u1502?\u1512?. \u1492?\u1508?\u1512?\u1505? \u1497?\u1493?\u1506?\u1504?\u1511? \u1500?\u1514?\u1500?\u1502?\u1497?\u1491?/\u1492? \u1488?\u1495?\u1491?/\u1514?. \u1490?\u1493?\u1489?\u1492? \u1492?\u1508?\u1512?\u1505? \u1499?\u1488?\u1500?\u1507? \u1513?\u8221"\u1495?.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 TODO prepare proposal\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 show how the best places do have these benefits on publishing short 1/2 page proposal with: giving cash prize for publishing a paper during MA in Q1/Q3 in the sum based on the yearly availability of funds in the department.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 yom patouch\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 doch shemot with rachel by years with no emails! one that shivok will send the email for us go to mador rishom for poetntial canidates- revital zamir\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO ask tal about layers from MAPI\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO Ask marina zusman $$$ back on sept and feb meetins\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO meeting with Alexei\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 past year\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -initial mexico model-paper sent -initial israel model-paper coming in the next few days -work in Europe (mainly in Italy but also in sweeden and switzerland and soon other regions)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 current issues to discuss:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 MAIAC RAW results in all NE areas we tried (Mexico, Israel etc) much worse. is it a mater of physics?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 all other regions such as Israel, Mexico, italy, SE USA have all relatively poor overall RAW R2 (monitors vs closest AOD) much lower than NE: in NE it ranges from 0.2-0.7 RAW while in all other regions RAW of 0.01-0.2 MAX bright surfaces (in California) get better agreement with aeronet; also in israel 0.6017 is MAIAC better at prediccting the uper column than surface in israel? what can we do to help this (bright surface problem)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 PM10 in Israel performs much better than PM2.5\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 the differences are huge- CV R2 pm10=0.82 and pm25 ~0.7 over fitting isn't the issue since also in a parsimonious model we still get this drop\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 histogram on dust days of AOD\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\field{\*\fldinst{HYPERLINK "file:///home/zeltak/org/attach/images_2015/screenshot_2015-02-11_09:15:22.png"}}{\fldrslt{\ul
+/home/zeltak/org/attach/images_2015/screenshot_2015-02-11_09:15:22.png
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 {\field{\*\fldinst{HYPERLINK "file:///home/zeltak/org/attach/images_2015/screenshot_2015-02-11_09:16:30.png"}}{\fldrslt{\ul
+/home/zeltak/org/attach/images_2015/screenshot_2015-02-11_09:16:30.png
+}}}
+\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 raw lm corr aod and pm25/10 on dust vs non dust days\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 0.16 non dust days 0.17 dust days\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 look at time series analysis\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 raw correlation with regions\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 reg5 R2 nsamps 1 1 0.39621 484 beer sheva 2 2 0.19817 7096 ashdod 3 3 0.30556 124 jerusalem 4 4 0.12481 3885 Tel aviv 5 5 0.16421 4627 North\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 in general raw correlations aren't great- 0.001-0.3 when breaking down to season/year etc there are specifc station in speific seasons that have a base correlation of 0\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 we saw that UN and adjancecny mask werent helping that much\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -alexei raw correlations in california from slides we saw in table and el segundo bad correlations in the range that we saw, whats the pysical explenation for this -lets take one year 2004 and focus on this. we will send you pm data. lets try to debug this issues we hypothesis: humidity and salt along the near shore area.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 clouds - focus on Mexico - Allan\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 uncertainty and adjacency mask don\u8217't help that much our additional filtering (spatial filter for high variance); there are long gaps with no data versions and datasets - when is the \u8220"new\u8221" version coming using Terra with Aqua\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 if time available:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 talk about Austraila talk about ratio and sea and land preformance composition\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 dataset for bad 0.00 R2 aod-pm pm-aeronet email quan di about geoschem and send him PM monitors\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO lab website\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 See what shiran has made out of it\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO new GIS presentation\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 expand and talk about each course with slides\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 long term Misc\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 GIS Trac k\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 info\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 do you know the numbers/ration in other universities and abroad in geo departments?\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 penn state is one of the leaders in GIS masters degree {\field{\*\fldinst{HYPERLINK "http://www.worldcampus.psu.edu/degrees-and-certificates/geographic-information-systems-gis-masters/courses"}}{\fldrslt{\ul
+http://www.worldcampus.psu.edu/degrees-and-certificates/geographic-information-systems-gis-masters/courses
+}}}
+ All courses, including electives, are GIS-related\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 split maybe into 2 tracks:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 work focused (non thesis):\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 will admit even non GIS background people stress jobs at every level from high tech (google maps, waze etc) to municipalities, governmental (hevrat hasmal etc), education (teaching in colleges etc), urban and regional planning,environmental resource management,surveying etc\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 academia focus- thesis as a focused GIS/geospatial track track\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 plus advertise GIS services for EPI/Health/Archeology etc\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 for Ba\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 ideas for interest in GIS, send to TAL\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 specialized courses\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Python programing modulebuilder Database development and use WebGIS/GIS servers SQL SAS R Open source GIS (OSM,GeoDA,GRASS (geo resources analysis suports systens),QGIS,GDAL,SciPy etc Geospatial statistics GIS project managment Cartography and imaging software remote sensing\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 meeting with tal\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 program:\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 non offical BA offical MA we sign certificate look at existing courses and make the program more modern assign to each person in the geo informatics program (tal,eran,aviva) which courses they take and whats included.\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 marketing\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 DONE email sagi langer about geoinformatics marketing\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 Find better MA students that do Research\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 relevant departments\par}
+{\pard \ql \f0 \sa0 \li0 \fi0 -epi -geology -biology\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab sde noker mahcon lecheker hmdbar\sa180\par}
+{\pard \ql \f0 \sa0 \li0 \fi0 -archeolgy\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab marachot media\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab sociology\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab medical School\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab envinmontal engineering\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab computer engineering\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab neihol\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 -tourism (manegment faculty)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 mundaine missions\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 TODO before start of uni year mifgash megama\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab talk to student in the geoinformatics group and tell them which courses they need to take\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 TODO meet first year students for BA\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 add some propaganda, Waze, python, work in high tech\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs20 TODO before start of uni year mifgah with MA megama students\par}
+{\pard \ql \f0 \sa0 \li0 \fi0 -talk to sigalit to set a date and place for this meetings\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab talk to student in the geoinformatics group that MA\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Mapi Maagal project\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Zipcode proxy\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 List of reviwers\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 jaime madrigano\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Madrigano, Jaime jm17@sph.rutgers.edu Rutgers School of public health\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Sara Adar\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Office: M5539 SPH II 1415 Washington Heights Ann Arbor, Michigan 48109-2029 Office: 734-615-9207; Fax: 734-936-2084 E-mail: sadar@umich.edu\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 University of Michigan, School of public health\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 greg Willenius\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Gregory A. Wellenius gregory{\sub Wellenius}@brown.edu Epidemiology, Brown\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 bob Wright\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Robert O. Wright Email: robert.wright@mssm.edu Mount sinai Department of Preventive Medicine\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 #+END{\sub SRC}\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Kees de Hoogh\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Scientific Collaborator Projects Publications Email c.dehoogh@unibas.ch Phone +41 61 284 87 49\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Michael Brauer\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Professor Director, Bridge Program ScD (Harvard), BA (University of California-Berkeley) Contact Information Biography Teaching and Students Publications Research Rm 366A, 2206 East Mall Vancouver, BC V6T 1Z3 phone: 604-822-9585 fax: 604-822-4994 michael.brauer@ubc.ca\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 Jeremy SarnatJeremy Sarnat\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Emory, Rollins school of public health Contact: 404-727-5692 (Melva Robertson, media relations) office melva.robertson@emory.edu\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 How to write BGU in papers\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Ben Gurion University of the Negev\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Journal statistics IF etc\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 2014\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 chronobiology international\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (IF= 2.8 ; Q1 biology, 19 of 85 )\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 atmospheric environment\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (IF= 3.1 ; Q1 environmental sciences, 45 of 216 )\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 plos one\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (IF= 3.5 ; Q1 multidisciplinary sciences, 8 of 55)\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 journal of allergy and clinical immunology\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (IF= 11.2 ; Q1 allergy, 1 of 21 )\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 occupational and environmental medicine\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (IF= 3.2 ; Q1 public, environmental & occupational health, 20 of 162 )\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 environmental health perspectives\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (IF= 7.0 ; Q1 environmental sciences, 5 of 216 )\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 science of the total environment\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (IF= 3.2 ; Q1 environmental sciences, 40 of 216 )\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 environmental health\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (IF= 2.7 ; Q1 public, environmental & occupational health, 37 of 162 )\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 remote sensing of environment\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (IF= 4.8 ; Q1 environmental sciences, 12 of 216 )\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 american journal of cardiology\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (IF= 3.4 ; Q1 cardiac & cardiovascular systems, 39 of 125 )\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 nature\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (IF= 42.35 ; Q1 multidisciplinary sciences, 1 of 55 )\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 epidemiology\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (IF= 6.2 ; Q1 public, environmental & occupational health, 2 of 143 )\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 environmental science & technology\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (IF= 5.5 ; Q1 environmental sciences, 8 of 216 )\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 science of the total environment\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (IF= 3.2 ; Q1 environmental sciences, 40 of 216 )\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 cancer causes & control\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (IF= 2.9 ; Q1 public, environmental & occupational health, 24 of 216 )\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 computers environment and urban systems\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (IF= 1.5; Q2 geography, 21 of 76 )\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 Journal of Exposure Science and Environmental Epidemiology\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (IF= 3 .0; Q1 Public, Environmental & Occupational Health, 23 of 160 )\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs24 american journal of Epidemiology\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 (IF= 4.9 ; Q1 public, environmental & occupational health, 11 of 162 )\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 GIT program\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 Below are tables for both the new BA and MA GIT programs as we discussed I our previous meeting\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 BA\par}
+{
+\trowd \trgaph120
+\clbrdrb\brdrs\cellx4320\clbrdrb\brdrs\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 course\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 nakaz\par}
+\cell}
+}
+\intbl\row}
+{
+\trowd \trgaph120
+\cellx4320\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 introduction to GIS\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 3\par}
+\cell}
+}
+\intbl\row}
+{
+\trowd \trgaph120
+\cellx4320\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 GIS Lab\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 3\par}
+\cell}
+}
+\intbl\row}
+{
+\trowd \trgaph120
+\cellx4320\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 3d GIS\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 3\par}
+\cell}
+}
+\intbl\row}
+{
+\trowd \trgaph120
+\cellx4320\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 Qgis\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 3\par}
+\cell}
+}
+\intbl\row}
+{
+\trowd \trgaph120
+\cellx4320\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 image proccesing\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 3\par}
+\cell}
+}
+\intbl\row}
+{
+\trowd \trgaph120
+\cellx4320\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 Radar (Macam)\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 3\par}
+\cell}
+}
+\intbl\row}
+{
+\trowd \trgaph120
+\cellx4320\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 arnon karnieli- introduction to remote sensing\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 3\par}
+\cell}
+}
+\intbl\row}
+{
+\trowd \trgaph120
+\cellx4320\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 virtual geography\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 3\par}
+\cell}
+}
+\intbl\row}
+{\pard \ql \f0 \sa180 \li0 \fi0 \par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs28 MA\par}
+{
+\trowd \trgaph120
+\clbrdrb\brdrs\cellx4320\clbrdrb\brdrs\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 course\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 nakaz\par}
+\cell}
+}
+\intbl\row}
+{
+\trowd \trgaph120
+\cellx4320\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 spatial editing (gis for planners)\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 3\par}
+\cell}
+}
+\intbl\row}
+{
+\trowd \trgaph120
+\cellx4320\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 geostatistics\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 3\par}
+\cell}
+}
+\intbl\row}
+{
+\trowd \trgaph120
+\cellx4320\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 python\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 3\par}
+\cell}
+}
+\intbl\row}
+{
+\trowd \trgaph120
+\cellx4320\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 gis modeling\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 3\par}
+\cell}
+}
+\intbl\row}
+{
+\trowd \trgaph120
+\cellx4320\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 sql\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 2\par}
+\cell}
+}
+\intbl\row}
+{
+\trowd \trgaph120
+\cellx4320\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 hyperspectral\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 3\par}
+\cell}
+}
+\intbl\row}
+{
+\trowd \trgaph120
+\cellx4320\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 avinoam's course\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 2\par}
+\cell}
+}
+\intbl\row}
+{
+\trowd \trgaph120
+\cellx4320\cellx8640
+\trkeep\intbl
+{
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 JavaScript/other progranning course (R etc)\par}
+\cell}
+{{\pard\intbl \ql \f0 \sa0 \li0 \fi0 3\par}
+\cell}
+}
+\intbl\row}
+{\pard \ql \f0 \sa180 \li0 \fi0 \par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 MA publishing award\par}
+{\pard \ql \f0 \sa0 \li0 \fi0 -every MA student that will submit to a international journal will get 1750 NIS (within the 2 offical MA years)\par}
+{\pard \ql \f0 \sa0 \li360 \fi-360 \bullet \tx360\tab among students that got the paper published within the 2 years there will be a comitee which will award tbest paper another 1750 NIS\sa180\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 misc\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO check if we need to pay harel or healthy life insurance (see docs) and if we payed them already\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Mount sainai\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 what research field needed tenure track?> time to tenure, what are you judged on, stats teaching? whats exp expcted work loads\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 WD drive\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 admin salar21\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 hfsp website\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 ikloog@bgu.ac.il Salar2121\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 TODO my ftp\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 add to keepass\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 address: 132.72.152.204 User: zftp pass:hsphbgu2014\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs32 Eran vanger layer- check chezch passport\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 054-7525243 where was grandpa born all documents available degrees place and time of marriage and documents\par}
+{\pard \ql \f0 \sa180 \li0 \fi0 \b \fs36 Mails\par}
+}

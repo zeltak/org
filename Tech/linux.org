@@ -528,6 +528,10 @@ Description: gmt, catalyst-test, ttf-ms-win8, rstudio, meshlab, gcc-gcj, vlc-git
 Server = http://kps.bplaced.net/repo/$arch
 #+END_EXAMPLE
 
+****** haskell repo
+#+BEGIN_SRC sh
+
+#+END_SRC
 **** Installs Server
 
 #+BEGIN_SRC sh
@@ -30756,6 +30760,83 @@ How to open a local HTML file: Call eww-open-file.
 
 How to switch to a real browser: Call eww-browse-with-external-browser.
 
+******* mu4e
+******** keybinds
+********* composing emails
+key          description
+---          -----------
+C-c C-c      send message
+C-c C-d      save to drafts and leave
+C-c C-k      kill the message
+C-c C-a      attach a file (pro-tip: drag & drop works as well)
+R Reply
+(mu4e-specific)
+C-S-u        update mail & reindex
+******* wanderlust
+******** setup
+********* init.el
+
+set should write to init.el is
+
+#+BEGIN_SRC emacs-lisp :results none
+(autoload 'wl "wl" "Wanderlust" t)
+(autoload 'wl-draft "wl" "Write draft with Wanderlust." t)
+#+END_SRC
+
+Only this.
+********* .wl
+We want to create a .wl to HOME below. This file EmacsWiki quote from
+#+BEGIN_SRC emacs-lisp :results none
+
+;; IMAP, gmail:
+(setq elmo-imap4-default-server "imap.gmail.com"
+      elmo-imap4-default-user "username@gmail.com"
+      elmo-imap4-default-authenticate-type 'clear
+      elmo-imap4-default-port '993
+      elmo-imap4-default-stream-type 'ssl
+
+      ;;for non ascii-characters in folder-names
+      elmo-imap4-use-modified-utf7 t)
+
+;; SMTP
+(setq wl-smtp-connection-type 'starttls
+      wl-smtp-posting-port 587
+      wl-smtp-authenticate-type "plain"
+      wl-smtp-posting-user "username"
+      wl-smtp-posting-server "smtp.gmail.com"
+      wl-local-domain "gmail.com"
+      wl-message-id-domain "smtp.gmail.com")
+
+(setq wl-from "Firstname Lastname <username@gmail.com>"
+
+      ;;all system folders (draft, trash, spam, etc) are placed in the
+      ;;[Gmail]-folder, except inbox. "%" means it's an IMAP-folder
+      wl-default-folder "%inbox"
+      wl-draft-folder   "%[Gmail]/Drafts"
+      wl-trash-folder   "%[Gmail]/Trash"
+      wl-fcc            "%[Gmail]/Sent"
+
+      ;; mark sent messages as read (sent messages get sent back to you and
+      ;; placed in the folder specified by wl-fcc)
+      wl-fcc-force-as-read    t
+
+      ;;for when auto-compleating foldernames
+      wl-default-spec "%")
+#+END_SRC
+********* .folders
+
+Keep writing as follows, also made a .folders following HOME
+
+#+BEGIN_SRC emacs-lisp :results none
+%inbox  "Inbox"
+%Sent   "Sent"
+%Trash  "Trash"
+%Junk   "Junk"
++draft  "Draft"
+#+END_SRC
+
+********* How to use
+First, you can start with the Mx wl.
 *** 'org-mode'
        :PROPERTIES:
        :ID:       be4759e1-2951-4c91-a155-056bc2a16d9f
@@ -31043,6 +31124,18 @@ When visiting an Org file, in what folding state do I first want to see it? Many
 org-archive-location
 When archiving an entry, where will it go?
 
+******* file wide definitions 
+******** Categories
+The category is a broad label assigned to each agenda item. By default, the category is simply derived from the file name, but you can also specify it with a special line in the buffer, like this1:
+
+#+BEGIN_EXAMPLE
+#+CATEGORY: Thesis
+#+END_EXAMPLE
+If you would like to have a special CATEGORY for a single entry or a (sub)tree, give the entry a :CATEGORY: property with the special category you want to apply as the value.
+
+The display in the agenda buffer looks best if the category is not longer than 10 characters.
+
+You can set up icons for category by customizing the org-agenda-category-icon-alist variable.
 ******* archiving
 ******** base
 use the following lines in your config to define where the archives go
@@ -31056,6 +31149,9 @@ C-c C-x C-a     (org-archive-subtree-default)
 Archive the current entry using the command specified in the variable org-archive-default-command
 ******* agenda and TODO
 ******** Agenda
+	 :PROPERTIES:
+	 :ID:       cf2c69b4-3d4c-4f81-a01d-bbbe1d120e62
+	 :END:
 ********* How can I limit the agenda view to a particular category?
 Another way to filter agenda views by type of work is to use a "#+CATEGORY" declaration at the top of each file, such as:
 
@@ -32645,6 +32741,7 @@ TODO Refactor [[grep:OldClassName][OldClassName]] into NewClassName
 [[Bittorrent-sync%20(btsync)][Bittorrent-sync (btsync)]] CLI Admin
 ******** org-id 
 ********* base commands
+
 org-id-get-create
        Create an ID for the entry at point if it does not yet have one.
        Returns the ID (old or new).  This function can be used
@@ -32669,6 +32766,7 @@ org-id-get-with-outline-drilling
 
 org-id-find
        Find the location of an entry with specific id.
+
 ********* copy and id and linking to an id in orgmode
 to copy an id `use org-id-copy` (also creates one if missing on header for you)
 
