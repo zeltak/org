@@ -26470,6 +26470,14 @@ To activate it, add this to your .emacs
 
      (add-to-list 'dired-omit-extension ".example")
      (delete 'dired-omit-extension ".example")
+******** copy file/folder names to kill ring 
+The command `w` (dired-copy-filename-as-kill) puts the names of the marked (or next n) files into the kill ring, as if you had killed them with C-w. The names are separated by a space.
+
+With a zero prefix argument `0 w`  this uses the absolute file name of each marked file. 
+With just C-u as the prefix argument `C-u w`  it uses file names relative to the Dired buffer’s default directory. (This can still contain slashes if in a subdirectory.) 
+
+As a special case, if point is on a directory headerline, w gives you the absolute name of that directory. Any prefix argument or marked files are ignored in this case.
+
 ******* copy,cut,paste
 
 ******** kill-rectangle  replace-rectangle
@@ -32825,6 +32833,49 @@ use this
 :VISIBILITY: folded
 :END:
 #+END_EXAMPLE
+
+******* org-google sync 
+******** org-gcal
+https://github.com/myuhe/org-gcal.el
+
+org-gcal is now available in the famous emacs package repo MELPA, so the recommended way is to install it through Emacs package management system.
+
+to configure: 
+
+`Go to Google Developers Console`
+Create a project (with any name)
+Click on the project
+Click on APIs & Auth then Credentials
+Click on Create New Client ID with Application type Installed application, Installed application type Other
+Click on Create Client ID
+Record the Client ID and Client secret for setup.
+Under the same APIs & Auth menu section, select APIs
+Scroll down to Calendar API. Click the Status button to enable calendar API access to the app you created in steps 5 & 6.
+
+`Go to Google setting page`
+Go to Google setting page and click the gear-shaped settings icon in the upper right, then select “Settings” from the drop down list.
+Select the “Calendars” tab, which will display a list of your calendars.
+Select the calendar you would like to synchronize with. This will take you to the “Calendar Details” page for that calendar. Near the end is a section titled “Calendar Address”. Following the XML, ICAL, and HTML tags, you will see your Calendar ID.
+Copy the Calendar ID for use in the settings below, where you will use it as the first element in the org-gcal-file-alist for associating calendars with specific org files. You can associate different calendars with different org files, so repeat this for each calendar you want to use.
+
+`Setting example`
+#+BEGIN_SRC emacs-lisp :results none
+(require 'org-gcal)
+(setq org-gcal-client-id "DEVELOPER ID"
+      org-gcal-client-secret "DEVELOPER SECRET KEY"
+      org-gcal-file-alist '(
+("CALANDER-ADRESS-FROM-GOOCAL@GOOGS.COM" .  "~/org/files/agenda/gcal.org")
+
+))
+#+END_SRC
+
+`Usage`
+
+#+BEGIN_SRC emacs-lisp :results none
+org-gcal-sync
+#+END_SRC
+
+Sync between Org and Gcal. before syncing, execute org-gcal-fetch .
 
 *** sublime text
 
