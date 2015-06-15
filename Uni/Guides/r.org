@@ -9759,7 +9759,7 @@ the normal output is in org mode tables. to get a classic R console output use:
 
 $Note- changing the :results argument to `value` is the same as omitting the argument completely, since 'value' is the default )$
 
-*** Passing data between code blocks (sessions)			        
+*** make R session persistant (sessions)			        
 Often in R, we will define functions or objects in one code block
 and want to use these objects in subsequent code blocks. However,
 each time we submit a code block using C-c C-c, org-mode is firing up
@@ -10629,4 +10629,5 @@ gestwide[1,1:10, with = F]
 
 
  
+
 

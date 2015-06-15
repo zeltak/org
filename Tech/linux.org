@@ -6414,7 +6414,7 @@ systemd
 
  and a bitlbee channel should come up.
 
-***** Step One: Registering
+**** Step One: Registering
 
 You need register so that all your IM settings (passwords, contacts,
 etc) can be saved on the BitlBee server. It's important that you pick a
@@ -29243,6 +29243,21 @@ add this to your config
 *********** tagging in list view
 see the hotkeys in config for personal tagging keys
 $Note-when tagging one needs to enter tag> ENTER then ENTER again with an empty prompt to save the tag$ 
+*********** use tags to execute a lisp code (for example narrow region when launched)
+Tags that have the prefix "bmkp-" are reserved – do not name your own tags using this prefix. Currently, "bmkp-jump" is the only predefined bookmark tag. You can give this tag a value that is a function – it is called whenever the tagged bookmark is visited. Any Lisp-readable function value is allowed: a symbol or a lambda expression.
+
+For example, to display Hello! when a bookmark is visited you can use this:
+
+issue ~T v~
+enter bmkp-jump
+press  RET
+enter code
+₆In example₆  (lambda () (message "Hello!"))
+this is an example code for narrow region
+#+BEGIN_SRC emacs-lisp :results none
+(lambda () (org-narrow-to-subtree))
+#+END_SRC
+The function that is the value of a "bmkp-jump" tag is called just after the the standard hook ‘bookmark-after-jump-hook’ is invoked. You can use this tag to invoke functions that are specific to individual bookmarks; bookmarks can thus have their own, extra jump functions.
 ********* Hippie
 ********** add own expansion
 If hippie-expand fails to find any satisfactory expansion, you may want to add a new one by using function `inverse-add-global-abbrev. The following should probably be the last function in `hippie-expand-try-functions-list:
@@ -31160,6 +31175,8 @@ Archive the current entry using the command specified in the variable org-archiv
 	 :PROPERTIES:
 	 :ID:       cf2c69b4-3d4c-4f81-a01d-bbbe1d120e62
 	 :END:
+http://orgmode.org/worg/org-tutorials/org-custom-agenda-commands.html
+
 ********* How can I limit the agenda view to a particular category?
 Another way to filter agenda views by type of work is to use a "#+CATEGORY" declaration at the top of each file, such as:
 
@@ -31279,7 +31296,7 @@ Note that the -tree agenda views need to be called from an Org buffer as they op
 #+END_EXAMPLE
 
 ********* block
-
+	  
 Another possibility is the construction of agenda views that comprise the results of several commands, each of which creates a block in the agenda buffer. The available commands include agenda for the daily or weekly agenda (as created with C-c a a), alltodo for the global TODO list (as constructed with C-c a t), and the matching commands discussed above: todo, tags, and tags-todo. Here are two examples:
 
 #+BEGIN_SRC emacs-lisp :results none
@@ -31313,7 +31330,7 @@ another example
         ;; ...other commands here
         ))
 #+END_SRC
-********* define multiple critera (₆In example₆ todos)
+********* define multiple criteria (₆In example₆ todos)
 use a pipe between the items:
 #+BEGIN_SRC emacs-lisp :results none
 ("r" "research" todo "TODO|NEXT" 
@@ -31322,10 +31339,75 @@ use a pipe between the items:
           (org-agenda-sorting-strategy 
           '(priority-down effort-down)
 #+END_SRC
+********* choose several todo categories
+use the | operator:
+
+#+BEGIN_SRC emacs-lisp :results none
+("w" "work" todo "TODO|BGU" 
+         (
+          (org-agenda-sorting-strategy 
+          '(priority-down effort-down)) ) )
+
+#+END_SRC
 ********* sorting methods
 #+BEGIN_SRC emacs-lisp :results none
 (priority-down effort-down todo-state-down) 
 #+END_SRC 
+********* narrow search agenda on specific file only
+#+BEGIN_SRC emacs-lisp :results none
+;work related only tasks (from research|bgu files)
+("w" "work" todo "TODO|BGU|EXP"
+(
+(org-agenda-files 
+(list "~/org/files/agenda/Research.org"  "~/org/files/agenda/bgu.org"))
+(org-agenda-sorting-strategy '(priority-down effort-down)
+)))
+     
+#+END_SRC
+********* time
+********* schedule vs appointment 
+Scheduling an item in Org mode should not be understood in the same way that we understand scheduling a meeting. Setting a date for a meeting is just a simple appointment, you should mark this entry with a simple plain timestamp, to get this item shown on the date where it applies. This is a frequent misunderstanding by Org users. In Org mode, scheduling means setting a date when you want to start working on an action item.
+
+A plain timestamp, C-c .: This is used for things like appointments where the entry occurs at a specific date/time. Such an entry will show up in the agenda on the specified day, and will not show up after that day has passed. Note that an appointment in the past won't keep showing up on your agenda regardless of whether you mark it DONE: if you didn't go to your doctor's appointment yesterday, that doesn't mean you still have one today!
+
+C-u C-c !
+Like C-c . and C-c !, but use the alternative format which contains date and time. The default time can be rounded to multiples of 5 minutes, see the option org-time-stamp-rounding-minutes. 
+
+A SCHEDULED timestamp, C-c C-s: This is used to indicate when you intend to do the task. It will show up on the agenda on the scheduled day. If you don't complete the task at that time, it will continue to show up on the agenda on the following days to show you that you have not completed something that you planned to do.
+
+A DEADLINE timestamp, C-c C-d: This is used to indicate when something must be completed. Typically you want to see deadlines ahead of time, so that you can do whatever it is that must be done to meet them. Like a scheduled entry, if you miss a deadline it will continue to appear on the agenda as past due.
+
+(Strictly speaking there is a fourth option: an inactive timestamp, C-c !. This is when you want to attach a date to an entry but do not want it to show up in the agenda at all. Inactive timestamps have no special behavior.)
+
+example for a meeting
+
+http://orgmode.org/worg/org-faq.html#Appointments/Diary
+
+
+#+BEGIN_EXAMPLE
+/** meet tzur  
+<2015-06-14 Sun 11:00-11:30 >
+#+END_EXAMPLE
+
+multi day schedule
+
+#+BEGIN_EXAMPLE
+/* Vacation
+  <2009-03-20 Fri>--<2009-04-01 Wed>
+#+END_EXAMPLE
+
+********* Repeating events
+Some tasks need to be repeated at regular intervals - daily, weekly, fortnightly, monthly, quarterly and annually. Items can be made to repeat in the agenda view by including a repeater directive at the end of the date. This has the format of a plus sign, a number and a letter indicating a unit of time: days (d), weeks (w), months (m) and years (y).
+
+Therefore, the weekly meeting entries can look like:
+#+BEGIN_EXAMPLE
+/      *** Tuesday department meeting 
+       <2007-10-23 Tue 10:00-11:00 +1w>
+       *** Friday afternoon team meeting
+       <2007-10-26 Fri 15:00-16:00 +1w>
+#+END_EXAMPLE
+Viewing the agenda and scrolling forward into future weeks will show the date entries.
+
 ******** Todo
 ********* PULL TODO from a set of files/ALL
 you can define where to pull TODO to the agenda view

@@ -1,91 +1,14 @@
 #+TITLE: Research 
-#+TODO: TODO(t) | SUBMITTED(s) K_TRACK(k) PAUSED(p) DONE(d) 
+#+TODO: TODO(t) EXP(e) | SUBMITTED(s) K_TRACK(k) PAUSED(p) DONE(d) 
 #+CATEGORY: work
 #+TAGS:  first(f) read_only(r) 
 #+STARTUP: overview  inlineimages eval: (org-columns)
 #+PRIORITIES: A
 #+OPTIONS: toc:nil 
 
-* Today
-** TODO discuss with qian di
-geoschem model vertical profile - put into a europe wide pm dataset
-disucss that with qian di vertical
-talk about mysql datasets
-
-** alexei talk 31.3.2105
-*** low yearly aod values and compared to DB which is higher
-we should look at wind speed from reanalysis data/station to see if these areas have low or high ws values
-*** TODO basic raw zero correlation with PM stations
-send alexei the the full ts pm data so he check this
-*** look at aod azimuths
-use data with 30 degree azimuths that should be better:
-either subset data by that or play with these azimuths as weights in a model 
-** Andrea/Bob talk
-*** temperature modeling: showing heat island effects, there could be several degrees c in spatial variblity at night time
-*** "greenes" :- use sattelite NDVI (modis/lansat/other) as an exposure (1km-30m) as a proxy for green spaces/areas and
-*** walkability
-there are several ways of addressing walkability
-
-1) simple method gis based method- intersection count, business count, and population density
-
-residence-level measures of population density
-
-business counts (as a proxy for accessibility)-Business counts were measured by the counts of all stores, facilities, and services in a participant’s network buffer
-points of interest”, which includes grocery stores, restaurants, banks, hotels, hospitals, libraries, 
-
-intersection counts (as a proxy for street connectivity)-network buffers around each home address
-Intersection counts were quantified by the number of intersections that were 3-way or greater within each network buffer (Figure 2). A greater intersection count increases the efficiency of walking to destinations. 
-
-2) developing a more complex model taking into account traffic lanes, traffic direction, walking obstacles, intersections counts etc etc
-
-*** light at night
-
-DMSP satellite allows 600m resolution. new satellite (NASA-NOAA Suomi National Polar-orbiting Partnership (NPP) satellite) can produce higher res data
-LAN as a exposure and as a potential proxy to residence level pop density
-
-*** web data social/location based services
-
-whats available in Mexico city/around?
-could be used for: 
-mapping traffic density
-mapping access to health, healthy food, business counts
-
-*** perhaps noise exposure modeling? I have a student that is working on this- tis very hard to model, need a "moitoring campagin", height, buliding material etc
-
-
-*** crime-data availability?
-
-** TODO Joel talk 12.05.15
-**** LPM
-code needed is on FTP
-shi: what else is needed on top of the drobo files?
-use WRF for stage 4-
-talsk to shi
-
-**** TODO use of aqua and terra as 2 separate exposure:
-instead of calibrating: one would be a peak level exposure and one a "background" exposure
-calibrate with hourly 
-terra > 9:30
-aqua > 14:30 
-talk to petros
-compare EC and OC from speciation and compare
-we want to show that one picks up traffic well while the other picks up transported PM mainly
-**** updates
--swiss, sweeden  project coming along
--italy is ready for run- I will come a few days earlier to rome to finalize the model with massimo
--VIIRS update 
-**** antonellas grant
-do we need to prepare for the grant in anyway
-when does it start
-who will do what?
-- MA student here
-** TODO check if I got back money for haifa GEO conference
-** rahcel- ask about lab services like tal, how do I open this 
 * 'Projects'
 ** PAUSED PM2.5 1kmx1km NEMIA					    :ucurent:
-
-id:b967025d-dec5-468a-afa4-2922cc2532da
-   
+  
 *** Brainstorm
 -there may be degredation in data quality in Terra from 2000-2008 may introduce noide, we may need to address this at some stage in the future
 -AOD values:
@@ -161,54 +84,36 @@ run the reg with some left out monitors and see if the slope is different then '
    :PROPERTIES:
    :ID:       599074f7-2550-40ab-ba04-782947688ce0
    :END:
-*** Weekly TODOS
-    :PROPERTIES:
-    :ID:       7716b93c-4a8f-42a4-a602-5e57d517febf
-    :END:
--why do we correlate 24h and not by overpass
--better regions
--go over PM25 and see if it looks
-*** improvment
-run by season
-ask california group whats the raw pm-aod correlations
-create yearly nox etc variables 
-*** TODO check in Israel for next iteration
-composition of PM in israel, 
+*** info file
+id:ac53d526-2eb4-4aea-a472-09df35dc41e6
+*** code
+file:/home/zeltak/org/files/Uni/Projects/code/P046.Israel_MAIAC
+*** meetings
+*** TD
+*** explore
+**** low yearly aod values and compared to DB which is higher
+ we should look at wind speed from reanalysis data/station to see if these areas have low or high ws values
+
+**** EXP use of aqua and terra as 2 separate exposure:
+instead of calibrating: one would be a peak level exposure and one a "background" exposure
+calibrate with hourly 
+terra > 9:30
+aqua > 14:30 
+talk to petros
+compare EC and OC from speciation and compare
+we want to show that one picks up traffic well while the other picks up transported PM mainly
+**** look at aod azimuths
+ use data with 30 degree azimuths that should be better:
+ either subset data by that or play with these azimuths as weights in a model 
+
+**** EXP check in Israel for next iteration
+composition of PM in israel
 teom at 50 celsius  may over measure and introduce noise to pm25.
 look at average residual in monitors 
 put that in the paper teom is limited
-*** TODO talking to alexei about size distribution
-tried latley:
-kernel machine approach
-PLS
-a mean 20km mpm excluding the actual monitoring data. works very well as predictor but we have mod 2 problem. Also David dosent like it.
-Tried prev/post AOD as predictor
-tried mean of surrounding AOD as predictor. works almost as well as monitor AOD but both linerly don't improve much in model.
-both didn't imporve R2 by much 
-code 
-check email from 26.1.2015 joel 
-all vars in log scale , check which one was dropped 
-
-*** ask joel
-even simple pm-aod models show this sharp CV drop
-
-*** talk with david
-
-| mod                      |   r2 | space | time |
-| aod                      | 0.77 |   .76 | 0.78 |
-| lu+met+intercept for day |   75 |  0.61 | 0.76 |
-| aod+all                  | 0.84 |  0.89 | 0.84 |
-
-the use of physical measuremtns gives us the ability to predict in areas far from physics monitors (such as >30km etc) and reach rural area
-use of AOD gives us daily predctions over space where LUR cannot
-monitors in modest numbers some areas may be under or unrepresented in calibrating the land use regression.
-
-using Aod results in more parsimonious models then LUR- leaves out some Land use terms used in later health outcome models that can create bias since they are included in the exposure
-
-*** dust seasons in the south of israel
- main dust season: dec-march
- main non dust season: jul-aug 
-
+-why do we correlate 24h and not by overpass
+-better regions
+-a mean 20km mpm excluding the actual monitoring data. works very well as predictor but we have mod 2 problem. Also David dosent like it.
 ** TODO France temperature paper
    :PROPERTIES:
    :ID:       661912dc-74af-472a-ad07-f57affd87b96
@@ -348,8 +253,8 @@ consider using other pollutants around the city specifacly indicators for high t
 if prev day isnt avilable we use the same day twice
 -to borrow information across space create a variable that weights and down weights low aod observations per day
 *** Top pri
-**** TODO [#A] weight sites in Mod1 by inverse of nearby missing AOD (downweight sites near clouds)	 	
-**** TODO Joel suggests we put time interactions on almost everything
+**** EXP weight sites in Mod1 by inverse of nearby missing AOD (downweight sites near clouds)	 	
+**** Joel suggests we put time interactions on almost everything
   which interaction
   file:/home/acjust/projects/airmex/code/LUR_Mex_1b_clean_local.R
 
@@ -357,14 +262,20 @@ if prev day isnt avilable we use the same day twice
   what about instead clustering to find characteristics of days that predict the AOD-pm relationship
   and substituting slopes/intercepts from those instead for the many days when no calibration is occuring because mod1 is empty on that day (no aod near monitors)
 
-**** TODO add high res local smoothing in mod1 
+**** EXP add high res local smoothing in mod1 
   in mod1 file, join the monitor to average of nearby AOD
 
 **** Workflow and fixes
-**** TODO Discover patterns of bad AOD data using spatstat to check for contiguous regions
+**** EXP Discover patterns of bad AOD data using spatstat to check for contiguous regions
 
 ***** create paths so S:/ and S:/EOME taken care of automatically
-***** TODO Fix KNN function
+***** EXP Enhance geomerge
+      :PROPERTIES:
+      :ID:       063b3058-0d6b-4f36-820c-adfd60cf1f8f
+      :END:
+don't fail on missing
+don't require matrix ID to be character
+better arguments inline with common gis terminology
 
 ***** joel and Bernt talk
 ****** Dynamic threshold of high aod (exclude high aod if monitor are low)
@@ -374,8 +285,8 @@ if prev day isnt avilable we use the same day twice
 ****** Try aod divided by pbl. Or cluster groups of days (by pbl profile). Fit different models for subsets?
 ****** Handle data as a matrix, smooth with a weighted kernel. Strip off measures near edges.
 
-**** TODO add flag to exclude closest in mean calc in geomerge/nearestbyday
-
+**** EXP add flag to exclude closest in mean calc in geomerge/nearestbyday
+**** PLS regression 
 *** lower pri
 **** TODO [#A] LUR; space-time smoothing; nearby cells weighted for missing and previous day (if gone, use today)
 **** is the ground monitoring data under a cloud otherwise the same as when not clouded (apart from precip events)?
@@ -476,7 +387,6 @@ if prev day isnt avilable we use the same day twice
 **** impute missing pbl	 	
  	  check out Amelia, maybe single impute time-series?
 	  http://cran.r-project.org/web/packages/Amelia/vignettes/amelia.pdf
-**** TODO leave one monitor out cross-validation	  :coremodel:newdata:
 ****  RH modifies particle size distribution - need to include	 	
 ****  scraping google or bing road traffic	 	
 ****  use lots of spatial terms with PLS regression a la Sampson paper 
@@ -504,6 +414,7 @@ if prev day isnt avilable we use the same day twice
   run three stages again
   minimal additional cloud cleaning
   draft results
+*** TODO explore road classifications 
 ** Italy PM models
 *** Diffrances then NE paper:
 - in in europe
@@ -811,7 +722,7 @@ file:
 ***** Meris satellite
  Data from european sattelite - We here in my Lab are looking into this and possible future applications
 
-* Future Research Ideas
+* Future Project Ideas
 ** PM model (NEXT BRANCH)
 *** MAIAC next stages
 **** TODO call with Alexei
@@ -1105,6 +1016,59 @@ R package by lauren hunn
 **** sattelite humidity
 lowest level
 
+*** meetings
+**** TODO meeting with Alexei [2015-04-21 Tue] 
+***** MAIAC RAW results in all NE areas we tried (Mexico, Israel etc) much worse. is it a mater of physics?
+ all other regions such as Israel, Mexico, italy, SE USA have all relatively poor overall RAW R2 (monitors vs closest AOD) much lower than NE:
+ in NE it ranges from 0.2-0.7 RAW while in all other regions RAW of 0.01-0.2 MAX
+ bright surfaces (in California) get better agreement with aeronet; also in israel
+ 0.6017
+ is MAIAC better at prediccting the uper column than surface in israel? 
+ what can we do to help this (bright surface problem)
+
+***** PM10 in Israel performs much better than PM2.5
+ the differences are huge- CV R2 pm10=0.82 and pm25 ~0.7
+ over fitting isn't the issue since also in a parsimonious model we still get this drop
+****** histogram on dust days of AOD
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2015-02-11 09:15:22
+ #+attr_html: :width 450tx
+   [[/home/zeltak/org/attach/images_2015/screenshot_2015-02-11_09:15:22.png]]   
+ #+DOWNLOADED: /tmp/screenshot.png @ 2015-02-11 09:16:30
+ #+attr_html: :width 450px
+  [[/home/zeltak/org/attach/images_2015/screenshot_2015-02-11_09:16:30.png]]
+
+
+****** raw lm corr aod and pm25/10 on dust vs non dust days 
+ 0.16 non dust days
+ 0.17 dust days
+
+ look at time series analysis
+****** raw correlation with regions
+ reg5      R2   nsamps
+ 1    1 0.39621    484  beer sheva
+ 2    2 0.19817   7096  ashdod
+ 3    3 0.30556    124  jerusalem
+ 4    4 0.12481   3885   Tel aviv 
+ 5    5 0.16421   4627  North 
+
+ in general raw correlations aren't great- 0.001-0.3 when breaking down to season/year etc
+ there are specifc station in speific seasons that have a base correlation of 0
+
+ we saw that UN and adjancecny mask werent helping that much
+
+ -alexei raw correlations in california from slides
+ we saw in table and el segundo bad correlations in the range that we saw, whats the pysical explenation for this
+ -lets take one year 2004  and focus on this. we will send you pm data. lets try to debug this
+ issues we hypothesis: humidity and salt along the near shore area.
+
+***** clouds - focus on Mexico - Allan
+ uncertainty and adjacency mask don’t help that much
+ our additional filtering (spatial filter for high variance);
+ there are long gaps with no data 
+ versions and datasets - when is the “new” version coming
+ using Terra with Aqua
+
 ** Ta model (next branch) 
 *** stage 3 regression by grid cell
 You do not need to run a model with a random effect for each grid cell. Instead, you can run a separate regression for each gridcell, regressing the non-missing predicted Ta against the mean of monitored Ta within 100km. This gives you 1 million regressions to do, but you can divide the gridcells into 100 groups and run 100 jobs on the cluster and it will run in an hour. We do this when we regress the 5000,000 methylation sites against predictors in the NAS.  Also, we need some of the land use terms.
@@ -1323,6 +1287,9 @@ study of nursing home cases, dont move much good for 1x1 km data
 -calculate the residuals between our model and the BC model
 create moving averages of the 4,8,12 weeks and try that in the model> will capture only non traffic exposures
 when we get the 1x1km data ready go back to the icam/vcam reanalysis by marie-able and the stacey BC paper and see if that changes things
+** explore Mapi Maagal project 
+Zipcode proxy
+
 * Grants
 ** K_TRACK EHF grant: birth weight outcomes (defects, Ultra sound measurements and Ta,PM2.5
    :PROPERTIES:
@@ -1378,6 +1345,15 @@ meytal drori
    :ID:       5a8c67d0-bd9b-4eff-9d5b-8ae444153490
    :END:
 ** R21 with Allan Mexico
+*** info file
+id:
+*** code
+file:
+*** meetings
+**** meeting on R21[2015-06-19 Fri 16:00] 
+***** Joel ask about both meeting in rome with David a
+*** TD
+
 ** K_TRACK CIG
 *** gen info
 can be dynamic, that is i can move money from each budget section to another
@@ -1399,395 +1375,99 @@ account number 87347711 saif 40
 - create a propensity  score regressing epxo vs all variables get a predictive modelt
 - advanimcg epi in israel taking acasuel moel appraoch coming up with estimates wich are not just casuel and advance methods
 
-* Students
-** maayan
-*** Phd topics
-**** overall topic association between PM and cardio vascular diseases and risk factos
-***** DM and air pollution
-***** outcomes MI,IHD,CVA (cardio cerrebro vascular attach-head)
-***** dislipedemia (blood lipids)
-***** hypertension 
+** Andrea/bob built environment grant
+*** grant ideas 
+**** temperature modeling: showing heat island effects, there could be several degrees c in spatial variblity at night time
+**** "greenes" :- use sattelite NDVI (modis/lansat/other) as an exposure (1km-30m) as a proxy for green spaces/areas and
+**** walkability
+ there are several ways of addressing walkability
 
-*** maayan 12.5.15
-***** case crossover
- whats the N?
- simplest way is to take first admission
- if N is small lets see in litrature how other people dealt with this
-***** the Stat zone file
- what are these variables
- HOUSEHOLDS	ownership of houses
- AVERAGE_HH	
- ASIRON1_3	% of population in eshkol 1-3
- ASIRON7_10	% of population in eshkol 7-10
- DIROG	 method of ranking SES
- MADD_SOC	alternative method to rank SES
- INCOME	mean income 
- ZOBJECT	Zone Number
- ESHKOL_NUM	eshol rank from 1-10 (or 1-20 for moatzot)
-***** TODO Behzad paper
- mind taking a look? authorship is problematic we need to see what can be done
-***** TODO arrange meeting with ofer and erez
-***** TODO check distribution for pm for seasons
+ 1) simple method gis based method- intersection count, business count, and population density
 
-** meytar schedule
-in R- gbm analylis- check model with only highest variables.
-1.ratio
-2.france PM
-3.cooperation with Austrailia
-4.data fusion
-5.composition 
-* Office/Budgets
-  :PROPERTIES:
-  :ID:       248dff94-3c3f-4b05-b9d3-4c25addf746b
-  :END:
-** budgeting students "manot"
-in 2014 1 "mana" is 514 NIS
-for a post-doc the $$ is between 4-20
-** Trips Abroad info
-*** Eshel 
-for days you don't ask for hotel 
-the per day is $123
-for days with hotel 
-the sum is $74
-** Budget
-*** running budgets 
-| name      |   Number |
-|-----------+----------|
-| CIG       | 87361211 |
-| sal klita | 87347711 |
-|           |          |
+ residence-level measures of population density
 
-  
-*** BGU budget glossary
-department sections starts with '5'
-grant money sections starts with '3'
-other research sections starts with '8'
-to see how much is left you need to check in "מחקרים"
-*** Move budget that is unused
-check how to move unused budget to department/faculty to pay for other students ans somehow get the money back
-*** budgeting students "manot"
- in 2014 1 "mana" is 514 NIS
- for a post-doc the $$ is between 4-20
+ business counts (as a proxy for accessibility)-Business counts were measured by the counts of all stores, facilities, and services in a participant’s network buffer
+ points of interest”, which includes grocery stores, restaurants, banks, hotels, hospitals, libraries, 
 
-** Office Hardware info
-*** IP
-Beast IP: 132.72.155.204
-NAS BGU:
-132.72.154.204 (main)
-132.72.152.204
-*** Phone
-*** bgu wifi network
-use id BGU-USERS\ikloog  
-** salary
-*** הקדשת זמן
-בחירת שנה סמסטר לדיווח הקדשת זמן
-	
-@you need to mark "הקדשתי"@
+ intersection counts (as a proxy for street connectivity)-network buffers around each home address
+ Intersection counts were quantified by the number of intersections that were 3-way or greater within each network buffer (Figure 2). A greater intersection count increases the efficiency of walking to destinations. 
 
-you get the bonus in salary for hakdashat zman in Nov/Feb/May/Augment
-*** "criterionim"
-you get the bonus in salary for this in Oct/Janurary/April/July
+ 2) developing a more complex model taking into account traffic lanes, traffic direction, walking obstacles, intersections counts etc etc
 
+**** light at night
 
-** TODO refund cellphone
-   :PROPERTIES:
-   :ID:       75644e8e-69ea-47fe-b011-81b0b9d82c3b
-   :END:
-use wither bug or dv com:
+ DMSP satellite allows 600m resolution. new satellite (NASA-NOAA Suomi National Polar-orbiting Partnership (NPP) satellite) can produce higher res data
+ LAN as a exposure and as a potential proxy to residence level pop density
 
-אהובה קדם
-מנהלת מחלקה עסקית – באג מולטיסיטם בע"מ
-טל:08-6222769  פקס:08-9202410 נייד:052-3122265
-אימייל:ahuva@bug.co.il
+**** web data social/location based services
 
+ whats available in Mexico city/around?
+ could be used for: 
+ mapping traffic density
+ mapping access to health, healthy food, business counts
 
-Felix Tzigelman
-Purchasing and Logistics Manager
-dvcom_logo_s
- 
-Lazarov 33,Rishon Lezion 75654
-Israel
- 
-Tel. +972-72-2203300 ext.3
-Fax. +972-72-2203307
-M.   +972-52-4058888
+**** perhaps noise exposure modeling? I have a student that is working on this- tis very hard to model, need a "moitoring campagin", height, buliding material etc
+**** crime-data availability?
+* scheduled mail/calls/meetings
+** TODO discuss with qian di
+geoschem model vertical profile - put into a europe wide pm dataset
+disucss that with qian di vertical
+talk about mysql datasets
 
-
-internet from home
-שלוחה   	08-6461743
-
-אמיר צפנת
-
-שלוחה   	08-6479449
-
-
-* Short term Misc
-** TODO make sense of all kopot gemel
-   :PROPERTIES:
-   :ID:       6c1e9592-8c50-41e4-b187-c42884527820
-   :END:
-** TODO investigate national transportation model
-   :PROPERTIES:
-   :ID:       2d43ca32-4aa2-4ecb-bd5a-9a1d231dc35a
-   :END:
-
-http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_transportation_atlas_database/2014/index.html
-
-** TODO Build Lab website
-:PROPERTIES:
-:ID:       08d89d98-7330-4d4e-894f-3792bd24a115
-:END:
-*** talk to oren tal about sharepoint access
-** TODO publications comitee
-*** monetary benefits for publications- see examples below- always when accepted in all places
-    should the money be awarded on start of MA or after the paper is accepted- always when accepted
-
-report
-china
-
-rewarded with cash, and the more prestigious the journal, the larger the sum
-
-Indexed in ISTP — $92 Indexed in EI — $275 Impact factor < 1 — $306 1 ≥ IF < 3 –$458 3 ≥ IF < 5 — $611 5 ≥ IF < 10 — $764 IF ≥ 10 — $2,139 Published in Science or Nature – $30,562
-Europe
-
-University of Bayreuth-University in Bayreuth, Germany: supervisor to assess the publication according to the criteria (accepted) gives supplement to the budget
-
-    Denmark : graduate students may be entitled to receive a publication bonus of up to DKK 15000. must be published in peer review with university affiliation
-
--other instituations with no specific examples that hand out money per publications all have various programs that give graduate students incentives for publishing papers the ammount is hard to get to via web
-
-    common in Russia
-
--leeds university
-
-    many Austrailian universites
-
-USA
-
--bonuses for publishing in high impact journals in some universites/departments
-
--some universities even give undergrad pubication bonuses!: Beloit College is a private liberal arts college in Beloit, Wisconsin
-israel
-haifa
-
-תלמיד יקבל מענק מיוחד באם במהלך השנה האקדמית יגיש לפרסום ספר מדעי/מקצועי, או פרק לספר מדעי/מקצועי, או מאמר מדעי/מקצועי לכתב-עת, אשר יתקבל לפרסום על בסיס רפרנטורה מקצועית. המענק מיועד לתלמידי מחקר שנה א’ – ד’, עבור פעילות מחקרית שנעשתה במהלך לימודי התואר השלישי.
-
-גובה המענק ייקבע מראש כל שנה בהתאם לאפשרויות התקציביות.
-huji
-
-פרס בגין פרסום מאמר בכתב עת אקדמי: פרס ובר ג’ורג’: על פרסום מאמר מצטיין באחד מכתבי העת האקדמיים של הפקולטה. הפרס יוענק בגין מאמר שהתקבל לפרסום (אף אם טרם התפרסם בפועל) במהלך שנת הלימודים הקודמת. יש לצרף לבקשה עותק מן המאמר. הפרס יוענק לתלמיד/ה אחד/ת. גובה הפרס כאלף ש”ח.
-*** TODO prepare proposal
-show how the best places do have these benefits on publishing short 1/2 page proposal with: giving cash prize for publishing a paper during MA in Q1/Q3 in the sum based on the yearly availability of funds in the department.
-
-** yom patouch
-doch shemot with rachel
-by years with no emails!
-one that shivok will send the email for us
-go to mador rishom for poetntial canidates- revital zamir
-** TODO ask tal about layers from MAPI
-** TODO Ask marina zusman $$$ back on sept and feb meetins
-   
-** TODO meeting with Alexei
-*** past year
--initial mexico model-paper sent
--initial israel model-paper coming in the next few days
--work in Europe (mainly in Italy but also in sweeden and switzerland and soon other regions)
-*** current issues to discuss:
-**** MAIAC RAW results in all NE areas we tried (Mexico, Israel etc) much worse. is it a mater of physics?
-all other regions such as Israel, Mexico, italy, SE USA have all relatively poor overall RAW R2 (monitors vs closest AOD) much lower than NE:
-in NE it ranges from 0.2-0.7 RAW while in all other regions RAW of 0.01-0.2 MAX
-bright surfaces (in California) get better agreement with aeronet; also in israel
-0.6017
-is MAIAC better at prediccting the uper column than surface in israel? 
-what can we do to help this (bright surface problem)
-
-**** PM10 in Israel performs much better than PM2.5
-the differences are huge- CV R2 pm10=0.82 and pm25 ~0.7
-over fitting isn't the issue since also in a parsimonious model we still get this drop
-***** histogram on dust days of AOD
-
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-02-11 09:15:22
-#+attr_html: :width 450tx
-  [[/home/zeltak/org/attach/images_2015/screenshot_2015-02-11_09:15:22.png]]   
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-02-11 09:16:30
-#+attr_html: :width 450px
- [[/home/zeltak/org/attach/images_2015/screenshot_2015-02-11_09:16:30.png]]
-
-
-***** raw lm corr aod and pm25/10 on dust vs non dust days 
-0.16 non dust days
-0.17 dust days
-
-look at time series analysis
-***** raw correlation with regions
-reg5      R2   nsamps
-1    1 0.39621    484  beer sheva
-2    2 0.19817   7096  ashdod
-3    3 0.30556    124  jerusalem
-4    4 0.12481   3885   Tel aviv 
-5    5 0.16421   4627  North 
-
-in general raw correlations aren't great- 0.001-0.3 when breaking down to season/year etc
-there are specifc station in speific seasons that have a base correlation of 0
-
-we saw that UN and adjancecny mask werent helping that much
-
--alexei raw correlations in california from slides
-we saw in table and el segundo bad correlations in the range that we saw, whats the pysical explenation for this
--lets take one year 2004  and focus on this. we will send you pm data. lets try to debug this
-issues we hypothesis: humidity and salt along the near shore area.
-
-**** clouds - focus on Mexico - Allan
-uncertainty and adjacency mask don’t help that much
-our additional filtering (spatial filter for high variance);
-there are long gaps with no data 
-versions and datasets - when is the “new” version coming
-using Terra with Aqua
-
-**** if time available: 
-talk about Austraila
-talk about ratio and sea and land preformance
-composition 
-
-dataset for bad 0.00 R2 aod-pm 
-pm-aeronet
-email quan di about geoschem and send him PM monitors 
-
-** TODO lab website
-See what shiran has made out of it 
-** TODO new GIS presentation
-expand and talk about each course with slides
-
-* long term Misc
-** GIS Trac k
-    :PROPERTIES:
-    :ID:       836c5749-6059-4d98-9844-6611b7726cb9
-    :END:
-*** info 
-**** do you know the numbers/ration in other universities and abroad in geo departments?
-penn state is one of the leaders in GIS masters degree
-http://www.worldcampus.psu.edu/degrees-and-certificates/geographic-information-systems-gis-masters/courses
-All courses, including electives, are GIS-related
-**** split maybe into 2 tracks:
-***** work focused (non thesis):
-will admit even non GIS background people
-stress jobs at every level from high tech (google maps, waze etc) to municipalities, governmental (hevrat hasmal etc), education (teaching in colleges etc), urban and regional planning,environmental resource management,surveying etc
-***** academia focus- thesis as a focused GIS/geospatial track track
-plus advertise GIS services for EPI/Health/Archeology etc
-**** for Ba
-ideas for interest in GIS, send to TAL
-**** specialized courses
-Python programing
-modulebuilder
-Database development and use
-WebGIS/GIS servers
-SQL
-SAS
-R
-Open source GIS (OSM,GeoDA,GRASS (geo resources analysis suports systens),QGIS,GDAL,SciPy etc 
-Geospatial statistics
-GIS project managment
-Cartography and imaging software
-remote sensing
-*** meeting with tal
-**** program:
-non offical BA 
-offical MA we sign certificate
-look at existing courses and make the program more modern
-assign to each person in the geo informatics program (tal,eran,aviva) which courses they take and whats included.
-
-**** marketing 
-***** DONE email sagi langer about geoinformatics marketing
-      :PROPERTIES:
-      :ID:       ab06e34d-92f2-4914-9e87-a086a408d4cf
-      :END:
-***** Find better MA students that do Research
-**** relevant departments
--epi
--geology
--biology
-- sde noker mahcon lecheker hmdbar
--archeolgy
-- marachot media 
-- sociology
-- medical School
-- envinmontal engineering
-- computer engineering
-- neihol
--tourism (manegment faculty)
-**** mundaine missions
-***** TODO before start of uni year mifgash megama
-      :PROPERTIES:
-      :ID:       c243b581-4a00-42db-bf1f-b286c0437506
-      :END:
-- talk to student in the geoinformatics group and tell them which courses they need to take
-
-***** TODO meet first year students for BA
-      :PROPERTIES:
-      :ID:       d58d6dba-bf72-4343-a5a9-f4dfd6edddd9
-      :END:
-add some propaganda, Waze, python, work in high tech
-***** TODO before start of uni year mifgah with MA megama students
-      :PROPERTIES:
-      :ID:       648a0805-3737-4c38-a256-93627565d17e
-      :END:
--talk to sigalit to set a date and place for this meetings 
-- talk to student in the geoinformatics group that MA
-** Mapi Maagal project 
-Zipcode proxy
-** List of reviwers
+* Papers
+** List of reviewers
 *** jaime madrigano
-Madrigano, Jaime
-jm17@sph.rutgers.edu
-Rutgers School of public health
+ Madrigano, Jaime
+ jm17@sph.rutgers.edu
+ Rutgers School of public health
 *** Sara Adar 
-Office: M5539 SPH II     
-1415 Washington Heights 
-Ann Arbor, Michigan 48109-2029
-Office: 734-615-9207; Fax: 734-936-2084
-E-mail: sadar@umich.edu
+ Office: M5539 SPH II     
+ 1415 Washington Heights 
+ Ann Arbor, Michigan 48109-2029
+ Office: 734-615-9207; Fax: 734-936-2084
+ E-mail: sadar@umich.edu
 
-University of Michigan, School of public health
+ University of Michigan, School of public health
 *** greg Willenius
-Gregory A. Wellenius 
-gregory_Wellenius@brown.edu
-Epidemiology, Brown
+ Gregory A. Wellenius 
+ gregory_Wellenius@brown.edu
+ Epidemiology, Brown
 *** bob Wright
-Robert O. Wright
-Email: robert.wright@mssm.edu
-Mount sinai
-Department of Preventive Medicine
-#+END_SRC
+ Robert O. Wright
+ Email: robert.wright@mssm.edu
+ Mount sinai
+ Department of Preventive Medicine
+ #+END_SRC
 
 
 *** Kees de Hoogh 
-Scientific Collaborator Projects 
-Publications Email
-c.dehoogh@unibas.ch
-Phone
-+41 61 284 87 49
+ Scientific Collaborator Projects 
+ Publications Email
+ c.dehoogh@unibas.ch
+ Phone
+ +41 61 284 87 49
 *** Michael Brauer
-Professor
-Director, Bridge Program
-ScD (Harvard), BA (University of California-Berkeley)
-Contact Information
-Biography
-Teaching and Students
-Publications
-Research
-Rm 366A, 2206 East Mall
-Vancouver, BC V6T 1Z3
-phone: 604-822-9585
-fax: 604-822-4994
-michael.brauer@ubc.ca
+ Professor
+ Director, Bridge Program
+ ScD (Harvard), BA (University of California-Berkeley)
+ Contact Information
+ Biography
+ Teaching and Students
+ Publications
+ Research
+ Rm 366A, 2206 East Mall
+ Vancouver, BC V6T 1Z3
+ phone: 604-822-9585
+ fax: 604-822-4994
+ michael.brauer@ubc.ca
 *** Jeremy SarnatJeremy Sarnat
 
-Emory, Rollins school of public health  
-Contact: 
-404-727-5692 (Melva Robertson, media relations) office
-melva.robertson@emory.edu
+ Emory, Rollins school of public health  
+ Contact: 
+ 404-727-5692 (Melva Robertson, media relations) office
+ melva.robertson@emory.edu
 ** How to write BGU in papers
-Ben Gurion University of the Negev
+ Ben Gurion University of the Negev
 ** Journal statistics IF etc
 *** 2014
 **** chronobiology international
@@ -1826,63 +1506,4 @@ Ben Gurion University of the Negev
 (IF= 3 .0; Q1  Public, Environmental & Occupational Health, 23 of 160 )
 **** american journal of Epidemiology 
 (IF= 4.9 ; Q1 public, environmental & occupational health, 11  of 162 )
-
-** GIT program
-Below are tables for both the new BA and MA GIT programs as we discussed I our previous meeting
-*** BA
-| course                                          | nakaz |
-|-------------------------------------------------+-------|
-| introduction to GIS                             |     3 |
-| GIS Lab                                         |     3 |
-| 3d  GIS                                         |     3 |
-| Qgis                                            |     3 |
-| image proccesing                                |     3 |
-| Radar (Macam)                                   |     3 |
-| arnon karnieli- introduction  to remote sensing |     3 |
-| virtual geography                               |     3 |
-
-*** MA
-| course                                      | nakaz |
-|---------------------------------------------+-------|
-| spatial editing (gis for planners)          |     3 |
-| geostatistics                               |     3 |
-| python                                      |     3 |
-| gis modeling                                |     3 |
-| sql                                         |     2 |
-| hyperspectral                               |     3 |
-| avinoam's course                            |     2 |
-| JavaScript/other progranning course (R etc) |     3 |
-
-** MA publishing award
--every MA student that will submit to a international journal will get 1750 NIS (within the 2 offical MA years)
-- among students that got the paper published within the 2 years there will be a comitee which will award t\he best paper another 1750 NIS
-* misc
-** TODO check if we need to pay harel or healthy life insurance (see docs) and if we payed them already
-** Mount sainai
- what research field needed
- tenure track?> time to tenure, what are you judged on, stats
- teaching?
- whats exp expcted
- work loads
-
-** WD drive
-admin
-salar21
-** hfsp website
-ikloog@bgu.ac.il
-Salar2121
-** TODO my ftp
-add to keepass
-
-address: 132.72.152.204
-User: zftp
-pass:hsphbgu2014
-
-** Eran vanger layer- check chezch passport
-054-7525243
-where was grandpa born
-all documents available
-degrees
-place and time of marriage and documents
-* Mails
 
