@@ -169,6 +169,9 @@ Before continuing, users must enable Developer Options in the devices settings a
 #+END_EXAMPLE
 
 **** Unlock The Bootloader
+     :PROPERTIES:
+     :ID:       258def20-62ea-49f5-97ca-9d00df7be9b6
+     :END:
 Turn the phone off. Then boot it into the bootloader/fastboot mode by holding volume down + power.
 Plug the phone into your PC, then open a command prompt window window and type:
 #+BEGIN_SRC sh
@@ -217,6 +220,78 @@ file:/home/zeltak/org/attach/files_2015/CF-Auto-Root-shamu-shamu-nexus6.zip
 
 Follow the on-screen instructions - watch both the computer and the device!
 
+*** restore factory settings
+**** Step 1 : Pre-requisite
+
+make sure you have adb working (on arch install from aur). to test issue:
+
+#+BEGIN_SRC sh :results none
+adb version                                                                     master⚡
+#Android Debug Bridge version 1.0.31
+#+END_SRC
+
+if you see the version number your good to go
+
+**** Step 2 : Downloading Factory Images
+
+You can find Nexus 6(shamu) factory images from here.
+https://developers.google.com/android/nexus/images
+
+**** Step 3 : Extracting Factory Images
+Extract the archive you downloaded. You can use WinRaR or 7z etc. It should look like this
+
+**** Step 4 : Unlock the blootloader
+[[id:258def20-62ea-49f5-97ca-9d00df7be9b6][Unlock The Bootloader]]
+
+**** Step 5 : Flashing
+
+Extract the image-shamu-XXXXXX.zip somewhere easy to access (On C:/image-shamu-XXXXXX for example).
+ In the same folder, from the original archive, extract "bootloader-shamu-moto-XXXXXX.img" (rename it to bootloader.img) and "radio-shamu-XXXXXX.img" (rename it to radio.img). 
+
+ - Power off your phone. 
+
+ - Boot it in fastboot(bootloader mode) by pressing and holding Power Button + Volume Down at the same time.
+
+ - Connect your phone to your PC through your USB cable.
+
+ - Open a CMD window.(By pressing shift key + right mouse click at same time)
+
+ - Type the following commands, in this order (If you have a different folder, change the path)
+
+ 
+#+BEGIN_SRC sh :results none
+fastboot flash bootloader C:/image-shamu-XXXXXX/bootloader.img
+fastboot reboot-bootloader
+fastboot flash radio C:/image-shamu-XXXXXX/radio.img
+fastboot reboot-bootloader
+fastboot flash system C:/image-shamu-XXXXXX/system.img
+fastboot flash userdata C:/image-shamu-XXXXXX/userdata.img 
+###(Note: this command will wipe your device (including /sdcard), EVEN if your bootloader is already unlocked.)
+fastboot flash boot C:/image-shamu-XXXXXX/boot.img
+fastboot flash recovery C:/image-shamu-XXXXXX/recovery.img
+fastboot erase cache
+fastboot flash cache C:/image-shamu-XXXXXX/cache.img
+#+END_SRC
+ - After everything finished, select "Recovery" using the volume buttons.
+
+ - When a small Android appears, press Power Button + Volume UP.
+
+ - Select "Wipe data/factory data reset"
+
+ - Reboot. Your phone should be stock.
+
+*** nexus shows 23G instead of 64G after reflash 
+So, after following instructions fully, not skipping any step from method 2, my 64Gb shows up as a 32Gb. Any ideas?
+
+Reboot into the bootloader and type this:
+
+#+BEGIN_SRC sh :results none
+fastboot format userdata
+fastboot format cache
+fastboot reboot
+#+END_SRC
+
+That will obviously wipe all your data again, but it should return back to 64GB
 ** apps
 *** install obb files
 install the apk then copy the folder containing the .obb files to file:android/obb/

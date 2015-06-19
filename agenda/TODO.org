@@ -1,24 +1,26 @@
 #+TAGS: Fav(f) Most_used(m) PreR(p)
 #+TITLE: TODO
 #+STARTUP: overview  inlineimages eval: (org-columns)
+#+LaTeX_CLASS_OPTIONS: [garamond]
+
 
 * @TODAY@
+** TODO rofi
+wait 2 seconds and if no input launch app
+** DONE [#A] test agenda
+   DEADLINE: <2015-06-24 Wed> SCHEDULED: <2015-06-20 Sat>
+
+** screen saver time length by location (IP)
+** i3 revise
+*** TODO have win+grave cycle through clients of same type
+
+** rofi tmux switch to pane
 ** list of known laptop issues
 *** network drops
 happnes both with LAN and wifi
 happens with dock connected and with local laptop adaptor
 could be just internet and not network related? maybe the internet drops and not network..
-*** multi screen
-xrandr works :
-
-xrandr --output eDP1 --off ; xrandr --output DP2-1 --mode 800x600 ; xrandr  --output DP2-2 --mode 2560x1440 --right-of DP2-1               
-xrandr --output eDP1 --off ; xrandr --output DP2-1 --mode 1024x768 ; xrandr  --output DP2-2 --mode 2560x1440 --right-of DP2-1 
-
-
-
-
 ** bind keys at debian PC to ssh and control MPD
-** reinstall seahorse after trying out kde 
 ** create a daily agenda in orgmode somwhow
 will show me things to do today ranked 
 ** TODO ask rasi for clerk 2 listen menu entry where it would go over a 2play playlist
@@ -45,14 +47,13 @@ idealy: a function to copy current line, ask which file to copy to (like refile)
 ✬✱✹ ✾ ✽ ❤ ➠ ⭤⮀☍⛢
 ** a new Emacs pop up window for helm chrome bookmarks
 ** TODO top 
-   SCHEDULED: <2014-11-30 Sun>
 :PROPERTIES:
 :STYLE: habit
 :END:
 change stow so no more common
 check patst.sh in ZH_tmp
 check tarman
-org habits 
+org habit s
 ** tmux
 *** why isn't TAB working in Emacs (org mode)
 ** set all mime related to web to chromium
@@ -103,7 +104,7 @@ punchagan | zeltak: it looks like properties need to be all upper case.
 | Linux Laptop | 132.72.154.204 | github                                                                           |          |
 |              |                |                                                                                  |          |
 
-*** Sync     
+*** Sync methods     
 **** for all textfile-git
 ***** what is currently synced
 -dotfiles (including my linux scripts under bin/scripts)
@@ -183,9 +184,14 @@ file:/~/org/attach/
  #+END_SRC
 **** browser related
 user chrome/firefox built in sync mechanisms
+**** passwords
+using password-store. more info [[id:d57aa1cc-33ce-4081-9811-c6f2782b8eee][password-store]]
 *** Backup 
 **** family photos 
 **** daily backups
+     :PROPERTIES:
+     :ID:       7b98d815-4327-4f65-8c60-dfd9711859bd
+     :END:
 ***** rsync 
 ****** TODO rsync to push data from laptop to synology nas (use urs.sh)
        :PROPERTIES:
@@ -203,17 +209,11 @@ rsync -aRPz --delete -e ssh /home/zeltak/dotfiles/  root@132.72.152.204:/volume1
 use this script created in ~bin:
 file:/home/zeltak/bin/lrs
 
-**** keepass
-save to ftp site (NAS)
-add rsync at uni/laptop to overwrite local file each type
 *** TODO CRON!!! talk to rasi
     :PROPERTIES:
     :ID:       8638e3da-4bdb-41dc-a980-c7c02dc3dddb
     :END:
     
-*** keepass
-ftp://132.72.152.204/rsync/keepass/zpass.kbsx
-
 ** explore memacs
 *** http://shelve.sourceforge.net/
 ** fix wraps
@@ -460,7 +460,7 @@ Webmail    : https://sdfeu.org/webmail             (after validation)
 Twitter    : http://twitter.com/sdf_pubnix
 
 ** filbot qnap
-http://www.filebot.net/forums/viewtopic.php?f=8&t=2335&p=13416&hilit=qnap#p13416
+http://www.filebot.net/forums/viewtopic.php?f=8&t=2335&p=13416&hiilt=qnap#p13416
 ** flexget  
 
 
@@ -1019,6 +1019,7 @@ comment _;_ // comment _t_o line // comment para_g_raph // co_p_y-paste-comment
 
 #+RESULTS:
 | defun | hydra-commenting/hint | nil | (if hydra-lv (lv-message (concat (format comment _;_ // comment %so line // comment para%sraph // co%sy-paste-comment |
+
 
 
 

@@ -7,6 +7,11 @@
 #+OPTIONS: toc:nil 
 
 * Today
+** TODO discuss with qian di
+geoschem model vertical profile - put into a europe wide pm dataset
+disucss that with qian di vertical
+talk about mysql datasets
+
 ** alexei talk 31.3.2105
 *** low yearly aod values and compared to DB which is higher
 we should look at wind speed from reanalysis data/station to see if these areas have low or high ws values
@@ -88,6 +93,134 @@ who will do what?
 ** TODO check if I got back money for haifa GEO conference
 ** follow order for noise metric
 order number 3918261
+** rahcel- ask about lab services like tal, how do I open this 
+** Cardiovascular Health and Air Pollution: A National Study- PM2.5 modeling preliminary talk (6.4.2014) 
+
+Dear all,
+
+As discussed in our talk a few days ago,  here is the compiled document of the topics we discussed during our meeting last Thursday and additional data on each variable we discussed.
+
+Our overall goal as agreed is to initially create a spatio temporal database across the USA to serve of a standardized base for running the MAIAC based PM2.5 models across the USA.
+
+We also agreed that it would probably be a good idea to buy a NAS and store all the data in a centralized location there. We can ask for recommendation from microway when you order the new high end PC (Antonella you can contact me if you consulting on that)
+
+*** Database predictors 
+**** PM2.5
+ - We will gather PM data from both EPA and IMPROVE sources
+ - mihye has experience with collection of such data and can collect the data across the USA
+ - mihye: could you send us all the link to the new site replacing the Views website?
+ - these websites were used before to download the data is:
+   http://views.cira.colostate.edu/web/DataWizard/
+   http://www.epa.gov/ttn/airs/airsaqs/detaildata/downloadaqsdata.htm
+ - Also we should contact Qian (cced) and coordinate this with him,  since he will also be running USA wide GEOSCHEM models and we don't want to duplicate our data collection efforts
+ - We also need to check the different measurement type (that is teom vs other methods) since this could effect the calibrations
+
+**** AOD
+- AOD MAIAC based data is available on DROBO after mihye downloaded it from my FTP server. 
+- We need to convert the hdf files to csv/MATLAB files 
+- check data availability for all years on USA data
+-  The latest code to extract these hdf via matlab is attached to this email
+-  When shi has time we should discuss Matlab use and how to optimize the code 
+
+**** Meteorology (NCDC/EPA data)
+- We will collect data from NCDC and EPA site and collect the following met data:
+Temp,wdsp,RH,Visibility
+- this is the link to download the NCDC data
+http://www7.ncdc.noaa.gov/CDO/cdoselect.cmd?datasetabbv=GSOD&countryabbv=&georegionabbv=
+
+**** NDVI
+- NDVI data is freely available from the reverb website:
+http://reverb.echo.nasa.gov/reverb/#utf8=%E2%9C%93&spatial_map=satellite&spatial_type=rectangle
+
+- We use 1 month time scales since NDVI does not vary dramitccly from day to day
+***** TODO We should also talk to peter james since he may already have NDVI data on a national scale and we can save use the download and proccesing time.
+**** PBL 
+- I already have PBL data from 2000-2012 across the USA
+- we will need to download 2013-2014 data from North American Regional Reanalysis dataset
+- This is the NARR website for PBL
+http://nomads.ncdc.noaa.gov/data.php?name=access#narr_datasets
+**** rain/percipitation
+- we may want to also get rain data from the above reanalysis data
+http://nomads.ncdc.noaa.gov/data.php?name=access#narr_datasets
+**** Roads
+- We can use ESRI or TIGER road data classified into (classified 'A' roads) and create surfaces to calculate "road density" as a proxy for traffic density. This has worked well in the past yet it is time invariant.
+- we excluded A5 (vehicular tracks), A65 (ferry crossings) and A7(other thoroughfares, walkways, alleys, driveways).  
+- We use ArcGIS Spatial Analyst Line Density tool was used to calculate density of roads per sq km within 1 km for 1 km grid.
+- Another approach would be to look into national road density data (either observed data or modeled). here is a link to investigate
+http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_transportation_atlas_database/index.html
+
+**** fire indicator from modis 
+- We will try to investigate fire indicators from MODIS to try to incorperate as a predictor in specific areas across the USA
+http://modis.gsfc.nasa.gov/data/dataprod/nontech/MOD14.php
+**** dust
+- The same will go for Dust , this is important in the south-western areas and arid places.
+**** omi data
+- We will investigate the Aerosol index and  ultra violet index of the OMI satellite.
+- Below is in depth details on the OMI satellite
+***** OMI - Ozone Monitoring Instrument
+OMI, onboard NASA’s EOS-Aura (Earth Observing System-Aura), measures the Earth reflectance spectra in both the VIS and UV spectral bands (270–500 nm) and has been used to distinguish between UV-absorbing aerosols, such as desert dust, and weakly UV-absorbing aerosols and clouds (Kazadzis et al. 2009; Stammes and Noordhoek 2002). Aura was launched into a sun-synchronous orbit on July 15, 2004, and globally observes e earth between 13:00-14:00 UTC with a nearly daily pass. The Aura satellite orbits at an altitude of 705 km in a sun-synchronous polar orbit with an exact 16-day repeat cycle. There is an approximate ~8 min time lapse between the Aqua and Aura overpasses. The orbital inclination is 98.1 degrees, providing latitudinal coverage from 82° N to 82° S
+ The OMI is an imaging spectrometer that measures solar light backscattered by the Earth’s atmosphere and surface (Bucsela et al., 2006). The instrument consists of two spectrometers, one measuring the UV spectral range from 270 to 365 nm in two sub-ranges (UV1: 270–314 nm, resolution: 0.42 nm, sampling: 0.32 nm; UV2: 306–380 nm, resolution: 0.45 nm, sampling: 0.15 nm), the other measuring the UV-visible spectrum from 350 to 500 nm (resolution: 0.63 nm; sampling: 0.21 nm). OMI uses a CCD array with one dimension resolving the spectral features and the other dimension allowing a 114º field of view, providing a 2600-km viewing swath transverse to the orbit track. Its nadir spatial resolution ranges from 13x24 to 24x48 km2, depending on the instrument’s operating mode and observing geometry. 
+
+Products: 
+UV-AAI /VIS-AAI - The absorbing aerosol index (AAI) is derived from the change in the spectral dependence of backscattered UV radiance by aerosols relative to Rayleigh scattering in the 354-388 nm spectral range. The AAI was found to be a useful indicator of elevated concentrations of UV absorbing aerosols, such as dust, taking a near zero value for clouds and weakly absorbing aerosols and a positive value for desert aerosols.
+ 	
+The measured I is the intensity of light observed by the satellite-sensor while the calculated I is based on radiative transfer model results. The advantages of using the UV-based data for aerosol properties are that in this spectral range most surfaces (except for snow) have very low scattering therefore a good separation with the aerosol-signal is possible. As mentioned earlier, dust particles show positive AAI values while urban fine particles usually have AAI values near. 
+
+AAOD- The Aerosol Absorbing Optical Depth (AAOD), retrieved from the OMI platform, apparently represents the absorbing fraction of particles dependent on the AOD and the SSA in a certain wavelength.
+			
+NO2  - integrated column data (80km vertical resolution) as a proxy to particles created mainly by fossil fuel burning and agriculture sources. It is retrieved in the blue wavelength range (420-450nm)  of the OMI platform .
+
+Obtaining data examples:
+http://disc.sci.gsfc.nasa.gov/Aura/data-holdings/OMI 
+http://mirador.gsfc.nasa.gov/cgi-bin/mirador/LocationTimeAttribute_Search.pl?tree=project&project=OMI&&dataGroup=L2_V003&dataset=OMAERUV.003&version=003&CGISESSID=d5b768a67f81f0d3cef6a509eb98f524
+**** point emmisons and Area emssions 
+- Data will be obtained from EPA
+- include PM25,PM10,NoX,SO2
+- we will calculate total sum of each pollutant,distance to point source emission, total emissions per area, and buffers of 3k,10k,15k around point sources
+**** from NLCD raster
+- data will be downloaded from the National Land Cover Database (NLCD)
+http://www.mrlc.gov/nlcd06_data.php
+several LU classifications on can be calculated to the 1km resolution
+We should check we peter james if they already have such data
+These are the values and method we used in previous analysis
+
+Op Value:21 Developed, Open Space - Includes areas with a mixture of some constructed materials, but mostly vegetation in the form of lawn grasses.  Impervious surfaces account for less than 20 percent of total cover.  These areas most commonly include large-lot single-family housing units, parks, golf courses, and vegetation planted in developed settings for recreation, erosion control, or aesthetic purposes.
+Ld Value: 22 Developed, Low Intensity -Includes areas with a mixture of constructed materials and vegetation.  Impervious surfaces account for 20-49 percent of total cover.  These areas most commonly include single-family housing units.
+Md Value: 23 Developed, Medium Intensity - Includes areas with a mixture of constructed materials and vegetation. Impervious surfaces account for 50-79 percent of the total cover.  These areas most commonly include single-family housing units.
+Hd  Value: 24 Developed, High Intensity - Includes highly developed areas where people reside or work in high numbers. Examples include apartment complexes, row houses and commercial/industrial.  Impervious surfaces account for 80 to100 percent of the total cover.
+Df Value: 41 Deciduous Forest  - Areas dominated by trees generally greater than 5 meters tall, and greater than 20% of total vegetation cover. More than 75 percent of the tree species shed foliage simultaneously in response to seasonal change.
+Ev  Value: 42 Evergreen Forest - Areas dominated by trees generally greater than 5 meters tall, and greater than 20% of total vegetation cover. More than 75 percent of the tree species maintain their leaves all year. Canopy is never without green foliage. 
+Mf Value: 43 Mixed Forest - Areas dominated by trees generally greater than 5 meters tall, and greater than 20% of total vegetation cover. Neither deciduous nor evergreen species are greater than 75 percent of total tree cover.
+Sh Value: 52 Shrub/Scrub - Areas dominated by shrubs; less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions.
+Gr Value: 71 Grassland/Herbaceous - Areas dominated by grammanoid or herbaceous vegetation, generally greater than 80% of total vegetation.  These areas are not subject to intensive management such as tilling, but can be utilized for grazing.
+Pa  Value: 81 Pasture/Hay  - Areas of grasses, legumes, or grass-legume mixtures planted for livestock grazing or the production of seed or hay crops, typically on a perennial cycle. Pasture/hay vegetation accounts for greater than 20 percent of total vegetation.
+Cr Value: 82 Cultivated Crops - Areas used for the production of annual crops, such as corn, soybeans, vegetables, tobacco, and cotton, and also perennial woody crops such as orchards and vineyards. Crop vegetation accounts for greater than 20 percent of total vegetation. This class also includes all land being actively tilled.
+
+NLCD 2006 30 m resolution rasters was reclassified as rasters for each of the individual land uses listed above.  In each raster cells with the specified land use were given the value 1 all other cells were set to 0
+
+ArcGIS Focal statistics tool was used to sum up the 33 X 33 neighboring 30 m cells and the result divided by 1089 to give an approximate value of percent of each land use within 1 km of center point of each 30 m cell.  Missing values, for example along the coast and boundaries of the study region were treated as zero.  The focal statistics tool used a mask extending 5 km beyond the state boundaries for the eastern US states defining the study area.  
+ 
+**** dividing USA into sub regions 
+Traditionally we have clustered ares based on the geo-climatic characteristics of regions across the USA.
+We will look at taking PM monitors and look at correlations between them
+we will then try and cluster these by regions to try and compare that to our traditional way of clustering regions by geo-climatic characteristics.
+We should contact brent regarding the clustering method.
+
+**** pop density
+We can use ESRI data on population per census/tract to get at population density for each 1km gridcell
+mihye already has a system in place and she will be in charge of doing that
+previously we have done this:
+Census block group boundaries from ESRI Data and Maps provided with ArcGIS 10 were used.  Area of block groups in square miles was an attribute in this data and was converted to square kilometers.  This appears to be total square miles not dry land square miles.  Census block group population per square kilometer has been used for the BC model.  The median block group area  in MA is 16 sq km, so block group level data seems an appropriate scale for a 1 km resolution model.  For the 50 m spatial resolution lpm variable block population data was used to estimate population density at a finer spatial scale. A disadvantage of this approach is that it assumes population is uniformly distributed within a census block and noise is introduced by small blocks with 0 population and neighboring blocks with very different populations.  Population density could represent the effects of home heating sources on air pollution or air pollution from traffic at a neighborhood scale. 
+
+**** elevation
+-We can get freely available national DEM data across the USA via USGS:
+http://ned.usgs.gov/
+-Elevation is in  meters and can be interpolated from a 30 m resolution raster created from 1/3 arc second elevation data downloaded from USGS
+-we can use that to extract elevation to each 1km grid cell
+-We should also look at  deriving slopes for each grid cell
+-This can be done with using ArcGis and mihye already has experience of doing that
+**** Meris satellite
+Data from european sattelite - We here in my Lab are looking into this and possible future applications
 * 'Ongoing'
 ** PAUSED PM2.5 1kmx1km NEMIA					    :ucurent:
 *** Brainstorm
@@ -548,6 +681,16 @@ will send via FTP
 **** OSM project 
 see [[*OSM project][OSM project]]
 **** TODO create a pan euro dataset
+*** Kees talk 03.06.2015
+**** hired a ma student to work on OSM project
+perhaps organize a skype call soon between us? or start with getting her data
+**** AOD data is proccesing..
+took long time but should be ready in next few days
+**** TODO rome meeting 07/2015
+grant aim data for whole europe including osm data
+impute pm2.5 from pm10 data in low pm2.5 years
+
+
 ** italy temperature models
 *** Ideas
 tmin tmax
@@ -1227,6 +1370,9 @@ the grant can be submitted directly to the EHF anytime up to July 2014
 -Joel: Placental abruption , acute effect that can happen
 http://en.wikipedia.org/wiki/Placental_abruption
 ***** A3:look at interactions between PM and Ta exposures and birth outcomes
+*** account number
+874304
+meytal drori
 ** PAUSED Resubmit ISF grant
    SCHEDULED: <2014-10-19 Sun>
    :PROPERTIES:
@@ -1252,10 +1398,30 @@ alexandra schnider
 -run a poisson regression where we regress counts by zipcode and day (like 10x10 NE) ~1 year lags of the pollutants, and a spline for date (See 10x10 code). this will be run togheter for 10 years
 -also to check if the association changed from year to year we will run these exact models by year (IE each year speratley in a seperate model) !note! remember to change the DF for the dats spline for 1 year
 !note! once can run the same model instead of yearly in 1 model with all year with interactions so that each pollutant interacts with a year variable, but you need a very large N`
-** SUBMITTED Antonella whole USA 1x1km grant
+** TODO Antonella whole USA 1x1km grant
    :PROPERTIES:
    :ID:       5a8c67d0-bd9b-4eff-9d5b-8ae444153490
    :END:
+*** TODO grant r01 ideas talk 26.5.2015
+To summarize our talk today we agreed to have a framework in place which will include the following:
+1.we will start in the next few weeks to build a nationwide dataset with all the temporal and spatial predictor needed for modelling the entire country:
+I will create over the next few days a document of all needed data (including sources and will send it over soon (to mihyee and Anna as well))
+
+2. We will create soon a overall nationwide 1km grid which will be used for all our modeling in all area.
+we agreed that areas inhabited mainly by coyotes (that is with population of less then X per 1kmsq) will be flagged and later on dropped from the individual modles
+
+3. We will try to use the same overall modeling methodology in all areas but with slight tweaks for each region (based on the changing geo-climatic conditions)
+This will also allow testing different methods in each region to enhance the fits.
+
+4. we will make an effort to acquire actual emissions for all point sources across the country (from EPA?)
+
+5. once we get the nation wide spatial-temporal dataset going we will try and see region each student works on, but this can be discussed further down the road
+
+thanks!
+
+itai
+
+
 ** Big data grant
 will look into it for next round (~june)
 maybe leveraging Open source application/stat programs (R,Octovo etc) for big data proccesing)

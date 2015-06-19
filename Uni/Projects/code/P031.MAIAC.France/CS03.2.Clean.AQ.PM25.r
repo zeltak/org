@@ -21,42 +21,68 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/geomerge_alpha_ex-1.r
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/geomerge_alpha.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
-
-
+#add newly avilable LU data
+#airport
+dair<-fread("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/Qgis/dist_airports.csv")
+setnames(dair,"InputID","aodid")
+setnames(dair,"Distance","dair")
+#dports
+dport<-fread("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/Qgis/dist_ports.csv")
+setnames(dport,"InputID","aodid")
+setnames(dport,"Distance","dport")
+lua<-left_join(dair,dport, by = c("aodid" = "aodid") )
+#distances
+dist<-fread("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/distances.csv")
+lua<-left_join(lua,dist, by = c("aodid" = "aodid") )
+head(lua)
+lua$TargetID.y<-NULL
+lua$TargetID.x<-NULL
 #add emissions
-key.ems<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ems.rds")
+#key.ems<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ems.rds")
 ems<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/LU/fin.emission.rds")
+lua<-left_join(lua,ems, by = c("emsid" = "emsid") )
+#lucor
+lucor<-fread("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/lucor.csv")
+head(lucor)
+lucor<-select(lucor,aodid,baggrimean,bopenmean,burban_mea,bforest_me,pmreg,id)
+lucor$baggrimean<-lucor$baggrimean*100
+lucor$bopenmean<-lucor$bopenmean*100
+lucor$burban_mea<-lucor$burban_mea*100
+lucor$bforest_me<-lucor$bforest_me*100
+
+#renames
+setnames(lucor,"baggrimean","p.agric")
+setnames(lucor,"bopenmean","p.opem")
+setnames(lucor,"burban_mea","p.urban")
+setnames(lucor,"bforest_me","p.forest")
+setnames(lucor,"id","regid")
+head(lua)
+lua<-left_join(lua,lucor, by = c("aodid" = "aodid") )
+setnames(lua,"NOx (as NO2)","NO2")
+setnames(lua,"SOx (as SO2)","SO2")
+setnames(lua,"PCDD/ PCDF (dioxins/ furans)","PCD")
+#delete uneeded
+lua$reg<-NULL
+lua$region<-NULL
+lua$V1<-NULL
 
 
-
-#Y2003
+#Y2005
 #mod1 PM25
 
-mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.rds")
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2005.PM25.rds")
 #take out stations in non contigious france
 mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
 #delete water flags
 mod1<-filter(mod1,wflag != 1)
-
-#create aodid
+#recreate aodid
 mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+
+#add lu
+mod1<-left_join(mod1,lua, by = c("aodid" = "aodid") )
 head(mod1)
 
-
-#add lu-key
-setkey(mod1,aodid)
-setkey(key.ems,aodid)
-mod1 <- merge(mod1, key.ems, all.x = T)
-#add lu
-setkey(mod1,emsid)
-setkey(ems,emsid)
-mod1 <- merge(mod1, ems, all.x = T)
-
-y<-unique(mod1$emsid)
-dim(y)
-x<-inner_join(mod1,ems)
-head(x)
-
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2005.PM25.c1.rds")
 
 
 ################# clean BAD STN PM25 and check if improved model?
@@ -68,14 +94,14 @@ raWDaf <- ddply(mod1, c("stn","c"),
 })
 raWDaf
 raWDaf<-as.data.table(raWDaf)
-bad<- raWDaf[R2 <= 0.05]
+bad<- raWDaf[R2 <= 0.01]
 bad[,badid := paste(stn,c,sep="-")]
 #################BAD STN
 mod1[,badid := paste(stn,c,sep="-")]
 ####Take out bad stations
 mod1 <- mod1[!(mod1$badid %in% bad$badid), ] 
 
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.clean.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2005.PM25.c2.rds")
 
 
 

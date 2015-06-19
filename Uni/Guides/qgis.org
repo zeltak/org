@@ -1,7 +1,7 @@
 #+TITLE: Qgis
 
 * General
-** confiuration
+** configuration
 *** open attrib table in dock
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-02-04 12:04:37
@@ -223,6 +223,101 @@ To make the change permanent, toggle off Editing mode.
 I used intersect from geoprocessing tools, worked fine
 then I created a new field calcualting the area of each new polygon ($area)
 finally I created a new field calculating the portion of the area of the new polygon from the area of the CT it belongs to (the last 2 fields of the layer). Then I export to csv and from there to R and use this % to weight this grid point when building the weighted average for each census tract. 
+*** Select by location (the spatial query plug-in)
+first make sure the plug-in is installed
+http://docs.qgis.org/2.2/en/docs/user_manual/plugins/plugins_spatial_query.html
+
+then in the vector menu>> spatial plug-in launch the plug-in 
+
+choose the source layer and reference layer and the geo proces (within etc)
+
+then click apply $Note- this will take a long time with large datasets$
+
+when finished you will be presented with the results @ DO NOT click apply again or it will run again@ 
+
+instead save the layer while that result window is open and make sure `save selected features` is checked
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-06-09 10:11:28
+#+attr_html: :width 300px
+ [[~/org/attach/images_2015/screenshot_2015-06-09_10:11:28.png]]
+*** Distance calculations  
+**** Shortest distance from point to line (for very big datasets)
+***** Rasterize line layer
+ in qgis use:
+ Raster>>Conversion>>Rasterize
+
+ $Note- the input vector maybe leave areas out of the target point layer since it dosnet cover the whole are- my current hack is to create fake lines far away so the even point out of range would be included$ 
+
+ for input file choose the line layer
+
+ in the attribute field choose the ID for the lines
+
+ in the output create a raster (ignore the @Warning@ message)
+
+ define a raster size in pixels- @this has to be small enough to fit the line more or less@, so it maybe be better to have the data projected and choose the `raster resolution in map units per pixel`
+ ₆In example₆ for a 250m resolution one can use 250 x250
+ $Note- the map maybe just black due to presentation issues the data is still there and you can proceed to next step$ 
+ launch OK
+***** Convert to Proximity 
+ go to Raster>>Analysis>>Proximity
+ choose the raster you created in the previous step 
+ choose and output location and name
+ Make sure "Dist units" are set to GEO (for GEOreferenced coordinates)
+ check "Load into canvas..." 
+ press OK
+***** Use plugin Point sampling tool to get values for all your point from raster
+ install the `point sampling tool` plug-in
+ launch it (under plugins or from the toolbar icon)
+ make sure the point layer your calculating the distance is checked and viable in the qgis window
+ select the layer of points in the dropdown menu
+ select the fields from both the point layer and raster layer to be included in final shapefile
+ in the fields layer you can rename the field
+ specify an output layer name and press OK
+ To check, sort by roadDist , select those with zero distance, and then see were they are on the map. they should be on a road.
+ when the tool finishes press CLOSE
+
+**** calculate distance between 2 point layers 
+Go to Vector ‣ Analysis Tools ‣ Distance Matrix
+
+Here select the the Input point layer (the one you want to calculate distances from it to the target layer) and the the target layer. You also need to select a unique field from each of these layers which is how your results will be displayed.
+$Note-make sure you have a valid unique id in the input layer (₆In example₆ aodid) so that you can later work with the data$ 
+
+%Tip- usually you are looking to get only 1 nearest point, so check the Use only the nearest(k) target points, and enter 1.%
+Name your output file NAME.csv, and click OK
+ Once the processing finishes, click Close.
+
+%Tip% A useful thing to note is that you can even perform the analysis with only 1 layer. Select the same layer as both Input and Target. The result would be a nearest neighbor from the same layer instead of a different layer as we have used here.
+Once the processing finishes, click the Close button in the Distance Matrix dialog.
+You can now view the NAME.csv file in Notepad or any text editor.
+
+*** Buffer in QGIS
+Input vector Layer – the layer that contains the source objects
+Buffer Distance – the distance the buffer will extend from the source objects
+Buffer Distance Field – alternatively QGIS can use a value from a numeric field, this makes drawing variable width buffers for features in the same layer easy e.g. Sites rated High Sensitivity could be updated with a buffer distance of 1,000m, sites rated Medium Sensitivity could be updated with a buffer distance of 500m.
+Dissolve Buffer Results. The default is to combine the buffers into one region. Enabling this creates a separate region for each source object.
+** raster
+*** gdal related
+**** bugs/errors
+***** error saying it cant find the source file
+sometime for bizarre reasons qgis will input a wrong/trunctaed (this maybe with use of . in the filname) source file name (it inputs the source name twice one with path and one without (the first).
+
+original erroneous code example 
+
+#+BEGIN_EXAMPLE
+gdal_rasterize -a FID -ts 3000 3000 -l france /media/NAS/Uni/Data/GIS/Europe/france/coastline/france.coastline.shp /home/zeltak/ZH_tmp/yy1.tif
+
+#+END_EXAMPLE
+
+we fix this by hand to the correct format
+
+#+BEGIN_EXAMPLE
+gdal_rasterize -a FID -ts 3000 3000 -l france.coastline /media/NAS/Uni/Data/GIS/Europe/france/coastline/france.coastline.shp /home/zeltak/ZH_tmp/yy1.tif
+
+#or with untis per pixel
+gdal_rasterize -a FID -tr 250.0 250.0 -l france.coastline /media/NAS/Uni/Data/GIS/Europe/france/coastline/france.coastline.shp /home/zeltak/ZH_tmp/francecoast4.raster.tif
+#+END_EXAMPLE
+
 ** selection
 *** select by expression
 **** select squares above X size
@@ -350,3 +445,6 @@ and ref plug-in
 
 *** netCDF- use a qgis plug-in to extract
 Although it is not possible to have multiple columns, it is still possible to have the text of the layer or item on multiple lines to avoid long lines of text. This is found in the tab 'General', last item (you have to scroll down), with 'Wrap'. To use '/', enter '/' in the field and then in the tab 'Legend items', when you modify the layer or item name enter something like 'Natural and semi natural/urban greenspaces': the text will break to the next line. 
+** Attribute table
+*** Sorting
+By clicking on the column heading you sort the column in ascending or descending order.

@@ -194,6 +194,8 @@ aqm2.2003.m2[,Raina.s:= scale(rainday)]
 #save mod2
 saveRDS(aqm2.2003.m2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.rds")
 #aqm2.2003.m2<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.rds")
+#recreate aodid
+aqm2.2003.m2$aodid<-paste(aqm2.2003.m2$long_aod,aqm2.2003.m2$lat_aod,sep="-")
 gc()
 
 
@@ -256,7 +258,6 @@ PM10.m1<-PM10.m1[!is.na(aod)]
 
 #save mod 1
 saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM10.rds")
-
 
 keep(fgrid,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
 gc()
