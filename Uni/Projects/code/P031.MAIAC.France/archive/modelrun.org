@@ -447,6 +447,8 @@ mod2[, pred.t33 := predict(Final_pred_all)]
 #check correlations
 res[res$type=="PM25", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=mod2))$r.squared) 
 
+saveRDS(Final_pred_all,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/Final_pred.AQ.PM25.2003.rds")
+
 #+END_SRC 
 
 *** mod 3

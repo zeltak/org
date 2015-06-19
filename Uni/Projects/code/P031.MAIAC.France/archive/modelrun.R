@@ -374,8 +374,10 @@ mod2[, pred.t33 := predict(Final_pred_all)]
 res[res$type=="PM25", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=mod2))$r.squared)
 gc()
 
+saveRDS(Final_pred_all,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/Final_pred.AQ.PM25.2003.rds")
 
-mod3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2003.rds")
+mod3 <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2003.rds")
+
 #for PM25
 mod3 <- select(mod3,day,aodid,m,meanPM25,long_aod,lat_aod)
 mod3[, bimon := (m + 1) %/% 2]
@@ -447,13 +449,13 @@ mod3$pred.m3 <-mod3$pred.m3.mix+mod3$gpred
 hist(mod3$pred.m3)
 #describe(mod3$pred.m3)
 #recode negative into zero
-#mod3 <- mod3[pred.m3 >= 0]
+mod3 <- mod3[pred.m3  <= 0 , pred.m3  := 0.5]
 
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.pred.AQ.2003.rds")
-keep(data.m3,mod3,res,rmse, sure=TRUE) 
+saveRDS(mod3,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2003.predm3.rds")
+keep(mod3,res,rmse,splitdf, sure=TRUE) 
 gc()
 
-mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.pm25.predm1.rds")
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.predm1.rds")
   mod1<-mod1[,c("aodid","day","pm25","pred.m1","stn"),with=FALSE]
   #R2.m3
   setkey(mod3,day,aodid)
@@ -485,11 +487,10 @@ mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ
   mod_temporal <- lm(delpm ~ delpred, data=tempoall)
   res[res$type=="pm25", 'm3.R2.time'] <-  print(summary(lm(delpm ~ delpred, data=tempoall))$r.squared)
 
-
-saveRDS(res, "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/resALL.AQ.PM25.rds")
-
+saveRDS(res,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/results.AQ.2003.rds")
+gc()
 #import mod2
- mod2<- readRDS( "/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.PM25.predm2.rds")
+mod2<- readRDS( "/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.PM25.predm2.rds")
 mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
 
  #----------------> store the best available
@@ -497,13 +498,14 @@ mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
  setkey(mod3best, day, aodid)
  setkey(mod2, day, aodid)
  mod3best <- merge(mod3best, mod2[,list(aodid, day, pred.m2)], all.x = T)
+ mod1$pred.m3<-NULL 
  setkey(mod1,day,aodid)
- mod3best <- merge(mod3best, mod1, all.x = T)
+ mod3best <- merge(mod3best, mod1, all.x = T, allow.cartesian=T)
  mod3best[,bestpred := pred.m3]
  mod3best[!is.na(pred.m2),bestpred := pred.m2]
  mod3best[!is.na(pred.m1),bestpred := pred.m1]
  summary(mod3best$bestpred)
- mod3best[bestpred < 0 , bestpred  := 0.5]
+ mod3best[bestpred <= 0 , bestpred  := 0.5]
 
  #save
  saveRDS(mod3best,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/bestpred.AQ.2003.PM25.rds")
@@ -513,11 +515,11 @@ mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
                            npred.m1 = sum(!is.na(pred.m1)),
                            npred.m2 = sum(!is.na(pred.m2)),
                            npred.m3 = sum(!is.na(pred.m3)),
-                           long_aod =  long_aod[1], lat_aod = lat_aod[1]),by=aodid], "/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.pm25.LTPM.csv", row.names = F)
+                           long_aod =  long_aod[1], lat_aod = lat_aod[1]),by=aodid], "/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/bestpred.AQ.2003.LTPM.csv", row.names = F)
 
  #export res to csv
 
- write.csv(res,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/results.AQ.2003.rds")
+ write.csv(res,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/results.AQ.2003.csv")
 
  #bestprmap
  m3d_agg <- (mod3best[, list(LTPM =mean(bestpred, na.rm = TRUE), 
@@ -531,19 +533,7 @@ mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
    ggtitle("Long term predictions")
  P1
 
- #predperyear
- mod3best[, c := as.numeric(format(day, "%Y")) ]
- mod3best.2003<-mod3best[c==2003]
- m3d_agg <- (mod3best.2003[, list(LTPM =mean(bestpred, na.rm = TRUE), 
-                         utmx = long_aod[1], #use the first long and lat (by aodid)
-                         utmy = lat_aod[1]),by = aodid])  
- P1 <- ggplot(m3d_agg, aes(utmx, utmy, color = LTPM)) + 
-   geom_point(size = 4, shape = 15) + 
-   xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
-   scale_colour_gradientn("long term PM2.5 prediction-2003", colours = rainbow(10)) + #c("purple", "blue", "white", "red", "orange")) + 
-   theme_bw() + 
-   ggtitle("Long term predictions")
- P1
+ 
 
 keep(rmse,splitdf, sure=TRUE) 
 gc()
