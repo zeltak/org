@@ -1,228 +1,14 @@
 #+TITLE: Research 
-#+TODO: TODO(t) | SUBMITTED(s) K_TRACK(k) PAUSED(p) DONE(d) 
+#+TODO: TODO(t) EXP(e) | SUBMITTED(s) K_TRACK(k) PAUSED(p) DONE(d) 
 #+CATEGORY: work
-#+TAGS:  first(f) read_only(r) 
+#+TAGS:  first(f) read_only(r) allan(a) 
 #+STARTUP: overview  inlineimages eval: (org-columns)
 #+PRIORITIES: A
 #+OPTIONS: toc:nil 
 
-* Today
-** TODO discuss with qian di
-geoschem model vertical profile - put into a europe wide pm dataset
-disucss that with qian di vertical
-talk about mysql datasets
-
-** alexei talk 31.3.2105
-*** low yearly aod values and compared to DB which is higher
-we should look at wind speed from reanalysis data/station to see if these areas have low or high ws values
-*** TODO basic raw zero correlation with PM stations
-send alexei the the full ts pm data so he check this
-*** look at aod azimuths
-use data with 30 degree azimuths that should be better:
-either subset data by that or play with these azimuths as weights in a model 
-** dust seasons in the south of israel
-main dust season: dec-march
-main non dust season: jul-aug 
-** chronic vs accute variablity in exposure assesmnt 
-for chronic we care about spatial variability
-for acute we care about temporal variability 
-** Andrea/Bob talk
-*** ellena uk model with kees, come to rome this summer?
- 
-*** temperature modeling: showing heat island effects, there could be several degrees c in spatial variblity at night time
-*** "greenes" :- use sattelite NDVI (modis/lansat/other) as an exposure (1km-30m) as a proxy for green spaces/areas and
-*** walkability
-there are several ways of addressing walkability
-
-1) simple method gis based method- intersection count, business count, and population density
-
-residence-level measures of population density
-
-business counts (as a proxy for accessibility)-Business counts were measured by the counts of all stores, facilities, and services in a participant’s network buffer
-points of interest”, which includes grocery stores, restaurants, banks, hotels, hospitals, libraries, 
-
-intersection counts (as a proxy for street connectivity)-network buffers around each home address
-Intersection counts were quantified by the number of intersections that were 3-way or greater within each network buffer (Figure 2). A greater intersection count increases the efficiency of walking to destinations. 
-
-2) developing a more complex model taking into account traffic lanes, traffic direction, walking obstacles, intersections counts etc etc
-
-*** light at night
-
-DMSP satellite allows 600m resolution. new satellite (NASA-NOAA Suomi National Polar-orbiting Partnership (NPP) satellite) can produce higher res data
-LAN as a exposure and as a potential proxy to residence level pop density
-
-*** web data social/location based services
-
-whats available in Mexico city/around?
-could be used for: 
-mapping traffic density
-mapping access to health, healthy food, business counts
-
-*** perhaps noise exposure modeling? I have a student that is working on this- tis very hard to model, need a "moitoring campagin", height, buliding material etc
-
-
-*** crime-data availability?
-
-** TODO Joel talk 12.05.15
-**** LPM
-code needed is on FTP
-shi: what else is needed on top of the drobo files?
-use WRF for stage 4-
-talsk to shi
-
-**** TODO use of aqua and terra as 2 separate exposure:
-instead of calibrating: one would be a peak level exposure and one a "background" exposure
-calibrate with hourly 
-terra > 9:30
-aqua > 14:30 
-talk to petros
-compare EC and OC from speciation and compare
-we want to show that one picks up traffic well while the other picks up transported PM mainly
-**** updates
--swiss, sweeden  project coming along
--italy is ready for run- I will come a few days earlier to rome to finalize the model with massimo
--VIIRS update 
-**** antonellas grant
-do we need to prepare for the grant in anyway
-when does it start
-who will do what?
-- MA student here
-** TODO send massimo AOD italy
-** TODO send massimo AOD Sweededn
-** TODO send KEES AOD swiss
-** TODO check if I got back money for haifa GEO conference
-** follow order for noise metric
-order number 3918261
-** rahcel- ask about lab services like tal, how do I open this 
-** Cardiovascular Health and Air Pollution: A National Study- PM2.5 modeling preliminary talk (6.4.2014) 
-
-Dear all,
-
-As discussed in our talk a few days ago,  here is the compiled document of the topics we discussed during our meeting last Thursday and additional data on each variable we discussed.
-
-Our overall goal as agreed is to initially create a spatio temporal database across the USA to serve of a standardized base for running the MAIAC based PM2.5 models across the USA.
-
-We also agreed that it would probably be a good idea to buy a NAS and store all the data in a centralized location there. We can ask for recommendation from microway when you order the new high end PC (Antonella you can contact me if you consulting on that)
-
-*** Database predictors 
-**** PM2.5
- - We will gather PM data from both EPA and IMPROVE sources
- - mihye has experience with collection of such data and can collect the data across the USA
- - mihye: could you send us all the link to the new site replacing the Views website?
- - these websites were used before to download the data is:
-   http://views.cira.colostate.edu/web/DataWizard/
-   http://www.epa.gov/ttn/airs/airsaqs/detaildata/downloadaqsdata.htm
- - Also we should contact Qian (cced) and coordinate this with him,  since he will also be running USA wide GEOSCHEM models and we don't want to duplicate our data collection efforts
- - We also need to check the different measurement type (that is teom vs other methods) since this could effect the calibrations
-
-**** AOD
-- AOD MAIAC based data is available on DROBO after mihye downloaded it from my FTP server. 
-- We need to convert the hdf files to csv/MATLAB files 
-- check data availability for all years on USA data
--  The latest code to extract these hdf via matlab is attached to this email
--  When shi has time we should discuss Matlab use and how to optimize the code 
-
-**** Meteorology (NCDC/EPA data)
-- We will collect data from NCDC and EPA site and collect the following met data:
-Temp,wdsp,RH,Visibility
-- this is the link to download the NCDC data
-http://www7.ncdc.noaa.gov/CDO/cdoselect.cmd?datasetabbv=GSOD&countryabbv=&georegionabbv=
-
-**** NDVI
-- NDVI data is freely available from the reverb website:
-http://reverb.echo.nasa.gov/reverb/#utf8=%E2%9C%93&spatial_map=satellite&spatial_type=rectangle
-
-- We use 1 month time scales since NDVI does not vary dramitccly from day to day
-***** TODO We should also talk to peter james since he may already have NDVI data on a national scale and we can save use the download and proccesing time.
-**** PBL 
-- I already have PBL data from 2000-2012 across the USA
-- we will need to download 2013-2014 data from North American Regional Reanalysis dataset
-- This is the NARR website for PBL
-http://nomads.ncdc.noaa.gov/data.php?name=access#narr_datasets
-**** rain/percipitation
-- we may want to also get rain data from the above reanalysis data
-http://nomads.ncdc.noaa.gov/data.php?name=access#narr_datasets
-**** Roads
-- We can use ESRI or TIGER road data classified into (classified 'A' roads) and create surfaces to calculate "road density" as a proxy for traffic density. This has worked well in the past yet it is time invariant.
-- we excluded A5 (vehicular tracks), A65 (ferry crossings) and A7(other thoroughfares, walkways, alleys, driveways).  
-- We use ArcGIS Spatial Analyst Line Density tool was used to calculate density of roads per sq km within 1 km for 1 km grid.
-- Another approach would be to look into national road density data (either observed data or modeled). here is a link to investigate
-http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_transportation_atlas_database/index.html
-
-**** fire indicator from modis 
-- We will try to investigate fire indicators from MODIS to try to incorperate as a predictor in specific areas across the USA
-http://modis.gsfc.nasa.gov/data/dataprod/nontech/MOD14.php
-**** dust
-- The same will go for Dust , this is important in the south-western areas and arid places.
-**** omi data
-- We will investigate the Aerosol index and  ultra violet index of the OMI satellite.
-- Below is in depth details on the OMI satellite
-***** OMI - Ozone Monitoring Instrument
-OMI, onboard NASA’s EOS-Aura (Earth Observing System-Aura), measures the Earth reflectance spectra in both the VIS and UV spectral bands (270–500 nm) and has been used to distinguish between UV-absorbing aerosols, such as desert dust, and weakly UV-absorbing aerosols and clouds (Kazadzis et al. 2009; Stammes and Noordhoek 2002). Aura was launched into a sun-synchronous orbit on July 15, 2004, and globally observes e earth between 13:00-14:00 UTC with a nearly daily pass. The Aura satellite orbits at an altitude of 705 km in a sun-synchronous polar orbit with an exact 16-day repeat cycle. There is an approximate ~8 min time lapse between the Aqua and Aura overpasses. The orbital inclination is 98.1 degrees, providing latitudinal coverage from 82° N to 82° S
- The OMI is an imaging spectrometer that measures solar light backscattered by the Earth’s atmosphere and surface (Bucsela et al., 2006). The instrument consists of two spectrometers, one measuring the UV spectral range from 270 to 365 nm in two sub-ranges (UV1: 270–314 nm, resolution: 0.42 nm, sampling: 0.32 nm; UV2: 306–380 nm, resolution: 0.45 nm, sampling: 0.15 nm), the other measuring the UV-visible spectrum from 350 to 500 nm (resolution: 0.63 nm; sampling: 0.21 nm). OMI uses a CCD array with one dimension resolving the spectral features and the other dimension allowing a 114º field of view, providing a 2600-km viewing swath transverse to the orbit track. Its nadir spatial resolution ranges from 13x24 to 24x48 km2, depending on the instrument’s operating mode and observing geometry. 
-
-Products: 
-UV-AAI /VIS-AAI - The absorbing aerosol index (AAI) is derived from the change in the spectral dependence of backscattered UV radiance by aerosols relative to Rayleigh scattering in the 354-388 nm spectral range. The AAI was found to be a useful indicator of elevated concentrations of UV absorbing aerosols, such as dust, taking a near zero value for clouds and weakly absorbing aerosols and a positive value for desert aerosols.
- 	
-The measured I is the intensity of light observed by the satellite-sensor while the calculated I is based on radiative transfer model results. The advantages of using the UV-based data for aerosol properties are that in this spectral range most surfaces (except for snow) have very low scattering therefore a good separation with the aerosol-signal is possible. As mentioned earlier, dust particles show positive AAI values while urban fine particles usually have AAI values near. 
-
-AAOD- The Aerosol Absorbing Optical Depth (AAOD), retrieved from the OMI platform, apparently represents the absorbing fraction of particles dependent on the AOD and the SSA in a certain wavelength.
-			
-NO2  - integrated column data (80km vertical resolution) as a proxy to particles created mainly by fossil fuel burning and agriculture sources. It is retrieved in the blue wavelength range (420-450nm)  of the OMI platform .
-
-Obtaining data examples:
-http://disc.sci.gsfc.nasa.gov/Aura/data-holdings/OMI 
-http://mirador.gsfc.nasa.gov/cgi-bin/mirador/LocationTimeAttribute_Search.pl?tree=project&project=OMI&&dataGroup=L2_V003&dataset=OMAERUV.003&version=003&CGISESSID=d5b768a67f81f0d3cef6a509eb98f524
-**** point emmisons and Area emssions 
-- Data will be obtained from EPA
-- include PM25,PM10,NoX,SO2
-- we will calculate total sum of each pollutant,distance to point source emission, total emissions per area, and buffers of 3k,10k,15k around point sources
-**** from NLCD raster
-- data will be downloaded from the National Land Cover Database (NLCD)
-http://www.mrlc.gov/nlcd06_data.php
-several LU classifications on can be calculated to the 1km resolution
-We should check we peter james if they already have such data
-These are the values and method we used in previous analysis
-
-Op Value:21 Developed, Open Space - Includes areas with a mixture of some constructed materials, but mostly vegetation in the form of lawn grasses.  Impervious surfaces account for less than 20 percent of total cover.  These areas most commonly include large-lot single-family housing units, parks, golf courses, and vegetation planted in developed settings for recreation, erosion control, or aesthetic purposes.
-Ld Value: 22 Developed, Low Intensity -Includes areas with a mixture of constructed materials and vegetation.  Impervious surfaces account for 20-49 percent of total cover.  These areas most commonly include single-family housing units.
-Md Value: 23 Developed, Medium Intensity - Includes areas with a mixture of constructed materials and vegetation. Impervious surfaces account for 50-79 percent of the total cover.  These areas most commonly include single-family housing units.
-Hd  Value: 24 Developed, High Intensity - Includes highly developed areas where people reside or work in high numbers. Examples include apartment complexes, row houses and commercial/industrial.  Impervious surfaces account for 80 to100 percent of the total cover.
-Df Value: 41 Deciduous Forest  - Areas dominated by trees generally greater than 5 meters tall, and greater than 20% of total vegetation cover. More than 75 percent of the tree species shed foliage simultaneously in response to seasonal change.
-Ev  Value: 42 Evergreen Forest - Areas dominated by trees generally greater than 5 meters tall, and greater than 20% of total vegetation cover. More than 75 percent of the tree species maintain their leaves all year. Canopy is never without green foliage. 
-Mf Value: 43 Mixed Forest - Areas dominated by trees generally greater than 5 meters tall, and greater than 20% of total vegetation cover. Neither deciduous nor evergreen species are greater than 75 percent of total tree cover.
-Sh Value: 52 Shrub/Scrub - Areas dominated by shrubs; less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions.
-Gr Value: 71 Grassland/Herbaceous - Areas dominated by grammanoid or herbaceous vegetation, generally greater than 80% of total vegetation.  These areas are not subject to intensive management such as tilling, but can be utilized for grazing.
-Pa  Value: 81 Pasture/Hay  - Areas of grasses, legumes, or grass-legume mixtures planted for livestock grazing or the production of seed or hay crops, typically on a perennial cycle. Pasture/hay vegetation accounts for greater than 20 percent of total vegetation.
-Cr Value: 82 Cultivated Crops - Areas used for the production of annual crops, such as corn, soybeans, vegetables, tobacco, and cotton, and also perennial woody crops such as orchards and vineyards. Crop vegetation accounts for greater than 20 percent of total vegetation. This class also includes all land being actively tilled.
-
-NLCD 2006 30 m resolution rasters was reclassified as rasters for each of the individual land uses listed above.  In each raster cells with the specified land use were given the value 1 all other cells were set to 0
-
-ArcGIS Focal statistics tool was used to sum up the 33 X 33 neighboring 30 m cells and the result divided by 1089 to give an approximate value of percent of each land use within 1 km of center point of each 30 m cell.  Missing values, for example along the coast and boundaries of the study region were treated as zero.  The focal statistics tool used a mask extending 5 km beyond the state boundaries for the eastern US states defining the study area.  
- 
-**** dividing USA into sub regions 
-Traditionally we have clustered ares based on the geo-climatic characteristics of regions across the USA.
-We will look at taking PM monitors and look at correlations between them
-we will then try and cluster these by regions to try and compare that to our traditional way of clustering regions by geo-climatic characteristics.
-We should contact brent regarding the clustering method.
-
-**** pop density
-We can use ESRI data on population per census/tract to get at population density for each 1km gridcell
-mihye already has a system in place and she will be in charge of doing that
-previously we have done this:
-Census block group boundaries from ESRI Data and Maps provided with ArcGIS 10 were used.  Area of block groups in square miles was an attribute in this data and was converted to square kilometers.  This appears to be total square miles not dry land square miles.  Census block group population per square kilometer has been used for the BC model.  The median block group area  in MA is 16 sq km, so block group level data seems an appropriate scale for a 1 km resolution model.  For the 50 m spatial resolution lpm variable block population data was used to estimate population density at a finer spatial scale. A disadvantage of this approach is that it assumes population is uniformly distributed within a census block and noise is introduced by small blocks with 0 population and neighboring blocks with very different populations.  Population density could represent the effects of home heating sources on air pollution or air pollution from traffic at a neighborhood scale. 
-
-**** elevation
--We can get freely available national DEM data across the USA via USGS:
-http://ned.usgs.gov/
--Elevation is in  meters and can be interpolated from a 30 m resolution raster created from 1/3 arc second elevation data downloaded from USGS
--we can use that to extract elevation to each 1km grid cell
--We should also look at  deriving slopes for each grid cell
--This can be done with using ArcGis and mihye already has experience of doing that
-**** Meris satellite
-Data from european sattelite - We here in my Lab are looking into this and possible future applications
-* 'Ongoing'
+* 'Projects'
 ** PAUSED PM2.5 1kmx1km NEMIA					    :ucurent:
+  
 *** Brainstorm
 -there may be degredation in data quality in Terra from 2000-2008 may introduce noide, we may need to address this at some stage in the future
 -AOD values:
@@ -298,52 +84,36 @@ run the reg with some left out monitors and see if the slope is different then '
    :PROPERTIES:
    :ID:       599074f7-2550-40ab-ba04-782947688ce0
    :END:
-*** Weekly TODOS
-    :PROPERTIES:
-    :ID:       7716b93c-4a8f-42a4-a602-5e57d517febf
-    :END:
--why do we correlate 24h and not by overpass
--better regions
--go over PM25 and see if it looks
-*** improvment
-run by season
-ask california group whats the raw pm-aod correlations
-create yearly nox etc variables 
-*** TODO check in Israel for next iteration
-composition of PM in israel, 
+*** info file
+id:ac53d526-2eb4-4aea-a472-09df35dc41e6
+*** code
+file:/home/zeltak/org/files/Uni/Projects/code/P046.Israel_MAIAC
+*** meetings
+*** TD
+*** explore
+**** low yearly aod values and compared to DB which is higher
+ we should look at wind speed from reanalysis data/station to see if these areas have low or high ws values
+
+**** EXP use of aqua and terra as 2 separate exposure:
+instead of calibrating: one would be a peak level exposure and one a "background" exposure
+calibrate with hourly 
+terra > 9:30
+aqua > 14:30 
+talk to petros
+compare EC and OC from speciation and compare
+we want to show that one picks up traffic well while the other picks up transported PM mainly
+**** look at aod azimuths
+ use data with 30 degree azimuths that should be better:
+ either subset data by that or play with these azimuths as weights in a model 
+
+**** EXP check in Israel for next iteration
+composition of PM in israel
 teom at 50 celsius  may over measure and introduce noise to pm25.
 look at average residual in monitors 
 put that in the paper teom is limited
-*** TODO talking to alexei about size distribution
-tried latley:
-kernel machine approach
-PLS
-a mean 20km mpm excluding the actual monitoring data. works very well as predictor but we have mod 2 problem. Also David dosent like it.
-Tried prev/post AOD as predictor
-tried mean of surrounding AOD as predictor. works almost as well as monitor AOD but both linerly don't improve much in model.
-both didn't imporve R2 by much 
-code 
-check email from 26.1.2015 joel 
-all vars in log scale , check which one was dropped 
-
-*** ask joel
-even simple pm-aod models show this sharp CV drop
-
-*** talk with david
-
-| mod                      |   r2 | space | time |
-| aod                      | 0.77 |   .76 | 0.78 |
-| lu+met+intercept for day |   75 |  0.61 | 0.76 |
-| aod+all                  | 0.84 |  0.89 | 0.84 |
-
-the use of physical measuremtns gives us the ability to predict in areas far from physics monitors (such as >30km etc) and reach rural area
-use of AOD gives us daily predctions over space where LUR cannot
-monitors in modest numbers some areas may be under or unrepresented in calibrating the land use regression.
-
-using Aod results in more parsimonious models then LUR- leaves out some Land use terms used in later health outcome models that can create bias since they are included in the exposure
-
-
-
+-why do we correlate 24h and not by overpass
+-better regions
+-a mean 20km mpm excluding the actual monitoring data. works very well as predictor but we have mod 2 problem. Also David dosent like it.
 ** TODO France temperature paper
    :PROPERTIES:
    :ID:       661912dc-74af-472a-ad07-f57affd87b96
@@ -483,8 +253,8 @@ consider using other pollutants around the city specifacly indicators for high t
 if prev day isnt avilable we use the same day twice
 -to borrow information across space create a variable that weights and down weights low aod observations per day
 *** Top pri
-**** TODO [#A] weight sites in Mod1 by inverse of nearby missing AOD (downweight sites near clouds)	 	
-**** TODO Joel suggests we put time interactions on almost everything
+**** EXP weight sites in Mod1 by inverse of nearby missing AOD (downweight sites near clouds)	 	
+**** Joel suggests we put time interactions on almost everything
   which interaction
   file:/home/acjust/projects/airmex/code/LUR_Mex_1b_clean_local.R
 
@@ -492,14 +262,20 @@ if prev day isnt avilable we use the same day twice
   what about instead clustering to find characteristics of days that predict the AOD-pm relationship
   and substituting slopes/intercepts from those instead for the many days when no calibration is occuring because mod1 is empty on that day (no aod near monitors)
 
-**** TODO add high res local smoothing in mod1 
+**** EXP add high res local smoothing in mod1 
   in mod1 file, join the monitor to average of nearby AOD
 
 **** Workflow and fixes
-**** TODO Discover patterns of bad AOD data using spatstat to check for contiguous regions
+**** EXP Discover patterns of bad AOD data using spatstat to check for contiguous regions
 
 ***** create paths so S:/ and S:/EOME taken care of automatically
-***** TODO Fix KNN function
+***** EXP Enhance geomerge
+      :PROPERTIES:
+      :ID:       063b3058-0d6b-4f36-820c-adfd60cf1f8f
+      :END:
+don't fail on missing
+don't require matrix ID to be character
+better arguments inline with common gis terminology
 
 ***** joel and Bernt talk
 ****** Dynamic threshold of high aod (exclude high aod if monitor are low)
@@ -509,8 +285,8 @@ if prev day isnt avilable we use the same day twice
 ****** Try aod divided by pbl. Or cluster groups of days (by pbl profile). Fit different models for subsets?
 ****** Handle data as a matrix, smooth with a weighted kernel. Strip off measures near edges.
 
-**** TODO add flag to exclude closest in mean calc in geomerge/nearestbyday
-
+**** EXP add flag to exclude closest in mean calc in geomerge/nearestbyday
+**** PLS regression 
 *** lower pri
 **** TODO [#A] LUR; space-time smoothing; nearby cells weighted for missing and previous day (if gone, use today)
 **** is the ground monitoring data under a cloud otherwise the same as when not clouded (apart from precip events)?
@@ -611,7 +387,6 @@ if prev day isnt avilable we use the same day twice
 **** impute missing pbl	 	
  	  check out Amelia, maybe single impute time-series?
 	  http://cran.r-project.org/web/packages/Amelia/vignettes/amelia.pdf
-**** TODO leave one monitor out cross-validation	  :coremodel:newdata:
 ****  RH modifies particle size distribution - need to include	 	
 ****  scraping google or bing road traffic	 	
 ****  use lots of spatial terms with PLS regression a la Sampson paper 
@@ -639,6 +414,7 @@ if prev day isnt avilable we use the same day twice
   run three stages again
   minimal additional cloud cleaning
   draft results
+*** TODO explore road classifications 
 ** Italy PM models
 *** Diffrances then NE paper:
 - in in europe
@@ -664,38 +440,45 @@ I want to report an interesting discussion I had last week with Daniel Jacob. We
 This may have implications for Italy, where there is dust transport, even when there is not a peak event, and where there is wood smoke in the winter. I wonder if we could look at AOD in the 400nm range, or make use of the AI to help with the model?
 #+END_EXAMPLE
 
-** MAIAC EURO Consurtium 
+** MAIAC EURO Consortium 
+*** info file
+id:
+*** code
+file:
+*** meetings
+**** Kees talk 13.5.2015
+***** elena 
+ john goliver 
+***** data AOD is being processed for Swiss
+ should be ready by next 48h
+ will send via FTP 
+***** skype call to discuss meeting agenda
+***** OSM project 
+ see [[*OSM project][OSM project]]
+***** TODO create a pan euro dataset
+**** Kees talk 03.06.2015
+***** hired a ma student to work on OSM project
+ perhaps organize a skype call soon between us? or start with getting her data
+***** AOD data is proccesing..
+ took long time but should be ready in next few days
+***** TODO rome meeting 07/2015
+grant aim data for whole europe including osm data
+impute pm2.5 from pm10 data in low pm2.5 years
+*** TD
+**** TODO send massimo AOD Sweden
+**** TODO [#A] send KEES AOD corrected swiss data
 *** grant ideas
-**** supplementing PM2.5 with PM10-25 relationshipnm that year
+**** supplementing PM2.5 with PM10-25 relationship in  that year
 **** compare euro wide model with localized model
 **** centralized repositoary and data sharing
 for my NAS, with FTP access to project members?
 later if we get grant money we can build a server+NAS some centralized location
-*** Kees talk 13.5.2015
-**** elena 
-john goliver 
-**** data AOD is being processed for Swiss
-should be ready by next 48h
-will send via FTP 
-**** skype call to discuss meeting agenda
-**** OSM project 
-see [[*OSM project][OSM project]]
-**** TODO create a pan euro dataset
-*** Kees talk 03.06.2015
-**** hired a ma student to work on OSM project
-perhaps organize a skype call soon between us? or start with getting her data
-**** AOD data is proccesing..
-took long time but should be ready in next few days
-**** TODO rome meeting 07/2015
-grant aim data for whole europe including osm data
-impute pm2.5 from pm10 data in low pm2.5 years
-
-
+**** GEOSCehm integration
 ** italy temperature models
 *** Ideas
-tmin tmax
-use 4 measuremtns per day and use aqua and terra
-talk to brent of a method to to a sophisticated way to impute t from aqua and terra
+tmin tmax use 4 measuremtns per day and use aqua and terra talk to
+brent of a method to to a sophisticated way to impute t from aqua and
+track`
 ** Israel temperature models (LST-ta)- Aaar Rozenfeld
 *** different calibration methids 
 *** comparing the wrf model in israel to our model as part of the methods paper
@@ -708,42 +491,6 @@ talk to brent of a method to to a sophisticated way to impute t from aqua and te
 antonella dosent have sulfate data, is it from EPA data website?
 - specification data from antonella
 -also email choon min
-** alexandra
-*** TODO assign shiran to download data
-    :PROPERTIES:
-    :ID:       7441f396-72a0-4841-9c82-8339fe13f1d1
-    :END:
-ask alexandra about this in next weeks meeting 
-*** Alexandra meetings
-**** methods paper 10x10 Vs 1x1k etc
-comparing multiple resolution models to better charecterize fine particulate matter in urban Environments:
-years 2003-2008
-Boston, Worcster, NYC, Newark
-4 rural
-
--fig 1: 10x10 NE usa 10x10 and 1x1km NE USA
--plot 2: box plot of true pm and pm 10km vs 1km per ( and maybe 200) city and by season
-range of true PM, pred 10, pred 1-check ranges in each 
--plot 3: distances from main roads and/or urban rings and levels of PM: take NYC and boston and see how much the levels of pm go down for each few km's from the city: downtown, surrondings area, outer core , rural
--plot 4: transported pm by trajectories and thresholds
--discussion: show how you might underestimate the health effect (exposure bias)
-maiac is similar to modis but much more obsrv with more variability
-
-
-comparing rural vs urban areas, comparing cities by decreasing populations
-comparing 10x10,3x3,1x1,200x200
-X-city size or popultaion  and scale Y-PM and create 3 box plots 10,1,200
-season-same as above
-range of variablilty of 1x1m pixels within a 10x10km model.
-figures:
-fig 1: 10x10 vs 1x1km for 2003-2008
-fig 2: box plot city/pop vs pm
-fig 3- going further from A1 roads and PM levels
-
-*** 2004-current OMI 
-**** no2 modles
-**** O3 models
-**** So2 models
 ** Multi Pollutant project-living in the modern environment (with Jamie)
 *** meeting with jamie
 **** 15.7.2013 prepare MA datasets of temp,PM,NDVI,SES stuff and other perhaps to prepare to the regression tree
@@ -770,32 +517,6 @@ fig 3- going further from A1 roads and PM levels
 -socio economic disatvanteges measures
 -urban classification
 *** meeting with Allan and Jamie
-*** TODO prepare <2014-09-30 Tue> 
-    :PROPERTIES:
-    :ID:       fa5e1478-8766-47a1-9408-f662f09f79cb
-    :END:
-**** TODO prepare exposure dataset
-     :PROPERTIES:
-     :ID:       c0cce914-5714-42e1-b7e5-607aed9e0407
-     :END:
-prepare for the MA birth from 2003-2008:
-PM
-Ta
-SES
-NDVI/Ospace
-walkabilty
-access to healthy food,access to health centers
-
-***** Temperature 
-***** Wakability
-***** SES variables
-***** PM
-***** open space/ NDVI (greeness)
-**** DONE arrange a skype call with Jaime
-     :PROPERTIES:
-     :ID:       ad417cd8-7eba-4697-81ce-ffcbc88ec479
-     :END:
-
 ** Noise pollution Israel- omer harovi
 *** sources
 **** israel contacts
@@ -812,13 +533,170 @@ beysian kriging- nox sox pm2.5 (used in some station from imputin from pm10 via 
 look at change in delta air pollution vs delta of change in outcome 
 
 ** France Pm models
-*** todo data management
-*** info on data sources for paper
-Temperature and wind speed data came from measurements operated by Météo-France. I think Annick Auffray from Météo-France should be a co-author. Note that we need them to approve the paper before submission (it was explicitly written in our contract).
-Planetary boundary layer data came from CNRS, Robert Vautard. If needed, he will add something in the paper about the model from which these data come from (50km resolution).
-I’ve got population density, hydrology, and traffic data from the IGN (Institut national de l'information géographique et forestière (IGN)) website but I will need to check how we should acknowledge them.
+*** info file
+id:23371787-acbe-41fa-8bab-5a2e91c1e61e
+*** code
+file:/home/zeltak/org/files/Uni/Projects/code/P031.MAIAC.France
 
-* Future Research Ideas
+*** Meetings
+**** johanna meeting [2015-06-12 Fri] 
+*** TODO'S
+
+** OSM-environmental health project (lara)
+*** info file
+id:
+*** code
+file:
+
+** R01 Cardiovascular Health and Air Pollution: A National Study
+*** info file
+id:
+*** code
+file:
+*** meetings
+**** preliminary exposure talk talk [2015-05-26 Tue] 
+ To summarize our talk today we agreed to have a framework in place which will include the following:
+ 1.we will start in the next few weeks to build a nationwide dataset with all the temporal and spatial predictor needed for modelling the entire country:
+ I will create over the next few days a document of all needed data (including sources and will send it over soon (to mihyee and Anna as well))
+
+ 2. We will create soon a overall nationwide 1km grid which will be used for all our modeling in all area.
+ we agreed that areas inhabited mainly by coyotes (that is with population of less then X per 1kmsq) will be flagged and later on dropped from the individual modles
+
+ 3. We will try to use the same overall modeling methodology in all areas but with slight tweaks for each region (based on the changing geo-climatic conditions)
+ This will also allow testing different methods in each region to enhance the fits.
+
+ 4. we will make an effort to acquire actual emissions for all point sources across the country (from EPA?)
+
+ 5. once we get the nation wide spatial-temporal dataset going we will try and see region each student works on, but this can be discussed further down the road
+**** Database building meeting [2015-06-04 Thu] 
+***** PM2.5
+  - We will gather PM data from both EPA and IMPROVE sources
+  - mihye has experience with collection of such data and can collect the data across the USA
+  - mihye: could you send us all the link to the new site replacing the Views website?
+  - these websites were used before to download the data is:
+    http://views.cira.colostate.edu/web/DataWizard/
+    http://www.epa.gov/ttn/airs/airsaqs/detaildata/downloadaqsdata.htm
+  - Also we should contact Qian (cced) and coordinate this with him,  since he will also be running USA wide GEOSCHEM models and we don't want to duplicate our data collection efforts
+  - We also need to check the different measurement type (that is teom vs other methods) since this could effect the calibrations
+
+***** AOD
+ - AOD MAIAC based data is available on DROBO after mihye downloaded it from my FTP server. 
+ - We need to convert the hdf files to csv/MATLAB files 
+ - check data availability for all years on USA data
+ -  The latest code to extract these hdf via matlab is attached to this email
+ -  When shi has time we should discuss Matlab use and how to optimize the code 
+
+***** Meteorology (NCDC/EPA data)
+ - We will collect data from NCDC and EPA site and collect the following met data:
+ Temp,wdsp,RH,Visibility
+ - this is the link to download the NCDC data
+ http://www7.ncdc.noaa.gov/CDO/cdoselect.cmd?datasetabbv=GSOD&countryabbv=&georegionabbv=
+
+***** NDVI
+ - NDVI data is freely available from the reverb website:
+ http://reverb.echo.nasa.gov/reverb/#utf8=%E2%9C%93&spatial_map=satellite&spatial_type=rectangle
+
+ - We use 1 month time scales since NDVI does not vary dramitccly from day to day
+****** TODO We should also talk to peter james since he may already have NDVI data on a national scale and we can save use the download and proccesing time.
+***** PBL 
+ - I already have PBL data from 2000-2012 across the USA
+ - we will need to download 2013-2014 data from North American Regional Reanalysis dataset
+ - This is the NARR website for PBL
+ http://nomads.ncdc.noaa.gov/data.php?name=access#narr_datasets
+***** rain/percipitation
+ - we may want to also get rain data from the above reanalysis data
+ http://nomads.ncdc.noaa.gov/data.php?name=access#narr_datasets
+***** Roads
+ - We can use ESRI or TIGER road data classified into (classified 'A' roads) and create surfaces to calculate "road density" as a proxy for traffic density. This has worked well in the past yet it is time invariant.
+ - we excluded A5 (vehicular tracks), A65 (ferry crossings) and A7(other thoroughfares, walkways, alleys, driveways).  
+ - We use ArcGIS Spatial Analyst Line Density tool was used to calculate density of roads per sq km within 1 km for 1 km grid.
+ - Another approach would be to look into national road density data (either observed data or modeled). here is a link to investigate
+ http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_transportation_atlas_database/index.html
+
+***** fire indicator from modis 
+ - We will try to investigate fire indicators from MODIS to try to incorperate as a predictor in specific areas across the USA
+ http://modis.gsfc.nasa.gov/data/dataprod/nontech/MOD14.php
+***** dust
+ - The same will go for Dust , this is important in the south-western areas and arid places.
+***** omi data
+ - We will investigate the Aerosol index and  ultra violet index of the OMI satellite.
+ - Below is in depth details on the OMI satellite
+****** OMI - Ozone Monitoring Instrument
+ OMI, onboard NASA’s EOS-Aura (Earth Observing System-Aura), measures the Earth reflectance spectra in both the VIS and UV spectral bands (270–500 nm) and has been used to distinguish between UV-absorbing aerosols, such as desert dust, and weakly UV-absorbing aerosols and clouds (Kazadzis et al. 2009; Stammes and Noordhoek 2002). Aura was launched into a sun-synchronous orbit on July 15, 2004, and globally observes e earth between 13:00-14:00 UTC with a nearly daily pass. The Aura satellite orbits at an altitude of 705 km in a sun-synchronous polar orbit with an exact 16-day repeat cycle. There is an approximate ~8 min time lapse between the Aqua and Aura overpasses. The orbital inclination is 98.1 degrees, providing latitudinal coverage from 82° N to 82° S
+  The OMI is an imaging spectrometer that measures solar light backscattered by the Earth’s atmosphere and surface (Bucsela et al., 2006). The instrument consists of two spectrometers, one measuring the UV spectral range from 270 to 365 nm in two sub-ranges (UV1: 270–314 nm, resolution: 0.42 nm, sampling: 0.32 nm; UV2: 306–380 nm, resolution: 0.45 nm, sampling: 0.15 nm), the other measuring the UV-visible spectrum from 350 to 500 nm (resolution: 0.63 nm; sampling: 0.21 nm). OMI uses a CCD array with one dimension resolving the spectral features and the other dimension allowing a 114º field of view, providing a 2600-km viewing swath transverse to the orbit track. Its nadir spatial resolution ranges from 13x24 to 24x48 km2, depending on the instrument’s operating mode and observing geometry. 
+
+ Products: 
+ UV-AAI /VIS-AAI - The absorbing aerosol index (AAI) is derived from the change in the spectral dependence of backscattered UV radiance by aerosols relative to Rayleigh scattering in the 354-388 nm spectral range. The AAI was found to be a useful indicator of elevated concentrations of UV absorbing aerosols, such as dust, taking a near zero value for clouds and weakly absorbing aerosols and a positive value for desert aerosols.
+ 	
+ The measured I is the intensity of light observed by the satellite-sensor while the calculated I is based on radiative transfer model results. The advantages of using the UV-based data for aerosol properties are that in this spectral range most surfaces (except for snow) have very low scattering therefore a good separation with the aerosol-signal is possible. As mentioned earlier, dust particles show positive AAI values while urban fine particles usually have AAI values near. 
+
+ AAOD- The Aerosol Absorbing Optical Depth (AAOD), retrieved from the OMI platform, apparently represents the absorbing fraction of particles dependent on the AOD and the SSA in a certain wavelength.
+			
+ NO2  - integrated column data (80km vertical resolution) as a proxy to particles created mainly by fossil fuel burning and agriculture sources. It is retrieved in the blue wavelength range (420-450nm)  of the OMI platform .
+
+ Obtaining data examples:
+ http://disc.sci.gsfc.nasa.gov/Aura/data-holdings/OMI 
+ http://mirador.gsfc.nasa.gov/cgi-bin/mirador/LocationTimeAttribute_Search.pl?tree=project&project=OMI&&dataGroup=L2_V003&dataset=OMAERUV.003&version=003&CGISESSID=d5b768a67f81f0d3cef6a509eb98f524
+***** point emmisons and Area emssions 
+ - Data will be obtained from EPA
+ - include PM25,PM10,NoX,SO2
+ - we will calculate total sum of each pollutant,distance to point source emission, total emissions per area, and buffers of 3k,10k,15k around point sources
+***** from NLCD raster
+ - data will be downloaded from the National Land Cover Database (NLCD)
+ http://www.mrlc.gov/nlcd06_data.php
+ several LU classifications on can be calculated to the 1km resolution
+ We should check we peter james if they already have such data
+ These are the values and method we used in previous analysis
+
+ Op Value:21 Developed, Open Space - Includes areas with a mixture of some constructed materials, but mostly vegetation in the form of lawn grasses.  Impervious surfaces account for less than 20 percent of total cover.  These areas most commonly include large-lot single-family housing units, parks, golf courses, and vegetation planted in developed settings for recreation, erosion control, or aesthetic purposes.
+ Ld Value: 22 Developed, Low Intensity -Includes areas with a mixture of constructed materials and vegetation.  Impervious surfaces account for 20-49 percent of total cover.  These areas most commonly include single-family housing units.
+ Md Value: 23 Developed, Medium Intensity - Includes areas with a mixture of constructed materials and vegetation. Impervious surfaces account for 50-79 percent of the total cover.  These areas most commonly include single-family housing units.
+ Hd  Value: 24 Developed, High Intensity - Includes highly developed areas where people reside or work in high numbers. Examples include apartment complexes, row houses and commercial/industrial.  Impervious surfaces account for 80 to100 percent of the total cover.
+ Df Value: 41 Deciduous Forest  - Areas dominated by trees generally greater than 5 meters tall, and greater than 20% of total vegetation cover. More than 75 percent of the tree species shed foliage simultaneously in response to seasonal change.
+ Ev  Value: 42 Evergreen Forest - Areas dominated by trees generally greater than 5 meters tall, and greater than 20% of total vegetation cover. More than 75 percent of the tree species maintain their leaves all year. Canopy is never without green foliage. 
+ Mf Value: 43 Mixed Forest - Areas dominated by trees generally greater than 5 meters tall, and greater than 20% of total vegetation cover. Neither deciduous nor evergreen species are greater than 75 percent of total tree cover.
+ Sh Value: 52 Shrub/Scrub - Areas dominated by shrubs; less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions.
+ Gr Value: 71 Grassland/Herbaceous - Areas dominated by grammanoid or herbaceous vegetation, generally greater than 80% of total vegetation.  These areas are not subject to intensive management such as tilling, but can be utilized for grazing.
+ Pa  Value: 81 Pasture/Hay  - Areas of grasses, legumes, or grass-legume mixtures planted for livestock grazing or the production of seed or hay crops, typically on a perennial cycle. Pasture/hay vegetation accounts for greater than 20 percent of total vegetation.
+ Cr Value: 82 Cultivated Crops - Areas used for the production of annual crops, such as corn, soybeans, vegetables, tobacco, and cotton, and also perennial woody crops such as orchards and vineyards. Crop vegetation accounts for greater than 20 percent of total vegetation. This class also includes all land being actively tilled.
+
+ NLCD 2006 30 m resolution rasters was reclassified as rasters for each of the individual land uses listed above.  In each raster cells with the specified land use were given the value 1 all other cells were set to 0
+
+ ArcGIS Focal statistics tool was used to sum up the 33 X 33 neighboring 30 m cells and the result divided by 1089 to give an approximate value of percent of each land use within 1 km of center point of each 30 m cell.  Missing values, for example along the coast and boundaries of the study region were treated as zero.  The focal statistics tool used a mask extending 5 km beyond the state boundaries for the eastern US states defining the study area.  
+ 
+***** dividing USA into sub regions 
+ Traditionally we have clustered ares based on the geo-climatic characteristics of regions across the USA.
+ We will look at taking PM monitors and look at correlations between them
+ we will then try and cluster these by regions to try and compare that to our traditional way of clustering regions by geo-climatic characteristics.
+ We should contact brent regarding the clustering method.
+
+***** pop density
+ We can use ESRI data on population per census/tract to get at population density for each 1km gridcell
+ mihye already has a system in place and she will be in charge of doing that
+ previously we have done this:
+ Census block group boundaries from ESRI Data and Maps provided with ArcGIS 10 were used.  Area of block groups in square miles was an attribute in this data and was converted to square kilometers.  This appears to be total square miles not dry land square miles.  Census block group population per square kilometer has been used for the BC model.  The median block group area  in MA is 16 sq km, so block group level data seems an appropriate scale for a 1 km resolution model.  For the 50 m spatial resolution lpm variable block population data was used to estimate population density at a finer spatial scale. A disadvantage of this approach is that it assumes population is uniformly distributed within a census block and noise is introduced by small blocks with 0 population and neighboring blocks with very different populations.  Population density could represent the effects of home heating sources on air pollution or air pollution from traffic at a neighborhood scale. 
+
+***** elevation
+ -We can get freely available national DEM data across the USA via USGS:
+ http://ned.usgs.gov/
+ -Elevation is in  meters and can be interpolated from a 30 m resolution raster created from 1/3 arc second elevation data downloaded from USGS
+ -we can use that to extract elevation to each 1km grid cell
+ -We should also look at  deriving slopes for each grid cell
+ -This can be done with using ArcGis and mihye already has experience of doing that
+***** Meris satellite
+ Data from european sattelite - We here in my Lab are looking into this and possible future applications
+
+** storke and PM10 in israel
+*** TODO ask allan abour long term analysis glmpql cells with 0	      :allan:
+** Swiss MAIAC model
+*** info filer
+id:a2dffbf3-49ef-4fac-ad21-47a2d72a144c
+*** code
+file:
+*** meetings
+*** TD
+
+* Future Project Ideas
 ** PM model (NEXT BRANCH)
 *** MAIAC next stages
 **** TODO call with Alexei
@@ -1112,6 +990,58 @@ R package by lauren hunn
 **** sattelite humidity
 lowest level
 
+*** meetings
+**** TODO meeting with Alexei [2015-04-21 Tue] 
+***** MAIAC RAW results in all NE areas we tried (Mexico, Israel etc) much worse. is it a mater of physics?
+ all other regions such as Israel, Mexico, italy, SE USA have all relatively poor overall RAW R2 (monitors vs closest AOD) much lower than NE:
+ in NE it ranges from 0.2-0.7 RAW while in all other regions RAW of 0.01-0.2 MAX
+ bright surfaces (in California) get better agreement with aeronet; also in israel
+ 0.6017
+ is MAIAC better at prediccting the uper column than surface in israel? 
+ what can we do to help this (bright surface problem)
+
+***** PM10 in Israel performs much better than PM2.5
+ the differences are huge- CV R2 pm10=0.82 and pm25 ~0.7
+ over fitting isn't the issue since also in a parsimonious model we still get this drop
+****** histogram on dust days of AOD
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2015-02-11 09:15:22
+ #+attr_html: :width 450tx
+   [[/home/zeltak/org/attach/images_2015/screenshot_2015-02-11_09:15:22.png]]   
+ #+DOWNLOADED: /tmp/screenshot.png @ 2015-02-11 09:16:30
+ #+attr_html: :width 450px
+  [[/home/zeltak/org/attach/images_2015/screenshot_2015-02-11_09:16:30.png]]
+
+
+****** raw lm corr aod and pm25/10 on dust vs non dust days 
+ 0.16 non dust days
+ 0.17 dust days
+
+ look at time series analysis
+****** raw correlation with regions
+ reg5      R2   nsamps
+ 1    1 0.39621    484  beer sheva
+ 2    2 0.19817   7096  ashdod
+ 3    3 0.30556    124  jerusalem
+ 4    4 0.12481   3885   Tel aviv 
+ 5    5 0.16421   4627  North 
+
+ in general raw correlations aren't great- 0.001-0.3 when breaking down to season/year etc
+ there are specifc station in speific seasons that have a base correlation of 0
+
+ we saw that UN and adjancecny mask werent helping that much
+
+ -alexei raw correlations in california from slides
+ we saw in table and el segundo bad correlations in the range that we saw, whats the pysical explenation for this
+ -lets take one year 2004  and focus on this. we will send you pm data. lets try to debug this
+ issues we hypothesis: humidity and salt along the near shore area.
+
+***** clouds - focus on Mexico - Allan
+ uncertainty and adjacency mask don’t help that much
+ our additional filtering (spatial filter for high variance);
+ there are long gaps with no data 
+ versions and datasets - when is the “new” version coming
+ using Terra with Aqua
 
 ** Ta model (next branch) 
 *** stage 3 regression by grid cell
@@ -1236,6 +1166,38 @@ discrepancies between these measurements, it's worth analyzing the contribution 
 satellite-borne RH profile and maybe find a RH correction factor to use in PM prediction 
 
 models.
+** alexandra
+*** Alexandra meetings
+**** methods paper 10x10 Vs 1x1k etc
+comparing multiple resolution models to better charecterize fine particulate matter in urban Environments:
+years 2003-2008
+Boston, Worcster, NYC, Newark
+4 rural
+
+-fig 1: 10x10 NE usa 10x10 and 1x1km NE USA
+-plot 2: box plot of true pm and pm 10km vs 1km per ( and maybe 200) city and by season
+range of true PM, pred 10, pred 1-check ranges in each 
+-plot 3: distances from main roads and/or urban rings and levels of PM: take NYC and boston and see how much the levels of pm go down for each few km's from the city: downtown, surrondings area, outer core , rural
+-plot 4: transported pm by trajectories and thresholds
+-discussion: show how you might underestimate the health effect (exposure bias)
+maiac is similar to modis but much more obsrv with more variability
+
+
+comparing rural vs urban areas, comparing cities by decreasing populations
+comparing 10x10,3x3,1x1,200x200
+X-city size or popultaion  and scale Y-PM and create 3 box plots 10,1,200
+season-same as above
+range of variablilty of 1x1m pixels within a 10x10km model.
+figures:
+fig 1: 10x10 vs 1x1km for 2003-2008
+fig 2: box plot city/pop vs pm
+fig 3- going further from A1 roads and PM levels
+
+*** 2004-current OMI 
+**** no2 modles
+**** O3 models
+**** So2 models
+
 ** Future exposure models 
    :PROPERTIES:
    :ID:       03c79a3e-10b4-4295-b91f-d0c4f38e9497
@@ -1324,15 +1286,18 @@ study of nursing home cases, dont move much good for 1x1 km data
 ** Joel NAS paper about no correlation with SES and PM, try with 1km data
 ** Look into developing spatio temporal ozone (O3) modles from sattelite in USA
 ** Compare our BW study with low "western world" effetcs to a high polluted (mexico city) area
-** Temerature model results and Liu CMAQ results
+** Temperature model results and Liu CMAQ results
    -look at mortality cases and temperature (short term, acute temprature days), and compare results with our model and CMAQ
 ** go back to the ICAM/VCAM reanalysis
--stacey re-analysis with 1kmx1km data :: We should say that we see an effect for both the year lag and medium term but the longer lag is more important
+-stacey re-analysis with 1kmx1km data : We should say that we see an effect for both the year lag and medium term but the longer lag is more important
 -calculate the residuals between our model and the BC model
 create moving averages of the 4,8,12 weeks and try that in the model> will capture only non traffic exposures
 when we get the 1x1km data ready go back to the icam/vcam reanalysis by marie-able and the stacey BC paper and see if that changes things
+** explore Mapi Maagal project 
+Zipcode proxy
+
 * Grants
-** SUBMITTED EHF grant: birth weight outcomes (defects, Ultra sound measurements and Ta,PM2.5
+** K_TRACK EHF grant: birth weight outcomes (defects, Ultra sound measurements and Ta,PM2.5
    :PROPERTIES:
    :ID:       39e8a4e3-a097-46c4-a3a5-8c35b9452187
    :END:
@@ -1373,23 +1338,6 @@ http://en.wikipedia.org/wiki/Placental_abruption
 *** account number
 874304
 meytal drori
-** PAUSED Resubmit ISF grant
-   SCHEDULED: <2014-10-19 Sun>
-   :PROPERTIES:
-   :ID:       2d51f244-9704-406f-87ae-9a02c28cfcaa
-   :END:
-*** TODO convert region to Israel and add data fusion with 3 and 1 km data
-    :PROPERTIES:
-    :ID:       2f180069-c109-4419-84ef-f7b0b6c38069
-    :END:
-
-** ESCAPE project with PM for horizon 2020
-** DONE Resubmit Young GIF
-   SCHEDULED: <2014-09-30 Tue>
-   :PROPERTIES:
-   :ID:       e363cfbc-1013-42d0-a32a-d25303f43814
-   :END:
-alexandra schnider
 ** K_TRACK Boris Haifa
    :PROPERTIES:
    :ID:       f6ccd685-fd83-402f-bbd8-82198406039a
@@ -1398,36 +1346,20 @@ alexandra schnider
 -run a poisson regression where we regress counts by zipcode and day (like 10x10 NE) ~1 year lags of the pollutants, and a spline for date (See 10x10 code). this will be run togheter for 10 years
 -also to check if the association changed from year to year we will run these exact models by year (IE each year speratley in a seperate model) !note! remember to change the DF for the dats spline for 1 year
 !note! once can run the same model instead of yearly in 1 model with all year with interactions so that each pollutant interacts with a year variable, but you need a very large N`
-** TODO Antonella whole USA 1x1km grant
+** K_TRACK Antonella whole USA 1x1km grant
    :PROPERTIES:
    :ID:       5a8c67d0-bd9b-4eff-9d5b-8ae444153490
    :END:
-*** TODO grant r01 ideas talk 26.5.2015
-To summarize our talk today we agreed to have a framework in place which will include the following:
-1.we will start in the next few weeks to build a nationwide dataset with all the temporal and spatial predictor needed for modelling the entire country:
-I will create over the next few days a document of all needed data (including sources and will send it over soon (to mihyee and Anna as well))
-
-2. We will create soon a overall nationwide 1km grid which will be used for all our modeling in all area.
-we agreed that areas inhabited mainly by coyotes (that is with population of less then X per 1kmsq) will be flagged and later on dropped from the individual modles
-
-3. We will try to use the same overall modeling methodology in all areas but with slight tweaks for each region (based on the changing geo-climatic conditions)
-This will also allow testing different methods in each region to enhance the fits.
-
-4. we will make an effort to acquire actual emissions for all point sources across the country (from EPA?)
-
-5. once we get the nation wide spatial-temporal dataset going we will try and see region each student works on, but this can be discussed further down the road
-
-thanks!
-
-itai
-
-
-** Big data grant
-will look into it for next round (~june)
-maybe leveraging Open source application/stat programs (R,Octovo etc) for big data proccesing)
-bringing in Data set from differnet sources both spatilly and temporally differnt resolutions
-** SUBMITTED WAITING Andrea padwan LAN-Prostate Italian SIR grant
 ** R21 with Allan Mexico
+*** info file
+id:
+*** code
+file:
+*** meetings
+**** meeting on R21[2015-06-19 Fri 16:00] 
+***** Joel ask about both meeting in rome with David a
+*** TD
+
 ** K_TRACK CIG
 *** gen info
 can be dynamic, that is i can move money from each budget section to another
@@ -1449,471 +1381,99 @@ account number 87347711 saif 40
 - create a propensity  score regressing epxo vs all variables get a predictive modelt
 - advanimcg epi in israel taking acasuel moel appraoch coming up with estimates wich are not just casuel and advance methods
 
-** SUBMITTED MOST: Infrastructures Program in Space Research
-   SCHEDULED: <2015-05-10 Sun> DEADLINE: <2015-05-03 Sun>
+** Andrea/bob built environment grant
+*** grant ideas 
+**** temperature modeling: showing heat island effects, there could be several degrees c in spatial variblity at night time
+**** "greenes" :- use sattelite NDVI (modis/lansat/other) as an exposure (1km-30m) as a proxy for green spaces/areas and
+**** walkability
+ there are several ways of addressing walkability
 
-משרד המדע: תשתיות מדעיות בתחום החלל – קול קורא להצעות מחקר (מועד ההגשה לרשות המחקר 10.5, למשרד המדע: 14.5)
-http://most.gov.il/Information/Calls/Pages/Space2015.aspx
+ 1) simple method gis based method- intersection count, business count, and population density
 
-aims:
+ residence-level measures of population density
 
-use of sattelite data for improving predicting air pollution 
-management of environmental resources speciffacly air pollution
+ business counts (as a proxy for accessibility)-Business counts were measured by the counts of all stores, facilities, and services in a participant’s network buffer
+ points of interest”, which includes grocery stores, restaurants, banks, hotels, hospitals, libraries, 
 
-use of deep blue over ocean for better use of aod 
+ intersection counts (as a proxy for street connectivity)-network buffers around each home address
+ Intersection counts were quantified by the number of intersections that were 3-way or greater within each network buffer (Figure 2). A greater intersection count increases the efficiency of walking to destinations. 
 
-A1: data fusion and calman
-fusion CMAQ VIIRS deep blue
-A2: methods improvments
-use of moving windows to asses daily aod quality at each point
-better use of higher resolution tmeporal met variables using WRF data integration
-combining aqua and terra
-space-time smoothing; nearby cells weighted for missing and previous day (if gone, use today)
-does relationship of Aqua and Terra give us info? early pollutant build-up vs continuous across the day?
-A3: 
+ 2) developing a more complex model taking into account traffic lanes, traffic direction, walking obstacles, intersections counts etc etc
 
+**** light at night
 
-* Students
-** maayan
-*** Phd topics
-**** overall topic association between PM and cardio vascular diseases and risk factos
-***** DM and air pollution
-***** outcomes MI,IHD,CVA (cardio cerrebro vascular attach-head)
-***** dislipedemia (blood lipids)
-***** hypertension 
+ DMSP satellite allows 600m resolution. new satellite (NASA-NOAA Suomi National Polar-orbiting Partnership (NPP) satellite) can produce higher res data
+ LAN as a exposure and as a potential proxy to residence level pop density
 
-*** maayan 12.5.15
-***** case crossover
- whats the N?
- simplest way is to take first admission
- if N is small lets see in litrature how other people dealt with this
-***** the Stat zone file
- what are these variables
- HOUSEHOLDS	ownership of houses
- AVERAGE_HH	
- ASIRON1_3	% of population in eshkol 1-3
- ASIRON7_10	% of population in eshkol 7-10
- DIROG	 method of ranking SES
- MADD_SOC	alternative method to rank SES
- INCOME	mean income 
- ZOBJECT	Zone Number
- ESHKOL_NUM	eshol rank from 1-10 (or 1-20 for moatzot)
-***** TODO Behzad paper
- mind taking a look? authorship is problematic we need to see what can be done
-***** TODO arrange meeting with ofer and erez
-***** TODO check distribution for pm for seasons
+**** web data social/location based services
 
-** meytar schedule
-in R- gbm analylis- check model with only highest variables.
-1.ratio
-2.france PM
-3.cooperation with Austrailia
-4.data fusion
-5.composition 
+ whats available in Mexico city/around?
+ could be used for: 
+ mapping traffic density
+ mapping access to health, healthy food, business counts
 
+**** perhaps noise exposure modeling? I have a student that is working on this- tis very hard to model, need a "moitoring campagin", height, buliding material etc
+**** crime-data availability?
+* scheduled mail/calls/meetings
+** TODO discuss with qian di
+geoschem model vertical profile - put into a europe wide pm dataset
+disucss that with qian di vertical
+talk about mysql datasets
 
-
-* Office/Budgets
-  :PROPERTIES:
-  :ID:       248dff94-3c3f-4b05-b9d3-4c25addf746b
-  :END:
-** budgeting students "manot"
-in 2014 1 "mana" is 514 NIS
-for a post-doc the $$ is between 4-20
-** Trips Abroad info
-*** Eshel 
-for days you don't ask for hotel 
-the per day is $123
-for days with hotel 
-the sum is $74
-** Budget
-*** running budgets 
-| name      |   Number |
-|-----------+----------|
-| CIG       | 87361211 |
-| sal klita | 87347711 |
-|           |          |
-
-  
-*** BGU budget glossary
-department sections starts with '5'
-grant money sections starts with '3'
-other research sections starts with '8'
-to see how much is left you need to check in "מחקרים"
-*** Move budget that is unused
-check how to move unused budget to department/faculty to pay for other students ans somehow get the money back
-*** budgeting students "manot"
- in 2014 1 "mana" is 514 NIS
- for a post-doc the $$ is between 4-20
-
-** Office Hardware info
-*** IP
-Beast IP: 132.72.155.204
-NAS BGU:
-132.72.154.204 (main)
-132.72.152.204
-*** Phone
-*** bgu wifi network
-use id BGU-USERS\ikloog  
-** PAUSED maabadot budget
-   DEADLINE: <2014-08-30 Sat>
-   :PROPERTIES:
-   :ID:       366cb046-d309-40a1-8c30-6d9712caa313
-   :END:
-*** another scanner?
-*** fridge?
-*** micro?
-*** UPS
-*** Speakers
-***  מסך מחשב Dell UltraSharp P2815Q 28'' UltraHD 4K
-*** Proffesional camera 
--buy DSLR?
--buy projector?
--buy LAN meters
-** DONE hire a student for 90 hours of work
-   :PROPERTIES:
-   :ID:       5ebfa8b5-7816-453a-8e53-59402db2b3df
-   :END:
-** fill in sick days etc
-   DEADLINE: <2014-07-29 Tue +1m>
-   - State "SUBMITTED"  from "NEXT"       [2014-07-29 Tue 10:55]
-   - State "SUBMITTED"  from "NEXT"       [2014-07-29 Tue 10:55]
-   - State "SUBMITTED"  from "NEXT"       [2014-07-29 Tue 10:55]
-   :PROPERTIES:
-   :ID:       6026376b-de51-4adf-a7a4-762887ceb426
-   :LAST_REPEAT: [2014-07-29 Tue 10:55]
-   :END:
-** TODO Buy Laptop
-   :PROPERTIES:
-   :ID:       d8da2a30-f5f0-46d7-8a45-c80e1e72fc27
-   :END:
-extra battery 6 cell
-extra powercord
-docking station
-warrenty?
-Intel wifi card (strongly recommended for Linux)
-** DONE buy fridge and micro from seed money?
-   :PROPERTIES:
-   :ID:       e0ac04b4-c871-40d0-8427-7c80eac94ccb
-   :END:
-** TODO mechanical keyboard
-   :PROPERTIES:
-   :ID:       cebeff91-1ddc-4c63-b53e-45ef37f48ab5
-   :END:
-** TODO backup drive usb
-   :PROPERTIES:
-   :ID:       391ab9c4-4185-4765-b102-b16d0bcb91c6
-   :END:
-** salary
-*** הקדשת זמן
-בחירת שנה סמסטר לדיווח הקדשת זמן
-	
-@you need to mark "הקדשתי"@
-
-you get the bonus in salary for hakdashat zman in Nov/Feb/May/Augment
-*** "criterionim"
-you get the bonus in salary for this in Oct/Janurary/April/July
-
-
-** TODO refund cellphone
-   :PROPERTIES:
-   :ID:       75644e8e-69ea-47fe-b011-81b0b9d82c3b
-   :END:
-use wither bug or dv com:
-
-אהובה קדם
-מנהלת מחלקה עסקית – באג מולטיסיטם בע"מ
-טל:08-6222769  פקס:08-9202410 נייד:052-3122265
-אימייל:ahuva@bug.co.il
-
-
-Felix Tzigelman
-Purchasing and Logistics Manager
-dvcom_logo_s
- 
-Lazarov 33,Rishon Lezion 75654
-Israel
- 
-Tel. +972-72-2203300 ext.3
-Fax. +972-72-2203307
-M.   +972-52-4058888
-
-
-internet from home
-שלוחה   	08-6461743
-
-אמיר צפנת
-
-שלוחה   	08-6479449
-
-
-* Short term Misc
-** TODO make sense of all kopot gemel
-   :PROPERTIES:
-   :ID:       6c1e9592-8c50-41e4-b187-c42884527820
-   :END:
-** TODO investigate national transportation model
-   :PROPERTIES:
-   :ID:       2d43ca32-4aa2-4ecb-bd5a-9a1d231dc35a
-   :END:
-
-http://www.rita.dot.gov/bts/sites/rita.dot.gov.bts/files/publications/national_transportation_atlas_database/2014/index.html
-
-** TODO Build Lab website
-:PROPERTIES:
-:ID:       08d89d98-7330-4d4e-894f-3792bd24a115
-:END:
-*** talk to oren tal about sharepoint access
-** TODO publications comitee
-*** monetary benefits for publications- see examples below- always when accepted in all places
-    should the money be awarded on start of MA or after the paper is accepted- always when accepted
-
-report
-china
-
-rewarded with cash, and the more prestigious the journal, the larger the sum
-
-Indexed in ISTP — $92 Indexed in EI — $275 Impact factor < 1 — $306 1 ≥ IF < 3 –$458 3 ≥ IF < 5 — $611 5 ≥ IF < 10 — $764 IF ≥ 10 — $2,139 Published in Science or Nature – $30,562
-Europe
-
-University of Bayreuth-University in Bayreuth, Germany: supervisor to assess the publication according to the criteria (accepted) gives supplement to the budget
-
-    Denmark : graduate students may be entitled to receive a publication bonus of up to DKK 15000. must be published in peer review with university affiliation
-
--other instituations with no specific examples that hand out money per publications all have various programs that give graduate students incentives for publishing papers the ammount is hard to get to via web
-
-    common in Russia
-
--leeds university
-
-    many Austrailian universites
-
-USA
-
--bonuses for publishing in high impact journals in some universites/departments
-
--some universities even give undergrad pubication bonuses!: Beloit College is a private liberal arts college in Beloit, Wisconsin
-israel
-haifa
-
-תלמיד יקבל מענק מיוחד באם במהלך השנה האקדמית יגיש לפרסום ספר מדעי/מקצועי, או פרק לספר מדעי/מקצועי, או מאמר מדעי/מקצועי לכתב-עת, אשר יתקבל לפרסום על בסיס רפרנטורה מקצועית. המענק מיועד לתלמידי מחקר שנה א’ – ד’, עבור פעילות מחקרית שנעשתה במהלך לימודי התואר השלישי.
-
-גובה המענק ייקבע מראש כל שנה בהתאם לאפשרויות התקציביות.
-huji
-
-פרס בגין פרסום מאמר בכתב עת אקדמי: פרס ובר ג’ורג’: על פרסום מאמר מצטיין באחד מכתבי העת האקדמיים של הפקולטה. הפרס יוענק בגין מאמר שהתקבל לפרסום (אף אם טרם התפרסם בפועל) במהלך שנת הלימודים הקודמת. יש לצרף לבקשה עותק מן המאמר. הפרס יוענק לתלמיד/ה אחד/ת. גובה הפרס כאלף ש”ח.
-*** TODO prepare proposal
-show how the best places do have these benefits on publishing short 1/2 page proposal with: giving cash prize for publishing a paper during MA in Q1/Q3 in the sum based on the yearly availability of funds in the department.
-
-** yom patouch
-doch shemot with rachel
-by years with no emails!
-one that shivok will send the email for us
-go to mador rishom for poetntial canidates- revital zamir
-** TODO ask tal about layers from MAPI
-** TODO Ask marina zusman $$$ back on sept and feb meetins
-   
-** TODO meeting with Alexei
-*** past year
--initial mexico model-paper sent
--initial israel model-paper coming in the next few days
--work in Europe (mainly in Italy but also in sweeden and switzerland and soon other regions)
-*** current issues to discuss:
-**** MAIAC RAW results in all NE areas we tried (Mexico, Israel etc) much worse. is it a mater of physics?
-all other regions such as Israel, Mexico, italy, SE USA have all relatively poor overall RAW R2 (monitors vs closest AOD) much lower than NE:
-in NE it ranges from 0.2-0.7 RAW while in all other regions RAW of 0.01-0.2 MAX
-bright surfaces (in California) get better agreement with aeronet; also in israel
-0.6017
-is MAIAC better at prediccting the uper column than surface in israel? 
-what can we do to help this (bright surface problem)
-
-**** PM10 in Israel performs much better than PM2.5
-the differences are huge- CV R2 pm10=0.82 and pm25 ~0.7
-over fitting isn't the issue since also in a parsimonious model we still get this drop
-***** histogram on dust days of AOD
-
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-02-11 09:15:22
-#+attr_html: :width 450tx
-  [[/home/zeltak/org/attach/images_2015/screenshot_2015-02-11_09:15:22.png]]   
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-02-11 09:16:30
-#+attr_html: :width 450px
- [[/home/zeltak/org/attach/images_2015/screenshot_2015-02-11_09:16:30.png]]
-
-
-***** raw lm corr aod and pm25/10 on dust vs non dust days 
-0.16 non dust days
-0.17 dust days
-
-look at time series analysis
-***** raw correlation with regions
-reg5      R2   nsamps
-1    1 0.39621    484  beer sheva
-2    2 0.19817   7096  ashdod
-3    3 0.30556    124  jerusalem
-4    4 0.12481   3885   Tel aviv 
-5    5 0.16421   4627  North 
-
-in general raw correlations aren't great- 0.001-0.3 when breaking down to season/year etc
-there are specifc station in speific seasons that have a base correlation of 0
-
-we saw that UN and adjancecny mask werent helping that much
-
--alexei raw correlations in california from slides
-we saw in table and el segundo bad correlations in the range that we saw, whats the pysical explenation for this
--lets take one year 2004  and focus on this. we will send you pm data. lets try to debug this
-issues we hypothesis: humidity and salt along the near shore area.
-
-**** clouds - focus on Mexico - Allan
-uncertainty and adjacency mask don’t help that much
-our additional filtering (spatial filter for high variance);
-there are long gaps with no data 
-versions and datasets - when is the “new” version coming
-using Terra with Aqua
-
-**** if time available: 
-talk about Austraila
-talk about ratio and sea and land preformance
-composition 
-
-dataset for bad 0.00 R2 aod-pm 
-pm-aeronet
-email quan di about geoschem and send him PM monitors 
-
-** TODO lab website
-See what shiran has made out of it 
-** TODO new GIS presentation
-expand and talk about each course with slides
-
-* long term Misc
-** GIS Trac k
-    :PROPERTIES:
-    :ID:       836c5749-6059-4d98-9844-6611b7726cb9
-    :END:
-*** info 
-**** do you know the numbers/ration in other universities and abroad in geo departments?
-penn state is one of the leaders in GIS masters degree
-http://www.worldcampus.psu.edu/degrees-and-certificates/geographic-information-systems-gis-masters/courses
-All courses, including electives, are GIS-related
-**** split maybe into 2 tracks:
-***** work focused (non thesis):
-will admit even non GIS background people
-stress jobs at every level from high tech (google maps, waze etc) to municipalities, governmental (hevrat hasmal etc), education (teaching in colleges etc), urban and regional planning,environmental resource management,surveying etc
-***** academia focus- thesis as a focused GIS/geospatial track track
-plus advertise GIS services for EPI/Health/Archeology etc
-**** for Ba
-ideas for interest in GIS, send to TAL
-**** specialized courses
-Python programing
-modulebuilder
-Database development and use
-WebGIS/GIS servers
-SQL
-SAS
-R
-Open source GIS (OSM,GeoDA,GRASS (geo resources analysis suports systens),QGIS,GDAL,SciPy etc 
-Geospatial statistics
-GIS project managment
-Cartography and imaging software
-remote sensing
-*** meeting with tal
-**** program:
-non offical BA 
-offical MA we sign certificate
-look at existing courses and make the program more modern
-assign to each person in the geo informatics program (tal,eran,aviva) which courses they take and whats included.
-
-**** marketing 
-***** DONE email sagi langer about geoinformatics marketing
-      :PROPERTIES:
-      :ID:       ab06e34d-92f2-4914-9e87-a086a408d4cf
-      :END:
-***** Find better MA students that do Research
-**** relevant departments
--epi
--geology
--biology
-- sde noker mahcon lecheker hmdbar
--archeolgy
-- marachot media 
-- sociology
-- medical School
-- envinmontal engineering
-- computer engineering
-- neihol
--tourism (manegment faculty)
-**** mundaine missions
-***** TODO before start of uni year mifgash megama
-      :PROPERTIES:
-      :ID:       c243b581-4a00-42db-bf1f-b286c0437506
-      :END:
-- talk to student in the geoinformatics group and tell them which courses they need to take
-
-***** TODO meet first year students for BA
-      :PROPERTIES:
-      :ID:       d58d6dba-bf72-4343-a5a9-f4dfd6edddd9
-      :END:
-add some propaganda, Waze, python, work in high tech
-***** TODO before start of uni year mifgah with MA megama students
-      :PROPERTIES:
-      :ID:       648a0805-3737-4c38-a256-93627565d17e
-      :END:
--talk to sigalit to set a date and place for this meetings 
-- talk to student in the geoinformatics group that MA
-** Mapi Maagal project 
-Zipcode proxy
-** List of reviwers
+* Papers
+** List of reviewers
 *** jaime madrigano
-Madrigano, Jaime
-jm17@sph.rutgers.edu
-Rutgers School of public health
+ Madrigano, Jaime
+ jm17@sph.rutgers.edu
+ Rutgers School of public health
 *** Sara Adar 
-Office: M5539 SPH II     
-1415 Washington Heights 
-Ann Arbor, Michigan 48109-2029
-Office: 734-615-9207; Fax: 734-936-2084
-E-mail: sadar@umich.edu
+ Office: M5539 SPH II     
+ 1415 Washington Heights 
+ Ann Arbor, Michigan 48109-2029
+ Office: 734-615-9207; Fax: 734-936-2084
+ E-mail: sadar@umich.edu
 
-University of Michigan, School of public health
+ University of Michigan, School of public health
 *** greg Willenius
-Gregory A. Wellenius 
-gregory_Wellenius@brown.edu
-Epidemiology, Brown
+ Gregory A. Wellenius 
+ gregory_Wellenius@brown.edu
+ Epidemiology, Brown
 *** bob Wright
-Robert O. Wright
-Email: robert.wright@mssm.edu
-Mount sinai
-Department of Preventive Medicine
-#+END_SRC
+ Robert O. Wright
+ Email: robert.wright@mssm.edu
+ Mount sinai
+ Department of Preventive Medicine
+ #+END_SRC
 
 
 *** Kees de Hoogh 
-Scientific Collaborator Projects 
-Publications Email
-c.dehoogh@unibas.ch
-Phone
-+41 61 284 87 49
+ Scientific Collaborator Projects 
+ Publications Email
+ c.dehoogh@unibas.ch
+ Phone
+ +41 61 284 87 49
 *** Michael Brauer
-Professor
-Director, Bridge Program
-ScD (Harvard), BA (University of California-Berkeley)
-Contact Information
-Biography
-Teaching and Students
-Publications
-Research
-Rm 366A, 2206 East Mall
-Vancouver, BC V6T 1Z3
-phone: 604-822-9585
-fax: 604-822-4994
-michael.brauer@ubc.ca
+ Professor
+ Director, Bridge Program
+ ScD (Harvard), BA (University of California-Berkeley)
+ Contact Information
+ Biography
+ Teaching and Students
+ Publications
+ Research
+ Rm 366A, 2206 East Mall
+ Vancouver, BC V6T 1Z3
+ phone: 604-822-9585
+ fax: 604-822-4994
+ michael.brauer@ubc.ca
 *** Jeremy SarnatJeremy Sarnat
 
-Emory, Rollins school of public health  
-Contact: 
-404-727-5692 (Melva Robertson, media relations) office
-melva.robertson@emory.edu
+ Emory, Rollins school of public health  
+ Contact: 
+ 404-727-5692 (Melva Robertson, media relations) office
+ melva.robertson@emory.edu
 ** How to write BGU in papers
-Ben Gurion University of the Negev
+ Ben Gurion University of the Negev
 ** Journal statistics IF etc
 *** 2014
 **** chronobiology international
@@ -1953,58 +1513,3 @@ Ben Gurion University of the Negev
 **** american journal of Epidemiology 
 (IF= 4.9 ; Q1 public, environmental & occupational health, 11  of 162 )
 
-** GIT program
-*** BA
-| course                                 | nakaz |
-| intro                                  |     3 |
-| Lab                                    |     3 |
-| 3d                                     |     3 |
-| Qgis                                   |     3 |
-| image proccesing                       |     3 |
-| Macam                                  |     3 |
-| arnon karnieli- into to remote sensing |     3 |
-| virtual geog                           |     3 |
-
-*** MA
-| course                             | nakaz |
-| spatial editing (gis for planners) |     3 |
-| geostatistics                      |     3 |
-| python                             |     3 |
-| gis modeling                       |     3 |
-| sql                                |     2 |
-| hyperspectral                      |     3 |
-| avinoam                            |     2 |
-| JS                                 |     3 |
-
-** MA publishing award
--every MA student that will submit to a international journal will get 1750 NIS (within the 2 offical MA years)
-- among students that got the paper published within the 2 years there will be a comitee which will award t\he best paper another 1750 NIS
-* misc
-** TODO check if we need to pay harel or healthy life insurance (see docs) and if we payed them already
-** Mount sainai
- what research field needed
- tenure track?> time to tenure, what are you judged on, stats
- teaching?
- whats exp expcted
- work loads
-
-** WD drive
-admin
-salar21
-** hfsp website
-ikloog@bgu.ac.il
-Salar2121
-** TODO my ftp
-add to keepass
-
-address: 132.72.152.204
-User: zftp
-pass:hsphbgu2014
-
-** Eran vanger layer- check chezch passport
-054-7525243
-where was grandpa born
-all documents available
-degrees
-place and time of marriage and documents
-* Mails

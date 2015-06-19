@@ -9759,7 +9759,7 @@ the normal output is in org mode tables. to get a classic R console output use:
 
 $Note- changing the :results argument to `value` is the same as omitting the argument completely, since 'value' is the default )$
 
-*** Passing data between code blocks (sessions)			        
+*** make R session persistant (sessions)			        
 Often in R, we will define functions or objects in one code block
 and want to use these objects in subsequent code blocks. However,
 each time we submit a code block using C-c C-c, org-mode is firing up
@@ -9779,6 +9779,24 @@ You simply use the :session argument to the org-mode source block.
 #+end_src 
 
 %tip- it is helpful to name the session, ₆In example₆ use :session R1%
+
+you can also name the session for the whole buffer
+We can give a name to the R session (let us say, my-r-session) that our Org buffer should be linked to by adding the following line at the top (in the preamble, that is).
+
+#+BEGIN_SRC R
+#+property: session my-r-session
+#+END_SRC
+
+*** Evaluating code during export
+By default, Org evaluates source code at the time of exporting. If your code involves a lot of computation, this can slow down exporting.
+
+In such cases, I do not evaluate all source blocks at the time of exporting. I evaluate them manually, one by one, using C-c C-c.
+
+Insert following line right at the top. Note, this has to be the first line of the buffer.
+#+BEGIN_EXAMPLE
+# -*- mode: org; org-export-babel-evaluate: nil -*-
+#+END_EXAMPLE
+If your buffer has this line, the source code is not evaluated at the time of export, and whatever already exists in #+RESULTS block is exported.
 
 ** Grphical output
 *** Inserting R graphical output 
@@ -9835,11 +9853,59 @@ several things to notice.
 use 'org-babel-execute-buffer' or  'org-babel-execute-subtree' 
 ** tangeling
 *** intro
+%Tip-  make sure you save the file before tangeling %
+
+`org-babel-tangle`
+Tangle the current file. Bound to C-c C-v t.
+With prefix argument only tangle the current code block. 
+
+`org-babel-tangle-file`
+Choose a file to tangle. Bound to C-c C-v f.
+
+Hooks:
+
+`org-babel-post-tangle-hook`
+
+This hook is run from within code files tangled by org-babel-tangle. Example applications could include post-processing, compilation or evaluation of tangled code files.
+
+*** Header arguments
+:tangle no
+The default. The code block is not included in the tangled output. 
+
+:tangle yes
+Include the code block in the tangled output. The output file name is the name of the org file with the extension ‘.org’ replaced by the extension for the block language. 
+
+:tangle filename
+Include the code block in the tangled output to file ‘filename’.
+*** Tangeling the full document
+use a property drwaer in the top level header (*)
+like this:
+
+#+BEGIN_EXAMPLE
+'*' TOPLEVEL 
+    :PROPERTIES:
+    :tangle:  yes
+    :comments: org
+    :END:
+#+END_EXAMPLE
+*** type of comments are exported:
+
+#+BEGIN_EXAMPLE
+no- retains its behavior of not tangling any comments 
+
+yes-retains its behavior of wrapping the code in links back to the original org-mode file 
+
+link- is synonymous with "yes" 
+
+org- does not wrap the code in links back to the original org file, but does include preceding text from the org-mode file as a comment before the code block 
+
+both-turns on both the "link" and "org" options 
+#+END_EXAMPLE
+and the output file in the ':tangle' part
 *** Tangling the document for selective code blocks 
 Now that we have seen how to instruct org-mode how to produce source code files from our org-mode document, how do we actually tangle the document?
 
 We simply have to call the 'org-babel-tangle' function, bound by default to ?C-c C-v C-t?
-
 to do this you will need to have a the tangle switch in each code block 
 #+BEGIN_SRC emacs-lisp :results none
 :tangle yes
@@ -9853,38 +9919,6 @@ to do this you will need to have a the tangle switch in each code block
 ;Include the code block in the tangled output to file ‘filename’. 
 #+END_SRC								    
 								  
-*** Tangeling the full document
-
-use a property drwaer in the top level header (*)
-
-like this:
-
-#+BEGIN_SRC emacs-lisp :results none
-`*` Toplevel
-    :PROPERTIES:
-    :comments: org
-    :tangle:   comments.r
-    :END:
-#+END_SRC
-
-you can specify which type of comments are exported:
-
-#+BEGIN_EXAMPLE
-
-no
-    retains its behavior of not tangling any comments 
-yes
-    retains its behavior of wrapping the code in links back to the original org-mode file 
-link
-    is synonymous with "yes" 
-org
-    does not wrap the code in links back to the original org file, but does include preceding text from the org-mode file as a comment before the code block 
-both
-    turns on both the "link" and "org" options 
-#+END_EXAMPLE
-
-and the output file in the ':tangle' part
-
 * dplyr
 ** @warning-plyr will screw with dplyr results so be careful when loading both@
 in general you should load plyr first and then dplyr
@@ -10628,4 +10662,5 @@ gestwide[1,1:10, with = F]
 
 
  
+
 

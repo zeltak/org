@@ -4,12 +4,79 @@
 #+LaTeX_CLASS_OPTIONS: [garamond]
 
 
-* @TODAY@
+* @TODAY@							  :CANCELLED:
+** org revison
+*** TODO todo
+create todos based on tags and TODO
+for example todo with allan (tag)
+*** calander
+*** email
+*** refrence library
+**** helm-bibtex
+exclude search items
+₆In example₆ 
+xebar - in progress 
+(I want to exclude in progress articles not published yet)
+**** org-ref- to insert citations
+https://github.com/jkitchin/org-ref/blob/master/org-ref.org
+
+jmax-bibtex-hydra/body
+
+**** reftex?
+http://tex.stackexchange.com/questions/18848/workflow-for-managing-references/18855#18855
+**** biber?
+look into how to convert to biber
+**** biblatex 							  :CANCELLED:
+**** bib2bib
+http://www.cse.msu.edu/~cse914/F02/Public/Papers/Bibtex/bibtex2html-doc.htm
+*** revise leuven for better agenda/TODO color scheme
+*** R
+**** update template to use codeblock name
+also see:
+On top of the line starting with #+RESULTS:, we shall add two more lines, to give the table a title and a name. Note that both the code block and the result of the code block have separate names.
+#+NAME: bmi-table-output
+#+CAPTION: Average BMI, by country
+#+RESULTS: bmi-table-code
+**** Code blocks that produce a graph to be included in the document
+
+These code blocks can have a series of commands. The last command produces a graph that we would like to be included in the document.
+
+The following code shows an example of a code block that produces a graph.
+
+#+NAME: mygraph-code
+#+BEGIN_SRC R :results output graphics :file bmi2.png :width 825 :height 1050 :fonts serif
+
+#+END_SRC
+As before, for creating your graph, you first write the #+NAME, BEGIN_SRC and the END_SRC lines, and then go into a temporary ESS buffer by using C-c ‘.
+
+Once in this temporary ESS buffer, you can write the R commands for making your graph.
+As you write, you can evaluate the commands using C-j, C-r and C-b and see what your output looks like.
+The output is displayed on your screen using the default graphic device used by R (X11, quartz or windows graphic device depending upon your operating system).
+Once you have finalised your graph, you press C-c ’ and come back to the Org buffer.
+Note that creation of the image file is left to appropriate switches in the #+BEGIN_SRC line. Org automatically chooses appropriate graphic device to produce the file. When you evaluate this code using C-c C-c, the results are displayed below the code block as follows.
+
+#+RESULTS: mygraph-code
+[[bmi2.png]]
+Note that, taking the file name from our #+BEGIN_SRC line, a file called bmi2.png was automatically created and linked, so that the graph would be inserted in the document when you produce the formatted output.[fn:5] Every time you evaluate the code using C-c C-c, the underlying image file containing the graph is overwritten by a new file.
+
+As with the tables, we shall add a caption and a name to it as follows
+
+#+NAME: my-bmi-graph
+#+CAPTION: Average BMI, by Country
+#+RESULTS: mygraph-code
+[[gini.png]]
+You can now refer to this graph in the text using [[my-bmi-graph]].
+
+** look at  org sh links
+[[shell:sudo%20pacman%20-Syu][http://orgmode.org/manual/External-links.html#External-links
+
+shell:sudo pacman]] 
+** screen blanking 
+loQok at 
+xset dpms 600
+
 ** TODO rofi
 wait 2 seconds and if no input launch app
-** DONE [#A] test agenda
-   DEADLINE: <2015-06-24 Wed> SCHEDULED: <2015-06-20 Sat>
-
 ** screen saver time length by location (IP)
 ** i3 revise
 *** TODO have win+grave cycle through clients of same type
@@ -464,9 +531,11 @@ http://www.filebot.net/forums/viewtopic.php?f=8&t=2335&p=13416&hiilt=qnap#p13416
 ** flexget  
 
 
-** djiet
-** 16.5 
+** 16.5 weight  
 83.3
+**  [[https://github.com/djcb/sauron][djcb/sauron - https://github.com/]][[https://github.com/djcb/sauron][djcb/sauron - https://github.com/]]
+
+
 * Linux
 ** Org
 *** TODO Chain babel blocks, ₆In example₆ launch multiple blocks togheter 
@@ -1019,6 +1088,8 @@ comment _;_ // comment _t_o line // comment para_g_raph // co_p_y-paste-comment
 
 #+RESULTS:
 | defun | hydra-commenting/hint | nil | (if hydra-lv (lv-message (concat (format comment _;_ // comment %so line // comment para%sraph // co%sy-paste-comment |
+
+
 
 
 
