@@ -12,15 +12,43 @@ for example todo with allan (tag)
 *** calander
 *** email
 *** refrence library
+**** change and clean lib
+change key to exclude ()
+clean umicode
 **** helm-bibtex
-exclude search items
-₆In example₆ 
-xebar - in progress 
-(I want to exclude in progress articles not published yet)
+***** exclude search items
+ ₆In example₆ 
+ xebar - in progress 
+ (I want to exclude in progress articles not published yet)
+
+***** define default enter command
+***** open in Emacs PDF viwer
+
+***** TODO create filed for projects? maybe use the tag field?
 **** org-ref- to insert citations
 https://github.com/jkitchin/org-ref/blob/master/org-ref.org
+check out:
+***** jmax-bibtex-hydra/body
+***** TODO org-ref-clean-bibtex-entry
 
-jmax-bibtex-hydra/body
+figure this out 
+***** COMMENT workflow
+C-] 
+org-ref-helm-insert-cite-link
+to insert ref into orgmode buffer 
+
+clicking/C-c o on a link will give you a helm buffer with options 
+
+for multiple cites just use C-space in the helm buffer to choose
+
+shift-arrows move around
+
+org-ref-sort-citation-link will sort by year
+
+org-ref-extract-bibtex-entries to create a list of all cites used in document
+
+org-ref
+to check buffer for ref issues and a menu of org-ref options 
 
 **** reftex?
 http://tex.stackexchange.com/questions/18848/workflow-for-managing-references/18855#18855
@@ -29,6 +57,10 @@ look into how to convert to biber
 **** biblatex 							  :CANCELLED:
 **** bib2bib
 http://www.cse.msu.edu/~cse914/F02/Public/Papers/Bibtex/bibtex2html-doc.htm
+**** cb2Bib
+**** bibtool
+http://www.gerd-neugebauer.de/software/TeX/BibTool/index.en.html
+generate keys?
 *** revise leuven for better agenda/TODO color scheme
 *** R
 **** update template to use codeblock name
@@ -1088,6 +1120,7 @@ comment _;_ // comment _t_o line // comment para_g_raph // co_p_y-paste-comment
 
 #+RESULTS:
 | defun | hydra-commenting/hint | nil | (if hydra-lv (lv-message (concat (format comment _;_ // comment %so line // comment para%sraph // co%sy-paste-comment |
+
 
 
 
