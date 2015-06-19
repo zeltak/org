@@ -29615,8 +29615,45 @@ In a helm-M-x session, if you type any prefix argument, it will be visible, i.e.
 ********** change color of modline matches
 change this variable wither in theme or with M-x > customize faces 
 #+BEGIN_EXAMPLE
-
+;;modline color for helm inof there
+`(helm-candidate-number ((,class (:foreground "green" :background "#073642")))) 
 #+END_EXAMPLE
+********** custom helm-bibtex search 
+example :
+
+#+BEGIN_SRC elisp
+;; Define helm-search with predefined search expression:
+(defun helm-bibtex-my-publications ()
+  "Search BibTeX entries authored by Xebar Sara."
+  (interactive)
+  (helm :sources '(helm-source-bibtex)
+        :full-frame t
+        :input "xebar saram"
+        :candidate-number-limit 500))
+
+;; Bind this search function to Ctrl-x p:
+;(global-set-key (kbd "C-x p") 'helm-bibtex-my-publications)
+#+END_SRC
+********** search on custom keywords
+from dev email
+
+I use two BibTeX fields to tag entries: “keywords” for keywords
+describing the content of the paper (as usual) and “tags” for meta
+data.  Values that I use in tags are “own”, “manuscript”, “poster”,
+“talk”, … So if I want a list of all articles in progress, I search for
+“own manuscript”.  Since the tags field is non-standard, it has to be
+added to `helm-bibtex-additional-search-fields`.
+
+Another solution would be to use the pubstate field and to search for
+your name and “forthcoming” (add pubstate to
+helm-bibtex-additional-search-fields for this to work).
+
+in my example I add to my *.bib file a `tags` filed. then I add this to my helm-bibtex config
+
+#+BEGIN_EXAMPLE
+(setq helm-bibtex-additional-search-fields '(tags))
+#+END_EXAMPLE
+
 ********* google-contacts
 
 http://julien.danjou.info/projects/emacs-packages#google-contacts
@@ -30181,6 +30218,15 @@ You can then retrieve your e-mail using M-x mu4e-update-mail-and-index, or C-S-u
 ~C~ compose  
 
 ~O~ sort 
+********* pdf-tools
+https://github.com/politza/pdf-tools
+********** install 
+he package may be installed via melpa and it will try to build the server part when it is actiated the first time, though next section is still relevant
+
+in arch you will need all the dev packages as well as poppler and imagemagick
+
+once you install from melpa, use M-x `pdf-tools-install` and hopefully it will start installing the server 
+
 ******* registers
 ******** basics
 
