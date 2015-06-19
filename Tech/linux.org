@@ -25141,6 +25141,19 @@ to enable simple use of the mouse--only single clicks are supported. The normal 
 ******** start with systemd 
 look at the systemd entery [[id:6e5c769c-0f97-4001-8ce7-c19acdd8ce89][setup emacsclient as a systemd unit in Arch]]
 
+******* `sync between laptop and work pc`
+pull latest Emacs from repo github. if you get an error just overwrite local Emacs with this git command
+
+#+BEGIN_SRC sh
+git fetch
+git reset --hard origin/master
+#+END_SRC
+
+then zip the file:~/.Emacs.d/elpa and file:~/Emacs.g folder and move them to work pc
+extract them into respective places 
+
+delete the setting.el before restarting
+
 ******* saving/closing emacs
 ******** base 
 Save To save file: press Ctrl+x, then Ctrl+s.
@@ -28333,7 +28346,7 @@ To record keystrokes use:
 
 ?M-x start-kbd-macro?
 
-to end. If you made a mistake, you can cancel  ?Ctrl+g? (keyboard-quit) and start over.
+If you made a mistake, you can cancel  ?Ctrl+g? (keyboard-quit) and start over.
 
 ********** to stop the macro
 
@@ -31147,6 +31160,78 @@ When visiting an Org file, in what folding state do I first want to see it? Many
 org-archive-location
 When archiving an entry, where will it go?
 
+******* table 
+******** find which row/column your in
+ The easiest way to learn about references is to type C-c ? while you are in a field.
+
+ For example, if you are in the [Formula] field, C-c ? will tell you: line @2, col $4, ref @2$4 or D2, meaning that you are on the second row (or line) of the fourth column, and the reference for this field is either @2$4 or D2.
+
+ At any moment, if you are lost in rows and columns, you can always turn on the reference visualization grid with C-c }:
+******** base formula creation 
+ Put the cursor in the (empty) [Formula] field. Now type :=vmean($2..$3) in this field. This formula means: calculate the mean for fields from the second ($2) to the third ($3) field in this row. If you prefer to use the other notation, type :=vmean(B&..C&) – where the & character stands for "in this row", which is implicit in the previous notation.
+
+ While still in the row, hit C-c C-c – you should observe two things: 1) the formula has been replaced by the result of the calculation and 2) a new line starting with #+TBLFM has been inserted at the bottom of the table.
+
+ The #+TBLFM line contains all the formulas for the table above, and you should be careful while editing it manually.
+
+******** example for sum rows (lines)
+
+ #+BEGIN_EXAMPLE
+ | name   | expense |   total |
+ | Eshel  | 74*8    |     592 |
+ | Flight |         |  396.56 |
+ | Hotel  |         |  679.45 |
+ | travel |         |     180 |
+ | total  |         | 1848.01 |
+ |        |         |         |
+ #+TBLFM: @6$3=vsum(@2..@5)
+ #+END_EXAMPLE
+ here we sum all expenses in each name line
+
+******** Column formulas and field formulas
+
+Ok, so now we have this table:
+
+| Student  | Maths | Physics | Mean |
+|----------+-------+---------+------|
+| Bertrand |    13 |      09 |   11 |
+| Henri    |    15 |      14 |      |
+| Arnold   |    17 |      13 |      |
+#+TBLFM: @2$4=vmean($2..$3)
+But what we really want is to compute the formulas for all fields in the column named "Mean". In other words, we really want a column formula, not a field formula.
+
+To replace the formula with a column formula, go back to the field where it has been defined and type =vmean($2..$3). Note that the only difference with what you've inserted previously is that the formula is prefixed by = instead of :=. When you're done, do a C-c C-c in the field: you should be prompted whether you want to replace the formula with a column formula, which is precisely what we want.
+
+Once you agree with this, the value in the field should be the same than before (namely 11) and you can now update all the fields in this column by reapplying all formulas with C-u C-c * (or C-c C-c if you're on the #+TBLFM line.)
+
+So now we have this table:
+
+| Student  | Maths | Physics | Mean |
+|----------+-------+---------+------|
+| Bertrand |    13 |      09 |   11 |
+| Henri    |    15 |      14 | 14.5 |
+| Arnold   |    17 |      13 |   15 |
+#+TBLFM: $4=vmean($2..$3)
+As our single formula in #+TBLFM now applies to the entire column, it doesn't contain any reference to a row. The formula was previously applied for the @2$4 field, and it is now applied for the $4 column.
+
+Finally, we can add the row for the means per discipline. This row contains two field formulas, each one calculating the mean for the fields above in the same column:
+
+| Student  | Maths | Physics | Mean |
+|----------+-------+---------+------|
+| Bertrand |    13 |      09 |   11 |
+| Henri    |    15 |      14 | 14.5 |
+| Arnold   |    17 |      13 |   15 |
+|----------+-------+---------+------|
+| Means    |    15 |      12 |      |
+#+TBLFM: $4=vmean($2..$3)::@5$2=vmean(@2$2..@4$2)::@5$3=vmean(@2$3..@4$3)
+Which brings up this table:
+
+Student	Maths	Physics	Mean
+Bertrand	13	09	11
+Henri	15	14	14.5
+Arnold	17	13	15
+Means	15	12	 
+
 ******* file wide definitions 
 ******** Categories
 The category is a broad label assigned to each agenda item. By default, the category is simply derived from the file name, but you can also specify it with a special line in the buffer, like this1:
@@ -32958,6 +33043,16 @@ org-gcal-sync
 #+END_SRC
 
 Sync between Org and Gcal. before syncing, execute org-gcal-fetch .
+
+*** LateX
+**** intro
+`bibtex` and `biber` are external programs that process bibliography information and act (roughly) as the interface between your .bib file and your LaTeX document
+
+`natbib` and `biblatex` are LaTeX packages that format citations and bibliographies; natbib works only with bibtex, while biblatex (at the moment) works with both bibtex and biber.)
+
+we tend to use the term bibtex file to refer to the .bib file itself, which leads to the assumption that tools that manipulate .bib files are only available to bibtex users and not biber users. This is simply not the case: tools designed for manipulating .bib files such as reference managers and various .bib file generation/manipulation tools can be used.
+
+It is the case, however, that as you transition to using all the features of biber/biblatex you may find certain differences in the .bib files become more relevant.
 
 *** sublime text
 

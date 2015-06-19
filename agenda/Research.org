@@ -1,7 +1,7 @@
 #+TITLE: Research 
 #+TODO: TODO(t) EXP(e) | SUBMITTED(s) K_TRACK(k) PAUSED(p) DONE(d) 
 #+CATEGORY: work
-#+TAGS:  first(f) read_only(r) 
+#+TAGS:  first(f) read_only(r) allan(a) 
 #+STARTUP: overview  inlineimages eval: (org-columns)
 #+PRIORITIES: A
 #+OPTIONS: toc:nil 
@@ -476,9 +476,9 @@ later if we get grant money we can build a server+NAS some centralized location
 **** GEOSCehm integration
 ** italy temperature models
 *** Ideas
-tmin tmax
-use 4 measuremtns per day and use aqua and terra
-talk to brent of a method to to a sophisticated way to impute t from aqua and terra
+tmin tmax use 4 measuremtns per day and use aqua and terra talk to
+brent of a method to to a sophisticated way to impute t from aqua and
+track`
 ** Israel temperature models (LST-ta)- Aaar Rozenfeld
 *** different calibration methids 
 *** comparing the wrf model in israel to our model as part of the methods paper
@@ -491,42 +491,6 @@ talk to brent of a method to to a sophisticated way to impute t from aqua and te
 antonella dosent have sulfate data, is it from EPA data website?
 - specification data from antonella
 -also email choon min
-** alexandra
-*** TODO assign shiran to download data
-    :PROPERTIES:
-    :ID:       7441f396-72a0-4841-9c82-8339fe13f1d1
-    :END:
-ask alexandra about this in next weeks meeting 
-*** Alexandra meetings
-**** methods paper 10x10 Vs 1x1k etc
-comparing multiple resolution models to better charecterize fine particulate matter in urban Environments:
-years 2003-2008
-Boston, Worcster, NYC, Newark
-4 rural
-
--fig 1: 10x10 NE usa 10x10 and 1x1km NE USA
--plot 2: box plot of true pm and pm 10km vs 1km per ( and maybe 200) city and by season
-range of true PM, pred 10, pred 1-check ranges in each 
--plot 3: distances from main roads and/or urban rings and levels of PM: take NYC and boston and see how much the levels of pm go down for each few km's from the city: downtown, surrondings area, outer core , rural
--plot 4: transported pm by trajectories and thresholds
--discussion: show how you might underestimate the health effect (exposure bias)
-maiac is similar to modis but much more obsrv with more variability
-
-
-comparing rural vs urban areas, comparing cities by decreasing populations
-comparing 10x10,3x3,1x1,200x200
-X-city size or popultaion  and scale Y-PM and create 3 box plots 10,1,200
-season-same as above
-range of variablilty of 1x1m pixels within a 10x10km model.
-figures:
-fig 1: 10x10 vs 1x1km for 2003-2008
-fig 2: box plot city/pop vs pm
-fig 3- going further from A1 roads and PM levels
-
-*** 2004-current OMI 
-**** no2 modles
-**** O3 models
-**** So2 models
 ** Multi Pollutant project-living in the modern environment (with Jamie)
 *** meeting with jamie
 **** 15.7.2013 prepare MA datasets of temp,PM,NDVI,SES stuff and other perhaps to prepare to the regression tree
@@ -721,6 +685,16 @@ file:
  -This can be done with using ArcGis and mihye already has experience of doing that
 ***** Meris satellite
  Data from european sattelite - We here in my Lab are looking into this and possible future applications
+
+** storke and PM10 in israel
+*** TODO ask allan abour long term analysis glmpql cells with 0	      :allan:
+** Swiss MAIAC model
+*** info filer
+id:a2dffbf3-49ef-4fac-ad21-47a2d72a144c
+*** code
+file:
+*** meetings
+*** TD
 
 * Future Project Ideas
 ** PM model (NEXT BRANCH)
@@ -1192,6 +1166,38 @@ discrepancies between these measurements, it's worth analyzing the contribution 
 satellite-borne RH profile and maybe find a RH correction factor to use in PM prediction 
 
 models.
+** alexandra
+*** Alexandra meetings
+**** methods paper 10x10 Vs 1x1k etc
+comparing multiple resolution models to better charecterize fine particulate matter in urban Environments:
+years 2003-2008
+Boston, Worcster, NYC, Newark
+4 rural
+
+-fig 1: 10x10 NE usa 10x10 and 1x1km NE USA
+-plot 2: box plot of true pm and pm 10km vs 1km per ( and maybe 200) city and by season
+range of true PM, pred 10, pred 1-check ranges in each 
+-plot 3: distances from main roads and/or urban rings and levels of PM: take NYC and boston and see how much the levels of pm go down for each few km's from the city: downtown, surrondings area, outer core , rural
+-plot 4: transported pm by trajectories and thresholds
+-discussion: show how you might underestimate the health effect (exposure bias)
+maiac is similar to modis but much more obsrv with more variability
+
+
+comparing rural vs urban areas, comparing cities by decreasing populations
+comparing 10x10,3x3,1x1,200x200
+X-city size or popultaion  and scale Y-PM and create 3 box plots 10,1,200
+season-same as above
+range of variablilty of 1x1m pixels within a 10x10km model.
+figures:
+fig 1: 10x10 vs 1x1km for 2003-2008
+fig 2: box plot city/pop vs pm
+fig 3- going further from A1 roads and PM levels
+
+*** 2004-current OMI 
+**** no2 modles
+**** O3 models
+**** So2 models
+
 ** Future exposure models 
    :PROPERTIES:
    :ID:       03c79a3e-10b4-4295-b91f-d0c4f38e9497
