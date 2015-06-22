@@ -5,6 +5,7 @@
 
 
 * @TODAY@							  :CANCELLED:
+
 ** org revison
 *** TODO todo
 create todos based on tags and TODO
@@ -99,6 +100,9 @@ As with the tables, we shall add a caption and a name to it as follows
 [[gini.png]]
 You can now refer to this graph in the text using [[my-bmi-graph]].
 
+*** org capture 
+** hydra requests
+*** TODO request custom color for commands (make it more visible)
 ** look at  org sh links
 [[shell:sudo%20pacman%20-Syu][http://orgmode.org/manual/External-links.html#External-links
 
@@ -1118,8 +1122,7 @@ comment _;_ // comment _t_o line // comment para_g_raph // co_p_y-paste-comment
                       ("q" nil "cancel"))))
 #+END_SRC
 
-#+RESULTS:
-| defun | hydra-commenting/hint | nil | (if hydra-lv (lv-message (concat (format comment _;_ // comment %so line // comment para%sraph // co%sy-paste-comment |
+
 
 
 
