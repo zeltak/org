@@ -51,6 +51,11 @@ this is the one we ended up using
  #added
 +(1+aod|day/cid))  #0.745
   #+END_SRC 
+**** mod1 formula with time effects
+this is the one we ended up using 
+  #+BEGIN_SRC R  :session Rorg  :results none
+ m1.formula <- as.formula(pm25 ~aod+m +(1+aod|day)+(1+m|aodid))  #0.745
+  #+END_SRC 
 **** raw formula 
 
 #+BEGIN_SRC R  :session Rorg  :results none
@@ -365,9 +370,9 @@ mod2 <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.A
   mod2[, pred.m2 := predict(object=m1_sc,newdata=mod2,allow.new.levels=TRUE,re.form=NULL)]
   #summary(mod2$pred.m2)
   #delete implossible values
-  mod2 <- mod2[pred.m2 > 0.00000000000001 , ]
-  mod2 <- mod2[pred.m2 < 200   , ]
-  saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.PM25.predm2.rds")
+ # mod2 <- mod2[pred.m2 > 0.00000000000001 , ]
+ # mod2 <- mod2[pred.m2 < 200   , ]
+ # saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.PM25.predm2.rds")
   gc()
 #+END_SRC 
 
@@ -649,4 +654,17 @@ mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
 #+BEGIN_SRC R  :session Rorg  :results none
 keep(rmse,splitdf, sure=TRUE) 
 gc()
+#+END_SRC 
+
+
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+aod<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/AOD.AQ.2003.rds")
+
+aqua <- aod %>%
+    group_by(aodid,day) %>%
+    summarise(long_aod=mean(long_aod),lat_aod=mean(lat_aod),aod=mean(aod),UN=mean(UN),QA=mean(QA),Year=mean(Year) )
+
+write.csv(aqua,"~/ZH_tmp/aq1tsts.csv")
 #+END_SRC 

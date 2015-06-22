@@ -533,7 +533,19 @@ mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
    ggtitle("Long term predictions")
  P1
 
- 
 
+#bestprmap
+ m3d_agg <- (mod3best[, list(LTPM =mean(pred.m2, na.rm = TRUE), 
+                         utmx = long_aod[1], #use the first long and lat (by aodid)
+                         utmy = lat_aod[1]),by = aodid])  
+ P1 <- ggplot(m3d_agg, aes(utmx, utmy, color = LTPM)) + 
+   geom_point(size = 4, shape = 15) + 
+   xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
+   scale_colour_gradientn("long term PM2.5 prediction", colours = rainbow(10)) + #c("purple", "blue", "white", "red", "orange")) + 
+   theme_bw() + 
+   ggtitle("Long term predictions")
+ P1
+ 
+write.csv(m3d_agg,"~/ZH_tmp/ddss.csv")
 keep(rmse,splitdf, sure=TRUE) 
 gc()
