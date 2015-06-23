@@ -33100,6 +33100,7 @@ Sync between Org and Gcal. before syncing, execute org-gcal-fetch .
 
 *** LateX
 **** intro
+***** bib
 `bibtex` and `biber` are external programs that process bibliography information and act (roughly) as the interface between your .bib file and your LaTeX document
 
 `natbib` and `biblatex` are LaTeX packages that format citations and bibliographies; natbib works only with bibtex, while biblatex (at the moment) works with both bibtex and biber.)
@@ -33108,6 +33109,369 @@ we tend to use the term bibtex file to refer to the .bib file itself, which lead
 
 It is the case, however, that as you transition to using all the features of biber/biblatex you may find certain differences in the .bib files become more relevant.
 
+***** Files You Might Encounter
+When you work with L A TEX you will soon find yourself in a maze of files
+with various extensions and probably no clue. The following list explains the
+various file types you might encounter when working with TEX. Please note
+that this table does not claim to be a complete list of extensions, but if you
+find one missing that you think is important, please drop me a line.
+
+.tex L A TEX or TEX input file. Can be compiled with latex.
+
+.sty L A TEX Macro package. Load this into your L A TEX document using the
+\usepackage command.
+
+.dtx Documented TEX. This is the main distribution format for L A TEX style
+files. If you process a .dtx file you get documented macro code of the
+L A TEX package contained in the .dtx file.
+
+.ins The installer for the files contained in the matching .dtx file. If you
+download a L A TEX package from the net, you will normally get a .dtx
+and a .ins file. Run L A TEX on the .ins file to unpack the .dtx file.
+
+.cls Class files define what your document looks like. They are selected
+with the \documentclass command.
+
+.fd Font description file telling L A TEX about new fonts.
+The following files are generated when you run L A TEX on your input file:
+
+.dvi Device Independent File. This is the main result of a L A TEX compile
+run. Look at its content with a DVI previewer program or send it to a
+printer with dvips or a similar application.
+
+.log Gives a detailed account of what happened during the last compiler
+run.
+
+.toc Stores all your section headers. It gets read in for the next compiler
+run and is used to produce the table of contents.
+
+.lof This is like .toc but for the list of figures.
+
+.lot And again the same for the list of tables.
+
+.aux Another file that transports information from one compiler run to the
+next. Among other things, the .aux file is used to store information
+associated with cross-references.
+
+.idx If your document contains an index. L A TEX stores all the words that
+go into the index in this file. Process this file with makeindex. Refer
+to section 4.3 on page 86 for more information on indexing.
+
+.ind The processed .idx file, ready for inclusion into your document on the
+next compile cycle.
+
+.ilg Logfile telling what makeindex did.
+
+**** structure
+***** Special Characters
+The following symbols are reserved characters that either have a special
+meaning under L A TEX or are not available in all the fonts. If you enter them
+directly in your text, they will normally not print, but rather coerce L A TEX
+to do things you did not intend.
+#+BEGIN_EXAMPLE
+# $   %  ^ & _ {} ~ \ 
+
+#+END_EXAMPLE
+As you will see, these characters can be used in your documents all the
+
+same by using a prefix backslash:
+
+\# \$ \% \^{} \& \_ \{ \} \~{} \textbackslash
+
+The other symbols and many more can be printed with special commands
+in mathematical formulae or as accents. 
+
+$Note$ The backslash character \ can not be entered by adding another backslash in front of it (\\); this sequence is used for line breaking. Use the \textbackslash command instead.
+***** LATEX Commands
+LATEX commands are case sensitive, and take one of the following two formats:
+• They start with a backslash \ and then have a name consisting of
+letters only. Command names are terminated by a space, a number or
+any other ‘non-letter.’
+• They consist of a backslash and exactly one non-letter.
+• Many commands exist in a ‘starred variant’ where a star is appended
+to the command name.
+L A TEX ignores whitespace after commands. If you want to get a space after
+a command, you have to put either an empty parameter {} and a blank or a
+special spacing command after the command name. The empty parameter
+{} stops L A TEX from eating up all the white space after the command name.
+New \TeX users may miss whitespaces after a command. `%` renders wrong Experienced \TeX{} users are \TeX perts, and know how to use whitespaces. 
+% renders correct
+
+Some commands require a parameter, which has to be given between
+curly braces { } after the command name. Some commands take optional
+parameters, which are inserted after the command name in square brack-
+ets [ ].
+
+#+BEGIN_EXAMPLE
+\command[optional parameter]{parameter}
+#+END_EXAMPLE
+
+the next examples use some L A TEX commands. Don’t worry about them; they will be explained later.
+
+***** Comments
+When L A TEX encounters a % character while processing an input file, it ignores
+the rest of the present line, the line break, and all whitespace at the beginning
+of the next line.
+This can be used to write notes into the input file, which will not show
+up in the printed version.
+
+The % character can also be used to split long input lines where no whitespace or line breaks are allowed. For longer comments you could use the comment environment provided by
+the verbatim package. Add the line 
+#+BEGIN_EXAMPLE
+\usepackage{verbatim}
+#+END_EXAMPLE
+
+to the preamble of your document as explained below to use this command.
+
+This is another
+#+BEGIN_EXAMPLE
+\begin{comment}
+rather stupid,
+but helpful
+\end{comment}
+
+#+END_EXAMPLE
+***** Input File Structure
+When L A TEX 2ε processes an input file, it expects it to follow a certain
+structure. Thus every input file must start with the command
+
+\documentclass{...}
+
+This specifies what sort of document you intend to write. After that, add
+commands to influence the style of the whole document, or load packages
+that add new features to the L A TEX system. To load such a package you use
+the command
+
+\usepackage{...}
+
+When all the setup work is done,4 you start the body of the text with
+the command
+
+\begin{document}
+
+Now you enter the text mixed with some useful L A TEX commands. At
+the end of the document you add the
+
+\end{document}
+
+command, which tells L A TEX to call it a day. Anything that follows this
+command will be ignored by L A TEX.
+
+***** Document Classes
+The first information L A TEX needs to know when processing an input file is
+the type of document the author wants to create. This is specified with the
+\documentclass command.
+
+#+BEGIN_EXAMPLE
+\documentclass[options]{class}
+#+END_EXAMPLE
+
+Here class specifies the type of document to be created. Table 1.1 lists the
+document classes explained in this introduction. The L A TEX 2ε distribution
+provides additional classes for other documents, including letters and slides.
+The options parameter customises the behaviour of the document class. The
+options have to be separated by commas. 
+
+Example: An input file for a L A TEX document could start with the line
+
+#+BEGIN_EXAMPLE
+\documentclass[11pt,twoside,a4paper]{article}
+#+END_EXAMPLE
+
+which instructs L A TEX to typeset the document as an article with a base
+font size of eleven points, and to produce a layout suitable for double sided
+printing on A4 paper.
+
+`Document Class Options.`
+
+10pt, 11pt, 12pt
+Sets the size of the main font in the document. If no
+option is specified, 10pt is assumed.
+
+a4paper, letterpaper, 
+Defines the paper size. The default size is letterpaper. Besides that, a5paper, b5paper, executivepaper, and legalpaper can be specified.
+
+
+fleqn
+Typesets displayed formulae left-aligned instead of centred.
+leqno Places the numbering of formulae on the left hand side instead of
+the right.
+
+
+titlepage, notitlepage
+ Specifies whether a new page should be started
+after the document title or not. The article class does not start a
+new page by default, while report and book do.
+
+
+onecolumn, twocolumn
+ Instructs L A TEX to typeset the document in one
+column or two columns.
+twoside, oneside Specifies whether double or single sided output
+should be generated. The classes article and report are single sided
+and the book class is double sided by default. Note that this option
+concerns the style of the document only. The option twoside does not
+tell the printer you use that it should actually make a two-sided
+printout.
+
+
+landscape mode.
+Changes the layout of the document to print in landscape
+
+
+openright, openany
+ Makes chapters begin either only on right hand
+pages or on the next page available. This does not work with the
+article class, as it does not know about chapters. The report class
+by default starts chapters on the next page available and the book
+class starts them on right hand pages.
+
+***** Packages
+While writing your document, you will probably find that there are some
+areas where basic L A TEX cannot solve your problem. If you want to include
+graphics, coloured text or source code from a file into your document, you
+need to enhance the capabilities of L A TEX. Such enhancements are called
+packages. Packages are activated with the
+
+#+BEGIN_EXAMPLE
+\usepackage[options]{package}
+#+END_EXAMPLE
+
+command, where package is the name of the package and options is a list
+of keywords that trigger special features in the package. The \usepackage
+command goes into the preamble of the document. See section 1.4 for details.
+Some packages come with the L A TEX 2ε base distribution (See Table 1.3).
+Others are provided separately. You may find more information on the
+packages installed at your site in your Local Guide [5]. The prime source for
+information about L A TEX packages is The L A TEX Companion [3]. It contains
+descriptions on hundreds of packages, along with information of how to write
+your own extensions to L A TEX 2ε .
+Modern TEX distributions come with a large number of packages prein-
+stalled. If you are working on a Unix system, use the command texdoc for
+accessing package documentation.
+
+***** Page Styles
+L A TEX supports three predefined header/footer combinations—so-called page
+styles. The style parameter of the
+
+#+BEGIN_EXAMPLE
+\pagestyle{style}
+#+END_EXAMPLE
+command defines which one to use. Table 1.4 lists the predefined page styles.
+plain prints the page numbers on the bottom of the page, in the middle of
+the footer. This is the default page style.
+headings prints the current chapter heading and the page number in the
+header on each page, while the footer remains empty. (This is the style
+used in this document)
+empty sets both the header and the footer to be empty.
+It is possible to change the page style of the current page with the
+#+BEGIN_EXAMPLE
+\thispagestyle{style}
+#+END_EXAMPLE
+***** Justified Paragraphs
+In special cases it might be necessary to order L A TEX to break a line:
+\\ or \newline
+starts a new line without starting a new paragraph.
+
+\\*
+additionally prohibits a page break after the forced line break.
+
+\newpage
+starts a new page.
+
+\linebreak[n], \nolinebreak[n], \pagebreak[n], \nopagebreak[n]
+
+suggest places where a break may (or may not) happen. They enable the
+author to influence their actions with the optional argument n, which can
+be set to a number between zero and four. By setting n to a value below
+4, you leave L A TEX the option of ignoring your command if the result would
+look very bad. Do not confuse these “break” commands with the “new”
+commands. Even when you give a “break” command, L A TEX still tries to even
+out the right border of the line and the total length of the page, as described
+in the next section; this can lead to unpleasant gaps in your text.
+***** symbols and inserts  
+****** insert today date 
+use
+#+BEGIN_LaTeX
+\today
+#+END_LaTeX
+****** Quotation Marks
+You should not use the " for quotation marks as you would on a typewriter.
+In publishing there are special opening and closing quotation marks. In L A TEX,
+use two ` (grave accent) for opening quotation marks and two ' (vertical
+quote) for closing quotation marks. For single quotes you use just one of
+each.
+#+BEGIN_EXAMPLE
+‘‘Please press the ‘x’ key.’’
+#+END_EXAMPLE
+
+it’s really a back-tick or grave accent (`) for opening quotes and vertical quote (') for closing, despite what the font chosen might suggest 
+****** Tilde (∼)
+A character often seen in web addresses is the tilde. To generate this in
+L A TEX use \~{} but the result ( ̃) is not really what you want. Try this
+instead:
+http://www.rich.edu/\~{}bush \\
+http://www.clever.edu/$\sim$demo
+
+that is the $\sim$ command
+
+****** Slash (/)
+In order to typeset a slash between two words, one can simply type e.g.
+read/write, but this makes L A TEX treat the two words as one. Hyphenation
+is disabled for these two words, so there may be ‘overfull’ errors. To over-
+come this, use \slash. For example type ‘read\slash write’ which allows
+hyphenation. But normal ‘/’ character may be still used for ratios or units,
+e.g. 5 MB/s.
+
+****** Degree Symbol (◦)
+Printing the degree symbol in pure L A TEX
+#+BEGIN_EXAMPLE
+It’s $-30\,^{\circ}\mathrm{C}$.
+#+END_EXAMPLE
+
+The `textcomp` package makes the degree symbol also available as \textdegree
+or in combination with the C by using the \textcelsius.
+30 \textcelsius{} is
+86 \textdegree{}F.
+
+
+***** packages
+****** Installing Extra Packages
+Most LATEX installations come with a large set of pre-installed style packages,
+but many more are available on the net. The main place to look for style
+packages on the Internet is CTAN (http://www.ctan.org/).
+Packages such as geometry, hyphenat, and many others are typically made
+up of two files: a file with the extension .ins and another with the extension
+.dtx. There will often be a readme.txt with a brief description of the
+package. You should of course read this file first.
+In any event, once you have copied the package files onto your machine,
+you still have to process them in a way that (a) tells your TEX distribution
+about the new style package and (b) gives you the documentation. Here’s
+how you do the first part:
+1. Run LATEX on the .ins file. This will extract a .sty file.
+2. Move the .sty file to a place where your distribution can find it. Usually
+this is in your .../localtexmf /tex/latex subdirectory (Windows or
+OS/2 users should feel free to change the direction of the slashes).
+3. Refresh your distribution’s file-name database. The command depends
+on the LATEXdistribution you use: TEXlive – texhash; web2c –
+maktexlsr; MiKTEX – initexmf --update-fndb or use the GUI.
+Now extract the documentation from the .dtx file:
+1. Run LATEX on the .dtx file. This will generate a .dvi file. Note that you
+may have to run LATEX several times before it gets the cross-references
+right.
+2. Check to see if LATEX has produced a .idx file among the various files
+you now have. If you do not see this file, then the documentation has
+no index. Continue with step 5.
+3. In order to generate the index, type the following:
+makeindex -s gind.ist name
+(where name stands for the main-file name without any extension).
+4. Run LATEX on the .dtx file once again.
+5. Last but not least, make a .ps or .pdf file to increase your reading
+pleasure.
+Sometimes you will see that a .glo (glossary) file has been produced.
+Run the following command between step 4 and 5:
+makeindex -s gglo.ist -o name.gls name.glo
+Be sure to run LATEX on the .dtx one last time before moving on to step 5. 
 *** sublime text
 
 **** search and replace
