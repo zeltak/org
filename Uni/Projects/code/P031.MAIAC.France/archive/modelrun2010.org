@@ -103,7 +103,7 @@ this is the one we ended up using
 +(1|day))
 #+END_SRC 
 
-** year 2003 
+** year 2010 
 *** results
 #+BEGIN_SRC R  :session Rorg  :results none
 #-------------------->> RES TABLE
@@ -123,7 +123,7 @@ res$type <- c("pm25")
 
 *** load cleaned db
   #+BEGIN_SRC R  :session Rorg  :results none
-mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.c2.rds")
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2010.PM25.c2.rds")
 describe(mod1$pm25)
 #dim(mod1)
   #+END_SRC 
@@ -246,9 +246,9 @@ res[res$type=="pm25", 'm1.noaod.time'] <- print(summary(lm(delpm ~ delpred, data
    mod_temporal <- lm(delpm ~ delpred, data=tempoall)
    res[res$type=="pm25", 'm1.R2.time']<- print(summary(lm(delpm ~ delpred, data=tempoall))$r.squared)
    #save
-   saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.predm1.rds")
+   saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2010.PM25.predm1.rds")
    #save results
-   saveRDS(res,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/results.AQ.2003.rds")
+   saveRDS(res,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/results.AQ.2010.rds")
  #+END_SRC 
 *** Cross validation mod 1
 here we run a "90-10%" leave one out CV for mod 1
@@ -329,7 +329,7 @@ here we run a "90-10%" leave one out CV for mod 1
      #BIND 1 dataset
      mod1.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s6,test_s7,test_s8,test_s9, test_s10))
      #save
-     saveRDS(mod1.cv,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.CV.rds")
+     saveRDS(mod1.cv,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2010.PM25.CV.rds")
      # cleanup (remove from WS) objects from CV
      rm(list = ls(pattern = "train_|test_"))
      #table updates
@@ -356,24 +356,25 @@ here we run a "90-10%" leave one out CV for mod 1
      res[res$type=="pm25", 'm1cv.R2.time'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.cv))$r.squared)
 
      #save results
-     saveRDS(res,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/results.AQ.2003.rds")
+     saveRDS(res,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/results.AQ.2010.rds")
    #+END_SRC 
 
 *** mod2 
 **** read data
 #+BEGIN_SRC R  :session Rorg  :results none
-mod2 <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.c.rds")
+mod2 <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2010.c.rds")
 #+END_SRC 
 **** generate predictions
 
 #+BEGIN_SRC R  :session Rorg  :results none
-  mod2[, pred.m2 := predict(object=m1_sc,newdata=mod2,allow.new.levels=TRUE,re.form=NULL)]
-  #summary(mod2$pred.m2)
-  #delete implossible values
- # mod2 <- mod2[pred.m2 > 0.00000000000001 , ]
- # mod2 <- mod2[pred.m2 < 200   , ]
- # saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.PM25.predm2.rds")
-  gc()
+  
+mod2[, pred.m2 := predict(object=m1_sc,newdata=mod2,allow.new.levels=TRUE,re.form=NULL)]
+#summary(mod2$pred.m2)
+#delete implossible values
+# mod2 <- mod2[pred.m2 > 0.00000000000001 , ]
+# mod2 <- mod2[pred.m2 < 200   , ]
+# saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2010.PM25.predm2.rds")
+ gc()
 #+END_SRC 
 
 
@@ -389,9 +390,7 @@ setkey(mod2,aodid)
 setkey(fgrid,aodid)
 mod2 <- merge(mod2,fgrid[,list(aodid,long_aod,lat_aod)],all.x = T)
 
-out <-mod2 %>%
-    group_by(aodid) %>%
-    summarise(long_aod=mean(long_aod),lat_aod=mean(lat_aod),aod=mean(pred.m2) )
+out <-mod2 %>%   group_by(aodid) %>%    summarise(long_aod=mean(long_aod),lat_aod=mean(lat_aod),aod=mean(aod) )
 #+END_SRC 
 
 **** check R2
@@ -470,14 +469,14 @@ mod2[, pred.t33 := predict(Final_pred_all)]
 #check correlations
 res[res$type=="PM25", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=mod2))$r.squared) 
 
-saveRDS(Final_pred_all,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/Final_pred.AQ.PM25.2003.rds")
+saveRDS(Final_pred_all,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/Final_pred.AQ.PM25.2010.rds")
 
 #+END_SRC 
 
 *** mod 3
 **** import mod3 
   #+BEGIN_SRC R  :session Rorg  :results none
-  mod3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2003.rds")
+  mod3 <- readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.2010.rds")
   #for PM25
   mod3 <- select(mod3,day,aodid,m,meanPM25,long_aod,lat_aod)
   mod3[, bimon := (m + 1) %/% 2]
@@ -563,14 +562,14 @@ mod3$pred.m3.mix <-  predict(Final_pred_all,mod3)
 **** save mod3 
 
 #+BEGIN_SRC R  :session Rorg  :results none
-saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.pred.AQ.2003.rds")
+saveRDS(mod3,"/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.pred.AQ.2010.rds")
 keep(data.m3,mod3,res,rmse, sure=TRUE) 
 gc()
 #+END_SRC 
 *** final predictions
 **** R2 stage 3
  #+BEGIN_SRC R  :session Rorg  :results none
-   mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.pm25.predm1.rds")
+   mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2010.pm25.predm1.rds")
    mod1<-mod1[,c("aodid","day","pm25","pred.m1","stn"),with=FALSE]
    #R2.m3
    setkey(mod3,day,aodid)
@@ -610,7 +609,7 @@ gc()
 
 #+BEGIN_SRC R  :session Rorg  :results none
  #import mod2
- mod2<- readRDS( "/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.PM25.predm2.rds")
+ mod2<- readRDS( "/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2010.PM25.predm2.rds")
 mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
 
  #----------------> store the best available
@@ -627,7 +626,7 @@ mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
  mod3best[bestpred < 0 , bestpred  := 0.5]
 
  #save
- saveRDS(mod3best,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/bestpred.AQ.2003.PM25.rds")
+ saveRDS(mod3best,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/bestpred.AQ.2010.PM25.rds")
  mod3best<-filter(mod3best,!is.na(bestpred))
  #save for GIS
  write.csv(mod3best[, list(LTPM = mean(bestpred, na.rm = T), 
@@ -638,7 +637,7 @@ mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
 
  #export res to csv
 
- write.csv(res,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/results.AQ.2003.rds")
+ write.csv(res,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/results.AQ.2010.rds")
 
  #bestprmap
  m3d_agg <- (mod3best[, list(LTPM =mean(bestpred, na.rm = TRUE), 
@@ -654,21 +653,21 @@ mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
 
  #predperyear
  mod3best[, c := as.numeric(format(day, "%Y")) ]
- mod3best.2003<-mod3best[c==2003]
- m3d_agg <- (mod3best.2003[, list(LTPM =mean(bestpred, na.rm = TRUE), 
+ mod3best.2010<-mod3best[c==2010]
+ m3d_agg <- (mod3best.2010[, list(LTPM =mean(bestpred, na.rm = TRUE), 
                          utmx = long_aod[1], #use the first long and lat (by aodid)
                          utmy = lat_aod[1]),by = aodid])  
  P1 <- ggplot(m3d_agg, aes(utmx, utmy, color = LTPM)) + 
    geom_point(size = 4, shape = 15) + 
    xlab("longitude in utm (meters)") + ylab("latitude in utm (meters)") + 
-   scale_colour_gradientn("long term PM2.5 prediction-2003", colours = rainbow(10)) + #c("purple", "blue", "white", "red", "orange")) + 
+   scale_colour_gradientn("long term PM2.5 prediction-2010", colours = rainbow(10)) + #c("purple", "blue", "white", "red", "orange")) + 
    theme_bw() + 
    ggtitle("Long term predictions")
  P1
 
 #+END_SRC 
 
-*** clean 2003
+*** clean 2010
 #+BEGIN_SRC R  :session Rorg  :results none
 keep(rmse,splitdf, sure=TRUE) 
 gc()
@@ -678,7 +677,7 @@ gc()
 
 
 #+BEGIN_SRC R  :session Rorg  :results none
-aod<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/AOD.AQ.2003.rds")
+aod<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/AOD.AQ.2010.rds")
 
 aqua <- aod %>%
     group_by(aodid,day) %>%

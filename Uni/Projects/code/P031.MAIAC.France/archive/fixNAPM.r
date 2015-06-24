@@ -59,7 +59,7 @@ aod.m <- makepointsmatrix(aqm2.2003[aqm2.2003[,unique(aodid)], list(long_aod, la
 
 pmj1<- nearestbyday(aod.m  ,pm.m , 
                             aqm2.2003, PM25 [, list(day,pm25,stn)], 
-                            "aodid", "stn", "closest","pm25",knearest = 7, maxdistance = 60000, nearestmean = T)
+                            "aodid", "stn", "closest","pm25",knearest = 7, maxdistance = 100000, nearestmean = T)
 #join to DB
 setkey(pmj1,aodid,day)
 setkey(aqm2.2003,aodid,day)
@@ -73,7 +73,7 @@ aod.m <- makepointsmatrix(aqm2.2003[aqm2.2003[,unique(aodid)], list(long_aod, la
 
 pmj1<- nearestbyday(aod.m  ,pm.m , 
                             aqm2.2003, PM10 [, list(day,pm10,stn)], 
-                            "aodid", "stn", "closest","pm10",knearest = 7, maxdistance = 60000, nearestmean = T)
+                            "aodid", "stn", "closest","pm10",knearest = 10, maxdistance = 120000, nearestmean = T)
 gc()
 #join to DB
 setkey(pmj1,aodid,day)
