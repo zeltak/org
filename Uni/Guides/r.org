@@ -1001,6 +1001,11 @@ data.frame(contantName = sapply(NAs, deparse),
 # 5   NA_complex_   complex   complex
 #+end_src
 
+** grep for variable names
+#+BEGIN_SRC R
+grep("Yield", names(df1), value=TRUE)
+#+END_SRC
+
 * Data Input/output
 ** Import
 *** import csv files
@@ -10070,6 +10075,12 @@ mutate_if(bwfull.ptvl,birthyear==2003|birthyear==2004,yearb=2004)
 #+END_SRC
 where for DT bwfull.ptvl, for years 2003 and 2004 rows the variable yearb will get 2004
 
+** search for variable by name
+#+BEGIN_SRC R
+names(DF1 %>% select(contains("aod")))
+#or
+names(select(DF1, contains("Yield")))
+#+END_SRC
 
 ** aggregate/summary
 *** base

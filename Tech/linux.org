@@ -33434,9 +33434,102 @@ or in combination with the C by using the \textcelsius.
 30 \textcelsius{} is
 86 \textdegree{}F.
 
+****** Ellipsis (. . . )
+On a typewriter, a comma or a period takes the same amount of space as
+any other letter. In book printing, these characters occupy only a little space
+and are set very close to the preceding letter. Therefore, entering ‘ellipsis’
+by just typing three dots would produce the wrong result. Instead, there is
+a special command for these dots. It is called
+\ldots (low dots)
+Not like this ... but like this:\\
+New York, Tokyo, Budapest, \ldots
+***** Titles, Chapters, and Sections
+To help the reader find his or her way through your work, you should divide
+it into chapters, sections, and subsections. L A TEX supports this with special
+commands that take the section title as their argument. It is up to you to
+use them in the correct order.
+The following sectioning commands are available for the article class:
 
-***** packages
-****** Installing Extra Packages
+#+BEGIN_EXAMPLE
+\section{...}
+\subsection{...}
+\subsubsection{...}
+\paragraph{...}
+\subparagraph{...}
+#+END_EXAMPLE
+If you want to split your document into parts without influencing the
+section or chapter numbering use
+#+BEGIN_EXAMPLE
+\part{...}
+#+END_EXAMPLE
+
+• The \part command does not influence the numbering sequence of
+chapters.
+• The \appendix command does not take an argument. It just changes
+the chapter numbering to letters.18
+L A TEX creates a table of contents by taking the section headings and page
+numbers from the last compile cycle of the document. The command
+\tableofcontents
+expands to a table of contents at the place it is issued. A new document
+has to be compiled (“L A TEXed”) twice to get a correct table of contents.
+Sometimes it might be necessary to compile the document a third time.
+L A TEX will tell you when this is necessary.
+***** Footnotes
+With the command
+\footnote{footnote text}
+a footnote is printed at the foot of the current page. Footnotes should always
+be put20 after the word or sentence they refer to. Footnotes referring to a
+sentence or part of it should therefore be put after the comma or period.21
+Footnotes\footnote{This is
+a footnote.} are often used
+by people using \LaTeX.
+***** formating text
+****** underline
+f a text is typed using a typewriter, important words are emphasized by
+underlining them.
+#+BEGIN_EXAMPLE
+\underline{text}
+#+END_EXAMPLE
+****** Flushleft, Flushright, and Center
+The environments flushleft and flushright generate paragraphs that
+are either left- or right-aligned. The center environment generates centred
+text. If you do not issue \\ to specify line breaks, L A TEX will automatically
+determine line breaks.
+
+#+BEGIN_LaTeX
+\begin{flushleft}
+This text is\\ left-aligned.
+\LaTeX{} is not trying to make
+each line the same length.
+\end{flushleft}
+
+
+\begin{flushright}
+This text is right-\\aligned.
+\LaTeX{} is not trying to make
+each line the same length.
+\end{flushright}
+
+\begin{center}
+At the centre\\of the earth
+\end{center}
+
+#+END_LaTeX
+****** Font Changing Commands
+L A TEX chooses the appropriate font and font size based on the logical structure
+of the document (sections, footnotes, . . . ). In some cases, one might like
+to change fonts and sizes by hand. To do this, use the commands listed in
+Tables 6.1 and 6.2. The actual size of each font is a design issue and depends
+on the document class and its options. Table 6.3 shows the absolute point
+size for these commands as implemented in the standard document classes.
+#+BEGIN_LaTeX
+{\small The small and
+\textbf{bold} Romans ruled}
+{\Large all of great big
+\textit{Italy}.}
+#+END_LaTeX
+**** packages
+***** Installing Extra Packages
 Most LATEX installations come with a large set of pre-installed style packages,
 but many more are available on the net. The main place to look for style
 packages on the Internet is CTAN (http://www.ctan.org/).
@@ -33472,6 +33565,208 @@ Sometimes you will see that a .glo (glossary) file has been produced.
 Run the following command between step 4 and 5:
 makeindex -s gglo.ist -o name.gls name.glo
 Be sure to run LATEX on the .dtx one last time before moving on to step 5. 
+**** graphics 
+***** Using Graphics
+Including graphics into a document works best with the graphicx package
+#+BEGIN_LaTeX
+\usepackage{xcolor,graphicx}
+#+END_LaTeX
+
+In the sample above I have included the color package, as using color in
+documents displayed on the web comes quite naturally.
+
+**** Manuscript preparation 
+***** Abstract
+In scientific publications it is customary to start with an abstract which gives
+the reader a quick overview of what to expect. L A TEX provides the abstract
+environment for this purpose. Normally abstract is used in documents
+typeset with the article document class.
+#+BEGIN_LaTeX
+\begin{abstract}
+The abstract abstract.
+\end{abstract}
+#+END_LaTeX
+
+**** Typesetting Mathematical Formula
+A mathematical formula can be typeset in-line within a paragraph (text style),
+or the paragraph can be broken and the formula typeset separately (display
+style). Mathematical equations within a paragraph are entered between $
+and $:
+using
+a more mathematical approach:
+$a^2 + b^2 = c^2$
+
+for underscore use $PM_25$
+
+if you have more then 1 sub/super script use the {}
+₆In example₆
+
+#+BEGIN_LaTeX
+$PM_{ij}$
+#+END_LaTeX
+
+**** Bibliography_Management
+***** intro (bibtex and biber//natbib and biblatex)
+bibtex and biber are external programs that process bibliography information and act (roughly) as the interface between your .bib file and your LaTeX document.
+
+natbib and biblatex are LaTeX packages that format citations and bibliographies; natbib works only with bibtex, while biblatex (at the moment) works with both bibtex and biber
+***** Getting current LaTeX document to use your .bib file
+At the end of your LaTeX file (that is, after the content, but *before* \end{document}), you need to place the following commands:
+
+#+BEGIN_src latex 
+\bibliographystyle{plain}
+\bibliography{sample1,sample2,...,samplen}
+#+END_src  
+%Note the lack of whitespace between the commas and the next bib file.%
+
+₆In example₆ 
+
+#+begin_src latex
+\bibliographystyle{plain}
+\bibliography{/home/zeltak/org/files/Uni/papers/bib/kloog_2015}
+#+end_src
+
+Bibliography styles are files recognized by BibTeX that tell it how to format the information stored in the .bib file when processed for output. And so the first command listed above is declaring which style file to use. The style file in this instance is plain.bst (which comes as standard with BibTeX). You do not need to add the .bst extension when using this command, as it is assumed. Despite its name, the plain style does a pretty good job (look at the output of this tutorial to see what I mean).
+
+The second command is the one that actually specifies the .bib file you wish to use.
+once again, you don't include the file extension. 
+
+The .bib file can be in the same directory as the LaTeX document. However, if your .bib file was elsewhere (which makes sense if you intend to maintain a centralized database of references for all your research), you need to specify the path as well, e.g
+
+\bibliography{/some/where/sample}
+or
+\bibliography{../sample1}
+(if the .bib file is in the parent directory of the .tex document that calls it).
+
+***** citing 
+Now that LaTeX and BibTeX know where to look for the appropriate files, actually citing the references is fairly trivial.
+
+#+begin_src latex
+\cite{ref_key}
+#+end_src
+
+is the command you need, making sure that the ref_key corresponds exactly to one of the entries in the .bib file. 
+
+If you wish to cite more than one reference at the same time, do the following:
+
+#+BEGIN_SRC latex :results none
+\cite{ref_key1, ref_key2, ..., ref_keyN}.
+#+END_SRC
+
+***** Why won't LaTeX generate any output?
+The addition of BibTeX adds extra complexity for the processing of the source to the desired output. This is largely hidden from the user, but because of all the complexity of the referencing of citations from your source LaTeX file to the database entries in another file, you actually need multiple passes to accomplish the task. This means you have to run LaTeX a number of times. Each pass will perform a particular task until it has managed to resolve all the citation references. Here's what you need to type (into command line):
+#+BEGIN_SRC sh :results none
+
+latex latex_source_code.tex
+bibtex latex_source_code.aux
+latex latex_source_code.tex
+latex latex_source_code.tex
+#+END_SRC
+
+%Tip-in Emacs you need to launch the latex command then the bibtex command (from toolbars or keybinds and then the latex command again until you get no errors% 
+
+***** natbib (Author-date citations)
+The first job is to add the following to your preamble in order to get LaTeX to use the Natbib package:
+#+BEGIN_SRC latex :results none
+\usepackage[options]{natbib}
+#+END_SRC
+
+Also, you need to change the bibliography style file to be used, so edit the appropriate line at the bottom of the file so that it reads:
+
+#+BEGIN_SRC latex :results none
+\bibliographystyle{plainnat}
+#+END_SRC
+
+Once done, it is basically a matter of altering the existing \cite commands to display the type of citation you want.
+
+Use the natbib package if you want to include author-date citations. Natbib uses the command citep for author date
+#+BEGIN_SRC latex :results none
+\citep{...} 
+#+END_SRC
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-06-23 21:53:49
+#+attr_html: :width 300px
+[[~/org/attach/images_2015/screenshot_2015-06-23_21:53:49.png]]
+
+***** Natbib's customization options
+round: (default) for round parentheses;
+square: for square brackets;
+curly: for curly braces;
+angle: for angle brackets;
+colon: (default) to separate multiple citations with colons;
+comma: to use commas as separaters;
+authoryear: (default) for author-year citations;
+numbers: for numerical citations;
+super: for superscripted numerical citations, as in Nature;
+sort: orders multiple citations into the sequence in which they appear in the list of references;
+sort&compress: as sort but in addition multiple numerical citations are compressed if possible (as 3-6, 15);
+longnamesfirst: makes the first citation of any reference the equivalent of the starred variant (full author list) and subsequent citations normal (abbreviated list);
+sectionbib: redefines \thebibliography to issue \section* instead of \chapter*; valid only for classes with a \chapter command; to be used with the chapterbib package;
+nonamebreak: keeps all the authors' names in a citation on one line; causes overfull hboxes but helps with some hyperref problems.
+***** Natbib's textual and parenthetical commands
+http://merkel.zoneo.net/Latex/natbib.php
+
+The natbib package has two basic citation commands, \citet and \citep for textual and parenthetical citations, respectively. There also exist the starred versions \citet* and \citep* that print the full author list, and not just the abbreviated one. All of these may take one or two optional arguments to add some text before and after the citation.
+
+#+BEGIN_SRC latex :results none
+\citet{jon90}	    -->    	Jones et al. (1990)
+\citet[chap. 2]{jon90}	    -->    	Jones et al. (1990, chap. 2)
+\citep{jon90}	    -->    	(Jones et al., 1990)
+\citep[chap. 2]{jon90}	    -->    	(Jones et al., 1990, chap. 2)
+\citep[see][]{jon90}	    -->    	(see Jones et al., 1990)
+\citep[see][chap. 2]{jon90}	    -->    	(see Jones et al., 1990, chap. 2)
+\citet*{jon90}	    -->    	Jones, Baker, and Williams (1990)
+\citep*{jon90}	    -->    	(Jones, Baker, and Williams, 1990)
+% Multiple citations may be made by including more than one citation key in the \cite command argument.
+\citet{jon90,jam91}	    -->    	Jones et al. (1990); James et al. (1991)
+\citep{jon90,jam91}	    -->    	(Jones et al., 1990; James et al. 1991)
+\citep{jon90,jon91}	    -->    	(Jones et al., 1990, 1991)
+\citep{jon90a,jon90b}	    -->    	(Jones et al., 1990a,b)
+#+END_SRC
+***** common citation styles
+look here first
+http://web.archive.org/web/20131102023045id_/http://nodonn.tipido.net/bibstyle.php
+
+
+-authordate1
+
+***** Other bibliography styles
+If you want to use a different style (e.g. one provided by the journal you are submitting an article to) you should save the style file (.bst file) in the same folder as your .tex and .bib files. Include the name of the .bst file in the \bibliographystyle{...} commmand.
+***** Including URLs in bibliography
+As you can see, there is no field for URLs. One possibility is to include Internet addresses in howpublished field of @misc or note field of @techreport, @article, @book:
+howpublished = "\url{http://www.example.com}"
+Note the usage of \url command to ensure proper appearance of URLs.
+Another way is to use special field url and make bibliography style recognise it.
+ url = "http://www.example.com"
+You need to use \usepackage{url} in the first case or \usepackage{hyperref} in the second case.
+Styles provided by Natbib (see below) handle this field, other styles can be modified using urlbst program. Modifications of three standard styles (plain, abbrv and alpha) are provided with urlbst.
+
+***** Customizing bibliography appearance
+One of the main advantages of BibTeX, especially for people who write many research papers, is the ability to customize your bibliography to suit the requirements of a given publication. You will notice how different publications tend to have their own style of formatting references, to which authors must adhere if they want their manuscripts published. In fact, established journals and conference organizers often will have created their own bibliography style (.bst file) for those users of BibTeX, to do all the hard work for you.
+It can achieve this because of the nature of the .bib database, where all the information about your references is stored in a structured format, but nothing about style. This is a common theme in LaTeX in general, where it tries as much as possible to keep content and presentation separate.
+A bibliography style file (.bst) will tell LaTeX how to format each attribute, what order to put them in, what punctuation to use in between particular attributes etc. Unfortunately, creating such a style by hand is not a trivial task. Which is why Makebst (also known as custom-bib) is the tool we need.
+Makebst can be used to automatically generate a .bst file based on your needs. It is very simple, and actually asks you a series of questions about your preferences. Once complete, it will then output the appropriate style file for you to use.
+It should be installed with the LaTeX distribution (otherwise, you can download it) and it's very simple to initiate. At the command line, type:
+
+#+BEGIN_SRC sh :results none
+latex makebst
+#+END_SRC
+
+LaTeX will find the relevant file and the questioning process will begin. You will have to answer quite a few (although, note that the default answers are pretty sensible), which means it would be impractical to go through an example in this tutorial. However, it is fairly straight-forward. And if you require further guidance, then there is a comprehensive manual available. I'd recommend experimenting with it and seeing what the results are when applied to a LaTeX document.
+
+If you are using a custom built .bst file, it is important that LaTeX can find it.
+
+So, make sure its in the same directory as the LaTeX source file, unless you are using one of the standard style files (such as plain or plainnat, that come bundled with LaTeX - these will be automatically found in the directories that they are installed. Also, make sure the name of the .bst file you want to use is reflected in the \bibliographystyle{style} command (but don't include the .bst extension!).
+***** Showing unused items (bibliography without citations)- No cite command
+If you only want a reference to appear in the bibliography, but not where it is referenced in the main text, then the \nocite{} command can be used, for example:
+A special version of the command, \nocite{*}, includes all entries from the database, whether they are referenced in the document or not.
+
+#+BEGIN_SRC latex :results none
+\nocite{Name89} % Show Bibliography entry of Name89
+\nocite{*} % Show all Bib-entries
+#+END_SRC
+
 *** sublime text
 
 **** search and replace
