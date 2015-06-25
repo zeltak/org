@@ -27707,69 +27707,109 @@ Single Key Sequence.  F9 8, F9  Page
 Key Combination.  Ctrl+8, Ctrl+Alt+8
 Sequence of single/combo keys.  Alt+7 8, Alt+7 Ctrl+i
 ******** Emacs Keybinding Syntax Examples
+http://ergoemacs.org/emacs/keyboard_shortcuts_examples.html
+- Single Modifier Key
 
-This page shows sample syntax for defining keys in emacs. (For general
-guide on defining keys, see: Emacs: How to Define Keyboard Shortcuts.)
- In the following, the beep is a example command. Replace it with the
-command name you want. Meta is Alt by default.
-Single Modifier Key
-(global-set-key (kbd "M-a") 'beep) ; Meta+a
-(global-set-key (kbd "C-a") 'beep) ; Ctrl+a
+#+BEGIN_SRC latex :results none
+(global-set-key (kbd "M-a") 'backward-char) ; Alt+a
+(global-set-key (kbd "C-a") 'backward-char) ; Ctrl+a
 Function keys and Special keys
-(global-set-key (kbd "<f2>") 'beep) ; F2 key
-(global-set-key (kbd "<kp-2>") 'beep) ; the "2" key on the number keypad
-(global-set-key (kbd "<insert>") 'beep) ; the Ins key
-(global-set-key (kbd "<delete>") 'beep) ; the Del key
-(global-set-key (kbd "<home>") 'beep)
-(global-set-key (kbd "<end>") 'beep)
-(global-set-key (kbd "<next>") 'beep) ; page down key
-(global-set-key (kbd "<prior>") 'beep) ; page up key
-(global-set-key (kbd "<left>") 'beep) ; 
-(global-set-key (kbd "<right>") 'beep) ; 
-(global-set-key (kbd "<up>") 'beep) ; 
-(global-set-key (kbd "<down>") 'beep) ; 
-(global-set-key (kbd "<return>") 'beep) ; the Enter/Return key
-(global-set-key (kbd "SPC") 'beep) ; the Space bar key
-(info "(elisp) Function Keys")
-Modifier + Special Key
-(global-set-key (kbd "M-<f2>") 'beep) ; Meta+F2
-(global-set-key (kbd "C-<f2>") 'beep) ; Ctrl+F2
-(global-set-key (kbd "S-<f2>") 'beep) ; Shift+F2
-(global-set-key (kbd "M-<up>") 'beep) ; Meta+
-(global-set-key (kbd "C-<up>") 'beep) ; Ctrl+
-(global-set-key (kbd "S-<up>") 'beep) ; Shift+
-Two Modifier Keys
-2 modifier keys pressed simultaneously, plus a letter key:
-(global-set-key (kbd "M-A") 'beep) ; Meta+Shift+a
-(global-set-key (kbd "C-A") 'beep) ; Ctrl+Shift+a
-(global-set-key (kbd "C-M-a") 'beep) ; Ctrl+Meta+a
-Example of 2 modifier keys with a digit key:
-(global-set-key (kbd "M-@") 'beep) ; Meta+Shift+2 or Meta+@
-(global-set-key (kbd "C-@") 'beep) ; Ctrl+Shift+2 or Ctrl+@
-(global-set-key (kbd "C-M-2") 'beep) ; Ctrl+Meta+2
-(global-set-key (kbd "C-S-<kp-2>") 'beep); Ctrl+Shift+"numberic pad 2"
-Three Modifier Keys
-3 modifier keys pressed simultaneously:
 
-(global-set-key (kbd "C-M-S-a") 'beep) ; Ctrl+Meta+Shift+a
-(global-set-key (kbd "C-M-!") 'beep) ; Ctrl+Meta+Shift+1 or Ctrl+Meta+!
-(global-set-key (kbd "C-M-\"") 'beep) ; Ctrl+Meta+Shift+' or Ctrl+Meta+"
-(global-set-key (kbd "C-M-S-<up>") 'beep); Ctrl+Meta+Shift+
-Key Sequence
-Example of sequence of key combinations:
-(global-set-key (kbd "C-, a") 'beep) ; Ctrl+, a
-(global-set-key (kbd "C-, SPC") 'beep) ; Ctrl+, Space
-(global-set-key (kbd "C-, C-a") 'beep); Ctrl+, Ctrl+a
-(global-set-key (kbd "<f7> <f8>") 'beep); F7 F8
-No Modifiers
-A shortcut can be created without any modifier keys.
-(global-set-key (kbd "2") 'beep)
-(global-set-key (kbd "a") 'beep)
-(global-set-key (kbd "") 'beep)
-(global-set-key (kbd "") 'beep)
-(global-set-key (kbd "") 'beep)
-(global-set-key (kbd "(") 'beep)
-(global-set-key (kbd "") 'beep)
+(global-set-key (kbd "<f3>")   'backward-char)   ; F3 key
+(global-set-key (kbd "<kp-3>") 'backward-char)   ; the “3” key on number keypad
+
+(global-set-key (kbd "<insert>") 'backward-char) ; Ins key
+(global-set-key (kbd "<delete>") 'backward-char) ; Del key
+
+(global-set-key (kbd "<home>") 'backward-char)
+(global-set-key (kbd "<end>") 'backward-char)
+
+(global-set-key (kbd "<next>") 'backward-char)   ; page down key
+(global-set-key (kbd "<prior>") 'backward-char)  ; page up key
+
+(global-set-key (kbd "<left>") 'backward-char)   ; ←
+(global-set-key (kbd "<right>") 'backward-char)  ; →
+(global-set-key (kbd "<up>") 'backward-char)     ; ↑
+(global-set-key (kbd "<down>") 'backward-char)   ; ↓
+
+(global-set-key (kbd "RET") 'backward-char) ; Enter/Return key
+(global-set-key (kbd "SPC") 'backward-char) ; Space bar key
+(info "(elisp) Function Keys")
+#+END_SRC
+
+-Menu/App Key
+
+#+BEGIN_SRC latex :results none
+;; On Linux, menu/apps key syntax is <menu>
+(global-set-key (kbd "<menu> c") 'calendar) ;
+;; Windows, menu/apps key syntax is <apps>
+(global-set-key (kbd "<app> c") 'calendar) ;
+#+END_SRC
+Example of single key sequence starting with the ▤ Menu key.
+
+#+BEGIN_SRC latex :results none
+;; Linux, the menu/apps key syntax is <menu>
+;; Windows, the menu/apps key syntax is <apps>
+(define-key key-translation-map (kbd "<apps>") (kbd "<menu>")) ; make the syntax equal
+
+(global-set-key (kbd "<menu>") nil) ; good idea to put nil to the starting key
+(global-set-key (kbd "<menu> n") nil) ; good idea to put nil to the starting key
+(global-set-key (kbd "<menu> n 6") 'calendar) 
+(global-set-key (kbd "<menu> n 7") 'calc)
+
+#+END_SRC
+-Super ＆ Hyper Keys
+
+#+BEGIN_SRC latex :results none
+;; Example of single key sequence
+(global-set-key (kbd "<f7>") nil) ; good idea to put nil to the starting key
+(global-set-key (kbd "<f7> <f8>") 'calendar)
+(global-set-key (kbd "<f7> <f9>") 'calc)
+;; Example of sequence of single or chord keys
+
+(global-set-key (kbd "C-e") nil) ; good idea to put nil to the starting key
+(global-set-key (kbd "C-e a") 'calendar)  ; Ctrl+e a
+(global-set-key (kbd "C-e SPC") 'calendar)  ; Ctrl+e Space
+(global-set-key (kbd "C-e C-a") 'calendar); Ctrl+e Ctrl+a
+1 Modifier + Special Key
+
+(global-set-key (kbd "M-<f3>") 'backward-char) ; Alt+F3
+(global-set-key (kbd "C-<f3>") 'backward-char)  ; Ctrl+F3
+(global-set-key (kbd "S-<f3>") 'backward-char)  ; Shift+F3
+
+(global-set-key (kbd "M-<up>") 'backward-char)  ; Alt+↑
+(global-set-key (kbd "C-<up>") 'backward-char)  ; Ctrl+↑
+(global-set-key (kbd "S-<up>") 'backward-char)  ; Shift+↑
+#+END_SRC
+2 Modifier Keys
+
+#+BEGIN_SRC latex :results none
+(global-set-key (kbd "M-A") 'backward-char) ; Alt+Shift+a
+(global-set-key (kbd "C-A") 'backward-char) ; Ctrl+Shift+a
+(global-set-key (kbd "C-M-a") 'backward-char) ; Ctrl+Alt+a
+Example of 2 modifier keys with a digit key:
+
+(global-set-key (kbd "M-#") 'backward-char)       ; Alt+Shift+3 or Alt+#
+(global-set-key (kbd "C-#") 'backward-char)       ; Ctrl+Shift+3 or Ctrl+#
+(global-set-key (kbd "C-M-3") 'backward-char)     ; Ctrl+Alt+3
+
+(global-set-key (kbd "C-S-<kp-3>") 'backward-char); Ctrl+Shift+“numberic pad 3”
+
+;3 modifier keys pressed simultaneously:
+
+(global-set-key (kbd "C-M-S-a") 'backward-char)   ; Ctrl+Alt+Shift+a
+(global-set-key (kbd "C-M-!") 'backward-char)     ; Ctrl+Alt+Shift+1 or Ctrl+Alt+!
+(global-set-key (kbd "C-M-S-<up>") 'backward-char); Ctrl+Alt+Shift+↑
+
+;No Modifiers
+;A shortcut can be created without any modifier keys.
+
+(global-set-key (kbd "3") 'backward-char)
+(global-set-key (kbd "a") 'backward-char)
+(global-set-key (kbd "é") 'backward-char)
+(global-set-key (kbd "α") 'backward-char)
+(global-set-key (kbd "你") 'backward-char)
+#+END_SRC
 
 ******** intro
 
@@ -30330,10 +30370,6 @@ Sometimes you will get bad citation links in your document. Maybe there is no co
 
 *********** Extracting citations entries
 You will often work from your default bibliography for your own work. Eventually you will need to extract the entries cited so you can send them to someone. The command  elisp:org-ref-extract-bibtex-entries will do that for you. If I have cited something cite:calle-vallejo-2010-trend-stabil.
-
-
-
-
 
 ********* mu4e
 ********** org mode integration
@@ -33908,7 +33944,6 @@ A special version of the command, \nocite{*}, includes all entries from the data
 ***** Biblatex
 ****** base biblatex setup
 $Note Recent versions of biblatex have deprecated$
-
 #+BEGIN_SRC latex :results none
 \bibliography{<database>} 
 %in favour of the more general
@@ -33972,6 +34007,27 @@ this is my example
 \end{document}
 #+END_SRC
  
+******* styles
+******** using styles
+example
+#+BEGIN_SRC latex :results none
+\usepackage[
+    backend=biber,
+    style=authoryear,
+    url=false, 
+    doi=true,
+    eprint=false
+]{biblatex}
+#+END_SRC
+
+/cite vs /autocite 
+******** styles 
+https://www.sharelatex.com/learn/Biblatex_bibliography_styles
+
+********* authoryear
+the classic author-date style is name authoryear
+********* chem-acs
+the [1] for cite 
 *** sublime text
 
 **** search and replace
