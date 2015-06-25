@@ -39,6 +39,7 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 #load clipped france grid 
 fgrid <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/gird/france.grid.csv")
 #+END_SRC 
+
 ** PM25.AQ.2003
 *** load Aqua data
 #+BEGIN_SRC R  :session Rorg  :results none
@@ -83,7 +84,8 @@ db2003 <- merge(days2003,aqua.2003, all.x = T)
 
     #clean
   db2003$QA<-NULL
-  db2003$year<-NULL
+  db2003$Year<-NULL
+gc()
 #+END_SRC
 
 *** add met data
@@ -100,11 +102,12 @@ db2003 <- merge(days2003,aqua.2003, all.x = T)
   lu.m <- makepointsmatrix(db2003[db2003[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
   aqua.met <- nearestbyday(lu.m ,met.m , 
                               db2003, Temp[, list(day,tempavg,stn)], 
-                              "aodid", "stn", "cloesetSTN", "tempavg", knearest = 15, maxdistance = NA)
+                              "aodid", "stn", "cloesetSTN", "tempavg", knearest = 10, maxdistance = NA)
   setkey(db2003,aodid,day)
   setkey(aqua.met,aodid,day)
   db2003 <- merge(db2003, aqua.met[,list(day,tempavg,aodid)], all.x = T)
 
+  gc()
 
   #wsavg
   aqua.met <- nearestbyday(lu.m ,met.m , 
@@ -115,21 +118,24 @@ db2003 <- merge(days2003,aqua.2003, all.x = T)
   setkey(aqua.met,aodid,day)
   db2003 <- merge(db2003, aqua.met[,list(day,wsavg,aodid)], all.x = T)
 
-  #rhavg
-  aqua.met <- nearestbyday(lu.m ,met.m , 
-                              db2003, Temp[, list(day,rhavg,stn)], 
-                              "aodid", "stn", "cloesetSTN", "rhavg", knearest = 10, maxdistance = NA)
-  setkey(db2003,aodid,day)
-  setkey(aqua.met,aodid,day)
-  db2003 <- merge(db2003, aqua.met[,list(day,rhavg,aodid)], all.x = T)
 
-  #rainday
-  aqua.met <- nearestbyday(lu.m ,met.m , 
-                              db2003, Temp[, list(day,rainday,stn)], 
-                              "aodid", "stn", "cloesetSTN", "rainday", knearest = 10, maxdistance = NA)
-  setkey(db2003,aodid,day)
-  setkey(aqua.met,aodid,day)
-  db2003 <- merge(db2003, aqua.met[,list(day,rainday,aodid)], all.x = T)
+  gc()
+
+  ## #rhavg
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2003, Temp[, list(day,rhavg,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rhavg", knearest = 10, maxdistance = NA)
+  ## setkey(db2003,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2003 <- merge(db2003, aqua.met[,list(day,rhavg,aodid)], all.x = T)
+
+  ## #rainday
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2003, Temp[, list(day,rainday,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rainday", knearest = 10, maxdistance = NA)
+  ## setkey(db2003,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2003 <- merge(db2003, aqua.met[,list(day,rainday,aodid)], all.x = T)
 
   #cleanup
   keep(fgrid,db2003,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
@@ -158,35 +164,36 @@ setkey(db2003,pblid,day)
 setkey(fin.pbl,pblid,day)
 db2003 <- merge(db2003, fin.pbl[,list(pblid,PBL,day)], all.x = T)
 db2003$pblid<-NULL
+gc()
 #+END_SRC 
 
 *** add ndvi 
 #+BEGIN_SRC R  :session Rorg  :results none
 
-#add month
-db2003[, m := as.numeric(format(day, "%m")) ]
-#add season
-#1-winter, 2-spring,3-summer,4-autum
-db2003$season<-recode(db2003$m,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")
-#1-winter, 2-summer
-db2003$seasonSW<-recode(db2003$m,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;12=1")
+  ## #add month
+  ## db2003[, m := as.numeric(format(day, "%m")) ]
+  ## #add season
+  ## #1-winter, 2-spring,3-summer,4-autum
+  ## db2003$season<-recode(db2003$m,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")
+  ## #1-winter, 2-summer
+  ## db2003$seasonSW<-recode(db2003$m,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;12=1")
 
-#join NDVI to aod
-fin.ndvi<-readRDS("/media/NAS/Uni/Data/Europe/france/ndvi_france/out/fin.ndvi.rds")
-fin.ndvi<-filter(fin.ndvi,year==2003)
-gc() 
-key.ndvi<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ndvi.rds")
-#add ndvi-key
-setkey(db2003,aodid)
-setkey(key.ndvi,aodid)
-db2003 <- merge(db2003, key.ndvi, all.x = T)
-#add ndvi
-setkey(db2003,ndviid,m)
-setkey(fin.ndvi,ndviid,m)
-db2003 <- merge(db2003, fin.ndvi[,list(ndviid,ndvi,m)], all.x = T)
-#cleanup
-keep(fgrid,db2003,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
-gc()
+  ## #join NDVI to aod
+  ## fin.ndvi<-readRDS("/media/NAS/Uni/Data/Europe/france/ndvi_france/out/fin.ndvi.rds")
+  ## fin.ndvi<-filter(fin.ndvi,year==2003)
+  ## gc() 
+  ## key.ndvi<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ndvi.rds")
+  ## #add ndvi-key
+  ## setkey(db2003,aodid)
+  ## setkey(key.ndvi,aodid)
+  ## db2003 <- merge(db2003, key.ndvi, all.x = T)
+  ## #add ndvi
+  ## setkey(db2003,ndviid,m)
+  ## setkey(fin.ndvi,ndviid,m)
+  ## db2003 <- merge(db2003, fin.ndvi[,list(ndviid,ndvi,m)], all.x = T)
+  #cleanup
+  keep(fgrid,db2003,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  gc()
 #+END_SRC 
 
 *** meanPM calculations 
@@ -242,12 +249,10 @@ gc()
 **** clean (take out uneeded variables) and save mod3
 #+BEGIN_SRC R  :session Rorg  :results none
 #take out uneeded
-db2003[,c("ndviid"):=NULL]
-
-
 #save
+gc()
 saveRDS(db2003,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2003.rds")
-
+gc()
 #+END_SRC 
 
 *** weights 
@@ -256,13 +261,13 @@ saveRDS(db2003,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ
 db2003<-db2003[,obs:=1]
 db2003[is.na(aod), obs:= 0]
 ws.2003<-select(db2003,obs,elev_m,PBL,m,tempavg,aodid,day)
-ws.2003<-filter(ws.2003,!(is.na(tempavg)))
+#ws.2003<-filter(ws.2003,!(is.na(tempavg)))
 rm(db2003)
 gc()
 
 #splits
 ws.2003.s1<-ws.2003[1:50000000,]
-w1.s1<- glm(obs ~ elev_m+PBL+as.factor(m)+tempavg,family=binomial,data=ws.2003.s1)
+w1.s1<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2003.s1)
 ws.2003.s1$prob <- predict(w1.s1,type = c("response"))  
 ws.2003.s1$wt <- 1/ws.2003.s1$prob
 ws.2003.s1$normwt <- ws.2003.s1$wt/mean(ws.2003.s1$wt)
@@ -273,7 +278,7 @@ gc()
 
 #splits
 ws.2003.s2<-ws.2003[50000001:100000000,]
-w1.s2<- glm(obs ~ elev_m+PBL+as.factor(m)+tempavg,family=binomial,data=ws.2003.s2)
+w1.s2<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2003.s2)
 ws.2003.s2$prob <- predict(w1.s2,type = c("response"))  
 ws.2003.s2$wt <- 1/ws.2003.s2$prob
 ws.2003.s2$normwt <- ws.2003.s2$wt/mean(ws.2003.s2$wt)
@@ -283,7 +288,7 @@ gc()
 
 #splits
 ws.2003.s3<-ws.2003[100000001:150000000,]
-w1.s3<- glm(obs ~ elev_m+PBL+as.factor(m)+tempavg,family=binomial,data=ws.2003.s3)
+w1.s3<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2003.s3)
 ws.2003.s3$prob <- predict(w1.s3,type = c("response"))  
 ws.2003.s3$wt <- 1/ws.2003.s3$prob
 ws.2003.s3$normwt <- ws.2003.s3$wt/mean(ws.2003.s3$wt)
@@ -295,7 +300,7 @@ gc()
 #splits
 x<-dim(ws.2003)
 ws.2003.s4<-ws.2003[150000001:x[1],]
-w1.s4<- glm(obs ~ elev_m+PBL+as.factor(m)+tempavg,family=binomial,data=ws.2003.s4)
+w1.s4<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2003.s4)
 ws.2003.s4$prob <- predict(w1.s4,type = c("response"))  
 ws.2003.s4$wt <- 1/ws.2003.s4$prob
 ws.2003.s4$normwt <- ws.2003.s4$wt/mean(ws.2003.s4$wt)
@@ -325,79 +330,3816 @@ gc()
 
 #+END_SRC 
 *** mod1
-
 #+BEGIN_SRC R  :session Rorg  :results none
 
 
-#--------->mod1
-#PM25
-#to fix missing days issues resulting in cartesean error
-db2003days <- sort(unique(db2003.m2$day))
+  #--------->mod1
+  #PM25
+  #to fix missing days issues resulting in cartesean error
+  db2003days <- sort(unique(db2003.m2$day))
 
-#PM import again
-PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
-PM25<-filter(PM25,c==2003)
-PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
-PM10<-filter(PM10,c==2003)
+  #PM import again
+  PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+  PM25<-filter(PM25,c==2003)
+  PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+  PM10<-filter(PM10,c==2003)
 
-########### join aod to PM25
-#create PM matrix
-pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
-#create aod terra matrix
-db2003.m2$aodid<-as.character(db2003.m2$aodid)
-setkey(db2003.m2,aodid)
-aod.m <- makepointsmatrix(db2003.m2[db2003.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
-head(aod.m)
-
-
-
-#run function
-closestaod <- nearestbyday(pm.m, aod.m, 
-                           PM25[day %in% db2003days,], db2003.m2, 
-                           "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
-
-
-#closestaod[,i.stn :=NULL]
-closestaod[,closestknn :=NULL]
-
-setkey(PM25,stn,day)
-setkey(closestaod,stn,day)
-PM25.m1 <- merge(PM25, closestaod, all.x = T)
-PM25.m1<-PM25.m1[!is.na(aod)]
-
-#save mod 1
-saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.rds")
+  ########### join aod to PM25
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+  #create aod terra matrix
+  db2003.m2$aodid<-as.character(db2003.m2$aodid)
+  setkey(db2003.m2,aodid)
+  aod.m <- makepointsmatrix(db2003.m2[db2003.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
 
 
 
-########### join aod to PM10
-#create PM matrix
-pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
-#create aod terra matrix
-db2003.m2$aodid<-as.character(db2003.m2$aodid)
-setkey(db2003.m2,aodid)
-aod.m <- makepointsmatrix(db2003.m2[db2003.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
-head(aod.m)
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM25[day %in% db2003days,], db2003.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM25,stn,day)
+  setkey(closestaod,stn,day)
+  PM25.m1 <- merge(PM25, closestaod, all.x = T)
+  PM25.m1<-PM25.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.rds")
 
 
 
-#run function
-closestaod <- nearestbyday(pm.m, aod.m, 
-                           PM10[day %in% db2003days,], db2003.m2, 
-                           "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+  ########### join aod to PM10
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+  #create aod terra matrix
+  db2003.m2$aodid<-as.character(db2003.m2$aodid)
+  setkey(db2003.m2,aodid)
+  aod.m <- makepointsmatrix(db2003.m2[db2003.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
 
 
-#closestaod[,i.stn :=NULL]
-closestaod[,closestknn :=NULL]
 
-setkey(PM10,stn,day)
-setkey(closestaod,stn,day)
-PM10.m1 <- merge(PM10, closestaod, all.x = T)
-PM10.m1<-PM10.m1[!is.na(aod)]
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM10[day %in% db2003days,], db2003.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
 
-#save mod 1
-saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM10.rds")
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM10,stn,day)
+  setkey(closestaod,stn,day)
+  PM10.m1 <- merge(PM10, closestaod, all.x = T)
+  PM10.m1<-PM10.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM10.rds")
 
 
 #+END_SRC 
 
+*** cleanup and prepare for next year
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#cleanup
+keep(fgrid,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+#+END_SRC 
+
+** PM25.AQ.2004
+start time 08:35
+*** load Aqua data
+#+BEGIN_SRC R  :session Rorg  :results none
+#load aod data
+aqua.2004<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/AOD.AQ.2004.rds")
+#get rid of dplyr tbl_df until bug gets fixed
+aqua.2004<-as.data.frame(aqua.2004)
+aqua.2004<-as.data.table(aqua.2004)
+#+END_SRC 
+
+*** Expand to all days in 2004 ("mod3")
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#create full LU TS
+days<-seq.Date(from = as.Date("2004-01-01"), to = as.Date("2004-12-31"), 1)
+#create date range
+days2004 <- data.table(expand.grid(aodid = fgrid[, unique(aodid)], day = days))
+#merge
+setkey(aqua.2004,aodid,day)
+setkey(days2004 ,aodid,day)
+db2004 <- merge(days2004,aqua.2004, all.x = T)  
+
+#+END_SRC 
+
+*** add land use
+
+#+BEGIN_SRC R  :session Rorg  :results none
+    lu <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/france.grid.allLU.rds")
+    #merge
+    setkey(db2004,aodid)
+    setkey(lu ,aodid)
+    db2004 <- merge(db2004,lu, all.x = T)  
+    #fix LAT/LONG
+  db2004$long_aod<- NULL
+  db2004$lat_aod<- NULL
+  gc()
+
+  #Fix LAT/LONG
+  setkey(db2004,aodid)
+  setkey(fgrid,aodid)
+  db2004 <- merge(db2004,fgrid[,list(aodid,long_aod,lat_aod)],all.x = T)
+
+    #clean
+  db2004$QA<-NULL
+  db2004$Year<-NULL
+gc()
+#+END_SRC
+
+*** add met data
+
+#+BEGIN_SRC R  :session Rorg  :results none
+  #load met
+  Temp<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/met/fin.met.rds")
+  Temp<-filter(Temp,c==2004)
+
+  #begin "spatio-temporal joins" using GeoMerge
+
+  met.m <- makepointsmatrix(Temp, "long_met", "lat_met", "stn")
+  setkey(db2004, aodid)
+  lu.m <- makepointsmatrix(db2004[db2004[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2004, Temp[, list(day,tempavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "tempavg", knearest = 10, maxdistance = NA)
+  setkey(db2004,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2004 <- merge(db2004, aqua.met[,list(day,tempavg,aodid)], all.x = T)
+
+  gc()
+
+  #wsavg
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2004, Temp[, list(day,wsavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "wsavg", knearest = 10, maxdistance = NA)
+  #head(aqua.met)
+  setkey(db2004,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2004 <- merge(db2004, aqua.met[,list(day,wsavg,aodid)], all.x = T)
+
+
+  gc()
+
+  ## #rhavg
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2004, Temp[, list(day,rhavg,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rhavg", knearest = 10, maxdistance = NA)
+  ## setkey(db2004,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2004 <- merge(db2004, aqua.met[,list(day,rhavg,aodid)], all.x = T)
+
+  ## #rainday
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2004, Temp[, list(day,rainday,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rainday", knearest = 10, maxdistance = NA)
+  ## setkey(db2004,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2004 <- merge(db2004, aqua.met[,list(day,rainday,aodid)], all.x = T)
+
+  #cleanup
+  keep(fgrid,db2004,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  db2004$LUaodid<-NULL
+  gc()
+
+#+END_SRC 
+
+*** add pbl
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+
+#Join PBL
+fin.pbl<-readRDS("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/fin.pbl.rds")
+fin.pbl<-filter(fin.pbl,c==2004)
+gc() 
+key.pbl<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.pbl.rds")
+
+#add pbl-key
+setkey(db2004,aodid)
+setkey(key.pbl,aodid)
+db2004 <- merge(db2004, key.pbl, all.x = T)
+#add pbl
+setkey(db2004,pblid,day)
+setkey(fin.pbl,pblid,day)
+db2004 <- merge(db2004, fin.pbl[,list(pblid,PBL,day)], all.x = T)
+db2004$pblid<-NULL
+gc()
+#+END_SRC 
+
+*** add ndvi 
+#+BEGIN_SRC R  :session Rorg  :results none
+
+  ## #add month
+  ## db2004[, m := as.numeric(format(day, "%m")) ]
+  ## #add season
+  ## #1-winter, 2-spring,3-summer,4-autum
+  ## db2004$season<-recode(db2004$m,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")
+  ## #1-winter, 2-summer
+  ## db2004$seasonSW<-recode(db2004$m,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;12=1")
+
+  ## #join NDVI to aod
+  ## fin.ndvi<-readRDS("/media/NAS/Uni/Data/Europe/france/ndvi_france/out/fin.ndvi.rds")
+  ## fin.ndvi<-filter(fin.ndvi,year==2004)
+  ## gc() 
+  ## key.ndvi<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ndvi.rds")
+  ## #add ndvi-key
+  ## setkey(db2004,aodid)
+  ## setkey(key.ndvi,aodid)
+  ## db2004 <- merge(db2004, key.ndvi, all.x = T)
+  ## #add ndvi
+  ## setkey(db2004,ndviid,m)
+  ## setkey(fin.ndvi,ndviid,m)
+  ## db2004 <- merge(db2004, fin.ndvi[,list(ndviid,ndvi,m)], all.x = T)
+  #cleanup
+  keep(fgrid,db2004,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  gc()
+#+END_SRC 
+
+*** meanPM calculations 
+**** load PM data
+#+BEGIN_SRC R  :session Rorg  :results none
+#PM
+PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+PM25<-filter(PM25,c==2004)
+PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+PM10<-filter(PM10,c==2004)
+
+#+END_SRC 
+
+**** geomerge meanpm
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#-------> meanPM25  for mod 2+3
+pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+setkey(db2004, aodid)
+aod.m <- makepointsmatrix(db2004[db2004[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2004, PM25 [, list(day,pm25,stn)], 
+                            "aodid", "stn", "closest","pm25",knearest = 10, maxdistance = 120000, nearestmean = T)
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2004,aodid,day)
+db2004 <- merge(db2004,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2004,"closestmean","meanPM25")
+gc()
+#-------> meanPM10  for mod 2+3
+pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+setkey(db2004, aodid)
+aod.m <- makepointsmatrix(db2004[db2004[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2004, PM10 [, list(day,pm10,stn)], 
+                            "aodid", "stn", "closest","pm10",knearest = 10, maxdistance = 120000, nearestmean = T)
+gc()
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2004,aodid,day)
+db2004 <- merge(db2004,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2004,"closestmean","meanPM10")
+summary(db2004$meanPM10)
+#cleanup
+keep(fgrid,db2004,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+
+#+END_SRC 
+
+**** clean (take out uneeded variables) and save mod3
+#+BEGIN_SRC R  :session Rorg  :results none
+#take out uneeded
+#save
+gc()
+saveRDS(db2004,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2004.rds")
+gc()
+#+END_SRC 
+
+*** weights 
+
+#+BEGIN_SRC R  :session Rorg  :results none
+db2004<-db2004[,obs:=1]
+db2004[is.na(aod), obs:= 0]
+ws.2004<-select(db2004,obs,elev_m,PBL,m,tempavg,aodid,day)
+#ws.2004<-filter(ws.2004,!(is.na(tempavg)))
+rm(db2004)
+gc()
+
+#splits
+ws.2004.s1<-ws.2004[1:50000000,]
+w1.s1<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2004.s1)
+ws.2004.s1$prob <- predict(w1.s1,type = c("response"))  
+ws.2004.s1$wt <- 1/ws.2004.s1$prob
+ws.2004.s1$normwt <- ws.2004.s1$wt/mean(ws.2004.s1$wt)
+ws.2004.s1[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s1)
+gc()
+
+
+#splits
+ws.2004.s2<-ws.2004[50000001:100000000,]
+w1.s2<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2004.s2)
+ws.2004.s2$prob <- predict(w1.s2,type = c("response"))  
+ws.2004.s2$wt <- 1/ws.2004.s2$prob
+ws.2004.s2$normwt <- ws.2004.s2$wt/mean(ws.2004.s2$wt)
+ws.2004.s2[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s2)
+gc()
+
+#splits
+ws.2004.s3<-ws.2004[100000001:150000000,]
+w1.s3<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2004.s3)
+ws.2004.s3$prob <- predict(w1.s3,type = c("response"))  
+ws.2004.s3$wt <- 1/ws.2004.s3$prob
+ws.2004.s3$normwt <- ws.2004.s3$wt/mean(ws.2004.s3$wt)
+ws.2004.s3[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s3)
+gc()
+
+
+#splits
+x<-dim(ws.2004)
+ws.2004.s4<-ws.2004[150000001:x[1],]
+w1.s4<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2004.s4)
+ws.2004.s4$prob <- predict(w1.s4,type = c("response"))  
+ws.2004.s4$wt <- 1/ws.2004.s4$prob
+ws.2004.s4$normwt <- ws.2004.s4$wt/mean(ws.2004.s4$wt)
+ws.2004.s4[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s4)
+gc()
+
+wf<-rbindlist(list(ws.2004.s1,ws.2004.s2,ws.2004.s3,ws.2004.s4))
+
+#reread m3
+db2004<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2004.rds")
+setkey(db2004,aodid,day)
+setkey(wf,aodid,day)
+db2004 <- merge(db2004,wf,all.x = T)
+
+#+END_SRC 
+
+*** mod2
+#+BEGIN_SRC R  :session Rorg  :results none
+db2004.m2 <- db2004[!is.na(aod)]
+#rm m3
+rm(db2004)
+gc()
+#save mod2
+saveRDS(db2004.m2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2004.rds")
+gc()
+
+#+END_SRC 
+*** mod1
+#+BEGIN_SRC R  :session Rorg  :results none
+
+
+  #--------->mod1
+  #PM25
+  #to fix missing days issues resulting in cartesean error
+  db2004days <- sort(unique(db2004.m2$day))
+
+  #PM import again
+  PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+  PM25<-filter(PM25,c==2004)
+  PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+  PM10<-filter(PM10,c==2004)
+
+  ########### join aod to PM25
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+  #create aod terra matrix
+  db2004.m2$aodid<-as.character(db2004.m2$aodid)
+  setkey(db2004.m2,aodid)
+  aod.m <- makepointsmatrix(db2004.m2[db2004.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM25[day %in% db2004days,], db2004.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM25,stn,day)
+  setkey(closestaod,stn,day)
+  PM25.m1 <- merge(PM25, closestaod, all.x = T)
+  PM25.m1<-PM25.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.rds")
+
+
+
+  ########### join aod to PM10
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+  #create aod terra matrix
+  db2004.m2$aodid<-as.character(db2004.m2$aodid)
+  setkey(db2004.m2,aodid)
+  aod.m <- makepointsmatrix(db2004.m2[db2004.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM10[day %in% db2004days,], db2004.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM10,stn,day)
+  setkey(closestaod,stn,day)
+  PM10.m1 <- merge(PM10, closestaod, all.x = T)
+  PM10.m1<-PM10.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.rds")
+
+
+#+END_SRC 
+
+*** cleanup and prepare for next year
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#cleanup
+keep(fgrid,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+#+END_SRC 
+
+** PM25.AQ.2005
+*** load Aqua data
+#+BEGIN_SRC R  :session Rorg  :results none
+#load aod data
+aqua.2005<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/AOD.AQ.2005.rds")
+#get rid of dplyr tbl_df until bug gets fixed
+aqua.2005<-as.data.frame(aqua.2005)
+aqua.2005<-as.data.table(aqua.2005)
+#+END_SRC 
+
+*** Expand to all days in 2005 ("mod3")
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#create full LU TS
+days<-seq.Date(from = as.Date("2005-01-01"), to = as.Date("2005-12-31"), 1)
+#create date range
+days2005 <- data.table(expand.grid(aodid = fgrid[, unique(aodid)], day = days))
+#merge
+setkey(aqua.2005,aodid,day)
+setkey(days2005 ,aodid,day)
+db2005 <- merge(days2005,aqua.2005, all.x = T)  
+
+#+END_SRC 
+
+*** add land use
+
+#+BEGIN_SRC R  :session Rorg  :results none
+    lu <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/france.grid.allLU.rds")
+    #merge
+    setkey(db2005,aodid)
+    setkey(lu ,aodid)
+    db2005 <- merge(db2005,lu, all.x = T)  
+    #fix LAT/LONG
+  db2005$long_aod<- NULL
+  db2005$lat_aod<- NULL
+  gc()
+
+  #Fix LAT/LONG
+  setkey(db2005,aodid)
+  setkey(fgrid,aodid)
+  db2005 <- merge(db2005,fgrid[,list(aodid,long_aod,lat_aod)],all.x = T)
+
+    #clean
+  db2005$QA<-NULL
+  db2005$Year<-NULL
+gc()
+#+END_SRC
+
+*** add met data
+
+#+BEGIN_SRC R  :session Rorg  :results none
+  #load met
+  Temp<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/met/fin.met.rds")
+  Temp<-filter(Temp,c==2005)
+
+  #begin "spatio-temporal joins" using GeoMerge
+
+  met.m <- makepointsmatrix(Temp, "long_met", "lat_met", "stn")
+  setkey(db2005, aodid)
+  lu.m <- makepointsmatrix(db2005[db2005[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2005, Temp[, list(day,tempavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "tempavg", knearest = 10, maxdistance = NA)
+  setkey(db2005,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2005 <- merge(db2005, aqua.met[,list(day,tempavg,aodid)], all.x = T)
+
+  gc()
+
+  #wsavg
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2005, Temp[, list(day,wsavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "wsavg", knearest = 10, maxdistance = NA)
+  #head(aqua.met)
+  setkey(db2005,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2005 <- merge(db2005, aqua.met[,list(day,wsavg,aodid)], all.x = T)
+
+
+  gc()
+
+  ## #rhavg
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2005, Temp[, list(day,rhavg,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rhavg", knearest = 10, maxdistance = NA)
+  ## setkey(db2005,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2005 <- merge(db2005, aqua.met[,list(day,rhavg,aodid)], all.x = T)
+
+  ## #rainday
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2005, Temp[, list(day,rainday,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rainday", knearest = 10, maxdistance = NA)
+  ## setkey(db2005,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2005 <- merge(db2005, aqua.met[,list(day,rainday,aodid)], all.x = T)
+
+  #cleanup
+  keep(fgrid,db2005,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  db2005$LUaodid<-NULL
+  gc()
+
+#+END_SRC 
+
+*** add pbl
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+
+#Join PBL
+fin.pbl<-readRDS("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/fin.pbl.rds")
+fin.pbl<-filter(fin.pbl,c==2005)
+gc() 
+key.pbl<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.pbl.rds")
+
+#add pbl-key
+setkey(db2005,aodid)
+setkey(key.pbl,aodid)
+db2005 <- merge(db2005, key.pbl, all.x = T)
+#add pbl
+setkey(db2005,pblid,day)
+setkey(fin.pbl,pblid,day)
+db2005 <- merge(db2005, fin.pbl[,list(pblid,PBL,day)], all.x = T)
+db2005$pblid<-NULL
+gc()
+#+END_SRC 
+
+*** add ndvi 
+#+BEGIN_SRC R  :session Rorg  :results none
+
+  ## #add month
+  ## db2005[, m := as.numeric(format(day, "%m")) ]
+  ## #add season
+  ## #1-winter, 2-spring,3-summer,4-autum
+  ## db2005$season<-recode(db2005$m,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")
+  ## #1-winter, 2-summer
+  ## db2005$seasonSW<-recode(db2005$m,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;12=1")
+
+  ## #join NDVI to aod
+  ## fin.ndvi<-readRDS("/media/NAS/Uni/Data/Europe/france/ndvi_france/out/fin.ndvi.rds")
+  ## fin.ndvi<-filter(fin.ndvi,year==2005)
+  ## gc() 
+  ## key.ndvi<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ndvi.rds")
+  ## #add ndvi-key
+  ## setkey(db2005,aodid)
+  ## setkey(key.ndvi,aodid)
+  ## db2005 <- merge(db2005, key.ndvi, all.x = T)
+  ## #add ndvi
+  ## setkey(db2005,ndviid,m)
+  ## setkey(fin.ndvi,ndviid,m)
+  ## db2005 <- merge(db2005, fin.ndvi[,list(ndviid,ndvi,m)], all.x = T)
+  #cleanup
+  keep(fgrid,db2005,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  gc()
+#+END_SRC 
+
+*** meanPM calculations 
+**** load PM data
+#+BEGIN_SRC R  :session Rorg  :results none
+#PM
+PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+PM25<-filter(PM25,c==2005)
+PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+PM10<-filter(PM10,c==2005)
+
+#+END_SRC 
+
+**** geomerge meanpm
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#-------> meanPM25  for mod 2+3
+pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+setkey(db2005, aodid)
+aod.m <- makepointsmatrix(db2005[db2005[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2005, PM25 [, list(day,pm25,stn)], 
+                            "aodid", "stn", "closest","pm25",knearest = 10, maxdistance = 120000, nearestmean = T)
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2005,aodid,day)
+db2005 <- merge(db2005,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2005,"closestmean","meanPM25")
+gc()
+#-------> meanPM10  for mod 2+3
+pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+setkey(db2005, aodid)
+aod.m <- makepointsmatrix(db2005[db2005[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2005, PM10 [, list(day,pm10,stn)], 
+                            "aodid", "stn", "closest","pm10",knearest = 10, maxdistance = 120000, nearestmean = T)
+gc()
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2005,aodid,day)
+db2005 <- merge(db2005,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2005,"closestmean","meanPM10")
+summary(db2005$meanPM10)
+#cleanup
+keep(fgrid,db2005,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+
+#+END_SRC 
+
+**** clean (take out uneeded variables) and save mod3
+#+BEGIN_SRC R  :session Rorg  :results none
+#take out uneeded
+#save
+gc()
+saveRDS(db2005,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2005.rds")
+gc()
+#+END_SRC 
+
+*** weights 
+
+#+BEGIN_SRC R  :session Rorg  :results none
+db2005<-db2005[,obs:=1]
+db2005[is.na(aod), obs:= 0]
+ws.2005<-select(db2005,obs,elev_m,PBL,m,tempavg,aodid,day)
+#ws.2005<-filter(ws.2005,!(is.na(tempavg)))
+rm(db2005)
+gc()
+
+#splits
+ws.2005.s1<-ws.2005[1:50000000,]
+w1.s1<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2005.s1)
+ws.2005.s1$prob <- predict(w1.s1,type = c("response"))  
+ws.2005.s1$wt <- 1/ws.2005.s1$prob
+ws.2005.s1$normwt <- ws.2005.s1$wt/mean(ws.2005.s1$wt)
+ws.2005.s1[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s1)
+gc()
+
+
+#splits
+ws.2005.s2<-ws.2005[50000001:100000000,]
+w1.s2<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2005.s2)
+ws.2005.s2$prob <- predict(w1.s2,type = c("response"))  
+ws.2005.s2$wt <- 1/ws.2005.s2$prob
+ws.2005.s2$normwt <- ws.2005.s2$wt/mean(ws.2005.s2$wt)
+ws.2005.s2[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s2)
+gc()
+
+#splits
+ws.2005.s3<-ws.2005[100000001:150000000,]
+w1.s3<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2005.s3)
+ws.2005.s3$prob <- predict(w1.s3,type = c("response"))  
+ws.2005.s3$wt <- 1/ws.2005.s3$prob
+ws.2005.s3$normwt <- ws.2005.s3$wt/mean(ws.2005.s3$wt)
+ws.2005.s3[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s3)
+gc()
+
+
+#splits
+x<-dim(ws.2005)
+ws.2005.s4<-ws.2005[150000001:x[1],]
+w1.s4<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2005.s4)
+ws.2005.s4$prob <- predict(w1.s4,type = c("response"))  
+ws.2005.s4$wt <- 1/ws.2005.s4$prob
+ws.2005.s4$normwt <- ws.2005.s4$wt/mean(ws.2005.s4$wt)
+ws.2005.s4[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s4)
+gc()
+
+wf<-rbindlist(list(ws.2005.s1,ws.2005.s2,ws.2005.s3,ws.2005.s4))
+
+#reread m3
+db2005<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2005.rds")
+setkey(db2005,aodid,day)
+setkey(wf,aodid,day)
+db2005 <- merge(db2005,wf,all.x = T)
+
+#+END_SRC 
+
+*** mod2
+#+BEGIN_SRC R  :session Rorg  :results none
+db2005.m2 <- db2005[!is.na(aod)]
+#rm m3
+rm(db2005)
+gc()
+#save mod2
+saveRDS(db2005.m2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2005.rds")
+gc()
+
+#+END_SRC 
+*** mod1
+#+BEGIN_SRC R  :session Rorg  :results none
+
+
+  #--------->mod1
+  #PM25
+  #to fix missing days issues resulting in cartesean error
+  db2005days <- sort(unique(db2005.m2$day))
+
+  #PM import again
+  PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+  PM25<-filter(PM25,c==2005)
+  PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+  PM10<-filter(PM10,c==2005)
+
+  ########### join aod to PM25
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+  #create aod terra matrix
+  db2005.m2$aodid<-as.character(db2005.m2$aodid)
+  setkey(db2005.m2,aodid)
+  aod.m <- makepointsmatrix(db2005.m2[db2005.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM25[day %in% db2005days,], db2005.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM25,stn,day)
+  setkey(closestaod,stn,day)
+  PM25.m1 <- merge(PM25, closestaod, all.x = T)
+  PM25.m1<-PM25.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2005.PM25.rds")
+
+
+
+  ########### join aod to PM10
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+  #create aod terra matrix
+  db2005.m2$aodid<-as.character(db2005.m2$aodid)
+  setkey(db2005.m2,aodid)
+  aod.m <- makepointsmatrix(db2005.m2[db2005.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM10[day %in% db2005days,], db2005.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM10,stn,day)
+  setkey(closestaod,stn,day)
+  PM10.m1 <- merge(PM10, closestaod, all.x = T)
+  PM10.m1<-PM10.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2005.PM10.rds")
+
+
+#+END_SRC 
+
+*** cleanup and prepare for next year
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#cleanup
+keep(fgrid,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+#+END_SRC 
+
+** PM25.AQ.2006
+*** load Aqua data
+#+BEGIN_SRC R  :session Rorg  :results none
+#load aod data
+aqua.2006<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/AOD.AQ.2006.rds")
+#get rid of dplyr tbl_df until bug gets fixed
+aqua.2006<-as.data.frame(aqua.2006)
+aqua.2006<-as.data.table(aqua.2006)
+#+END_SRC 
+
+*** Expand to all days in 2006 ("mod3")
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#create full LU TS
+days<-seq.Date(from = as.Date("2006-01-01"), to = as.Date("2006-12-31"), 1)
+#create date range
+days2006 <- data.table(expand.grid(aodid = fgrid[, unique(aodid)], day = days))
+#merge
+setkey(aqua.2006,aodid,day)
+setkey(days2006 ,aodid,day)
+db2006 <- merge(days2006,aqua.2006, all.x = T)  
+
+#+END_SRC 
+
+*** add land use
+
+#+BEGIN_SRC R  :session Rorg  :results none
+    lu <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/france.grid.allLU.rds")
+    #merge
+    setkey(db2006,aodid)
+    setkey(lu ,aodid)
+    db2006 <- merge(db2006,lu, all.x = T)  
+    #fix LAT/LONG
+  db2006$long_aod<- NULL
+  db2006$lat_aod<- NULL
+  gc()
+
+  #Fix LAT/LONG
+  setkey(db2006,aodid)
+  setkey(fgrid,aodid)
+  db2006 <- merge(db2006,fgrid[,list(aodid,long_aod,lat_aod)],all.x = T)
+
+    #clean
+  db2006$QA<-NULL
+  db2006$Year<-NULL
+gc()
+#+END_SRC
+
+*** add met data
+
+#+BEGIN_SRC R  :session Rorg  :results none
+  #load met
+  Temp<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/met/fin.met.rds")
+  Temp<-filter(Temp,c==2006)
+
+  #begin "spatio-temporal joins" using GeoMerge
+
+  met.m <- makepointsmatrix(Temp, "long_met", "lat_met", "stn")
+  setkey(db2006, aodid)
+  lu.m <- makepointsmatrix(db2006[db2006[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2006, Temp[, list(day,tempavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "tempavg", knearest = 10, maxdistance = NA)
+  setkey(db2006,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2006 <- merge(db2006, aqua.met[,list(day,tempavg,aodid)], all.x = T)
+
+  gc()
+
+  #wsavg
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2006, Temp[, list(day,wsavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "wsavg", knearest = 10, maxdistance = NA)
+  #head(aqua.met)
+  setkey(db2006,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2006 <- merge(db2006, aqua.met[,list(day,wsavg,aodid)], all.x = T)
+
+
+  gc()
+
+  ## #rhavg
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2006, Temp[, list(day,rhavg,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rhavg", knearest = 10, maxdistance = NA)
+  ## setkey(db2006,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2006 <- merge(db2006, aqua.met[,list(day,rhavg,aodid)], all.x = T)
+
+  ## #rainday
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2006, Temp[, list(day,rainday,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rainday", knearest = 10, maxdistance = NA)
+  ## setkey(db2006,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2006 <- merge(db2006, aqua.met[,list(day,rainday,aodid)], all.x = T)
+
+  #cleanup
+  keep(fgrid,db2006,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  db2006$LUaodid<-NULL
+  gc()
+
+#+END_SRC 
+
+*** add pbl
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+
+#Join PBL
+fin.pbl<-readRDS("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/fin.pbl.rds")
+fin.pbl<-filter(fin.pbl,c==2006)
+gc() 
+key.pbl<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.pbl.rds")
+
+#add pbl-key
+setkey(db2006,aodid)
+setkey(key.pbl,aodid)
+db2006 <- merge(db2006, key.pbl, all.x = T)
+#add pbl
+setkey(db2006,pblid,day)
+setkey(fin.pbl,pblid,day)
+db2006 <- merge(db2006, fin.pbl[,list(pblid,PBL,day)], all.x = T)
+db2006$pblid<-NULL
+gc()
+#+END_SRC 
+
+*** add ndvi 
+#+BEGIN_SRC R  :session Rorg  :results none
+
+  ## #add month
+  ## db2006[, m := as.numeric(format(day, "%m")) ]
+  ## #add season
+  ## #1-winter, 2-spring,3-summer,4-autum
+  ## db2006$season<-recode(db2006$m,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")
+  ## #1-winter, 2-summer
+  ## db2006$seasonSW<-recode(db2006$m,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;12=1")
+
+  ## #join NDVI to aod
+  ## fin.ndvi<-readRDS("/media/NAS/Uni/Data/Europe/france/ndvi_france/out/fin.ndvi.rds")
+  ## fin.ndvi<-filter(fin.ndvi,year==2006)
+  ## gc() 
+  ## key.ndvi<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ndvi.rds")
+  ## #add ndvi-key
+  ## setkey(db2006,aodid)
+  ## setkey(key.ndvi,aodid)
+  ## db2006 <- merge(db2006, key.ndvi, all.x = T)
+  ## #add ndvi
+  ## setkey(db2006,ndviid,m)
+  ## setkey(fin.ndvi,ndviid,m)
+  ## db2006 <- merge(db2006, fin.ndvi[,list(ndviid,ndvi,m)], all.x = T)
+  #cleanup
+  keep(fgrid,db2006,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  gc()
+#+END_SRC 
+
+*** meanPM calculations 
+**** load PM data
+#+BEGIN_SRC R  :session Rorg  :results none
+#PM
+PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+PM25<-filter(PM25,c==2006)
+PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+PM10<-filter(PM10,c==2006)
+
+#+END_SRC 
+
+**** geomerge meanpm
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#-------> meanPM25  for mod 2+3
+pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+setkey(db2006, aodid)
+aod.m <- makepointsmatrix(db2006[db2006[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2006, PM25 [, list(day,pm25,stn)], 
+                            "aodid", "stn", "closest","pm25",knearest = 10, maxdistance = 120000, nearestmean = T)
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2006,aodid,day)
+db2006 <- merge(db2006,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2006,"closestmean","meanPM25")
+gc()
+#-------> meanPM10  for mod 2+3
+pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+setkey(db2006, aodid)
+aod.m <- makepointsmatrix(db2006[db2006[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2006, PM10 [, list(day,pm10,stn)], 
+                            "aodid", "stn", "closest","pm10",knearest = 10, maxdistance = 120000, nearestmean = T)
+gc()
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2006,aodid,day)
+db2006 <- merge(db2006,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2006,"closestmean","meanPM10")
+summary(db2006$meanPM10)
+#cleanup
+keep(fgrid,db2006,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+
+#+END_SRC 
+
+**** clean (take out uneeded variables) and save mod3
+#+BEGIN_SRC R  :session Rorg  :results none
+#take out uneeded
+#save
+gc()
+saveRDS(db2006,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2006.rds")
+gc()
+#+END_SRC 
+
+*** weights 
+
+#+BEGIN_SRC R  :session Rorg  :results none
+db2006<-db2006[,obs:=1]
+db2006[is.na(aod), obs:= 0]
+ws.2006<-select(db2006,obs,elev_m,PBL,m,tempavg,aodid,day)
+#ws.2006<-filter(ws.2006,!(is.na(tempavg)))
+rm(db2006)
+gc()
+
+#splits
+ws.2006.s1<-ws.2006[1:50000000,]
+w1.s1<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2006.s1)
+ws.2006.s1$prob <- predict(w1.s1,type = c("response"))  
+ws.2006.s1$wt <- 1/ws.2006.s1$prob
+ws.2006.s1$normwt <- ws.2006.s1$wt/mean(ws.2006.s1$wt)
+ws.2006.s1[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s1)
+gc()
+
+
+#splits
+ws.2006.s2<-ws.2006[50000001:100000000,]
+w1.s2<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2006.s2)
+ws.2006.s2$prob <- predict(w1.s2,type = c("response"))  
+ws.2006.s2$wt <- 1/ws.2006.s2$prob
+ws.2006.s2$normwt <- ws.2006.s2$wt/mean(ws.2006.s2$wt)
+ws.2006.s2[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s2)
+gc()
+
+#splits
+ws.2006.s3<-ws.2006[100000001:150000000,]
+w1.s3<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2006.s3)
+ws.2006.s3$prob <- predict(w1.s3,type = c("response"))  
+ws.2006.s3$wt <- 1/ws.2006.s3$prob
+ws.2006.s3$normwt <- ws.2006.s3$wt/mean(ws.2006.s3$wt)
+ws.2006.s3[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s3)
+gc()
+
+
+#splits
+x<-dim(ws.2006)
+ws.2006.s4<-ws.2006[150000001:x[1],]
+w1.s4<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2006.s4)
+ws.2006.s4$prob <- predict(w1.s4,type = c("response"))  
+ws.2006.s4$wt <- 1/ws.2006.s4$prob
+ws.2006.s4$normwt <- ws.2006.s4$wt/mean(ws.2006.s4$wt)
+ws.2006.s4[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s4)
+gc()
+
+wf<-rbindlist(list(ws.2006.s1,ws.2006.s2,ws.2006.s3,ws.2006.s4))
+
+#reread m3
+db2006<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2006.rds")
+setkey(db2006,aodid,day)
+setkey(wf,aodid,day)
+db2006 <- merge(db2006,wf,all.x = T)
+
+#+END_SRC 
+
+*** mod2
+#+BEGIN_SRC R  :session Rorg  :results none
+db2006.m2 <- db2006[!is.na(aod)]
+#rm m3
+rm(db2006)
+gc()
+#save mod2
+saveRDS(db2006.m2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2006.rds")
+gc()
+
+#+END_SRC 
+*** mod1
+#+BEGIN_SRC R  :session Rorg  :results none
+
+
+  #--------->mod1
+  #PM25
+  #to fix missing days issues resulting in cartesean error
+  db2006days <- sort(unique(db2006.m2$day))
+
+  #PM import again
+  PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+  PM25<-filter(PM25,c==2006)
+  PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+  PM10<-filter(PM10,c==2006)
+
+  ########### join aod to PM25
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+  #create aod terra matrix
+  db2006.m2$aodid<-as.character(db2006.m2$aodid)
+  setkey(db2006.m2,aodid)
+  aod.m <- makepointsmatrix(db2006.m2[db2006.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM25[day %in% db2006days,], db2006.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM25,stn,day)
+  setkey(closestaod,stn,day)
+  PM25.m1 <- merge(PM25, closestaod, all.x = T)
+  PM25.m1<-PM25.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2006.PM25.rds")
+
+
+
+  ########### join aod to PM10
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+  #create aod terra matrix
+  db2006.m2$aodid<-as.character(db2006.m2$aodid)
+  setkey(db2006.m2,aodid)
+  aod.m <- makepointsmatrix(db2006.m2[db2006.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM10[day %in% db2006days,], db2006.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM10,stn,day)
+  setkey(closestaod,stn,day)
+  PM10.m1 <- merge(PM10, closestaod, all.x = T)
+  PM10.m1<-PM10.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2006.PM10.rds")
+
+
+#+END_SRC 
+
+*** cleanup and prepare for next year
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#cleanup
+keep(fgrid,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+#+END_SRC 
+
+** PM25.AQ.2007
+*** load Aqua data
+#+BEGIN_SRC R  :session Rorg  :results none
+#load aod data
+aqua.2007<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/AOD.AQ.2007.rds")
+#get rid of dplyr tbl_df until bug gets fixed
+aqua.2007<-as.data.frame(aqua.2007)
+aqua.2007<-as.data.table(aqua.2007)
+#+END_SRC 
+
+*** Expand to all days in 2007 ("mod3")
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#create full LU TS
+days<-seq.Date(from = as.Date("2007-01-01"), to = as.Date("2007-12-31"), 1)
+#create date range
+days2007 <- data.table(expand.grid(aodid = fgrid[, unique(aodid)], day = days))
+#merge
+setkey(aqua.2007,aodid,day)
+setkey(days2007 ,aodid,day)
+db2007 <- merge(days2007,aqua.2007, all.x = T)  
+
+#+END_SRC 
+
+*** add land use
+
+#+BEGIN_SRC R  :session Rorg  :results none
+    lu <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/france.grid.allLU.rds")
+    #merge
+    setkey(db2007,aodid)
+    setkey(lu ,aodid)
+    db2007 <- merge(db2007,lu, all.x = T)  
+    #fix LAT/LONG
+  db2007$long_aod<- NULL
+  db2007$lat_aod<- NULL
+  gc()
+
+  #Fix LAT/LONG
+  setkey(db2007,aodid)
+  setkey(fgrid,aodid)
+  db2007 <- merge(db2007,fgrid[,list(aodid,long_aod,lat_aod)],all.x = T)
+
+    #clean
+  db2007$QA<-NULL
+  db2007$Year<-NULL
+gc()
+#+END_SRC
+
+*** add met data
+
+#+BEGIN_SRC R  :session Rorg  :results none
+  #load met
+  Temp<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/met/fin.met.rds")
+  Temp<-filter(Temp,c==2007)
+
+  #begin "spatio-temporal joins" using GeoMerge
+
+  met.m <- makepointsmatrix(Temp, "long_met", "lat_met", "stn")
+  setkey(db2007, aodid)
+  lu.m <- makepointsmatrix(db2007[db2007[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2007, Temp[, list(day,tempavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "tempavg", knearest = 10, maxdistance = NA)
+  setkey(db2007,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2007 <- merge(db2007, aqua.met[,list(day,tempavg,aodid)], all.x = T)
+
+  gc()
+
+  #wsavg
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2007, Temp[, list(day,wsavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "wsavg", knearest = 10, maxdistance = NA)
+  #head(aqua.met)
+  setkey(db2007,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2007 <- merge(db2007, aqua.met[,list(day,wsavg,aodid)], all.x = T)
+
+
+  gc()
+
+  ## #rhavg
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2007, Temp[, list(day,rhavg,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rhavg", knearest = 10, maxdistance = NA)
+  ## setkey(db2007,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2007 <- merge(db2007, aqua.met[,list(day,rhavg,aodid)], all.x = T)
+
+  ## #rainday
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2007, Temp[, list(day,rainday,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rainday", knearest = 10, maxdistance = NA)
+  ## setkey(db2007,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2007 <- merge(db2007, aqua.met[,list(day,rainday,aodid)], all.x = T)
+
+  #cleanup
+  keep(fgrid,db2007,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  db2007$LUaodid<-NULL
+  gc()
+
+#+END_SRC 
+
+*** add pbl
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+
+#Join PBL
+fin.pbl<-readRDS("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/fin.pbl.rds")
+fin.pbl<-filter(fin.pbl,c==2007)
+gc() 
+key.pbl<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.pbl.rds")
+
+#add pbl-key
+setkey(db2007,aodid)
+setkey(key.pbl,aodid)
+db2007 <- merge(db2007, key.pbl, all.x = T)
+#add pbl
+setkey(db2007,pblid,day)
+setkey(fin.pbl,pblid,day)
+db2007 <- merge(db2007, fin.pbl[,list(pblid,PBL,day)], all.x = T)
+db2007$pblid<-NULL
+gc()
+#+END_SRC 
+
+*** add ndvi 
+#+BEGIN_SRC R  :session Rorg  :results none
+
+  ## #add month
+  ## db2007[, m := as.numeric(format(day, "%m")) ]
+  ## #add season
+  ## #1-winter, 2-spring,3-summer,4-autum
+  ## db2007$season<-recode(db2007$m,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")
+  ## #1-winter, 2-summer
+  ## db2007$seasonSW<-recode(db2007$m,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;12=1")
+
+  ## #join NDVI to aod
+  ## fin.ndvi<-readRDS("/media/NAS/Uni/Data/Europe/france/ndvi_france/out/fin.ndvi.rds")
+  ## fin.ndvi<-filter(fin.ndvi,year==2007)
+  ## gc() 
+  ## key.ndvi<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ndvi.rds")
+  ## #add ndvi-key
+  ## setkey(db2007,aodid)
+  ## setkey(key.ndvi,aodid)
+  ## db2007 <- merge(db2007, key.ndvi, all.x = T)
+  ## #add ndvi
+  ## setkey(db2007,ndviid,m)
+  ## setkey(fin.ndvi,ndviid,m)
+  ## db2007 <- merge(db2007, fin.ndvi[,list(ndviid,ndvi,m)], all.x = T)
+  #cleanup
+  keep(fgrid,db2007,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  gc()
+#+END_SRC 
+
+*** meanPM calculations 
+**** load PM data
+#+BEGIN_SRC R  :session Rorg  :results none
+#PM
+PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+PM25<-filter(PM25,c==2007)
+PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+PM10<-filter(PM10,c==2007)
+
+#+END_SRC 
+
+**** geomerge meanpm
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#-------> meanPM25  for mod 2+3
+pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+setkey(db2007, aodid)
+aod.m <- makepointsmatrix(db2007[db2007[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2007, PM25 [, list(day,pm25,stn)], 
+                            "aodid", "stn", "closest","pm25",knearest = 10, maxdistance = 120000, nearestmean = T)
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2007,aodid,day)
+db2007 <- merge(db2007,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2007,"closestmean","meanPM25")
+gc()
+#-------> meanPM10  for mod 2+3
+pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+setkey(db2007, aodid)
+aod.m <- makepointsmatrix(db2007[db2007[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2007, PM10 [, list(day,pm10,stn)], 
+                            "aodid", "stn", "closest","pm10",knearest = 10, maxdistance = 120000, nearestmean = T)
+gc()
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2007,aodid,day)
+db2007 <- merge(db2007,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2007,"closestmean","meanPM10")
+summary(db2007$meanPM10)
+#cleanup
+keep(fgrid,db2007,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+
+#+END_SRC 
+
+**** clean (take out uneeded variables) and save mod3
+#+BEGIN_SRC R  :session Rorg  :results none
+#take out uneeded
+#save
+gc()
+saveRDS(db2007,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2007.rds")
+gc()
+#+END_SRC 
+
+*** weights 
+
+#+BEGIN_SRC R  :session Rorg  :results none
+db2007<-db2007[,obs:=1]
+db2007[is.na(aod), obs:= 0]
+ws.2007<-select(db2007,obs,elev_m,PBL,m,tempavg,aodid,day)
+#ws.2007<-filter(ws.2007,!(is.na(tempavg)))
+rm(db2007)
+gc()
+
+#splits
+ws.2007.s1<-ws.2007[1:50000000,]
+w1.s1<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2007.s1)
+ws.2007.s1$prob <- predict(w1.s1,type = c("response"))  
+ws.2007.s1$wt <- 1/ws.2007.s1$prob
+ws.2007.s1$normwt <- ws.2007.s1$wt/mean(ws.2007.s1$wt)
+ws.2007.s1[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s1)
+gc()
+
+
+#splits
+ws.2007.s2<-ws.2007[50000001:100000000,]
+w1.s2<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2007.s2)
+ws.2007.s2$prob <- predict(w1.s2,type = c("response"))  
+ws.2007.s2$wt <- 1/ws.2007.s2$prob
+ws.2007.s2$normwt <- ws.2007.s2$wt/mean(ws.2007.s2$wt)
+ws.2007.s2[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s2)
+gc()
+
+#splits
+ws.2007.s3<-ws.2007[100000001:150000000,]
+w1.s3<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2007.s3)
+ws.2007.s3$prob <- predict(w1.s3,type = c("response"))  
+ws.2007.s3$wt <- 1/ws.2007.s3$prob
+ws.2007.s3$normwt <- ws.2007.s3$wt/mean(ws.2007.s3$wt)
+ws.2007.s3[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s3)
+gc()
+
+
+#splits
+x<-dim(ws.2007)
+ws.2007.s4<-ws.2007[150000001:x[1],]
+w1.s4<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2007.s4)
+ws.2007.s4$prob <- predict(w1.s4,type = c("response"))  
+ws.2007.s4$wt <- 1/ws.2007.s4$prob
+ws.2007.s4$normwt <- ws.2007.s4$wt/mean(ws.2007.s4$wt)
+ws.2007.s4[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s4)
+gc()
+
+wf<-rbindlist(list(ws.2007.s1,ws.2007.s2,ws.2007.s3,ws.2007.s4))
+
+#reread m3
+db2007<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2007.rds")
+setkey(db2007,aodid,day)
+setkey(wf,aodid,day)
+db2007 <- merge(db2007,wf,all.x = T)
+
+#+END_SRC 
+
+*** mod2
+#+BEGIN_SRC R  :session Rorg  :results none
+db2007.m2 <- db2007[!is.na(aod)]
+#rm m3
+rm(db2007)
+gc()
+#save mod2
+saveRDS(db2007.m2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2007.rds")
+gc()
+
+#+END_SRC 
+*** mod1
+#+BEGIN_SRC R  :session Rorg  :results none
+
+
+  #--------->mod1
+  #PM25
+  #to fix missing days issues resulting in cartesean error
+  db2007days <- sort(unique(db2007.m2$day))
+
+  #PM import again
+  PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+  PM25<-filter(PM25,c==2007)
+  PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+  PM10<-filter(PM10,c==2007)
+
+  ########### join aod to PM25
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+  #create aod terra matrix
+  db2007.m2$aodid<-as.character(db2007.m2$aodid)
+  setkey(db2007.m2,aodid)
+  aod.m <- makepointsmatrix(db2007.m2[db2007.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM25[day %in% db2007days,], db2007.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM25,stn,day)
+  setkey(closestaod,stn,day)
+  PM25.m1 <- merge(PM25, closestaod, all.x = T)
+  PM25.m1<-PM25.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2007.PM25.rds")
+
+
+
+  ########### join aod to PM10
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+  #create aod terra matrix
+  db2007.m2$aodid<-as.character(db2007.m2$aodid)
+  setkey(db2007.m2,aodid)
+  aod.m <- makepointsmatrix(db2007.m2[db2007.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM10[day %in% db2007days,], db2007.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM10,stn,day)
+  setkey(closestaod,stn,day)
+  PM10.m1 <- merge(PM10, closestaod, all.x = T)
+  PM10.m1<-PM10.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2007.PM10.rds")
+
+
+#+END_SRC 
+
+*** cleanup and prepare for next year
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#cleanup
+keep(fgrid,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+#+END_SRC 
+
+** PM25.AQ.2008
+*** load Aqua data
+#+BEGIN_SRC R  :session Rorg  :results none
+#load aod data
+aqua.2008<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/AOD.AQ.2008.rds")
+#get rid of dplyr tbl_df until bug gets fixed
+aqua.2008<-as.data.frame(aqua.2008)
+aqua.2008<-as.data.table(aqua.2008)
+#+END_SRC 
+
+*** Expand to all days in 2008 ("mod3")
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#create full LU TS
+days<-seq.Date(from = as.Date("2008-01-01"), to = as.Date("2008-12-31"), 1)
+#create date range
+days2008 <- data.table(expand.grid(aodid = fgrid[, unique(aodid)], day = days))
+#merge
+setkey(aqua.2008,aodid,day)
+setkey(days2008 ,aodid,day)
+db2008 <- merge(days2008,aqua.2008, all.x = T)  
+
+#+END_SRC 
+
+*** add land use
+
+#+BEGIN_SRC R  :session Rorg  :results none
+    lu <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/france.grid.allLU.rds")
+    #merge
+    setkey(db2008,aodid)
+    setkey(lu ,aodid)
+    db2008 <- merge(db2008,lu, all.x = T)  
+    #fix LAT/LONG
+  db2008$long_aod<- NULL
+  db2008$lat_aod<- NULL
+  gc()
+
+  #Fix LAT/LONG
+  setkey(db2008,aodid)
+  setkey(fgrid,aodid)
+  db2008 <- merge(db2008,fgrid[,list(aodid,long_aod,lat_aod)],all.x = T)
+
+    #clean
+  db2008$QA<-NULL
+  db2008$Year<-NULL
+gc()
+#+END_SRC
+
+*** add met data
+
+#+BEGIN_SRC R  :session Rorg  :results none
+  #load met
+  Temp<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/met/fin.met.rds")
+  Temp<-filter(Temp,c==2008)
+
+  #begin "spatio-temporal joins" using GeoMerge
+
+  met.m <- makepointsmatrix(Temp, "long_met", "lat_met", "stn")
+  setkey(db2008, aodid)
+  lu.m <- makepointsmatrix(db2008[db2008[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2008, Temp[, list(day,tempavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "tempavg", knearest = 10, maxdistance = NA)
+  setkey(db2008,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2008 <- merge(db2008, aqua.met[,list(day,tempavg,aodid)], all.x = T)
+
+  gc()
+
+  #wsavg
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2008, Temp[, list(day,wsavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "wsavg", knearest = 10, maxdistance = NA)
+  #head(aqua.met)
+  setkey(db2008,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2008 <- merge(db2008, aqua.met[,list(day,wsavg,aodid)], all.x = T)
+
+
+  gc()
+
+  ## #rhavg
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2008, Temp[, list(day,rhavg,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rhavg", knearest = 10, maxdistance = NA)
+  ## setkey(db2008,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2008 <- merge(db2008, aqua.met[,list(day,rhavg,aodid)], all.x = T)
+
+  ## #rainday
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2008, Temp[, list(day,rainday,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rainday", knearest = 10, maxdistance = NA)
+  ## setkey(db2008,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2008 <- merge(db2008, aqua.met[,list(day,rainday,aodid)], all.x = T)
+
+  #cleanup
+  keep(fgrid,db2008,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  db2008$LUaodid<-NULL
+  gc()
+
+#+END_SRC 
+
+*** add pbl
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+
+#Join PBL
+fin.pbl<-readRDS("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/fin.pbl.rds")
+fin.pbl<-filter(fin.pbl,c==2008)
+gc() 
+key.pbl<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.pbl.rds")
+
+#add pbl-key
+setkey(db2008,aodid)
+setkey(key.pbl,aodid)
+db2008 <- merge(db2008, key.pbl, all.x = T)
+#add pbl
+setkey(db2008,pblid,day)
+setkey(fin.pbl,pblid,day)
+db2008 <- merge(db2008, fin.pbl[,list(pblid,PBL,day)], all.x = T)
+db2008$pblid<-NULL
+gc()
+#+END_SRC 
+
+*** add ndvi 
+#+BEGIN_SRC R  :session Rorg  :results none
+
+  ## #add month
+  ## db2008[, m := as.numeric(format(day, "%m")) ]
+  ## #add season
+  ## #1-winter, 2-spring,3-summer,4-autum
+  ## db2008$season<-recode(db2008$m,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")
+  ## #1-winter, 2-summer
+  ## db2008$seasonSW<-recode(db2008$m,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;12=1")
+
+  ## #join NDVI to aod
+  ## fin.ndvi<-readRDS("/media/NAS/Uni/Data/Europe/france/ndvi_france/out/fin.ndvi.rds")
+  ## fin.ndvi<-filter(fin.ndvi,year==2008)
+  ## gc() 
+  ## key.ndvi<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ndvi.rds")
+  ## #add ndvi-key
+  ## setkey(db2008,aodid)
+  ## setkey(key.ndvi,aodid)
+  ## db2008 <- merge(db2008, key.ndvi, all.x = T)
+  ## #add ndvi
+  ## setkey(db2008,ndviid,m)
+  ## setkey(fin.ndvi,ndviid,m)
+  ## db2008 <- merge(db2008, fin.ndvi[,list(ndviid,ndvi,m)], all.x = T)
+  #cleanup
+  keep(fgrid,db2008,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  gc()
+#+END_SRC 
+
+*** meanPM calculations 
+**** load PM data
+#+BEGIN_SRC R  :session Rorg  :results none
+#PM
+PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+PM25<-filter(PM25,c==2008)
+PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+PM10<-filter(PM10,c==2008)
+
+#+END_SRC 
+
+**** geomerge meanpm
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#-------> meanPM25  for mod 2+3
+pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+setkey(db2008, aodid)
+aod.m <- makepointsmatrix(db2008[db2008[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2008, PM25 [, list(day,pm25,stn)], 
+                            "aodid", "stn", "closest","pm25",knearest = 10, maxdistance = 120000, nearestmean = T)
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2008,aodid,day)
+db2008 <- merge(db2008,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2008,"closestmean","meanPM25")
+gc()
+#-------> meanPM10  for mod 2+3
+pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+setkey(db2008, aodid)
+aod.m <- makepointsmatrix(db2008[db2008[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2008, PM10 [, list(day,pm10,stn)], 
+                            "aodid", "stn", "closest","pm10",knearest = 10, maxdistance = 120000, nearestmean = T)
+gc()
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2008,aodid,day)
+db2008 <- merge(db2008,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2008,"closestmean","meanPM10")
+summary(db2008$meanPM10)
+#cleanup
+keep(fgrid,db2008,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+
+#+END_SRC 
+
+**** clean (take out uneeded variables) and save mod3
+#+BEGIN_SRC R  :session Rorg  :results none
+#take out uneeded
+#save
+gc()
+saveRDS(db2008,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2008.rds")
+gc()
+#+END_SRC 
+
+*** weights 
+
+#+BEGIN_SRC R  :session Rorg  :results none
+db2008<-db2008[,obs:=1]
+db2008[is.na(aod), obs:= 0]
+ws.2008<-select(db2008,obs,elev_m,PBL,m,tempavg,aodid,day)
+#ws.2008<-filter(ws.2008,!(is.na(tempavg)))
+rm(db2008)
+gc()
+
+#splits
+ws.2008.s1<-ws.2008[1:50000000,]
+w1.s1<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2008.s1)
+ws.2008.s1$prob <- predict(w1.s1,type = c("response"))  
+ws.2008.s1$wt <- 1/ws.2008.s1$prob
+ws.2008.s1$normwt <- ws.2008.s1$wt/mean(ws.2008.s1$wt)
+ws.2008.s1[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s1)
+gc()
+
+
+#splits
+ws.2008.s2<-ws.2008[50000001:100000000,]
+w1.s2<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2008.s2)
+ws.2008.s2$prob <- predict(w1.s2,type = c("response"))  
+ws.2008.s2$wt <- 1/ws.2008.s2$prob
+ws.2008.s2$normwt <- ws.2008.s2$wt/mean(ws.2008.s2$wt)
+ws.2008.s2[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s2)
+gc()
+
+#splits
+ws.2008.s3<-ws.2008[100000001:150000000,]
+w1.s3<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2008.s3)
+ws.2008.s3$prob <- predict(w1.s3,type = c("response"))  
+ws.2008.s3$wt <- 1/ws.2008.s3$prob
+ws.2008.s3$normwt <- ws.2008.s3$wt/mean(ws.2008.s3$wt)
+ws.2008.s3[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s3)
+gc()
+
+
+#splits
+x<-dim(ws.2008)
+ws.2008.s4<-ws.2008[150000001:x[1],]
+w1.s4<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2008.s4)
+ws.2008.s4$prob <- predict(w1.s4,type = c("response"))  
+ws.2008.s4$wt <- 1/ws.2008.s4$prob
+ws.2008.s4$normwt <- ws.2008.s4$wt/mean(ws.2008.s4$wt)
+ws.2008.s4[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s4)
+gc()
+
+wf<-rbindlist(list(ws.2008.s1,ws.2008.s2,ws.2008.s3,ws.2008.s4))
+
+#reread m3
+db2008<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2008.rds")
+setkey(db2008,aodid,day)
+setkey(wf,aodid,day)
+db2008 <- merge(db2008,wf,all.x = T)
+
+#+END_SRC 
+
+*** mod2
+#+BEGIN_SRC R  :session Rorg  :results none
+db2008.m2 <- db2008[!is.na(aod)]
+#rm m3
+rm(db2008)
+gc()
+#save mod2
+saveRDS(db2008.m2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2008.rds")
+gc()
+
+#+END_SRC 
+*** mod1
+#+BEGIN_SRC R  :session Rorg  :results none
+
+
+  #--------->mod1
+  #PM25
+  #to fix missing days issues resulting in cartesean error
+  db2008days <- sort(unique(db2008.m2$day))
+
+  #PM import again
+  PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+  PM25<-filter(PM25,c==2008)
+  PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+  PM10<-filter(PM10,c==2008)
+
+  ########### join aod to PM25
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+  #create aod terra matrix
+  db2008.m2$aodid<-as.character(db2008.m2$aodid)
+  setkey(db2008.m2,aodid)
+  aod.m <- makepointsmatrix(db2008.m2[db2008.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM25[day %in% db2008days,], db2008.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM25,stn,day)
+  setkey(closestaod,stn,day)
+  PM25.m1 <- merge(PM25, closestaod, all.x = T)
+  PM25.m1<-PM25.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2008.PM25.rds")
+
+
+
+  ########### join aod to PM10
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+  #create aod terra matrix
+  db2008.m2$aodid<-as.character(db2008.m2$aodid)
+  setkey(db2008.m2,aodid)
+  aod.m <- makepointsmatrix(db2008.m2[db2008.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM10[day %in% db2008days,], db2008.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM10,stn,day)
+  setkey(closestaod,stn,day)
+  PM10.m1 <- merge(PM10, closestaod, all.x = T)
+  PM10.m1<-PM10.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2008.PM10.rds")
+
+
+#+END_SRC 
+
+*** cleanup and prepare for next year
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#cleanup
+keep(fgrid,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+#+END_SRC 
+
+** PM25.AQ.2009
+*** load Aqua data
+#+BEGIN_SRC R  :session Rorg  :results none
+#load aod data
+aqua.2009<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/AOD.AQ.2009.rds")
+#get rid of dplyr tbl_df until bug gets fixed
+aqua.2009<-as.data.frame(aqua.2009)
+aqua.2009<-as.data.table(aqua.2009)
+#+END_SRC 
+
+*** Expand to all days in 2009 ("mod3")
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#create full LU TS
+days<-seq.Date(from = as.Date("2009-01-01"), to = as.Date("2009-12-31"), 1)
+#create date range
+days2009 <- data.table(expand.grid(aodid = fgrid[, unique(aodid)], day = days))
+#merge
+setkey(aqua.2009,aodid,day)
+setkey(days2009 ,aodid,day)
+db2009 <- merge(days2009,aqua.2009, all.x = T)  
+
+#+END_SRC 
+
+*** add land use
+
+#+BEGIN_SRC R  :session Rorg  :results none
+    lu <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/france.grid.allLU.rds")
+    #merge
+    setkey(db2009,aodid)
+    setkey(lu ,aodid)
+    db2009 <- merge(db2009,lu, all.x = T)  
+    #fix LAT/LONG
+  db2009$long_aod<- NULL
+  db2009$lat_aod<- NULL
+  gc()
+
+  #Fix LAT/LONG
+  setkey(db2009,aodid)
+  setkey(fgrid,aodid)
+  db2009 <- merge(db2009,fgrid[,list(aodid,long_aod,lat_aod)],all.x = T)
+
+    #clean
+  db2009$QA<-NULL
+  db2009$Year<-NULL
+gc()
+#+END_SRC
+
+*** add met data
+
+#+BEGIN_SRC R  :session Rorg  :results none
+  #load met
+  Temp<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/met/fin.met.rds")
+  Temp<-filter(Temp,c==2009)
+
+  #begin "spatio-temporal joins" using GeoMerge
+
+  met.m <- makepointsmatrix(Temp, "long_met", "lat_met", "stn")
+  setkey(db2009, aodid)
+  lu.m <- makepointsmatrix(db2009[db2009[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2009, Temp[, list(day,tempavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "tempavg", knearest = 10, maxdistance = NA)
+  setkey(db2009,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2009 <- merge(db2009, aqua.met[,list(day,tempavg,aodid)], all.x = T)
+
+  gc()
+
+  #wsavg
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2009, Temp[, list(day,wsavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "wsavg", knearest = 10, maxdistance = NA)
+  #head(aqua.met)
+  setkey(db2009,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2009 <- merge(db2009, aqua.met[,list(day,wsavg,aodid)], all.x = T)
+
+
+  gc()
+
+  ## #rhavg
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2009, Temp[, list(day,rhavg,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rhavg", knearest = 10, maxdistance = NA)
+  ## setkey(db2009,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2009 <- merge(db2009, aqua.met[,list(day,rhavg,aodid)], all.x = T)
+
+  ## #rainday
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2009, Temp[, list(day,rainday,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rainday", knearest = 10, maxdistance = NA)
+  ## setkey(db2009,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2009 <- merge(db2009, aqua.met[,list(day,rainday,aodid)], all.x = T)
+
+  #cleanup
+  keep(fgrid,db2009,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  db2009$LUaodid<-NULL
+  gc()
+
+#+END_SRC 
+
+*** add pbl
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+
+#Join PBL
+fin.pbl<-readRDS("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/fin.pbl.rds")
+fin.pbl<-filter(fin.pbl,c==2009)
+gc() 
+key.pbl<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.pbl.rds")
+
+#add pbl-key
+setkey(db2009,aodid)
+setkey(key.pbl,aodid)
+db2009 <- merge(db2009, key.pbl, all.x = T)
+#add pbl
+setkey(db2009,pblid,day)
+setkey(fin.pbl,pblid,day)
+db2009 <- merge(db2009, fin.pbl[,list(pblid,PBL,day)], all.x = T)
+db2009$pblid<-NULL
+gc()
+#+END_SRC 
+
+*** add ndvi 
+#+BEGIN_SRC R  :session Rorg  :results none
+
+  ## #add month
+  ## db2009[, m := as.numeric(format(day, "%m")) ]
+  ## #add season
+  ## #1-winter, 2-spring,3-summer,4-autum
+  ## db2009$season<-recode(db2009$m,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")
+  ## #1-winter, 2-summer
+  ## db2009$seasonSW<-recode(db2009$m,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;12=1")
+
+  ## #join NDVI to aod
+  ## fin.ndvi<-readRDS("/media/NAS/Uni/Data/Europe/france/ndvi_france/out/fin.ndvi.rds")
+  ## fin.ndvi<-filter(fin.ndvi,year==2009)
+  ## gc() 
+  ## key.ndvi<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ndvi.rds")
+  ## #add ndvi-key
+  ## setkey(db2009,aodid)
+  ## setkey(key.ndvi,aodid)
+  ## db2009 <- merge(db2009, key.ndvi, all.x = T)
+  ## #add ndvi
+  ## setkey(db2009,ndviid,m)
+  ## setkey(fin.ndvi,ndviid,m)
+  ## db2009 <- merge(db2009, fin.ndvi[,list(ndviid,ndvi,m)], all.x = T)
+  #cleanup
+  keep(fgrid,db2009,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  gc()
+#+END_SRC 
+
+*** meanPM calculations 
+**** load PM data
+#+BEGIN_SRC R  :session Rorg  :results none
+#PM
+PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+PM25<-filter(PM25,c==2009)
+PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+PM10<-filter(PM10,c==2009)
+
+#+END_SRC 
+
+**** geomerge meanpm
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#-------> meanPM25  for mod 2+3
+pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+setkey(db2009, aodid)
+aod.m <- makepointsmatrix(db2009[db2009[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2009, PM25 [, list(day,pm25,stn)], 
+                            "aodid", "stn", "closest","pm25",knearest = 10, maxdistance = 120000, nearestmean = T)
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2009,aodid,day)
+db2009 <- merge(db2009,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2009,"closestmean","meanPM25")
+gc()
+#-------> meanPM10  for mod 2+3
+pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+setkey(db2009, aodid)
+aod.m <- makepointsmatrix(db2009[db2009[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2009, PM10 [, list(day,pm10,stn)], 
+                            "aodid", "stn", "closest","pm10",knearest = 10, maxdistance = 120000, nearestmean = T)
+gc()
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2009,aodid,day)
+db2009 <- merge(db2009,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2009,"closestmean","meanPM10")
+summary(db2009$meanPM10)
+#cleanup
+keep(fgrid,db2009,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+
+#+END_SRC 
+
+**** clean (take out uneeded variables) and save mod3
+#+BEGIN_SRC R  :session Rorg  :results none
+#take out uneeded
+#save
+gc()
+saveRDS(db2009,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2009.rds")
+gc()
+#+END_SRC 
+
+*** weights 
+
+#+BEGIN_SRC R  :session Rorg  :results none
+db2009<-db2009[,obs:=1]
+db2009[is.na(aod), obs:= 0]
+ws.2009<-select(db2009,obs,elev_m,PBL,m,tempavg,aodid,day)
+#ws.2009<-filter(ws.2009,!(is.na(tempavg)))
+rm(db2009)
+gc()
+
+#splits
+ws.2009.s1<-ws.2009[1:50000000,]
+w1.s1<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2009.s1)
+ws.2009.s1$prob <- predict(w1.s1,type = c("response"))  
+ws.2009.s1$wt <- 1/ws.2009.s1$prob
+ws.2009.s1$normwt <- ws.2009.s1$wt/mean(ws.2009.s1$wt)
+ws.2009.s1[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s1)
+gc()
+
+
+#splits
+ws.2009.s2<-ws.2009[50000001:100000000,]
+w1.s2<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2009.s2)
+ws.2009.s2$prob <- predict(w1.s2,type = c("response"))  
+ws.2009.s2$wt <- 1/ws.2009.s2$prob
+ws.2009.s2$normwt <- ws.2009.s2$wt/mean(ws.2009.s2$wt)
+ws.2009.s2[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s2)
+gc()
+
+#splits
+ws.2009.s3<-ws.2009[100000001:150000000,]
+w1.s3<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2009.s3)
+ws.2009.s3$prob <- predict(w1.s3,type = c("response"))  
+ws.2009.s3$wt <- 1/ws.2009.s3$prob
+ws.2009.s3$normwt <- ws.2009.s3$wt/mean(ws.2009.s3$wt)
+ws.2009.s3[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s3)
+gc()
+
+
+#splits
+x<-dim(ws.2009)
+ws.2009.s4<-ws.2009[150000001:x[1],]
+w1.s4<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2009.s4)
+ws.2009.s4$prob <- predict(w1.s4,type = c("response"))  
+ws.2009.s4$wt <- 1/ws.2009.s4$prob
+ws.2009.s4$normwt <- ws.2009.s4$wt/mean(ws.2009.s4$wt)
+ws.2009.s4[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s4)
+gc()
+
+wf<-rbindlist(list(ws.2009.s1,ws.2009.s2,ws.2009.s3,ws.2009.s4))
+
+#reread m3
+db2009<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2009.rds")
+setkey(db2009,aodid,day)
+setkey(wf,aodid,day)
+db2009 <- merge(db2009,wf,all.x = T)
+
+#+END_SRC 
+
+*** mod2
+#+BEGIN_SRC R  :session Rorg  :results none
+db2009.m2 <- db2009[!is.na(aod)]
+#rm m3
+rm(db2009)
+gc()
+#save mod2
+saveRDS(db2009.m2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2009.rds")
+gc()
+
+#+END_SRC 
+*** mod1
+#+BEGIN_SRC R  :session Rorg  :results none
+
+
+  #--------->mod1
+  #PM25
+  #to fix missing days issues resulting in cartesean error
+  db2009days <- sort(unique(db2009.m2$day))
+
+  #PM import again
+  PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+  PM25<-filter(PM25,c==2009)
+  PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+  PM10<-filter(PM10,c==2009)
+
+  ########### join aod to PM25
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+  #create aod terra matrix
+  db2009.m2$aodid<-as.character(db2009.m2$aodid)
+  setkey(db2009.m2,aodid)
+  aod.m <- makepointsmatrix(db2009.m2[db2009.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM25[day %in% db2009days,], db2009.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM25,stn,day)
+  setkey(closestaod,stn,day)
+  PM25.m1 <- merge(PM25, closestaod, all.x = T)
+  PM25.m1<-PM25.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2009.PM25.rds")
+
+
+
+  ########### join aod to PM10
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+  #create aod terra matrix
+  db2009.m2$aodid<-as.character(db2009.m2$aodid)
+  setkey(db2009.m2,aodid)
+  aod.m <- makepointsmatrix(db2009.m2[db2009.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM10[day %in% db2009days,], db2009.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM10,stn,day)
+  setkey(closestaod,stn,day)
+  PM10.m1 <- merge(PM10, closestaod, all.x = T)
+  PM10.m1<-PM10.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2009.PM10.rds")
+
+
+#+END_SRC 
+
+*** cleanup and prepare for next year
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#cleanup
+keep(fgrid,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+#+END_SRC 
+
+** PM25.AQ.2010
+*** load Aqua data
+#+BEGIN_SRC R  :session Rorg  :results none
+#load aod data
+aqua.2010<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/AOD.AQ.2010.rds")
+#get rid of dplyr tbl_df until bug gets fixed
+aqua.2010<-as.data.frame(aqua.2010)
+aqua.2010<-as.data.table(aqua.2010)
+#+END_SRC 
+
+*** Expand to all days in 2010 ("mod3")
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#create full LU TS
+days<-seq.Date(from = as.Date("2010-01-01"), to = as.Date("2010-12-31"), 1)
+#create date range
+days2010 <- data.table(expand.grid(aodid = fgrid[, unique(aodid)], day = days))
+#merge
+setkey(aqua.2010,aodid,day)
+setkey(days2010 ,aodid,day)
+db2010 <- merge(days2010,aqua.2010, all.x = T)  
+
+#+END_SRC 
+
+*** add land use
+
+#+BEGIN_SRC R  :session Rorg  :results none
+    lu <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/france.grid.allLU.rds")
+    #merge
+    setkey(db2010,aodid)
+    setkey(lu ,aodid)
+    db2010 <- merge(db2010,lu, all.x = T)  
+    #fix LAT/LONG
+  db2010$long_aod<- NULL
+  db2010$lat_aod<- NULL
+  gc()
+
+  #Fix LAT/LONG
+  setkey(db2010,aodid)
+  setkey(fgrid,aodid)
+  db2010 <- merge(db2010,fgrid[,list(aodid,long_aod,lat_aod)],all.x = T)
+
+    #clean
+  db2010$QA<-NULL
+  db2010$Year<-NULL
+gc()
+#+END_SRC
+
+*** add met data
+
+#+BEGIN_SRC R  :session Rorg  :results none
+  #load met
+  Temp<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/met/fin.met.rds")
+  Temp<-filter(Temp,c==2010)
+
+  #begin "spatio-temporal joins" using GeoMerge
+
+  met.m <- makepointsmatrix(Temp, "long_met", "lat_met", "stn")
+  setkey(db2010, aodid)
+  lu.m <- makepointsmatrix(db2010[db2010[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2010, Temp[, list(day,tempavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "tempavg", knearest = 10, maxdistance = NA)
+  setkey(db2010,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2010 <- merge(db2010, aqua.met[,list(day,tempavg,aodid)], all.x = T)
+
+  gc()
+
+  #wsavg
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2010, Temp[, list(day,wsavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "wsavg", knearest = 10, maxdistance = NA)
+  #head(aqua.met)
+  setkey(db2010,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2010 <- merge(db2010, aqua.met[,list(day,wsavg,aodid)], all.x = T)
+
+
+  gc()
+
+  ## #rhavg
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2010, Temp[, list(day,rhavg,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rhavg", knearest = 10, maxdistance = NA)
+  ## setkey(db2010,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2010 <- merge(db2010, aqua.met[,list(day,rhavg,aodid)], all.x = T)
+
+  ## #rainday
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2010, Temp[, list(day,rainday,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rainday", knearest = 10, maxdistance = NA)
+  ## setkey(db2010,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2010 <- merge(db2010, aqua.met[,list(day,rainday,aodid)], all.x = T)
+
+  #cleanup
+  keep(fgrid,db2010,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  db2010$LUaodid<-NULL
+  gc()
+
+#+END_SRC 
+
+*** add pbl
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+
+#Join PBL
+fin.pbl<-readRDS("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/fin.pbl.rds")
+fin.pbl<-filter(fin.pbl,c==2010)
+gc() 
+key.pbl<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.pbl.rds")
+
+#add pbl-key
+setkey(db2010,aodid)
+setkey(key.pbl,aodid)
+db2010 <- merge(db2010, key.pbl, all.x = T)
+#add pbl
+setkey(db2010,pblid,day)
+setkey(fin.pbl,pblid,day)
+db2010 <- merge(db2010, fin.pbl[,list(pblid,PBL,day)], all.x = T)
+db2010$pblid<-NULL
+gc()
+#+END_SRC 
+
+*** add ndvi 
+#+BEGIN_SRC R  :session Rorg  :results none
+
+  ## #add month
+  ## db2010[, m := as.numeric(format(day, "%m")) ]
+  ## #add season
+  ## #1-winter, 2-spring,3-summer,4-autum
+  ## db2010$season<-recode(db2010$m,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")
+  ## #1-winter, 2-summer
+  ## db2010$seasonSW<-recode(db2010$m,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;12=1")
+
+  ## #join NDVI to aod
+  ## fin.ndvi<-readRDS("/media/NAS/Uni/Data/Europe/france/ndvi_france/out/fin.ndvi.rds")
+  ## fin.ndvi<-filter(fin.ndvi,year==2010)
+  ## gc() 
+  ## key.ndvi<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ndvi.rds")
+  ## #add ndvi-key
+  ## setkey(db2010,aodid)
+  ## setkey(key.ndvi,aodid)
+  ## db2010 <- merge(db2010, key.ndvi, all.x = T)
+  ## #add ndvi
+  ## setkey(db2010,ndviid,m)
+  ## setkey(fin.ndvi,ndviid,m)
+  ## db2010 <- merge(db2010, fin.ndvi[,list(ndviid,ndvi,m)], all.x = T)
+  #cleanup
+  keep(fgrid,db2010,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  gc()
+#+END_SRC 
+
+*** meanPM calculations 
+**** load PM data
+#+BEGIN_SRC R  :session Rorg  :results none
+#PM
+PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+PM25<-filter(PM25,c==2010)
+PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+PM10<-filter(PM10,c==2010)
+
+#+END_SRC 
+
+**** geomerge meanpm
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#-------> meanPM25  for mod 2+3
+pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+setkey(db2010, aodid)
+aod.m <- makepointsmatrix(db2010[db2010[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2010, PM25 [, list(day,pm25,stn)], 
+                            "aodid", "stn", "closest","pm25",knearest = 10, maxdistance = 120000, nearestmean = T)
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2010,aodid,day)
+db2010 <- merge(db2010,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2010,"closestmean","meanPM25")
+gc()
+#-------> meanPM10  for mod 2+3
+pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+setkey(db2010, aodid)
+aod.m <- makepointsmatrix(db2010[db2010[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2010, PM10 [, list(day,pm10,stn)], 
+                            "aodid", "stn", "closest","pm10",knearest = 10, maxdistance = 120000, nearestmean = T)
+gc()
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2010,aodid,day)
+db2010 <- merge(db2010,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2010,"closestmean","meanPM10")
+summary(db2010$meanPM10)
+#cleanup
+keep(fgrid,db2010,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+
+#+END_SRC 
+
+**** clean (take out uneeded variables) and save mod3
+#+BEGIN_SRC R  :session Rorg  :results none
+#take out uneeded
+#save
+gc()
+saveRDS(db2010,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2010.rds")
+gc()
+#+END_SRC 
+
+*** weights 
+
+#+BEGIN_SRC R  :session Rorg  :results none
+db2010<-db2010[,obs:=1]
+db2010[is.na(aod), obs:= 0]
+ws.2010<-select(db2010,obs,elev_m,PBL,m,tempavg,aodid,day)
+#ws.2010<-filter(ws.2010,!(is.na(tempavg)))
+rm(db2010)
+gc()
+
+#splits
+ws.2010.s1<-ws.2010[1:50000000,]
+w1.s1<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2010.s1)
+ws.2010.s1$prob <- predict(w1.s1,type = c("response"))  
+ws.2010.s1$wt <- 1/ws.2010.s1$prob
+ws.2010.s1$normwt <- ws.2010.s1$wt/mean(ws.2010.s1$wt)
+ws.2010.s1[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s1)
+gc()
+
+
+#splits
+ws.2010.s2<-ws.2010[50000001:100000000,]
+w1.s2<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2010.s2)
+ws.2010.s2$prob <- predict(w1.s2,type = c("response"))  
+ws.2010.s2$wt <- 1/ws.2010.s2$prob
+ws.2010.s2$normwt <- ws.2010.s2$wt/mean(ws.2010.s2$wt)
+ws.2010.s2[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s2)
+gc()
+
+#splits
+ws.2010.s3<-ws.2010[100000001:150000000,]
+w1.s3<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2010.s3)
+ws.2010.s3$prob <- predict(w1.s3,type = c("response"))  
+ws.2010.s3$wt <- 1/ws.2010.s3$prob
+ws.2010.s3$normwt <- ws.2010.s3$wt/mean(ws.2010.s3$wt)
+ws.2010.s3[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s3)
+gc()
+
+
+#splits
+x<-dim(ws.2010)
+ws.2010.s4<-ws.2010[150000001:x[1],]
+w1.s4<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2010.s4)
+ws.2010.s4$prob <- predict(w1.s4,type = c("response"))  
+ws.2010.s4$wt <- 1/ws.2010.s4$prob
+ws.2010.s4$normwt <- ws.2010.s4$wt/mean(ws.2010.s4$wt)
+ws.2010.s4[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s4)
+gc()
+
+wf<-rbindlist(list(ws.2010.s1,ws.2010.s2,ws.2010.s3,ws.2010.s4))
+
+#reread m3
+db2010<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2010.rds")
+setkey(db2010,aodid,day)
+setkey(wf,aodid,day)
+db2010 <- merge(db2010,wf,all.x = T)
+
+#+END_SRC 
+
+*** mod2
+#+BEGIN_SRC R  :session Rorg  :results none
+db2010.m2 <- db2010[!is.na(aod)]
+#rm m3
+rm(db2010)
+gc()
+#save mod2
+saveRDS(db2010.m2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2010.rds")
+gc()
+
+#+END_SRC 
+*** mod1
+#+BEGIN_SRC R  :session Rorg  :results none
+
+
+  #--------->mod1
+  #PM25
+  #to fix missing days issues resulting in cartesean error
+  db2010days <- sort(unique(db2010.m2$day))
+
+  #PM import again
+  PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+  PM25<-filter(PM25,c==2010)
+  PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+  PM10<-filter(PM10,c==2010)
+
+  ########### join aod to PM25
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+  #create aod terra matrix
+  db2010.m2$aodid<-as.character(db2010.m2$aodid)
+  setkey(db2010.m2,aodid)
+  aod.m <- makepointsmatrix(db2010.m2[db2010.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM25[day %in% db2010days,], db2010.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM25,stn,day)
+  setkey(closestaod,stn,day)
+  PM25.m1 <- merge(PM25, closestaod, all.x = T)
+  PM25.m1<-PM25.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2010.PM25.rds")
+
+
+
+  ########### join aod to PM10
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+  #create aod terra matrix
+  db2010.m2$aodid<-as.character(db2010.m2$aodid)
+  setkey(db2010.m2,aodid)
+  aod.m <- makepointsmatrix(db2010.m2[db2010.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM10[day %in% db2010days,], db2010.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM10,stn,day)
+  setkey(closestaod,stn,day)
+  PM10.m1 <- merge(PM10, closestaod, all.x = T)
+  PM10.m1<-PM10.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2010.PM10.rds")
+
+
+#+END_SRC 
+
+*** cleanup and prepare for next year
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#cleanup
+keep(fgrid,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+#+END_SRC 
+
+** PM25.AQ.2011
+*** load Aqua data
+#+BEGIN_SRC R  :session Rorg  :results none
+#load aod data
+aqua.2011<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/AOD.AQ.2011.rds")
+#get rid of dplyr tbl_df until bug gets fixed
+aqua.2011<-as.data.frame(aqua.2011)
+aqua.2011<-as.data.table(aqua.2011)
+#+END_SRC 
+
+*** Expand to all days in 2011 ("mod3")
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#create full LU TS
+days<-seq.Date(from = as.Date("2011-01-01"), to = as.Date("2011-12-31"), 1)
+#create date range
+days2011 <- data.table(expand.grid(aodid = fgrid[, unique(aodid)], day = days))
+#merge
+setkey(aqua.2011,aodid,day)
+setkey(days2011 ,aodid,day)
+db2011 <- merge(days2011,aqua.2011, all.x = T)  
+
+#+END_SRC 
+
+*** add land use
+
+#+BEGIN_SRC R  :session Rorg  :results none
+    lu <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/france.grid.allLU.rds")
+    #merge
+    setkey(db2011,aodid)
+    setkey(lu ,aodid)
+    db2011 <- merge(db2011,lu, all.x = T)  
+    #fix LAT/LONG
+  db2011$long_aod<- NULL
+  db2011$lat_aod<- NULL
+  gc()
+
+  #Fix LAT/LONG
+  setkey(db2011,aodid)
+  setkey(fgrid,aodid)
+  db2011 <- merge(db2011,fgrid[,list(aodid,long_aod,lat_aod)],all.x = T)
+
+    #clean
+  db2011$QA<-NULL
+  db2011$Year<-NULL
+gc()
+#+END_SRC
+
+*** add met data
+
+#+BEGIN_SRC R  :session Rorg  :results none
+  #load met
+  Temp<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/met/fin.met.rds")
+  Temp<-filter(Temp,c==2011)
+
+  #begin "spatio-temporal joins" using GeoMerge
+
+  met.m <- makepointsmatrix(Temp, "long_met", "lat_met", "stn")
+  setkey(db2011, aodid)
+  lu.m <- makepointsmatrix(db2011[db2011[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2011, Temp[, list(day,tempavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "tempavg", knearest = 10, maxdistance = NA)
+  setkey(db2011,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2011 <- merge(db2011, aqua.met[,list(day,tempavg,aodid)], all.x = T)
+
+  gc()
+
+  #wsavg
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2011, Temp[, list(day,wsavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "wsavg", knearest = 10, maxdistance = NA)
+  #head(aqua.met)
+  setkey(db2011,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2011 <- merge(db2011, aqua.met[,list(day,wsavg,aodid)], all.x = T)
+
+
+  gc()
+
+  ## #rhavg
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2011, Temp[, list(day,rhavg,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rhavg", knearest = 10, maxdistance = NA)
+  ## setkey(db2011,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2011 <- merge(db2011, aqua.met[,list(day,rhavg,aodid)], all.x = T)
+
+  ## #rainday
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2011, Temp[, list(day,rainday,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rainday", knearest = 10, maxdistance = NA)
+  ## setkey(db2011,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2011 <- merge(db2011, aqua.met[,list(day,rainday,aodid)], all.x = T)
+
+  #cleanup
+  keep(fgrid,db2011,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  db2011$LUaodid<-NULL
+  gc()
+
+#+END_SRC 
+
+*** add pbl
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+
+#Join PBL
+fin.pbl<-readRDS("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/fin.pbl.rds")
+fin.pbl<-filter(fin.pbl,c==2011)
+gc() 
+key.pbl<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.pbl.rds")
+
+#add pbl-key
+setkey(db2011,aodid)
+setkey(key.pbl,aodid)
+db2011 <- merge(db2011, key.pbl, all.x = T)
+#add pbl
+setkey(db2011,pblid,day)
+setkey(fin.pbl,pblid,day)
+db2011 <- merge(db2011, fin.pbl[,list(pblid,PBL,day)], all.x = T)
+db2011$pblid<-NULL
+gc()
+#+END_SRC 
+
+*** add ndvi 
+#+BEGIN_SRC R  :session Rorg  :results none
+
+  ## #add month
+  ## db2011[, m := as.numeric(format(day, "%m")) ]
+  ## #add season
+  ## #1-winter, 2-spring,3-summer,4-autum
+  ## db2011$season<-recode(db2011$m,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")
+  ## #1-winter, 2-summer
+  ## db2011$seasonSW<-recode(db2011$m,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;12=1")
+
+  ## #join NDVI to aod
+  ## fin.ndvi<-readRDS("/media/NAS/Uni/Data/Europe/france/ndvi_france/out/fin.ndvi.rds")
+  ## fin.ndvi<-filter(fin.ndvi,year==2011)
+  ## gc() 
+  ## key.ndvi<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ndvi.rds")
+  ## #add ndvi-key
+  ## setkey(db2011,aodid)
+  ## setkey(key.ndvi,aodid)
+  ## db2011 <- merge(db2011, key.ndvi, all.x = T)
+  ## #add ndvi
+  ## setkey(db2011,ndviid,m)
+  ## setkey(fin.ndvi,ndviid,m)
+  ## db2011 <- merge(db2011, fin.ndvi[,list(ndviid,ndvi,m)], all.x = T)
+  #cleanup
+  keep(fgrid,db2011,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  gc()
+#+END_SRC 
+
+*** meanPM calculations 
+**** load PM data
+#+BEGIN_SRC R  :session Rorg  :results none
+#PM
+PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+PM25<-filter(PM25,c==2011)
+PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+PM10<-filter(PM10,c==2011)
+
+#+END_SRC 
+
+**** geomerge meanpm
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#-------> meanPM25  for mod 2+3
+pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+setkey(db2011, aodid)
+aod.m <- makepointsmatrix(db2011[db2011[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2011, PM25 [, list(day,pm25,stn)], 
+                            "aodid", "stn", "closest","pm25",knearest = 10, maxdistance = 120000, nearestmean = T)
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2011,aodid,day)
+db2011 <- merge(db2011,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2011,"closestmean","meanPM25")
+gc()
+#-------> meanPM10  for mod 2+3
+pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+setkey(db2011, aodid)
+aod.m <- makepointsmatrix(db2011[db2011[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2011, PM10 [, list(day,pm10,stn)], 
+                            "aodid", "stn", "closest","pm10",knearest = 10, maxdistance = 120000, nearestmean = T)
+gc()
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2011,aodid,day)
+db2011 <- merge(db2011,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2011,"closestmean","meanPM10")
+summary(db2011$meanPM10)
+#cleanup
+keep(fgrid,db2011,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+
+#+END_SRC 
+
+**** clean (take out uneeded variables) and save mod3
+#+BEGIN_SRC R  :session Rorg  :results none
+#take out uneeded
+#save
+gc()
+saveRDS(db2011,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2011.rds")
+gc()
+#+END_SRC 
+
+*** weights 
+
+#+BEGIN_SRC R  :session Rorg  :results none
+db2011<-db2011[,obs:=1]
+db2011[is.na(aod), obs:= 0]
+ws.2011<-select(db2011,obs,elev_m,PBL,m,tempavg,aodid,day)
+#ws.2011<-filter(ws.2011,!(is.na(tempavg)))
+rm(db2011)
+gc()
+
+#splits
+ws.2011.s1<-ws.2011[1:50000000,]
+w1.s1<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2011.s1)
+ws.2011.s1$prob <- predict(w1.s1,type = c("response"))  
+ws.2011.s1$wt <- 1/ws.2011.s1$prob
+ws.2011.s1$normwt <- ws.2011.s1$wt/mean(ws.2011.s1$wt)
+ws.2011.s1[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s1)
+gc()
+
+
+#splits
+ws.2011.s2<-ws.2011[50000001:100000000,]
+w1.s2<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2011.s2)
+ws.2011.s2$prob <- predict(w1.s2,type = c("response"))  
+ws.2011.s2$wt <- 1/ws.2011.s2$prob
+ws.2011.s2$normwt <- ws.2011.s2$wt/mean(ws.2011.s2$wt)
+ws.2011.s2[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s2)
+gc()
+
+#splits
+ws.2011.s3<-ws.2011[100000001:150000000,]
+w1.s3<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2011.s3)
+ws.2011.s3$prob <- predict(w1.s3,type = c("response"))  
+ws.2011.s3$wt <- 1/ws.2011.s3$prob
+ws.2011.s3$normwt <- ws.2011.s3$wt/mean(ws.2011.s3$wt)
+ws.2011.s3[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s3)
+gc()
+
+
+#splits
+x<-dim(ws.2011)
+ws.2011.s4<-ws.2011[150000001:x[1],]
+w1.s4<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2011.s4)
+ws.2011.s4$prob <- predict(w1.s4,type = c("response"))  
+ws.2011.s4$wt <- 1/ws.2011.s4$prob
+ws.2011.s4$normwt <- ws.2011.s4$wt/mean(ws.2011.s4$wt)
+ws.2011.s4[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s4)
+gc()
+
+wf<-rbindlist(list(ws.2011.s1,ws.2011.s2,ws.2011.s3,ws.2011.s4))
+
+#reread m3
+db2011<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2011.rds")
+setkey(db2011,aodid,day)
+setkey(wf,aodid,day)
+db2011 <- merge(db2011,wf,all.x = T)
+
+#+END_SRC 
+
+*** mod2
+#+BEGIN_SRC R  :session Rorg  :results none
+db2011.m2 <- db2011[!is.na(aod)]
+#rm m3
+rm(db2011)
+gc()
+#save mod2
+saveRDS(db2011.m2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2011.rds")
+gc()
+
+#+END_SRC 
+*** mod1
+#+BEGIN_SRC R  :session Rorg  :results none
+
+
+  #--------->mod1
+  #PM25
+  #to fix missing days issues resulting in cartesean error
+  db2011days <- sort(unique(db2011.m2$day))
+
+  #PM import again
+  PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+  PM25<-filter(PM25,c==2011)
+  PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+  PM10<-filter(PM10,c==2011)
+
+  ########### join aod to PM25
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+  #create aod terra matrix
+  db2011.m2$aodid<-as.character(db2011.m2$aodid)
+  setkey(db2011.m2,aodid)
+  aod.m <- makepointsmatrix(db2011.m2[db2011.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM25[day %in% db2011days,], db2011.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM25,stn,day)
+  setkey(closestaod,stn,day)
+  PM25.m1 <- merge(PM25, closestaod, all.x = T)
+  PM25.m1<-PM25.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2011.PM25.rds")
+
+
+
+  ########### join aod to PM10
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+  #create aod terra matrix
+  db2011.m2$aodid<-as.character(db2011.m2$aodid)
+  setkey(db2011.m2,aodid)
+  aod.m <- makepointsmatrix(db2011.m2[db2011.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM10[day %in% db2011days,], db2011.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM10,stn,day)
+  setkey(closestaod,stn,day)
+  PM10.m1 <- merge(PM10, closestaod, all.x = T)
+  PM10.m1<-PM10.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2011.PM10.rds")
+
+
+#+END_SRC 
+
+*** cleanup and prepare for next year
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#cleanup
+keep(fgrid,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+#+END_SRC 
+
+** PM25.AQ.2012
+*** load Aqua data
+#+BEGIN_SRC R  :session Rorg  :results none
+#load aod data
+aqua.2012<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/AOD.AQ.2012.rds")
+#get rid of dplyr tbl_df until bug gets fixed
+aqua.2012<-as.data.frame(aqua.2012)
+aqua.2012<-as.data.table(aqua.2012)
+#+END_SRC 
+
+*** Expand to all days in 2012 ("mod3")
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#create full LU TS
+days<-seq.Date(from = as.Date("2012-01-01"), to = as.Date("2012-12-31"), 1)
+#create date range
+days2012 <- data.table(expand.grid(aodid = fgrid[, unique(aodid)], day = days))
+#merge
+setkey(aqua.2012,aodid,day)
+setkey(days2012 ,aodid,day)
+db2012 <- merge(days2012,aqua.2012, all.x = T)  
+
+#+END_SRC 
+
+*** add land use
+
+#+BEGIN_SRC R  :session Rorg  :results none
+    lu <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/france.grid.allLU.rds")
+    #merge
+    setkey(db2012,aodid)
+    setkey(lu ,aodid)
+    db2012 <- merge(db2012,lu, all.x = T)  
+    #fix LAT/LONG
+  db2012$long_aod<- NULL
+  db2012$lat_aod<- NULL
+  gc()
+
+  #Fix LAT/LONG
+  setkey(db2012,aodid)
+  setkey(fgrid,aodid)
+  db2012 <- merge(db2012,fgrid[,list(aodid,long_aod,lat_aod)],all.x = T)
+
+    #clean
+  db2012$QA<-NULL
+  db2012$Year<-NULL
+gc()
+#+END_SRC
+
+*** add met data
+
+#+BEGIN_SRC R  :session Rorg  :results none
+  #load met
+  Temp<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/met/fin.met.rds")
+  Temp<-filter(Temp,c==2012)
+
+  #begin "spatio-temporal joins" using GeoMerge
+
+  met.m <- makepointsmatrix(Temp, "long_met", "lat_met", "stn")
+  setkey(db2012, aodid)
+  lu.m <- makepointsmatrix(db2012[db2012[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2012, Temp[, list(day,tempavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "tempavg", knearest = 10, maxdistance = NA)
+  setkey(db2012,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2012 <- merge(db2012, aqua.met[,list(day,tempavg,aodid)], all.x = T)
+
+  gc()
+
+  #wsavg
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2012, Temp[, list(day,wsavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "wsavg", knearest = 10, maxdistance = NA)
+  #head(aqua.met)
+  setkey(db2012,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2012 <- merge(db2012, aqua.met[,list(day,wsavg,aodid)], all.x = T)
+
+
+  gc()
+
+  ## #rhavg
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2012, Temp[, list(day,rhavg,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rhavg", knearest = 10, maxdistance = NA)
+  ## setkey(db2012,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2012 <- merge(db2012, aqua.met[,list(day,rhavg,aodid)], all.x = T)
+
+  ## #rainday
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2012, Temp[, list(day,rainday,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rainday", knearest = 10, maxdistance = NA)
+  ## setkey(db2012,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2012 <- merge(db2012, aqua.met[,list(day,rainday,aodid)], all.x = T)
+
+  #cleanup
+  keep(fgrid,db2012,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  db2012$LUaodid<-NULL
+  gc()
+
+#+END_SRC 
+
+*** add pbl
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+
+#Join PBL
+fin.pbl<-readRDS("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/fin.pbl.rds")
+fin.pbl<-filter(fin.pbl,c==2012)
+gc() 
+key.pbl<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.pbl.rds")
+
+#add pbl-key
+setkey(db2012,aodid)
+setkey(key.pbl,aodid)
+db2012 <- merge(db2012, key.pbl, all.x = T)
+#add pbl
+setkey(db2012,pblid,day)
+setkey(fin.pbl,pblid,day)
+db2012 <- merge(db2012, fin.pbl[,list(pblid,PBL,day)], all.x = T)
+db2012$pblid<-NULL
+gc()
+#+END_SRC 
+
+*** add ndvi 
+#+BEGIN_SRC R  :session Rorg  :results none
+
+  ## #add month
+  ## db2012[, m := as.numeric(format(day, "%m")) ]
+  ## #add season
+  ## #1-winter, 2-spring,3-summer,4-autum
+  ## db2012$season<-recode(db2012$m,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")
+  ## #1-winter, 2-summer
+  ## db2012$seasonSW<-recode(db2012$m,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;12=1")
+
+  ## #join NDVI to aod
+  ## fin.ndvi<-readRDS("/media/NAS/Uni/Data/Europe/france/ndvi_france/out/fin.ndvi.rds")
+  ## fin.ndvi<-filter(fin.ndvi,year==2012)
+  ## gc() 
+  ## key.ndvi<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ndvi.rds")
+  ## #add ndvi-key
+  ## setkey(db2012,aodid)
+  ## setkey(key.ndvi,aodid)
+  ## db2012 <- merge(db2012, key.ndvi, all.x = T)
+  ## #add ndvi
+  ## setkey(db2012,ndviid,m)
+  ## setkey(fin.ndvi,ndviid,m)
+  ## db2012 <- merge(db2012, fin.ndvi[,list(ndviid,ndvi,m)], all.x = T)
+  #cleanup
+  keep(fgrid,db2012,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  gc()
+#+END_SRC 
+
+*** meanPM calculations 
+**** load PM data
+#+BEGIN_SRC R  :session Rorg  :results none
+#PM
+PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+PM25<-filter(PM25,c==2012)
+PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+PM10<-filter(PM10,c==2012)
+
+#+END_SRC 
+
+**** geomerge meanpm
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#-------> meanPM25  for mod 2+3
+pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+setkey(db2012, aodid)
+aod.m <- makepointsmatrix(db2012[db2012[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2012, PM25 [, list(day,pm25,stn)], 
+                            "aodid", "stn", "closest","pm25",knearest = 10, maxdistance = 120000, nearestmean = T)
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2012,aodid,day)
+db2012 <- merge(db2012,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2012,"closestmean","meanPM25")
+gc()
+#-------> meanPM10  for mod 2+3
+pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+setkey(db2012, aodid)
+aod.m <- makepointsmatrix(db2012[db2012[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2012, PM10 [, list(day,pm10,stn)], 
+                            "aodid", "stn", "closest","pm10",knearest = 10, maxdistance = 120000, nearestmean = T)
+gc()
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2012,aodid,day)
+db2012 <- merge(db2012,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2012,"closestmean","meanPM10")
+summary(db2012$meanPM10)
+#cleanup
+keep(fgrid,db2012,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+
+#+END_SRC 
+
+**** clean (take out uneeded variables) and save mod3
+#+BEGIN_SRC R  :session Rorg  :results none
+#take out uneeded
+#save
+gc()
+saveRDS(db2012,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2012.rds")
+gc()
+#+END_SRC 
+
+*** weights 
+
+#+BEGIN_SRC R  :session Rorg  :results none
+db2012<-db2012[,obs:=1]
+db2012[is.na(aod), obs:= 0]
+ws.2012<-select(db2012,obs,elev_m,PBL,m,tempavg,aodid,day)
+#ws.2012<-filter(ws.2012,!(is.na(tempavg)))
+rm(db2012)
+gc()
+
+#splits
+ws.2012.s1<-ws.2012[1:50000000,]
+w1.s1<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2012.s1)
+ws.2012.s1$prob <- predict(w1.s1,type = c("response"))  
+ws.2012.s1$wt <- 1/ws.2012.s1$prob
+ws.2012.s1$normwt <- ws.2012.s1$wt/mean(ws.2012.s1$wt)
+ws.2012.s1[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s1)
+gc()
+
+
+#splits
+ws.2012.s2<-ws.2012[50000001:100000000,]
+w1.s2<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2012.s2)
+ws.2012.s2$prob <- predict(w1.s2,type = c("response"))  
+ws.2012.s2$wt <- 1/ws.2012.s2$prob
+ws.2012.s2$normwt <- ws.2012.s2$wt/mean(ws.2012.s2$wt)
+ws.2012.s2[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s2)
+gc()
+
+#splits
+ws.2012.s3<-ws.2012[100000001:150000000,]
+w1.s3<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2012.s3)
+ws.2012.s3$prob <- predict(w1.s3,type = c("response"))  
+ws.2012.s3$wt <- 1/ws.2012.s3$prob
+ws.2012.s3$normwt <- ws.2012.s3$wt/mean(ws.2012.s3$wt)
+ws.2012.s3[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s3)
+gc()
+
+
+#splits
+x<-dim(ws.2012)
+ws.2012.s4<-ws.2012[150000001:x[1],]
+w1.s4<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2012.s4)
+ws.2012.s4$prob <- predict(w1.s4,type = c("response"))  
+ws.2012.s4$wt <- 1/ws.2012.s4$prob
+ws.2012.s4$normwt <- ws.2012.s4$wt/mean(ws.2012.s4$wt)
+ws.2012.s4[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s4)
+gc()
+
+wf<-rbindlist(list(ws.2012.s1,ws.2012.s2,ws.2012.s3,ws.2012.s4))
+
+#reread m3
+db2012<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2012.rds")
+setkey(db2012,aodid,day)
+setkey(wf,aodid,day)
+db2012 <- merge(db2012,wf,all.x = T)
+
+#+END_SRC 
+
+*** mod2
+#+BEGIN_SRC R  :session Rorg  :results none
+db2012.m2 <- db2012[!is.na(aod)]
+#rm m3
+rm(db2012)
+gc()
+#save mod2
+saveRDS(db2012.m2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2012.rds")
+gc()
+
+#+END_SRC 
+*** mod1
+#+BEGIN_SRC R  :session Rorg  :results none
+
+
+  #--------->mod1
+  #PM25
+  #to fix missing days issues resulting in cartesean error
+  db2012days <- sort(unique(db2012.m2$day))
+
+  #PM import again
+  PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+  PM25<-filter(PM25,c==2012)
+  PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+  PM10<-filter(PM10,c==2012)
+
+  ########### join aod to PM25
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+  #create aod terra matrix
+  db2012.m2$aodid<-as.character(db2012.m2$aodid)
+  setkey(db2012.m2,aodid)
+  aod.m <- makepointsmatrix(db2012.m2[db2012.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM25[day %in% db2012days,], db2012.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM25,stn,day)
+  setkey(closestaod,stn,day)
+  PM25.m1 <- merge(PM25, closestaod, all.x = T)
+  PM25.m1<-PM25.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2012.PM25.rds")
+
+
+
+  ########### join aod to PM10
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+  #create aod terra matrix
+  db2012.m2$aodid<-as.character(db2012.m2$aodid)
+  setkey(db2012.m2,aodid)
+  aod.m <- makepointsmatrix(db2012.m2[db2012.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM10[day %in% db2012days,], db2012.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM10,stn,day)
+  setkey(closestaod,stn,day)
+  PM10.m1 <- merge(PM10, closestaod, all.x = T)
+  PM10.m1<-PM10.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2012.PM10.rds")
+
+
+#+END_SRC 
+
+*** cleanup and prepare for next year
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#cleanup
+keep(fgrid,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+#+END_SRC 
+
+** PM25.AQ.2013
+*** load Aqua data
+#+BEGIN_SRC R  :session Rorg  :results none
+#load aod data
+aqua.2013<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/AOD.AQ.2013.rds")
+#get rid of dplyr tbl_df until bug gets fixed
+aqua.2013<-as.data.frame(aqua.2013)
+aqua.2013<-as.data.table(aqua.2013)
+#+END_SRC 
+
+*** Expand to all days in 2013 ("mod3")
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#create full LU TS
+days<-seq.Date(from = as.Date("2013-01-01"), to = as.Date("2013-12-31"), 1)
+#create date range
+days2013 <- data.table(expand.grid(aodid = fgrid[, unique(aodid)], day = days))
+#merge
+setkey(aqua.2013,aodid,day)
+setkey(days2013 ,aodid,day)
+db2013 <- merge(days2013,aqua.2013, all.x = T)  
+
+#+END_SRC 
+
+*** add land use
+
+#+BEGIN_SRC R  :session Rorg  :results none
+    lu <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/france.grid.allLU.rds")
+    #merge
+    setkey(db2013,aodid)
+    setkey(lu ,aodid)
+    db2013 <- merge(db2013,lu, all.x = T)  
+    #fix LAT/LONG
+  db2013$long_aod<- NULL
+  db2013$lat_aod<- NULL
+  gc()
+
+  #Fix LAT/LONG
+  setkey(db2013,aodid)
+  setkey(fgrid,aodid)
+  db2013 <- merge(db2013,fgrid[,list(aodid,long_aod,lat_aod)],all.x = T)
+
+    #clean
+  db2013$QA<-NULL
+  db2013$Year<-NULL
+gc()
+#+END_SRC
+
+*** add met data
+
+#+BEGIN_SRC R  :session Rorg  :results none
+  #load met
+  Temp<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/met/fin.met.rds")
+  Temp<-filter(Temp,c==2013)
+
+  #begin "spatio-temporal joins" using GeoMerge
+
+  met.m <- makepointsmatrix(Temp, "long_met", "lat_met", "stn")
+  setkey(db2013, aodid)
+  lu.m <- makepointsmatrix(db2013[db2013[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2013, Temp[, list(day,tempavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "tempavg", knearest = 10, maxdistance = NA)
+  setkey(db2013,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2013 <- merge(db2013, aqua.met[,list(day,tempavg,aodid)], all.x = T)
+
+  gc()
+
+  #wsavg
+  aqua.met <- nearestbyday(lu.m ,met.m , 
+                              db2013, Temp[, list(day,wsavg,stn)], 
+                              "aodid", "stn", "cloesetSTN", "wsavg", knearest = 10, maxdistance = NA)
+  #head(aqua.met)
+  setkey(db2013,aodid,day)
+  setkey(aqua.met,aodid,day)
+  db2013 <- merge(db2013, aqua.met[,list(day,wsavg,aodid)], all.x = T)
+
+
+  gc()
+
+  ## #rhavg
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2013, Temp[, list(day,rhavg,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rhavg", knearest = 10, maxdistance = NA)
+  ## setkey(db2013,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2013 <- merge(db2013, aqua.met[,list(day,rhavg,aodid)], all.x = T)
+
+  ## #rainday
+  ## aqua.met <- nearestbyday(lu.m ,met.m , 
+  ##                             db2013, Temp[, list(day,rainday,stn)], 
+  ##                             "aodid", "stn", "cloesetSTN", "rainday", knearest = 10, maxdistance = NA)
+  ## setkey(db2013,aodid,day)
+  ## setkey(aqua.met,aodid,day)
+  ## db2013 <- merge(db2013, aqua.met[,list(day,rainday,aodid)], all.x = T)
+
+  #cleanup
+  keep(fgrid,db2013,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  db2013$LUaodid<-NULL
+  gc()
+
+#+END_SRC 
+
+*** add pbl
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+
+#Join PBL
+fin.pbl<-readRDS("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/fin.pbl.rds")
+fin.pbl<-filter(fin.pbl,c==2013)
+gc() 
+key.pbl<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.pbl.rds")
+
+#add pbl-key
+setkey(db2013,aodid)
+setkey(key.pbl,aodid)
+db2013 <- merge(db2013, key.pbl, all.x = T)
+#add pbl
+setkey(db2013,pblid,day)
+setkey(fin.pbl,pblid,day)
+db2013 <- merge(db2013, fin.pbl[,list(pblid,PBL,day)], all.x = T)
+db2013$pblid<-NULL
+gc()
+#+END_SRC 
+
+*** add ndvi 
+#+BEGIN_SRC R  :session Rorg  :results none
+
+  ## #add month
+  ## db2013[, m := as.numeric(format(day, "%m")) ]
+  ## #add season
+  ## #1-winter, 2-spring,3-summer,4-autum
+  ## db2013$season<-recode(db2013$m,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")
+  ## #1-winter, 2-summer
+  ## db2013$seasonSW<-recode(db2013$m,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;12=1")
+
+  ## #join NDVI to aod
+  ## fin.ndvi<-readRDS("/media/NAS/Uni/Data/Europe/france/ndvi_france/out/fin.ndvi.rds")
+  ## fin.ndvi<-filter(fin.ndvi,year==2013)
+  ## gc() 
+  ## key.ndvi<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ndvi.rds")
+  ## #add ndvi-key
+  ## setkey(db2013,aodid)
+  ## setkey(key.ndvi,aodid)
+  ## db2013 <- merge(db2013, key.ndvi, all.x = T)
+  ## #add ndvi
+  ## setkey(db2013,ndviid,m)
+  ## setkey(fin.ndvi,ndviid,m)
+  ## db2013 <- merge(db2013, fin.ndvi[,list(ndviid,ndvi,m)], all.x = T)
+  #cleanup
+  keep(fgrid,db2013,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  gc()
+#+END_SRC 
+
+*** meanPM calculations 
+**** load PM data
+#+BEGIN_SRC R  :session Rorg  :results none
+#PM
+PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+PM25<-filter(PM25,c==2013)
+PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+PM10<-filter(PM10,c==2013)
+
+#+END_SRC 
+
+**** geomerge meanpm
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#-------> meanPM25  for mod 2+3
+pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+setkey(db2013, aodid)
+aod.m <- makepointsmatrix(db2013[db2013[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2013, PM25 [, list(day,pm25,stn)], 
+                            "aodid", "stn", "closest","pm25",knearest = 10, maxdistance = 120000, nearestmean = T)
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2013,aodid,day)
+db2013 <- merge(db2013,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2013,"closestmean","meanPM25")
+gc()
+#-------> meanPM10  for mod 2+3
+pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+setkey(db2013, aodid)
+aod.m <- makepointsmatrix(db2013[db2013[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+pmj1<- nearestbyday(aod.m  ,pm.m , 
+                            db2013, PM10 [, list(day,pm10,stn)], 
+                            "aodid", "stn", "closest","pm10",knearest = 10, maxdistance = 120000, nearestmean = T)
+gc()
+#join to DB
+setkey(pmj1,aodid,day)
+setkey(db2013,aodid,day)
+db2013 <- merge(db2013,pmj1[,list(day,aodid,closestmean)],all.x = T)
+setnames(db2013,"closestmean","meanPM10")
+summary(db2013$meanPM10)
+#cleanup
+keep(fgrid,db2013,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+
+#+END_SRC 
+
+**** clean (take out uneeded variables) and save mod3
+#+BEGIN_SRC R  :session Rorg  :results none
+#take out uneeded
+#save
+gc()
+saveRDS(db2013,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2013.rds")
+gc()
+#+END_SRC 
+
+*** weights 
+
+#+BEGIN_SRC R  :session Rorg  :results none
+db2013<-db2013[,obs:=1]
+db2013[is.na(aod), obs:= 0]
+ws.2013<-select(db2013,obs,elev_m,PBL,m,tempavg,aodid,day)
+#ws.2013<-filter(ws.2013,!(is.na(tempavg)))
+rm(db2013)
+gc()
+
+#splits
+ws.2013.s1<-ws.2013[1:50000000,]
+w1.s1<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2013.s1)
+ws.2013.s1$prob <- predict(w1.s1,type = c("response"))  
+ws.2013.s1$wt <- 1/ws.2013.s1$prob
+ws.2013.s1$normwt <- ws.2013.s1$wt/mean(ws.2013.s1$wt)
+ws.2013.s1[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s1)
+gc()
+
+
+#splits
+ws.2013.s2<-ws.2013[50000001:100000000,]
+w1.s2<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2013.s2)
+ws.2013.s2$prob <- predict(w1.s2,type = c("response"))  
+ws.2013.s2$wt <- 1/ws.2013.s2$prob
+ws.2013.s2$normwt <- ws.2013.s2$wt/mean(ws.2013.s2$wt)
+ws.2013.s2[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s2)
+gc()
+
+#splits
+ws.2013.s3<-ws.2013[100000001:150000000,]
+w1.s3<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2013.s3)
+ws.2013.s3$prob <- predict(w1.s3,type = c("response"))  
+ws.2013.s3$wt <- 1/ws.2013.s3$prob
+ws.2013.s3$normwt <- ws.2013.s3$wt/mean(ws.2013.s3$wt)
+ws.2013.s3[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s3)
+gc()
+
+
+#splits
+x<-dim(ws.2013)
+ws.2013.s4<-ws.2013[150000001:x[1],]
+w1.s4<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2013.s4)
+ws.2013.s4$prob <- predict(w1.s4,type = c("response"))  
+ws.2013.s4$wt <- 1/ws.2013.s4$prob
+ws.2013.s4$normwt <- ws.2013.s4$wt/mean(ws.2013.s4$wt)
+ws.2013.s4[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
+rm(w1.s4)
+gc()
+
+wf<-rbindlist(list(ws.2013.s1,ws.2013.s2,ws.2013.s3,ws.2013.s4))
+
+#reread m3
+db2013<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2013.rds")
+setkey(db2013,aodid,day)
+setkey(wf,aodid,day)
+db2013 <- merge(db2013,wf,all.x = T)
+
+#+END_SRC 
+
+*** mod2
+#+BEGIN_SRC R  :session Rorg  :results none
+db2013.m2 <- db2013[!is.na(aod)]
+#rm m3
+rm(db2013)
+gc()
+#save mod2
+saveRDS(db2013.m2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2013.rds")
+gc()
+
+#+END_SRC 
+*** mod1
+#+BEGIN_SRC R  :session Rorg  :results none
+
+
+  #--------->mod1
+  #PM25
+  #to fix missing days issues resulting in cartesean error
+  db2013days <- sort(unique(db2013.m2$day))
+
+  #PM import again
+  PM25<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+  PM25<-filter(PM25,c==2013)
+  PM10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
+  PM10<-filter(PM10,c==2013)
+
+  ########### join aod to PM25
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
+  #create aod terra matrix
+  db2013.m2$aodid<-as.character(db2013.m2$aodid)
+  setkey(db2013.m2,aodid)
+  aod.m <- makepointsmatrix(db2013.m2[db2013.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM25[day %in% db2013days,], db2013.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM25,stn,day)
+  setkey(closestaod,stn,day)
+  PM25.m1 <- merge(PM25, closestaod, all.x = T)
+  PM25.m1<-PM25.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM25.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2013.PM25.rds")
+
+
+
+  ########### join aod to PM10
+  #create PM matrix
+  pm.m <- makepointsmatrix(PM10, "long_pm10", "lat_pm10", "stn")
+  #create aod terra matrix
+  db2013.m2$aodid<-as.character(db2013.m2$aodid)
+  setkey(db2013.m2,aodid)
+  aod.m <- makepointsmatrix(db2013.m2[db2013.m2[,unique(aodid)], list(long_aod, lat_aod, aodid), mult = "first"], "long_aod", "lat_aod", "aodid")
+
+
+
+  #run function
+  closestaod <- nearestbyday(pm.m, aod.m, 
+                             PM10[day %in% db2013days,], db2013.m2, 
+                             "stn", "aodid", "closest", "aod", knearest = 9, maxdistance = 1500)
+
+
+  #closestaod[,i.stn :=NULL]
+  closestaod[,closestknn :=NULL]
+
+  setkey(PM10,stn,day)
+  setkey(closestaod,stn,day)
+  PM10.m1 <- merge(PM10, closestaod, all.x = T)
+  PM10.m1<-PM10.m1[!is.na(aod)]
+
+  #save mod 1
+  saveRDS(PM10.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2013.PM10.rds")
+
+
+#+END_SRC 
+
+*** cleanup and prepare for next year
+
+
+#+BEGIN_SRC R  :session Rorg  :results none
+#cleanup
+keep(fgrid,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+#+END_SRC 
