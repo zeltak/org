@@ -30277,6 +30277,34 @@ The key formatting comes from these definitions:
       bibtex-autokey-titlewords-stretch 1
       bibtex-autokey-titleword-length 5)
 #+END_SRC
+
+clean all file:
+
+I suggest you run these first:
+%% (bibtex-validate-globally)   ; checks for duplicate keys
+%% (bibtex-validate)
+
+I also recommend you run bibtex-sort (it is easier to spot duplicates in
+a sorted list).
+
+Then, put this next line at the top of your bibtex file. 
+$Note- The `t` argument to org-ref-clean-bibtex-entry will preserve your existing keys$
+
+#+BEGIN_SRC latex :results none
+% (bibtex-map-entries (lambda (key start end) (org-ref-clean-bibtex-entry t)))
+#+END_SRC
+
+Put your cursor at the end of that line, and type C-x C-e to run the function, and
+wait patiently. It took a few minutes on my 1300 entries, and I had to restart it once on some entry.
+if you have bad Unicode, dup keys etc you will be prompted to input
+remove bad Unicode keys and fix dup keys when prompted
+Note if you want to change title cases in all entries you can use
+
+% (bibtex-map-entries 'jmax-title-case-article)
+% (bibtex-map-entries 'jmax-sentence-case-article)
+
+
+
 ********** Using org-ref to keep your bibtex files in order
 Maintaining an accurate, useful bibliography of references is critical for scientific writing. It is also not trivial. While it is easy to download and copy bibliographic entries to your database, these entries are often incomplete, not consistently formatted, and can contain invalid characters. org-ref provides several utility functions to help with this.
 
@@ -30707,6 +30735,10 @@ Alternative to the above options, you can also call save-some-buffers 【Ctrl+x 
 
 Note: emacs's regex is not the same as Perl or Python's, but similar. For a summary and common patterns, see: Emacs Regex.
 
+******** replace numeric with space/other
+use regex search (M-C-%)
+and enter this as a seacrh patterb
+[0-9]
 ******* setting (lisp)
 ******** setting common variables at once (setq)
 
@@ -34020,7 +34052,10 @@ example
 ]{biblatex}
 #+END_SRC
 
-/cite vs /autocite 
+$Note$ you can use \autocite instead of \parencite which is the actual counterpart of natbib's \citep. 
+
+\autocite is a high-level citation command that will be translated into the low-level bare citation command appropriate for the chosen style - e.g. it will enclose a citation in parentheses in authoryear styles, but produce a footnote citation in authortitle styles. Even more, it will automatically move trailing punctuation.
+
 ******** styles 
 https://www.sharelatex.com/learn/Biblatex_bibliography_styles
 
