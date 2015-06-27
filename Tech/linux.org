@@ -34108,6 +34108,10 @@ insert bibliography based in keyword criteria
 #+BEGIN_SRC latex :results none
 \printbibliography[keyword=article,notkeyword=submitted,keyword=own,heading=none]
 #+END_SRC
+
+you can tag the references like this:
+It’s a pretty straightforward org document except for one thing: the key to making this work was biblatex which can be used to create several lists of references filtered according to keywords, author, etc.  This allowed me to have separate sections for journal articles, conference presentations, etc.  I store the relevant keywords in the tags field of the BibTeX entries and since biblatex doesn’t know this field, I copy the tags on-the-fly to the keywords field (see DeclareSourcemap in the LaTeX headers).
+
 *** sublime text
 
 **** search and replace
