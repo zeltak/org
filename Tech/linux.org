@@ -33852,6 +33852,14 @@ $PM_{ij}$
 #+END_LaTeX
 
 **** Bibliography Management
+***** formatting citations
+****** default format 
+In the author field, `commas` are used to separate last name from first name and `and` to separate authors.
+
+#+BEGIN_EXAMPLE
+Example: LastName1, FirstName1 and LastName2, FirstName2 and ... 
+#+END_EXAMPLE
+
 ***** intro (bibtex and biber//natbib and biblatex)
 bibtex and biber are external programs that process bibliography information and act (roughly) as the interface between your .bib file and your LaTeX document.
 
@@ -34016,12 +34024,12 @@ A special version of the command, \nocite{*}, includes all entries from the data
 ***** Biblatex
 ****** base biblatex setup
 $Note Recent versions of biblatex have deprecated$
+******* changes to add bibsource in next verion 
 #+BEGIN_SRC latex :results none
 \bibliography{<database>} 
 %in favour of the more general
 \addbibresource{<database>.<extension>}
 #+END_SRC
-
 ******* use old bibtex backend 
 A minimal document for biblatex would be this
 
@@ -34078,7 +34086,7 @@ this is my example
 \printbibliography
 \end{document}
 #+END_SRC
- 
+
 ******* styles
 ******** using styles
 example

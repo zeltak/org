@@ -1,0 +1,238 @@
+#+TITLE:        Dr Itai Kloog
+#+AUTHOR:       Itai Kloog
+#+EMAIL:        ikloog@bgu.ac.il
+
+#+OPTIONS:      toc:nil skip:nil ':t
+
+#+LATEX_CLASS_OPTIONS: [11pt,draft=true]
+#+LANGUAGE:    en-us
+#+LATEX_HEADER: \usepackage[american]{babel}
+#+LATEX_HEADER: \usepackage{csquotes} 
+#+LATEX_HEADER: \usepackage{lastpage}
+#+LATEX_HEADER: \usepackage[margin=20mm, paperwidth=210mm, paperheight=297mm]{geometry}
+
+#+LATEX_HEADER: \usepackage[backend=biber,style=authoryear,url=false, doi=true, eprint=false]{biblatex}
+#+LATEX_HEADER: \DeclareLanguageMapping{american}{american-apa}
+#+LATEX_HEADER: \addbibresource{/home/zeltak/org/files/Uni/papers/kloog_2015.bib}
+
+#+LaTeX_HEADER: \DeclareSourcemap{
+#+LaTeX_HEADER:   \maps[datatype=bibtex]{
+#+LaTeX_HEADER:     \map[overwrite]{
+#+LaTeX_HEADER:        \step[fieldsource=tags]
+#+LaTeX_HEADER:        \step[fieldset=keywords, fieldvalue={,}, append] 
+#+LATEX_HEADER:        \step[fieldset=keywords, origfieldval, final]}}}
+#+LATEX_HEADER: \AtEveryBibitem{\clearfield{month}}
+
+# this below is needed in same dir as .tex file 
+#+LaTeX_HEADER: \input{bold_author_hack.tex}
+
+#+LaTeX_HEADER: \boldname{Itai} {Kloog}
+
+#+LATEX_HEADER: \renewcommand*\familydefault{\sfdefault}
+#+LATEX_HEADER: \renewcommand*\sfdefault{uop}
+#+LATEX_HEADER: \renewcommand*\familydefault{\sfdefault}
+#+LATEX_HEADER: \renewcommand{\rmdefault}{uop}
+
+#+latex_header: \usepackage{helvet}
+#+LaTeX_HEADER: \usepackage{paralist}
+#+LaTeX_HEADER: \let\itemize\compactitem
+#+LaTeX_HEADER: \let\description\compactdesc
+#+LaTeX_HEADER: \let\enumerate\compactenum  
+#+LaTeX_HEADER: \renewcommand{\thesection}{\arabic{section}}
+#+LaTeX_HEADER: \setcounter{secnumdepth}{2}
+#+LaTeX_HEADER: \usepackage{fancyhdr}
+#+LaTeX_HEADER: \pagestyle{fancy}
+#+LaTeX_HEADER: \fancyhead{}
+#+LaTeX_HEADER: \renewcommand{\headrulewidth}{0pt}
+#+LaTeX_HEADER: \rfoot{Page \thepage\ of \pageref{LastPage}}
+#+LaTeX_HEADER: \cfoot{Itai Kloog}
+#+LaTeX_HEADER: \lfoot{Curriculum Vitae}
+
+#+LaTeX_HEADER: \usepackage{titlesec}
+#+LaTeX_HEADER: \setlength{\parindent}{0cm}
+#+LaTeX_HEADER: \setcounter{secnumdepth}{0}
+#+LaTeX_HEADER: \renewcommand\maketitle{\begin{center}\LARGE\sc Dr Itai Kloog\end{center}\vspace{1cm}}
+ 
+* CURRICULUM VITAE AND LIST OF PUBLICATIONS
+#+attr_latex: :align p{4cm}p{14cm}
+| Name                     | Itai Kloog                             |
+| Date and place of birth  | September 13th, 1975, Tel-Aviv, Israel |
+| Date of immigration      | N/A                                    |
+| Regular military service | 01/1994-01/1997                        |
+
+** Address and telephone number at work
+
+#+attr_latex: :align p{8cm}p{28cm}
+ | Geography and Environmental Development Department       |
+ | Ben-Gurion University of the Negev                       |
+ | Beer Sheva 84105                                         |
+ | Israel                                                   |
+ | Tel. 972-8-6428394                                       |
+ | Email: ikloog@bgu.ac.il                                  |
+ | \url{http://in.bgu.ac.il/humsos/eeal/Pages/default.aspx} |
+ 
+** Address and telephone number at home
+#+attr_latex: :align p{8cm}p{24cm}
+ | Tapoach 7, Lehavim, Israel |
+ | 8533800                    |
+ | Tel. 972-58-7443320        |
+
+
+* Education
+  #+attr_latex: :align p{2cm}|p{14cm}
+| B.A    1997-2000| Tel-Aviv University – Department of Geography & Human Environment.|
+| M.A    2003-2006|University of Haifa, Department of Natural Resources & Environmental Management Title of thesis: “Investigating the link between Light at Night and breast cancer rates in Israel |
+| Ph.D.  2006-2009|University of Haifa, Department of Natural Resources & Environmental Management Title of thesis: Investigating the association between Light at Night (light pollution) and breast and Prostate cancer rates |
+
+
+* Employment History
+
+#+attr_latex: :align p{2cm}|p{14cm}
+| 2013 – Present |     Senior Lecturer; Department of Geography & Human Environment, Ben-Gurion University of the Negev, Beer-Sheva, Israel          |
+|2013 - Present |Visiting scientist; Department of Environmental Health Harvard University, School of Public Health, USA  |
+| 2010 -2013 |Post-Doctoral research fellow; Department of Environmental Health, Harvard University, School of Public Health, USA  |
+| 2005--2010 |Research assistant; Department of Natural Resources & Environmental Management, University of Haifa, Israel  |
+* Professional Activities
+** (a) Positions in academic administration (departmental, faculty and university)
+#+attr_latex: :align p{2cm}|p{14cm}
+| 2014-2015 |Head, Geographic Information Science and Technologies program, Department of Geography & Human Environment, Ben-Gurion University of the Negev, Beer-Sheva, Israel |
+| 2014-2015 |Member of the committee for research and publications, Department of Geography & Human Environment, Ben-Gurion University of the Negev, Beer-Sheva, Israel |
+
+** (b) Editor or member of editorial board of scientific or professional journal
+#+attr_latex: :align p{2cm}|p{14cm}
+| 2003-current | Member of the Editorial Board Journal of Sustainability & Environmental Management (JoSEM) |
+** (c) Ad-hoc reviewer
+
+_Peer reviewed journals:_ Epidemiology; Atmospheric Environment; Environmental
+health perspective; International Journal of Health Geographics; Journal of Exposure
+Science and Environmental Epidemiology; Remote Sensing of Environment; Science
+of the Total Environment; Environmental Pollution.
+
+** (d) Membership in professional/scientific societies
+#+attr_latex: :align p{2cm}|p{14cm}
+|2014   |Member of the Israeli Geographical Association   |
+|2011   |Member of the International Society for Environmental Epidemiology   |
+
+* Educational activities 
+
+** (a) Courses taught (all at BGU)
+3D Analysis in GIS (undergraduate level)\\
+GIS for urban planners (graduate level)\\
+Introduction to spatial programming: python in GIS (graduate level)\\
+Qgis and open source GIS software (undergraduate level)\\
+** (b) Research students
+_Postdoc_ \\
+Dr. Meytar Sorek-Hamer, 2015, Ben-Gurion University of the Negev, Israel\\
+Dr. Shai Kaplan, 2014-2015, Ben-Gurion University of the Negev, Israel\\
+
+_Ph.D_\\
+Maayan Yitzhak (joint student with Prof. Victor Novak, Ben-Gurion University of\\
+the Negev, Israel), Ben-Gurion University of the Negev, Israel, 2017 (expected).\\
+Francesca Dedonato (joint student with Prof. Paolo Vineis, Imperial College,\\
+London, England), Ben-Gurion University of the Negev, Israel, 2018 (expected).\\
+
+_M.A._
+Omer Harovi, Ben-Gurion University of the Negev, Israel 2016 (expected).\\
+Adar Rozenfeld, Ben-Gurion University of the Negev, Israel 2017 (expected).\\
+
+
+* Awards, Citations, Honors, Fellowships
+
+#+attr_latex: :align p{2cm}|p{14cm}
+| 2015 | Best Lecturer Award, Ben Gurion University of the negev                                      |
+| 2012 | EHF (Environmental health fund) Post-Doctoral Fellowship, $60,000, Post-doctoral fellowship. |
+| 2006 | Haifa University - Excellent Thesis 2006 Rector Award.                                       |
+| 2006 | Haifa University - Honor Diploma M.A. Thesis.                                                |
+
+* Scientific publications
+_*H-index*_: 10, 259 citations in total (excluding self-citations), average number of
+citations per item: 11.76. (Source: ISI, January, 2015).
+
+
+** (a) Refereed articles and refereed letters in scientific journals - running numbers
+
+
+\nocite{[[/home/zeltak/Sync/Uni/pdf_lib/myers-2014-increas-co2.pdf][myers-2014-increas-co2]]}
+
+\printbibliography[keyword=article,notkeyword=prep,keyword=own,heading=none]
+
+** Manuscripts in preparation
+\nocite{MalsburgAngele2015}
+\nocite{MetznerEtAl2014P600}
+\nocite{MalsburgEtAl2014Anaphora}
+
+\printbibliography[keyword=manuscript,keyword=own,heading=none]
+
+** Peer-reviewed conference talks
+\nocite{MetznerEtAl2014CUNY}	
+\nocite{MalsburgEtAl2013ECEM_scanpaths}
+\nocite{MetznerEtAl2013ECEM}
+\nocite{MetznerEtAl2013AMLaP}
+\nocite{PaapeEtAl2013CUNY}
+\nocite{MalsburgEtAl2012Coling}
+\nocite{MalsburgVasishth2011XSymp}
+\nocite{MalsburgVasishth2010CUNY}
+\nocite{MalsburgVasishth2009ECEM}
+
+\printbibliography[keyword=talk,keyword=own,heading=none]
+
+** Peer-reviewed posters and demos
+\nocite{AngeleMalsburg2015ECEM}
+\nocite{MalsburgEtAl2015CUNY}
+\nocite{MalsburgAngele2015CUNY}
+\nocite{MalsburgEtAl2014CUNY}
+\nocite{MetznerEtAl2014SNL}
+\nocite{MetznerEtAl2014AMLaP}
+\nocite{MalsburgIlling2013xCoAx}
+\nocite{MalsburgEtAl2013ECEM_coreg}
+\nocite{KobeleEtAl2012AMLaP}
+\nocite{MalsburgEtAl2012CUNY}
+# \nocite{MaruschEtAl2012HP}
+\nocite{MalsburgEtAl2011ECEM}
+\nocite{MalsburgVasishth2011CUNY}
+\nocite{VasishthEtAl2010CUNY}
+\nocite{MalsburgVasishth2009Cortona}
+\nocite{MalsburgVasishth2009CUNY}
+\nocite{Malsburg2009ECEM}
+\nocite{MalsburgVasishth2008CUNY}
+\nocite{MalsburgVasishth2007ECEM}
+
+\printbibliography[keyword=poster,keyword=own,heading=none]
+* Lectures and Presentations at Meetings and Invited Seminars not Followed by Published Proceedings
+** (a) Invited plenary lectures at conferences/meetings
+** (b) Presentation of papers at conferences/meetings
+** (c) Presentations at informal international seminars and workshops
+* Present Academic Activities
+** Research in progress:
+* Books and articles to be published
+** Papers in preparation
+** Papers submitted for publication (indicate journal)
+* Additional information
+** Organization of Scientific Meetings
+Co-Organizer and secretary of the 2009 International Congress of Applied \\
+Chronobiology and Chronomedicine, May 17-22, 2009 Akko, Israel.
+
+* Synopsis of research, including reference to publications and grants in above lists
+*1. Assessing Temporally and Spatially Resolved PM2.5 and Air Temperature Exposures For Epidemiological Studies Using Satellite Based Methods (CIG grant)*
+
+The goal of this research is two folds: to develop and validate novel high resolution spatio- temporal accurate PM2.5 and air temperature (Ta) exposure models for environmental epidemiology studies in Italy and France. The second goal is to conduct a nationwide study in France at a very small spatial resolution (geocoded individual location) to estimate the association between exposure to PM2.5 and air temperature and fetal growth:\\
+*1A* Exposure to PM2.5 has been associated with increased risk of myocardial infarction, reduced birth weights, cardiovascular and respiratory disease. Climate changes will lead to warmer Ta and more extreme weather events, which are associated with increased morbidity and mortality in sensitive populations. Current epidemiological studies on the health effects of PM2.5 and Ta have many limitations. They are conducted using large geographical areas (potentially biasing the health effect risk estimates due to exposure measurement error) and are focused only in urban areas where the monitors are placed. There is also an increasing recognition that risk estimation must recognize that people are exposed to multiple risk factors simultaneously. Thus, there are huge methodological and knowledge gaps that must be filled. We need to identify the sources of heterogeneity in the short and long term exposure to air pollution and Ta effects across territories and across sub-populations as well as identify the risks associated with multi-threat exposure. To address this we aim to develop better statistical exposure assessment methods to handle the currently exposure datasets, which are misaligned in both time and space. We have started working on developing and validating computationally efficient models that will allow us to more accurately estimate PM2.5 and Ta at a very high spatial (1km) and temporal (daily) resolutions for Italy and France for 2000- 2013.\\ 
+*1B* (joint work with Dr.Johanna Lepeule, Grenoble , France): We aim to assess the effects of maternal exposure to PM2.5 and air temperature on fetal growth, characterized by gestational duration, anthropometric measurements at birth and ultrasonography measurements during pregnancy in the ELFE. ELFE is a mother-child cohort where 18,000 pregnant women were recruited at delivery in 2011 in 344 maternity units randomly selected from all over metropolitan France. Birth weight and gestational duration will be extracted from the maternity records and women were asked to provide the reports of the 3 ultrasonography exams performed at each trimester of pregnancy. Exact addresses (and date of change of address) of the women during pregnancy were collected. We will make full use of the high spatial and temporal resolution of our exposure models by 1) calculating daily exposure to PM2.5 and temperature for each address of each women and 2) studying the effects of short and long term exposure windows, such as days, weeks, months and trimesters of exposure on pregnancy outcomes in order to identify potential time windows of vulnerability of the fetus to theses exposures. Correlation between exposure windows will be taken into account by using constrained distributed lag models. Fetal and birth anthropometric measurements will be studied by linear regression adjusted for gestational duration, sex of the child, parity of the mother, and age, height, weight, tobacco smoking, educational level, and occupation of both parents.\\
+
+*2. Studying the Association between Adverse Pregnancy Outcomes and Ambient Air Temperature and Particulate Matter in Southern Israel (EHF grant).*\\
+We aim at developing and validate computationally efficient models that will provide more accurately estimated Ta at very high spatial (1 km) and temporal (daily) resolutions in the very climate complex region of Israel. We then will make use of these generated Ta estimations alongside our groups previously developed PM2.5 models in a study assessing the effects of maternal exposure to Ta and PM2.5 on various pregnancy outcomes including birth weight, low birth weight, preterm birth, pre labor rupture of membranes (PROM), birth defects, APD (Antepartum death), preeclampsia and placental abruption. \\
+*2A* Scientific consensus strongly supports the scenario that climate change will lead to warmer air temperatures (Ta) and more extreme weather events, the latter of which are associated with increased morbidity and mortality in sensitive populations. This increase in Ta may also elevate the risk of adverse pregnancy outcomes, including preeclampsia, low or reduced birth weight, preterm parturition and stillbirths. Current epidemiological studies on the health effects of Ta and PM2.5 have many limitations. They are conducted over large geographical areas (potentially biasing the health effect risk estimates due to exposure measurement error) and are focused only in the urban areas where the monitors are placed. There is also an increasing recognition that risk estimation must recognize that people are exposed to multiple risk factors simultaneously. We are developing air temperature estimation models across the complex climatic region of Israel for the years 2000-2013. We aim these models for use with multi exposure epidemiology studies taking into account the unique climatology, land use and surface properties. This novel, spatiotemporally resolved temperature model is a significant improvement over the models currently available worldwide.\\ 
+*2B* (joint work with Dr.Ofer Errez, in collaboration with the Department of Obstetrics and Gynecology at the Soroka University medical center). We are conducting a study in southern Israel at a very small spatial resolution (geocoded individual locations) to estimate the association between ambient air temperature and multiple birth outcomes at an individual level. We are looking at the following outcomes: In utero fetal development by tracking its growth using serial ultrasonography measurements during gestation, assessment of fetal malformations, and APD (Antepartum death). Following delivery we will collect data regarding neonatal birth weight to identify those with, low birth weight and growth restricted. Other pregnancy outcome we are looking at include preterm labor, preterm PROM (Prelabor rupture of membranes), preterm delivery, preeclampsia and placental abruption. This work will dramatically advance environmental exposure assessment in Israel by producing high resolution spatio-temporally resolved exposure models. These models will allow us to estimate the effects of both short and long term exposure in both urban and rural areas, reducing exposure measurement error and providing a sound epidemiological basis for assessing the magnitude of risk associated with exposure to temperature and air pollution.\\ 
+
+*3.Hospitalization trends in the Haifa bay area associated with cardio-vascular and respiratory morbidity:\\*
+Multiple studies in the United States and worldwide have shown associations between exposure to ambient air pollution (PM2.5, PM10, NOx, So2) and adverse health effects. A large number of these studies tend to focus on the short term exposure to pollution (the acute effect), yet there remains uncertainty about the magnitude of these associations, the mechanisms, and the effects of long-term (chronic) exposure to pollutants, as compared with short-term exposure. We are conducting a within city analysis studying the association between long term exposure to multi pollutants (PM2.5, PM10, NoX, So2) and hospital admissions (focused on respiratory and cardiovascular morbidity) across the greater Haifa metropolitan area (GHMA).\\
+
+*4. Cardiovascular health and Air pollution: A national study* (joint work with Dr.Antonella Zanobetti, Prof Joel Schwartz, Prof Francesca Domenici, Prof Brent Coull- Harvard School of Public Health). We are using highly refined predictions of PM2.5 to conduct an epidemiological study with the highest possible level of accuracy, both in terms of spatial and temporal resolution. We are integrating AOD data with land use regression variables to predict and validate daily PM2.5 levels at 1km grid cell resolution for the entire continental US. This data will be matched to zip-codes based on spatial location and date. We will then link daily PM2.5 predictions to individual-level claims from everyone in the US enrolled in Medicare (90% of the entire US population of elderly) over the period 2000 to 2013. We develop statistical methods, and computationally efficient algorithms to analyze these linked data sets and ultimately provide evidence on the short and long-term effects of PM2.5 for all the US (including rural areas) and for a much smaller spatial resolution considered so far. We will also later on in the study decompose the estimated daily pollution surfaces into different spatial scales, representing regional and locally-generated pollution; estimate the shape of the exposure-response relationship between cardiovascular admissions and PM2.5 and examine effect modification by rural/urban areas, by multiple socioeconomic measures, and by land use characteristics. Finally, we will further develop our proposed approaches to estimate acute and chronic health risks associated with simultaneous exposure to both heat and PM2.5 
+
+
+
+
+
+
+
+

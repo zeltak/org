@@ -742,5 +742,21 @@
     "yan-assoc-pm2"
     "yan-prep-estim-causal"
     "antonella-prep-fine-scale"
-    "mehta-prep-assoc-between")))
+    "mehta-assoc-between"
+    "kloog-2008-light-israel"
+    "kloog-2014-asses-tempor"
+    "kloog-2014-using-pm2"
+    "kloog-2014-how"
+    "i-2012-using-novel"
+    "i-2012-using-new"
+    "i-2012-asses-tempor"
+    "kloog-2005-light"
+    "kloog-2005-inves"
+    "kloog-2005-artif"
+    "kloog-2006-artif"
+    "kloog-2006-study"
+    "kloog-2008-inves-haifa"
+    "kloog-2009-using"
+    "kloog-2009-global-lan"
+    "kloog-2011-asses")))
 
