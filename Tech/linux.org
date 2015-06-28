@@ -19075,6 +19075,28 @@ if pulseaudio is running then first issue:
 
  pulseaudio --start
 
+**** disable sound lowring of volume when opening multimedia (youtube etc) streams
+you need to config 3 files in /etc/pulse
+
+1. disable cork in file:/etc/pulse/default.pa
+
+#+BEGIN_EXAMPLE
+### Cork music/video streams when a phone stream is active
+#load-module module-role-cork
+#+END_EXAMPLE
+
+
+set flat volumes in file:/etc/pulse/deamon.conf to no and uncomment (it has a ; for comment)
+#+BEGIN_EXAMPLE
+flat-volumes = no
+#+END_EXAMPLE
+
+finally edit file:/etc/pulse/default.pa
+and comment the following line
+#+BEGIN_EXAMPLE
+#load-module module-intended-roles
+#+END_EXAMPLE
+
 **** PulseAudio over network
 
 PulseAudio over network
