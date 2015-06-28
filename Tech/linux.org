@@ -29724,6 +29724,80 @@ This commands provides a Helm interface for calc command
 n the original M-x, you pass prefix arguments before M-x.I
 'In Helm', you pass prefix arugments after running helm-M-x.
 In a helm-M-x session, if you type any prefix argument, it will be visible, i.e. if you type C-u 100, a message prefix argument: 100 appears. Then run your command as usual, the interactive command will receive the argument you passed in.
+********** Integrating swish-e and Emacs
+install swish-e from repo/AUR
+
+To test things out, I will only index org-files. I have these all over the place, and they are not all in my org-mode agenda. So, finding them quickly would be awesome.
+
+#+BEGIN_SRC text :tangle ~/.swish-e/swish.conf
+# Example configuration file
+
+# Tell Swish-e what to directories to index
+IndexDir /Users/jkitchin/Dropbox
+IndexDir "/Users/jkitchin/Box Sync"
+IndexDir /Users/jkitchin/blogofile-jkitchin.github.com
+
+# where to save the index
+IndexFile /Users/jkitchin/.swish-e/index.swish-e
+
+# What to index
+IndexOnly .org
+
+# Tell Swish-e that .txt files are to use the text parser.
+IndexContents TXT* .org
+
+# Otherwise, use the HTML parser
+DefaultContents HTML*
+
+# Ask libxml2 to report any parsing errors and warnings or
+# any UTF-8 to 8859-1 conversion errors
+ParserWarnLevel 9
+#+END_SRC
+
+Now, we create our index.
+
+#+BEGIN_SRC sh
+swish-e -c ~/.swish-e/swish.conf
+#+END_SRC
+
+Now an example search. I have been looking into the Energy frontier research centers, and I want to find my notes on it. Here is a little query. I use a special output format to keep things simple for the parsing later, just the rank and path, separated by a tab.
+
+#+BEGIN_SRC sh
+swish-e -f ~/.swish-e/index.swish-e -x '%r\t%p\n' -w efrc
+#+END_SRC
+
+Now, for the integration with Emacs. We just get that output in a string, split it, and get the parts we want.  I think I will use helm to provide a selection buffer to these results. We need a list of cons cells (string . candidate). Then we write an interactive helm function. We provide two sources. One for the initial query, and another to start a new search, in case you don't find what you want.
+
+#+BEGIN_SRC emacs-lisp
+(defun helm-swish-e-candidates (query)
+  "Generate a list of cons cells (swish-e result . path)."
+  (let* ((result (shell-command-to-string
+		  (format "swish-e -f ~/.swish-e/index.swish-e -x \"%%r\t%%p\n\" -w %s"
+			  (shell-quote-argument query))))
+	 (lines (s-split "\n" result t))
+	 (candidates '()))
+    (loop for line in lines
+	  unless (or  (s-starts-with? "#" line)
+		      (s-starts-with? "." line))
+	  collect (cons line (cdr (s-split "\t" line))))))
+
+
+(defun helm-swish-e (query)
+  "Run a swish-e query and provide helm selection buffer of the results."
+  (interactive "sQuery: ")
+  (helm :sources `(((name . ,(format "swish-e: %s" query))
+		    (candidates . ,(helm-swish-e-candidates query))
+		    (action . (("open" . (lambda (f)
+					   (find-file (car f)))))))
+		   ((name . "New search")
+		    (dummy)
+		    (action . (("search" . (lambda (f)
+					     (helm-swish-e helm-pattern)))))))))
+#+END_SRC
+
+Now I can run M-x helm-swish-e and enter "efrc AND computing infrastructure" to find org files containing those words, then press enter to find the file. Nice and easy. I have not tested the query syntax very fully, but so far it is working fine!
+
+
 ********* helm-bibtex
 https://github.com/tmalsburg/helm-bibtex
 
@@ -30716,6 +30790,8 @@ characters that you'll need to replace:
  [[macsen_files/Image_uAzmRVDZTNs1blt9dZ9E2g_0001.png]]
 
 ******** search
+%tip- jump back to where you started with ~C-u SPACE~ %
+
 How to search text?
 
 Press Ctrl+s (isearch-forward), then type your text. Emacs will
@@ -31261,7 +31337,7 @@ Keep writing as follows, also made a .folders following HOME
 First, you can start with the Mx wl.
 ******* Terminals
 ******** ansi term 
-refixing actions that aren’t recognized by their standard key commands with ‘C-x’. For example, ‘M-x’ becomes ‘C-x M-x’.
+	 refixing actions that aren’t recognized by their standard key commands with ‘C-x’. For example, ‘M-x’ becomes ‘C-x M-x’.
 *** 'org-mode'
        :PROPERTIES:
        :ID:       be4759e1-2951-4c91-a155-056bc2a16d9f
@@ -33972,6 +34048,16 @@ In the author field, `commas` are used to separate last name from first name and
 Example: LastName1, FirstName1 and LastName2, FirstName2 and ... 
 #+END_EXAMPLE
 
+***** make bibtex load biblatex dialect by default
+add this on the top of the file
+#+BEGIN_SRC latex :results none
+% -*- mode:bibtex; eval: (bibtex-set-dialect 'biblatex); -*-
+#+END_SRC
+
+to eval it place your cursor has to be right after the ) when you run C-x C-e to run that command.
+if it outputs `t` then it works.
+you will see bibtex is in biblatex dialect mode. this should start automaticly when you open the .bib file next time.
+
 ***** intro (bibtex and biber//natbib and biblatex)
 bibtex and biber are external programs that process bibliography information and act (roughly) as the interface between your .bib file and your LaTeX document.
 
@@ -34233,7 +34319,6 @@ you can tag the references like this:
 It’s a pretty straightforward org document except for one thing: the key to making this work was biblatex which can be used to create several lists of references filtered according to keywords, author, etc.  This allowed me to have separate sections for journal articles, conference presentations, etc.  I store the relevant keywords in the tags field of the BibTeX entries and since biblatex doesn’t know this field, I copy the tags on-the-fly to the keywords field (see DeclareSourcemap in the LaTeX headers).
 
 *** sublime text
-
 **** search and replace
 
 ***** keyboard shortcuts
@@ -34254,7 +34339,7 @@ actions:
  Find Next Enter
 
 *** vim
-    
+   
 **** $intro/help
 
 ***** help
@@ -37383,15 +37468,12 @@ cursor, etc)
  au BufWinEnter . silent! loadview "make vim load view (state) (folds,
 cursor, etc)
 
-*** General Regex
-
+*** Regex
 **** delete/select lines
-
 rexeg command to delete line starting with "ns":
  \^ns.$
  To delete empty lines:
  \^\s$
- 
 * Admin
 ** General Guides
 *** A-Z Index of the Linux BASH

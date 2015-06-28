@@ -741,7 +741,7 @@
     "rodos-circul-mirnas"
     "yan-assoc-pm2"
     "yan-prep-estim-causal"
-    "antonella-prep-fine-scale"
+    "antonella-fine-scale"
     "mehta-assoc-between"
     "kloog-2008-light-israel"
     "kloog-2014-asses-tempor"
