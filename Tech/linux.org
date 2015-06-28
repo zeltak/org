@@ -25618,6 +25618,7 @@ The following defuns show how you can know wich system type and name you have in
 )
 #+END_SRC
 
+
 Those previous commands are interactive, so you can just type M-x insert-system-name or M-x insert-system-type to test them.
 ********* Single dot emacs file and per-computer configuration
 
@@ -25657,25 +25658,26 @@ In order to include system-type based configurations, you can define functions t
 
 Once you have these functions, you can put the system-dependent configuration:
 
-********* Configuration depending on the system name
- 
-Now, you also want to put machine-dependent configuration, so you can define functions like this to detect in which machine you are currently located:
+********* Configuration depending on the system name (linux hostname)
+first on linux to define hostname issue
 
-;; Check if the system is my Kubuntu GNU/Linux at work
-(defun system-is-my-workpc ()
-(interactive)
-"Return true if the system we are running on is my PC at work"
-(string-equal system-name "dev002.workplace.com")
+#+BEGIN_SRC sh
+hostname
+#+END_SRC 
+
+#+RESULTS:
+: zx1voics
+
+then in your config you can see something like this
+
+#+BEGIN_SRC emacs-lisp :results none
+#+BEGIN_SRC emacs-lisp :results none
+(when (string= system-name "zx1voics")
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
 )
+#+END_SRC
 
-And then you just need to use the previous function in the specific configurations (note that Im using the hostname of my PC at work. Use your own hostname for you functions, dude).
-
-;; For my machine in my worplace, setup my work email address
-(if (system-is-my-workpc)
-(setq user-mail-address "my.name@workplace.com")
-)
-
-********* algternative OS specfic method
+********* alternative OS specfic method
 
 put OS-specific code in your initialization file but use the same file everywhere,  you might find this sample code useful.
 
@@ -27441,7 +27443,58 @@ then add this to Emacs config:
 (load "ess-site")
 #+END_SRC
 
-******** connect to a remote server and run r scripts there 
+******** `ess-remote` connect to a remote server (zuni) and run R scripts (and tangled org) 
+- Start a new shell:
+#+BEGIN_SRC emacs-lisp :results none
+ansi-term
+#+END_SRC
+
+- ssh into the machine
+#+BEGIN_SRC emacs-lisp :results none
+ssh uni
+#+END_SRC
+
+- Start the ESS process on the remote machine:  for example R
+
+#+BEGIN_SRC sh
+R
+#+END_SRC
+%Tip-you can check the correct machine with the R command%
+#+BEGIN_SRC R
+Sys.info()
+#+END_SRC
+
+- Start ‘M-x ess-remote':
+#+BEGIN_SRC emacs-lisp :results none
+ess-remote
+#+END_SRC
+%Tip- in some terms issue ~C-x M-x~ to launch the ess-remote command% 
+
+You will be prompted for a program name with completion. Choose R.
+#+BEGIN_EXAMPLE
+Dialect: R|stata|....
+#+END_EXAMPLE
+Your process is now known to ESS.
+
+
+- Graphics (interactive) on the remote machine. If you run X11 (See X11, X Windows) on both the local and remote machines then you should be able to display the graphs locally by setting the ‘DISPLAY’ environment variable appropriately. also enable X11 forwarding in your ssh config file:/~/.ssh/config  for the specific server
+
+- org
+
+for org mode compatibility change you sessuin name to the ansi term buffer R name. (defaults to *ansi-term*)
+₆In example₆ 
+
+
+this is the one we ended up using 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+ls()
+#+END_SRC 
+
+then just issue the command as usual (₆In example₆ eval block with C-c etc)
+
+********* alternative methods (not tested by zeltak)
+********** connect via tamp 
+
 ESS works with processes on remote computers as easily as with processes on the local machine. The recommended way to access a statistical program on remote computer is to start it with tramp. Require tramp in your .emacs file:
 (require 'tramp)
 %note- not needed with emacs 24 onwards%
@@ -27453,9 +27506,8 @@ Now start an ssh session with
 Tramp should open a dired buffer in your remote home directory. Now call your favorite ESS process (R, Julia, stata etc) as you would usually do on local machine: M-x R.
 
 Alternatively you can start your process normally (M-x R). After you are asked for starting directory, simply type ‘/ssh:user@host: RET’. R process will be started on the remote machine.
-******** 'connect via ssh' to a remote server and run local ESS there
-this is my prefferd way of doing this:
 
+********** using separate ssh command 
 you connect to the server you want to run R on via SSH on your local machine (client)
 $Note- you need to make sure Emacs daemon is runnig on that server$
 
@@ -27476,7 +27528,7 @@ this will prompt you to choose a folder as your work dir and will create a *R* b
 
 %Tip- if tab isn't working in terminal for some org related stuff (if using org with R) just use 0rg-cycle% 
 
-********* alternaive approach @not tested by me@
+********** using screen
 
 Here is how to use ESS with R running in a remote screen session:
 
@@ -27495,7 +27547,6 @@ resume the screen session (screen -r)
 start R
 
 finally attach ESS to the R process using M-x ess-remote in the shell buffer where you started R
-
 
 ******** a handy function to clear shell
 use the function below and bind it to a key of your liking
@@ -30438,7 +30489,43 @@ You can then retrieve your e-mail using M-x mu4e-update-mail-and-index, or C-S-u
 
 ~C~ compose  
 
-~O~ sort 
+~O~ sort
+********** install on ubuntu
+install dependencies
+
+#+BEGIN_SRC sh
+sudo apt-get install libtool autotools autotools-dev autoconf 
+
+$ sudo apt-get install libgmime-2.6-dev libxapian-dev
+# if libgmime-2.6-dev is not available, try libgmime-2.4-dev
+
+# optional
+$ sudo apt-get install guile-2.0-dev html2text xdg-utils
+
+#+END_SRC
+then dl and install
+
+#+BEGIN_SRC sh
+# get from git (alternatively, use a github tarball)
+$ git clone git://github.com/djcb/mu.git
+
+$ cd mu
+$ autoreconf -i && ./configure && make
+# On the BSDs: use gmake instead of make
+$ sudo make install
+#+END_SRC
+
+After this, mu and mu4e should be installed 18 on your system, and be available from the command line in emacs.
+
+You may need to restart emacs, so it can find mu4e in its load-path. If, even after restarting, emacs cannot find mu4e, you may need to add it to your load-path explicitly; check where mu4e is installed, and add something like the following to your configuration before trying again:
+
+#+BEGIN_SRC emacs-lisp :results none
+;; the exact path may differ -- check it
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
+#+END_SRC
+
+
+
 ********* pdf-tools
 https://github.com/politza/pdf-tools
 ********** install 
@@ -31150,6 +31237,9 @@ Keep writing as follows, also made a .folders following HOME
 
 ********* How to use
 First, you can start with the Mx wl.
+******* Terminals
+******** ansi term 
+refixing actions that aren’t recognized by their standard key commands with ‘C-x’. For example, ‘M-x’ becomes ‘C-x M-x’.
 *** 'org-mode'
        :PROPERTIES:
        :ID:       be4759e1-2951-4c91-a155-056bc2a16d9f
@@ -39564,10 +39654,8 @@ Assuming the media is stored locally (and the server paths are empty), this will
 **** Synchronizing org files with Unison
 This describes how to synchronize org files using the [[http://www.cis.upenn.edu/~bcpierce/unison/][Unisonfile synchronizer]],
 as well as how to configure it to use an external tool to merge conflicting
-edits.
-also see:
+edits. also see:
 http://orgmode.org/worg/org-tutorials/unison-sync.html
-
 ***** Synchronization
 
 Unison is a file synchronizer, thus it may be used to synchronize org files. To
