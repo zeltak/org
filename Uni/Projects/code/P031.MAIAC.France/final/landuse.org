@@ -29,87 +29,85 @@
 ** add LU  
 
 #+BEGIN_SRC R  :session Rorg  :results none
-  #load clipped france grid 
+#load clipped france grid 
+fgrid <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/gird/france.grid.csv")
 
-  fgrid <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/gird/france.grid.csv")
+key.lu<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.lu.rds")
+fin.lu<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/LU/fin.lu.rds")
 
+#add lu-key
+setkey(fgrid,aodid)
+setkey(key.lu,aodid)
+fgrid <- merge(fgrid, key.lu, all.x = T)
+#add lu
+setkey(fgrid,LUaodid)
+setkey(fin.lu,LUaodid)
+fgrid <- merge(fgrid, fin.lu[,list(LUaodid,pop06,pcturb,elev_m,distA1,wflag,tden)], all.x = T)
+fgrid<-select(fgrid,aodid,pop06, pcturb, elev_m    ,  distA1, wflag   ,  tden)
 
-    key.lu<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.lu.rds")
-    fin.lu<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/LU/fin.lu.rds")
+#add newly avilable LU data
+#airport
+dair<-fread("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/Qgis/dist_airports.csv")
+setnames(dair,"InputID","aodid")
+setnames(dair,"Distance","dair")
+#dports
+dport<-fread("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/Qgis/dist_ports.csv")
+setnames(dport,"InputID","aodid")
+setnames(dport,"Distance","dport")
+lua<-left_join(dair,dport, by = c("aodid" = "aodid") )
 
-      #add lu-key
-      setkey(fgrid,aodid)
-      setkey(key.lu,aodid)
-      fgrid <- merge(fgrid, key.lu, all.x = T)
-      #add lu
-      setkey(fgrid,LUaodid)
-      setkey(fin.lu,LUaodid)
-      fgrid <- merge(fgrid, fin.lu[,list(LUaodid,pop06,pcturb,elev_m,distA1,wflag,tden)], all.x = T)
-      fgrid<-select(fgrid,aodid,pop06, pcturb, elev_m    ,  distA1, wflag   ,  tden)
-
-      #add newly avilable LU data
-      #airport
-      dair<-fread("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/Qgis/dist_airports.csv")
-      setnames(dair,"InputID","aodid")
-      setnames(dair,"Distance","dair")
-      #dports
-      dport<-fread("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/Qgis/dist_ports.csv")
-      setnames(dport,"InputID","aodid")
-      setnames(dport,"Distance","dport")
-      lua<-left_join(dair,dport, by = c("aodid" = "aodid") )
-
-      setkey(lua,aodid)
-      setkey(fgrid,aodid)
-      fgrid <- merge(fgrid, lua, all.x = T)
+setkey(lua,aodid)
+setkey(fgrid,aodid)
+fgrid <- merge(fgrid, lua, all.x = T)
 
 
-      #distances
-      dist<-fread("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/distances.csv")
-      dist<-select(dist,aodid,dist_train,dist.aroad,dist.coast,dist.wb)
-      setkey(fgrid,aodid)
-      setkey(dist,aodid)
-      fgrid <- merge(fgrid, dist, all.x = T)
+#distances
+dist<-fread("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/distances.csv")
+dist<-select(dist,aodid,dist_train,dist.aroad,dist.coast,dist.wb)
+setkey(fgrid,aodid)
+setkey(dist,aodid)
+fgrid <- merge(fgrid, dist, all.x = T)
 
-      #add emissions
-      key.ems<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ems.rds")
-      setkey(fgrid,aodid)
-      setkey(key.ems,aodid)
-      fgrid <- merge(fgrid, key.ems, all.x = T)
-      ems<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/LU/fin.emission.rds")
-      setnames(ems,"NOx (as NO2)","NO2")
-      setnames(ems,"SOx (as SO2)","SO2")
-      ems<-select(ems,emsid,NO2,SO2,PM2.5,PM10)
-      #take care of double entries
-      ems <- ems  %>% group_by(emsid) %>%  summarise_each (funs(mean) )
-      setkey(fgrid,emsid)
-      setkey(ems,emsid)
-      fgrid <- merge(fgrid, ems , all.x = T)
-
-
-    #lucor
-    lucor<-fread("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/lucor.csv")
-
-  lucor<-select(lucor,aodid,baggrimean,bopenmean,burban_mea,bforest_me,pmreg,cid)
+#add emissions
+key.ems<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ems.rds")
+setkey(fgrid,aodid)
+setkey(key.ems,aodid)
+fgrid <- merge(fgrid, key.ems, all.x = T)
+ems<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/LU/fin.emission.rds")
+setnames(ems,"NOx (as NO2)","NO2")
+setnames(ems,"SOx (as SO2)","SO2")
+ems<-select(ems,emsid,NO2,SO2,PM2.5,PM10)
+#take care of double entries
+ems <- ems  %>% group_by(emsid) %>%  summarise_each (funs(mean) )
+setkey(fgrid,emsid)
+setkey(ems,emsid)
+fgrid <- merge(fgrid, ems , all.x = T)
 
 
-      lucor$baggrimean<-lucor$baggrimean*100
-      lucor$bopenmean<-lucor$bopenmean*100
-      lucor$burban_mea<-lucor$burban_mea*100
-      lucor$bforest_me<-lucor$bforest_me*100
+#lucor
+lucor<-fread("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/lucor.csv")
 
-      #renames
-      setnames(lucor,"baggrimean","p.agric")
-      setnames(lucor,"bopenmean","p.open")
-      setnames(lucor,"burban_mea","p.urban")
-      setnames(lucor,"bforest_me","p.forest")
+lucor<-select(lucor,aodid,baggrimean,bopenmean,burban_mea,bforest_me,pmreg,cid)
 
-      setkey(fgrid,aodid)
-      setkey(lucor,aodid)
-      fgrid <- merge(fgrid, lucor, all.x = T)
-  fgrid$TargetID.x <- NULL
-  fgrid$TargetID.y <- NULL
-  fgrid$emsid <- NULL
 
- saveRDS(fgrid, "/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/france.grid.allLU.rds")
+lucor$baggrimean<-lucor$baggrimean*100
+lucor$bopenmean<-lucor$bopenmean*100
+lucor$burban_mea<-lucor$burban_mea*100
+lucor$bforest_me<-lucor$bforest_me*100
+
+#renames
+setnames(lucor,"baggrimean","p.agric")
+setnames(lucor,"bopenmean","p.open")
+setnames(lucor,"burban_mea","p.urban")
+setnames(lucor,"bforest_me","p.forest")
+
+setkey(fgrid,aodid)
+setkey(lucor,aodid)
+fgrid <- merge(fgrid, lucor, all.x = T)
+fgrid$TargetID.x <- NULL
+fgrid$TargetID.y <- NULL
+fgrid$emsid <- NULL
+
+saveRDS(fgrid, "/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/france.grid.allLU.rds")
 #+END_SRC 
 
