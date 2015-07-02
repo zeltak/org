@@ -2,7 +2,6 @@
 #+TAGS: Fav(f) Most_used(m) cbugs(c)
 #+STARTUP: overview
 
-
 * distros/WM
 ** arch
 *** Fresh Sys Install
@@ -5410,20 +5409,24 @@ From your PC attempt to Ssh to NAS via OpenSSH:
 ssh admin@NAS-IP
 #+END_EXAMPLE
 
-***** make it run after reboot
+***** auto start on system startup
  If you are able to successfully login, then you know OpenSSH is installed properly.
  If your test Login worked, then you can follow these steps to add to your  "autorun.sh" file. 
 
- CODE: SELECT ALL
+#+BEGIN_SRC sh :results none
  #Start OpenSSH
- /opt/sbin/sshd 
+/opt/sbin/sshd 
+#+END_SRC
 
 Test your Configuration: At this point you should restart your NAS to ensure that OpenSSH does in fact startup when the NAS starts. (It should work, but again, if this fails) please reply to this message with information about the failure). Once your NAS has restarted attempt another SSH login to your NAS (login as "admin"). 
- Lets ensure that you can login on the standard port. 
- From your PC attempt to Ssh to NAS via OpenSSH:
- ssh admin@NAS-IP
- also retry Ssh to NAS via QNAP SSHd:
- ssh -p 12121 admin@NAS-IP
+Lets ensure that you can login on the standard port. 
+From your PC attempt to Ssh to NAS via OpenSSH:
+
+#+BEGIN_SRC sh :results none
+ssh admin@NAS-IP
+#also retry Ssh to NAS via QNAP SSHd:
+ssh -p 12121 admin@NAS-IP
+#+END_SRC
 
 If you are able to successfully login on both ports, then you know OpenSSH is installed properly (including "autostart" at startup), and that your QNAP SSHd daemon is still accessible on port 12121/TCP. Go grab another beverage, you've probably earned it this time. 
 
@@ -5441,7 +5444,7 @@ You may want to take advantage of this "feature". If you create users via the Ad
 Caveat: My autostart method could use some work. I didnt bother to build a proper start/stop script for this, (as I always want SSH running anyway), but OpenSSH should really be setup properly with a openssh.sh start/stop script probably started from /opt/etc/init.d if you following the instructions from the Running /opt/etc/init.d/* on startup section of the QNAPedia article: Install Optware IPKG. If any community members desire this, please post a reply to this message asking me to do so. (I skipped it at this time, simply because I haven't bothered for my own use yet. 
 
 ***** configure ssh with keys
-the .ssh folder should sit under USER, so if you login with 'zeltak' it should be in the zeltka home dir:
+the .ssh folder should sit under USER, so if you login with 'zeltak' it should be in the zeltak home dir:
 
 #+BEGIN_EXAMPLE
 file:/share/homes/USER/
@@ -5460,8 +5463,32 @@ the sshd_config file should be configured as you would ususally do
 
 1. make sure permissions on the .ssh folder is '700' (chmod 700) and on the authroized_keys '600' 
 2. make sure permissions on the USER ('zeltak') home folder is '755'
-3. 
+***** 'restart service after a sys reboot/upgrade'
+it maybe that the openssh service will stop working after a sys upgrade/reboot. remember you always have the backup qnap ssh on port 12121
+to fix this do the following
+login with the qnap ssh user
 
+#+BEGIN_SRC sh
+ssh -p 12121 admin@NAS-IP
+#+END_SRC
+
+then start the openssh service
+
+#+BEGIN_SRC sh
+#Start OpenSSH
+/opt/sbin/sshd 2>/dev/null
+#+END_SRC
+
+finally make sure the .ssh folder under USER (₆In example₆ zeltak) is setup
+
+#+BEGIN_EXAMPLE
+file:/share/homes/USER/
+#+END_EXAMPLE
+
+also:
+
+1. make sure permissions on the .ssh folder is '700' (chmod 700) and on the authroized_keys '600' 
+2. make sure permissions on the USER ('zeltak') home folder is '755'
 
 **** setup native qnap ssh (may be buggy)
 $Note-this assums that your already geneated id_rsa keys before hand$ 
@@ -19075,6 +19102,28 @@ if pulseaudio is running then first issue:
 
  pulseaudio --start
 
+**** disable sound lowring of volume when opening multimedia (youtube etc) streams
+you need to config 3 files in /etc/pulse
+
+1. disable cork in file:/etc/pulse/default.pa
+
+#+BEGIN_EXAMPLE
+### Cork music/video streams when a phone stream is active
+#load-module module-role-cork
+#+END_EXAMPLE
+
+
+set flat volumes in file:/etc/pulse/deamon.conf to no and uncomment (it has a ; for comment)
+#+BEGIN_EXAMPLE
+flat-volumes = no
+#+END_EXAMPLE
+
+finally edit file:/etc/pulse/default.pa
+and comment the following line
+#+BEGIN_EXAMPLE
+#load-module module-intended-roles
+#+END_EXAMPLE
+
 **** PulseAudio over network
 
 PulseAudio over network
@@ -25618,6 +25667,7 @@ The following defuns show how you can know wich system type and name you have in
 )
 #+END_SRC
 
+
 Those previous commands are interactive, so you can just type M-x insert-system-name or M-x insert-system-type to test them.
 ********* Single dot emacs file and per-computer configuration
 
@@ -25657,25 +25707,26 @@ In order to include system-type based configurations, you can define functions t
 
 Once you have these functions, you can put the system-dependent configuration:
 
-********* Configuration depending on the system name
- 
-Now, you also want to put machine-dependent configuration, so you can define functions like this to detect in which machine you are currently located:
+********* Configuration depending on the system name (linux hostname)
+first on linux to define hostname issue
 
-;; Check if the system is my Kubuntu GNU/Linux at work
-(defun system-is-my-workpc ()
-(interactive)
-"Return true if the system we are running on is my PC at work"
-(string-equal system-name "dev002.workplace.com")
+#+BEGIN_SRC sh
+hostname
+#+END_SRC 
+
+#+RESULTS:
+: zx1voics
+
+then in your config you can see something like this
+
+#+BEGIN_SRC emacs-lisp :results none
+#+BEGIN_SRC emacs-lisp :results none
+(when (string= system-name "zx1voics")
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
 )
+#+END_SRC
 
-And then you just need to use the previous function in the specific configurations (note that Im using the hostname of my PC at work. Use your own hostname for you functions, dude).
-
-;; For my machine in my worplace, setup my work email address
-(if (system-is-my-workpc)
-(setq user-mail-address "my.name@workplace.com")
-)
-
-********* algternative OS specfic method
+********* alternative OS specfic method
 
 put OS-specific code in your initialization file but use the same file everywhere,  you might find this sample code useful.
 
@@ -27441,7 +27492,58 @@ then add this to Emacs config:
 (load "ess-site")
 #+END_SRC
 
-******** connect to a remote server and run r scripts there 
+******** `ess-remote` connect to a remote server (zuni) and run R scripts (and tangled org) 
+- Start a new shell:
+#+BEGIN_SRC emacs-lisp :results none
+ansi-term
+#+END_SRC
+
+- ssh into the machine
+#+BEGIN_SRC emacs-lisp :results none
+ssh uni
+#+END_SRC
+
+- Start the ESS process on the remote machine:  for example R
+
+#+BEGIN_SRC sh
+R
+#+END_SRC
+%Tip-you can check the correct machine with the R command%
+#+BEGIN_SRC R
+Sys.info()
+#+END_SRC
+
+- Start ‘M-x ess-remote':
+#+BEGIN_SRC emacs-lisp :results none
+ess-remote
+#+END_SRC
+%Tip- in some terms issue ~C-x M-x~ to launch the ess-remote command% 
+
+You will be prompted for a program name with completion. Choose R.
+#+BEGIN_EXAMPLE
+Dialect: R|stata|....
+#+END_EXAMPLE
+Your process is now known to ESS.
+
+
+- Graphics (interactive) on the remote machine. If you run X11 (See X11, X Windows) on both the local and remote machines then you should be able to display the graphs locally by setting the ‘DISPLAY’ environment variable appropriately. also enable X11 forwarding in your ssh config file:/~/.ssh/config  for the specific server
+
+- org
+
+for org mode compatibility change you sessuin name to the ansi term buffer R name. (defaults to *ansi-term*)
+₆In example₆ 
+
+
+this is the one we ended up using 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+ls()
+#+END_SRC 
+
+then just issue the command as usual (₆In example₆ eval block with C-c etc)
+
+********* alternative methods (not tested by zeltak)
+********** connect via tamp 
+
 ESS works with processes on remote computers as easily as with processes on the local machine. The recommended way to access a statistical program on remote computer is to start it with tramp. Require tramp in your .emacs file:
 (require 'tramp)
 %note- not needed with emacs 24 onwards%
@@ -27453,9 +27555,8 @@ Now start an ssh session with
 Tramp should open a dired buffer in your remote home directory. Now call your favorite ESS process (R, Julia, stata etc) as you would usually do on local machine: M-x R.
 
 Alternatively you can start your process normally (M-x R). After you are asked for starting directory, simply type ‘/ssh:user@host: RET’. R process will be started on the remote machine.
-******** 'connect via ssh' to a remote server and run local ESS there
-this is my prefferd way of doing this:
 
+********** using separate ssh command 
 you connect to the server you want to run R on via SSH on your local machine (client)
 $Note- you need to make sure Emacs daemon is runnig on that server$
 
@@ -27476,7 +27577,7 @@ this will prompt you to choose a folder as your work dir and will create a *R* b
 
 %Tip- if tab isn't working in terminal for some org related stuff (if using org with R) just use 0rg-cycle% 
 
-********* alternaive approach @not tested by me@
+********** using screen
 
 Here is how to use ESS with R running in a remote screen session:
 
@@ -27495,7 +27596,6 @@ resume the screen session (screen -r)
 start R
 
 finally attach ESS to the R process using M-x ess-remote in the shell buffer where you started R
-
 
 ******** a handy function to clear shell
 use the function below and bind it to a key of your liking
@@ -27707,69 +27807,109 @@ Single Key Sequence.  F9 8, F9  Page
 Key Combination.  Ctrl+8, Ctrl+Alt+8
 Sequence of single/combo keys.  Alt+7 8, Alt+7 Ctrl+i
 ******** Emacs Keybinding Syntax Examples
+http://ergoemacs.org/emacs/keyboard_shortcuts_examples.html
+- Single Modifier Key
 
-This page shows sample syntax for defining keys in emacs. (For general
-guide on defining keys, see: Emacs: How to Define Keyboard Shortcuts.)
- In the following, the beep is a example command. Replace it with the
-command name you want. Meta is Alt by default.
-Single Modifier Key
-(global-set-key (kbd "M-a") 'beep) ; Meta+a
-(global-set-key (kbd "C-a") 'beep) ; Ctrl+a
+#+BEGIN_SRC latex :results none
+(global-set-key (kbd "M-a") 'backward-char) ; Alt+a
+(global-set-key (kbd "C-a") 'backward-char) ; Ctrl+a
 Function keys and Special keys
-(global-set-key (kbd "<f2>") 'beep) ; F2 key
-(global-set-key (kbd "<kp-2>") 'beep) ; the "2" key on the number keypad
-(global-set-key (kbd "<insert>") 'beep) ; the Ins key
-(global-set-key (kbd "<delete>") 'beep) ; the Del key
-(global-set-key (kbd "<home>") 'beep)
-(global-set-key (kbd "<end>") 'beep)
-(global-set-key (kbd "<next>") 'beep) ; page down key
-(global-set-key (kbd "<prior>") 'beep) ; page up key
-(global-set-key (kbd "<left>") 'beep) ; 
-(global-set-key (kbd "<right>") 'beep) ; 
-(global-set-key (kbd "<up>") 'beep) ; 
-(global-set-key (kbd "<down>") 'beep) ; 
-(global-set-key (kbd "<return>") 'beep) ; the Enter/Return key
-(global-set-key (kbd "SPC") 'beep) ; the Space bar key
-(info "(elisp) Function Keys")
-Modifier + Special Key
-(global-set-key (kbd "M-<f2>") 'beep) ; Meta+F2
-(global-set-key (kbd "C-<f2>") 'beep) ; Ctrl+F2
-(global-set-key (kbd "S-<f2>") 'beep) ; Shift+F2
-(global-set-key (kbd "M-<up>") 'beep) ; Meta+
-(global-set-key (kbd "C-<up>") 'beep) ; Ctrl+
-(global-set-key (kbd "S-<up>") 'beep) ; Shift+
-Two Modifier Keys
-2 modifier keys pressed simultaneously, plus a letter key:
-(global-set-key (kbd "M-A") 'beep) ; Meta+Shift+a
-(global-set-key (kbd "C-A") 'beep) ; Ctrl+Shift+a
-(global-set-key (kbd "C-M-a") 'beep) ; Ctrl+Meta+a
-Example of 2 modifier keys with a digit key:
-(global-set-key (kbd "M-@") 'beep) ; Meta+Shift+2 or Meta+@
-(global-set-key (kbd "C-@") 'beep) ; Ctrl+Shift+2 or Ctrl+@
-(global-set-key (kbd "C-M-2") 'beep) ; Ctrl+Meta+2
-(global-set-key (kbd "C-S-<kp-2>") 'beep); Ctrl+Shift+"numberic pad 2"
-Three Modifier Keys
-3 modifier keys pressed simultaneously:
 
-(global-set-key (kbd "C-M-S-a") 'beep) ; Ctrl+Meta+Shift+a
-(global-set-key (kbd "C-M-!") 'beep) ; Ctrl+Meta+Shift+1 or Ctrl+Meta+!
-(global-set-key (kbd "C-M-\"") 'beep) ; Ctrl+Meta+Shift+' or Ctrl+Meta+"
-(global-set-key (kbd "C-M-S-<up>") 'beep); Ctrl+Meta+Shift+
-Key Sequence
-Example of sequence of key combinations:
-(global-set-key (kbd "C-, a") 'beep) ; Ctrl+, a
-(global-set-key (kbd "C-, SPC") 'beep) ; Ctrl+, Space
-(global-set-key (kbd "C-, C-a") 'beep); Ctrl+, Ctrl+a
-(global-set-key (kbd "<f7> <f8>") 'beep); F7 F8
-No Modifiers
-A shortcut can be created without any modifier keys.
-(global-set-key (kbd "2") 'beep)
-(global-set-key (kbd "a") 'beep)
-(global-set-key (kbd "") 'beep)
-(global-set-key (kbd "") 'beep)
-(global-set-key (kbd "") 'beep)
-(global-set-key (kbd "(") 'beep)
-(global-set-key (kbd "") 'beep)
+(global-set-key (kbd "<f3>")   'backward-char)   ; F3 key
+(global-set-key (kbd "<kp-3>") 'backward-char)   ; the “3” key on number keypad
+
+(global-set-key (kbd "<insert>") 'backward-char) ; Ins key
+(global-set-key (kbd "<delete>") 'backward-char) ; Del key
+
+(global-set-key (kbd "<home>") 'backward-char)
+(global-set-key (kbd "<end>") 'backward-char)
+
+(global-set-key (kbd "<next>") 'backward-char)   ; page down key
+(global-set-key (kbd "<prior>") 'backward-char)  ; page up key
+
+(global-set-key (kbd "<left>") 'backward-char)   ; ←
+(global-set-key (kbd "<right>") 'backward-char)  ; →
+(global-set-key (kbd "<up>") 'backward-char)     ; ↑
+(global-set-key (kbd "<down>") 'backward-char)   ; ↓
+
+(global-set-key (kbd "RET") 'backward-char) ; Enter/Return key
+(global-set-key (kbd "SPC") 'backward-char) ; Space bar key
+(info "(elisp) Function Keys")
+#+END_SRC
+
+-Menu/App Key
+
+#+BEGIN_SRC latex :results none
+;; On Linux, menu/apps key syntax is <menu>
+(global-set-key (kbd "<menu> c") 'calendar) ;
+;; Windows, menu/apps key syntax is <apps>
+(global-set-key (kbd "<app> c") 'calendar) ;
+#+END_SRC
+Example of single key sequence starting with the ▤ Menu key.
+
+#+BEGIN_SRC latex :results none
+;; Linux, the menu/apps key syntax is <menu>
+;; Windows, the menu/apps key syntax is <apps>
+(define-key key-translation-map (kbd "<apps>") (kbd "<menu>")) ; make the syntax equal
+
+(global-set-key (kbd "<menu>") nil) ; good idea to put nil to the starting key
+(global-set-key (kbd "<menu> n") nil) ; good idea to put nil to the starting key
+(global-set-key (kbd "<menu> n 6") 'calendar) 
+(global-set-key (kbd "<menu> n 7") 'calc)
+
+#+END_SRC
+-Super ＆ Hyper Keys
+
+#+BEGIN_SRC latex :results none
+;; Example of single key sequence
+(global-set-key (kbd "<f7>") nil) ; good idea to put nil to the starting key
+(global-set-key (kbd "<f7> <f8>") 'calendar)
+(global-set-key (kbd "<f7> <f9>") 'calc)
+;; Example of sequence of single or chord keys
+
+(global-set-key (kbd "C-e") nil) ; good idea to put nil to the starting key
+(global-set-key (kbd "C-e a") 'calendar)  ; Ctrl+e a
+(global-set-key (kbd "C-e SPC") 'calendar)  ; Ctrl+e Space
+(global-set-key (kbd "C-e C-a") 'calendar); Ctrl+e Ctrl+a
+1 Modifier + Special Key
+
+(global-set-key (kbd "M-<f3>") 'backward-char) ; Alt+F3
+(global-set-key (kbd "C-<f3>") 'backward-char)  ; Ctrl+F3
+(global-set-key (kbd "S-<f3>") 'backward-char)  ; Shift+F3
+
+(global-set-key (kbd "M-<up>") 'backward-char)  ; Alt+↑
+(global-set-key (kbd "C-<up>") 'backward-char)  ; Ctrl+↑
+(global-set-key (kbd "S-<up>") 'backward-char)  ; Shift+↑
+#+END_SRC
+2 Modifier Keys
+
+#+BEGIN_SRC latex :results none
+(global-set-key (kbd "M-A") 'backward-char) ; Alt+Shift+a
+(global-set-key (kbd "C-A") 'backward-char) ; Ctrl+Shift+a
+(global-set-key (kbd "C-M-a") 'backward-char) ; Ctrl+Alt+a
+Example of 2 modifier keys with a digit key:
+
+(global-set-key (kbd "M-#") 'backward-char)       ; Alt+Shift+3 or Alt+#
+(global-set-key (kbd "C-#") 'backward-char)       ; Ctrl+Shift+3 or Ctrl+#
+(global-set-key (kbd "C-M-3") 'backward-char)     ; Ctrl+Alt+3
+
+(global-set-key (kbd "C-S-<kp-3>") 'backward-char); Ctrl+Shift+“numberic pad 3”
+
+;3 modifier keys pressed simultaneously:
+
+(global-set-key (kbd "C-M-S-a") 'backward-char)   ; Ctrl+Alt+Shift+a
+(global-set-key (kbd "C-M-!") 'backward-char)     ; Ctrl+Alt+Shift+1 or Ctrl+Alt+!
+(global-set-key (kbd "C-M-S-<up>") 'backward-char); Ctrl+Alt+Shift+↑
+
+;No Modifiers
+;A shortcut can be created without any modifier keys.
+
+(global-set-key (kbd "3") 'backward-char)
+(global-set-key (kbd "a") 'backward-char)
+(global-set-key (kbd "é") 'backward-char)
+(global-set-key (kbd "α") 'backward-char)
+(global-set-key (kbd "你") 'backward-char)
+#+END_SRC
 
 ******** intro
 
@@ -29611,7 +29751,83 @@ This commands provides a Helm interface for calc command
 n the original M-x, you pass prefix arguments before M-x.I
 'In Helm', you pass prefix arugments after running helm-M-x.
 In a helm-M-x session, if you type any prefix argument, it will be visible, i.e. if you type C-u 100, a message prefix argument: 100 appears. Then run your command as usual, the interactive command will receive the argument you passed in.
+********** Integrating swish-e and Emacs
+install swish-e from repo/AUR
+
+To test things out, I will only index org-files. I have these all over the place, and they are not all in my org-mode agenda. So, finding them quickly would be awesome.
+
+#+BEGIN_SRC text :tangle ~/.swish-e/swish.conf
+# Example configuration file
+
+# Tell Swish-e what to directories to index
+IndexDir /Users/jkitchin/Dropbox
+IndexDir "/Users/jkitchin/Box Sync"
+IndexDir /Users/jkitchin/blogofile-jkitchin.github.com
+
+# where to save the index
+IndexFile /Users/jkitchin/.swish-e/index.swish-e
+
+# What to index
+IndexOnly .org
+
+# Tell Swish-e that .txt files are to use the text parser.
+IndexContents TXT* .org
+
+# Otherwise, use the HTML parser
+DefaultContents HTML*
+
+# Ask libxml2 to report any parsing errors and warnings or
+# any UTF-8 to 8859-1 conversion errors
+ParserWarnLevel 9
+#+END_SRC
+
+Now, we create our index.
+
+#+BEGIN_SRC sh
+swish-e -c ~/.swish-e/swish.conf
+#+END_SRC
+
+Now an example search. I have been looking into the Energy frontier research centers, and I want to find my notes on it. Here is a little query. I use a special output format to keep things simple for the parsing later, just the rank and path, separated by a tab.
+
+#+BEGIN_SRC sh
+swish-e -f ~/.swish-e/index.swish-e -x '%r\t%p\n' -w efrc
+#+END_SRC
+
+Now, for the integration with Emacs. We just get that output in a string, split it, and get the parts we want.  I think I will use helm to provide a selection buffer to these results. We need a list of cons cells (string . candidate). Then we write an interactive helm function. We provide two sources. One for the initial query, and another to start a new search, in case you don't find what you want.
+
+#+BEGIN_SRC emacs-lisp
+(defun helm-swish-e-candidates (query)
+  "Generate a list of cons cells (swish-e result . path)."
+  (let* ((result (shell-command-to-string
+		  (format "swish-e -f ~/.swish-e/index.swish-e -x \"%%r\t%%p\n\" -w %s"
+			  (shell-quote-argument query))))
+	 (lines (s-split "\n" result t))
+	 (candidates '()))
+    (loop for line in lines
+	  unless (or  (s-starts-with? "#" line)
+		      (s-starts-with? "." line))
+	  collect (cons line (cdr (s-split "\t" line))))))
+
+
+(defun helm-swish-e (query)
+  "Run a swish-e query and provide helm selection buffer of the results."
+  (interactive "sQuery: ")
+  (helm :sources `(((name . ,(format "swish-e: %s" query))
+		    (candidates . ,(helm-swish-e-candidates query))
+		    (action . (("open" . (lambda (f)
+					   (find-file (car f)))))))
+		   ((name . "New search")
+		    (dummy)
+		    (action . (("search" . (lambda (f)
+					     (helm-swish-e helm-pattern)))))))))
+#+END_SRC
+
+Now I can run M-x helm-swish-e and enter "efrc AND computing infrastructure" to find org files containing those words, then press enter to find the file. Nice and easy. I have not tested the query syntax very fully, but so far it is working fine!
+
+
 ********* helm-bibtex
+https://github.com/tmalsburg/helm-bibtex
+
 ********** change color of modline matches
 change this variable wither in theme or with M-x > customize faces 
 #+BEGIN_EXAMPLE
@@ -29655,7 +29871,16 @@ in my example I add to my *.bib file a `tags` filed. then I add this to my helm-
 #+END_EXAMPLE
 
 ********** serach tips
-the key to NOT select is `!`
+the key to NOT select is
+`!`
+
+-Publications from 2010 and 2011:
+#+BEGIN_EXAMPLE
+\(2010\|2011\)
+#+END_EXAMPLE
+
+********** Search the word under the cursor
+A common use case is where a search term is written in a document (say in your LaTeX manuscript) and you want to search for it in your bibliography. In this situation, just start helm-bibtex and enter M-n. This inserts the word under the cursor as the search term. (This is a helm feature and can be used in all helm sources not just helm-bibtex.) Note that it is also possible to use BibTeX keys for searching. So if your cursor is on a BibTeX key (e.g., in a LaTeX cite command) you can start helm-bibtex, hit M+n and see the entry associated with that BibTeX key. Special case: you want to open the PDF associated with the BibTeX key under the cursor: M-x helm-bibtex M-n Enter. This is of course shorter if you bind helm-bibtex to a convenient key (see Key-bindings).
 ********** Change order of entries
 Yes.  Helm uses the first action as the default action.  To move an
 action to the top of the list you can use the following code:
@@ -29678,6 +29903,12 @@ action.  Here is a list of all actions and their functions:
   Show entry: helm-bibtex-show-entry
 #+END_EXAMPLE
 
+********** Send emails (mu4e) with references/pdfs 
+Start an email to your colleague and M-x helm-bibtex. Select your new publications and select “Attach PDF to email.” Then M-x helm-resume (the publications are still marked) and select “Insert BibTeX entry.” Optionally insert more human readable references by M-x helm-resume and “Insert reference.” Send email. Done. This takes less than 10 seconds. Of course, this assumes that you’re sending email from Emacs, e.g. via Mu4e.
+********** select all 
+~M-a~ selects all candidates
+********** use regular expressions to search for a range of
+years: 201[2-5]
 ********* google-contacts
 
 http://julien.danjou.info/projects/emacs-packages#google-contacts
@@ -30237,6 +30468,34 @@ The key formatting comes from these definitions:
       bibtex-autokey-titlewords-stretch 1
       bibtex-autokey-titleword-length 5)
 #+END_SRC
+
+clean all file:
+
+I suggest you run these first:
+%% (bibtex-validate-globally)   ; checks for duplicate keys
+%% (bibtex-validate)
+
+I also recommend you run bibtex-sort (it is easier to spot duplicates in
+a sorted list).
+
+Then, put this next line at the top of your bibtex file. 
+$Note- The `t` argument to org-ref-clean-bibtex-entry will preserve your existing keys$
+
+#+BEGIN_SRC latex :results none
+% (bibtex-map-entries (lambda (key start end) (org-ref-clean-bibtex-entry t)))
+#+END_SRC
+
+Put your cursor at the end of that line, and type C-x C-e to run the function, and
+wait patiently. It took a few minutes on my 1300 entries, and I had to restart it once on some entry.
+if you have bad Unicode, dup keys etc you will be prompted to input
+remove bad Unicode keys and fix dup keys when prompted
+Note if you want to change title cases in all entries you can use
+
+% (bibtex-map-entries 'jmax-title-case-article)
+% (bibtex-map-entries 'jmax-sentence-case-article)
+
+
+
 ********** Using org-ref to keep your bibtex files in order
 Maintaining an accurate, useful bibliography of references is critical for scientific writing. It is also not trivial. While it is easy to download and copy bibliographic entries to your database, these entries are often incomplete, not consistently formatted, and can contain invalid characters. org-ref provides several utility functions to help with this.
 
@@ -30331,10 +30590,6 @@ Sometimes you will get bad citation links in your document. Maybe there is no co
 *********** Extracting citations entries
 You will often work from your default bibliography for your own work. Eventually you will need to extract the entries cited so you can send them to someone. The command  elisp:org-ref-extract-bibtex-entries will do that for you. If I have cited something cite:calle-vallejo-2010-trend-stabil.
 
-
-
-
-
 ********* mu4e
 ********** org mode integration
 http://www.djcbsoftware.nl/code/mu/mu4e/Creating-org_002dmode-links.html
@@ -30357,7 +30612,43 @@ You can then retrieve your e-mail using M-x mu4e-update-mail-and-index, or C-S-u
 
 ~C~ compose  
 
-~O~ sort 
+~O~ sort
+********** install on ubuntu
+install dependencies
+
+#+BEGIN_SRC sh
+sudo apt-get install libtool autotools autotools-dev autoconf 
+
+$ sudo apt-get install libgmime-2.6-dev libxapian-dev
+# if libgmime-2.6-dev is not available, try libgmime-2.4-dev
+
+# optional
+$ sudo apt-get install guile-2.0-dev html2text xdg-utils
+
+#+END_SRC
+then dl and install
+
+#+BEGIN_SRC sh
+# get from git (alternatively, use a github tarball)
+$ git clone git://github.com/djcb/mu.git
+
+$ cd mu
+$ autoreconf -i && ./configure && make
+# On the BSDs: use gmake instead of make
+$ sudo make install
+#+END_SRC
+
+After this, mu and mu4e should be installed 18 on your system, and be available from the command line in emacs.
+
+You may need to restart emacs, so it can find mu4e in its load-path. If, even after restarting, emacs cannot find mu4e, you may need to add it to your load-path explicitly; check where mu4e is installed, and add something like the following to your configuration before trying again:
+
+#+BEGIN_SRC emacs-lisp :results none
+;; the exact path may differ -- check it
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
+#+END_SRC
+
+
+
 ********* pdf-tools
 https://github.com/politza/pdf-tools
 ********** install 
@@ -30526,6 +30817,8 @@ characters that you'll need to replace:
  [[macsen_files/Image_uAzmRVDZTNs1blt9dZ9E2g_0001.png]]
 
 ******** search
+%tip- jump back to where you started with ~C-u SPACE~ %
+
 How to search text?
 
 Press Ctrl+s (isearch-forward), then type your text. Emacs will
@@ -30671,6 +30964,10 @@ Alternative to the above options, you can also call save-some-buffers 【Ctrl+x 
 
 Note: emacs's regex is not the same as Perl or Python's, but similar. For a summary and common patterns, see: Emacs Regex.
 
+******** replace numeric with space/other
+use regex search (M-C-%)
+and enter this as a search pattern
+[0-9]
 ******* setting (lisp)
 ******** setting common variables at once (setq)
 
@@ -31065,6 +31362,9 @@ Keep writing as follows, also made a .folders following HOME
 
 ********* How to use
 First, you can start with the Mx wl.
+******* Terminals
+******** ansi term 
+	 refixing actions that aren’t recognized by their standard key commands with ‘C-x’. For example, ‘M-x’ becomes ‘C-x M-x’.
 *** 'org-mode'
        :PROPERTIES:
        :ID:       be4759e1-2951-4c91-a155-056bc2a16d9f
@@ -31749,6 +32049,17 @@ ls -la
 ******** "tangling"
 'tangling' is the proccess of creating pure source code files by extracting code from source blocks in the current buffer. 
 During “tangling” of code blocks their bodies are expanded using org-babel-expand-src-block which can expand both variable and “noweb” style references. In order to tangle a code block it must have a :tangle header argument (see [[header%20arguments][header arguments]] )
+******** tangeling to a tex file (for config)
+use this as an example
+
+#+BEGIN_SRC sh :tangle  ~/ZH_tmp/test.conf
+# Example configuration file
+this is pretty sweet
+#+END_SRC
+
+this will export the file to a config file when tangled
+to tangle only the code block and not the entire file use with prefix C-u
+
 ******** disable confirmation checks for certain languages
 for example for lisp
 #+BEGIN_SRC emacs-lisp :results none
@@ -32511,6 +32822,12 @@ or just %better% add something like this
 (require 'ox-odt)
 #+END_SRC
 its better to just have a bunch of (require 'ox-*) statements in your el files
+******** export to latex error
+look for a buffer named
+#+BEGIN_EXAMPLE
+     *org PDF latex output*
+#+END_EXAMPLE
+
 ******* refile
 ********* base 
 To refile tasks in org you need to tell it where you want to refile things.
@@ -33703,6 +34020,23 @@ Sometimes you will see that a .glo (glossary) file has been produced.
 Run the following command between step 4 and 5:
 makeindex -s gglo.ist -o name.gls name.glo
 Be sure to run LATEX on the .dtx one last time before moving on to step 5. 
+***** hyperref
+https://en.wikibooks.org/wiki/LaTeX/Hyperlinks
+
+The package hyperref provides LaTeX the ability to create hyperlinks within the document.
+
+load the package in the preamble:
+#+BEGIN_SRC latex :results none
+\usepackage{hyperref}
+
+%example Usage:
+\url{<my_url>}
+
+#+END_SRC
+
+
+It will show the URL using a mono-spaced font and, if you click on it, your browser will be opened pointing at it.
+
 **** graphics 
 ***** Using Graphics
 Including graphics into a document works best with the graphicx package
@@ -33744,6 +34078,24 @@ $PM_{ij}$
 #+END_LaTeX
 
 **** Bibliography Management
+***** formatting citations in .bib file
+****** default format 
+In the author field, `commas` are used to separate last name from first name and `and` to separate authors.
+
+#+BEGIN_EXAMPLE
+Example: LastName1, FirstName1 and LastName2, FirstName2 and ... 
+#+END_EXAMPLE
+
+***** make bibtex load biblatex dialect by default
+add this on the top of the file
+#+BEGIN_SRC latex :results none
+% -*- mode:bibtex; eval: (bibtex-set-dialect 'biblatex); -*-
+#+END_SRC
+
+to eval it place your cursor has to be right after the ) when you run C-x C-e to run that command.
+if it outputs `t` then it works.
+you will see bibtex is in biblatex dialect mode. this should start automaticly when you open the .bib file next time.
+
 ***** intro (bibtex and biber//natbib and biblatex)
 bibtex and biber are external programs that process bibliography information and act (roughly) as the interface between your .bib file and your LaTeX document.
 
@@ -33771,9 +34123,11 @@ once again, you don't include the file extension.
 
 The .bib file can be in the same directory as the LaTeX document. However, if your .bib file was elsewhere (which makes sense if you intend to maintain a centralized database of references for all your research), you need to specify the path as well, e.g
 
+#+BEGIN_SRC latex :results none
 \bibliography{/some/where/sample}
-or
+%or
 \bibliography{../sample1}
+#+END_SRC
 (if the .bib file is in the parent directory of the .tex document that calls it).
 
 ***** citing 
@@ -33794,7 +34148,6 @@ If you wish to cite more than one reference at the same time, do the following:
 ***** Why won't LaTeX generate any output?
 The addition of BibTeX adds extra complexity for the processing of the source to the desired output. This is largely hidden from the user, but because of all the complexity of the referencing of citations from your source LaTeX file to the database entries in another file, you actually need multiple passes to accomplish the task. This means you have to run LaTeX a number of times. Each pass will perform a particular task until it has managed to resolve all the citation references. Here's what you need to type (into command line):
 #+BEGIN_SRC sh :results none
-
 latex latex_source_code.tex
 bibtex latex_source_code.aux
 latex latex_source_code.tex
@@ -33803,7 +34156,8 @@ latex latex_source_code.tex
 
 %Tip-in Emacs you need to launch the latex command then the bibtex command (from toolbars or keybinds and then the latex command again until you get no errors% 
 
-***** natbib (Author-date citations)
+***** natbib 
+****** natbib (Author-date citations)
 The first job is to add the following to your preamble in order to get LaTeX to use the Natbib package:
 #+BEGIN_SRC latex :results none
 \usepackage[options]{natbib}
@@ -33827,7 +34181,7 @@ Use the natbib package if you want to include author-date citations. Natbib uses
 #+attr_html: :width 300px
 [[~/org/attach/images_2015/screenshot_2015-06-23_21:53:49.png]]
 
-***** Natbib's customization options
+****** Natbib's customization options
 round: (default) for round parentheses;
 square: for square brackets;
 curly: for curly braces;
@@ -33842,7 +34196,7 @@ sort&compress: as sort but in addition multiple numerical citations are compress
 longnamesfirst: makes the first citation of any reference the equivalent of the starred variant (full author list) and subsequent citations normal (abbreviated list);
 sectionbib: redefines \thebibliography to issue \section* instead of \chapter*; valid only for classes with a \chapter command; to be used with the chapterbib package;
 nonamebreak: keeps all the authors' names in a citation on one line; causes overfull hboxes but helps with some hyperref problems.
-***** Natbib's textual and parenthetical commands
+****** Natbib's textual and parenthetical commands
 http://merkel.zoneo.net/Latex/natbib.php
 
 The natbib package has two basic citation commands, \citet and \citep for textual and parenthetical citations, respectively. There also exist the starred versions \citet* and \citep* that print the full author list, and not just the abbreviated one. All of these may take one or two optional arguments to add some text before and after the citation.
@@ -33866,9 +34220,7 @@ The natbib package has two basic citation commands, \citet and \citep for textua
 look here first
 http://web.archive.org/web/20131102023045id_/http://nodonn.tipido.net/bibstyle.php
 
-
 -authordate1
-
 ***** Other bibliography styles
 If you want to use a different style (e.g. one provided by the journal you are submitting an article to) you should save the style file (.bst file) in the same folder as your .tex and .bib files. Include the name of the .bst file in the \bibliographystyle{...} commmand.
 ***** Including URLs in bibliography
@@ -33908,13 +34260,12 @@ A special version of the command, \nocite{*}, includes all entries from the data
 ***** Biblatex
 ****** base biblatex setup
 $Note Recent versions of biblatex have deprecated$
-
+******* changes to add bibsource in next verion 
 #+BEGIN_SRC latex :results none
 \bibliography{<database>} 
 %in favour of the more general
 \addbibresource{<database>.<extension>}
 #+END_SRC
-
 ******* use old bibtex backend 
 A minimal document for biblatex would be this
 
@@ -33944,8 +34295,8 @@ The minimal document for Biber is
 #+BEGIN_SRC latex :results none
 \documentclass{article}
 \usepackage[backend=biber]{biblatex}
-\bibliography{<database>} % or
-% \addbibresource{<database>.<extension>}
+%\bibliography{<database>} % or
+\addbibresource{<database>.<extension>}
 \begin{document}
 \cite{<some-ref>}
 \printbibliography
@@ -33971,9 +34322,41 @@ this is my example
 \printbibliography
 \end{document}
 #+END_SRC
- 
-*** sublime text
 
+******* styles
+******** using styles
+example
+#+BEGIN_SRC latex :results none
+\usepackage[
+    backend=biber,
+    style=authoryear,
+    url=false, 
+    doi=true,
+    eprint=false
+]{biblatex}
+#+END_SRC
+
+$Note$ you can use \autocite instead of \parencite which is the actual counterpart of natbib's \citep. 
+
+\autocite is a high-level citation command that will be translated into the low-level bare citation command appropriate for the chosen style - e.g. it will enclose a citation in parentheses in authoryear styles, but produce a footnote citation in authortitle styles. Even more, it will automatically move trailing punctuation.
+
+******** styles 
+https://www.sharelatex.com/learn/Biblatex_bibliography_styles
+
+********* authoryear
+the classic author-date style is name authoryear
+********* chem-acs
+the [1] for cite 
+**** CV writing tips
+insert bibliography based in keyword criteria
+#+BEGIN_SRC latex :results none
+\printbibliography[keyword=article,notkeyword=submitted,keyword=own,heading=none]
+#+END_SRC
+
+you can tag the references like this:
+It’s a pretty straightforward org document except for one thing: the key to making this work was biblatex which can be used to create several lists of references filtered according to keywords, author, etc.  This allowed me to have separate sections for journal articles, conference presentations, etc.  I store the relevant keywords in the tags field of the BibTeX entries and since biblatex doesn’t know this field, I copy the tags on-the-fly to the keywords field (see DeclareSourcemap in the LaTeX headers).
+
+*** sublime text
 **** search and replace
 
 ***** keyboard shortcuts
@@ -33994,7 +34377,7 @@ actions:
  Find Next Enter
 
 *** vim
-    
+   
 **** $intro/help
 
 ***** help
@@ -37123,15 +37506,12 @@ cursor, etc)
  au BufWinEnter . silent! loadview "make vim load view (state) (folds,
 cursor, etc)
 
-*** General Regex
-
+*** Regex
 **** delete/select lines
-
 rexeg command to delete line starting with "ns":
  \^ns.$
  To delete empty lines:
  \^\s$
- 
 * Admin
 ** General Guides
 *** A-Z Index of the Linux BASH
@@ -39414,10 +39794,8 @@ unison media
 Assuming the media is stored locally (and the server paths are empty), this will simply upload the contents from my machine to my server. If I bought a new machine, I could run this command to download my media to it. Using this command on my local machines will keep my latest additions, deletions, and modifications current across all my machines.
 
 **** Synchronizing org files with Unison
-This describes how to synchronize org files using the [[http://www.cis.upenn.edu/~bcpierce/unison/][Unisonfile synchronizer]],
-as well as how to configure it to use an external tool to merge conflicting
-edits.
-also see:
+This describes how to synchronize org files using the [[http://www.cis.upenn.edu/~bcpierce/unison/][Unisonfile synchronizer]], as well as how to configure it to use an external tool to merge conflicting edits. also see:
+
 http://orgmode.org/worg/org-tutorials/unison-sync.html
 
 ***** Synchronization
@@ -39511,8 +39889,17 @@ merge = Name .org -> emacsclient -c --eval '(ediff-merge-files "CURRENT1"
 
 #+END_EXAMPLE
 
-*** fscheck
+**** ignoring folders/names
+use something like this
+#+BEGIN_EXAMPLE
+ignore = Name {.git}
+#+END_EXAMPLE
 
+you can also ignore specific folders by name yet it will only ignore the top level root folde
+#+BEGIN_EXAMPLE
+ignore = path {.svn}
+#+END_EXAMPLE
+*** fscheck
 **** cancel fscheck
 
 quit during boot
@@ -39521,11 +39908,9 @@ quit during boot
  tune2fs -i 0 /dev/hdxx
 
 **** run fsck on next boot
-
 run the system file check program (fsck) on next boot
 
- sudo touch /forcefsck
-
+sudo touch /forcefsck
 *** swap
 
 **** create swap partition

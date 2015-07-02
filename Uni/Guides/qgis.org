@@ -480,3 +480,15 @@ Although it is not possible to have multiple columns, it is still possible to ha
 ** Attribute table
 *** Sorting
 By clicking on the column heading you sort the column in ascending or descending order.
+** python
+** Programmatically Select a CRS in QGIS using Python (disable CRS popup in input)
+you can add the item to define the crs string to the URI like `&crs=EPSG:4326`
+Your code should look as follows:
+#+begin_src python
+#---  6 Set import Sting here note only need to set x and y other come for free
+uri = InFlPth+"?delimiter=%s&xField=%s&yField=%s&crs=EPSG:4326" % (",","x","y")
+
+#--- 7 Load point layer
+implayer = QgsVectorLayer(uri, InFlnm, "delimitedtext")
+#+end_src
+

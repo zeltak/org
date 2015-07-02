@@ -10217,7 +10217,12 @@ the '.' is a placeholder for the data your placing in
 ## 15            YV          -32          -11           72           54
 #+END_EXAMPLE
 
-₆In example₆ 
+₆In example₆
+*** summarise each with na.omit
+#+BEGIN_SRC R
+by_species <- iris %>% group_by(Species)
+by_species %>% summarise_each(funs(mean(., na.rm = TRUE)))
+#+END_SRC
 *** create single aod point per aodid per day
 #+BEGIN_SRC R
 aqua <-out %>%
