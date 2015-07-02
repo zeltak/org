@@ -66,7 +66,6 @@
     "sec-7-1"
     "sec-7-2"
     "sec-7-3"
-    "sec-7-4"
     "sec-8"
     "sec-8-1"
     "sec-8-2"
@@ -80,5 +79,5 @@
     "sec-11-1"
     "sec-12")
    (LaTeX-add-bibliographies
-    "/home/zeltak/org/files/Uni/papers/kloog_2015")))
+    "/home/zeltak/org/files/Uni/papers/kloog")))
 

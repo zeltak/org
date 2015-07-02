@@ -2,7 +2,6 @@
 #+TAGS: Fav(f) Most_used(m) cbugs(c)
 #+STARTUP: overview
 
-
 * distros/WM
 ** arch
 *** Fresh Sys Install
@@ -5410,20 +5409,24 @@ From your PC attempt to Ssh to NAS via OpenSSH:
 ssh admin@NAS-IP
 #+END_EXAMPLE
 
-***** make it run after reboot
+***** auto start on system startup
  If you are able to successfully login, then you know OpenSSH is installed properly.
  If your test Login worked, then you can follow these steps to add to your  "autorun.sh" file. 
 
- CODE: SELECT ALL
+#+BEGIN_SRC sh :results none
  #Start OpenSSH
- /opt/sbin/sshd 
+/opt/sbin/sshd 
+#+END_SRC
 
 Test your Configuration: At this point you should restart your NAS to ensure that OpenSSH does in fact startup when the NAS starts. (It should work, but again, if this fails) please reply to this message with information about the failure). Once your NAS has restarted attempt another SSH login to your NAS (login as "admin"). 
- Lets ensure that you can login on the standard port. 
- From your PC attempt to Ssh to NAS via OpenSSH:
- ssh admin@NAS-IP
- also retry Ssh to NAS via QNAP SSHd:
- ssh -p 12121 admin@NAS-IP
+Lets ensure that you can login on the standard port. 
+From your PC attempt to Ssh to NAS via OpenSSH:
+
+#+BEGIN_SRC sh :results none
+ssh admin@NAS-IP
+#also retry Ssh to NAS via QNAP SSHd:
+ssh -p 12121 admin@NAS-IP
+#+END_SRC
 
 If you are able to successfully login on both ports, then you know OpenSSH is installed properly (including "autostart" at startup), and that your QNAP SSHd daemon is still accessible on port 12121/TCP. Go grab another beverage, you've probably earned it this time. 
 
@@ -5441,7 +5444,7 @@ You may want to take advantage of this "feature". If you create users via the Ad
 Caveat: My autostart method could use some work. I didnt bother to build a proper start/stop script for this, (as I always want SSH running anyway), but OpenSSH should really be setup properly with a openssh.sh start/stop script probably started from /opt/etc/init.d if you following the instructions from the Running /opt/etc/init.d/* on startup section of the QNAPedia article: Install Optware IPKG. If any community members desire this, please post a reply to this message asking me to do so. (I skipped it at this time, simply because I haven't bothered for my own use yet. 
 
 ***** configure ssh with keys
-the .ssh folder should sit under USER, so if you login with 'zeltak' it should be in the zeltka home dir:
+the .ssh folder should sit under USER, so if you login with 'zeltak' it should be in the zeltak home dir:
 
 #+BEGIN_EXAMPLE
 file:/share/homes/USER/
@@ -5460,8 +5463,32 @@ the sshd_config file should be configured as you would ususally do
 
 1. make sure permissions on the .ssh folder is '700' (chmod 700) and on the authroized_keys '600' 
 2. make sure permissions on the USER ('zeltak') home folder is '755'
-3. 
+***** 'restart service after a sys reboot/upgrade'
+it maybe that the openssh service will stop working after a sys upgrade/reboot. remember you always have the backup qnap ssh on port 12121
+to fix this do the following
+login with the qnap ssh user
 
+#+BEGIN_SRC sh
+ssh -p 12121 admin@NAS-IP
+#+END_SRC
+
+then start the openssh service
+
+#+BEGIN_SRC sh
+#Start OpenSSH
+/opt/sbin/sshd 2>/dev/null
+#+END_SRC
+
+finally make sure the .ssh folder under USER (₆In example₆ zeltak) is setup
+
+#+BEGIN_EXAMPLE
+file:/share/homes/USER/
+#+END_EXAMPLE
+
+also:
+
+1. make sure permissions on the .ssh folder is '700' (chmod 700) and on the authroized_keys '600' 
+2. make sure permissions on the USER ('zeltak') home folder is '755'
 
 **** setup native qnap ssh (may be buggy)
 $Note-this assums that your already geneated id_rsa keys before hand$ 
@@ -32022,6 +32049,17 @@ ls -la
 ******** "tangling"
 'tangling' is the proccess of creating pure source code files by extracting code from source blocks in the current buffer. 
 During “tangling” of code blocks their bodies are expanded using org-babel-expand-src-block which can expand both variable and “noweb” style references. In order to tangle a code block it must have a :tangle header argument (see [[header%20arguments][header arguments]] )
+******** tangeling to a tex file (for config)
+use this as an example
+
+#+BEGIN_SRC sh :tangle  ~/ZH_tmp/test.conf
+# Example configuration file
+this is pretty sweet
+#+END_SRC
+
+this will export the file to a config file when tangled
+to tangle only the code block and not the entire file use with prefix C-u
+
 ******** disable confirmation checks for certain languages
 for example for lisp
 #+BEGIN_SRC emacs-lisp :results none
@@ -34040,7 +34078,7 @@ $PM_{ij}$
 #+END_LaTeX
 
 **** Bibliography Management
-***** formatting citations
+***** formatting citations in .bib file
 ****** default format 
 In the author field, `commas` are used to separate last name from first name and `and` to separate authors.
 
@@ -34085,9 +34123,11 @@ once again, you don't include the file extension.
 
 The .bib file can be in the same directory as the LaTeX document. However, if your .bib file was elsewhere (which makes sense if you intend to maintain a centralized database of references for all your research), you need to specify the path as well, e.g
 
+#+BEGIN_SRC latex :results none
 \bibliography{/some/where/sample}
-or
+%or
 \bibliography{../sample1}
+#+END_SRC
 (if the .bib file is in the parent directory of the .tex document that calls it).
 
 ***** citing 
@@ -34108,7 +34148,6 @@ If you wish to cite more than one reference at the same time, do the following:
 ***** Why won't LaTeX generate any output?
 The addition of BibTeX adds extra complexity for the processing of the source to the desired output. This is largely hidden from the user, but because of all the complexity of the referencing of citations from your source LaTeX file to the database entries in another file, you actually need multiple passes to accomplish the task. This means you have to run LaTeX a number of times. Each pass will perform a particular task until it has managed to resolve all the citation references. Here's what you need to type (into command line):
 #+BEGIN_SRC sh :results none
-
 latex latex_source_code.tex
 bibtex latex_source_code.aux
 latex latex_source_code.tex
@@ -34117,7 +34156,8 @@ latex latex_source_code.tex
 
 %Tip-in Emacs you need to launch the latex command then the bibtex command (from toolbars or keybinds and then the latex command again until you get no errors% 
 
-***** natbib (Author-date citations)
+***** natbib 
+****** natbib (Author-date citations)
 The first job is to add the following to your preamble in order to get LaTeX to use the Natbib package:
 #+BEGIN_SRC latex :results none
 \usepackage[options]{natbib}
@@ -34141,7 +34181,7 @@ Use the natbib package if you want to include author-date citations. Natbib uses
 #+attr_html: :width 300px
 [[~/org/attach/images_2015/screenshot_2015-06-23_21:53:49.png]]
 
-***** Natbib's customization options
+****** Natbib's customization options
 round: (default) for round parentheses;
 square: for square brackets;
 curly: for curly braces;
@@ -34156,7 +34196,7 @@ sort&compress: as sort but in addition multiple numerical citations are compress
 longnamesfirst: makes the first citation of any reference the equivalent of the starred variant (full author list) and subsequent citations normal (abbreviated list);
 sectionbib: redefines \thebibliography to issue \section* instead of \chapter*; valid only for classes with a \chapter command; to be used with the chapterbib package;
 nonamebreak: keeps all the authors' names in a citation on one line; causes overfull hboxes but helps with some hyperref problems.
-***** Natbib's textual and parenthetical commands
+****** Natbib's textual and parenthetical commands
 http://merkel.zoneo.net/Latex/natbib.php
 
 The natbib package has two basic citation commands, \citet and \citep for textual and parenthetical citations, respectively. There also exist the starred versions \citet* and \citep* that print the full author list, and not just the abbreviated one. All of these may take one or two optional arguments to add some text before and after the citation.
@@ -34180,9 +34220,7 @@ The natbib package has two basic citation commands, \citet and \citep for textua
 look here first
 http://web.archive.org/web/20131102023045id_/http://nodonn.tipido.net/bibstyle.php
 
-
 -authordate1
-
 ***** Other bibliography styles
 If you want to use a different style (e.g. one provided by the journal you are submitting an article to) you should save the style file (.bst file) in the same folder as your .tex and .bib files. Include the name of the .bst file in the \bibliographystyle{...} commmand.
 ***** Including URLs in bibliography
@@ -34257,8 +34295,8 @@ The minimal document for Biber is
 #+BEGIN_SRC latex :results none
 \documentclass{article}
 \usepackage[backend=biber]{biblatex}
-\bibliography{<database>} % or
-% \addbibresource{<database>.<extension>}
+%\bibliography{<database>} % or
+\addbibresource{<database>.<extension>}
 \begin{document}
 \cite{<some-ref>}
 \printbibliography
@@ -39756,10 +39794,10 @@ unison media
 Assuming the media is stored locally (and the server paths are empty), this will simply upload the contents from my machine to my server. If I bought a new machine, I could run this command to download my media to it. Using this command on my local machines will keep my latest additions, deletions, and modifications current across all my machines.
 
 **** Synchronizing org files with Unison
-This describes how to synchronize org files using the [[http://www.cis.upenn.edu/~bcpierce/unison/][Unisonfile synchronizer]],
-as well as how to configure it to use an external tool to merge conflicting
-edits. also see:
+This describes how to synchronize org files using the [[http://www.cis.upenn.edu/~bcpierce/unison/][Unisonfile synchronizer]], as well as how to configure it to use an external tool to merge conflicting edits. also see:
+
 http://orgmode.org/worg/org-tutorials/unison-sync.html
+
 ***** Synchronization
 
 Unison is a file synchronizer, thus it may be used to synchronize org files. To
@@ -39851,8 +39889,17 @@ merge = Name .org -> emacsclient -c --eval '(ediff-merge-files "CURRENT1"
 
 #+END_EXAMPLE
 
-*** fscheck
+**** ignoring folders/names
+use something like this
+#+BEGIN_EXAMPLE
+ignore = Name {.git}
+#+END_EXAMPLE
 
+you can also ignore specific folders by name yet it will only ignore the top level root folde
+#+BEGIN_EXAMPLE
+ignore = path {.svn}
+#+END_EXAMPLE
+*** fscheck
 **** cancel fscheck
 
 quit during boot
@@ -39861,11 +39908,9 @@ quit during boot
  tune2fs -i 0 /dev/hdxx
 
 **** run fsck on next boot
-
 run the system file check program (fsck) on next boot
 
- sudo touch /forcefsck
-
+sudo touch /forcefsck
 *** swap
 
 **** create swap partition
