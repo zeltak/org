@@ -8,14 +8,7 @@
 
 
 
-* start by loading all libraries 
-
-
-
-#+BEGIN_SRC R  :session *ansi-term*   :results none
-ls()
-#+END_SRC
-
+** start by loading all libraries 
 
 #+BEGIN_SRC R  :session *ansi-term*  :results none
 ###############
@@ -42,23 +35,31 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 #+END_SRC
 
-* load data
-** load regular 
+** load data
+*** load regular 
 #+BEGIN_SRC R  :session *ansi-term*  :results none
-mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.rds")
-#describe(mod1$pm25)
-mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.c1.rds")
+#summary(mod1$pm25)
 dim(mod1)
 #+END_SRC 
-** load cleaned db
+*** load cleaned db
 #+BEGIN_SRC R  :session *ansi-term*  :results none
 mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.c2.rds")
 #describe(mod1$pm25)
 dim(mod1)
 #+END_SRC 
 
-* models
-** names
+
+
+*** load cleaned db pm10
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM10.c2.rds")
+#summary(mod1)
+dim(mod1)
+#+END_SRC 
+
+** models
+*** names
  
  #+BEGIN_SRC R  :session *ansi-term*  
 names(mod1) 
@@ -195,16 +196,46 @@ names(mod1)
  | pred.m1            |
 
  
-** scaled model (R^2 0.80)
-** aodid random  model (CV R^2 0.67 )
+*** aodid random  model (CV R^2 0.67 )
 this is the one we ended up using 
 #+BEGIN_SRC R  :session *ansi-term*  :results none
+   m1.formula <- as.formula(pm25 ~aod
+   #temporal
+  +(1+aod|day/cid)+ (1+m|aodid))  
+
+  #run model
+    m1_sc <- lmer(m1.formula,data=mod1)
+    summary(m1_sc)
+    mod1[,pred.m1 := NULL]
+    mod1$pred.m1 <- predict(m1_sc)
+    print(summary(lm(pm25~pred.m1,data=mod1))$r.squared)
+   #RMSPE
+  print(rmse(residuals(m1_sc)))
+
+#+END_SRC 
+
+
+*** testing model (CV R^2 0.70)
+this is the one we ended up using 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+
  m1.formula <- as.formula(pm25 ~aod
- #temporal
-+(1+aod|day/cid)+ (1+m|aodid))  #0.745
+#temporal
++temp.s 
+#spatial
++elev_m+tden
+#+pbl.s
+#distances
++dair.s+dport.s+dtrain.s+daroad.s+dcoast.s+dwb.s    
+#emissions
++NO2.s+SO2.s+PM10ems.s
+#LU
++ p.open.s +p.forest.s +p.urban.s +as.factor(cid) 
+#random
++(1+aod|day/cid) +(1+m|aodid)   ) 
 
 #run model
-  m1_sc <- lmer(m1.formula,data=mod1,weights=normwt)
+  m1_sc <- lmer(m1.formula,data=mod1)
   summary(m1_sc)
   mod1[,pred.m1 := NULL]
   mod1$pred.m1 <- predict(m1_sc)
@@ -214,69 +245,43 @@ print(rmse(residuals(m1_sc)))
 
 #+END_SRC 
 
-
-** testing model (R^2 0.822)
+*** testing model PM10  (CV R^2 )
 this is the one we ended up using 
 #+BEGIN_SRC R  :session *ansi-term*  :results none
- m1.formula <- as.formula(pm25 ~aod
- #temporal
-+temp.s +winds.s
-+elev.s+tden.s+pden.s+pbl.s
- #spatial
- +dair.l
-+dport.l+dtrain.l+daroad.l+dcoast.l+dwb.l    
- #emissions
- +NO2.s+SO2.s
- #+PM25ems.s
- +PM10ems.s
- #LU
-#+ p.agric.s
-+ p.open.s
-+p.forest.s        
-+p.urban.s
-+as.factor(cid)
-+as.factor(season)
-+(1+aod+temp.s|day/cid) +(1+m|aodid)   )  #0.745
+  m1.formula <- as.formula(pm10 ~aod
+  #temporal
+ # +temp.s 
+  #spatial
+  +elev_m+tden+pbl.s
+  #distances
+  +dair.s+dport.s+dtrain.s+daroad.s+dcoast.s+dwb.s    
+  #emissions
+  +NO2.s+SO2.s+PM10ems.s
+  #LU
+  + p.open.s +p.forest.s +p.urban.s +as.factor(cid) 
+  #random
+  +(1+aod|day/cid)  ) 
 
-#run model
-  m1_sc <- lmer(m1.formula,data=mod1,weights=normwt)
+  #run model
+  m1_sc <- lmer(m1.formula,data=mod1)
   summary(m1_sc)
-  mod1[,pred.m1 := NULL]
-  mod1$pred.m1 <- predict(m1_sc)
-  print(summary(lm(pm25~pred.m1,data=mod1))$r.squared)
- #RMSPE
-print(rmse(residuals(m1_sc)))
+    mod1[,pred.m1 := NULL]
+    mod1$pred.m1 <- predict(m1_sc)
+    print(summary(lm(pm10~pred.m1,data=mod1))$r.squared)
+   #RMSPE
+  print(rmse(residuals(m1_sc)))
 
 #+END_SRC 
 
-** we tested the following 
 
-
-m3.formula <- as.formula( log_pm10 ~   log_aod + as.factor(nome_zona) + log_aod:as.factor(nome_zona) + as.factor(season) + ns(log_pbl,2) + ns(speed_ms,2) +
-                            flag_sea + flag_lake + as.factor(desc_zone) + as.factor(desc_monitor) + 
-                            dust + ns(log_restot,2) + log_ndvi + as.factor(elevation_10_cl3) + log_aod:as.factor(elevation_10_cl3) + 
-                            as.factor(isa_cl3) + log_aod:as.factor(isa_cl3)+
-                            log_near_a1 + log_near_a2 + log_near_a3 + near_airport_1000 + near_port_1000 +
-                            length_a1_1000 + ns(length_a23_1000,2) + r_sum_length_a1_1000 + r_sum_length_a23_1000 + 
-                            pct_deciduous + pct_evergreen + pct_crop + pct_pasture + pct_shrub + pct_high_dev + pct_low_dev +
-                            log(near_emip) + nox_2010p_100 + nh3_2003p + r_sum_nox_2010p_100 + r_sum_nh3_2010p +
-                            log_so2_2010a + log_nox_2010a + log_nh3_2010a +
-                            rh + ns(visib_km,2) + ns(temp_c,2) +
-                            (1+aod|day/nome_zona))
-
-
-m1.formula <- as.formula(PM25 ~ aod+tempc+WDSP+NDVI+dist_PE+pcturb_1km+logroad+nei05nonpntcntypm25+pop_sqkm+elev_m+ah_gm3+visib+aod*pbl+pbl+NOXsum+PM10sum+SO2sum+pctmd_1km + pctld_1km+pctop_1km+  pctdf_1km+pctmf_1km+pctev_1km+  pctcr_1km+pctpa_1km+pctsh_1km+  pctgr_1km+  pm25stge30_15k  +  pm25stlt30_3k+pm10stge30_15k   + pm10stlt30_3k   +noxstge30_15k+noxstlt30_3k+ so2stge30_15k+so2stlt30_3k+ (1 +aod+tempc|day/region))
-
-
-
-** test linarity
+*** test linarity
 
 #+BEGIN_SRC R  :session *ansi-term*  :results none
 g1<-gam(pm25~s(aod)+s(tempa.s)+s(WSa.s), data=mod1  )
 plot(g1)
 #+END_SRC 
 +s(elev.s)+s(tden.s)+s(pden.s)+s(ndvi.s)+s(PBL)+s(dair)+s(dport)+s(dist_train)+s(dist.aroad)+s(dist.coast)+s(dist.wb)+s(p.agric)+ s(p.forest) + s(NO2)+s(SO2)+s(PM2.5)+s(PM10
-* Cross validation 
+** Cross validation 
 
 #+BEGIN_SRC R  :session *ansi-term*  :results none
 
@@ -360,9 +365,9 @@ plot(g1)
   print(rmse(residuals(m1.fit.all.cv)))
 #+END_SRC 
 
-* testing by region
+** testing by region
 
-** split to regions by cmid
+*** split to regions by cmid
 
 #+BEGIN_SRC R  :session *ansi-term*  :results none
 mod1.r1<-filter(mod1,cid==1) 
@@ -372,17 +377,17 @@ mod1.r4<-filter(mod1,cid==4)
 mod1.r5<-filter(mod1,cid==5) 
 #+END_SRC
 
-*** r1 R2= 0.92 (mountain areas)
+**** r1 R2= 0.92 (mountain areas)
 
- #+BEGIN_SRC R  :session *ansi-term*  :results none
- m1_sc <- lmer(m1.formula,data=mod1.r1 ,weights=normwt)
- mod1.r1$pred.m1 <- predict(m1_sc)
- print(summary(lm(pm25~pred.m1,data=mod1.r1))$r.squared)
- #RMSPE
- print(rmse(residuals(m1_sc)))
- #+END_SRC 
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+  m1_sc <- lmer(m1.formula,data=mod1.r1 ,weights=normwt)
+  mod1.r1$pred.m1 <- predict(m1_sc)
+  print(summary(lm(pm25~pred.m1,data=mod1.r1))$r.squared)
+  #RMSPE
+  print(rmse(residuals(m1_sc)))
+  #+END_SRC 
 
-*** r2 R2=0.77 oceanic areas
+**** r2 R2=0.77 oceanic areas
 
 #+BEGIN_SRC R  :session *ansi-term*  :results none
 m1_sc <- lmer(m1.formula,data=mod1.r2 ,weights=normwt)
@@ -392,37 +397,37 @@ print(summary(lm(pm25~pred.m1,data=mod1.r2))$r.squared)
 print(rmse(residuals(m1_sc)))
 #+END_SRC 
 
-*** r3 R2=0.83 inner oceanic areas
+**** r3 R2=0.83 inner oceanic areas
 
- #+BEGIN_SRC R  :session *ansi-term*  :results none
- m1_sc <- lmer(m1.formula,data=mod1.r3 ,weights=normwt)
- mod1.r3$pred.m1 <- predict(m1_sc)
- print(summary(lm(pm25~pred.m1,data=mod1.r3))$r.squared)
- #RMSPE
- print(rmse(residuals(m1_sc)))
- #+END_SRC 
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+  m1_sc <- lmer(m1.formula,data=mod1.r3 ,weights=normwt)
+  mod1.r3$pred.m1 <- predict(m1_sc)
+  print(summary(lm(pm25~pred.m1,data=mod1.r3))$r.squared)
+  #RMSPE
+  print(rmse(residuals(m1_sc)))
+  #+END_SRC 
 
-*** r4 R4=0.XX mediteranian wont run
+**** r4 R4=0.XX mediteranian wont run
 
- #+BEGIN_SRC R  :session *ansi-term*  :results none
- m1_sc <- lmer(m1.formula,data=mod1.r4 ,weights=normwt)
- mod1.r4$pred.m1 <- predict(m1_sc)
- print(summary(lm(pm25~pred.m1,data=mod1.r4))$r.squared)
- #RMSPE
- print(rmse(residuals(m1_sc)))
- #+END_SRC 
-*** r5 R5=0.91
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+  m1_sc <- lmer(m1.formula,data=mod1.r4 ,weights=normwt)
+  mod1.r4$pred.m1 <- predict(m1_sc)
+  print(summary(lm(pm25~pred.m1,data=mod1.r4))$r.squared)
+  #RMSPE
+  print(rmse(residuals(m1_sc)))
+  #+END_SRC 
+**** r5 R5=0.91
 
- #+BEGIN_SRC R  :session *ansi-term*  :results none
- m1_sc <- lmer(m1.formula,data=mod1.r5 ,weights=normwt)
- mod1.r5$pred.m1 <- predict(m1_sc)
- print(summary(lm(pm25~pred.m1,data=mod1.r5))$r.squared)
- #RMSPE
- print(rmse(residuals(m1_sc)))
- #+END_SRC 
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+  m1_sc <- lmer(m1.formula,data=mod1.r5 ,weights=normwt)
+  mod1.r5$pred.m1 <- predict(m1_sc)
+  print(summary(lm(pm25~pred.m1,data=mod1.r5))$r.squared)
+  #RMSPE
+  print(rmse(residuals(m1_sc)))
+  #+END_SRC 
 
 
-** split to regions by pmreg
+*** split to regions by pmreg
 
 #+BEGIN_SRC R  :session *ansi-term*  :results none
 mod1.r1<-filter(mod1,pmreg=="high") 
@@ -431,17 +436,17 @@ mod1.r3<-filter(mod1,pmreg=="med")
 mod1.r4<-filter(mod1,pmreg=="mlow") 
 #+END_SRC
 
-*** r1 R2= 0.75 high pm
+**** r1 R2= 0.75 high pm
 
- #+BEGIN_SRC R  :session *ansi-term*  :results none
- m1_sc <- lmer(m1.formula,data=mod1.r1 ,weights=normwt)
- mod1.r1$pred.m1 <- predict(m1_sc)
- print(summary(lm(pm25~pred.m1,data=mod1.r1))$r.squared)
- #RMSPE
- print(rmse(residuals(m1_sc)))
- #+END_SRC 
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+  m1_sc <- lmer(m1.formula,data=mod1.r1 ,weights=normwt)
+  mod1.r1$pred.m1 <- predict(m1_sc)
+  print(summary(lm(pm25~pred.m1,data=mod1.r1))$r.squared)
+  #RMSPE
+  print(rmse(residuals(m1_sc)))
+  #+END_SRC 
 
-*** r2 R2=0.83 low pm
+**** r2 R2=0.83 low pm
 
 #+BEGIN_SRC R  :session *ansi-term*  :results none
 m1_sc <- lmer(m1.formula,data=mod1.r2 ,weights=normwt)
@@ -451,22 +456,22 @@ print(summary(lm(pm25~pred.m1,data=mod1.r2))$r.squared)
 print(rmse(residuals(m1_sc)))
 #+END_SRC 
 
-*** r3 R2=0.82 medium pm
+**** r3 R2=0.82 medium pm
 
- #+BEGIN_SRC R  :session *ansi-term*  :results none
- m1_sc <- lmer(m1.formula,data=mod1.r3 ,weights=normwt)
- mod1.r3$pred.m1 <- predict(m1_sc)
- print(summary(lm(pm25~pred.m1,data=mod1.r3))$r.squared)
- #RMSPE
- print(rmse(residuals(m1_sc)))
- #+END_SRC 
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+  m1_sc <- lmer(m1.formula,data=mod1.r3 ,weights=normwt)
+  mod1.r3$pred.m1 <- predict(m1_sc)
+  print(summary(lm(pm25~pred.m1,data=mod1.r3))$r.squared)
+  #RMSPE
+  print(rmse(residuals(m1_sc)))
+  #+END_SRC 
 
-*** r4 R4=0.XX wont run
+**** r4 R4=0.XX wont run
 
- #+BEGIN_SRC R  :session *ansi-term*  :results none
- m1_sc <- lmer(m1.formula,data=mod1.r4 ,weights=normwt)
- mod1.r4$pred.m1 <- predict(m1_sc)
- print(summary(lm(pm25~pred.m1,data=mod1.r4))$r.squared)
- #RMSPE
- print(rmse(residuals(m1_sc)))
- #+END_SRC 
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+  m1_sc <- lmer(m1.formula,data=mod1.r4 ,weights=normwt)
+  mod1.r4$pred.m1 <- predict(m1_sc)
+  print(summary(lm(pm25~pred.m1,data=mod1.r4))$r.squared)
+  #RMSPE
+  print(rmse(residuals(m1_sc)))
+  #+END_SRC 

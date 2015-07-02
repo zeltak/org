@@ -1,0 +1,3386 @@
+#+TITLE:  Clean datasets
+
+* Run all  
+  :PROPERTIES:
+    :comments:  no
+    :tangle:    CS03.cleanDB.r
+    :END:
+
+** PM25
+
+*** add libraries 
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+  ###############
+  #LIBS
+  ###############
+  library(lme4)
+  library(reshape)
+  library(foreign) 
+  library(ggplot2)
+  library(plyr)
+  library(data.table)
+  library(reshape2)
+  library(Hmisc)
+  library(mgcv)
+  library(gdata)
+  library(car)
+  library(dplyr)
+  library(ggmap)
+  library(broom)
+  library(splines)
+  library(DataCombine)
+  #+END_SRC 
+
+
+
+*** year 2003
+***** mod1
+****** load mod 1 file for PM25
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2003
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM25ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm25 >  quantile(pm25, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm25 <  quantile(pm25, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM25 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm25 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM25ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.c.rds")
+ #+END_SRC
+***** clear  year 2003
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2004
+***** mod1
+****** load mod 1 file for PM25
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2004
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM25ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm25 >  quantile(pm25, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm25 <  quantile(pm25, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM25 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm25 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2004.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM25ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2004.c.rds")
+ #+END_SRC
+***** clear  year 2004
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2005
+***** mod1
+****** load mod 1 file for PM25
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2005
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2005.PM25.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM25ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2005.PM25.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm25 >  quantile(pm25, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm25 <  quantile(pm25, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM25 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm25 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2005.PM25.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2005.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM25ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2005.c.rds")
+ #+END_SRC
+***** clear  year 2005
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2006
+***** mod1
+****** load mod 1 file for PM25
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2006
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2006.PM25.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM25ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2006.PM25.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm25 >  quantile(pm25, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm25 <  quantile(pm25, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM25 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm25 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2006.PM25.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2006.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM25ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2006.c.rds")
+ #+END_SRC
+***** clear  year 2006
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2007
+***** mod1
+****** load mod 1 file for PM25
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2007
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2007.PM25.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM25ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2007.PM25.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm25 >  quantile(pm25, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm25 <  quantile(pm25, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM25 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm25 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2007.PM25.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2007.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM25ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2007.c.rds")
+ #+END_SRC
+***** clear  year 2007
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2008
+***** mod1
+****** load mod 1 file for PM25
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2008
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2008.PM25.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM25ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2008.PM25.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm25 >  quantile(pm25, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm25 <  quantile(pm25, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM25 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm25 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2008.PM25.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2008.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM25ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2008.c.rds")
+ #+END_SRC
+***** clear  year 2008
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2009
+***** mod1
+****** load mod 1 file for PM25
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2009
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2009.PM25.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM25ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2009.PM25.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm25 >  quantile(pm25, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm25 <  quantile(pm25, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM25 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm25 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2009.PM25.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2009.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM25ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2009.c.rds")
+ #+END_SRC
+***** clear  year 2009
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2010
+***** mod1
+****** load mod 1 file for PM25
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2010
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2010.PM25.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM25ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2010.PM25.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm25 >  quantile(pm25, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm25 <  quantile(pm25, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM25 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm25 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2010.PM25.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2010.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM25ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2010.c.rds")
+ #+END_SRC
+***** clear  year 2010
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2011
+***** mod1
+****** load mod 1 file for PM25
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2011
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2011.PM25.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM25ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2011.PM25.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm25 >  quantile(pm25, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm25 <  quantile(pm25, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM25 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm25 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2011.PM25.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2011.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM25ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2011.c.rds")
+ #+END_SRC
+***** clear  year 2011
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2012
+***** mod1
+****** load mod 1 file for PM25
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2012
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2012.PM25.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM25ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2012.PM25.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm25 >  quantile(pm25, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm25 <  quantile(pm25, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM25 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm25 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2012.PM25.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2012.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM25ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2012.c.rds")
+ #+END_SRC
+***** clear  year 2012
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2013
+***** mod1
+****** load mod 1 file for PM25
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2013
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2013.PM25.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM25ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2013.PM25.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm25 >  quantile(pm25, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm25 <  quantile(pm25, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM25 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm25 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2013.PM25.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2013.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM25ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2013.c.rds")
+ #+END_SRC
+***** clear  year 2013
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+
+** PM10
+
+*** add libraries 
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+  ###############
+  #LIBS
+  ###############
+  library(lme4)
+  library(reshape)
+  library(foreign) 
+  library(ggplot2)
+  library(plyr)
+  library(data.table)
+  library(reshape2)
+  library(Hmisc)
+  library(mgcv)
+  library(gdata)
+  library(car)
+  library(dplyr)
+  library(ggmap)
+  library(broom)
+  library(splines)
+  library(DataCombine)
+  #+END_SRC 
+
+
+
+
+
+*** year 2003
+***** mod1
+****** load mod 1 file for PM10
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2003
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM10.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM10ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM10.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm10 >  quantile(pm10, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm10 <  quantile(pm10, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM10 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm10 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM10.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM10ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.c.rds")
+ #+END_SRC
+***** clear  year 2003
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2004
+***** mod1
+****** load mod 1 file for PM10
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2004
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM10ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm10 >  quantile(pm10, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm10 <  quantile(pm10, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM10 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm10 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2004.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM10ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2004.c.rds")
+ #+END_SRC
+***** clear  year 2004
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2005
+***** mod1
+****** load mod 1 file for PM10
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2005
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2005.PM10.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM10ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2005.PM10.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm10 >  quantile(pm10, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm10 <  quantile(pm10, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM10 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm10 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2005.PM10.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2005.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM10ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2005.c.rds")
+ #+END_SRC
+***** clear  year 2005
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2006
+***** mod1
+****** load mod 1 file for PM10
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2006
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2006.PM10.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM10ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2006.PM10.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm10 >  quantile(pm10, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm10 <  quantile(pm10, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM10 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm10 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2006.PM10.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2006.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM10ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2006.c.rds")
+ #+END_SRC
+***** clear  year 2006
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2007
+***** mod1
+****** load mod 1 file for PM10
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2007
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2007.PM10.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM10ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2007.PM10.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm10 >  quantile(pm10, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm10 <  quantile(pm10, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM10 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm10 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2007.PM10.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2007.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM10ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2007.c.rds")
+ #+END_SRC
+***** clear  year 2007
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2008
+***** mod1
+****** load mod 1 file for PM10
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2008
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2008.PM10.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM10ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2008.PM10.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm10 >  quantile(pm10, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm10 <  quantile(pm10, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM10 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm10 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2008.PM10.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2008.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM10ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2008.c.rds")
+ #+END_SRC
+***** clear  year 2008
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2009
+***** mod1
+****** load mod 1 file for PM10
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2009
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2009.PM10.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM10ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2009.PM10.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm10 >  quantile(pm10, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm10 <  quantile(pm10, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM10 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm10 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2009.PM10.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2009.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM10ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2009.c.rds")
+ #+END_SRC
+***** clear  year 2009
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2010
+***** mod1
+****** load mod 1 file for PM10
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2010
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2010.PM10.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM10ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2010.PM10.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm10 >  quantile(pm10, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm10 <  quantile(pm10, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM10 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm10 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2010.PM10.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2010.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM10ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2010.c.rds")
+ #+END_SRC
+***** clear  year 2010
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2011
+***** mod1
+****** load mod 1 file for PM10
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2011
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2011.PM10.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM10ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2011.PM10.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm10 >  quantile(pm10, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm10 <  quantile(pm10, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM10 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm10 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2011.PM10.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2011.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM10ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2011.c.rds")
+ #+END_SRC
+***** clear  year 2011
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2012
+***** mod1
+****** load mod 1 file for PM10
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2012
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2012.PM10.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM10ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2012.PM10.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm10 >  quantile(pm10, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm10 <  quantile(pm10, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM10 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm10 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2012.PM10.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2012.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM10ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2012.c.rds")
+ #+END_SRC
+***** clear  year 2012
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+
+
+*** year 2013
+***** mod1
+****** load mod 1 file for PM10
+   #+BEGIN_SRC R  :session *ansi-term*  :results none
+##### YEAR 2013
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2013.PM10.rds")
+#take out stations in non contigious france
+mod1<-filter(mod1,stn != 40001 & stn != 39007 & stn != 38008)
+#delete water flags
+mod1<-filter(mod1,wflag != 1)
+# mod1<-filter(mod1,UN >0  & UN  <0.04)
+#recreate aodid
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+   #+END_SRC 
+
+****** scale		
+     re-scale
+     #+BEGIN_SRC R  :session *ansi-term*  :results none
+#rescale
+mod1[,dair.s:= scale(dair)]
+mod1[,dport.s:= scale(dport)]
+mod1[,dtrain.s:= scale(dist_train)]
+mod1[,daroad.s:= scale(dist.aroad)]
+mod1[,dcoast.s:= scale(dist.coast)]
+mod1[,dwb.s:= scale(dist.wb)]
+mod1[,NO2.s:= scale(NO2 )]
+mod1[,SO2.s:= scale(SO2)]
+mod1[,PM10ems.s:= scale(PM2.5)]
+mod1[,PM10ems.s:= scale(PM10)]
+mod1[,p.agric.s:= scale(p.agric)]
+mod1[,p.open.s:= scale(p.open)]
+mod1[,p.urban.s:= scale(p.urban)]
+mod1[,p.forest.s:= scale(p.forest)]
+mod1[,da1.s:= scale(distA1)]
+mod1[,pbl.s:= scale(PBL)]
+mod1[,temp.s:= scale(tempavg)]
+mod1[,ws.s:= scale(wsavg)]
+     #+END_SRC 
+****** save clean mod1.full 
+      #+BEGIN_SRC R  :session *ansi-term*  :results none
+  saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2013.PM10.c1.rds")
+      #+END_SRC
+       
+****** clean
+******* Alexandra thresholds
+Create an inclusion/exclusion variable based on previous criteria
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+x<-select(mod1,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1,stn)
+mod1 <- merge(mod1,x, all.x = T)
+
+mod1$exobs<-0
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm10 >  quantile(pm10, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm10 <  quantile(pm10, c(.50)), exobs := 3]
+mod1<-mod1[aod > 1.2 , exobs := 4]
+mod1<-mod1[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1<-filter(mod1,exobs==0)
+#save
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+                 
+#+END_SRC
+
+******* clean bad aod-pm and save
+
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+################# clean BAD STN PM10 and check if improved model?
+raWDaf <- ddply(mod1, c("stn","c"), 
+         function(x) {
+	mod1 <- lm(pm10 ~ aod, data=x)
+	data.frame(R2 = round(summary(mod1)$r.squared, 5), 
+                      nsamps = length(summary(mod1)$resid))
+})
+raWDaf
+raWDaf<-as.data.table(raWDaf)
+bad<- raWDaf[R2 <= 0.02]
+bad[,badid := paste(stn,c,sep="-")]
+#################BAD STN
+mod1[,badid := paste(stn,c,sep="-")]
+####Take out bad stations
+mod1c <- mod1[!(mod1$badid %in% bad$badid), ] 
+saveRDS(mod1c,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2013.PM10.c2.rds")
+    #+END_SRC 
+
+***** mod2 
+****** load DB
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2013.rds")
+gc()
+  #+END_SRC 
+
+check:
+
+t <- mod2 %>% group_by(aodid) %>% summarise (aod = mean(aod, na.rm=TRUE),y = mean(lat_aod, na.rm=TRUE), x = mean(long_aod, na.rm=TRUE)   )
+write.csv(t,"~/ZH_tmp/m2eee.csv")
+
+
+****** clean mod2
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+#delete water flags
+mod2<-filter(mod2,wflag != 1)
+#mod2<-filter(mod2,UN >0  & UN  <0.04)
+gc()
+#+END_SRC 
+
+****** create log and scale
+    #+BEGIN_SRC R  :session *ansi-term*  :results none
+      mod2[,dair.s:= scale(dair)]
+      mod2[,dport.s:= scale(dport)]
+      mod2[,dtrain.s:= scale(dist_train)]
+      mod2[,daroad.s:= scale(dist.aroad)]
+      mod2[,dcoast.s:= scale(dist.coast)]
+      mod2[,dwb.s:= scale(dist.wb)]
+      mod2[,NO2.s:= scale(NO2 )]
+      mod2[,SO2.s:= scale(SO2)]
+      mod2[,PM10ems.s:= scale(PM2.5)]
+      mod2[,PM10ems.s:= scale(PM10)]
+      mod2[,p.agric.s:= scale(p.agric)]
+      mod2[,p.open.s:= scale(p.open)]
+      mod2[,p.urban.s:= scale(p.urban)]
+      mod2[,p.forest.s:= scale(p.forest)]
+      mod2[,da1.s:= scale(distA1)]
+      mod2[,pbl.s:= scale(PBL)]
+      mod2[,temp.s:= scale(tempavg)]
+      mod2[,ws.s:= scale(wsavg)]
+    #+END_SRC 
+
+****** saving
+******* save clean mod2 
+#+BEGIN_SRC R  :session *ansi-term*  :results none
+saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2013.c.rds")
+ #+END_SRC
+***** clear  year 2013
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+keep(mod1, sure=TRUE) 
+gc()
+  #+END_SRC 
+
+
+
+
+
+

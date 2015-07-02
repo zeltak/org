@@ -11,7 +11,7 @@ from qgis.utils import iface
 
 
 #--- 3 Set csv file name here:  (inputfilename-'InFlnm')
-InFlnm='met.lu.No.da1.csv'
+InFlnm='met.lu.WK.rint.csv'
 
 #--- 4  Set csv location pathname here (inputdirpath-'InDrPth')
 InDrPth='home/zeltak/ZH_tmp/Rtmp/'
@@ -33,6 +33,8 @@ QgsMapLayerRegistry.instance().addMapLayer(implayer)
 
 #set style
 implayer.loadNamedStyle('/home/zeltak/.qgis2/styles/france.fakeraster.qml')
+#refresh 
+implayer.triggerRepaint()
 
 
 

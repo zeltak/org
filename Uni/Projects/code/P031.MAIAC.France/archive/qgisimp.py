@@ -11,16 +11,16 @@ from qgis.utils import iface
 
 
 #--- 3 Set csv file name here:  (inputfilename-'InFlnm')
-InFlnm='met.lu.No.da1.csv'
+InFlnm='qtrans.dist.csv'
 
 #--- 4  Set csv location pathname here (inputdirpath-'InDrPth')
-InDrPth='home/zeltak/ZH_tmp/Rtmp/'
+InDrPth='home/zeltak/ZH_tmp/'
 
 #--- 5 Build file name an path for uri (inputfilepath-'InFlPth')
 InFlPth="file:///"+InDrPth+InFlnm
 
-#---  6 Set import Sting here note only need to set x and y and CRS (end of uri string)
-uri = InFlPth+"?delimiter=%s&xField=%s&yField=%s&crs=EPSG:4326" % (",","x","y")
+#---  6 Set import Sting here note only need to set x and y other come for free
+uri = InFlPth+"?delimiter=%s&xField=%s&yField=%s" % (",","x","y")
 
 #--- 7 Load point layer
 implayer = QgsVectorLayer(uri, InFlnm, "delimitedtext")
@@ -28,11 +28,18 @@ implayer = QgsVectorLayer(uri, InFlnm, "delimitedtext")
 #--- 8 Confirm something is loaded and valid
 implayer.isValid()
 
-#--- 10 Display the layer into QGIS 
+#--- 9 Set CRS (currently set to ITM (2039 in qgis)
+implayer.setCrs( QgsCoordinateReferenceSystem(2039, QgsCoordinateReferenceSystem.EpsgCrsId) )
+
+
+#--- 10 Display the layer into QGIS (but it asks for CRS before displaying_
 QgsMapLayerRegistry.instance().addMapLayer(implayer)
 
+#--- 11 turn CRS dialog box back on again
+#s.setValue( "/Projections/defaultBehaviour", oldValidation )
+
 #set style
-implayer.loadNamedStyle('/home/zeltak/.qgis2/styles/france.fakeraster.qml')
+implayer.loadNamedStyle('/home/zeltak/.qgis/fakeraster.qml')
 
 
 
