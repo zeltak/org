@@ -46700,6 +46700,11 @@ If necessary, replace ~/.ssh/id dsa with ~/.ssh/id rsa
 eval `keychain --eval --agents ssh id dsa id_dsa2 id_dsa3`
 #+END_SRC
 
+***** error: Could not open a connection to your authentication agent.
+this is probably due to issues in your bash/zsh rc file. manually issue:
+#+BEGIN_SRC sh
+eval `ssh-agent -s` 
+#+END_SRC
 **** ssh config file (ssh alias) 					:Fav:
 ***** Understanding ~/.ssh/config entries
 Host : Defines for which host or hosts the configuration section applies. The section ends with a new Host section or the end of the file. A single * as a pattern can be used to provide global defaults for all hosts.
