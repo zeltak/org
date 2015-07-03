@@ -28207,6 +28207,91 @@ There are eight keys being defined there, most of which aren't even used every d
 
 Doesnt "Emacs, toggle column" just roll off your tongue as you're typing C-x t c? I feel like I'm commanding the strands of reality, but that could just be my D&D past taking the better of me.
 
+******** bind menu key
+Make the Menu as Leader Key
+
+Even better is to set ▤ Menu key as the lead key of key sequences for emacs's hundreds of commands. 〔➤ Banish Key Chords〕
+#+BEGIN_SRC emacs-lisp :results none
+
+;; On Linux, menu/apps key syntax is <menu>
+(global-set-key (kbd "<menu> c") 'calendar)
+
+;; Windows, menu/apps key syntax is <apps>
+(global-set-key (kbd "<app> c") 'calendar)
+#+END_SRC
+
+Example of key sequence starting with the ▤ Menu key.:
+
+#+BEGIN_SRC emacs-lisp :results none
+;; Linux, the menu/apps key syntax is <menu>
+;; Windows, the menu/apps key syntax is <apps>
+;; make the syntax equal
+(define-key key-translation-map (kbd "<apps>") (kbd "<menu>"))
+
+(progn
+  (define-prefix-command 'xah-fly-leader-key-map)
+
+  (define-key xah-fly-leader-key-map (kbd "RET") (if (fboundp 'smex) 'smex 'execute-extended-command ))
+  (define-key xah-fly-leader-key-map (kbd "<backspace>") nil)
+  (define-key xah-fly-leader-key-map (kbd "<delete>") nil)
+  (define-key xah-fly-leader-key-map (kbd "SPC") xah-insertion-keymap)
+  (define-key xah-fly-leader-key-map (kbd "<menu>") 'exchange-point-and-mark)
+  (define-key xah-fly-leader-key-map (kbd "TAB") xah-menu-tab-keymap)
+
+  (define-key xah-fly-leader-key-map (kbd ".") xah-highlight-keymap)
+
+  (define-key xah-fly-leader-key-map (kbd "'") 'quoted-insert)
+  (define-key xah-fly-leader-key-map (kbd ",") nil)
+  (define-key xah-fly-leader-key-map (kbd "-") nil)
+  (define-key xah-fly-leader-key-map (kbd "/") nil)
+  (define-key xah-fly-leader-key-map (kbd ";") nil)
+  (define-key xah-fly-leader-key-map (kbd "=") nil)
+  (define-key xah-fly-leader-key-map (kbd "[") nil)
+  (define-key xah-fly-leader-key-map (kbd "\\") nil)
+  (define-key xah-fly-leader-key-map (kbd "`") nil)
+
+
+  (define-key xah-fly-leader-key-map (kbd "8") nil)
+  (define-key xah-fly-leader-key-map (kbd "7") 'delete-window)
+  (define-key xah-fly-leader-key-map (kbd "3") 'delete-other-windows)
+  (define-key xah-fly-leader-key-map (kbd "4") 'split-window-below)
+  (define-key xah-fly-leader-key-map (kbd "5") 'split-window-right)
+
+  (define-key xah-fly-leader-key-map (kbd "6") nil)
+  (define-key xah-fly-leader-key-map (kbd "2") 'dired-jump)
+  (define-key xah-fly-leader-key-map (kbd "1") 'xah-open-file-path-under-cursor)
+  (define-key xah-fly-leader-key-map (kbd "9") 'ispell-word)
+  (define-key xah-fly-leader-key-map (kbd "0") nil)
+
+  (define-key xah-fly-leader-key-map (kbd "a") 'mark-whole-buffer)
+  (define-key xah-fly-leader-key-map (kbd "b") 'end-of-buffer)
+  (define-key xah-fly-leader-key-map (kbd "c") xah-menu-c-keymap)
+  (define-key xah-fly-leader-key-map (kbd "d") 'beginning-of-buffer)
+  (define-key xah-fly-leader-key-map (kbd "f") 'xah-search-current-word)
+  (define-key xah-fly-leader-key-map (kbd "g") 'isearch-forward)
+  (define-key xah-fly-leader-key-map (kbd "h") 'xah-help-keymap)
+  (define-key xah-fly-leader-key-map (kbd "i") xah-menu-i-keymap)
+  (define-key xah-fly-leader-key-map (kbd "j") 'xah-cut-line-or-region)
+  (define-key xah-fly-leader-key-map (kbd "k") 'yank)
+  (define-key xah-fly-leader-key-map (kbd "l") 'recenter-top-bottom)
+  (define-key xah-fly-leader-key-map (kbd "m") 'universal-argument)
+  (define-key xah-fly-leader-key-map (kbd "n") xah-harmless-keymap)
+  (define-key xah-fly-leader-key-map (kbd "o") nil)
+  (define-key xah-fly-leader-key-map (kbd "p") 'query-replace)
+  (define-key xah-fly-leader-key-map (kbd "q") 'xah-copy-line-or-region)
+  (define-key xah-fly-leader-key-map (kbd "r") xah-edit-cmds-keymap)
+  (define-key xah-fly-leader-key-map (kbd "s") nil)
+  (define-key xah-fly-leader-key-map (kbd "t") xah-menu-t-keymap)
+  (define-key xah-fly-leader-key-map (kbd "u") nil)
+  (define-key xah-fly-leader-key-map (kbd "v") xah-menu-v-keymap)
+  (define-key xah-fly-leader-key-map (kbd "w") xah-danger-keymap)
+  (define-key xah-fly-leader-key-map (kbd "x") nil)
+  (define-key xah-fly-leader-key-map (kbd "y") nil)
+  (define-key xah-fly-leader-key-map (kbd "z") 'comment-dwim))
+
+ (global-set-key (kbd "<menu>") 'xah-fly-leader-key-map) 
+#+END_SRC
+
 ******* look and feel
 ******** fonts
 ******** faces 	 
@@ -29027,27 +29112,38 @@ add this to your .emacs:
 ********** jump to dired from ido
 use C-j to jump into dired mode when within ido
 ********* Projectile
+https://github.com/bbatsov/projectile
+If you ever forget any of Projectile's keybindings just do a:
+
+C-c p C-h
 ********** ignore file
-Currently git, mercurial and bazaar repos are considered projects by default. If you want to mark a folder manually as a project just create an empty .projectile file in it
+If youd like to instruct Projectile to ignore certain files in a project, when indexing it you can do so in the .projectile file by adding each path to ignore, where the paths all are relative to the root directory and start with a slash. Everything ignored should be preceded with a - sign. Alternatively, not having any prefix at all also means to ignore the directory or file pattern that follows. Here's an example for a typical Rails application:
 
-add this to relevant .el file:
-;projectile
-(projectile-global-mode)
-
-ignoring files
-
-If you'd like to instruct Projectile to ignore certain files in a project, when indexing it you can do so in the .projectile file. Here's an example for a typical Rails application:
-
-/log
-/tmp
-/vendor
-/public/uploads
+#+BEGIN_EXAMPLE
+-/log
+-/tmp
+-/vendor
+-/public/uploads
+#+END_EXAMPLE
 
 This would ignore the folders only at the root of the project. Projectile also supports relative pathname ignores:
-tmp
-.rb
-.yml
+#+BEGIN_EXAMPLE
+-tmp
+-*.rb
+-*.yml
+-models
+#+END_EXAMPLE
 
+You can also ignore everything except certain subdirectories. This is useful when selecting the directories to keep is easier than selecting the directories to ignore, although you can do both. To select directories to keep, that means everything else will be ignored.
+
+Example:
+
+#+BEGIN_EXAMPLE
++/src/foo
++/tests/foo
+#+END_EXAMPLE
+Keep in mind that you can only include subdirectories, not file patterns.
+If both directories to keep and ignore are specified, the directories to keep first apply, restricting what fi
 ********** helm integration
 Projectile can be integrated with Helm via helm-c-source-projectile source (available in helm-projectile.el). There is also an example function for calling Helm with the Projectile file source. You can call it like this:
 
@@ -29056,7 +29152,6 @@ M-x helm-projectile
 or even better - bind it to a keybinding like this:
 
 (global-set-key (kbd "C-c h") 'helm-projectile)
-********** model
 ********* workgroups
 create and save a winodws state (not buffers/session)
 -first issue wg-create-workgroup, give it a name (not sure why this step is needed)
@@ -33983,6 +34078,8 @@ size for these commands as implemented in the standard document classes.
 {\Large all of great big
 \textit{Italy}.}
 #+END_LaTeX
+***** new pages
+"\newpage" or "\pagebreak" will start a new page
 **** packages
 ***** Installing Extra Packages
 Most LATEX installations come with a large set of pre-installed style packages,
@@ -34096,11 +34193,11 @@ to eval it place your cursor has to be right after the ) when you run C-x C-e to
 if it outputs `t` then it works.
 you will see bibtex is in biblatex dialect mode. this should start automaticly when you open the .bib file next time.
 
-***** intro (bibtex and biber//natbib and biblatex)
-bibtex and biber are external programs that process bibliography information and act (roughly) as the interface between your .bib file and your LaTeX document.
-
+***** bibtex
+****** intro (bibtex and biber//natbib and biblatex)
+`bibtex` and `biber` are external programs that process bibliography information and act (roughly) as the interface between your .bib file and your LaTeX document.
 natbib and biblatex are LaTeX packages that format citations and bibliographies; natbib works only with bibtex, while biblatex (at the moment) works with both bibtex and biber
-***** Getting current LaTeX document to use your .bib file
+****** Getting current LaTeX document to use your .bib file
 At the end of your LaTeX file (that is, after the content, but *before* \end{document}), you need to place the following commands:
 
 #+BEGIN_src latex 
@@ -34130,7 +34227,7 @@ The .bib file can be in the same directory as the LaTeX document. However, if yo
 #+END_SRC
 (if the .bib file is in the parent directory of the .tex document that calls it).
 
-***** citing 
+****** citing 
 Now that LaTeX and BibTeX know where to look for the appropriate files, actually citing the references is fairly trivial.
 
 #+begin_src latex
@@ -34145,7 +34242,7 @@ If you wish to cite more than one reference at the same time, do the following:
 \cite{ref_key1, ref_key2, ..., ref_keyN}.
 #+END_SRC
 
-***** Why won't LaTeX generate any output?
+****** Why won't LaTeX generate any output?
 The addition of BibTeX adds extra complexity for the processing of the source to the desired output. This is largely hidden from the user, but because of all the complexity of the referencing of citations from your source LaTeX file to the database entries in another file, you actually need multiple passes to accomplish the task. This means you have to run LaTeX a number of times. Each pass will perform a particular task until it has managed to resolve all the citation references. Here's what you need to type (into command line):
 #+BEGIN_SRC sh :results none
 latex latex_source_code.tex
@@ -34217,21 +34314,13 @@ The natbib package has two basic citation commands, \citet and \citep for textua
 \citep{jon90a,jon90b}	    -->    	(Jones et al., 1990a,b)
 #+END_SRC
 ***** common citation styles
+****** on-line guide
 look here first
 http://web.archive.org/web/20131102023045id_/http://nodonn.tipido.net/bibstyle.php
 
 -authordate1
-***** Other bibliography styles
+****** Other bibliography styles
 If you want to use a different style (e.g. one provided by the journal you are submitting an article to) you should save the style file (.bst file) in the same folder as your .tex and .bib files. Include the name of the .bst file in the \bibliographystyle{...} commmand.
-***** Including URLs in bibliography
-As you can see, there is no field for URLs. One possibility is to include Internet addresses in howpublished field of @misc or note field of @techreport, @article, @book:
-howpublished = "\url{http://www.example.com}"
-Note the usage of \url command to ensure proper appearance of URLs.
-Another way is to use special field url and make bibliography style recognise it.
- url = "http://www.example.com"
-You need to use \usepackage{url} in the first case or \usepackage{hyperref} in the second case.
-Styles provided by Natbib (see below) handle this field, other styles can be modified using urlbst program. Modifications of three standard styles (plain, abbrv and alpha) are provided with urlbst.
-
 ***** Customizing bibliography appearance
 One of the main advantages of BibTeX, especially for people who write many research papers, is the ability to customize your bibliography to suit the requirements of a given publication. You will notice how different publications tend to have their own style of formatting references, to which authors must adhere if they want their manuscripts published. In fact, established journals and conference organizers often will have created their own bibliography style (.bst file) for those users of BibTeX, to do all the hard work for you.
 It can achieve this because of the nature of the .bib database, where all the information about your references is stored in a structured format, but nothing about style. This is a common theme in LaTeX in general, where it tries as much as possible to keep content and presentation separate.
@@ -34248,6 +34337,15 @@ LaTeX will find the relevant file and the questioning process will begin. You wi
 If you are using a custom built .bst file, it is important that LaTeX can find it.
 
 So, make sure its in the same directory as the LaTeX source file, unless you are using one of the standard style files (such as plain or plainnat, that come bundled with LaTeX - these will be automatically found in the directories that they are installed. Also, make sure the name of the .bst file you want to use is reflected in the \bibliographystyle{style} command (but don't include the .bst extension!).
+***** Including URLs in bibliography
+As you can see, there is no field for URLs. One possibility is to include Internet addresses in howpublished field of @misc or note field of @techreport, @article, @book:
+howpublished = "\url{http://www.example.com}"
+Note the usage of \url command to ensure proper appearance of URLs.
+Another way is to use special field url and make bibliography style recognise it.
+ url = "http://www.example.com"
+You need to use \usepackage{url} in the first case or \usepackage{hyperref} in the second case.
+Styles provided by Natbib (see below) handle this field, other styles can be modified using urlbst program. Modifications of three standard styles (plain, abbrv and alpha) are provided with urlbst.
+
 ***** Showing unused items (bibliography without citations)- No cite command
 If you only want a reference to appear in the bibliography, but not where it is referenced in the main text, then the \nocite{} command can be used, for example:
 A special version of the command, \nocite{*}, includes all entries from the database, whether they are referenced in the document or not.
@@ -34258,15 +34356,13 @@ A special version of the command, \nocite{*}, includes all entries from the data
 #+END_SRC
 
 ***** Biblatex
-****** base biblatex setup
-$Note Recent versions of biblatex have deprecated$
-******* changes to add bibsource in next verion 
+******* changes to add bibsource in next version 
 #+BEGIN_SRC latex :results none
 \bibliography{<database>} 
 %in favour of the more general
 \addbibresource{<database>.<extension>}
 #+END_SRC
-******* use old bibtex backend 
+******* using old bibtex backend 
 A minimal document for biblatex would be this
 
 #+BEGIN_SRC latex :results none
@@ -34290,7 +34386,7 @@ Normally, you'd also select a bibliography style by loading this an an optional 
 #+BEGIN_SRC latex :results none
 \usepackage[style=numeric-comp]{biblatex} 
 #+END_SRC
-******* use new biber backend
+******* using new biber backend
 The minimal document for Biber is
 #+BEGIN_SRC latex :results none
 \documentclass{article}

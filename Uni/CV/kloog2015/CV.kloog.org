@@ -12,9 +12,10 @@
 #+LATEX_HEADER: \usepackage{lastpage}
 #+LATEX_HEADER: \usepackage[margin=20mm, paperwidth=210mm, paperheight=297mm]{geometry}
 
-#+LATEX_HEADER: \usepackage[backend=biber,style=authoryear,url=false, doi=true, eprint=false]{biblatex}
+#+LATEX_HEADER: \usepackage[backend=biber]{biblatex}
+#+LATEX_HEADER: \addbibresource{/home/zeltak/org/files/Uni/papers/ktst.bib}
+
 #+LATEX_HEADER: \DeclareLanguageMapping{american}{american-apa}
-#+LATEX_HEADER: \addbibresource{/home/zeltak/org/files/Uni/papers/kloog.2015.bib}
 
 #+LaTeX_HEADER: \DeclareSourcemap{
 #+LaTeX_HEADER:   \maps[datatype=bibtex]{
@@ -29,10 +30,6 @@
 
 #+LaTeX_HEADER: \boldname{Itai} {Kloog}
 
-#+LATEX_HEADER: \renewcommand*\familydefault{\sfdefault}
-#+LATEX_HEADER: \renewcommand*\sfdefault{uop}
-#+LATEX_HEADER: \renewcommand*\familydefault{\sfdefault}
-#+LATEX_HEADER: \renewcommand{\rmdefault}{uop}
 
 #+latex_header: \usepackage{helvet}
 #+LaTeX_HEADER: \usepackage{paralist}
@@ -151,6 +148,12 @@ _*H-index*_: 10, 259 citations in total (excluding self-citations), average numb
 citations per item: 11.76. (Source: ISI, January, 2015).
 
 ** (a) Refereed articles and refereed letters in scientific journals - running numbers
+
+
+
+
+\nocite{sun-2005-long,sultz-1970}
+\printbibliography[heading=none]
 
 
 

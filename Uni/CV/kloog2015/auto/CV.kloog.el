@@ -4,7 +4,7 @@
    (TeX-add-to-alist 'LaTeX-provided-class-options
                      '(("article" "11pt" "draft=true")))
    (TeX-add-to-alist 'LaTeX-provided-package-options
-                     '(("inputenc" "utf8") ("fontenc" "T1") ("ulem" "normalem") ("babel" "american") ("geometry" "margin=20mm" "paperwidth=210mm" "paperheight=297mm") ("biblatex" "backend=biber" "style=authoryear" "url=false" "doi=true" "eprint=false")))
+                     '(("inputenc" "utf8") ("fontenc" "T1") ("ulem" "normalem") ("babel" "american") ("geometry" "margin=20mm" "paperwidth=210mm" "paperheight=297mm") ("biblatex" "backend=biber")))
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperref")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperimage")
    (add-to-list 'LaTeX-verbatim-macros-with-braces-local "hyperbaseurl")
@@ -79,5 +79,5 @@
     "sec-11-1"
     "sec-12")
    (LaTeX-add-bibliographies
-    "/home/zeltak/org/files/Uni/papers/kloog")))
+    "/home/zeltak/org/files/Uni/papers/ktst")))
 
