@@ -79,5 +79,5 @@
     "sec-11-1"
     "sec-12")
    (LaTeX-add-bibliographies
-    "/home/zeltak/org/files/Uni/papers/ktst")))
+    "/home/zeltak/org/files/Uni/papers/kloog")))
 

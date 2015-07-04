@@ -38594,9 +38594,22 @@ or sudo visudo in the terminal will now open with your chosen editor.
 kill -10 1140  
      #+END_SRC 
 *** cron
+**** install on arch 
+#+BEGIN_SRC sh :results none
+#install
+sudo pacman -S cronie
+#enable systemd
+sudo systemctl enable cronie
+sudo systemctl start cronie
+#edit your crons
+crontab -e
+#+END_SRC
+₆In example₆ a mail sync with output to /tmp
+#+BEGIN_EXAMPLE
+*/3 * * * * /usr/bin/mbsync gmail >> /tmp/mbsynclog 2>&1
+#+END_EXAMPLE
 
 **** intro
-
 Cron-Intro
  
  For cron to run user-scheduled tasks, it reads a file called crontab.
@@ -38647,40 +38660,26 @@ specified as a three-letter
 prompting you for sudo password (because its running as root already)
 
 **** edit cron
-
 Edit cron from the command line
 
- crontab -e
+#+BEGIN_SRC sh :results none
+crontab  -e
+#+END_SRC
 
+Display your crontab file
 
- Display your crontab file
-
- crontab -l
-
-
-
-
+#+BEGIN_SRC sh :results none
+crontab -l
+#+END_SRC
 **** backup
-
 backup cron file manuay
 
- crontab -l > /path/to/your/backup/file
-
- Tip:
- to back up via rsync or other method ,y ou could just backup the entire
-/var/spool/cron directory.
- It contains all crontables of all users and more.
-
-**** cron and systemd
-
-make sure when using systemd do enable cron
-
- systemctl enable cronie
-
- and to check if loaded
-
- systemctl status cronie
-
+#+BEGIN_SRC sh :results none
+crontab -l > /path/to/your/backup/file
+#+END_SRC
+Tip:
+to back up via rsync or other method ,you could just backup the entire/var/spool/cron directory.
+It contains all crontables of all users and more.
 *** grub
 
 **** grub2
