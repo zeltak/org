@@ -32413,6 +32413,7 @@ make sure you have
 #+END_SRC
 in your init file before you start capturing
 ******** setup capture from chrome-Registering Org-Protocol with XDG-open
+
 http://tech.memoryimprintstudio.com/?p=160
 
 This method should work with other browsers (e.g. Chrome) and applications (e.g. Acrobat), and it is a clean way of getting xdg-open (a tool for configuring default applications in Linux) to open org-protocol links and pass them to emacs. adopted and modified from those two links link1 , link2 and Registering Custom URI Handler
@@ -34177,11 +34178,18 @@ $PM_{ij}$
 **** Bibliography Management
 ***** formatting citations in .bib file
 ****** default format 
-In the author field, `commas` are used to separate last name from first name and `and` to separate authors.
+BibTeX has a strict syntax for lists of authors’ (or editors’) names in the BibTeX data file; if you write the list of names in a “natural”-seeming way, the chances are you will confuse BibTeX, and the output produced will be quite different from what you had hoped.
+
+Names should be expressed in one of the forms
 
 #+BEGIN_EXAMPLE
-Example: LastName1, FirstName1 and LastName2, FirstName2 and ... 
+First Last
+Last, First
+Last, Suffix, First
 #+END_EXAMPLE
+
+and lists of names should be separated with `and`. 
+
 
 ***** make bibtex load biblatex dialect by default
 add this on the top of the file
