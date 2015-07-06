@@ -26542,6 +26542,29 @@ With just C-u as the prefix argument `C-u w`  it uses file names relative to the
 
 As a special case, if point is on a directory headerline, w gives you the absolute name of that directory. Any prefix argument or marked files are ignored in this case.
 
+******** dired color theme config 
+
+For Dired
+
+    dired-directory: Face used for subdirectories.
+    dired-header: Face used for directory headers.
+    dired-mark: Face used for dired marks.
+    dired-flagged: Face used for files flagged for deletion.
+    dired-marked: Face used for marked files.
+    dired-perm-write: Face used to highlight permissions of group- and world-writable files.
+    dired-symlink: Face used for symbolic links.
+
+For Dired+
+
+    diredp-date-time: Face used for date and time in dired buffers.
+    diredp-deletion: Face used for deletion flags (D) in dired buffers.
+    diredp-deletion-file-name: Face used for names of deleted files in dired buffers.
+    diredp-dir-heading: Face used for directory headings in dired buffers.
+    diredp-file-name: Face used for file names (without suffixes) in dired buffers.
+    diredp-file-suffix: Face used for file suffixes in dired buffers (file extension).
+
+There are many more faces that you can explore in Emacs Dired.
+
 ******* copy,cut,paste
 
 ******** kill-rectangle  replace-rectangle
@@ -45615,18 +45638,50 @@ with a space on the command line, like so:
  nmap -O host1.target.com host2.target.com
 
 *** network manager
+**** nmcli (new cli interface)
+nmcli is a better alternative in recent versions of NetworkManager to connect to lan/wifi
+
+***** to connect to wifi use this syntax
+
+ nmcli dev wifi con Hotel-Primavera_EXT 
+
+#+BEGIN_SRC emacs-lisp :results none
+ nmcli dev wifi con Hotel-Primavera_EXT 
+#+END_SRC
+***** info
+To list the currently available network connections, issue a command as follows:
+
+#+BEGIN_SRC sh :results none
+nmcli
+con show
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+NAME               UUID                     TYPE            TIMESTAMP-REAL
+eth0               4d5c449a-a6c5-451c-8206  802-3-ethernet  Tue 22 Oct 2013 19:50:00 BST
+MyWiFi             91451385-4eb8-4080-8b82  802-11-wireless Tue 22 Oct 2013 08:50:08 BST
+Bond connection 1  720aab83-28dd-4598-9325  bond            never
+
+#+END_EXAMPLE
+
+Note that the NAME field in the output always denotes the connection ID (name). It is not the interface name even though it might look the same. In the example above eth0 is the connection ID given by the user to the profile applied to the interface eth0. In the second line the user has assigned the connection ID MyWiFi to the interface wlan0.
+Device status can also be viewed:
+#+BEGIN_SRC sh :results none
+nmcli dev status
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+DEVICE      TYPE            STATE
+wlan0      802-11-wireless  connected
+bond0       bond            connecting (getting IP configuration)
+eth0        ethernet        disconnected
+lo          loopback        unmanaged
+#+END_EXAMPLE
 
 **** cnetwork manager (CLI interface)
-
 first install cnetworkmanager
  then to connect to wifii: (use the man if problems occur)
  cnetworkmanager --connect=NETWORKSSID --wpa-pass=PASSHERE
-
-
-**** nmcli (alternative cli interface)
-
-one can try using nmcli as an alternative interface to cnetworkmanaer
-
 **** config network without need for root
 
 Add yourself to the network group (if not already done before)
