@@ -7378,8 +7378,7 @@ to enable
 /filter add irc_smart  irc_smart_filter 
 #+END_EXAMPLE
 
-also ?Alt+=? will enable disable it
-
+also【Alt+= 】will enable disable it
 
 ****** aspell
 
@@ -45639,15 +45638,33 @@ with a space on the command line, like so:
 
 *** network manager
 **** nmcli (new cli interface)
-nmcli is a better alternative in recent versions of NetworkManager to connect to lan/wifi
-
+@WARNING:nmcli is a better alternative in recent versions of NetworkManager to connect to lan/wifi
+more info: https://docs.fedoraproject.org/en-US/Fedora/20/html/Networking_Guide/sec-Connecting_to_a_Network_Using_nmcli.html
 ***** to connect to wifi use this syntax
-
- nmcli dev wifi con Hotel-Primavera_EXT 
-
-#+BEGIN_SRC emacs-lisp :results none
- nmcli dev wifi con Hotel-Primavera_EXT 
+first issue this command to check wifi signal and ssid etc
+#+BEGIN_SRC sh :results none
+nmcli dev wifi list
 #+END_SRC
+
+#+BEGIN_EXAMPLE
+SSID            MODE  CHAN  RATE     SIGNAL  BARS  SECURITY
+  FedoraTest     Infra  11    54 MB/s  98      ▂▄▆█  WPA1
+  Red Hat Guest  Infra  6     54 MB/s  97      ▂▄▆█  WPA2
+  Red Hat        Infra  6     54 MB/s  77      ▂▄▆_  WPA2 802.1X
+ Red Hat        Infra  40    54 MB/s  66      ▂▄▆_  WPA2 802.1X
+  VoIP           Infra  1     54 MB/s  32      ▂▄__  WEP
+  MyCafe         Infra  11    54 MB/s  39      ▂▄__  WPA2
+#+END_EXAMPLE
+
+the syntax to connect is as follow :
+
+nmcli dev wifi con NAME/UUID 
+₆In example₆ 
+#+BEGIN_SRC emacs-lisp :results none
+nmcli dev wifi con Hotel-Primavera_EXT 
+#+END_SRC
+a gui password prompt will appear. if no GUI is available use the pass command
+
 ***** info
 To list the currently available network connections, issue a command as follows:
 

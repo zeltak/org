@@ -8827,8 +8827,8 @@ m3d_agg <- (mod3[, list(LTPM =mean(pm_mod3, na.rm = TRUE),
 **** simple rename
 #+begin_src R
 setnames(DT,"MyName.1","MyNewName")
-#+end_src
-**** rename multiple variables/columns at once
+#+end_src@WARNING:
+**** rena@me multiple variables/columns at once
 #+begin_src R
 setnames(DT,"b","B")               # by name; no match() needed
 setnames(DT,3,"C")                 # by position
