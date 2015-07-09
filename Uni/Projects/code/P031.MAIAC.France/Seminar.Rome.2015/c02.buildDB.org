@@ -28,7 +28,6 @@
 ** persistent data
 *** load needed functions 
 #+BEGIN_SRC R  :session Rorg  :results none
-source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/geomerge_alpha_ex-1.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/geomerge_alpha.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/lsR.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
@@ -67,6 +66,7 @@ db2003 <- merge(days2003,aqua.2003, all.x = T)
 #+END_SRC 
 
 *** add land use
+this is only for time invariant data
 
 #+BEGIN_SRC R  :session Rorg  :results none
     lu <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/france.grid.allLU.rds")

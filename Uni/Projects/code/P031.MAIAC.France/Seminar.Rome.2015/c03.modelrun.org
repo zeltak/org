@@ -51,12 +51,12 @@ res$type <- c("pm25")
 **** mod1 formula 
 this is the one we ended up using 
   #+BEGIN_SRC R  :session *ansi-term*  :results none
-m1.formula <- as.formula(pm25 ~aod
+m1.formula <- as.formula(pm25 ~ aod
 #temporal
 +pbl.s
 #spatial
 +elev_m+tden
-+(1+aod|day/cid) +(1| aodid)   )  
++(1+aod|day/cid)  )  
 m1_sc <- lmer(m1.formula,data=mod1)
   #+END_SRC 
 **** raw formula 
@@ -216,7 +216,10 @@ res[res$type=="pm25", 'm1.noaod.time'] <- print(summary(lm(delpm ~ delpred, data
 *** main mod 1
 
   #+BEGIN_SRC R  :session *ansi-term*  :results none
-    m1_sc <- lmer(m1.formula,data=mod1)
+    m1_sc <- lmer(m1.formula,data=mod1,weights=normwt)
+    #checking the model
+# need to check carefully the model and all variables
+    summary(m1_sc)
     mod1[,pred.m1 := NULL]
     mod1$pred.m1 <- predict(m1_sc)
     res[res$type=="pm25", 'm1.R2'] <- print(summary(lm(pm25~pred.m1,data=mod1))$r.squared)
@@ -350,80 +353,6 @@ here we run a "90-10%" leave one out CV for mod 1
 
      ## #save results
      ## saveRDS(res,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/results.AQ.2003.rds")
-   #+END_SRC 
-
-*** Cross validation 5F mod 1
-here we run a "90-10%" leave one out CV for mod 1
-
-   #+BEGIN_SRC R  :session *ansi-term*  :results none
-     #---------------->>>> CV
-     #s1
-     splits_s1 <- splitdf(mod1)
-     test_s1 <- splits_s1$testset
-     train_s1 <- splits_s1$trainset
-     out_train_s1 <- lmer(m1.formula,data =  train_s1)
-     test_s1$pred.m1.cv <- predict(object=out_train_s1 ,newdata=test_s1,allow.new.levels=TRUE,re.form=NULL )
-     test_s1$iter<-"s1"
-     #s2
-     splits_s2 <- splitdf(mod1)
-     test_s2 <- splits_s2$testset
-     train_s2 <- splits_s2$trainset
-     out_train_s2 <- lmer(m1.formula,data =  train_s2 )
-     test_s2$pred.m1.cv <- predict(object=out_train_s2 ,newdata=test_s2,allow.new.levels=TRUE,re.form=NULL )
-     test_s2$iter<-"s2"
-     #s3
-     splits_s3 <- splitdf(mod1)
-     test_s3 <- splits_s3$testset
-     train_s3 <- splits_s3$trainset
-     out_train_s3 <- lmer(m1.formula,data =  train_s3 )
-     test_s3$pred.m1.cv <- predict(object=out_train_s3 ,newdata=test_s3,allow.new.levels=TRUE,re.form=NULL )
-     test_s3$iter<-"s3"
-     #s4
-     splits_s4 <- splitdf(mod1)
-     test_s4 <- splits_s4$testset
-     train_s4 <- splits_s4$trainset
-     out_train_s4 <- lmer(m1.formula,data =  train_s4 )
-     test_s4$pred.m1.cv <- predict(object=out_train_s4 ,newdata=test_s4,allow.new.levels=TRUE,re.form=NULL )
-     test_s4$iter<-"s4"
-     #s5
-     splits_s5 <- splitdf(mod1)
-     test_s5 <- splits_s5$testset
-     train_s5 <- splits_s5$trainset
-     out_train_s5 <- lmer(m1.formula,data =  train_s5 )
-     test_s5$pred.m1.cv <- predict(object=out_train_s5 ,newdata=test_s5,allow.new.levels=TRUE,re.form=NULL )
-     test_s5$iter<-"s5"
-
-     #BIND 1 dataset
-     mod1.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5))
-     #save
-     saveRDS(mod1.cv,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.CV.rds")
-     # cleanup (remove from WS) objects from CV
-     rm(list = ls(pattern = "train_|test_"))
-     #table updates
-     m1.fit.all.cv<-lm(pm25~pred.m1.cv,data=mod1.cv)
-     res[res$type=="pm25", 'm1cv.R2'] <- print(summary(lm(pm25~pred.m1.cv,data=mod1.cv))$r.squared)
-     res[res$type=="pm25", 'm1cv.I'] <-print(summary(lm(pm25~pred.m1.cv,data=mod1.cv))$coef[1,1])
-     res[res$type=="pm25", 'm1cv.Ise'] <-print(summary(lm(pm25~pred.m1.cv,data=mod1.cv))$coef[1,2])
-     res[res$type=="pm25", 'm1cv.slope'] <-print(summary(lm(pm25~pred.m1.cv,data=mod1.cv))$coef[2,1])
-     res[res$type=="pm25", 'm1cv.slopese'] <-print(summary(lm(pm25~pred.m1.cv,data=mod1.cv))$coef[2,2])
-     #RMSPE
-     res[res$type=="pm25", 'm1cv.rmspe'] <- print(rmse(residuals(m1.fit.all.cv)))
-     #spatial
-     spatialall.cv<-mod1.cv %>%
-         group_by(stn) %>%
-         summarise(barpm = mean(pm25, na.rm=TRUE), barpred = mean(pred.m1, na.rm=TRUE)) 
-     m1.fit.all.cv.s <- lm(barpm ~ barpred, data=spatialall.cv)
-     res[res$type=="pm25", 'm1cv.R2.space'] <-  print(summary(lm(barpm ~ barpred, data=spatialall.cv))$r.squared)
-     res[res$type=="pm25", 'm1cv.rmspe.space'] <- print(rmse(residuals(m1.fit.all.cv.s)))
-     #temporal
-     tempoall.cv<-left_join(mod1.cv,spatialall.cv)
-     tempoall.cv$delpm <-tempoall.cv$pm25-tempoall.cv$barpm
-     tempoall.cv$delpred <-tempoall.cv$pred.m1.cv-tempoall.cv$barpred
-     mod_temporal.cv <- lm(delpm ~ delpred, data=tempoall.cv)
-     res[res$type=="pm25", 'm1cv.R2.time'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.cv))$r.squared)
-
-     #save results
-     saveRDS(res,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/results.AQ.2003.rds")
    #+END_SRC 
 
 *** mod2 
