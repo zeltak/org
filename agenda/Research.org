@@ -1043,26 +1043,6 @@ lowest level
  versions and datasets - when is the “new” version coming
  using Terra with Aqua
 
-**** meeting joel rome 
-***** support vector regression 
-***** regress and calibrate 2.5/10 ration but take into account long term dust trends (indicator)
-try support vector regression?
-pbl ,ws , humidaty 
-e1072- SVR R package
-weight the predicted pm2.5 as lower weights opposed to true PM10
-run it region by region and use lu/temporal terms to get a regional prediction.
-CV- built in for SVR
-***** for france look at sepaldi data for swiss
-talk to kees about that
-***** look into meris data for aod
-basian latnet variable  model
-***** consider inverse distance (1/dist) for all the dist variables  
-
-***** talk to adar to include wrf parameters in model
-***** talk to shi about contacting qian and shi and get access to WRF
-***** talk to omer about sending kees the data
-also look at the imperial coleage model and comparing it to his LUR regression
-
 ** Ta model (next branch) 
 *** stage 3 regression by grid cell
 You do not need to run a model with a random effect for each grid cell. Instead, you can run a separate regression for each gridcell, regressing the non-missing predicted Ta against the mean of monitored Ta within 100km. This gives you 1 million regressions to do, but you can divide the gridcells into 100 groups and run 100 jobs on the cluster and it will run in an hour. We do this when we regress the 5000,000 methylation sites against predictors in the NAS.  Also, we need some of the land use terms.
@@ -1620,8 +1600,28 @@ alexandra cleaning: Dynamic threshold of high aod (exclude high aod if monitor a
 pls regression for both inclufing aqua-terra??
 ** massimo
 meyter 2011 data (aod-pm) and height of stn for 2009-2011
-** maya
-** TODO talk to meytar about PM data availability in lag boomer
+** meeting joel rome 
+*** support vector regression 
+*** regress and calibrate 2.5/10 ration but take into account long term dust trends (indicator)
+try support vector regression?
+pbl ,ws , humidaty 
+e1072- SVR R package
+weight the predicted pm2.5 as lower weights opposed to true PM10
+run it region by region and use lu/temporal terms to get a regional prediction.
+CV- built in for SVR
+*** for france look at sepaldi data for swiss
+talk to kees about that
+*** look into meris data for aod
+basian latnet variable  model
+*** consider inverse distance (1/dist) for all the dist variables  
+
+*** talk to adar to include wrf parameters in model
+*** talk to shi about contacting qian and shi and get access to WRF
+*** talk to omer about sending kees the data
+also look at the imperial coleage model and comparing it to his LUR regression
+
+*** add as.factor(month)*aod in model
+*** israel next paper: check how model preforms in lag baomer and yom kipur
 * Papers
 ** List of reviewers
 *** jaime madrigano
