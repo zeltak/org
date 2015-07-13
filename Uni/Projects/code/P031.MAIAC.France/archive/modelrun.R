@@ -18,12 +18,43 @@ library(DataCombine)
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
+###year 2003
+#-------------------->> RES TABLE
+res <- matrix(nrow=1, ncol=48)
+res <- data.frame(res)
+colnames(res) <- c(
+"m1.raw","m1.raw.space","m1.raw.time","m1.time","m1.time.space","m1.time.time","m1.space","m1.space.space","m1.space.time","m1.noaod","m1.noaod.space","m1.noaod.time"
+,"m1.R2","m1.rmspe","m1.R2.space","m1.R2.time","m1.rmspe.space" #mod1 Full
+,"m1cv.R2","m1cv.I","m1cv.Ise","m1cv.slope","m1cv.slopese","m1cv.rmspe","m1cv.R2.space","m1cv.R2.time","m1cv.rmspe.space" #mod1 CV
+,"m1cvloc.R2","m1cvloc.I","m1cvloc.Ise","m1cvloc.slope","m1cvloc.slopese","m1cvloc.rmspe","m1cvloc.R2.space","m1cvloc.R2.time","m1cvloc.rmspe.space"#loc m1
+,"m2.R2" #mod2
+,"m3.t31","m3.t33" #mod3 tests
+,"m3.R2","m3.rmspe","m3.R2.space","m3.R2.time","m3.rmspe.space" #mod3
+,"m3.I","m3.Ise","m3.slope","m3.slopese")#Extra
+res$type <- c("pm25")
+
+# m1.formula <- as.formula(pm25 ~aod
+# #temporal
+# #+pbl.s
+# #spatial
+# +elev_m+tden
+# +(1+aod|day/cid) +(1| aodid)   )  
+# m1_sc <- lmer(m1.formula,data=mod1)
+
+names(mod1)
+
 m1.formula <- as.formula(pm25 ~aod
 #temporal
-+pbl.s
+#+pbl.s
 #spatial
 +elev_m+tden
-+(1+aod|day/cid) +(1| aodid))  
++(1+aod|day/cid) +(1| aodid)   )  
+m1_sc <- lmer(m1.formula,data=mod1)
+
+
+
+
+
 
 
 m1.raw.formula <- as.formula(pm25~ aod+(1+aod|day))
@@ -40,12 +71,12 @@ m1.spat.formula <- as.formula(pm25 ~aod
 
 m1.temp.formula <- as.formula(pm25 ~aod
  #temporal
- +temp.s+winds.s+elev.s+tden.s+pden.s+pbl.s
+ +temp.s+elev.s+tden.s+pden.s+pbl.s
 +(1+aod|day/cid))
 
 m1.noaod.formula <- as.formula(pm25 ~
  #temporal
- +temp.s+winds.s+elev.s+tden.s+pden.s+pbl.s
+ +temp.s+elev.s+tden.s+pden.s+pbl.s
  #spatial
  #+dair.s
 +dport.s+dtrain.s+daroad.s+dcoast.s+dwb.s    
@@ -60,25 +91,12 @@ m1.noaod.formula <- as.formula(pm25 ~
 +p.urban.s
 +(1|day))
 
-#-------------------->> RES TABLE
-res <- matrix(nrow=1, ncol=48)
-res <- data.frame(res)
-colnames(res) <- c(
-"m1.raw","m1.raw.space","m1.raw.time","m1.time","m1.time.space","m1.time.time","m1.space","m1.space.space","m1.space.time","m1.noaod","m1.noaod.space","m1.noaod.time"
-,"m1.R2","m1.rmspe","m1.R2.space","m1.R2.time","m1.rmspe.space" #mod1 Full
-,"m1cv.R2","m1cv.I","m1cv.Ise","m1cv.slope","m1cv.slopese","m1cv.rmspe","m1cv.R2.space","m1cv.R2.time","m1cv.rmspe.space" #mod1 CV
-,"m1cvloc.R2","m1cvloc.I","m1cvloc.Ise","m1cvloc.slope","m1cvloc.slopese","m1cvloc.rmspe","m1cvloc.R2.space","m1cvloc.R2.time","m1cvloc.rmspe.space"#loc m1
-,"m2.R2" #mod2
-,"m3.t31","m3.t33" #mod3 tests
-,"m3.R2","m3.rmspe","m3.R2.space","m3.R2.time","m3.rmspe.space" #mod3
-,"m3.I","m3.Ise","m3.slope","m3.slopese")#Extra
-res$type <- c("pm25")
-
-mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.c2.rds")
+#mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.c2.rds")
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.c3.rds")
 describe(mod1$pm25)
 #dim(mod1)
 
-m1_sc <- lmer(m1.raw.formula,data=mod1,weights=normwt)
+m1_sc <- lmer(m1.raw.formula,data=mod1 )
 mod1[,pred.m1 := NULL]
 mod1$pred.m1 <- predict(m1_sc)
 print(summary(lm(pm25~pred.m1,data=mod1))$r.squared)
@@ -188,43 +206,37 @@ saveRDS(res,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/results.AQ
 splits_s1 <- splitdf(mod1)
 test_s1 <- splits_s1$testset
 train_s1 <- splits_s1$trainset
-out_train_s1 <- lmer(m1.formula,data =  train_s1,weights=normwt)
+out_train_s1 <- lmer(m1.formula,data =  train_s1)
 test_s1$pred.m1.cv <- predict(object=out_train_s1 ,newdata=test_s1,allow.new.levels=TRUE,re.form=NULL )
 test_s1$iter<-"s1"
 #s2
 splits_s2 <- splitdf(mod1)
 test_s2 <- splits_s2$testset
 train_s2 <- splits_s2$trainset
-out_train_s2 <- lmer(m1.formula,data =  train_s2,weights=normwt)
+out_train_s2 <- lmer(m1.formula,data =  train_s2 )
 test_s2$pred.m1.cv <- predict(object=out_train_s2 ,newdata=test_s2,allow.new.levels=TRUE,re.form=NULL )
 test_s2$iter<-"s2"
 #s3
 splits_s3 <- splitdf(mod1)
 test_s3 <- splits_s3$testset
 train_s3 <- splits_s3$trainset
-out_train_s3 <- lmer(m1.formula,data =  train_s3,weights=normwt)
+out_train_s3 <- lmer(m1.formula,data =  train_s3 )
 test_s3$pred.m1.cv <- predict(object=out_train_s3 ,newdata=test_s3,allow.new.levels=TRUE,re.form=NULL )
 test_s3$iter<-"s3"
 #s4
 splits_s4 <- splitdf(mod1)
 test_s4 <- splits_s4$testset
 train_s4 <- splits_s4$trainset
-out_train_s4 <- lmer(m1.formula,data =  train_s4,weights=normwt)
+out_train_s4 <- lmer(m1.formula,data =  train_s4 )
 test_s4$pred.m1.cv <- predict(object=out_train_s4 ,newdata=test_s4,allow.new.levels=TRUE,re.form=NULL )
 test_s4$iter<-"s4"
 #s5
 splits_s5 <- splitdf(mod1)
 test_s5 <- splits_s5$testset
 train_s5 <- splits_s5$trainset
-out_train_s5 <- lmer(m1.formula,data =  train_s5,weights=normwt)
+out_train_s5 <- lmer(m1.formula,data =  train_s5 )
 test_s5$pred.m1.cv <- predict(object=out_train_s5 ,newdata=test_s5,allow.new.levels=TRUE,re.form=NULL )
 test_s5$iter<-"s5"
-#s6
-splits_s6 <- splitdf(mod1)
-test_s6 <- splits_s6$testset
-train_s6 <- splits_s6$trainset
-out_train_s6 <- lmer(m1.formula,data =  train_s6,weights=normwt)
-test_s6$pred.m1.cv <- predict(object=out_train_s6 ,newdata=test_s6,allow.new.levels=TRUE,re.form=NULL )
 
 #BIND 1 dataset
 mod1.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5))
@@ -261,10 +273,15 @@ saveRDS(res,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/results.AQ
 mod2 <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.c.rds")
 
 mod2[, pred.m2 := predict(object=m1_sc,newdata=mod2,allow.new.levels=TRUE,re.form=NULL)]
-#delete implossible values
-# mod2 <- mod2[pred.m2 > 0.00000000000001 , ]
-# mod2 <- mod2[pred.m2 < 200   , ]
+gc()
+setkey(mod2,day, aodid)
+mod2<-mod2[!is.na(meanPM25)]
+mod2[, bimon := (m + 1) %/% 2]
+#summary(mod2$pred.m2)
+gc()
+mod2 <- select(mod2,day,aodid,m,meanPM25,long_aod,lat_aod,bimon,pred.m2,aod)
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.PM25.predm2.rds")
+keep(mod2,res,rmse,splitdf, sure=TRUE) 
 gc()
 
 ## out <-mod2 %>%
@@ -273,7 +290,7 @@ gc()
 ## out<-na.omit(out)
 ## write.csv(out,"~/ZH_tmp/Rout1.csv")
 
-## mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/Xmod1C.AQ.PM25.rds")
+## mod1 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1C.AQ.PM25.rds")
 ## mod1[,aodid:= paste(mod1$long_aod.x,mod1$lat_aod.x,sep="-")]
 ## mod1<-mod1[,c("aodid","day","PM25","stn","c"),with=FALSE]
 ## #R2.m3
@@ -282,15 +299,6 @@ gc()
 ## mod1 <- merge(mod1,mod2[, list(day,aodid,pred.m2)], all.x = T)
 ## m3.fit.all<- summary(lm(PM25~pred.m2,data=mod1))
 ## res[res$type=="PM25", 'm2.R2'] <- print(summary(lm(PM25~pred.m2,data=mod1))$r.squared)
-
-setkey(mod2,day, aodid)
- mod2<-mod2[!is.na(meanPM25)]
- mod2[, bimon := (m + 1) %/% 2]
- gc()
-mod2 <- select(mod2,day,aodid,m,meanPM25,long_aod,lat_aod,bimon,pred.m2,aod)
-keep(mod2,res,rmse,splitdf, sure=TRUE) 
-gc()
-
 
 
 m2.smooth = lme(pred.m2 ~ meanPM25,random = list(aodid= ~1 + meanPM25),control=lmeControl(opt = "optim"), data= mod2 )
@@ -341,6 +349,7 @@ saveRDS(Final_pred_all,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR
 mod3 <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2003.rds")
 #for PM25
 mod3 <- select(mod3,day,aodid,m,meanPM25,long_aod,lat_aod)
+mod3[, m := as.numeric(format(day, "%m")) ]
 mod3[, bimon := (m + 1) %/% 2]
 setkey(mod3,day, aodid)
 mod3<-mod3[!is.na(meanPM25)]
@@ -407,11 +416,10 @@ mod3_bimon6 <- merge(mod3_bimon6, uniq_gid_bimon6[,list(aodid,gpred)], all.x = T
 mod3 <- rbind(mod3_bimon1,mod3_bimon2,mod3_bimon3,mod3_bimon4,mod3_bimon5,mod3_bimon6)
 # create pred.m3
 mod3$pred.m3 <-mod3$pred.m3.mix+mod3$gpred
-hist(mod3$pred.m3)
+#hist(mod3$pred.m3)
 #describe(mod3$pred.m3)
 #recode negative into zero
 mod3 <- mod3[pred.m3  < 0 , pred  := 0.1]
-
 
 saveRDS(mod3,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.pred.AQ.2003.rds")
 keep(data.m3,mod3,res,rmse, sure=TRUE) 
@@ -448,8 +456,6 @@ mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ
   tempoall$delpred <-tempoall$pred.m3-tempoall$barpred
   mod_temporal <- lm(delpm ~ delpred, data=tempoall)
   res[res$type=="pm25", 'm3.R2.time'] <-  print(summary(lm(delpm ~ delpred, data=tempoall))$r.squared)
-
-
 saveRDS(res, "/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/resALL.AQ.2003.PM25.rds")
 
 #import mod2
@@ -480,3 +486,6 @@ out<-na.omit(out)
 write.csv(out,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/map.bestpred.AQ.2003.PM25.csv")
 #save res
 saveRDS(res,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/results.AQ.2003.rds")
+
+keep(rmse,splitdf, sure=TRUE) 
+gc()

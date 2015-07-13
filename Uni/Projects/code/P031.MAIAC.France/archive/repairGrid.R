@@ -1,4 +1,6 @@
 #find lat/lon point in a certain distance from a known lat/lon point
+#clear workspace
+rm(list = ls())
 library(data.table)
 library(geosphere)
 #dist = (arccos(sin(lat1) · sin(lat2)) + (cos(lat1) · cos(lat2)) · cos(lon1 - lon2)) · R
@@ -14,7 +16,7 @@ setnames(lon_old,"Longitude","lon_old")
 r=6378137 #assuming a spherical approximationa of the figure of the Earth.  R is Radius of the Earth in m.
 
 b = 135 #Bearing is 315 degrees between points (center to upper left) (upper left to center is 135)
-d = sqrt(2000) #Distance in m (diagonal of 1km square)
+d = sqrt(0.5)*1000 #Distance in m (diagonal of 1km square)
 L1=cbind(lon_old,lat_old)#insert 2 column matrix with all lat-long pairs
 L1=as.data.table(L1)
 

@@ -48,16 +48,27 @@ res$type <- c("pm25")
 #+END_SRC 
 
 *** formulas
-**** mod1 formula 
+**** mod1 formula (simple)
 this is the one we ended up using 
   #+BEGIN_SRC R  :session *ansi-term*  :results none
-m1.formula <- as.formula(pm25 ~aod
-#temporal
-+pbl.s
-#spatial
-+elev_m+tden
-+(1+aod|day/cid) +(1| aodid)   )  
-m1_sc <- lmer(m1.formula,data=mod1)
+    m1.formula <- as.formula(pm25 ~aod
+    #temporal
+    +pbl.s
+    #spatial
+    +elev_m+tden
+    +(1+aod|day/cid) +(1| aodid)   )  
+    m1_sc <- lmer(m1.formula,data=mod1)
+  #+END_SRC 
+**** mod1 formula (with splines)
+this is the one we ended up using 
+  #+BEGIN_SRC R  :session *ansi-term*  :results none
+    m1.formula <- as.formula(pm25 ~aod
+    #temporal
+    +pbl.s
+    #spatial
+    +elev_m+tden
+    +(1+aod|day/cid) +(1| aodid)   )  
+    m1_sc <- lmer(m1.formula,data=mod1)
   #+END_SRC 
 **** raw formula 
 
@@ -110,11 +121,9 @@ this is the one we ended up using
 
      
 
-
 *** load cleaned db
   #+BEGIN_SRC R  :session *ansi-term*  :results none
-mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.c2.rds")
-#mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.c3.rds")
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.c3.rds")
 describe(mod1$pm25)
 #dim(mod1)
   #+END_SRC 
@@ -455,30 +464,6 @@ gc()
   ## write.csv(out,"~/ZH_tmp/Rout1.csv")
 #+END_SRC 
 
-**** check R2
-#+BEGIN_SRC R  :session *ansi-term*  :results none
-  ## mod1 <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1C.AQ.PM25.rds")
-  ## mod1[,aodid:= paste(mod1$long_aod.x,mod1$lat_aod.x,sep="-")]
-  ## mod1<-mod1[,c("aodid","day","PM25","stn","c"),with=FALSE]
-  ## #R2.m3
-  ## setkey(mod2,day,aodid)
-  ## setkey(mod1,day,aodid)
-  ## mod1 <- merge(mod1,mod2[, list(day,aodid,pred.m2)], all.x = T)
-  ## m3.fit.all<- summary(lm(PM25~pred.m2,data=mod1))
-  ## res[res$type=="PM25", 'm2.R2'] <- print(summary(lm(PM25~pred.m2,data=mod1))$r.squared)
-#+END_SRC 
-
-**** Prepare for mod3
-#+BEGIN_SRC R  :session *ansi-term*  :results none
-setkey(mod2,day, aodid)
-mod2<-mod2[!is.na(meanPM25)]
-mod2[, bimon := (m + 1) %/% 2]
-gc()
-mod2 <- select(mod2,day,aodid,m,meanPM25,long_aod,lat_aod,bimon,pred.m2,aod)
-keep(mod2,res,rmse,splitdf, sure=TRUE) 
-gc()
-#+END_SRC 
-
 **** lmer 
 run the lmer part regressing stage 2 pred Vs mean pm
 
@@ -535,6 +520,7 @@ saveRDS(Final_pred_all,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR
 
 mod3 <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2003.rds")
 #for PM25
+mod3[, m := as.numeric(format(day, "%m")) ]
 mod3 <- select(mod3,day,aodid,m,meanPM25,long_aod,lat_aod)
 mod3[, bimon := (m + 1) %/% 2]
 setkey(mod3,day, aodid)

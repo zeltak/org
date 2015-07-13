@@ -32,7 +32,6 @@
   #+END_SRC 
 
 
-
 *** year 2003
 ***** mod1
 ****** load mod 1 file for PM25
@@ -99,7 +98,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.c3.rds")
                  
 #+END_SRC
 
@@ -173,10 +172,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.c.rds")
  #+END_SRC
 ***** clear  year 2003
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -324,10 +323,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2004.c.rds")
  #+END_SRC
 ***** clear  year 2004
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -401,7 +400,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2005.PM25.c3.rds")
                  
 #+END_SRC
 
@@ -475,10 +474,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2005.c.rds")
  #+END_SRC
 ***** clear  year 2005
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -552,7 +551,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2006.PM25.c3.rds")
                  
 #+END_SRC
 
@@ -626,10 +625,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2006.c.rds")
  #+END_SRC
 ***** clear  year 2006
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -703,7 +702,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2007.PM25.c3.rds")
                  
 #+END_SRC
 
@@ -777,10 +776,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2007.c.rds")
  #+END_SRC
 ***** clear  year 2007
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -854,7 +853,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2008.PM25.c3.rds")
                  
 #+END_SRC
 
@@ -928,10 +927,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2008.c.rds")
  #+END_SRC
 ***** clear  year 2008
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -1005,7 +1004,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2009.PM25.c3.rds")
                  
 #+END_SRC
 
@@ -1079,10 +1078,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2009.c.rds")
  #+END_SRC
 ***** clear  year 2009
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -1156,7 +1155,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2010.PM25.c3.rds")
                  
 #+END_SRC
 
@@ -1230,10 +1229,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2010.c.rds")
  #+END_SRC
 ***** clear  year 2010
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -1307,7 +1306,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2011.PM25.c3.rds")
                  
 #+END_SRC
 
@@ -1381,10 +1380,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2011.c.rds")
  #+END_SRC
 ***** clear  year 2011
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -1458,7 +1457,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2012.PM25.c3.rds")
                  
 #+END_SRC
 
@@ -1532,10 +1531,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2012.c.rds")
  #+END_SRC
 ***** clear  year 2012
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -1609,7 +1608,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2013.PM25.c3.rds")
                  
 #+END_SRC
 
@@ -1683,10 +1682,11 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2013.c.rds")
  #+END_SRC
 ***** clear  year 2013
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
+
 
 
 
@@ -1719,9 +1719,6 @@ gc()
   library(splines)
   library(DataCombine)
   #+END_SRC 
-
-
-
 
 
 *** year 2003
@@ -1790,7 +1787,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM10.c3.rds")
                  
 #+END_SRC
 
@@ -1864,10 +1861,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.c.rds")
  #+END_SRC
 ***** clear  year 2003
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -2015,10 +2012,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2004.c.rds")
  #+END_SRC
 ***** clear  year 2004
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -2092,7 +2089,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2005.PM10.c3.rds")
                  
 #+END_SRC
 
@@ -2166,10 +2163,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2005.c.rds")
  #+END_SRC
 ***** clear  year 2005
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -2243,7 +2240,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2006.PM10.c3.rds")
                  
 #+END_SRC
 
@@ -2317,10 +2314,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2006.c.rds")
  #+END_SRC
 ***** clear  year 2006
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -2394,7 +2391,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2007.PM10.c3.rds")
                  
 #+END_SRC
 
@@ -2468,10 +2465,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2007.c.rds")
  #+END_SRC
 ***** clear  year 2007
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -2545,7 +2542,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2008.PM10.c3.rds")
                  
 #+END_SRC
 
@@ -2619,10 +2616,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2008.c.rds")
  #+END_SRC
 ***** clear  year 2008
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -2696,7 +2693,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2009.PM10.c3.rds")
                  
 #+END_SRC
 
@@ -2770,10 +2767,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2009.c.rds")
  #+END_SRC
 ***** clear  year 2009
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -2847,7 +2844,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2010.PM10.c3.rds")
                  
 #+END_SRC
 
@@ -2921,10 +2918,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2010.c.rds")
  #+END_SRC
 ***** clear  year 2010
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -2998,7 +2995,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2011.PM10.c3.rds")
                  
 #+END_SRC
 
@@ -3072,10 +3069,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2011.c.rds")
  #+END_SRC
 ***** clear  year 2011
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -3149,7 +3146,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2012.PM10.c3.rds")
                  
 #+END_SRC
 
@@ -3223,10 +3220,10 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2012.c.rds")
  #+END_SRC
 ***** clear  year 2012
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
 
 
 
@@ -3300,13 +3297,13 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 #save
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM10.c3.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2013.PM10.c3.rds")
                  
 #+END_SRC
 
 ******* clean bad aod-pm and save
 
-    #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 ################# clean BAD STN PM10 and check if improved model?
 raWDaf <- ddply(mod1, c("stn","c"), 
          function(x) {
@@ -3374,10 +3371,12 @@ gc()
 saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2013.c.rds")
  #+END_SRC
 ***** clear  year 2013
-  #+BEGIN_SRC R  :session *ansi-term*  :results none
+#+BEGIN_SRC R  :session *ansi-term*  :results none
 keep(mod1, sure=TRUE) 
 gc()
-  #+END_SRC 
+#+END_SRC 
+
+
 
 
 

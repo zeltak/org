@@ -377,7 +377,7 @@ mod1.r4<-filter(mod1,cid==4)
 mod1.r5<-filter(mod1,cid==5) 
 #+END_SRC
 
-**** r1 R2= 0.92 (mountain areas)
+**** [#A] r1 R2= 0.92 (mountain areas)
 
   #+BEGIN_SRC R  :session *ansi-term*  :results none
   m1_sc <- lmer(m1.formula,data=mod1.r1 ,weights=normwt)
@@ -407,7 +407,7 @@ print(rmse(residuals(m1_sc)))
   print(rmse(residuals(m1_sc)))
   #+END_SRC 
 
-**** r4 R4=0.XX mediteranian wont run
+**** r4 R4=0.72  mediteranian wont run
 
   #+BEGIN_SRC R  :session *ansi-term*  :results none
   m1_sc <- lmer(m1.formula,data=mod1.r4 ,weights=normwt)
