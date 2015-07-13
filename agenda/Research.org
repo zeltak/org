@@ -955,7 +955,7 @@ round(mod1table$', i, '_', j, ', 2)', sep='')))
 #+END_SRC
 
 **** using WRF data for met.pbl etc data (see AE I reviewed)- also look at sattelite derived column no2-from same paper 
-
+q
 **** TODO combine aqua and terra
 I have an idea for combining the satellites but we need to get NE done quickly and I thought we should save it for your Midwest paper. You should expect half or more of the observations to be missing. What is your missing percentage?
 Regarding the two satellites you need to remember some stuff from Petros' air pollution course. In the morning the mixing height is low. Local pollution is trapped near the ground, an is a large fraction of particles. It is mostly from traffic or from oil heat in the winter, and so a lot of the particles are black, and a lot are fresh, and hence small. I n the afternoon the mixing height is high, transported particles mix down, and the color and size distribution change. Therefore, the calibration changes. So we need to do the stage 1 calibration separately for each satellite, and then combine, since one is in the morning and one in the afternoon. 

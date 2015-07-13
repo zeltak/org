@@ -26564,6 +26564,19 @@ For Dired+
 
 There are many more faces that you can explore in Emacs Dired.
 
+******** advanced marking 
+You can mark files in dired by pressing m on the line of a file, and unflag it by pressing u. You can mark several files individually using m or mark all files whose names match a search string by using % m string <RET>. Use U to unmark all files.
+
+The strings used for matching are regular expressions, so are very powerful. For example:
+
+% m test <RET> will mark all files with names containing the string "test" (equivalent to *test* on the command line.
+% m ^test <RET> will mark all files with names starting with the string "test" (equivalent to test* on the command line).
+% m txt$ <RET> will mark all files with names ending with the string "txt" (equivalent to *txt on the command line).
+% m ^test.*org$ <RET> will mark all files with names starting with the string "test" and ending with "org" (equivalent to test*org on the command line).
+% m [kxj] <RET> will mark all files with names containing the letters k, x, or j
+% m [kxj] <RET> will mark all files with names containing the letters k, x, or j
+% m [6-9] <RET> will mark all files with names containing the digits 6,7,8,9
+
 ******* copy,cut,paste
 
 ******** kill-rectangle  replace-rectangle
@@ -29112,7 +29125,6 @@ For more information, type M-x describe-function RET company-mode.
 To customize other aspects of its behavior, type M-x customize-group RET company.
 	
 ********** add/remove backnends
-
 To see or change the list of enabled back-ends, type M-x customize-variable RET company-backends. Also see its description for information on writing a back-end.
 For information on specific back-ends, also check out the comments inside the respective files.
 
@@ -41956,7 +41968,7 @@ exactly the permissions, no more and no less.
 [[~/Dropbox/Org/Tech/linux_files/permissnapshot5.png]]
 
 *** Find Duplicate Files
-
+**** built in way
 The sure-fire way to find duplicate files is by comparing MD5 hashes.
 This compares only the first 20 characters of the md5sum, but it still
 takes a long time. It's the most accurate method, so I don't mind the
@@ -41973,6 +41985,14 @@ lot faster:
  I use the first method when I start accumulating a lot of sloppy
 backups, and have too many copies of the same files littering my backup
 servers.
+**** using the fdups app
+install fdupes
+
+then issue 
+
+#+BEGIN_SRC sh
+fdupes /path/to/dir/
+#+END_SRC
 
 *** output (pipe/list) all file and files in subdirectories into a text file
 cd into desired dir
