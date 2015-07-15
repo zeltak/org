@@ -40388,7 +40388,7 @@ first  you need to generate a gpg key,in a process similar to generating ssh key
 gpg --full-gen-key  
 #+END_SRC
 
-$Note-its common practice to use your email as your ket user$ 
+$Note-its common practice to use your email as your key user$ 
 
 this will launch a wizard which will end up creating a .gnupg foder and related files in it
 list which keys are available 
@@ -40424,8 +40424,10 @@ you can also import a key similarly
 **** gpg-agent
 ***** info and install
 gpg-agent is mostly used as daemon to request and cache the password for the keychain. This is useful if GnuPG is used from an external program like a mail client. It can be activated by adding following line in gpg.conf:
+
 file:~/.gnupg/gpg.conf
 and add this line
+
 #+BEGIN_EXAMPLE
 use-agent
 #+END_EXAMPLE
@@ -40444,6 +40446,7 @@ export GPG_AGENT_INFO  # the env file does not contain the export statement
 export SSH_AUTH_SOCK   # enable gpg-agent for ssh
 #+END_SRC
 Log out of the session and log back in. Check if gpg-agent is activated:
+
 #+BEGIN_SRC sh :results none
 pgrep gpg-agent
 #+END_SRC
@@ -40451,6 +40454,7 @@ pgrep gpg-agent
 ***** Configuration
 gpg-agent can be configured via file:~/.gnupg/gpg-agent.conf file. 
 The configuration options are listed in man gpg-agent. For example you can change cache ttl for unused keys:
+
 #+BEGIN_EXAMPLE
 default-cache-ttl 3600
 #+END_EXAMPLE
