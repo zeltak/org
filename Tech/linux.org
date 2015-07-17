@@ -30777,7 +30777,6 @@ You may need to restart emacs, so it can find mu4e in its load-path. If, even af
 #+END_SRC
 
 
-
 ********* pdf-tools
 https://github.com/politza/pdf-tools
 ********** install 
@@ -30786,6 +30785,24 @@ he package may be installed via melpa and it will try to build the server part w
 in arch you will need all the dev packages as well as poppler and imagemagick
 
 once you install from melpa, use M-x `pdf-tools-install` and hopefully it will start installing the server 
+
+
+********* sunrise 
+********** base 
+*********** launch sunrise
+The command `sunrise' invokes sunrise
+The command `sunrise-cd' invokes Sunrise and automatically selects the current file wherever it is in the  filesystem. Type h at any moment for information on available key bindings.
+********** functions 
+*********** copy a directory structure without copying the files
+select the directories you want to clone, press K (sr-do-clone) and select “(D)irectories only”.
+
+Cloning was devised as a more general operation than recursive copying of files and directories[1]: all directories are created with the same name and structure at the destination, while what happens to all the other files depends on the option you choose:
+
+“(D)irectories only” - ignores all files, copies only directories,
+“(C)opies” - performs a traditional copy of all files,
+“(H)ardlinks” - makes every new file a (hard) link to the original one (obviously the source and destination directories must be in the same partition for this to work),
+“(S)ymlinks” - creates absolute symbolic links for all files in the tree,
+“(R)elative symlinks” - creates relative symbolic links for all files.
 
 ******* registers
 ******** basics
