@@ -8,29 +8,25 @@
 
 ** TODO RASI: Talk about GPG and how to use same for email mbsync 
 ** sunrise
--if only 1 match left in fuzzt match- auto select it (that is enter dir)
--how is checkpoint different from boomarks? the documentation is sparse on this point, when I issue sr-restore-checkpoint I still get my normal Emacs boomakrs there as well
+*** questions 
+1) REQUEST: if there is only 1 match left in fuzzy match- can SR auto select it (that is enter dir)
 
-Been coding all night? Enjoy the Sunrise! (or press q to quit)
-Type "q" in help window to restore its previous buffer, <M-next> to scroll help.
-Omitting...
-(Nothing to omit)
-Omitting...
-(Nothing to omit)
-Omitting...
-(Nothing to omit)
-Omitting...
-(Nothing to omit)
-Omitting...
-(Nothing to omit)
-Omitting...
-(Nothing to omit)
-Omitting...
-(Nothing to omit)
-Omitting...
-(Nothing to omit)
-End of buffer [2 times]
-C-c e is undefined
+2) this is what casues the issue with the second pane shifting to another buffer. I have this in my dired config
+(define-key dired-mode-map (kbd "<left>") 'diredp-up-directory-reuse-dir-buffer )
+(define-key dired-mode-map (kbd "<right>") 'diredp-find-file-reuse-dir-buffer )
+
+I like to use the left and right keys to easly move to/from dirs (this is called lynx like motion in mc). are there similar SR command that do that?
+
+3) how is checkpoint different from boomarks? the documentation is sparse on this point, when I issue sr-restore-checkpoint I still get my normal Emacs boomakrs there as well
+
+
+4) I still cant get some options to work for me. mainly these (I set them all via customize-group as you suggested)
+
+(sr-show-hidden-files t) 
+SR still doesn't come up with dotfiles shown
+
+5) for sr-show-files-info can the return info be in MB/GB (and not bytes :))
+
 
 
 *** Navigation

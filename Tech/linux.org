@@ -30804,6 +30804,26 @@ Cloning was devised as a more general operation than recursive copying of files 
 “(S)ymlinks” - creates absolute symbolic links for all files in the tree,
 “(R)elative symlinks” - creates relative symbolic links for all files.
 
+********** terminal integration
+Terminal integration and Command line expansion: integrates tightly with
+ `eshell' and `term-mode' to allow interaction between terminal emulators in
+ line mode (C-c C-j) and the panes: the most important navigation commands
+ (up, down, mark, unmark, go to parent dir) can be executed on the active pane
+ directly from the terminal by pressing the usual keys with Meta: <M-up>,
+ <M-down>, etc. Additionally, the following substitutions are automagically
+ performed in `eshell' and `term-line-mode':
+     %f - expands to the currently selected file in the left pane
+     %F - expands to the currently selected file in the right pane
+     %m - expands to the list of paths of all marked files in the left pane
+     %M - expands to the list of paths of all marked files in the right pane
+     %n - expands to the list of names of all marked files in the left pane
+     %N - expands to the list of names of all marked files in the right pane
+     %d - expands to the current directory in the left pane
+     %D - expands to the current directory in the right pane
+     %a - expands to the list of paths of all marked files in the active pane
+     %A - expands to the current directory in the active pane
+     %p - expands to the list of paths of all marked files in the passive pane
+     %P - expands to the current directory in the passive pane
 ******* registers
 ******** basics
 
