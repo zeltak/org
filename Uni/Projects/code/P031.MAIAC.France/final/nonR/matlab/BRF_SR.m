@@ -14,7 +14,7 @@ DataArray(1,:)=1;
 
 %define the length of i 1 to..M. for testing purpose we can change M to
 %numbner IE 1:3
-for K = 1:2
+for K = 1:M
     
     % Import SR,Lat,Lon Data from hdf files
     
@@ -85,7 +85,7 @@ for K = 1:2
  
     
 end
-
+DataArray(1,:)=[];
  [row,col]=find(DataArray(:,7)~= -2.8672); %exclude all days with NAN
     DataArray=DataArray(row,:);
  

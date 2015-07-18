@@ -60,15 +60,15 @@ this is the one we ended up using
     m1_sc <- lmer(m1.formula,data=mod1)
   #+END_SRC 
 **** mod1 formula (with splines)
-this is the one we ended up using 
   #+BEGIN_SRC R  :session *ansi-term*  :results none
-    m1.formula <- as.formula(pm25 ~aod
-    #temporal
-    +pbl.s
-    #spatial
-    +elev_m+tden
-    +(1+aod|day/cid) +(1| aodid)   )  
-    m1_sc <- lmer(m1.formula,data=mod1)
+m1.formula <- as.formula(pm25 ~aod
+#temporal
++ns(pbl.s,3)
++dport
+#spatial
++(1+aod|day/cid)  )  
+m1_sc <- lmer(m1.formula,data=mod1)
+
   #+END_SRC 
 **** raw formula 
 
