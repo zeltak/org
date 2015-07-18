@@ -4132,7 +4132,7 @@ Some tools (such as import or xdotool) might be unable to run upon a KeyPress ev
 Syntax:
 bindsym [--release] [Modifiers+]keysym command
 bindcode [--release] [Modifiers+]keycode command
-s
+
 %Tip% use xmodmap -pke to see what keys on your current layouts are named 
 
 one can use either keycode (see [[#1j48GzRPTGBvo.qeYq0t1w][xev]] on how to get key codes) and then in config use bindcode
@@ -40458,6 +40458,16 @@ gpg --export-secret-key -a "your@email.bla" > private.key
 
 you can also import a key similarly
 
+**** use for email password
+create a empty file for the password, ₆In example₆ 
+file:/home/zeltak/.gnupg/ikloogmail.gpg
+
+then enter your pass in the file and save (since the extension is .gpg it will ask for your id and pass)
+then in your mail downloader (₆In example₆ here mbsync) refer to that file
+#+BEGIN_SRC sh
+PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d /home/zeltak/.gnupg/ikloogmail.gpg" 
+#+END_SRC
+
 **** gpg-agent
 ***** info and install
 gpg-agent is mostly used as daemon to request and cache the password for the keychain. This is useful if GnuPG is used from an external program like a mail client. It can be activated by adding following line in gpg.conf:
@@ -40488,12 +40498,12 @@ Log out of the session and log back in. Check if gpg-agent is activated:
 pgrep gpg-agent
 #+END_SRC
 
-***** Configuration
+***** Configuration (add more time after opening keys)
 gpg-agent can be configured via file:~/.gnupg/gpg-agent.conf file. 
 The configuration options are listed in man gpg-agent. For example you can change cache ttl for unused keys:
 
 #+BEGIN_EXAMPLE
-default-cache-ttl 3600
+default-cache-ttl 9600
 #+END_EXAMPLE
 ***** Reload the agent
 After changing the configuration, reload the agent by piping the RELOADAGENT string to gpg-connect-agent.
@@ -49640,3 +49650,4 @@ End:
 #+END_SRC
  
 
+* #1j48GzRPTGBvo.qeYq0t1w
