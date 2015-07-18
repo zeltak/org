@@ -4132,7 +4132,7 @@ Some tools (such as import or xdotool) might be unable to run upon a KeyPress ev
 Syntax:
 bindsym [--release] [Modifiers+]keysym command
 bindcode [--release] [Modifiers+]keycode command
-s
+
 %Tip% use xmodmap -pke to see what keys on your current layouts are named 
 
 one can use either keycode (see [[#1j48GzRPTGBvo.qeYq0t1w][xev]] on how to get key codes) and then in config use bindcode
@@ -30777,7 +30777,6 @@ You may need to restart emacs, so it can find mu4e in its load-path. If, even af
 #+END_SRC
 
 
-
 ********* pdf-tools
 https://github.com/politza/pdf-tools
 ********** install 
@@ -30787,6 +30786,44 @@ in arch you will need all the dev packages as well as poppler and imagemagick
 
 once you install from melpa, use M-x `pdf-tools-install` and hopefully it will start installing the server 
 
+
+********* sunrise 
+********** base 
+*********** launch sunrise
+The command `sunrise' invokes sunrise
+The command `sunrise-cd' invokes Sunrise and automatically selects the current file wherever it is in the  filesystem. Type h at any moment for information on available key bindings.
+********** functions 
+*********** copy a directory structure without copying the files
+select the directories you want to clone, press K (sr-do-clone) and select “(D)irectories only”.
+
+Cloning was devised as a more general operation than recursive copying of files and directories[1]: all directories are created with the same name and structure at the destination, while what happens to all the other files depends on the option you choose:
+
+“(D)irectories only” - ignores all files, copies only directories,
+“(C)opies” - performs a traditional copy of all files,
+“(H)ardlinks” - makes every new file a (hard) link to the original one (obviously the source and destination directories must be in the same partition for this to work),
+“(S)ymlinks” - creates absolute symbolic links for all files in the tree,
+“(R)elative symlinks” - creates relative symbolic links for all files.
+
+********** terminal integration
+Terminal integration and Command line expansion: integrates tightly with
+ `eshell' and `term-mode' to allow interaction between terminal emulators in
+ line mode (C-c C-j) and the panes: the most important navigation commands
+ (up, down, mark, unmark, go to parent dir) can be executed on the active pane
+ directly from the terminal by pressing the usual keys with Meta: <M-up>,
+ <M-down>, etc. Additionally, the following substitutions are automagically
+ performed in `eshell' and `term-line-mode':
+     %f - expands to the currently selected file in the left pane
+     %F - expands to the currently selected file in the right pane
+     %m - expands to the list of paths of all marked files in the left pane
+     %M - expands to the list of paths of all marked files in the right pane
+     %n - expands to the list of names of all marked files in the left pane
+     %N - expands to the list of names of all marked files in the right pane
+     %d - expands to the current directory in the left pane
+     %D - expands to the current directory in the right pane
+     %a - expands to the list of paths of all marked files in the active pane
+     %A - expands to the current directory in the active pane
+     %p - expands to the list of paths of all marked files in the passive pane
+     %P - expands to the current directory in the passive pane
 ******* registers
 ******** basics
 
@@ -40388,7 +40425,7 @@ first  you need to generate a gpg key,in a process similar to generating ssh key
 gpg --full-gen-key  
 #+END_SRC
 
-$Note-its common practice to use your email as your ket user$ 
+$Note-its common practice to use your email as your key user$ 
 
 this will launch a wizard which will end up creating a .gnupg foder and related files in it
 list which keys are available 
@@ -40421,11 +40458,23 @@ gpg --export-secret-key -a "your@email.bla" > private.key
 
 you can also import a key similarly
 
+**** use for email password
+create a empty file for the password, ₆In example₆ 
+file:/home/zeltak/.gnupg/ikloogmail.gpg
+
+then enter your pass in the file and save (since the extension is .gpg it will ask for your id and pass)
+then in your mail downloader (₆In example₆ here mbsync) refer to that file
+#+BEGIN_SRC sh
+PassCmd "gpg2 -q --for-your-eyes-only --no-tty -d /home/zeltak/.gnupg/ikloogmail.gpg" 
+#+END_SRC
+
 **** gpg-agent
 ***** info and install
 gpg-agent is mostly used as daemon to request and cache the password for the keychain. This is useful if GnuPG is used from an external program like a mail client. It can be activated by adding following line in gpg.conf:
+
 file:~/.gnupg/gpg.conf
 and add this line
+
 #+BEGIN_EXAMPLE
 use-agent
 #+END_EXAMPLE
@@ -40444,15 +40493,17 @@ export GPG_AGENT_INFO  # the env file does not contain the export statement
 export SSH_AUTH_SOCK   # enable gpg-agent for ssh
 #+END_SRC
 Log out of the session and log back in. Check if gpg-agent is activated:
+
 #+BEGIN_SRC sh :results none
 pgrep gpg-agent
 #+END_SRC
 
-***** Configuration
+***** Configuration (add more time after opening keys)
 gpg-agent can be configured via file:~/.gnupg/gpg-agent.conf file. 
 The configuration options are listed in man gpg-agent. For example you can change cache ttl for unused keys:
+
 #+BEGIN_EXAMPLE
-default-cache-ttl 3600
+default-cache-ttl 9600
 #+END_EXAMPLE
 ***** Reload the agent
 After changing the configuration, reload the agent by piping the RELOADAGENT string to gpg-connect-agent.
@@ -49599,3 +49650,4 @@ End:
 #+END_SRC
  
 
+* #1j48GzRPTGBvo.qeYq0t1w
