@@ -8344,42 +8344,46 @@ can use /iset and put this in:
  logger.file.time format string "%Y-%m-%d %H:%M:%S"
  
 ***** weechat 'server' (irc relay)
-
-***** setup and start a relay on weechat
+****** setup and start a relay on weechat
 
 1) to start the relay running in weechat server its best to use weechat
-own protocol.
- this will work with supported apps like weechat for android
- issue
+own protocol.this will work with supported apps like weechat for android issue
 
- /relay add weechat 9001
-
+#+BEGIN_SRC sh :results none
+/relay add weechat 9001
+#+END_SRC
  you should see this:
 
- relay: listening on port 9001 (relay: weechat, max 5 clients)
- relay: relay "weechat" (port 9001) added
+#+BEGIN_SRC sh :results none
+relay: listening on port 9001 (relay: weechat, max 5 clients)
+relay: relay "weechat" (port 9001) added
+#+END_SRC
 
  2) its also possible to add a by network relays (which can be used with
 other non wee chat clients (IE xchat etc)
 
- /relay add irc.freenode 8000
+#+BEGIN_SRC sh :results none
+/relay add irc.freenode 8000
+#+END_SRC
 
  3)after you connect you can set a password for it, replacing
 "your-secret-password" with your chosen password.
  Note: Connections with weechat are not encrypted, so in theory an
 evesdropper can intercept your password and any other communications
 sent.
- issue this (or use iset)
+issue this (or use iset)
 
- /set relay.network.password "your-secret-password"
+#+BEGIN_SRC sh :results none
+/set relay.network.password "your-secret-password"
+#+END_SRC
 
- A note about firewalls
- Since weechat is now listening for connections on port 8001, you need
+A note about firewalls
+Since weechat is now listening for connections on port 8001, you need
 to make sure your firewall is setup to allow that port. If you are
 behind a router you will need to configure port forwarding. This is
 beyond the scope of this guide however.
 
-***** connect from a client
+****** connect from a client
 
 to connect from a client
  the weechat one can be found here:
