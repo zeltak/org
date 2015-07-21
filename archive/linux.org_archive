@@ -406,3 +406,1132 @@ group' and tick it.
 delete this file
  /home/zeltak/.gconf/system/http proxy/%gconf.xml
  to erase all previous proxies
+
+* WDTV
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-20 Mon 15:25
+  :ARCHIVE_FILE: ~/org/files/Tech/linux.org
+  :ARCHIVE_OLPATH: linux hardware tips
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+** flash vs non-flash version (ext3)
+
+The Normal (Flash) version requires Flashing the Firmware into the
+WDTV Live. It contains all changes from the Changelog
+ This is normally what you want to install
+ the Ext3 version (non-flash) version is used either for testing
+purposes, or for purposes of modifying the firmware content. It is
+identical to the normal flashed version. The main difference is that
+while WDLXTV runs from the internal read only NAND flash, the ext3
+version is pivoted into and run directly off your external device. This
+means the ext3 version gives you full read/write permissions.
+ It gets only mounted at boot, if all of the following applies:
+ a previously flashed WDLXTV version (0.2+) is already present on
+the WDTVLive,
+ root.bin is placed on the WDTV-plugged-in USB thumb drive.
+ Note that its net.mounts, S00custom-options and smb.conf (if avaliable)
+override the ones previously installed.
+ Never unmount/unplug the USB thumb drive on which it resides, while the
+WDTVLive is plugged-in (even if in standby), otherwise the system will
+become unstable.
+ For more information on how to use this, see USB Boot
+
+** install/upgrade custom firmware
+
+This is relevant both for installing from scratch and on upgrades
+ 1.Download the Firmware
+ Download the latest firmware (the flash version) for your device.
+Ensure you get firmware appropriate to your device model (G2/Live/Plus).
+ Zeltaks version is :
+ wdlxtv-live
+ EXT3 versions are for non-permanently testing newer builds, so ensure
+you download the non-EXT3 version for your model.
+ 1.Install the Firmware to USB Stick
+ Format a USB stick to FAT32. This is easily doable in Windows via
+Computer -> Right Click (Driver Letter) -> Format. Quick format is all
+that is needed. Linux users should use mkfs with vfat.
+ Once your stick is formatted extract the firmware zip you copied and
+place at a minimum the wdtvlive.bin and wdtvlive.ver files onto your USB
+stick.
+ If the archive contains a wdtvlive.fff file put it also on the USB
+stick!
+ You may also add the S00custom-options file if you wish.
+ 3.Flash the Firmware
+ Turn your WDTV off.
+ This means pulling the power plug, not using the remote. Disconnect any
+existing USB devices you may have from your WDTV and insert the stick
+into the left port.
+ Plug the power cable back in, turn the unit on, and follow the onscreen
+instructions (updating procedure)
+ Notes:
+
+ If the screen stays dark wait at least 15 minutes then remove power
+completely again, move the USB stick to the rear port, and re-attempt.
+ If the new firmware is not found and you don't get a "New firmware
+found", edit the wdtvlive.ver file and change the first version number
+to something higher than your currently installed firmware.
+ Example:
+ You have 1.02.21.WDLXTV LIVE-0.4.5.3 running and want to up- or
+downgrade to any other version, change the content of wdtvlive.ver to
+ VERSION='1.02.22.WDLXTV LIVE-0.4.5.3'
+ If it is still not showing the upgrade notice it's most likely due to
+your USB stick. (95% of the cases)
+ In this case start over with formating the drive and copying the files
+(make sure you safely remove the device after copying!
+ If it's still not working try a different USB stick.
+ 4.Boot
+ If all went well you should now be running the latest, greatest version
+of WDLXTV!
+
+** after fresh install
+
+after succesfuly installing wdlxtv on your device for the first time
+follow these steps:
+ 1)You should now use telnet to set your SSH password.
+ use telnet to login (using the WD ip adress)
+ the user is root and password is emrty
+ use the command
+ passwd
+ to set a unix password
+ then logout and ssh in with user root IE:
+
+ssh root@192.168.0.100
+
+ 2.Enabling Web Management (Live/Plus)
+ Now that your SSH password has been set, you will probably want a more
+convenient way to manage your WDTV. Luckily, it comes with a complete
+and fully featured web GUI. While still connected via SSH/telnet, enter
+the following commands to ensure the Apache web server is running.
+ config tool -c APACHE='ON'
+ config tool -s
+ /etc/init.d/S66apache2 start
+ Final Steps
+ With the web GUI enabled, you can manage your WDTV much more easily.
+Simply point your browser to either the hostname or IP address of your
+WDTV box; you can find the IP address under the about system menu.
+ The default user/pass for the web GUI is :
+ wdlxtv/wdlxtv
+ Note that most configuration changes require a reboot
+
+** WDTV Live - Revert to official firmware without flashing
+
+Prerequisites:
+ This procedure is valid if the WDTV Live is flashed with unofficial
+firmware explained in http://wiki.wdlxtv.com/Main Page site.
+ Procedure:
+ - Download last wdtvlive firmware from
+http://www.wdc.com/wdproducts/updates/?family=wdfwdtv live
+ - unzip wdtvlive 1.04.10 V.zip
+ - Download cramfsck-16k binary files from
+http://forum.wdlxtv.com/download/file.php?id=4
+ - Extract firmware and create system directory:
+ - tail -c +33 wdtvlive.bin > wdtvlive.stripped.bin
+ - ./cramfsck-16k -x dump wdtvlive.stripped.bin
+ - cd dump
+ - mkdir -p boot
+ - mkdir -p dev
+ - mkdir -p mnt/boot
+ - mkdir -p mnt/fwup
+ - mkdir -p opt
+ - mkdir -p proc
+ - Create root.bin file with right dimension:
+ - dd if=/dev/zero of=new.root.bin bs=1024k count=150
+ - Format it ext3:
+ - mkfs.ext3 ./new.root.bin
+ - Mount it:
+ - sudo mkdir /tmp/smaller
+ - sudo mount -o loop new.root.bin /tmp/smaller
+ - Copy files:
+ - sudo rsync -avHS /home/asdf/wdtv/wdtvlive 1.04.10 V/dump/
+/tmp/smaller
+ - sync
+ - Umount it:
+ - sudo umount /dev/loop1
+ - Rename it:
+ - mv new.root.bin root.bin
+ - Copy root.bin in a formatted fat 8Gb root directory /
+ - Plug-in usb key in wdtvlive
+ - Reboot
+
+** control playback thorugh ssh
+
+here is simple way to control osd from console, just send
+
+echo % > /tmp/ir injection
+
+ where % is char assigned to button u want to send, here;s table
+ POWER - w
+ HOME - o
+ UP - u
+ LEFT - l
+ ENTER - n
+ RIGHT - r
+ DOWN - d
+ BACK - T
+ STOP - t
+ OPTION - G
+ REWIND - H
+ PLAY/PAUSE - p
+ FORWARD - I
+ PREVIOUS - [
+ NEXT - ]
+ SEARCH - E
+ EJECT - X
+ for example
+ Code:
+
+echo X > /tmp/ir injection
+
+ do the same as EJECT button.
+ it should be quite easy to modify redindian's web-based remote control
+page to make it work on live.
+ also you can create a script and use it with IR commands
+ is it => 1s (your comment on split second) that the 0x001051c memory
+location is cleared? If so, then just a delay of 1s and a read would
+suffice. We could just do something like this:
+ Code:
+ while true; do
+ if [ $(devmem 0x001051c) != "0x00000000" ]; then
+ act on remote code()
+ sleep 1
+ fi
+ done
+ #Obviously a bit more needed but this gets the point across.
+ This would be very trivial to write if one wanted to use a remote
+control that wasn't a programmable universal remote. I just use a
+learning remote and this isn't needed I send actual WD TV remote codes
+instead.
+ We just need you to expose the extra remote options (Vol UP/DOWN, one
+key subtitles, one key chapters, etc) and then this would be a perfect
+daemon to stay running and act on all the extra remote codes.
+ Great info BTW!
+
+** reboot
+
+issue:
+
+reboot -f
+
+ Pasted from
+<[[http://wiki.wdlxtv.com/Appz][http://wiki.wdlxtv.com/Appz]]>
+
+** plugins/apps
+
+*** 1)initial setup
+
+1.format a usb thumb drive with ext3
+ 2.download the non flash firmware (the one that supports plugins for
+now 1.03.49 )
+ 3. unzip it to the ext3 thumb drive
+ 4.boot with it
+ note-this will only work if
+ a previously flashed WDLXTV version (0.2+) is already present on
+the WDTVLive,
+ root.bin is placed on the WDTV-plugged-in USB thumb drive.
+
+ 5.you will now get the new firmware from the flash drive with
+read/write support. when you fo to the plugin button it will first
+prompty you to create a plugin folder, accpet and it will create one in
+the disk root (.pluginswdltx)
+ 6)turn off the device and add some plugins now to the .pluginswdltx
+folder
+ 7. turn on the device and then you can install some plugins using the
+gui menu
+ you need to reboot after every plugin install to make the plugins work
+ for apps see next stage
+
+*** 2)ipkg
+
+INSTALL (extremely simple)
+ Installs in 4 simple steps:
+ - format usb storage with ext3 (alredy done in step1)
+ - put the wdlxtv optware.app.bin in it (in the root dir)
+ - login from telnet or ssh
+ - type optware-install.sh
+ - type 'source /etc/profile'
+ NOTE:
+ - the usb storage needs to be ext3 formatted but this doesn't means
+that you need the ext3 version of firmware
+ - this port builds the /opt directory inside your usb storage
+ every time your WDTV HD Live is booted with the app.bin your shell will
+be configured to have the ipkg command type "ipkg list" to realize how
+much software you can install (lots!)
+ use ipkg install to install apps:
+
+$ipkg install weechat
+
+*** 3)optware install
+
+ipkg install bitlbee mc weechat ncdu vim zsh mlocate mpd htop rsync zip
+unzip unrar wget python ruby perl
+
+** Turn off all LED permanently?
+
+To turn LED's off you can use a script like this:
+ (if you name it S99user-script and put it in /conf directory it gets
+executed on boot)
+ #!/bin/sh
+ led-control power led off
+ led-control status led off
+
+** NFS mounting
+
+create a file in the config dir (conf) called :
+ net.mounts
+ then put the mounts you want in that file:
+ xmount 192.168.0.1:/media/tomb/ tomb nfs
+
+** upnp-cmd
+
+*** example on how to add a media file
+
+use this syntax
+ SetAVTransportURI <URI> <URIMetaData> (allowed URI:
+"http://server/file", "file:///folder/file"
+ IE:
+
+upnp-cmd SetAVTransportURI "file:///tmp/media/usb/tomb/Sesame.m4v"
+
+** subtitles
+
+to get subtitles to work you must rename it exactly as the movie name
+and make sure its in srt format
+
+
+* x200
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-20 Mon 15:25
+  :ARCHIVE_FILE: ~/org/files/Tech/linux.org
+  :ARCHIVE_OLPATH: linux hardware tips
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+** powersave tips
+
+Finding and removing high interrupt packages
+ Install PowerTOP
+ Run PowerTOP as root (sudo powertop) and look for the packages that
+come up on top of the interrupt frequency list. These are the packages
+that wake up the CPU most frequently.
+ In my case the majority of the easily preventable interrupts were from
+3 packages:
+ i915, the intel graphics driver
+ SCIM
+ Gnome Power Manager
+ With the first one accounting for the bulk of the battery life
+improvement.
+ The %'s in PowerTOP give you an indication of what to focus on, no need
+to worry about a 1% problem (unless it is easy to prevent that it), it
+will not have much impact on your battery life.
+ Remember that over time these packages will improve and will not need
+to be removed.
+ Turning off DRI
+ Just insert: Option "NoDRI" to the "Device" section in
+/etc/X11/xorg.conf. This turns off all 3D, so no compiz or other fancy
+effect. Worth it for me because the impact on battery life is
+substantial.
+ Turning off SCIM
+ I had my system set to accept foreign characters. Going to System >
+Language Support > Disable support to enter complex characters does the
+trick.
+ Turning off Gnome Power Manager
+ You may decide you cannot live without it, but on my system I disabled
+Gnome Power Manager from the startup list: System > Sessions > Power
+Management daemon.
+ I replaced it with the Gnome Panel Battery Charge Monitor (Add to
+Panel...) which works well enough for me.
+ Reducing CPU voltage
+ Installing phc module patches
+ The phc module patches are available here, make sure you get the
+version that matches you kernel version. You can easily check by typing
+uname -r in a console.
+ You need not compile your own module, check the thread, users have
+posted already compiled versions of the acpi-cpufreg.ko module for most
+kernel versions.
+ Once you have the apci-cpufreq.ko module, back up the old module:
+ sudo cp /lib/modules/$(uname
+-r)/kernel/arch/x86/kernel/cpu/cpufreq/acpi cpufreq.ko
+ /lib/modules/$(uname
+-r)/kernel/arch/x86/kernel/cpu/cpufreq/acpi cpufreq.ko.bak
+ Then copy the new module to the right place:
+ sudo cp acpi cpufreq.ko /lib/modules/$(uname
+-r)/kernel/arch/x86/kernel/cpu/cpufreq
+ Restart your system and check that you now have voltage controls by
+typing: more /sys/devices/system/cpu/cpu0/cpufreq/phc vids
+ You should see something like:
+ 38 29 23 13 (your values may be different)
+ These are the voltage index values for the 4 frequencies available on
+your CPU. They are directly related to the actual voltages, phctools
+does the computation for you as explained below.
+ Notes:
+ If you check phc fids you will see values that do not make sense
+ more /sys/devices/system/cpu/cpu0/cpufreq/phc fids
+ These are supposed to be the available frequency indexes, which are the
+ratios of CPU frequency to FSB frequency, sometimes called multipliers.
+There is a bug in the phc patches which affects how the multiplers are
+reported. This bug does not affect undervolting your CPU.
+ Intalling phctools
+ Download them here.
+ Unpack the package in a directory where you can conveniently access it.
+Use the install script (install.sh) to enable pctools to run without
+requiring a password.
+ Also download here the update which supports the Core2Duo CPU.
+ Unpack the archive and copy the file to"inc/libs" within the PHCTool
+directory (replace the old one).
+ Lastly made sure the module msr is loaded. PhcTool works without it,
+but having it loaded allows it to display the actual votage fed into
+your CPU.
+ sudo modprobe msr
+ You can make this module load automatically by adding it to the file
+/etc/modules
+ Also install the burnMMX application, it is designed to put a heavy
+load on your system and is necessary to make sure the voltages you
+choose will work under load:
+ sudo apt-get install burnMMX
+ Experimenting with lower voltages
+ This is the scary part: you will have to crash your system on purpose.
+I found it to be harmless, but be forewarned that some users have
+reported that it could damage your system.
+ DO NOT RUN THIS TEST WITH A CUSTOM PROGRAM TO CONTROL THE FAN, YOU
+COULD FRY YOUR SYSTEM. FIRST REVERT TO HW CONTROLLED FAN IF YOU MADE ANY
+CHANGES TO FAN CONTROL.
+ Check that you are using "ondemand" as the frequency scaling governor.
+This governor delivers the lowest power consumption according to Intel.
+An easy way to do this is to use Frequency Scaling Monitor Gnome panel
+applet.
+ Another way is to check:
+ /sys/devices/system/cpu/cpu0/cpufreq/scaling governor
+ which returns the currently active governor. You can echo a new value
+as root, it takes effect immediately.
+ Start phctools:
+ phctools.sh
+ On the Info tab, you will see your CPU identified and the available
+frequencies for this CPU:
+ 2267Mhz 2266Mhz 1600Mhz 800Mhz
+ On the Voltage tab you will see the VID and corresponding voltage for
+each frequency as well as the difference from the default values.
+ The phc patches prevent you from using a value higher than the highest
+defaults voltage or a value lower than the lowest default voltage even
+though phctools will let you enter higher and lower values. They will
+have no effect, so stay within the range defined by the highest and
+lowest VID value.
+ The default values are also reloaded each time you restart the system.
+Do NOT set phctools to "restore VID on load" at this time.
+ Now the fun begins...
+ Start burnMMX in a terminal window. WARNING this puts a lot of stress
+on your sys
+ Lower the first VID value, 25 should work to get started. Do this for
+both CPU's (tab on the left for CPU0 and CPU1
+ Save values
+ Use your system for a bit and see if it is stable
+ Lower the first VID value until your system crashes (or stop before if
+you do not dare).
+ My threshold was 15, at this VID my system crashes after less than a
+minute. At this point reboot your system, restart phctools and set the
+VID for 2267Mhz to the value that crashed + 2. Do this for both CPU's.
+ Restart and work on the other frequencies, using the Frequency Scaling
+Monitor applet to force the CPU to the frequency you want to test.
+ On my system the safe values were:
+ 17 15 13 13
+ Making the voltages stick
+ One you have found the lowest VID's that your system can safely run
+with, enter them on phctools Voltages for both CPU0 and CPU1, then go to
+settings and click "restore VID's on load".
+ All that is left is to make phctools restore your VID's each time you
+boot. Add the command:
+ yourphcdirectory/phctools.sh background
+ to your startup applications in System > Sessions. It will
+automatically start phctools, make it restore your VID's and quit.
+ Note that if you do nothing, the original VID's are automatically
+reloaded each time you reboot the system.
+
+** turning off the wireless radios
+
+Turning off the wireless radios
+ The X200 has a great feature: a button on the left side to disable all
+radios. Use it when you do not need wireless. When you need wireless,
+use FN + F5 to turn on/off Wifi and Blutooth.
+ The hidden power hog is the 3G broadband modem (Ericsson F3507g), even
+when the 3G led is off. To completely shut down power to the modem:
+ sudo echo 0 > /sys/devices/platform/thinkpad acpi/wwan enable
+
+** kill bluetooth
+
+Unused Bluetooth
+ Many laptops now come with Bluetooth.
+ Just like WiFi, Bluetooth has a radio transmitter, so it can take quite
+a bit of power.
+ Unlike WiFi, Bluetooth is rarely used, so it's very possible that your
+Bluetooth device isn't actually used for anything, and is just consuming
+battery life.
+ You can see if there are Bluetooth devices active on your system with
+the hcitool command:
+ # hciconfig
+ hci0: Type: USB
+ BD Address: 00:00:00:00:00:00 ACL MTU: 0:0 SCO MTU: 0:0
+ DOWN
+ RX bytes:0 acl:0 sco:0 events:0 errors:0
+ TX bytes:0 acl:0 sco:0 commands:0 errors:0
+ In the example above, a USB bluetooth dongle is present and active.
+ Note that many internal bluetooth adapters in laptops now use USB.
+ The easiest way to disable a USB bluetooth device, is to use these
+commands:
+ hciconfig hci0 down
+ rmmod hci usb
+
+** gen tips
+
+ - General powersaving settings, aka laptop mode: Install and then
+activate laptop-mode editing the file
+"/etc/laptop-mode/laptop-mode.conf". After that, check all the files in
+"/etc/laptop-mode/conf.d/" and activate all the things you can. Except
+maybe cpufreq, I rather let cpufreqd do that job, it's much simpler.
+Start laptop-mode with "/etc/rc.d/laptop-mode start" and add it to your
+daemon list in your rc.conf file. In case you skip something here, I'll
+probably mention it anyway, but laptop-mode comes in handy for
+automating it.
+ - Cpu frequency scaling. I recommend using cpufreqd, it is very very
+simple. Install it, do a "echo ondemand > /etc/conf.d/cpufreq" and start
+the daemon as shown above, also adding it to the daemon list.
+ - Turn off the video outputs. It sounds weird, but with the xorg 1.5
+and the old intel 2.4 drivers, the video chipset doesn't detect the
+outputs right and turns on HDMI. The newer xorg 1.6 and intel driver 2.6
+didn't have this problem when I tried them, but check it anyway. You can
+do it with "xrandr". If you see a star (  ) on some line, that output
+is active. Turn it off with "xrandr --output HDMI-2 --off". You should
+check again on restart.
+ - Turn down the wifi power. This is a real power hog, it can drain more
+than 1.5W doing nothing. The control file is
+"/sys/class/net/wlan0/device/power level". With "echo 5 > file" you
+maximize powersaving. Obviously, "cat file" gives you the wifi status.
+I've noticed some misbehavior lately, if you are not connected and with
+some network manager daemon running, it keeps going back to level 0
+(maximum power usage). I usually fix it with:
+ # killall wicd-manager
+ # /etc/rc.d/wicd stop
+ # killall wpa supplicant
+ # ifconfig wlan0 up
+ # echo 5 > /sys/class/net/wlan0/device/power level
+ # ifconfig wlan0 down
+ # cat /sys/class/net/wlan0/device/power level
+ If the last command shows a "INDEX:5", it'll probably stay that way,
+but checking it some time later would be good. As usual, let a script do
+that for you. If it is not 5 but 0, repeat the previous 3 steps. If you
+are conncected to some network, it usually stays at level 5 without any
+issue after a simple echo.
+ - Turn off bluetooth if you are not using it. As easy as "echo disable
+> /proc/acpi/ibm/bluetooth". Sometimes it doesn't want to wake up again,
+try a "lsusb" after re-enabling it. Again, acpid is a great way to
+handle it, here is a chunk of my handler:
+ 1005)
+ if [ "$(cat /var/local/bluetooth)" = "disabled" ]; then
+ echo "enable" > /proc/acpi/ibm/bluetooth
+ echo "enabled" > /var/local/bluetooth
+ lsusb > /dev/null
+ logger "ACPI bluetooth on"
+ else
+ echo "disable" > /proc/acpi/ibm/bluetooth
+ echo "disabled" > /var/local/bluetooth
+ logger "ACPI bluetooth off"
+ fi
+ ;;
+ - Turn on SATA link powersaving. This one is pretty straightforward:
+"for i in /sys/class/scsi host/host/link power management policy;
+do echo min power > $i; done". Once every power cycle. If you connect
+the power plug and disconnect it, only one link file will go back to
+powersave, so you have to execute it every time you go on battery.
+Acpid, again, is a great way to do that.
+ - Turn on PCIe powersaving. The control file is
+"/sys/module/pcie aspm/parameters/policy". You can "echo powersave" to
+it to turn it on and "echo performance" to turn it off. As always, cat
+will tell you the actual status.
+ - Activate the sound auto-suspend. Echo the timeout to
+"/sys/module/snd hda intel/parameters/power save". If you are not
+using the sound at all, mute it with the hardware button, just in case.
+ - This one may be VERY DANGEROUS. You can turn off the fan if you are
+going to do lightweight work and you trust your programs to be
+infinite-loop-free, so firefox is out of the question here. You have to
+load the thinkpad acpi module with "fan control=1" parameter and then
+manage the control file "/proc/acpi/ibm/fan". Again, "echo" stuff to set
+the fan on/off, "cat" to get info. I HIGHLY recommend to use the
+watchdog function and some script to make sure the processor won't melt.
+You can read the temperatures at "/proc/acpi/ibm/thermal",
+"/sys/class/thermal/thermal zone/temp" and
+"/sys/bus/platform/devices/coretemp./temp1 input", among others.
+Google is your friend ;)
+ - If hal is polling you nonexistent (on a X200) CD drive, kill it.
+ - If you are not using it, close firefox. The diffrerence may be 1W. If
+you plan on use it later, a simple "killall -STOP firefox" will do the
+trick. When you are going to use it again, "killall -CONT firefox". Bind
+it to a hotkey if you want.
+ - Also, "ifconfig eth0 down" sure doesn't hurt if you are not using the
+good ol' ethernet interface.
+ - Unloading modules doesn't usually work, but you may try it (and post
+a comment with your findings!). Some people unloads uhci,
+snd hda intel, or iwlagn. I haven't seen any difference trying, but
+your mileage may vary. You can also take one core of the cpu offline,
+but it seems to cause to actually consume MORE power than sitting idle.
+I haven't measured it myself, so if you do, please let me know! The
+control file is "/sys/devices/system/cpu/cpu1/online", 0 takes it
+offline, 1 brings it back to work.
+ - Last but not least: install and run powertop. It's a wise program.
+Follow it's suggestions. I use it to activate USB autosuspend and see
+which programs and wreaking havoc. Firefox, amarok2 and any java-based
+ones are on top positions, but some other programs may be broken and
+causing the processor to work more than it should. Knotify4 in KDE 4.1
+had a 100Hz timer, for instance.
+ If I remember any other tweak, I'll post it here, stay tuned.
+ With all these tricks, brightness at minimum, everything off and doing
+ nothing , the X200s drains 5.8W. With wifi on, brightness 5/15,
+browsing and programming (without heavy compiling), it goes at around
+6.5W. On full brightness, no wifi, just above 7W. Full brighness + wifi
+it's under 7.5W. You have to do some pretty heavy stuff to take it above
+10W, watching HD movies at full volume and brightness will do it, but
+anyway, at 10W the battery still lasts more than 8 hours. If you want me
+to try any specific combination, let me know.
+
+
+* dockstar
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-20 Mon 15:25
+  :ARCHIVE_FILE: ~/org/files/Tech/linux.org
+  :ARCHIVE_OLPATH: linux hardware tips
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+** Install Debian
+
+Install Debian Linux on your Dockstar
+ This will install Debian Squeeze on a USB drive connected to your
+Dockstar.
+ 1) Find your Pogoplug's IP address (through the router dhcp menu or
+through the nmap command) and connect via SSH:
+ username: root
+ password: stxadmin
+ 2) in a linux box partition your flash drive using fdisk or gparted:
+ fdisk /dev/sda
+ # Configure partion 1 as Linux (I'd recommend making this at least
+512Mb. The default bare-bones installation uses 280Mb.)
+ # Configure partion 2 as Linux Swap (I have no idea what a suitable
+value would be. I used 256MB.)
+ 3)connect usb drive to the dockstar and issue this to make sure sda is
+the right drive:
+ /sbin/fdisk -l
+ and check ouptut to see if thats the drive
+ 4) on the dockstar through ssh download and run the debian install
+script:
+ cd /tmp
+ wget http://jeff.doozan.com/debian/dockstar.debian-squeeze.sh
+ chmod +x dockstar.debian-squeeze.sh
+ export PATH=$PATH:/usr/sbin:/sbin
+ ./dockstar.debian-squeeze.sh
+ The script will take some time to download the debian images and
+extract them to your flash drive. The total install time will vary with
+the speed of your flash drive and your Internet connection. On my
+system, it takes about 20 minutes. Once it's finished, you have the
+option of rebooting into your new debian install.
+ The default root password in Debian is 'root'. After you've logged in,
+I'd recommend changing the root password and configuring
+/etc/apt/sources.list to point to something near you.
+ passwd
+ vi /etc/apt/sources.list
+ 5)add a user to the system:
+ adduser zeltak
+ 5)add static IP if needed:
+ 1. First you need to edit /etc/network/interfaces using your favorite
+text editor:
+ sudo vim /etc/network/interfaces
+ 2. Next you need to enter your static IP information:
+ auto lo
+ iface lo inet loopback
+ iface eth0 inet static
+ address 192.168.0.20
+ netmask 255.255.255.0
+ gateway 192.168.0.44
+ auto eth0
+ 
+ 3. Save your changes.
+ 4. Now you need to point your server to your DNS server. To do this,
+you need to edit /etc/resolv.conf:
+ sudo vi /etc/resolv.conf
+ name server xxx.xxx.xxx.xxx (Replace the x's with the IP address of
+your DNS server)
+ nameserver 192.115.106.10
+ 5. Save your changes, then restart your network:
+ sudo /etc/init.d/networking restart
+ 6)install sudo:
+ apt-get install sudo
+ Add sudo permissions:
+ to add a user to the sudors list you need to issue:
+ this is done with:
+ visudo
+ using visudo you need to type "i" to edit something and to type ":wq"
+to save and exit
+ enter the user name needed:
+ zeltak ALL=(ALL) ALL
+ 7)install software:
+ apt-get install vim sudo weechat weechat-plugins rtorrent mc screen
+nfs-common portmap
+ 8)mount nfs dirs and create entry in taskbar
+
+** current IP
+
+192.168.0.20
+
+** errors
+
+*** procceses killed
+
+if you get an error about procceses killed IE:
+
+ Generating locales... en US.UTF-8.../usr/sbin/locale-gen: line 41:
+27962 Killed localedef -i $input -c -f $charset -A
+
+ this usually meand there is no memory and no swap partiton is avilable
+ create a swap partition (see[[#3KeBPFV6TPxLS5pxDtOxyw][THIS]]) and
+rerun again
+
+** swap
+
+by default the pogo app distro comes without a swap partition since swap
+kills flash drives but if need occesionally
+ create a swap partition (see[[#3KeBPFV6TPxLS5pxDtOxyw][THIS]]) and turn
+it off on when needed using [[#KMHV3aORURXCDCZBPt669A][this command]]
+
+** plugapps
+
+*** install
+
+Install the new Bootloader (U-Boot)
+ While connected via SSH to your plug, copy, paste, and run the
+following commands to download a bootloader that can boot from USB
+drives:
+ cd /tmp
+ wget http://jeff.doozan.com/debian/uboot/install uboot mtd0.sh
+ chmod +x install uboot mtd0.sh
+ ./install uboot mtd0.sh
+ Format your USB drive
+
+ After the new bootloader is installed, you will need to use fdisk to
+partition a storage device. Plug in a 1GB or bigger USB drive. REMOVE
+ALL OTHER DRIVES. Move everything you need off of the drive and back it
+all up.
+ Everything on the USB drive with be deleted and replaced with PlugApps
+Linux.
+ 1a. Now run:
+ /sbin/fdisk /dev/sda
+ 1b. At the fdisk prompt, delete old partitions and create a new one:
+ Now type p. This will list any partitions on your disk drive.
+ Type d 1, d 2, and so on to delete all partitions.
+ Type p to list partitions. There should be no partitions left.
+ Now type n, then p for primary, 1 for the first partition on the
+drive, and then press ENTER, accepting default values.
+ Exit by typing w.
+ 1c. After you create a new partition, create the ext2 filesystem:
+ wget http://plugapps.com/os/pogoplug/mke2fs
+ chmod 755 mke2fs
+ ./mke2fs /dev/sda1
+ mkdir usb
+ mount /dev/sda1 usb
+ 2. Download and install PlugApps Linux:
+ cd usb
+ wget
+http://plugapps.com/os/2011.02/PlugApps-Linux-2011.02-rootfs.tar.gz
+ tar -xzvf PlugApps-Linux-2011.02-rootfs.tar.gz # This will take a long
+time
+ rm PlugApps-Linux-2011.02-rootfs.tar.gz
+ sync # Takes a while if you are using a flash drive
+ 3. Reboot. Cross your fingers and hope for the best.
+ cd ..
+ umount usb
+ /sbin/reboot OR shutdown -h now
+ 4. The key of your device will be different, so you need to tell Mac OS
+X or Linux to remove it from ~/.ssh/known hosts before using SSH again:
+ ssh-keygen -R 192.168.1.123 #(using your device's IP)
+ Log back in after your Pogoplug rebootsusing username root and
+password root.
+
+*** configure static IP
+
+1)edit your /etc/rc.conf
+ and make sure ONLY these lines are there in the network station:
+
+eth0="eth0 192.168.0.20 netmask 255.255.255.0 broadcast 192.168.0.255"
+ INTERFACES=(eth0)
+ gateway="default gw 192.168.0.44"
+ ROUTES=(gateway)
+
+ 2)IMPORTANT: edit the /etc/resolv.conf and make sure the GW and an
+additonal dns server is there just in case:
+
+# Use 'ifconfig -a' or 'ls /sys/class/net/' to see all available
+interfaces.
+ # Generated by dhcpcd
+ # /etc/resolv.conf.head can replace this line
+ # /etc/resolv.conf.tail can replace this line
+ nameserver 8.8.8.8
+ nameserver 192.168.0.44
+
+ reboot to see if it worked
+
+*** config
+
+ rc.conf:
+
+ change the hostname to your computer and timezone
+ edit the deamons. make sure nfs-common comes up last
+ fstab
+mount nfs shares
+
+ Proceed to add a user
+ISSUE as root:
+ useradd -m -g [initial group] -G [additional groups] -s
+[login shell] [username]
+ ie
+ useradd -m -g users -G audio,lp,optical,storage,video,wheel,games,power
+-s /bin/bash zeltak
+ followed by passwd USER:
+ passwd zeltak
+ to set the password
+
+*** installs
+
+pacman -S vim mlocate tmux zip unzip unrar nfs-utils rpcbind ncdu
+transmission-cli weechat mc ranger htop python2 rtorrent
+
+*** sudo
+
+Add sudo permissions:
+ to add a user to the sudors list you need to issue:
+ this is done with vi:
+ using visudo you need to type "i" to edit something and to type ":wq"
+to save and exit
+ enter the user name needed:
+ zeltak ALL=(ALL) ALL
+
+*** backup
+
+ you could shutdown, mount it on your linux desktop, and (as root, from
+the base directory of the drive) do a
+ tar -zcf ~/plug-backup.tgz ./
+
+** increase rootdelay (solve thumb drives not booting up)
+
+until i made these adjusments the sometimes after a reboot the thumb
+drives would not boot up and only would after numerous restarts
+ to fix that and get a constant reboot action do this:
+ (NOTE- normally you only have to do this once when you buy the new
+device or after a firmware upgrade):
+ 1)login to the dockstar using ssh with original user:password
+ 2)issue:
+
+killall hbwd
+
+2) run
+
+/usr/sbin/fw printenv | grep -i rootdelay
+
+ and see the output. it should say that the root delay is 10
+ 3) run
+
+/usr/sbin/fw setenv usb rootdelay 20
+
+ to change the root delay to 20
+ 4 )rerun step 2 to make sure root delay is 20 now
+ 5) reboot and it should be fine now
+
+/sbin/reboot
+
+
+* WDTV
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-20 Mon 15:25
+  :ARCHIVE_FILE: ~/org/files/Tech/linux.org
+  :ARCHIVE_OLPATH: linux hardware tips
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+** flash vs non-flash version (ext3)
+
+The Normal (Flash) version requires Flashing the Firmware into the
+WDTV Live. It contains all changes from the Changelog
+ This is normally what you want to install
+ the Ext3 version (non-flash) version is used either for testing
+purposes, or for purposes of modifying the firmware content. It is
+identical to the normal flashed version. The main difference is that
+while WDLXTV runs from the internal read only NAND flash, the ext3
+version is pivoted into and run directly off your external device. This
+means the ext3 version gives you full read/write permissions.
+ It gets only mounted at boot, if all of the following applies:
+ a previously flashed WDLXTV version (0.2+) is already present on
+the WDTVLive,
+ root.bin is placed on the WDTV-plugged-in USB thumb drive.
+ Note that its net.mounts, S00custom-options and smb.conf (if avaliable)
+override the ones previously installed.
+ Never unmount/unplug the USB thumb drive on which it resides, while the
+WDTVLive is plugged-in (even if in standby), otherwise the system will
+become unstable.
+ For more information on how to use this, see USB Boot
+
+** install/upgrade custom firmware
+
+This is relevant both for installing from scratch and on upgrades
+ 1.Download the Firmware
+ Download the latest firmware (the flash version) for your device.
+Ensure you get firmware appropriate to your device model (G2/Live/Plus).
+ Zeltaks version is :
+ wdlxtv-live
+ EXT3 versions are for non-permanently testing newer builds, so ensure
+you download the non-EXT3 version for your model.
+ 1.Install the Firmware to USB Stick
+ Format a USB stick to FAT32. This is easily doable in Windows via
+Computer -> Right Click (Driver Letter) -> Format. Quick format is all
+that is needed. Linux users should use mkfs with vfat.
+ Once your stick is formatted extract the firmware zip you copied and
+place at a minimum the wdtvlive.bin and wdtvlive.ver files onto your USB
+stick.
+ If the archive contains a wdtvlive.fff file put it also on the USB
+stick!
+ You may also add the S00custom-options file if you wish.
+ 3.Flash the Firmware
+ Turn your WDTV off.
+ This means pulling the power plug, not using the remote. Disconnect any
+existing USB devices you may have from your WDTV and insert the stick
+into the left port.
+ Plug the power cable back in, turn the unit on, and follow the onscreen
+instructions (updating procedure)
+ Notes:
+
+ If the screen stays dark wait at least 15 minutes then remove power
+completely again, move the USB stick to the rear port, and re-attempt.
+ If the new firmware is not found and you don't get a "New firmware
+found", edit the wdtvlive.ver file and change the first version number
+to something higher than your currently installed firmware.
+ Example:
+ You have 1.02.21.WDLXTV LIVE-0.4.5.3 running and want to up- or
+downgrade to any other version, change the content of wdtvlive.ver to
+ VERSION='1.02.22.WDLXTV LIVE-0.4.5.3'
+ If it is still not showing the upgrade notice it's most likely due to
+your USB stick. (95% of the cases)
+ In this case start over with formating the drive and copying the files
+(make sure you safely remove the device after copying!
+ If it's still not working try a different USB stick.
+ 4.Boot
+ If all went well you should now be running the latest, greatest version
+of WDLXTV!
+
+** after fresh install
+
+after succesfuly installing wdlxtv on your device for the first time
+follow these steps:
+ 1)You should now use telnet to set your SSH password.
+ use telnet to login (using the WD ip adress)
+ the user is root and password is emrty
+ use the command
+ passwd
+ to set a unix password
+ then logout and ssh in with user root IE:
+
+ssh root@192.168.0.100
+
+ 2.Enabling Web Management (Live/Plus)
+ Now that your SSH password has been set, you will probably want a more
+convenient way to manage your WDTV. Luckily, it comes with a complete
+and fully featured web GUI. While still connected via SSH/telnet, enter
+the following commands to ensure the Apache web server is running.
+ config tool -c APACHE='ON'
+ config tool -s
+ /etc/init.d/S66apache2 start
+ Final Steps
+ With the web GUI enabled, you can manage your WDTV much more easily.
+Simply point your browser to either the hostname or IP address of your
+WDTV box; you can find the IP address under the about system menu.
+ The default user/pass for the web GUI is :
+ wdlxtv/wdlxtv
+ Note that most configuration changes require a reboot
+
+** WDTV Live - Revert to official firmware without flashing
+
+Prerequisites:
+ This procedure is valid if the WDTV Live is flashed with unofficial
+firmware explained in http://wiki.wdlxtv.com/Main Page site.
+ Procedure:
+ - Download last wdtvlive firmware from
+http://www.wdc.com/wdproducts/updates/?family=wdfwdtv live
+ - unzip wdtvlive 1.04.10 V.zip
+ - Download cramfsck-16k binary files from
+http://forum.wdlxtv.com/download/file.php?id=4
+ - Extract firmware and create system directory:
+ - tail -c +33 wdtvlive.bin > wdtvlive.stripped.bin
+ - ./cramfsck-16k -x dump wdtvlive.stripped.bin
+ - cd dump
+ - mkdir -p boot
+ - mkdir -p dev
+ - mkdir -p mnt/boot
+ - mkdir -p mnt/fwup
+ - mkdir -p opt
+ - mkdir -p proc
+ - Create root.bin file with right dimension:
+ - dd if=/dev/zero of=new.root.bin bs=1024k count=150
+ - Format it ext3:
+ - mkfs.ext3 ./new.root.bin
+ - Mount it:
+ - sudo mkdir /tmp/smaller
+ - sudo mount -o loop new.root.bin /tmp/smaller
+ - Copy files:
+ - sudo rsync -avHS /home/asdf/wdtv/wdtvlive 1.04.10 V/dump/
+/tmp/smaller
+ - sync
+ - Umount it:
+ - sudo umount /dev/loop1
+ - Rename it:
+ - mv new.root.bin root.bin
+ - Copy root.bin in a formatted fat 8Gb root directory /
+ - Plug-in usb key in wdtvlive
+ - Reboot
+
+** control playback thorugh ssh
+
+here is simple way to control osd from console, just send
+
+echo % > /tmp/ir injection
+
+ where % is char assigned to button u want to send, here;s table
+ POWER - w
+ HOME - o
+ UP - u
+ LEFT - l
+ ENTER - n
+ RIGHT - r
+ DOWN - d
+ BACK - T
+ STOP - t
+ OPTION - G
+ REWIND - H
+ PLAY/PAUSE - p
+ FORWARD - I
+ PREVIOUS - [
+ NEXT - ]
+ SEARCH - E
+ EJECT - X
+ for example
+ Code:
+
+echo X > /tmp/ir injection
+
+ do the same as EJECT button.
+ it should be quite easy to modify redindian's web-based remote control
+page to make it work on live.
+ also you can create a script and use it with IR commands
+ is it => 1s (your comment on split second) that the 0x001051c memory
+location is cleared? If so, then just a delay of 1s and a read would
+suffice. We could just do something like this:
+ Code:
+ while true; do
+ if [ $(devmem 0x001051c) != "0x00000000" ]; then
+ act on remote code()
+ sleep 1
+ fi
+ done
+ #Obviously a bit more needed but this gets the point across.
+ This would be very trivial to write if one wanted to use a remote
+control that wasn't a programmable universal remote. I just use a
+learning remote and this isn't needed I send actual WD TV remote codes
+instead.
+ We just need you to expose the extra remote options (Vol UP/DOWN, one
+key subtitles, one key chapters, etc) and then this would be a perfect
+daemon to stay running and act on all the extra remote codes.
+ Great info BTW!
+
+** reboot
+
+issue:
+
+reboot -f
+
+ Pasted from
+<[[http://wiki.wdlxtv.com/Appz][http://wiki.wdlxtv.com/Appz]]>
+
+** plugins/apps
+
+*** 1)initial setup
+
+1.format a usb thumb drive with ext3
+ 2.download the non flash firmware (the one that supports plugins for
+now 1.03.49 )
+ 3. unzip it to the ext3 thumb drive
+ 4.boot with it
+ note-this will only work if
+ a previously flashed WDLXTV version (0.2+) is already present on
+the WDTVLive,
+ root.bin is placed on the WDTV-plugged-in USB thumb drive.
+
+ 5.you will now get the new firmware from the flash drive with
+read/write support. when you fo to the plugin button it will first
+prompty you to create a plugin folder, accpet and it will create one in
+the disk root (.pluginswdltx)
+ 6)turn off the device and add some plugins now to the .pluginswdltx
+folder
+ 7. turn on the device and then you can install some plugins using the
+gui menu
+ you need to reboot after every plugin install to make the plugins work
+ for apps see next stage
+
+*** 2)ipkg
+
+INSTALL (extremely simple)
+ Installs in 4 simple steps:
+ - format usb storage with ext3 (alredy done in step1)
+ - put the wdlxtv optware.app.bin in it (in the root dir)
+ - login from telnet or ssh
+ - type optware-install.sh
+ - type 'source /etc/profile'
+ NOTE:
+ - the usb storage needs to be ext3 formatted but this doesn't means
+that you need the ext3 version of firmware
+ - this port builds the /opt directory inside your usb storage
+ every time your WDTV HD Live is booted with the app.bin your shell will
+be configured to have the ipkg command type "ipkg list" to realize how
+much software you can install (lots!)
+ use ipkg install to install apps:
+
+$ipkg install weechat
+
+*** 3)optware install
+
+ipkg install bitlbee mc weechat ncdu vim zsh mlocate mpd htop rsync zip
+unzip unrar wget python ruby perl
+
+** Turn off all LED permanently?
+
+To turn LED's off you can use a script like this:
+ (if you name it S99user-script and put it in /conf directory it gets
+executed on boot)
+ #!/bin/sh
+ led-control power led off
+ led-control status led off
+
+** NFS mounting
+
+create a file in the config dir (conf) called :
+ net.mounts
+ then put the mounts you want in that file:
+ xmount 192.168.0.1:/media/tomb/ tomb nfs
+
+** upnp-cmd
+
+*** example on how to add a media file
+
+use this syntax
+ SetAVTransportURI <URI> <URIMetaData> (allowed URI:
+"http://server/file", "file:///folder/file"
+ IE:
+
+upnp-cmd SetAVTransportURI "file:///tmp/media/usb/tomb/Sesame.m4v"
+
+** subtitles
+
+to get subtitles to work you must rename it exactly as the movie name
+and make sure its in srt format
+

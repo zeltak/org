@@ -367,3 +367,24 @@ https://github.com/nex3/perspective-el
   )
 #+END_SRC 
 
+
+* Ace jump
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-20 Mon 18:34
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages
+  :ARCHIVE_CATEGORY: settings
+  :END:
+** evil mode specifics 
+#+BEGIN_SRC emacs-lisp :results none 
+  ;; some proposals for binding:
+ 
+;  (define-key evil-motion-state-map (kbd "SPC") #'evil-ace-jump-char-mode)
+;  (define-key evil-motion-state-map (kbd "C-SPC") #'evil-ace-jump-word-mode)
+;  (define-key evil-motion-state-map (kbd "M-SPC") #'evil-ace-jump-line-mode)
+   
+  ;; (define-key evil-operator-state-map (kbd "SPC") #'evil-ace-jump-char-mode)      ; similar to f
+  ;; (define-key evil-operator-state-map (kbd "C-SPC") #'evil-ace-jump-char-to-mode) ; similar to t
+  ;; (define-key evil-operator-state-map (kbd "M-SPC") #'evil-ace-jump-word-mode)
+  
+#+END_SRC
