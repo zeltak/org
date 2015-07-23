@@ -6,8 +6,6 @@
 
 * @TODAY@							  :CANCELLED:
 
-** TODO RASI: Talk about GPG and how to use same for email mbsync 
-sun
 ** sunrise
 *** questions 
 1) REQUEST: if there is only 1 match left in fuzzy match- can SR auto select it (that is enter dir)
@@ -16,6 +14,21 @@ sun
 
 5) for sr-show-files-info can the return info be in MB/GB (and not fubytes :))
 
+
+Hi again zeltak :-)
+
+In order:
+
+1) M-x customize-variable [RET] sr-show-file-attributes [RET]
+2) That's weird. Can you find a way to reproduce the problem reliably?
+3) Just adding (define-key sr-mode-map (kbd "/") 'sr-fuzzy-narrow) to your .emacs file should do the trick
+4) That's because you can create only one tab per directory. If you move to another directory you'll be able to create another tab.
+5) I don't know what that configuration is for, but all you should need to care about is having avfsd correctly configured and running and having the `sr-avfs-root' variable pointing to the directory where avfs is mounted. Take a look at this tip: http://www.emacswiki.org/emacs/Sunrise_Commander_Tips#toc12
+6) Press r -- it will reverse whatever order you have selected and it's sticky.
+7) What kind of commands would you like to write? Shell commands? Actually the best way would be to know a little Emacs lisp, but without it there's still a few things one can do:
+7.a) Learn how to create and save keyboard macros (http://www.gnu.org/software/emacs/manual/html_node/emacs/Keyboard-Macros.html#Keyboard-Macros) -- then you'll be able to record your command as a macro, bind it to a key and replay it anytime you want.
+7.b) Write regular scripts (e.g. shell scripts), save them into a bookmarked directory so you can easily find them whenever you need and execute any of them by pressing the "X" key in SC (of course, the script must have the executable flag set for this to work.)
+7.c) In any case, nothing gives you as much rope as learning some Emacs lisp. And it's not at all difficult. Here's some good reading that may convince you better than I could: https://www.gnu.org/software/emacs/manual/html_node/eintr/ -- if this succeeds at whetting your appetite, as I hope, why not start right away? https://www.gnu.org/software/emacs/manual/html_node/eintr/
 
 
 *** Navigation
@@ -54,6 +67,31 @@ Storing links from Sunrise-commander
       link)))
 *** AVFS
 '(sr-virtual-listing-switches "-al --group-directories-first")
+** hydra
+(defface hydra-face-orange
+    '((t (:foreground "orange" :bold t)))
+  "Orange face. For fun.")
+
+(defhydra hydra-projectile (:color blue
+                            :columns 4)
+  "Projectile"
+  ("a" projectile-ag "ag" :face 'hydra-face-orange)
+  ("b" projectile-switch-to-buffer "switch to buffer")
+  ("c" projectile-invalidate-cache "cache clear")
+  ("d" projectile-find-dir "dir")
+  ("s-f" projectile-find-file "file")
+  ("ff" projectile-find-file-dwim "file dwim")
+  ("fd" projectile-find-file-in-directory "file curr dir")
+  ("g" ggtags-update-tags "update gtags")
+  ("i" projectile-ibuffer "Ibuffer")
+  ("K" projectile-kill-buffers "Kill all buffers")
+  ("o" projectile-multi-occur "multi-occur")
+  ("p" projectile-switch-project "switch")
+  ("r" projectile-recentf "recent file")
+  ("x" projectile-remove-known-project "remove known")
+  ("X" projectile-cleanup-known-projects "cleanup non-existing")
+  ("z" projectile-cache-current-file "cache current")
+  ("q" nil "cancel"))
 ** bookmark+ link to orgid
 ** keys reahual
 *** Emacs

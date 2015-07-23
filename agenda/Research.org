@@ -1,7 +1,7 @@
 #+TITLE: Research 
 #+TODO: TODO(t) EXP(e) | SUBMITTED(s) K_TRACK(k) PAUSED(p) DONE(d) 
 #+CATEGORY: work
-#+TAGS:  first(f) read_only(r) allan(a) joel(j)
+#+TAGS:  first(f) read_only(r) allan(a) joel(j) meytar(t) Boris(b) BGU(u)  
 #+STARTUP: overview  inlineimages eval: (org-columns)
 #+PRIORITIES: A
 #+OPTIONS: toc:nil 
@@ -708,6 +708,11 @@ will mainly be head circumference and Birth weight
 build a kernal density map of exposure and overlay with outcome kerenl density maps
 look at cholropleth maps (SSA level) of outcome Vs Exposure
  
+** SVM project with allan
+look into incorperating mixed model framework into svm
+prepare the data for NY/NE/NJ area
+look into svm model with mixed effect and if that doesn't help look into taking the random parts from mod1 and use them in an SVM
+look into using svm in mod4
 * Future Project Ideas
 ** PM model (NEXT BRANCH)
 *** MAIAC next stages
@@ -1722,6 +1727,11 @@ summary(model)
 
 tried with mediocre success so far- is there a way to include a random statement
 
+*** SVM for mod4
+can we incorporate splines
+*** check spciaction from MOEP to see which componenets (traffic vs secondary ) are in each city and vs rural areas
+ask david about that
+borrow a haravrd based filter- talk to petros
 ** run calls from R  to open r sessions
 * Papers
 ** List of reviewers

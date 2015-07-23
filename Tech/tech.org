@@ -5990,6 +5990,74 @@ export PATH=/opt/bin:$PATH
 make
 make install 
 #+END_SRC
+** WD cloud mirror
+*** setup Rsync
+Enable SSH on the NAS, (user is sshd and password is what you defined)
+
+then use vi (or nano if installed) and edit 
+1)vi /etc/rsync.secrets
+$Note$ -This file will be left empty, but the file needs to be there
+
+2)vi /etc/rsyncd.conf
+and Type the following into the file
+
+#+BEGIN_EXAMPLE
+[shares]
+# the following path works fine. When you setup the backup task in the Synology, you will be able
+# to choose the desired WD share
+path = /shares
+uid = root
+gid = root
+read only = no
+list = yes
+# auth users = all
+secrets file = /etc/rsyncd.secrets
+# the IP address is the one of the Synology backing up to the WD. This provides some security.
+hosts allow = IP NEEDED to allow
+#+END_EXAMPLE 
+
+$Note$  the IPNEEDED above is the other NAS IP that initiates the rsync
+
+dont leave path = /shares other wise you will get space errors. change it to where your actual raid resides
+
+path = /mnt/HD/HD_a2/rsync/
+
+$Note$ - i create the rsync folder there previously with mkdir command
+
+Same thing for  /etc/default/rsync
+
+3)start in ssh CLI rsync
+ 
+#+BEGIN_SRC sh :results none
+rsync --daemon
+#+END_SRC
+
+ 
+Then go to the Synology and set up a backup destination as a r-sync compatible server. Enter the IP address of the WD (better to have a fixed one). 
+Enter USER (sshd default) and PASS.
+
+Pick the "shares" in the list of modules. Then create a backup task using this destination. At that point, you will be able to pick a WD share as the backup directory for all the Synology data.
+Run your backup task.
+ 
+To start rsync automatically on the WD reboot, do the following:
+ 
+In /etc/init.d/rsync
+
+change
+
+#+BEGIN_EXAMPLE
+RSYNC_ENABLE=false
+#to
+RSYNC_ENABLE=true
+#+END_EXAMPLE
+
+
+then in the synology/qnap backup, create a new rsync based sync and add the full path manually :
+
+/mnt/HD/HD_a2/rsync/
+
+into the `Backup module` section (dont use the suggested options)
+
 ** X1 carbon
 *** fix clickpad buttons (until kernel 4.0 is released)
 for a fix that lasts until a reboot
