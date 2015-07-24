@@ -1,0 +1,288 @@
+#+TITLE: Epidemiology
+
+* Epidemiology
+** Terms
+
+*** basic terms
+
+[[Epidemiology_files/attach/epid_gloss.pdf][Attachment #01
+(epid\_gloss.pdf)]]
+
+** Data, Experiments, Studies
+
+*** Cross sectional study
+
+Cross sectional studies are those that record data from a sample of
+subjects at a given point in time.
+ **
+
+Cross-sectional Data:C
+
+ross-sectional data refer to observations of many individuals (subjects,
+objects) at a given time.A simple example of cross-sectional data is the
+gross annual income for each of 1000 randomly chosen households in New
+York City for the year 2000.
+ Consider, for example, a set of 1000 households randomly chosen from
+all households of New York City. The observed variable is the gross
+annual income.
+ A set of 1000 annual income values for year 1995 for each household is
+an example
+of [[http://www.statistics.com/resources/glossary/c/crossdat.php][ ]]oss-sectional
+data . From such data one could derive information on how income was
+distributed among households in New York City in 1995.
+
+*** Longitudinal study
+
+Longitudinal analysis is concerned with statistical inference
+from [[http://www.statistics.com/resources/glossary/l/longdat.php][longitudinal
+data]].
+ Longitudinal studies are those that record data for subjects or
+variables over time.
+ If a longitudinal study uses the same subjects at each point where data
+are recorded, it is a [[#8wJ-MChsEs34tIs6Pa1F2A][panel study]] .
+ If a longitudinal study samples from the same group at each point where
+data are recorded, it is a [[#N0z.WxuMzV4Pg5rtyQ0R5g][cohort study]].
+ Longitudinal Data:
+ Longitudinal data refer to observations of a given unit made over time.
+Such data can usually be represented as a time-series and, therefore,
+they are often referred to as time series data.
+ A simple example of longitudinal data is the average gross annual
+income of, say, 1000 households randomly chosen from New York City for
+years 1991-2000. Such data could be represented as a time series of 10
+values (each value being the average gross income of all 1000 households
+for one year).
+
+*** Cohort study
+
+Cohort study:
+ A cohort study is a longitudinal study that identifies a population or
+large group (a "cohort") then draws a sample from the population at
+various points in time and records data for the sample.
+
+*** Panel study
+
+Panel study:
+ A panel study is a longitudinal study that selects a group of subjects
+then records data for each member of the group at various points in
+time. See also panel data .
+ Panel Data:
+ A panel data set refers contains observations on a number of units
+(e.g. subjects, objects) over time. Thus, panel data has characteristics
+of both longitudinal data and cross-sectional data .
+ A simple example of panel data is the values of the gross annual income
+for each of 1000 randomly chosen households in New York City collected
+for each of 10 years from 1991 to 2000. Such data can be represented as
+a set of double-indexed values {Vij; i=1,...,10, j=1,...,1000} .
+
+** Rates, prevelance, proportions
+
+ *induction period:* deﬁned as the period of time from causal action
+until disease occurrence.
+ *latent period :* The time interval between disease occurrence and
+detection.
+ *Hill* suggested the following aspects of an association be considered
+ in attempting to distinguish causal from noncausal associations: (1)
+strength,
+ (2) consistency, (3) speciﬁcity, (4) temporality, (5) biologic
+gradient, (6) plausibility,
+ (7) coherence, (8) experimental evidence, and (9) analogy.
+ *Incidence rate*measures the occurrence of *new* disease per unit of
+person-time.*
+**
+**Prevalence*, a measure of status rather than of newly occurring
+disease, measures the *proportion of people who have disease* at a
+speciﬁc time.
+ *Incidence times* are simply the times at which new disease occurs
+among population members.
+ *Incidence proportion* measures the proportion of people who develop
+new disease during a speciﬁed period of time.
+ [[Epidemiology_files/img/image%204.png]]
+
+** Case crossover
+
+*** intro
+
+The case crossover design was introduced in 1991 by Maclure M (Am J
+Epidemiol 1991;133:144-53) to study the transient effect of brief
+exposure on the occurrence of a rare acute-onset disease.
+ The argument is that if there are precipitating events, these events
+should occur much more frequently during a period immediately prior to
+the onset of disease than at a similar period which is more distant from
+the disease onset. For example, it has been reported that physical
+stress and mental stress may trigger sudden cardiac death. If this is
+true, one would find that sudden cardiac death occurred more frequently
+during or shortly after strenuous physical activity, or that there was
+an increase in informant-reported life stress either acutely before
+sudden cardiac death or during the weeks before the event. Another
+example is the alcohol consumption and injury. The effect of alcohol is
+transient and alcohol use is usually associated with injury. Therefore,
+one would expect that the alcohol consumption prior to injury increases
+the risk of injury.   
+ [[Epidemiology_files/img/Pasted.jpg]]
+ For example, to find out what might trigger the onset of myocardial
+infarction, we may wonder if the patient endured certain heavy physical
+activity, or if he/she consumed specific type of food right before the
+disease. If we can gather the so called "exposure" information from many
+patients, it is possible to determine the effect of the event or
+"attitude" on the onset of disease.
+ [[Epidemiology_files/img/Image_bklqKLwr0vLS-aBS2iFAlg_0001.jpg]]
+  Like most of the epidemiological studies we need to have control data
+to determine what "unusual" meant. However, we can't do the comparison
+among individuals since everyone is different. Rather, the comparison
+should be done within the individual. In another words, we will compare
+the individual's activity before the disease onset to his/her usual
+activity. Thus here, we have a "case" component and also a "control"
+component, but the information of both components will come from the
+same individual.
+ [[Epidemiology_files/img/Image_bklqKLwr0vLS-aBS2iFAlg_0002.jpg]]
+ We define the "case component" as hazard period which is the time
+period right before the disease or event onset; and the "control
+component" as control period which is a specified time interval other
+than the hazard period. The information of the individual "exposed to
+certain activity or agent during the hazard period and control period
+will be compared. If we collect such information from many subjects who
+had the disease or event, we can test for consistent relationships
+between the disease and the exposure.
+
+*** case crossover desgin
+
+[[Epidemiology_files/img/Image_3jEK0KCSJJZHq8.d6PQ8Bw_0001.jpg]]
+ - The term "crossover" is mainly used to describe experiments in which
+all individuals pass through both the treatment and placebo phases.
+  In the case crossover design, the treatment phase is the hazard period
+and placebo phase is the control period. Since there are a hazard period
+and a control period and each individual provides the exposure
+information for both hazard and control periods, case crossover design
+can be viewed as a matched case-control study design where it involves
+cases only and each individual serves as his/her own control.
+ - On the other hand, the case crossover study can also be viewed as a
+retrospective cohort study as the control data are not necessarily the
+"counts", they can be units of exposure person-time (this will be
+illustrated in slides 13, 16, 20). When it is this case, the analysis
+for the study can be treated as a pooled analysis of several cohort
+studies each with a sample size of one.
+ [[Epidemiology_files/img/Image_3jEK0KCSJJZHq8.d6PQ8Bw_0002.jpg]]
+ - In summary, case crossover design is used when a brief exposure
+causes a transient change in risk of an acute onset event. The event can
+be the onset of type I diabetes, a motor vehicle accident, or an injury.
+The "exposure" can be another disease or certain activity, such as
+having an infectious disease, conducting a certain unusual task, or
+using a certain device. There is a hazard period associated with the
+event onset and the exposure information in the hazard period is
+compared with the control data from a selected control period.
+
+*** What is effect period of the exposure?
+
+[[Epidemiology_files/img/Image_Nab8pC9wklEkvqUGskAcjw_0001.jpg]]
+ The effect period after the exposure is the time period during which
+there is either excess or reduced risk due to the exposure. If there is
+a delay before impact of the exposure and/or there is carry over time of
+the exposure, the effect period is not exactly the same as the period of
+exposure. Thus, the effect period is defined as the difference of those
+two. Usually, one can assume the minimum delay before impact as "0".
+ There is an effect period associated with every episode of exposure.
+For example, if the effect of certain physical activity lasts for 30
+minutes, then every time after the physical activity, the following 30
+minutes will be considered as the effect period. That is during those 30
+minutes the individual will have higher risk of the event, say MI.   
+
+*** What is hazard period?
+
+ [[Epidemiology_files/img/Image_HuB2dIZcZOF0KKQam2QZkQ_0001.jpg]]
+ The hazard period is the period of time right before the event onset
+and its length is the same as the length of exposure effect period. It
+is hypothesized that, during this period of time, the individual is most
+likely exposed to certain agent which triggers the onset of the event.
+Thus we are interested to know if the individuals had exposure in this
+period of time or not.   
+ [[Epidemiology_files/img/Image_HuB2dIZcZOF0KKQam2QZkQ_0002.jpg]]
+  The length of the hazard period can be decided according to the
+investigator's past experience. The length of this period is very
+important. If the duration is overestimated, many "false exposures" will
+become "exposures". If the duration is underestimated, some of the "true
+exposures" will be excluded. When either of these occur, the association
+between the event and exposure can't be evaluated correctly.
+
+*** control data
+
+[[Epidemiology_files/img/Image_9LDXr7w-YsiaEvbGbYK73Q_0001.jpg]]
+  - From the earlier slides we know that the exposure information in the
+hazard period will be compared to the exposure information in the
+control data. There are 2 types of control data we can use in a case
+crossover analysis. The first type of data and also the most used is the
+exposure information from a "control period" which has the same length
+as the hazard period but at different time point. For example, if the
+length of hazard period is 5 hours, the control period is also a 5-hour
+period but it can be from the day before or two days before.
+ - The second type of control data is the exposure information from the
+past, it can be from the past month or past year. The analysis based on
+this type of control data will be more complicated.
+ [[Epidemiology_files/img/Image_9LDXr7w-YsiaEvbGbYK73Q_0002.jpg]]
+     Here the myocardial infarction study by Mittleman MA (1993) is used
+to illustrate the types of control data we can use in a case crossover
+study. In the study they investigated the effect of heavy physical
+exertion on the onset of MI and whether the risk of MI can be modified
+by regular physical exertion. Thus here, the "event" is the onset of MI,
+and the "exposure" is heavy physical exertion. The effect of physical
+exertion is assumed to last one hour, and the hazard period is one hour
+before the onset of MI.
+ [[Epidemiology_files/img/Image_9LDXr7w-YsiaEvbGbYK73Q_0003.jpg]]
+     The first type of control data is the exertion information from a
+one-hour control period which is defined as at the same hour but on the
+day before the onset of MI. For example, if a patient had MI at 9pm, May
+28, the control period will be at 8-9pm, May 27. The physical exertion
+information (yes or no) was collected during these 2 time periods.
+ [[Epidemiology_files/img/Image_9LDXr7w-YsiaEvbGbYK73Q_0004.jpg]]
+ The other type of control data they used is the patient's usual
+frequency of physical exertion over the past year. The idea is to
+compare the amount of time exposed to exertion and the amount of time
+not exposed to exertion over the past with the information of whether
+there was exertion during the hazard period. Since here "person-time"
+exposed to exertion is used, the design is rather like a "cohort" study
+than a traditional case-control study, and the analysis for this type of
+control data will also be more like a cohort study analysis.
+
+*** Analysis: If the control data were from a comparable control period
+
+[[Epidemiology_files/img/Image_bsvx3WzUSJsDlauAwvGQyQ_0001.jpg]]
+ Now we will talk about how to analyze the hazard period data and
+control data to estimate the effect of exposure on the outcome. Since
+there are 2 types of control data, we will also have 2 types of
+analyses. 
+ If the control data are from a comparable control period, the analysis
+will be the same as that for a matched case-control study. However,
+instead of concordant and discordant pairs of study subjects in a
+matched case-control study, here we will have concordant and discordant
+pairs of exposures from the hazard period and control period. That is,
+the pairs are made up of two intervals(hazard period and control period)
+for each subject, and the pairs are either concordant or discordant for
+exposure. After arranging the data in a 2 by 2 table as shown in the
+slide, we can just use the standard method for matched case-control to
+get the odds ratio.   
+
+*** Discussion
+
+[[Epidemiology_files/img/Image_g.zza7WkUcN5V5hpa2wkKw_0001.jpg]]
+  - The important assumptions in a case crossover design include that
+the exposure should be brief, the time between exposure and event onset
+should be short and there is little carryover effect on the exposure.
+Therefore, this study design can't be used, for example, to evaluate an
+intervention which is anticipated to cause cumulative changes in the
+participants, or to study on the progression of a chronic disease.
+ - Because of the above conditions, the results from a case crossover
+analysis only represent short-term risk but not cumulative risk, and
+relative risk but not absolute risk.
+ [[Epidemiology_files/img/Image_g.zza7WkUcN5V5hpa2wkKw_0002.jpg]]
+ - The exposure information will be provided by the study participants
+or their next of kin (if the outcome is mortality). Recall bias may very
+possible occur when the information is not "recorded" and is recalled by
+the individuals. 
+ - In the design each individual serves as his/her own control and this
+can eliminate confounding by subject characteristics. But if there is
+certain characteristics which change over time in the individual, self
+control can't adjust for this. For example, an individual usually
+drinking coffee after exercise represents a within-individual
+confounding, since it is difficult to distinguish whether coffee
+consumption or exercise causes the outcome of interest. If this happens,
+one can stratify the data or use conditional logistic regression to
+adjust for the confounding.   

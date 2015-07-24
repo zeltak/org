@@ -1,7 +1,7 @@
 #+TITLE: Research 
 #+TODO: TODO(t) EXP(e) | SUBMITTED(s) K_TRACK(k) PAUSED(p) DONE(d) 
 #+CATEGORY: work
-#+TAGS:  allan(a) joel(j) meytar(t) Boris(b) BGU(u) maayan(m) adar(d) omer(o) lara(l) hila(h) students(s)
+#+TAGS:  allan(a) joel(j) meytar(t) boris(b) BGU(u) maayan(m) adar(d) omer(o) lara(l) hila(h) students(s)
 #+STARTUP: overview  inlineimages eval: (org-columns)
 #+PRIORITIES: A
 #+OPTIONS: toc:nil 
@@ -146,15 +146,14 @@ compare then how they work in "bad" areas such as africa?
  send the road network data
  eurodata at 50m comapre to OSM data
 
-** peripheral artery disease (PAD) , AE and PM2.5 in NE USA 	     :maayan:
+** peripheral artery disease (PAD), AE and PM2.5 in NE USA 	     :maayan:
 **** idea
 By reading this paper it came back to my mind that there is another orphan cardiovascular disease in air pollution research: peripheral artery disease. This is usually due to atherosclerosis and narrowing of the arteries in the limbs and an lead to severe outcomes such as amputation.
 It makes sense to be affected by air pollution, but last time I checked no one had published anything on this. With a large database and geospatial resolution, PAD would be an obvious one to look at.
 **** data from antonella
 when there is no 2, it means that they are created form first diagnosis, when there is the 2 it means that are created based on 1 and up to 5 secondary diagnosis
 so the ones with the 2 should have higher numbers of hospitalizations    
-**** TODO schedule a talk with maayan to start this project	     :maayan:
-
+**** TODO schedule a talk with maayan to start PAD/AE and PM  project :maayan:
 ** Mexico PM model 
 *** Health outcome studies
 ***** Birth outcome analysis
@@ -323,17 +322,23 @@ will mainly be head circumference and Birth weight
 **** analaysis
 build a kernal density map of exposure and overlay with outcome kerenl density maps
 look at cholropleth maps (SSA level) of outcome Vs Exposure
- 
-
-** France Pm models
+** [#A] MODEL.PM.France
 *** info file
 id:23371787-acbe-41fa-8bab-5a2e91c1e61e
 *** code
 file:/home/zeltak/org/files/Uni/Projects/code/P031.MAIAC.France
-
-*** Meetings
-**** johanna meeting [2015-06-12 Fri] 
-*** TODO'S
+*** meetings
+*** TD MODEL.PM.France
+**** check data completeness
+***** check missing ndvi France
+***** TODO Check missing met (temp,WS) France
+Try to use prev post day lags for areas missing Met
+***** DONE PM10.25 analysis
+*** explore
+*** related papers
+**** Read Queue
+**** Paper Summary
+**** Writing Material
 
 ** OSM-environmental health project (lara)
 *** info file
@@ -479,7 +484,7 @@ file:
 ***** Meris satellite
  Data from european sattelite - We here in my Lab are looking into this and possible future applications
 
-** storke and PM10 in israel
+** Storke and PM10 in israel					     :maayan:
 *** TODO ask allan abour long term analysis glmpql cells with 0	      :allan:
 ** Swiss MAIAC model
 *** info file
@@ -496,63 +501,60 @@ prepare the data for NY/NE/NJ area
 *** what to try:
 look into incorperating mixed model framework into svm
 look into svm model with mixed effect and if that doesn't help look into taking the random parts from mod1 and use them in an SVM
-** Ratio project
-*** regress and calibrate 2.5/10 ration but take into account long term dust trends (indicator)
-try support vector regression?
-pbl ,ws , humidaty 
-weight the predicted pm2.5 as lower weights opposed to true PM10
+** Ratio global project
+*** info file
+*** code
+*** meetings
+*** TD Ratio global project
+**** TODO slowly start organize data to publishable state	     :meytar:
+*** explore
+regress and calibrate 2.5/10 ration but take into account long term dust trends (indicator)
 run it region by region and use lu/temporal terms to get a regional prediction.
-CV- built in for SVR
-
-** meytar tasks 
-*** Ratio
-slowly start organize data to publishable state
 Add view Geometry
-*** Dust
-**** TODO as Victor
-how many hours of dust exposure is relevant to see an effect, did you guys look at daily means, or hourly data by any chance? know of relevant studies on that, weight exposure by ammount of hours of dust days.
-**** application of prev methodology in italy india-define dust events based on PM10 and modeling
-- output will be definition of dust event- hourly (0,1)
-- 2 completely different geo-climate regions
--test weather israel classification methodology works in other regions
--if not model adjustments locally
--check this definition vs italy model massimo has
-**** incorporation AOD 3km data for italy and India with OMI data to better 
-take AOD and OMI (observing index) and take the israeli classification and try to classify days to dust and non dust.
-use the Satellite data to classify dust days and once you have this classification compare tro israeli model. if there is agreement generate for india where there isn't pm10 data and use that to go back and classify. 
-*** Model adjustments
-***** Use sqrt transforms instead of log transform for skewed variables (after first checking the variable distribution etc.).
-***** TODO Use SVM
-tried with mediocre success so far- is there a way to include a random statement
-***** Exclude high percentiles in PM-AOD data
-after first performing box plot and outlier analysis and trying to understand the origin of the “errors”
-***** Evaluate chosen regions
-if there are enough monitors examine the spatial variability, temporal correlations among stations, examine common(?) geo-climatic patters, topography, land cover, ...
-Use correlation between nearby stations as a spatial variable
-!no! I do not think this belongs to phase 1. Maybe to phase 2??? When you apply the model and have only aod how whould you apply this term? I think it is the same cheating as using random intercept that accounts for the AQM station. If there are links between stations ayo ushould see them via the above (previous item).
-***** Add time effect - interaction between aod and as.factor(month) 
-***** Run model annually per country per region in different countries
-(do the regions with poor results have similar characteristics?) but present evaluation on a daily basis – show annual distribution of daily r2, rmse. Etc.
-***** Check with Brent Coull the possibility of incorporating the predicted temp (from the temp model) into the PM model.
-***** Consider validation of stage (3) in observations where (a) PM locations with PM data and missing aod data or/and (b) exclude known PM locations with both aod and PM available data for validation process. Namely – perform cross validation also of phase 3 !!!
-***** Run the model separately on subsets of the available collocated data based on high/low PM conc.
-***** Check the fit of the model in two different holidays: Yom Kipur and Lag Baomer. Check with David if he has someone working on this topic.
-
-***** use as a base model the LUR and see how much the aod add to it (rather than the other way)
-***** try use in the model both the abs error (norm 1) the sqrt of it (norm 2) to learn what gives most of the errors (season?, special daily conditions?, etc.).
-***** Use % dark pixles in both maiac and DB as variable and see if it explains some of the variability
-***** Study the angles during retrievals (and their link to the % dark pixles)
-***** examine and report statistics of the daily results
-(possibly averaged over long time but not only) and not only annual results (averages). Why? – because if there is a threshold than exposure to -10% may not be identical to exposure to +10% although the may (a) cancel each other in norm 1 (abs error),and add to each other in norm 2 (sqrt) where as in practice 9and o one knows if I am right or wrong) mybe only one of them matters 9due to the threshold). So – various metrics should be reported, and on daily basis. (e.g. error histogram, various moments of the error distribution statistics, etc.)
-*** France
-***** check data completeness 
-****** ndvi
-****** met (temp,WS)
-****** PM10.25
-
+Analyze the relation between PM hourly (overpass) data and daily data 
+Analyze diurnal cycles per station and compare daily to hourly PM values. 
+Analyze relation between overpass time and daily mean concentrations for all ground 
+variables (also dust events) for each station separately and maybe aggregated to regions.
+Discuss the use of daily data and how the overpass data represents the daily mean per station ?
+Understanding the causativeness between the PM2.5/PM10 ratio to the goodness of fit of 
+the AOD>>PM model to each PM fraction.
+Understanding if different ratios in different areas that are affected from different sources 
+reveal different fits. Global database: Israel, USA, Italy, Mexico, Spain etc. 
+The hypothesis is that the final graph will look schematically like this:
+*** related papers
+**** Read Queue
+**** Paper Summary
+**** Writing Material
 * Future Project Ideas
 ** Model.PM 
 *** TODO Ideas (NEED TO QUEUE BY PRIORITY)
+**** predict pm25 from 10
+weight the predicted pm2.5 as lower weights opposed to true PM10
+**** Compare results between correlation to MAIAC/MODIS C06 AOD data with overpass data (i.e. mixed effect model).
+**** Use sqrt transforms instead of log transform for skewed variables (after first checking the variable distribution etc.).
+**** TODO Use SVM
+tried with mediocre success so far- is there a way to include a random statement
+**** Exclude high percentiles in PM-AOD data
+after first performing box plot and outlier analysis and trying to understand the origin of the “errors”
+**** Evaluate chosen regions
+if there are enough monitors examine the spatial variability, temporal correlations among stations, examine common(?) geo-climatic patters, topography, land cover, ...
+Use correlation between nearby stations as a spatial variable
+!no! I do not think this belongs to phase 1. Maybe to phase 2??? When you apply the model and have only aod how whould you apply this term? I think it is the same cheating as using random intercept that accounts for the AQM station. If there are links between stations ayo ushould see them via the above (previous item).
+**** Add time effect - interaction between aod and as.factor(month) 
+**** Run model annually per country per region in different countries
+(do the regions with poor results have similar characteristics?) but present evaluation on a daily basis – show annual distribution of daily r2, rmse. Etc.
+**** Check with Brent Coull the possibility of incorporating the predicted temp (from the temp model) into the PM model.
+**** Consider validation of stage (3) in observations where (a) PM locations with PM data and missing aod data or/and (b) exclude known PM locations with both aod and PM available data for validation process. Namely – perform cross validation also of phase 3 !!!
+**** Run the model separately on subsets of the available collocated data based on high/low PM conc.
+**** Check the fit of the model in two different holidays: Yom Kipur and Lag Baomer. Check with David if he has someone working on this topic.
+
+**** use as a base model the LUR and see how much the aod add to it (rather than the other way)
+**** try use in the model both the abs error (norm 1) the sqrt of it (norm 2) to learn what gives most of the errors (season?, special daily conditions?, etc.).
+**** Use % dark pixles in both maiac and DB as variable and see if it explains some of the variability
+**** Study the angles during retrievals (and their link to the % dark pixles)
+**** examine and report statistics of the daily results
+(possibly averaged over long time but not only) and not only annual results (averages). Why? – because if there is a threshold than exposure to -10% may not be identical to exposure to +10% although the may (a) cancel each other in norm 1 (abs error),and add to each other in norm 2 (sqrt) where as in practice 9and o one knows if I am right or wrong) mybe only one of them matters 9due to the threshold). So – various metrics should be reported, and on daily basis. (e.g. error histogram, various moments of the error distribution statistics, etc.)
+
 **** lag terms for every day well have lags:
 pm~aod+aod01
 if prev day isnt avilable we use the same day twice
@@ -993,124 +995,6 @@ lowest level
 *** stage 3 regression by grid cell
 You do not need to run a model with a random effect for each grid cell. Instead, you can run a separate regression for each gridcell, regressing the non-missing predicted Ta against the mean of monitored Ta within 100km. This gives you 1 million regressions to do, but you can divide the gridcells into 100 groups and run 100 jobs on the cluster and it will run in an hour. We do this when we regress the 5000,000 methylation sites against predictors in the NAS.  Also, we need some of the land use terms.
 
-** meytar research topics 
-1. PM-MAIAC model in Israel
-
-Predict PM2.5 /PM10 based on MAIAC AOD using mixed effects model following I.Kloogs 
-
-extended model with occurrence of dust events. 
-
-In process
-
-o Examine the relation between PBL measurements from Beit-Dagan and the modeled 
-
-o Examine the use of AIC/BIC tests that take into account the DF to compare model 
-
-PBL. Calibrate the model with AOD, date, temperature and PBL.
-
-results.
-
-2. Analysis of the Spatial coverage of dust events in Israel
-
-- Define dust event in each area based on ground PM10 data and compositional data (?)
-
-- Use satellite data to apply dust classification model on the data
-
-- Analyze the spatial coverage of each event (main goal: showing that not every dust event 
-
-affects the whole country)
-
-In process
-
-3. Analyze the relation between PM hourly (overpass) data and daily data 
-
-- Create a global dataset of all ground data from the overpass hours of Terra(10:30) and 
-
-Aqua(13:30) from (Israel, USA, Europe).
-
-- Analyze diurnal cycles per station and compare daily to hourly PM values. 
-
-- Compare results between correlation to MAIAC/MODIS C06 AOD data with overpass data 
-
-(i.e. mixed effect model).
-
-- Analyze relation between overpass time and daily mean concentrations for all ground 
-
-variables (also dust events) for each station separately and maybe aggregated to regions.
-
-- Discuss the use of daily data and how the overpass data represents the daily mean per 
-
-station ?
-
-Israel part is done, need data from other areas to finish analysis.
-
-4. Understanding the causativeness between the PM2.5/PM10 ratio to the goodness of fit of 
-
-the AOD>>PM model to each PM fraction.
-
-Understanding if different ratios in different areas that are affected from different sources 
-
-reveal different fits. Global database: Israel, USA, Italy, Mexico, Spain etc. 
-
-The hypothesis is that the final graph will look schematically like this:
-
-PM10 PM2.5 
-
-5. class of where dust came and outcome 
-
-R2 
-
-PM2.5/PM10 Ratio 
-
-6. Deep Blue over Israel
-
-Analyze DB data over Israel using collection 6 data (e.g. 10km, combined aod_dt-db) and 
-
-examine PM estimation model using the db especially over bright surfaces. Maybe use dt in 
-
-certain regions and db in others based on a surface reflectance threshold (e.g. optimization 
-
-model that will choose for each pixel what is the best dataset to use, 
-
-DT/DB/Combined/MAIAC, in order to represent PM with the minimum error).
-
-Will it be possible to create DB data in a higher resolution (by ourselves/to receive from 
-
-NASA-A.Sayer/B.Ridgway) ?
-
-7. Understanding the local PM vertical profile
-
-Data from:
-
-(1) Calipso
-
-(2) MPL - Nes Ziona (Karnieli/Smadar - David Please check with her)
-
-(3) Is there any vertical data from Aeronet?
-
-8. PM composition detection using Satellite observations (Israel, Arizona, Spain, Italy, 
-
-Cyprus and more)
-
-- Using PM composition ground measurements as an evaluation.
-
-- Broad cooperation, Large Grant needed 
-
-9. Understanding the limitations of satellite remote sensing over coastal areas
-
-Compare PM estimation ability by AOD over land with data over coastal areas, examine the 
-
-coastal flag in MODIS/MAIAC algorithms.
-
-10. Humidity profile from satellite observations
-
-As the difference in RH between the ground and satellite measurements may derive the 
-
-discrepancies between these measurements, it's worth analyzing the contribution of the 
-
-satellite-borne RH profile and maybe find a RH correction factor to use in PM prediction 
-
-models.
 ** Future exposure models 
    :PROPERTIES:
    :ID:       03c79a3e-10b4-4295-b91f-d0c4f38e9497
@@ -1175,7 +1059,7 @@ Joel has mortality data
 *** create a model to predict LAN wave lenght models
 *** use LAN maps to describe Land Use
 ** Temperature model results and Liu CMAQ results
-   -look at mortality cases and temperature (short term, acute temprature days), and compare results with our model and CMAQ
+ -look at mortality cases and temperature (short term, acute temprature days), and compare results with our model and CMAQ
 ** go back to the ICAM/VCAM reanalysis
 -stacey re-analysis with 1kmx1km data : We should say that we see an effect for both the year lag and medium term but the longer lag is more important
 -calculate the residuals between our model and the BC model
@@ -1183,7 +1067,33 @@ create moving averages of the 4,8,12 weeks and try that in the model> will captu
 when we get the 1x1km data ready go back to the icam/vcam reanalysis by marie-able and the stacey BC paper and see if that changes things
 ** explore Mapi Maagal project 
 Zipcode proxy
+** Understanding the local PM vertical profile			     :meytar:
+Data from:
+(1) Calipso
+(2) MPL - Nes Ziona (Karnieli/Smadar - David Please check with her)
+(3) Is there any vertical data from Aeronet?
+** PM composition detection using Satellite observations (Israel, Arizona, Spain, Italy, Cyprus and more) :meytar:
+- Using PM composition ground measurements as an evaluation.
+- Broad cooperation, Large Grant needed 
+** Understanding the limitations of satellite remote sensing over coastal areas :meytar:
 
+Compare PM estimation ability by AOD over land with data over coastal areas, examine the coastal flag in MODIS/MAIAC algorithms.
+
+** Humidity models and profile from satellite observations	     :meytar:
+As the difference in RH between the ground and satellite measurements may derive the discrepancies between these measurements, it's worth analyzing the contribution of the satellite-borne RH profile and maybe find a RH correction factor to use in PM prediction models.
+
+** Dust classification project with India/Italy			     :meytar:
+**** TODO ask Victor
+how many hours of dust exposure is relevant to see an effect, did you guys look at daily means, or hourly data by any chance? know of relevant studies on that, weight exposure by ammount of hours of dust days.
+**** application of prev methodology in italy india-define dust events based on PM10 and modeling
+- output will be definition of dust event- hourly (0,1)
+- 2 completely different geo-climate regions
+-test weather israel classification methodology works in other regions
+-if not model adjustments locally
+-check this definition vs italy model massimo has
+**** incorporation AOD 3km data for italy and India with OMI data to better 
+take AOD and OMI (observing index) and take the israeli classification and try to classify days to dust and non dust.
+use the Satellite data to classify dust days and once you have this classification compare tro israeli model. if there is agreement generate for india where there isn't pm10 data and use that to go back and classify. 
 * Finished Projects
 ** DONE DVT admissions and PM
   :PROPERTIES:
