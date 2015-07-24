@@ -3072,3 +3072,463 @@ ask alexandra about this in next weeks meeting
   :ARCHIVE_OLPATH: scheduled mail/calls/meetings
   :ARCHIVE_CATEGORY: work
   :END:
+
+*  BSF grant
+    :PROPERTIES:
+    :ID:       46751f92-a1d4-4d1c-a1f2-5565da630550
+    :ARCHIVE_TIME: 2015-07-23 Thu 12:51
+    :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+    :ARCHIVE_OLPATH: Grants
+    :ARCHIVE_CATEGORY: work
+    :END:
+- propensity score analysis of TA and PM 
+- create a propensity  score regressing epxo vs all variables get a predictive modelt
+- advanimcg epi in israel taking acasuel moel appraoch coming up with estimates wich are not just casuel and advance methods
+
+
+* TODO [#A] send KEES AOD corrected swiss data
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-23 Thu 13:02
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Projects'/MAIAC EURO Consortium/TD
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: TODO
+  :END:
+
+* r code
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-23 Thu 13:02
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: scheduled mail/calls/meetings/discuss with qian di
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+#+begin_src R
+###############
+#LIBS
+###############
+library(lme4)
+library(reshape)
+library(foreign) 
+library(ggplot2)
+library(plyr)
+library(data.table)
+library(reshape2)
+library(Hmisc)
+library(mgcv)
+library(gdata)
+
+#mod 3 data
+mod3 <- readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/FN008_model_prep/m3_2003.pred3.rds")
+#clean
+keep(mod3, sure=TRUE) 
+gc()
+
+
+#########################
+#prepare for m3.R2
+#########################
+mod3[,lat_aod.y:=NULL]
+mod3[,long_aod.y:=NULL]
+setnames(mod3,"lat_aod.x","lat_aod")
+setnames(mod3,"long_aod.x","long_aod")
+#subset mod3
+mod3<-mod3[,c("guid","day","lat_aod","long_aod","predicted.m3"),with=FALSE]
+
+#load mod1
+mod1table<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/FN000_RWORKDIR/mod1table2003_p2.rds")
+mod1<- readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/FN008_model_prep/mod1_2003_pred.m1.rds")
+mod1<-mod1[,c("guid","day","PM25","predicted","SiteCode"),with=FALSE]
+setnames(mod1,"predicted","predicted.m1")
+#R2.m3
+setkey(mod3,day,guid)
+setkey(mod1,day,guid)
+mod1 <- merge(mod1,mod3[, list(day,guid,predicted.m3)], all.x = T)    		
+mod3d_reg <- lm(PM25~predicted.m3,data=mod1)
+summary(mod3d_reg)$r.squared 
+#0.8980116
+
+####GAM formula
+m4.formula<-as.formula(resm3~s(tden,popden)+s(pcturban)+s(elev)+s(dist_pemis)+s(dist_A1)+s(tden,pbl)+s(pbl)+s(tden,WDSP)+s(tden,tempc)+ah_gm3+s(tden,visib))
+
+####################################
+#2003
+####################################
+
+###############################
+mod1<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN000_RWORKDIR/mod1_2003w_p.m3.rds")
+head(mod1)
+
+
+#R2
+mod3d_reg <- lm(PM25~predicted.m3,data=mod1)
+summary(mod3d_reg)$r.squared #R2
+summary(mod3d_reg)$coef[1,1] #intercept
+summary(mod3d_reg)$coef[1,2] #intercept SE
+summary(mod3d_reg)$coef[2,1] #Slope
+summary(mod3d_reg)$coef[2,2] #Slope SE
+#rmspe
+sqrt(mean(mod3d_reg$residual^2))
+
+####################################
+#check leave 5 out monitors and see how this affects slope
+#####
+###############################
+#spatial
+m1CV_agg <- (mod1[, j=list(mean(PM25, na.rm = TRUE),mean(predicted.m3, na.rm = TRUE)),by = SiteCode])  
+# Rename column
+setnames(m1CV_agg,"V1","barpm")
+setnames(m1CV_agg,"V2","barpred")
+mod1_spatial <- lm(barpm ~ barpred, data=m1CV_agg)
+summary(mod1_spatial)$r.squared
+
+###############################
+#temporal
+setkey(m1CV_agg ,SiteCode)
+setkey(mod1,SiteCode)
+dat <- merge(mod1,m1CV_agg, all.x = T)
+dat$delpm <-dat$PM25-dat$barpm
+dat$delpred <-dat$predicted.m3-dat$barpred
+mod_temporal <- lm(delpm ~ delpred, data=dat)
+summary(mod_temporal)$r.squared
+
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#>>ADD LOCAL PM STAGE
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+luf<-readRDS("/media/NAS/Uni/Projects/P031_MIAC_PM/3.Work/2.Gather_data/FN025_LPM_ST_Calc/lpmST2003.rds")
+#shorten mod1
+l=seq(names(mod1));names(l)=names(mod1);l
+mod1_2003<-mod1
+
+###############################
+#add 200m LU to CV data
+setkey(mod1_2003,SiteCode,day)
+setkey(luf,SiteCode,day)
+mod1d_all_st <- merge(mod1_2003, luf, all.x = T)
+mod1d_all_st<-na.omit(mod1d_all_st)
+mod1d_all_st[,guid.y:=NULL]
+setnames(mod1d_all_st,"guid.x","guid")
+#summary(mod1d_all_st)
+#create residual mp3 variable
+mod1d_all_st$resm3<-mod1d_all_st$PM25-mod1d_all_st$predicted.m3
+names(mod1d_all_st)
+
+#The GAM model
+#normal
+                   
+bp.model.ps<-gam(m4.formula ,data = mod1d_all_st)
+mod1d_all_st$Predlocm <-predict(bp.model.ps)
+mod1d_all_st$OAPred <- mod1d_all_st$predicted.m3+mod1d_all_st$Predlocm
+
+####################reg
+mod1d_reg_st <- lm(mod1d_all_st$PM25~mod1d_all_st$OAPred)
+
+summary(mod1d_reg_st)$r.squared
+summary(mod1d_reg_st)$coef[1,1]
+summary(mod1d_reg_st)$coef[1,2]
+summary(mod1d_reg_st)$coef[2,1]
+summary(mod1d_reg_st)$coef[2,2]
+#rmspe
+sqrt(mean(mod1d_reg_st$residual^2))
+
+####################
+#spatial
+m1CVLPM_agg <- (mod1d_all_st[, j=list(mean(PM25, na.rm = TRUE),mean(OAPred, na.rm = TRUE)),by = SiteCode])  
+# Rename column
+setnames(m1CVLPM_agg,"V1","barpm")
+setnames(m1CVLPM_agg,"V2","barpred")
+mod1LPM_spatial <- lm(barpm ~ barpred, data=m1CVLPM_agg)
+summary(mod1LPM_spatial)$r.squared
+
+####################
+#temporal
+setkey(m1CVLPM_agg,SiteCode)
+setkey(mod1d_all_st,SiteCode)
+dat <- merge(mod1d_all_st,m1CVLPM_agg, all.x = T)
+dat$delpm <-dat$PM25-dat$barpm
+dat$delpred <-dat$OAPred-dat$barpred
+mod_temporal <- lm(delpm ~ delpred, data=dat)
+summary(mod_temporal)$r.squared
+
+
+#+end_src
+
+
+* stations
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-23 Thu 13:02
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: scheduled mail/calls/meetings/discuss with qian di
+  :ARCHIVE_CATEGORY: work
+  :END:
+many station are outside limited NE we ran
+maybe some stations don't run all years 
+downloaded all data available in views, maybe needed to look at epa site as well
+
+* model r2 differences
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-23 Thu 13:02
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: scheduled mail/calls/meetings/discuss with qian di
+  :ARCHIVE_CATEGORY: work
+  :END:
+both mod1 and mod3 predictions include lpm stage in them as done in all other papers
+how did he co-locate pm stations and pred guids
+
+* meeting with david and meytar
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-23 Thu 13:02
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: scheduled mail/calls/meetings/discuss with qian di
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* massimo
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-23 Thu 13:07
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: scheduled mail/calls/meetings
+  :ARCHIVE_CATEGORY: work
+  :END:
+meyter 2011 data (aod-pm) and height of stn for 2009-2011
+
+* support vector regression 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-23 Thu 13:07
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: scheduled mail/calls/meetings/meeting joel rome
+  :ARCHIVE_CATEGORY: work
+  :END:
+e1072- SVR R package
+
+
+* consider inverse distance (1/dist) for all the dist variables  
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-23 Thu 13:08
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: scheduled mail/calls/meetings/meeting joel rome
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* talk to shi about contacting qian and shi and get access to WRF
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-23 Thu 13:09
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: scheduled mail/calls/meetings/meeting joel rome
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* TODO pm10/25 ratio paper- send us meytar
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-23 Thu 19:06
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: scheduled mail/calls/meetings/kees 15.7.2015
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: TODO
+  :END:
+-send emission data
+
+* kees 15.7.2015
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-23 Thu 19:08
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: scheduled mail/calls/meetings
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* for france look at sepaldi data for swiss
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-23 Thu 19:09
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: scheduled mail/calls/meetings/meeting joel rome
+  :ARCHIVE_CATEGORY: work
+  :END:
+talk to kees about that
+
+* meeting joel rome 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-23 Thu 19:10
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: scheduled mail/calls/meetings
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* Joel israel EHF [2015-07-19 Sun] 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-23 Thu 19:12
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: scheduled mail/calls/meetings
+  :ARCHIVE_CATEGORY: work
+  :END:
+** EHP response
+
+Comment on “Using Satellite-Based Resolved Air Temperature Exposure to Study the Association between Ambient Air Temperature and Birth Outcomes in Massachusetts” 
+
+In a recently published paper using space-time satellite data to determine air temperature (Ta), Kloog et al. conclude that “Ta during pregnancy was associated with lower birth weight and shorter gestational age in our study population.” The results obtained pointed to associations between Ta and birth weight during the last trimester and Ta and preterm delivery and low birth weight during the entire pregnancy. These results are in agreement with those obtained by Dadvand et al. (2014) whereby Ta has a stressful role influencing low birth weight. 
+There are many epidemiological studies reporting a nonlinear J- or U-shaped relationship between Ta and health indicators such as mortality (Basu and Samet 2002) and morbidity (Ye et al. 2012), with different response times for heat and cold waves (Gasparrini et al. 2015). When Kloog et al. performed linear and logistic models, Ta is introduced with a linear component in multiple time windows before birth. Models also were adjusted for different environmental and sociodemographic factors. However, the authors did not control for heat and cold episodes during pregnancy. From our point of view, a similar nonlinear behavior could be expected or would at least be worth analyzing in the case of adverse birth variables. As a susceptible population group, pregnant women may be more sensitive to changes in temperature and may be at a greater risk of heat stress, because during pregnancy the increase in fat deposition and associated decrease in the ratio of body surface area to body mass result in less capacity for heat loss to the environment (Wells and Cole 2002).
+A study conducted in Rome with time series analysis methodology (Schifano et al. 2013) showed that heat, as measured by the maximum temperature in warmer periods, was associated in the short term with preterm birth. This apparent effect of temperature was not observed in the cold periods. Similar results were obtained in Madrid (Linares et al. 2015). This study considered daily maximum temperatures above 34°C (the definition of a heat wave for Madrid) and below –2°C, corresponding to the minimum daily temperature (the definition of a cold wave for Madrid) for the period 2001–2009. The results obtained about the influence of high temperatures on the low birth weight were similar to those found in Rome, with the same short-term association between temperature rise and increase in cases of premature birth and, consequently, low birth weight.
+This suggests heat waves are an acute stressor on pregnant women, and not the chronic stressor described by Kloog et al. The mechanism is unclear by which high temperatures may increase the risk of preterm birth, but there is evidence in the literature that relation them at the short-term (Carolan-Olah and Frankowska 2014). This short-term effect of Ta on adverse birth outcomes is similar to that already described for traffic noise as a factor in adverse birth outcomes in Madrid (Diaz and Linares 2015). 
+Although Kloog et al. introduced Ta values with linear components, from our point of view, introducing Ta as a linear component and not taking into account the effects of heat and cold separately minimizes the determination of the impacts. The effects of high temperatures may be offset by cold temperatures. Therefore, it would be interesting to improve the analysis of Kloog et al. taking into account the effect of Ta, but separating its effect by warm and cold seasons and especially on days of heat wave and cold wave periods.
+
+** SVM in France
+Without mixed model low correlation
+
+#+BEGIN_SRC R :results none
+###base model
+m1.formula <- as.formula(pm25~ aod +ws.s+temp.s +pcturb+elev_m+tden+pbl.s+distA1+as.factor(cid)+as.factor(day) +dport.s+dtrain.s+daroad.s+dcoast.s+dwb.s    
++NO2.s+SO2.s+PM10ems.s + p.agric.s+ p.open.s+p.forest.s+p.urban.s +aod*pbl.s)
+#svm
+model <- svm( m1.formula,type="nu-regression", mod1)
+mod1$pred.m1 <- predict(model)
+print(summary(lm(pm25~pred.m1,data=mod1))$r.squared)
+summary(model)
+#cor 0.37
+#+END_SRC
+
+tried with mediocre success so far- is there a way to include a random statement
+
+** SVM for mod4
+can we incorporate splines
+
+* Joel israel EHF [2015-07-19 Sun] 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-23 Thu 19:12
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: scheduled mail/calls/meetings
+  :ARCHIVE_CATEGORY: work
+  :END:
+** EHP response
+
+Comment on “Using Satellite-Based Resolved Air Temperature Exposure to Study the Association between Ambient Air Temperature and Birth Outcomes in Massachusetts” 
+
+In a recently published paper using space-time satellite data to determine air temperature (Ta), Kloog et al. conclude that “Ta during pregnancy was associated with lower birth weight and shorter gestational age in our study population.” The results obtained pointed to associations between Ta and birth weight during the last trimester and Ta and preterm delivery and low birth weight during the entire pregnancy. These results are in agreement with those obtained by Dadvand et al. (2014) whereby Ta has a stressful role influencing low birth weight. 
+There are many epidemiological studies reporting a nonlinear J- or U-shaped relationship between Ta and health indicators such as mortality (Basu and Samet 2002) and morbidity (Ye et al. 2012), with different response times for heat and cold waves (Gasparrini et al. 2015). When Kloog et al. performed linear and logistic models, Ta is introduced with a linear component in multiple time windows before birth. Models also were adjusted for different environmental and sociodemographic factors. However, the authors did not control for heat and cold episodes during pregnancy. From our point of view, a similar nonlinear behavior could be expected or would at least be worth analyzing in the case of adverse birth variables. As a susceptible population group, pregnant women may be more sensitive to changes in temperature and may be at a greater risk of heat stress, because during pregnancy the increase in fat deposition and associated decrease in the ratio of body surface area to body mass result in less capacity for heat loss to the environment (Wells and Cole 2002).
+A study conducted in Rome with time series analysis methodology (Schifano et al. 2013) showed that heat, as measured by the maximum temperature in warmer periods, was associated in the short term with preterm birth. This apparent effect of temperature was not observed in the cold periods. Similar results were obtained in Madrid (Linares et al. 2015). This study considered daily maximum temperatures above 34°C (the definition of a heat wave for Madrid) and below –2°C, corresponding to the minimum daily temperature (the definition of a cold wave for Madrid) for the period 2001–2009. The results obtained about the influence of high temperatures on the low birth weight were similar to those found in Rome, with the same short-term association between temperature rise and increase in cases of premature birth and, consequently, low birth weight.
+This suggests heat waves are an acute stressor on pregnant women, and not the chronic stressor described by Kloog et al. The mechanism is unclear by which high temperatures may increase the risk of preterm birth, but there is evidence in the literature that relation them at the short-term (Carolan-Olah and Frankowska 2014). This short-term effect of Ta on adverse birth outcomes is similar to that already described for traffic noise as a factor in adverse birth outcomes in Madrid (Diaz and Linares 2015). 
+Although Kloog et al. introduced Ta values with linear components, from our point of view, introducing Ta as a linear component and not taking into account the effects of heat and cold separately minimizes the determination of the impacts. The effects of high temperatures may be offset by cold temperatures. Therefore, it would be interesting to improve the analysis of Kloog et al. taking into account the effect of Ta, but separating its effect by warm and cold seasons and especially on days of heat wave and cold wave periods.
+
+** SVM in France
+Without mixed model low correlation
+
+#+BEGIN_SRC R :results none
+###base model
+m1.formula <- as.formula(pm25~ aod +ws.s+temp.s +pcturb+elev_m+tden+pbl.s+distA1+as.factor(cid)+as.factor(day) +dport.s+dtrain.s+daroad.s+dcoast.s+dwb.s    
++NO2.s+SO2.s+PM10ems.s + p.agric.s+ p.open.s+p.forest.s+p.urban.s +aod*pbl.s)
+#svm
+model <- svm( m1.formula,type="nu-regression", mod1)
+mod1$pred.m1 <- predict(model)
+print(summary(lm(pm25~pred.m1,data=mod1))$r.squared)
+summary(model)
+#cor 0.37
+#+END_SRC
+
+tried with mediocre success so far- is there a way to include a random statement
+
+** SVM for mod4
+can we incorporate splines
+
+* run calls from R  to open r sessions
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-23 Thu 19:12
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: scheduled mail/calls/meetings
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* Papers
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-23 Thu 19:14
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_CATEGORY: work
+  :END:
+** List of reviewers
+*** jaime madrigano
+ Madrigano, Jaime
+ jm17@sph.rutgers.edu
+ Rutgers School of public health
+*** Sara Adar 
+ Office: M5539 SPH II     
+ 1415 Washington Heights 
+ Ann Arbor, Michigan 48109-2029
+ Office: 734-615-9207; Fax: 734-936-2084
+ E-mail: sadar@umich.edu
+
+ University of Michigan, School of public health
+*** greg Willenius
+ Gregory A. Wellenius 
+ gregory_Wellenius@brown.edu
+ Epidemiology, Brown
+*** bob Wright
+ Robert O. Wright
+ Email: robert.wright@mssm.edu
+ Mount sinai
+ Department of Preventive Medicine
+ #+END_SRC
+
+
+*** Kees de Hoogh 
+ Scientific Collaborator Projects 
+ Publications Email
+ c.dehoogh@unibas.ch
+ Phone
+ +41 61 284 87 49
+*** Michael Brauer
+ Professor
+ Director, Bridge Program
+ ScD (Harvard), BA (University of California-Berkeley)
+ Contact Information
+ Biography
+ Teaching and Students
+ Publications
+ Research
+ Rm 366A, 2206 East Mall
+ Vancouver, BC V6T 1Z3
+ phone: 604-822-9585
+ fax: 604-822-4994
+ michael.brauer@ubc.ca
+*** Jeremy Sarnat
+Emory, Rollins school of public health  
+Contact: 
+404-727-5692 (Melva Robertson, media relations) office
+melva.robertson@emory.edu
+** How to write BGU in papers
+ Ben Gurion University of the Negev
+** Journal statistics IF etc
+*** 2014
+**** chronobiology international
+(IF= 2.8 ; Q1 biology, 19 of 85 )
+**** atmospheric environment
+(IF= 3.1 ; Q1 environmental sciences, 45 of 216 )
+**** plos one
+(IF= 3.5 ; Q1 multidisciplinary sciences, 8 of 55)
+**** journal of allergy and clinical immunology 
+(IF= 11.2 ; Q1 allergy, 1 of 21 )
+**** occupational and environmental medicine
+(IF= 3.2 ; Q1 public, environmental & occupational health, 20 of 162 )
+**** environmental health perspectives
+(IF= 7.0 ; Q1 environmental sciences, 5 of 216 )
+**** science of the total environment
+(IF= 3.2 ; Q1 environmental sciences, 40 of 216 )
+**** environmental health
+(IF= 2.7 ; Q1  public, environmental & occupational health, 37 of 162 )
+**** remote sensing of environment
+(IF= 4.8 ; Q1 environmental sciences, 12 of 216 )
+**** american journal of cardiology 
+(IF= 3.4 ; Q1 cardiac & cardiovascular systems, 39 of 125 )
+**** nature
+(IF= 42.35  ; Q1 multidisciplinary sciences, 1 of 55 )
+**** epidemiology
+(IF= 6.2 ; Q1 public, environmental & occupational health, 2 of 143 )
+**** environmental science & technology
+(IF= 5.5 ; Q1 environmental sciences, 8 of 216 )
+**** science of the total environment
+(IF= 3.2 ; Q1 environmental sciences, 40  of 216 )
+**** cancer causes & control
+(IF= 2.9 ; Q1 public, environmental & occupational health, 24 of 216 )
+**** computers environment and urban systems	
+(IF= 1.5; Q2 geography, 21 of 76 )
+**** Journal of Exposure Science and Environmental Epidemiology
+(IF= 3 .0; Q1  Public, Environmental & Occupational Health, 23 of 160 )
+**** american journal of Epidemiology 
+(IF= 4.9 ; Q1 public, environmental & occupational health, 11  of 162 )
+
