@@ -7,137 +7,8 @@
 #+OPTIONS: toc:nil 
 
 * 'Projects'
-** PAUSED PM2.5 1kmx1km NEMIA
-*** Brainstorm
--there may be degredation in data quality in Terra from 2000-2008 may introduce noide, we may need to address this at some stage in the future
--AOD values:
-0-1 indicates normal AOD days
-0.7-1.2 Days where heavy PM concentrations are transported from elsewhere
-2-4 HEavy sand stroms days, days in Africa etc
-When you see values of 1.2 in Western counties (IE MA) it is most likley clouds
-aod-PM convesion table, is that avilable?
-- masking algoryhtm :
-for dayswith "." calculate distance to pixel with cloud , then use distance to cloud and maybe a histogram (tail of histogram)?
--LPM- interact lpm with z scores to get spatio-temporal stuff working.
--weights in gamm 3rd stage?
--for non pm2.5 countries perhaps calculate a ratio of Pm10/2.5 by season> imputation> convert pm10 to pm 2.5
-*** Decompose local/area
-http://svitsrv25.epfl.ch/R-doc/library/quantreg/html/predict.rqss.html
--smooth of top 5%
-#+begin_src r
-xmat <- ns(x,y)
-quantreg(pred~xmat)
-#vqss?
-#+end_src
--decompose:
-1)smooth geo components
-2)deviance from smooth will give us the local contribution
-*** brent/joel meetings
-**** meeting 04.09.13
-***** General
-maybe try differnet land use and different buffers for LUR terms, like have 2 buffers for a term like tden and try in the model
-humidty makes particles grow-interact with aod
-interact wdsp*mjrd
-penelized spline/n.s for dist to point emission
-interactions with pbl/wdsp with source/are emissions
-***** LPM
-1.normal LPM but with temporal and spatio-temporal interactions
--also talk to steve to make effort to get traffic density by day/week etc, the mesa project maybe bought from someone.
--ask steve about traffic modeling, nescam
--check out Nldas data set (the North American Land Data Assimilation System)
-http://ldas.gsfc.nasa.gov/nldas/NLDAS2forcing.php
-2.smoothing of the residuals-lucas neas suggestion
-#+BEGIN_SRC sh
-vresid~ LU+MET+Interactions+ s(x,y)
-#+END_SRC
-**** meet 04.10.2013 with joel
--pls and kernel not working well
-running just LU variables Spatial R2=~0.83
-forward stepwise regression
-put in a mix of important LU as fixed and the rest as randomf
-**** meeting 11.11.2013
-     :PROPERTIES:
-     :ID:       661bffef-4085-46ca-8344-ea0eb62a01ed
-     :END:
-in stage 4 things to check check:
-pbl interaction with wdsp
-season interaction with LU variables
-tden*year
-poden*years
-s(tden, by-year)
-**** meeting 23.1.2014
-***** show results
-***** next steps
-***** mi-hyees models
-***** CV of stage 3 impossible, what i did was leave 5 monitors out in stage 3 and look at the slopes , the slopes and R2 were still very similar
-***** stage 4 s-t
-      :PROPERTIES:
-      :ID:       b1f42285-be84-4b26-8867-5c086e243211
-      :END:
-ideas to further improve this part?
-maybe try a mixed model, relationship between resif ~ met variables changes daily/
-*** Model run
-**** reg calibaration instead of CV for stage 3
-run the reg with some left out monitors and see if the slope is different then '0' to see if we have Bias 
-** Israel pm models
-   :PROPERTIES:
-   :ID:       599074f7-2550-40ab-ba04-782947688ce0
-   :END:
+** [#A] MODEL.Ta.FRANCE
 *** info file
-file:ac53d526-2eb4-4aea-a472-09df35dc41e6
-*** code
-file:/home/zeltak/org/files/Uni/Projects/code/P046.Israel_MAIAC
-*** meetings
-*** TD Israel pm models
-**** TODO check spciaction from MOEP to see which componenets (traffic vs secondary ) are in each city and vs rural areas
-ask david about that
-borrow a haravrd based filter- talk to petros
-
-*** explore
-**** low yearly aod values and compared to DB which is higher
- we should look at wind speed from reanalysis data/station to see if these areas have low or high ws values
-
-**** EXP use of aqua and terra as 2 separate exposure:
-instead of calibrating: one would be a peak level exposure and one a "background" exposure
-calibrate with hourly 
-terra > 9:30
-aqua > 14:30 
-talk to petros
-compare EC and OC from speciation and compare
-we want to show that one picks up traffic well while the other picks up transported PM mainly
-**** look at aod azimuths
- use data with 30 degree azimuths that should be better:
- either subset data by that or play with these azimuths as weights in a model 
-
-**** EXP check in Israel for next iteration
-     composition of PM in israel
-teom at 50 celsius  may over measure and introduce noise to pm25.
-look at average residual in monitors 
-put that in the paper teom is limited
--why do we correlate 24h and not by overpass
--better regions
--a mean 20km mpm excluding the actual monitoring data. works very well as predictor but we have mod 2 problem. Also David dosent like it.
-**** israel next paper: check how model preforms in lag baomer and yom kipur
-
-** France temperature paper
-   :PROPERTIES:
-   :ID:       661912dc-74af-472a-ad07-f57affd87b96
-   :END:
-**** how will we diffrantiate it from NE paper:
--emphasize how the performance is not known in Europe, and in more mountainous areas, and can allow studies of temperature and health to include people not in big cities. 
-
--completely different geographic region with med climate in south ,alpine in east and north-european in north
--focus perhaps on paris and spatial variation across the city
-map urban heat island
-seasoanlity
--we used regression calibration (ask fran) in stage 1
--Submit to a Euro journal
--compare the model to avilable models in europe.
-- epi people still using monitors
-**** Fran tasks
-***** add to the methods section the regression calibration part :
-we did it to reduce the noise etc etc 
-
 **** variables used
 Hi,
 I found all the data we need to run the model.
@@ -155,8 +26,78 @@ proc mixed data = Modis.Ep_Final_s1_&year method=reml;
    random intercept &Type / subject = date type = UN;
 run;
 quit;
-**** TODO paper
-Yes, I think dynamic buffering is fine. Regarding the France paper, I think the emphasis should be 1) existing health studies of temperature effect only capture temporal variation and not spatial variation, and a model for every day and km sq can help address this; 2) while modeled temperature data does exist, it mostly has not taken advantage of the rich satellite remote sensing resource; 3) While we were successful in developing such a model in the Northeast, performance in Europe is unknown where land use patterns are different, and where there are sharp climate gradients such as mountainous areas, cold Atlantic shores Mediterranean climate, etc such as in France. I would also point out that the model has shown its advantages over nearby temperature monitors in health effect studies already.  I would try Atmospheric Environment. 
+
+*** code
+*** meetings
+*** TD MODEL.Ta.FRANCE
+revise for journal so the text is differnt
+*** explore
+*** related papers
+**** Read Queue
+**** Paper Summary
+**** Writing Material
+
+*** Manuscript
+**** how will we differentiate it from NE paper:
+-emphasize how the performance is not known in Europe, and in more mountainous areas, and can allow studies of temperature and health to include people not in big cities. 
+-completely different geographic region with med climate in south ,alpine in east and north-european in north
+-focus perhaps on paris and spatial variation across the city
+map urban heat island
+seasoanlity
+-we used regression calibration (ask fran) in stage 1
+-Submit to a Euro journal
+-compare the model to avilable models in europe.
+- epi people still using monitors
+I think the emphasis should be 1) existing health studies of temperature effect only capture temporal variation and not spatial variation, and a model for every day and km sq can help address this; 2) while modeled temperature data does exist, it mostly has not taken advantage of the rich satellite remote sensing resource; 3) While we were successful in developing such a model in the Northeast, performance in Europe is unknown where land use patterns are different, and where there are sharp climate gradients such as mountainous areas, cold Atlantic shores Mediterranean climate, etc such as in France. I would also point out that the model has shown its advantages over nearby temperature monitors in health effect studies already.  I would try Atmospheric Environment. 
+
+** PAUSED MODEL.PM.NE
+*** info file
+*** code
+*** meetings
+*** TD MODEL.PM.NE
+*** explore
+*** related papers
+**** Read Queue
+**** Paper Summary
+
+*** Manuscript
+** [#A] MODEL.PM.Israel
+*** info file
+*** code
+file:/home/zeltak/org/files/Uni/Projects/code/P046.Israel_MAIAC
+*** meetings
+*** TD MODEL.PM.Israel
+**** TODO check spciaction from MOEP to see which componenets (traffic vs secondary ) are in each city and vs rural areas
+ask david about that
+borrow a haravrd based filter- talk to petros
+*** explore
+**** low yearly aod values and compared to DB which is higher in south of israel
+we should look at wind speed from reanalysis data/station to see if these areas have low or high ws values
+**** EXP use of aqua and terra as 2 separate exposure:
+instead of calibrating: one would be a peak level exposure and one a "background" exposure
+calibrate with hourly 
+terra > 9:30
+aqua > 14:30 
+talk to petros
+compare EC and OC from speciation and compare
+we want to show that one picks up traffic well while the other picks up transported PM mainly
+**** look at aod azimuths
+use data with 30 degree azimuths that should be better:
+either subset data by that or play with these azimuths as weights in a model 
+
+**** EXP check in Israel for next iteration
+composition of PM in israel
+teom at 50 celsius  may over measure and introduce noise to pm25.
+look at average residual in monitors 
+put that in the paper teom is limited
+-why do we correlate 24h and not by overpass
+-better regions
+-a mean 20km mpm excluding the actual monitoring data. works very well as predictor but we have mod 2 problem. Also David dosent like it.
+**** israel next paper: check how model preforms in lag baomer and yom kipur
+
+*** related papers
+**** Read Queue
+**** Paper Summary
 ** OSM project
 *** paper focus
 **** 1st paper
@@ -205,34 +146,6 @@ compare then how they work in "bad" areas such as africa?
  send the road network data
  eurodata at 50m comapre to OSM data
 
-** DVT admissions and PM
-   :PROPERTIES:
-   :ID:       2668bdf2-f4de-40cd-b57f-101a88076ba7
-   :END:
-*** info
-The variable thromb is based on the first main diagnosis of admission, while thromb2 is based on primary and secondary admissions.
-The ICD are below
-thromb=0;
-if (icd11 in (415, 451, 453)) then thromb=1;
-*** secondary stage
-**** Ask antonella about medical history, prev admisons, causes
--look into weather had cancer yes/no
--hospitalized last 90 days
-**** add interactions
-:PROPERTIES:
-     :ID:       bd8bcdf7-4bbc-44f4-a7f2-eb65bdd2d333
-     :END:
-- for c-xover try individual level and zip level SES, sex, urban-rural
-- interact with ndvi/percet of open space in both short and long term
-  (CXover and Ts)
--look at interacting with season (winter vs summer)
-**** Survival analysis
-     :PROPERTIES:
-     :ID:       8e80e09e-3dba-4bb1-a09e-50c09b8b28f5
-     :END:
-Try running a survival anlysis or maybe a posion survival analyis (SA) (look at johana 6 city paper)
-if running a posion SA we can extract the random slopes fro every zipcode and with smoothing create a spatial map showing risk areas
-*** Smooth the random slopes to create risk maps
 ** peripheral artery disease (PAD) , AE and PM2.5 in NE USA 	     :maayan:
 **** idea
 By reading this paper it came back to my mind that there is another orphan cardiovascular disease in air pollution research: peripheral artery disease. This is usually due to atherosclerosis and narrowing of the arteries in the limbs and an lead to severe outcomes such as amputation.
@@ -243,166 +156,13 @@ so the ones with the 2 should have higher numbers of hospitalizations
 **** TODO schedule a talk with maayan to start this project	     :maayan:
 
 ** Mexico PM model 
-   :PROPERTIES:
-   :ID:       6bbf7400-720f-437e-bbbc-213154482dd2
-   :END:
-*** mexico joels ideas
-
-consider using other pollutants around the city specifacly indicators for high traffic, use n02 and co and create an indicator where co/pm and no/pm is in the top third and create a high traffic indicator
--similarly try to make an indicator for partical color composition, look at ratio for pm10 and pm2.5
--filter for spatial pattern-cloud contaminated days
--concnerd using teoms Vs filter based (like in the usa) 
--use aeronet site in city to check maiac aod
-- interactions for time for almost anything if you run a full model: interact with aod, all LU, all met. each one interacting
-- lag terms for every day well have lags:
- pm~aod+aod01
-if prev day isnt avilable we use the same day twice
--to borrow information across space create a variable that weights and down weights low aod observations per day
-*** Top pri
-**** EXP weight sites in Mod1 by inverse of nearby missing AOD (downweight sites near clouds)	 	
-**** Joel suggests we put time interactions on almost everything
-  which interaction
-  file:/home/acjust/projects/airmex/code/LUR_Mex_1b_clean_local.R
-
-**** if no points to calibrate against - maybe don't use mean slope/intercept for mod2 prediction
-  what about instead clustering to find characteristics of days that predict the AOD-pm relationship
-  and substituting slopes/intercepts from those instead for the many days when no calibration is occuring because mod1 is empty on that day (no aod near monitors)
-
-**** EXP add high res local smoothing in mod1 
-in mod1 file, join the monitor to average of nearby AOD
-**** Workflow and fixes
-**** EXP Discover patterns of bad AOD data using spatstat to check for contiguous regions
-
-***** create paths so S:/ and S:/EOME taken care of automatically
-***** EXP Enhance geomerge
-      :PROPERTIES:
-      :ID:       063b3058-0d6b-4f36-820c-adfd60cf1f8f
-      :END:
-don't fail on missing
-don't require matrix ID to be character
-better arguments inline with common gis terminology
-
-***** joel and Bernt talk
-****** Dynamic threshold of high aod (exclude high aod if monitor are low)
-****** Or substitute nearby Monitor pm if aod high but Mon is low (bad ground measure).
-****** Look at diurnal pattern (pm, pbl) to predict when build up occurs. Use both aqua and terra as predictors?
-****** Cross validation: bootstrap prediction after leaving out two monitors with replacement, make predictions, check r2
-****** Try aod divided by pbl. Or cluster groups of days (by pbl profile). Fit different models for subsets?
-****** Handle data as a matrix, smooth with a weighted kernel. Strip off measures near edges.
-
-**** EXP add flag to exclude closest in mean calc in geomerge/nearestbyday
-**** PLS regression 
-*** lower pri
-**** TODO [#A] LUR; space-time smoothing; nearby cells weighted for missing and previous day (if gone, use today)
-**** is the ground monitoring data under a cloud otherwise the same as when not clouded (apart from precip events)?
-**** does relationship of Aqua and Terra give us info? early pollutant build-up vs continuous across the day? :newdata:
-**** can I extract cloudiness from NOAA dataset?
-**** can we construct a surrogate for particle color composition?
-**** pick satellite (Aqua vs Terra) based on which one has lower uncertainty in gridcells that join to monitors :newdata:
-**** validate at schools
-  To show that AOD is helping
-  compare mod3 predictions with measures at schools
-  how does this compare to assigning the closest real mon?
-
-**** LUR-Mex: Why is our mod1 dropping UIZ and SJA in much of 2007 - it looks like there was daymean measured there before
-**** compare two approaches to imputing at sites missing all AOD (in a year)
-    - after stage 3, assign the closest grid cell prediction (or average the near ones)
-    - fill in those grid cells with stage 2 predictions and then run the smooth mod3 part
-    - add land use terms later on to improve these predictions further
-
-**** transform elevation so that it isn't correlated with intercept (subtract min before log)
-
-**** running all years at once vs 1 year at a time (mod1 in particular)
-**** are there temporal trends? 
-**** look at a plot of the random slopes and intercepts as a function of time
-**** can we get traffic data from google
-**** if points are completely missing				    :newdata:
-  wait and see if after the new data we still have missing grids
-  take average of closest non-missing bestpred by day - to smooth over them
-
-**** use OpenStreetMap roadways (downloaded July 31, 2013)
-**** show relation of PBL height and how well AOD agrees with monitor (is this unique to MCMA?)
-**** show importance of roadway network as a source - maybe fit model without a rden and show how gridcell estimates differ as a function of the proportion of heavy roadways
-
-**** stage 4 model (local PM)t					  :coremodel:
-  take residuals from stage 3 model and then regress that with 
-  very fine resolution (50 or 100 or 200m) spatial and temporal terms
-  this could be added back to overall prediction - much more detail because not just on 1x1 scale
-
-**** Try removing (in mod1&2) aodid gridcells that have very few passable days (<100) :newdata:
-  since they may have ground conditions that are weird
-
-**** incorporate MODIS characteristics for aodid grid cells (or other landcover dataset)
-  especially since these could change over the decade
-
-
-**** Checking new data						  :coremodel:
-  aeronet: AOT_440 in 2003 2004 vs schools PM
-  look at REDMA (filter based PM2.5) 
-  look hour of flyover PM2.5 (could diurnal throw us off) using dat.hr
-  interaction with rain (rain scatter looks like particles)
-  Redo time series plot dropping points on rain days
-
-**** some monitors are poorly correlated with aod:		    :newdata:
-  why is this? geography (notheast of the city); 
-   political boundaries (outside df run by different agency)?; 
-   elevation? proximity to local sources?
-**** additional covs. 
-  Data to integrate/other data sources:
-
-  Use spatially distributed precipitation data (but maybe only DF, see also conagua?)
-
-  Add in some representation of point sources (layer in GIS)
-
-  Use land use/greenspace
-    
-**** Use aeronet - maybe as a super-monitor (weighted?) Use other satellite data?
-
-
-**** Use a latent class linear mixed model (LCLMM) to generate PBL patterns as predictors (see ?lcmm::hlme); 
-  See also Schafer et al.
-
-**** Proportion of the day with wind from the north (if point sources matter)?
-**** Andrew Ng's strategy for assessing bias vs variance in prediction algorithms (see coursera videos)
-****  Should we try to impute missing PBL (especially runs of multiple missing days) 
-**** Construct directional buffers and intersect these with road density for each point;
-  consider upwind traffic on each day (directional road density weighted by daily wind)
-
-**** TODO spatial join to best close point
-  Instead of taking the closest AOD point to each monitor for each day, what if we took each of the points within some distance and ran a regression then preferentially weight our selection AOD points to pick those sites with best agreement to monitor (likely a function of local land use features). The best agreement could be not the closest point, but the one downwind the most, or with the most similar amount of roadway, etc... This could really impact calibration in Mod1.
-  see also LUR_Mex_4b_2_vignette_spatialjoin.R
-
-****  Are there better predictions at stations with their own met monitoring?
-  does it matter if you have the spatial/temporal covs from your own monitor Vs. borrowing it from nearby
-****  Does open streetmap give the same predictions as municipal GIS
-**** TODO For any pair of monitors, what is their correlation as a function of distance (manual semivariogram)
-****  Are seasonal patterns driven by rain alone or rain + other factors
-****  If there are temporal patterns (decreases) are any particular predictors major drivers of these trends (interaction by time)
-****  If we compare school monitor stations with closest SIMAT monitor - how good are they?
-**** Fix R code to convert latlon to UTM 14N
-****  Why is our mod1 dropping UIZ and SJA in much of 2007 - it looks like there was daymean measured there before :newdata:
-**** Add no2 and co; indicator for days with high co to pm ratio (top third), same with no2	 	
-  using additional monitoring data (co-pollutants) as an indicator of the composition (daily or by sub-region&day)
-**** Add pressure to data from noaa	 	
-**** Air mex Pm 10 to pm2.5 ratio, could that change how well it fits	 	
-
- 		
-**** Calibrate TEOM against filter-based PM2.5 measure - could burn off volatiles and under-report PM2.5, maybe varying by seasons/locations	 	
-**** import from HDF4 using R: maybe recompile rgdal from source? see link	 	
-**** impute missing pbl	 	
- 	  check out Amelia, maybe single impute time-series?
-	  http://cran.r-project.org/web/packages/Amelia/vignettes/amelia.pdf
-****  RH modifies particle size distribution - need to include	 	
-****  scraping google or bing road traffic	 	
-****  use lots of spatial terms with PLS regression a la Sampson paper 
-****  seasonal patterns - are these just due to rain?	 	
-
 *** Health outcome studies
 ***** Birth outcome analysis
 ****** Derive predictions for different lag times/prenatal periods 
 ****** and plot bweight~airpollution parameter as a function of prenatal windows
 ****** distribuated lag model
 ****** Assign participant addresses to ageb as a proxy for neighborhood?
+***** Compare our BW study with low "western world" effetcs to a high polluted (mexico city) area
 *** papers 
 **** methods paper
 ***** draft methods - ask Mara about GPS devices used by drivers	 	
@@ -422,6 +182,11 @@ better arguments inline with common gis terminology
 *** TODO explore road classifications 
 *** Mexico 2010 very low pm that year
 lur wont be able to deal with that we 
+
+*** Compare our BW study with low "western world" effetcs to a high polluted (mexico city) area
+
+*** MEX city specific todo
+**** consider using other pollutants around the city specifacly indicators for high traffic, use n02 and co and create an indicator where co/pm and no/pm is in the top third and create a high traffic indicator
 
 ** Italy PM models
 *** Diffrances then NE paper:
@@ -786,21 +551,172 @@ Use correlation between nearby stations as a spatial variable
 ****** PM10.25
 
 * Future Project Ideas
-** PM model (NEXT BRANCH)
-*** MAIAC next stages
-**** TODO call with Alexei
- cloud cover issue in Mexico; grid cells being masked because of bright surfaces (false clouds) and dropping of clear days
- (long time series with no scene coverage)
-Israel data subsets with no raw correlation - Itai will send examples to Alexei (related: not certain why we have big differences
- in R2 from year to year in Israel and Mexico)
-dust days not caught by MAIAC (in Israel); Itai and Meytar sending a few examples
-(both areas) focus on improving a single year to speed iteration - we nominate 2004 - hopefully this lets us communicate back
- and forth.
+** Model.PM 
+*** TODO Ideas (NEED TO QUEUE BY PRIORITY)
+**** lag terms for every day well have lags:
+pm~aod+aod01
+if prev day isnt avilable we use the same day twice
+**** to borrow information across space create a variable that weights and down weights low aod observations per day
+**** TODO [#A] LUR; space-time smoothing; nearby cells weighted for missing and previous day (if gone, use today)
+**** is the ground monitoring data under a cloud otherwise the same as when not clouded (apart from precip events)?
+**** does relationship of Aqua and Terra give us info? early pollutant build-up vs continuous across the day? :newdata:
+**** can I extract cloudiness from NOAA dataset?
+**** can we construct a surrogate for particle color composition?
+**** pick satellite (Aqua vs Terra) based on which one has lower uncertainty in gridcells that join to monitors :newdata:
+**** validate at schools
+  To show that AOD is helping
+  compare mod3 predictions with measures at schools
+  how does this compare to assigning the closest real mon?
 
-We also heard some great suggestions that I am eager to try about TEOM recalibration; characterizing diurnal monitor patterns; comparing aeronet versus the closest monitors; attempting inverse variance weights on AOD; and carefully using both Aqua and Terra.
+**** LUR-Mex: Why is our mod1 dropping UIZ and SJA in much of 2007 - it looks like there was daymean measured there before
+**** compare two approaches to imputing at sites missing all AOD (in a year)
+    - after stage 3, assign the closest grid cell prediction (or average the near ones)
+    - fill in those grid cells with stage 2 predictions and then run the smooth mod3 part
+    - add land use terms later on to improve these predictions further
 
-*** explore Callipso sattelite 
-*** Future models ideas
+**** transform elevation so that it isn't correlated with intercept (subtract min before log)
+
+**** running all years at once vs 1 year at a time (mod1 in particular)
+**** are there temporal trends? 
+**** look at a plot of the random slopes and intercepts as a function of time
+**** can we get traffic data from google
+**** if points are completely missing				    :newdata:
+  wait and see if after the new data we still have missing grids
+  take average of closest non-missing bestpred by day - to smooth over them
+
+**** use OpenStreetMap roadways (downloaded July 31, 2013)
+**** show relation of PBL height and how well AOD agrees with monitor (is this unique to MCMA?)
+**** show importance of roadway network as a source - maybe fit model without a rden and show how gridcell estimates differ as a function of the proportion of heavy roadways
+
+**** stage 4 model (local PM)t					  :coremodel:
+  take residuals from stage 3 model and then regress that with 
+  very fine resolution (50 or 100 or 200m) spatial and temporal terms
+  this could be added back to overall prediction - much more detail because not just on 1x1 scale
+
+**** Try removing (in mod1&2) aodid gridcells that have very few passable days (<100) :newdata:
+  since they may have ground conditions that are weird
+
+**** incorporate MODIS characteristics for aodid grid cells (or other landcover dataset)
+  especially since these could change over the decade
+
+
+**** Checking new data						  :coremodel:
+  aeronet: AOT_440 in 2003 2004 vs schools PM
+  look at REDMA (filter based PM2.5) 
+  look hour of flyover PM2.5 (could diurnal throw us off) using dat.hr
+  interaction with rain (rain scatter looks like particles)
+  Redo time series plot dropping points on rain days
+
+**** some monitors are poorly correlated with aod:		    :newdata:
+  why is this? geography (notheast of the city); 
+   political boundaries (outside df run by different agency)?; 
+   elevation? proximity to local sources?
+**** additional covs. 
+  Data to integrate/other data sources:
+
+  Use spatially distributed precipitation data (but maybe only DF, see also conagua?)
+
+  Add in some representation of point sources (layer in GIS)
+
+  Use land use/greenspace
+    
+**** Use aeronet - maybe as a super-monitor (weighted?) Use other satellite data?
+
+
+**** Use a latent class linear mixed model (LCLMM) to generate PBL patterns as predictors (see ?lcmm::hlme); 
+  See also Schafer et al.
+
+**** Proportion of the day with wind from the north (if point sources matter)?
+**** Andrew Ng's strategy for assessing bias vs variance in prediction algorithms (see coursera videos)
+****  Should we try to impute missing PBL (especially runs of multiple missing days) 
+**** Construct directional buffers and intersect these with road density for each point;
+  consider upwind traffic on each day (directional road density weighted by daily wind)
+
+**** TODO spatial join to best close point
+  Instead of taking the closest AOD point to each monitor for each day, what if we took each of the points within some distance and ran a regression then preferentially weight our selection AOD points to pick those sites with best agreement to monitor (likely a function of local land use features). The best agreement could be not the closest point, but the one downwind the most, or with the most similar amount of roadway, etc... This could really impact calibration in Mod1.
+  see also LUR_Mex_4b_2_vignette_spatialjoin.R
+
+****  Are there better predictions at stations with their own met monitoring?
+  does it matter if you have the spatial/temporal covs from your own monitor Vs. borrowing it from nearby
+****  Does open streetmap give the same predictions as municipal GIS
+**** TODO For any pair of monitors, what is their correlation as a function of distance (manual semivariogram)
+****  Are seasonal patterns driven by rain alone or rain + other factors
+****  If there are temporal patterns (decreases) are any particular predictors major drivers of these trends (interaction by time)
+****  If we compare school monitor stations with closest SIMAT monitor - how good are they?
+**** Fix R code to convert latlon to UTM 14N
+****  Why is our mod1 dropping UIZ and SJA in much of 2007 - it looks like there was daymean measured there before :newdata:
+**** Add no2 and co; indicator for days with high co to pm ratio (top third), same with no2	 	
+  using additional monitoring data (co-pollutants) as an indicator of the composition (daily or by sub-region&day)
+**** Add pressure to data from noaa	 	
+**** Air mex Pm 10 to pm2.5 ratio, could that change how well it fits	 	
+
+ 		
+**** Calibrate TEOM against filter-based PM2.5 measure - could burn off volatiles and under-report PM2.5, maybe varying by seasons/locations	 	
+**** import from HDF4 using R: maybe recompile rgdal from source? see link	 	
+**** impute missing pbl	 	
+ 	  check out Amelia, maybe single impute time-series?
+	  http://cran.r-project.org/web/packages/Amelia/vignettes/amelia.pdf
+****  RH modifies particle size distribution - need to include	 	
+****  scraping google or bing road traffic	 	
+****  use lots of spatial terms with PLS regression a la Sampson paper 
+****  seasonal patterns - are these just due to rain?	 	
+
+**** EXP weight sites in Mod1 by inverse of nearby missing AOD (downweight sites near clouds)	 	
+**** Joel suggests we put time interactions on almost everything
+  which interaction
+  file:/home/acjust/projects/airmex/code/LUR_Mex_1b_clean_local.R
+
+**** if no points to calibrate against - maybe don't use mean slope/intercept for mod2 prediction
+  what about instead clustering to find characteristics of days that predict the AOD-pm relationship
+  and substituting slopes/intercepts from those instead for the many days when no calibration is occuring because mod1 is empty on that day (no aod near monitors)
+
+**** EXP add high res local smoothing in mod1 
+in mod1 file, join the monitor to average of nearby AOD
+**** Workflow and fixes
+**** EXP Discover patterns of bad AOD data using spatstat to check for contiguous regions
+
+***** create paths so S:/ and S:/EOME taken care of automatically
+***** EXP Enhance geomerge
+      :PROPERTIES:
+      :ID:       063b3058-0d6b-4f36-820c-adfd60cf1f8f
+      :END:
+don't fail on missing
+don't require matrix ID to be character
+better arguments inline with common gis terminology
+
+***** joel and Bernt talk
+****** Dynamic threshold of high aod (exclude high aod if monitor are low)
+****** Or substitute nearby Monitor pm if aod high but Mon is low (bad ground measure).
+****** Look at diurnal pattern (pm, pbl) to predict when build up occurs. Use both aqua and terra as predictors?
+****** Cross validation: bootstrap prediction after leaving out two monitors with replacement, make predictions, check r2
+****** Try aod divided by pbl. Or cluster groups of days (by pbl profile). Fit different models for subsets?
+****** Handle data as a matrix, smooth with a weighted kernel. Strip off measures near edges.
+
+**** EXP add flag to exclude closest in mean calc in geomerge/nearestbyday
+**** PLS regression 
+**** look into Eumetsat for met data over EU/Israel		     :meytar:
+http://oiswww.eumetsat.org/IPPS/html/MSG/RGB/DUST/WESTERNAFRICA/
+**** add as.factor(month)*aod in model
+**** look into using svm in mod4
+
+**** geoschem model vertical profile - put into a europe wide pm dataset
+
+**** pick satellite (Aqua vs Terra) based on which one has lower uncertainty in gridcells that join to monitors
+**** look at surface refelectance and zenith
+**** weight sites in Mod1 by inverse of nearby missing AOD- (downweight sites near clouds)
+**** pls regression for both inclufing aqua-terra??
+**** look into meris data for aod
+basian latnet variable  model
+
+**** smoothing of the residuals-lucas neas suggestion
+#+BEGIN_SRC sh
+vresid~ LU+MET+Interactions+ s(x,y)
+#+END_SRC
+**** reg calibaration instead of CV for stage 3
+run the reg with some left out monitors and see if the slope is different then '0' to see if we have Bias 
+
+**** explore Callipso sattelite 
+
 **** TODO supplementing AOD by space and time
      :PROPERTIES:
      :ID:       bd374907-316e-4494-bbb1-f877ef09e627
@@ -818,7 +734,7 @@ we can supplment 1k data with 3k data where we preform lousy and dont do so well
 random slope for each slopes for each wind direction
 use wind speed to choose the best 9 grid cell aod 
 reanalysis data set for wind direction
-**** LPM- rule if you have a spline it should stop in distance X etc (₆In example₆ for A1 1500km).
+**** LPM- rule if you have a spline it should stop in distance X etc (in examp: for A1 1500km).
 **** Try removing (in mod1&2) aodid gridcells that have very few passable days (<100) :newdata:
      :PROPERTIES:
      :ID:       31731f52-2f71-4a2c-80e8-31e664617df3
@@ -843,12 +759,6 @@ resid~ LU+MET+Interactions+ s(x,y)
      :PROPERTIES:
      :ID:       5ce7437b-68c9-4227-928e-5e222f7cb922
      :END:
-**** penelized spline/n.s for dist to point emission
-     :PROPERTIES:
-     :ID:       e7798cf3-03ab-4c67-be81-1dba135623ec
-     :END:
-
-      
 **** Better error estimation
 I have one other idea regarding error estimation. What I previously proposed samples spatial variability in error. We take the annual error in each monitoring location and do a LUR. But there is also temporal variability in at least the GEOS-Chem output, because the chemistry is not perfect and on some days that will matter more. For this I propose the following. On each day, for a region, e.g. New England, we compute the daily rmse. We can then regress these against temporal factors, mostly meteorological. 
 
@@ -1079,78 +989,11 @@ R package by lauren hunn
 **** sattelite humidity
 lowest level
 
-*** meetings
-**** TODO meeting with Alexei [2015-04-21 Tue] 
-***** MAIAC RAW results in all NE areas we tried (Mexico, Israel etc) much worse. is it a mater of physics?
- all other regions such as Israel, Mexico, italy, SE USA have all relatively poor overall RAW R2 (monitors vs closest AOD) much lower than NE:
- in NE it ranges from 0.2-0.7 RAW while in all other regions RAW of 0.01-0.2 MAX
- bright surfaces (in California) get better agreement with aeronet; also in israel
- 0.6017
- is MAIAC better at prediccting the uper column than surface in israel? 
- what can we do to help this (bright surface problem)
-
-***** PM10 in Israel performs much better than PM2.5
- the differences are huge- CV R2 pm10=0.82 and pm25 ~0.7
- over fitting isn't the issue since also in a parsimonious model we still get this drop
-****** histogram on dust days of AOD
-
- #+DOWNLOADED: /tmp/screenshot.png @ 2015-02-11 09:15:22
- #+attr_html: :width 450tx
-   [[/home/zeltak/org/attach/images_2015/screenshot_2015-02-11_09:15:22.png]]   
- #+DOWNLOADED: /tmp/screenshot.png @ 2015-02-11 09:16:30
- #+attr_html: :width 450px
-  [[/home/zeltak/org/attach/images_2015/screenshot_2015-02-11_09:16:30.png]]
-
-
-****** raw lm corr aod and pm25/10 on dust vs non dust days 
- 0.16 non dust days
- 0.17 dust days
-
- look at time series analysis
-****** raw correlation with regions
- reg5      R2   nsamps
- 1    1 0.39621    484  beer sheva
- 2    2 0.19817   7096  ashdod
- 3    3 0.30556    124  jerusalem
- 4    4 0.12481   3885   Tel aviv 
- 5    5 0.16421   4627  North 
-
- in general raw correlations aren't great- 0.001-0.3 when breaking down to season/year etc
- there are specifc station in speific seasons that have a base correlation of 0
-
- we saw that UN and adjancecny mask werent helping that much
-
- -alexei raw correlations in california from slides
- we saw in table and el segundo bad correlations in the range that we saw, whats the pysical explenation for this
- -lets take one year 2004  and focus on this. we will send you pm data. lets try to debug this
- issues we hypothesis: humidity and salt along the near shore area.
-
-***** clouds - focus on Mexico - Allan
- uncertainty and adjacency mask don’t help that much
- our additional filtering (spatial filter for high variance);
- there are long gaps with no data 
- versions and datasets - when is the “new” version coming
- using Terra with Aqua
-
-*** TODO Ideas (NEED TO QUEUE BY PRIORITY)
-**** add as.factor(month)*aod in model
-**** look into using svm in mod4
-
-**** geoschem model vertical profile - put into a europe wide pm dataset
-
-**** pick satellite (Aqua vs Terra) based on which one has lower uncertainty in gridcells that join to monitors
-**** look at surface refelectance and zenith
-**** weight sites in Mod1 by inverse of nearby missing AOD- (downweight sites near clouds)
-**** pls regression for both inclufing aqua-terra??
-**** look into meris data for aod
-basian latnet variable  model
-
-** Ta model (next branch) 
+** Model.Ta 
 *** stage 3 regression by grid cell
 You do not need to run a model with a random effect for each grid cell. Instead, you can run a separate regression for each gridcell, regressing the non-missing predicted Ta against the mean of monitored Ta within 100km. This gives you 1 million regressions to do, but you can divide the gridcells into 100 groups and run 100 jobs on the cluster and it will run in an hour. We do this when we regress the 5000,000 methylation sites against predictors in the NAS.  Also, we need some of the land use terms.
 
 ** meytar research topics 
-   
 1. PM-MAIAC model in Israel
 
 Predict PM2.5 /PM10 based on MAIAC AOD using mixed effects model following I.Kloogs 
@@ -1268,38 +1111,6 @@ discrepancies between these measurements, it's worth analyzing the contribution 
 satellite-borne RH profile and maybe find a RH correction factor to use in PM prediction 
 
 models.
-** alexandra
-*** Alexandra meetings
-**** methods paper 10x10 Vs 1x1k etc
-comparing multiple resolution models to better charecterize fine particulate matter in urban Environments:
-years 2003-2008
-Boston, Worcster, NYC, Newark
-4 rural
-
--fig 1: 10x10 NE usa 10x10 and 1x1km NE USA
--plot 2: box plot of true pm and pm 10km vs 1km per ( and maybe 200) city and by season
-range of true PM, pred 10, pred 1-check ranges in each 
--plot 3: distances from main roads and/or urban rings and levels of PM: take NYC and boston and see how much the levels of pm go down for each few km's from the city: downtown, surrondings area, outer core , rural
--plot 4: transported pm by trajectories and thresholds
--discussion: show how you might underestimate the health effect (exposure bias)
-maiac is similar to modis but much more obsrv with more variability
-
-
-comparing rural vs urban areas, comparing cities by decreasing populations
-comparing 10x10,3x3,1x1,200x200
-X-city size or popultaion  and scale Y-PM and create 3 box plots 10,1,200
-season-same as above
-range of variablilty of 1x1m pixels within a 10x10km model.
-figures:
-fig 1: 10x10 vs 1x1km for 2003-2008
-fig 2: box plot city/pop vs pm
-fig 3- going further from A1 roads and PM levels
-
-*** 2004-current OMI 
-**** no2 modles
-**** O3 models
-**** So2 models
-
 ** Future exposure models 
    :PROPERTIES:
    :ID:       03c79a3e-10b4-4295-b91f-d0c4f38e9497
@@ -1332,9 +1143,7 @@ black particles are going to observer and scatter roughly the same ammount vs ot
     :ID:       2a65cb66-1218-4ad7-8467-d80dc3d84cf1
     :END:
 arange a skype call with alexie
-** smoking and particle exposure 
-block group level data in block groups and exposre 
-** Mortality and Ta 
+** Mortality and Ta in Israel
 ** NAS temperature analyis
 *** DONE create exposure datasets
 *** test various previous temp-nas studies
@@ -1345,13 +1154,6 @@ Re-run previous studies with NAS and TEMP using a central monitor and
 see wheather this improves things. if not its also ok to write a paper
 about this
 -try using the same models used in the paper with our NAS data
-** look into Eumetsat for met data over EU/Israel
-
-http://oiswww.eumetsat.org/IPPS/html/MSG/RGB/DUST/WESTERNAFRICA/
-
-** OMI sattelite for NO2 and O3 callibration models
-develop no2 and/or O3 sattelite models (look at omi sattelite)
-http://aura.gsfc.nasa.gov/instruments/omi.html
 ** LAN project with Joel
 *** LAN in NEW-England
 **** Email DMSP regarding data purchuse
@@ -1368,26 +1170,10 @@ http://aura.gsfc.nasa.gov/instruments/omi.html
 maybe use living near highways (A1 vs parkways vs low density roads)
 *** light at night in Georgia- W/Joel
 Joel has mortality data
-   
+ 
 ** LAN ideas Boris
 *** create a model to predict LAN wave lenght models
 *** use LAN maps to describe Land Use
-** Sara addar project
-   Start running the models for these areas
-   places include:
-       ohio
-       illinoy
-       indiana
-** Michelle bell colaboration-Conn data, maybe other world areas brasil etc
-Wants to use 1x1km temp data for health studies that we are not going to persue
-very intrested in other parts of the world as well:
-Brasil (sau paolo -lots of monitors but spatialy all clustered)
-Nepal- few monitos, only specific years and then they stopped
-Asia- Japan etc
-study of nursing home cases, dont move much good for 1x1 km data
-** Joel NAS paper about no correlation with SES and PM, try with 1km data
-** Look into developing spatio temporal ozone (O3) modles from sattelite in USA
-** Compare our BW study with low "western world" effetcs to a high polluted (mexico city) area
 ** Temperature model results and Liu CMAQ results
    -look at mortality cases and temperature (short term, acute temprature days), and compare results with our model and CMAQ
 ** go back to the ICAM/VCAM reanalysis
@@ -1397,6 +1183,36 @@ create moving averages of the 4,8,12 weeks and try that in the model> will captu
 when we get the 1x1km data ready go back to the icam/vcam reanalysis by marie-able and the stacey BC paper and see if that changes things
 ** explore Mapi Maagal project 
 Zipcode proxy
+
+* Finished Projects
+** DONE DVT admissions and PM
+  :PROPERTIES:
+  :ID:       2668bdf2-f4de-40cd-b57f-101a88076ba7
+  :END:
+** info
+The variable thromb is based on the first main diagnosis of admission, while thromb2 is based on primary and secondary admissions.
+The ICD are below
+thromb=0;
+if (icd11 in (415, 451, 453)) then thromb=1;
+** secondary stage
+*** Ask antonella about medical history, prev admisons, causes
+-look into weather had cancer yes/no
+-hospitalized last 90 days
+*** add interactions
+:PROPERTIES:
+     :ID:       bd8bcdf7-4bbc-44f4-a7f2-eb65bdd2d333
+     :END:
+- for c-xover try individual level and zip level SES, sex, urban-rural
+- interact with ndvi/percet of open space in both short and long term
+  (CXover and Ts)
+-look at interacting with season (winter vs summer)
+*** Survival analysis
+     :PROPERTIES:
+     :ID:       8e80e09e-3dba-4bb1-a09e-50c09b8b28f5
+     :END:
+Try running a survival anlysis or maybe a posion survival analyis (SA) (look at johana 6 city paper)
+if running a posion SA we can extract the random slopes fro every zipcode and with smoothing create a spatial map showing risk areas
+** Smooth the random slopes to create risk maps
 
 * Grants
 ** K_TRACK EHF grant: birth weight outcomes (defects, Ultra sound measurements and Ta,PM2.5
@@ -1520,3 +1336,44 @@ account number 87347711 saif 40
 **** perhaps noise exposure modeling? I have a student that is working on this- tis very hard to model, need a "moitoring campagin", height, buliding material etc
 **** crime-data availability?
 * scheduled mail/calls/meetings
+** Alexei Mount Sinai[2015-09-18 Fri] 
+*** issues: 
+**** cloud cover issue in Mexico; grid cells being masked because of bright surfaces (false clouds) and dropping of clear days- (long time series with no scene coverage)
+**** Israel data subsets with no raw correlation - Itai will send examples to Alexei (related: not certain why we have big differences in R2 from year to year in Israel and Mexico)
+**** dust days not caught by MAIAC (in Israel); Itai and Meytar sending a few examples
+**** both areas-Focus on improving a single year to speed iteration - we nominate 2004 - hopefully this lets us communicate back and forth.
+**** PM10 in Israel performs much better than PM2.5
+ the differences are huge- CV R2 pm10=0.82 and pm25 ~0.7
+ over fitting isn't the issue since also in a parsimonious model we still get this drop
+***** histogram on dust days of AOD
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2015-02-11 09:15:22
+ #+attr_html: :width 450tx
+   [[/home/zeltak/org/attach/images_2015/screenshot_2015-02-11_09:15:22.png]]   
+ #+DOWNLOADED: /tmp/screenshot.png @ 2015-02-11 09:16:30
+ #+attr_html: :width 450px
+  [[/home/zeltak/org/attach/images_2015/screenshot_2015-02-11_09:16:30.png]]
+
+***** raw lm corr aod and pm25/10 on dust vs non dust days 
+0.16 non dust days
+0.17 dust days
+
+look at time series analysis
+***** raw correlation with regions
+ reg5      R2   nsamps
+ 1    1 0.39621    484  beer sheva
+ 2    2 0.19817   7096  ashdod
+ 3    3 0.30556    124  jerusalem
+ 4    4 0.12481   3885   Tel aviv 
+ 5    5 0.16421   4627  North 
+
+ in general raw correlations aren't great- 0.001-0.3 when breaking down to season/year etc
+ there are specifc station in speific seasons that have a base correlation of 0
+
+ we saw that UN and adjancecny mask werent helping that much
+
+ -alexei raw correlations in california from slides
+ we saw in table and el segundo bad correlations in the range that we saw, whats the pysical explenation for this
+ -lets take one year 2004  and focus on this. we will send you pm data. lets try to debug this
+ issues we hypothesis: humidity and salt along the near shore area.
+

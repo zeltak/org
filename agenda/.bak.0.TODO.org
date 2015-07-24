@@ -93,6 +93,7 @@ Storing links from Sunrise-commander
   ("z" projectile-cache-current-file "cache current")
   ("q" nil "cancel"))
 ** bookmark+ link to orgid
+I guess someone who uses OrgMode (I don’t) would need to code that up. But have you tried just bookmarking a header line location? When you bookmark a position, bookmarking keeps track of the immediately surrounding text, to use to relocate the position when the buffer gets modified. Or try bookmarking some text immediately preceding or following a header
 ** keys reahual
 *** Emacs
 make changing windows similar to i3 and tmux

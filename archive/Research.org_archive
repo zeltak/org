@@ -3532,3 +3532,188 @@ melva.robertson@emory.edu
 **** american journal of Epidemiology 
 (IF= 4.9 ; Q1 public, environmental & occupational health, 11  of 162 )
 
+
+* Decompose local/area
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-24 Fri 07:53
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Projects'/PM2.5 1kmx1km NEMIA
+  :ARCHIVE_CATEGORY: work
+  :END:
+http://svitsrv25.epfl.ch/R-doc/library/quantreg/html/predict.rqss.html
+-smooth of top 5%
+#+begin_src r
+xmat <- ns(x,y)
+quantreg(pred~xmat)
+#vqss?
+#+end_src
+-decompose:
+1)smooth geo components
+2)deviance from smooth will give us the local contribution
+
+* meeting 04.09.13
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-24 Fri 08:00
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Projects'/PM2.5 1kmx1km NEMIA/brent/joel meetings
+  :ARCHIVE_CATEGORY: work
+  :END:
+** General
+maybe try differnet land use and different buffers for LUR terms, like have 2 buffers for a term like tden and try in the model
+humidty makes particles grow-interact with aod
+interact wdsp*mjrd
+penelized spline/n.s for dist to point emission
+interactions with pbl/wdsp with source/are emissions
+** LPM
+1.normal LPM but with temporal and spatio-temporal interactions
+-also talk to steve to make effort to get traffic density by day/week etc, the mesa project maybe bought from someone.
+-ask steve about traffic modeling, nescam
+-check out Nldas data set (the North American Land Data Assimilation System)
+http://ldas.gsfc.nasa.gov/nldas/NLDAS2forcing.php
+
+
+* meet 04.10.2013 with joel
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-24 Fri 08:00
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Projects'/PM2.5 1kmx1km NEMIA/brent/joel meetings
+  :ARCHIVE_CATEGORY: work
+  :END:
+-pls and kernel not working well
+running just LU variables Spatial R2=~0.83
+forward stepwise regression
+put in a mix of important LU as fixed and the rest as randomf
+
+* meeting 11.11.2013
+     :PROPERTIES:
+     :ID:       661bffef-4085-46ca-8344-ea0eb62a01ed
+     :ARCHIVE_TIME: 2015-07-24 Fri 08:00
+     :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+     :ARCHIVE_OLPATH: 'Projects'/PM2.5 1kmx1km NEMIA/brent/joel meetings
+     :ARCHIVE_CATEGORY: work
+     :END:
+in stage 4 things to check check:
+pbl interaction with wdsp
+season interaction with LU variables
+tden*year
+poden*years
+s(tden, by-year)
+
+* meeting 23.1.2014
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-24 Fri 08:01
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: 'Projects'/PM2.5 1kmx1km NEMIA/brent/joel meetings
+  :ARCHIVE_CATEGORY: work
+  :END:
+** show results
+** next steps
+** mi-hyees models
+** CV of stage 3 impossible, what i did was leave 5 monitors out in stage 3 and look at the slopes , the slopes and R2 were still very similar
+** stage 4 s-t
+      :PROPERTIES:
+      :ID:       b1f42285-be84-4b26-8867-5c086e243211
+      :END:
+ideas to further improve this part?
+maybe try a mixed model, relationship between resif ~ met variables changes daily/
+
+* alexandra
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-24 Fri 09:14
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Future Project Ideas
+  :ARCHIVE_CATEGORY: work
+  :END:
+** Alexandra meetings
+*** methods paper 10x10 Vs 1x1k etc
+comparing multiple resolution models to better charecterize fine particulate matter in urban Environments:
+years 2003-2008
+Boston, Worcster, NYC, Newark
+4 rural
+
+-fig 1: 10x10 NE usa 10x10 and 1x1km NE USA
+-plot 2: box plot of true pm and pm 10km vs 1km per ( and maybe 200) city and by season
+range of true PM, pred 10, pred 1-check ranges in each 
+-plot 3: distances from main roads and/or urban rings and levels of PM: take NYC and boston and see how much the levels of pm go down for each few km's from the city: downtown, surrondings area, outer core , rural
+-plot 4: transported pm by trajectories and thresholds
+-discussion: show how you might underestimate the health effect (exposure bias)
+maiac is similar to modis but much more obsrv with more variability
+
+
+comparing rural vs urban areas, comparing cities by decreasing populations
+comparing 10x10,3x3,1x1,200x200
+X-city size or popultaion  and scale Y-PM and create 3 box plots 10,1,200
+season-same as above
+range of variablilty of 1x1m pixels within a 10x10km model.
+figures:
+fig 1: 10x10 vs 1x1km for 2003-2008
+fig 2: box plot city/pop vs pm
+fig 3- going further from A1 roads and PM levels
+
+** 2004-current OMI 
+*** no2 modles
+*** O3 models
+*** So2 models
+
+
+* smoking and particle exposure 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-24 Fri 09:15
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Future Project Ideas
+  :ARCHIVE_CATEGORY: work
+  :END:
+block group level data in block groups and exposre 
+
+* OMI sattelite for NO2 and O3 callibration models
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-24 Fri 09:17
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Future Project Ideas
+  :ARCHIVE_CATEGORY: work
+  :END:
+develop no2 and/or O3 sattelite models (look at omi sattelite)
+http://aura.gsfc.nasa.gov/instruments/omi.html
+
+* Sara addar project
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-24 Fri 09:17
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Future Project Ideas
+  :ARCHIVE_CATEGORY: work
+  :END:
+  Start running the models for these areas
+  places include:
+      ohio
+      illinoy
+      indiana
+
+* Michelle bell colaboration-Conn data, maybe other world areas brasil etc
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-24 Fri 09:18
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Future Project Ideas
+  :ARCHIVE_CATEGORY: work
+  :END:
+Wants to use 1x1km temp data for health studies that we are not going to persue
+very intrested in other parts of the world as well:
+Brasil (sau paolo -lots of monitors but spatialy all clustered)
+Nepal- few monitos, only specific years and then they stopped
+Asia- Japan etc
+study of nursing home cases, dont move much good for 1x1 km data
+
+* Joel NAS paper about no correlation with SES and PM, try with 1km data
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-24 Fri 09:18
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Future Project Ideas
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* Look into developing spatio temporal ozone (O3) modles from sattelite in USA
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-24 Fri 09:18
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Future Project Ideas
+  :ARCHIVE_CATEGORY: work
+  :END:
