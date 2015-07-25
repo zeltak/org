@@ -5576,9 +5576,7 @@ finally make sure the .ssh folder under USER (₆In example₆ zeltak) is setup
 #+BEGIN_EXAMPLE
 file:/share/homes/USER/
 #+END_EXAMPLE
-
 also:
-
 1. make sure permissions on the .ssh folder is '700' (chmod 700) and on the authroized_keys '600' 
 2. make sure permissions on the USER ('zeltak') home folder is '755'
 
@@ -24668,8 +24666,7 @@ the script has CLI arguments like
 rofi-pass show_entry  #to launch the other one
 #+END_SRC
 
-also it can be configured s:
-
+also it can be configured as:
 
 if you have a website that needs more than one field, you need to name them in the password file accordingly:
 #+BEGIN_EXAMPLE
@@ -24697,6 +24694,15 @@ you should be able to choose the password needed which will auto fill the user/p
 
 $Note- the magic wont happen before you focused the field so if you use cvim etc focuse the field first to autofill $
 
+***** operations
+remember to never use FM/CLI tools to move/copy/rename/delete etc since it will not update git
+use the pass * commands like
+
+#+BEGIN_SRC sh
+pass rm
+#+END_SRC
+
+or Emacs/rofi-pass to do that
 ***** enable git
 to enable passwd to act as a git repo issue this command while in file:~/.password-store 
 #+BEGIN_SRC sh
@@ -40040,6 +40046,12 @@ this command:
 /media/raid/Music/Backup Zmusic
 
 **** advanced commands
+**** Rsync with a non-standard ssh port
+use this
+
+#+BEGIN_SRC sh
+rsync -avz -e "ssh -p $portNumber" user@remoteip:/path/to/files/ /local/path/
+#+END_SRC
 *** unsion
 **** Terminology
 Replicas are the set of files (and folders) you would like synced. On each machine that is synced, the replica has a root which is the folder path (e.g., /home/jacob/) where the synced files will be stored. (For example, different roots allow you to keep the contents from a server /home/jacob/ in sync with its logical desktop counterpart /Users/jacob/.)

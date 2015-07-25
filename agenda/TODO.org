@@ -198,8 +198,6 @@ As with the tables, we shall add a caption and a name to it as follows
 You can now refer to this graph in the text using [[my-bmi-graph]].
 
 *** org capture
-** hydra requests
-*** TODO request custom color for commands (make it more visible)
 ** explore worf-mode
 ;;; Commentary:
 ;;
@@ -395,21 +393,18 @@ punchagan | zeltak: it looks like properties need to be all upper case.
 -mode
 
 ** @sync//backup project@
-*** Uni IP's
+*** Relevant IP's
 
-| Machine      |             IP | Ports open                                                                       | Comments |
-|--------------+----------------+----------------------------------------------------------------------------------+----------|
-| Linux PC     | 132.72.155.204 | github,                                                                          |          |
-| Synology NAS | 132.72.152.204 | FTP into machine,github, ssh (22), btsync (UDP/TCP 9999 ,UDP/TCP 8888, UDP 3000) |          |
-| Linux Laptop | 132.72.154.204 | github                                                                           |          |
-|              |                |                                                                                  |          |
+| Machine          |             IP | Ports open                                                                       | Comments |
+|------------------+----------------+----------------------------------------------------------------------------------+----------|
+| Linux PC         | 132.72.155.204 | github,                                                                          |          |
+| Synology NAS     | 132.72.152.204 | FTP into machine,github, ssh (22), btsync (UDP/TCP 9999 ,UDP/TCP 8888, UDP 3000) |          |
+| Linux Laptop     | 132.72.154.204 | github                                                                           |          |
+| home qnap        |       10.0.0.2 |                                                                                  |          |
+| hope laptop wifi |      10.0.0.12 |                                                                                  |          |
 
 *** Sync methods     
 **** for all textfile-git
-***** what is currently synced
--dotfiles (including my linux scripts under bin/scripts)
--org files(including my work scripts)
- -.emacs.d special directory
 ***** create a central bare repo (or use github)
 ****** using github as a central repo
 -create a repo (named zorg) on github
@@ -450,7 +445,6 @@ I use this for android to pull my whole git repo (org) and have a copy of it on 
 ********* TODO you can also git push back changes
 ******** Mobile org 
 i used that for agenda notes to have a more accesable way to quick read notes from there
-***** TODO create color git output
 **** Binary files (images,pdfs etc)-Unison
 I use unison to sync the following folders
 I create a profile called sync under file:/home/zeltak/.unison/sync.prf
@@ -509,11 +503,6 @@ rsync -aRPz --delete -e ssh /home/zeltak/dotfiles/  root@132.72.152.204:/volume1
 use this script created in ~bin:
 file:/home/zeltak/bin/lrs
 
-*** TODO CRON!!! talk to rasi
-    :PROPERTIES:
-    :ID:       8638e3da-4bdb-41dc-a980-c7c02dc3dddb
-    :END:
-    
 ** explore memacs
 *** http://shelve.sourceforge.net/
 ** fix wraps

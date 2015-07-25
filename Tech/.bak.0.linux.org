@@ -33782,6 +33782,28 @@ I added the following to the org-capture-templates list
 
 Thus, pressing the assigned button in your browser and emacs will ask you what kind of link you want to add to your file. Press g for gmail and enter the description for the link (this could be done automatically, but I find it to long and not helpful). You will find the link in your capture buffer in emacs for further processing
 
+******** connect to ssh link in xterm in org file
+One day after being particularly frustrated when I couldn’t get into a box, I was adding yet another entry to ~/.ssh/config only to realize it was in there twice already, I decided to turn this problem into a nail so I could use my universal hammer, emacs.
+
+#+BEGIN_EXAMPLE
+(defun jgk/xterm-ssh (host)
+  "Spawn a xterm with a ssh to the host"
+  (start-process-shell-command "*org-xterm-ssh*" "ssh-xterm" "xterm" "-e"
+                               (concat "'ssh -AY "  host "'")))
+#+END_EXAMPLE
+
+I now have an org file for each project I work on and can create links that will let me ssh into a system with a ‘click’
+
+#+BEGIN_EXAMPLE
+[[elisp:(jgk/xterm-ssh "username@192.168.15.218")][Magical Mystery Machine]]
+#+END_EXAMPLE
+
+Since it is in org mode I can now categorize and tag these links. I can take notes and use tramp to open directories.
+
+I am slowly adding systems in as I need them. I have found the ability to keep notes and a basic log of what and why I was there to be invaluable.
+
+If you need to access a lot of random systems you should try this, it has made my life sane
+
 ******* attach
 ******** set default dir
  #+BEGIN_EXAMPLE
