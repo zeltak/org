@@ -1244,6 +1244,18 @@ account number 87347711 saif 40
 
 **** perhaps noise exposure modeling? I have a student that is working on this- tis very hard to model, need a "moitoring campagin", height, buliding material etc
 **** crime-data availability?
+** Grant with german group- Josepg
+1.  the Volksvaben grant
+
+2.      The Niedersachsen-Israel Research Cooperation Program – I do not know yet when is the next cycle – probably towards the fall – only with institutions in lower Saxony
+
+3.      BMBF (more engineering and less scientific than GIF)
+
+4.    Alexander von Humboldt-Foundation  - We promote academic cooperation between excellent scientists and scholars from abroad and from Germany.
+
+Our research fellowships and research awards allow you to come to Germany to work on a research project you have chosen yourself together with a host and collaborative partner.
+If you are a scientist or scholar from Germany you can profit from our support and carry out a research project abroad as a guest of one of more than 26,000 Humboldt Foundation alumni worldwide - the Humboldtians.
+As an intermediary organisation for German foreign cultural and educational policy we promote international cultural dialogue and academic exchange.
 * scheduled mail/calls/meetings
 ** Alexei Mount Sinai[2015-09-18 Fri] 
 *** issues: 
@@ -1295,3 +1307,22 @@ https://mail.google.com/mail/u/0/#inbox/14dadae578497953
 https://mail.google.com/mail/u/0/#inbox/14e880a8cbf2a2be
 ** Kees investogate ftp
 https://mail.google.com/mail/u/0/#inbox/14e91c24938adf11 
+** לגבי ה-IDW, לא חובה לעבוד עם אובייקטים מרחביים (SpatialPointsDataFrame), אפשר לעבוד עם data.frame.
+https://mail.google.com/mail/u/0/#search/%3Cmichael.dorman%40mail.huji.ac.il%3E+Re%3A+Link/14e07836f0d509d7
+
+אם יש לך data.frame עם תצפיות (למשל rainfall) עם עמודות קואורדינטות (x ו-y) ועמודה של משתנה תלוי (annual) ו-data.frame של הנקודות עבורן אתה רוצה לבצע את החיזוי (למשל towns), גם כן עם עמודות קואורדינטות (x ו-y), מדובר בשתי שורות קוד -
+
+model = gstat(formula = annual ~ 1, locations = ~ x + y, data = rainfall)
+predict(object = model, newdata = towns)
+
+האובייקט model בדוגמה הנ"ל, מהמחלקה gstat, מכיל את כל המידע הנחוץ לביצוע חיזוי או cross-validation בשיטה שנבחרה (IDW) עם נתוני הכיול הרלוונטיים. בחירת השיטה, דרך אגב, מתבצעת אוטומטית עפ"י סט הארגומנטים של הפונקציה (אתה יכול לראות את זה בשקף 20 של המצגת המצורפת). הסט הנ"ל קובע שהמודל יהיה IDW, עם סט שונה של ארגומנטים ייבחר kriging וכו'. רצוי שהקואורדינטות יהיו ב-projection ולא קווי אורך ורוחב כי עובדים עם מרחקים, אבל באזור קטן כמו ישראל זה לא כל כך משנה. מצ"ב קוד עם דוגמה שאפשר לשחזר.
+
+** pick up check-allan - Ryan.Buck@childrens.harvard.edu
+https://mail.google.com/mail/u/0/#search/%22Buck%2C+Ryan%22+%3CRyan.Buck%40childrens.harvard.edu%3E+RE%3A+Invoice+request/14df8c94af6e479b
+
+** Current Opinion in Pediatrics review paper
+
+https://mail.google.com/mail/u/0/#search/Robert+Wright+%3Cem%40editorialmanager.com%3E+Current+Opinion+in+Pediatrics/14e48fbf2720ec29
+
+** helen burress paperowk
+ heburris@bidmc.harvard.edu RE: paperwork issues
