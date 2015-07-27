@@ -239,7 +239,8 @@ impute pm2.5 from pm10 data in low pm2.5 years
 **** TODO open a ftp 
 -lets start setting up euro dataset
 **** TODO send massimo AOD Sweden
-**** TODO ill create euro wide grids
+**** TODO ill create euro wide grids				     :meytar:
+Talk to myetar to make csv for single hdf lat/longs
 **** TODO [#A] send qian pm2.5 10 data in israel italy france
 *** grant ideas
 **** supplementing PM2.5 with PM10-25 relationship in  that year
@@ -321,6 +322,15 @@ will mainly be head circumference and Birth weight
 **** analaysis
 build a kernal density map of exposure and overlay with outcome kerenl density maps
 look at cholropleth maps (SSA level) of outcome Vs Exposure
+**** check geocode
+use t-test for geocodinh
+situation of child development, density of cases, hotspots
+join to ssa 2008 data.
+
+**** TODO check with tal money transfer autorization from haifa 
+**** TODO [#A] Check back RE: ERSA regestration 
+     DEADLINE: <2015-07-30 Thu>
+
 ** [#A] MODEL.PM.France
 *** info file
 id:23371787-acbe-41fa-8bab-5a2e91c1e61e
@@ -333,6 +343,8 @@ file:/home/zeltak/org/files/Uni/Projects/code/P031.MAIAC.France
 ***** TODO Check missing met (temp,WS) France
 Try to use prev post day lags for areas missing Met
 ***** DONE PM10.25 analysis
+***** TODO take a look at the us data and check the correlations between trimesters
+
 *** explore
 *** related papers
 **** Read Queue
@@ -526,12 +538,12 @@ The hypothesis is that the final graph will look schematically like this:
 **** Writing Material
 * Future Project Ideas
 ** Model.PM 
-*** TODO Ideas (NEED TO QUEUE BY PRIORITY)
+*** Ideas (NEED TO QUEUE BY PRIORITY)
 **** predict pm25 from 10
 weight the predicted pm2.5 as lower weights opposed to true PM10
 **** Compare results between correlation to MAIAC/MODIS C06 AOD data with overpass data (i.e. mixed effect model).
 **** Use sqrt transforms instead of log transform for skewed variables (after first checking the variable distribution etc.).
-**** TODO Use SVM
+**** Use SVM
 tried with mediocre success so far- is there a way to include a random statement
 **** Exclude high percentiles in PM-AOD data
 after first performing box plot and outlier analysis and trying to understand the origin of the “errors”
@@ -558,7 +570,7 @@ Use correlation between nearby stations as a spatial variable
 pm~aod+aod01
 if prev day isnt avilable we use the same day twice
 **** to borrow information across space create a variable that weights and down weights low aod observations per day
-**** TODO [#A] LUR; space-time smoothing; nearby cells weighted for missing and previous day (if gone, use today)
+**** [#A] LUR; space-time smoothing; nearby cells weighted for missing and previous day (if gone, use today)
 **** is the ground monitoring data under a cloud otherwise the same as when not clouded (apart from precip events)?
 **** does relationship of Aqua and Terra give us info? early pollutant build-up vs continuous across the day? :newdata:
 **** can I extract cloudiness from NOAA dataset?
@@ -633,14 +645,14 @@ if prev day isnt avilable we use the same day twice
 **** Construct directional buffers and intersect these with road density for each point;
   consider upwind traffic on each day (directional road density weighted by daily wind)
 
-**** TODO spatial join to best close point
+**** spatial join to best close point
   Instead of taking the closest AOD point to each monitor for each day, what if we took each of the points within some distance and ran a regression then preferentially weight our selection AOD points to pick those sites with best agreement to monitor (likely a function of local land use features). The best agreement could be not the closest point, but the one downwind the most, or with the most similar amount of roadway, etc... This could really impact calibration in Mod1.
   see also LUR_Mex_4b_2_vignette_spatialjoin.R
 
 ****  Are there better predictions at stations with their own met monitoring?
   does it matter if you have the spatial/temporal covs from your own monitor Vs. borrowing it from nearby
 ****  Does open streetmap give the same predictions as municipal GIS
-**** TODO For any pair of monitors, what is their correlation as a function of distance (manual semivariogram)
+**** For any pair of monitors, what is their correlation as a function of distance (manual semivariogram)
 ****  Are seasonal patterns driven by rain alone or rain + other factors
 ****  If there are temporal patterns (decreases) are any particular predictors major drivers of these trends (interaction by time)
 ****  If we compare school monitor stations with closest SIMAT monitor - how good are they?
@@ -662,7 +674,7 @@ if prev day isnt avilable we use the same day twice
 ****  use lots of spatial terms with PLS regression a la Sampson paper 
 ****  seasonal patterns - are these just due to rain?	 	
 
-**** EXP weight sites in Mod1 by inverse of nearby missing AOD (downweight sites near clouds)	 	
+**** weight sites in Mod1 by inverse of nearby missing AOD (downweight sites near clouds)
 **** Joel suggests we put time interactions on almost everything
   which interaction
   file:/home/acjust/projects/airmex/code/LUR_Mex_1b_clean_local.R
@@ -671,13 +683,13 @@ if prev day isnt avilable we use the same day twice
   what about instead clustering to find characteristics of days that predict the AOD-pm relationship
   and substituting slopes/intercepts from those instead for the many days when no calibration is occuring because mod1 is empty on that day (no aod near monitors)
 
-**** EXP add high res local smoothing in mod1 
+**** add high res local smoothing in mod1
 in mod1 file, join the monitor to average of nearby AOD
 **** Workflow and fixes
-**** EXP Discover patterns of bad AOD data using spatstat to check for contiguous regions
+**** Discover patterns of bad AOD data using spatstat to check for contiguous regions
 
 ***** create paths so S:/ and S:/EOME taken care of automatically
-***** EXP Enhance geomerge
+***** Enhance geomerge
       :PROPERTIES:
       :ID:       063b3058-0d6b-4f36-820c-adfd60cf1f8f
       :END:
@@ -693,7 +705,7 @@ better arguments inline with common gis terminology
 ****** Try aod divided by pbl. Or cluster groups of days (by pbl profile). Fit different models for subsets?
 ****** Handle data as a matrix, smooth with a weighted kernel. Strip off measures near edges.
 
-**** EXP add flag to exclude closest in mean calc in geomerge/nearestbyday
+**** add flag to exclude closest in mean calc in geomerge/nearestbyday
 **** PLS regression 
 **** look into Eumetsat for met data over EU/Israel		     :meytar:
 http://oiswww.eumetsat.org/IPPS/html/MSG/RGB/DUST/WESTERNAFRICA/
@@ -718,7 +730,7 @@ run the reg with some left out monitors and see if the slope is different then '
 
 **** explore Callipso sattelite 
 
-**** TODO supplementing AOD by space and time
+**** supplementing AOD by space and time
      :PROPERTIES:
      :ID:       bd374907-316e-4494-bbb1-f877ef09e627
      :END:
@@ -726,7 +738,7 @@ space: perhaps taking aod from n (~ 9) adjacent cells
 time: take from prev/next day if no AOD avilable today
 also we can maybe weight nearby cells by missingness/distance
 
-**** TODO use calman filter to merge 1x1km to 3x3km
+**** use calman filter to merge 1x1km to 3x3km
      :PROPERTIES:
      :ID:       162c23d1-7d21-4026-ac93-bbe20193c975
      :END:
@@ -956,7 +968,7 @@ round(mod1table$', i, '_', j, ', 2)', sep='')))
 
 **** using WRF data for met.pbl etc data (see AE I reviewed)- also look at sattelite derived column no2-from same paper 
 q
-**** TODO combine aqua and terra
+**** combine aqua and terra
 I have an idea for combining the satellites but we need to get NE done quickly and I thought we should save it for your Midwest paper. You should expect half or more of the observations to be missing. What is your missing percentage?
 Regarding the two satellites you need to remember some stuff from Petros' air pollution course. In the morning the mixing height is low. Local pollution is trapped near the ground, an is a large fraction of particles. It is mostly from traffic or from oil heat in the winter, and so a lot of the particles are black, and a lot are fresh, and hence small. I n the afternoon the mixing height is high, transported particles mix down, and the color and size distribution change. Therefore, the calibration changes. So we need to do the stage 1 calibration separately for each satellite, and then combine, since one is in the morning and one in the afternoon. 
 
@@ -972,7 +984,7 @@ http://www.temis.nl/airpollution/absaai/
 
 **** data fusion in North America
 combining the 3k and 1k data which have different algorithms and hence different errors
-**** TODO use calman filter to merge 1x1km to 3x3km, 10k
+**** use calman filter to merge 1x1km to 3x3km, 10k
       :PROPERTIES:
       :ID:       51e638d4-a837-4689-b3cd-56d46777b576
       :END:
@@ -998,18 +1010,18 @@ You do not need to run a model with a random effect for each grid cell. Instead,
    :PROPERTIES:
    :ID:       03c79a3e-10b4-4295-b91f-d0c4f38e9497
    :END:
-**** TODO Order of importance 
+**** Order of importance 
      :PROPERTIES:
      :ID:       6d4ad710-4e3e-42ee-a6d0-510562544802
      :END:
 N02-eurpoe issue more disel
 O3-Is worth having models
 light at night
-**** TODO noise pollution models- based on traffic counts/density, blding geometries, Z's etc
+**** noise pollution models- based on traffic counts/density, blding geometries, Z's etc
      :PROPERTIES:
      :ID:       4cf32841-7607-4d9f-ab85-a6d412578664
      :END:
-**** TODO LAN models based on sattelite data, traffic etc
+**** LAN models based on sattelite data, traffic etc
      :PROPERTIES:
      :ID:       b9336baf-a7d3-475a-840e-ad3f16818f28
      :END:
@@ -1326,3 +1338,4 @@ https://mail.google.com/mail/u/0/#search/Robert+Wright+%3Cem%40editorialmanager.
 
 ** helen burress paperowk
  heburris@bidmc.harvard.edu RE: paperwork issues
+
