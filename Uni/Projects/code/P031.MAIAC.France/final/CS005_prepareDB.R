@@ -1,4 +1,3 @@
-
 library(lme4)
 library(reshape)
 library(foreign) 
