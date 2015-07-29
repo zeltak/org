@@ -30964,6 +30964,14 @@ on arch to get it working issue this (at startup)
 #+BEGIN_SRC sh
 grep -q "^avfsd $HOME/.avfs " /proc/mounts || avfsd ~/.avfs -o auto_cache     
 #+END_SRC
+********* Transmission
+install from melpa
+to define and config it issue customize-group >> transmission
+
+you can try and add the user pass to you config file
+#+BEGIN_SRC emacs-lisp :results none
+(setq transmission-rpc-auth '(:username "USER" :password "PASS" ) )
+#+END_SRC
 ******* registers
 ******** basics
 
