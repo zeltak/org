@@ -5,8 +5,32 @@
 
 
 * @TODAY@							  :CANCELLED:
+** custom agenda example 
+I use a "@Q2" tag for things that are
+important and not urgent, and I reserve some time to work on them. The
+ones I'm currently working on are scheduled, and they are shown in my
+custom agenda view using this:
+
+#+begin_src emacs-lisp
+("q" "Q2 tasks"
+ ((agenda
+   ""
+   ((org-agenda-overriding-header "Q2 Scheduled")
+    (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp ":@Q2:"))))
+  (tags-todo
+   "@Q2/!-HOLD-WAITING"
+   ((org-agenda-overriding-header "Q2")
+    (org-agenda-todo-ignore-deadlines t)
+    (org-agenda-todo-ignore-scheduled t)))))
+#+end_src
+
+
 ** TODO tackle org capture DE popup
 ** macro for close window and focus previous one as full frame 
+
+
+
+
 ** sunrise
 *** questions 
 1) REQUEST: if there is only 1 match left in fuzzy match- can SR auto select it (that is enter dir)
@@ -68,6 +92,10 @@ Storing links from Sunrise-commander
       link)))
 *** AVFS
 '(sr-virtual-listing-switches "-al --group-directories-first")
+
+
+
+
 ** hydra
 (defface hydra-face-orange
     '((t (:foreground "orange" :bold t)))
@@ -198,6 +226,27 @@ As with the tables, we shall add a caption and a name to it as follows
 You can now refer to this graph in the text using [[my-bmi-graph]].
 
 *** org capture
+** helm bibtex notes
+I worked on the note-files branch and as far as I’m concerned it
+is ready to be merged into master.  There are several changes:
+
+When one big notes file is used:
+
+- The new default template for notes is simpler than what org-ref uses
+  but it should be compatible because it uses the Custom_ID property to
+  store the key.
+- Note templates can be defined in `helm-bibtex-notes-template`.
+- The list of publications now shows a mark if notes are available for a
+  publication.
+- Finding the correct entry is now robust because the code looks for
+  `Custom_ID: key` not just for the key.
+
+Multiple note files (one for each publication):
+
+- The template for notes is used to populate new note
+  files.  (Previously it was only used in the case with one big notes
+  file.)
+
 ** explore worf-mode
 ;;; Commentary:
 ;;

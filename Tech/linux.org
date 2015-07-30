@@ -28308,6 +28308,10 @@ you could use this self contained code:
                       (call-interactively #'org-refile))))
 #+END_SRC
 
+the key part is the last line where you need to define the function name (FUNCNAME)
+
+(call-interactively #'FUNCNAME))))
+
 or %better% eval this macro and use it in all future binds
 
 #+BEGIN_SRC emacs-lisp :results none
