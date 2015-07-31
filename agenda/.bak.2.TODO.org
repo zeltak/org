@@ -5,9 +5,6 @@
 
 
 * @TODAY@							  :CANCELLED:
-  :PROPERTIES:
-  :ID:       70feaa43-c66b-4675-89f5-9ae26bddc03e
-  :END:
 ** custom agenda example 
 I use a "@Q2" tag for things that are
 important and not urgent, and I reserve some time to work on them. The
@@ -130,45 +127,6 @@ I guess someone who uses OrgMode (I don’t) would need to code that up. But hav
 *** Emacs
 make changing windows similar to i3 and tmux
 change C-S up/down to move lines 
-** org latex CV
-Unlike the others who've commented, I moved my CV from LaTeX to org-mode and I'm happy with the results. Two things make it work well.
-
-First, a "cv" class added to org-latex-classes:
-#+BEGIN_SRC emacs-lisp :results none
-(add-to-list '("cv" "\\documentclass[10pt]{article}\n\\usepackage[margin=.75in]{geometry}\n%\\usepackage{palatino}\n\\usepackage{sectsty}\n\\sectionfont{\\normalsize\\selectfont\\itshape}\n\\usepackage[T1]{fontenc}\n\\usepackage{libertine}\n\\renewcommand*\\oldstylenums[1]{{\\fontfamily{fxlj}\\selectfont #1}}"
-  ("\\section{%s}" . "\\section*{%s}")))
-#+END_SRC
-
-Second, something like the following at the top of the org file (replace with your particulars):
-
-#+OPTIONS: author:nil timestamp:nil
-#+TITLE:
-#+DATE:
-#+LaTeX_CLASS: cv
-
-#+BEGIN_LATEX
-\begin{flushleft}
-  \bfseries\Large Curriculum Vitae\hfill Daniel M. Griswold\normalfont
-\end{flushleft}
-
-\vspace{-12pt}%
-\begin{flushright}
-  69 Stratton Road\\
-  Rochester, NY 14610\\
-  (585) xxx-xxxx\\
-  dgriswol@xxxxx.com\\
-  \hrulefill
-\end{flushright}
-#+END_LATEX
-
-Main headings are things like:
-
-*** Education
-*** Specialization
-*** Employment
-*** Publications
-*** Awards and Honors
-and the details below each of these headings are simply unordered lists
 ** org revison
 *** TODO todo
 create todos based on tags and TODO
@@ -1366,5 +1324,33 @@ much for this kind of thing is implemented in devilspie2 though.
   add retsart chrome
   add reload all tabs
   keybind to quickly enable/disable cvim
-* tst
+* Emacs vim replace
+
+C-k kill lin`e forward 
+C-d kill charater forward
+M-d kill forward 
+
+#+BEGIN_SRC emacs-lisp 
+(nth 7 (macroexpand '(defhydra hydra-commenting (:color blue :hint nil)
+                      "
+comment _;_ // comment _t_o line // comment para_g_raph // co_p_y-paste-comment
+"
+                      (";" evilnc-comment-or-uncomment-lines)
+                      ("t" evilnc-quick-comment-or-uncomment-to-the-line)
+                      ("g" evilnc-comment-or-uncomment-paragraphs)q
+                      ("p" evilnc-copy-and-comment-lines)
+                      ("d" downcase-region "downcase")
+                      ("q" nil "cancel"))))
+#+END_SRC
+
+
+
+
+
+
+#+begin_src emacs-lisp
+  (defun my-cooking-sparse-tree-main ()
+    (interactive)
+    (org-match-sparse-tree t "+TODO=\"TODO\"+TYPE=\"main\""))
+#+end_src
 
