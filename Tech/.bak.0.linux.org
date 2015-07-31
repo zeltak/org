@@ -28308,6 +28308,10 @@ you could use this self contained code:
                       (call-interactively #'org-refile))))
 #+END_SRC
 
+the key part is the last line where you need to define the function name (FUNCNAME)
+
+(call-interactively #'FUNCNAME))))
+
 or %better% eval this macro and use it in all future binds
 
 #+BEGIN_SRC emacs-lisp :results none
@@ -33451,6 +33455,22 @@ If FILEXT is provided, return files with extension FILEXT instead."
 
 
 #+END_SRC
+******** create a sparese tree function
+You create an interactive function that simply calls
+`org-match-sparse-tree' with the right match string:
+
+#+begin_src emacs-lisp
+  (defun my-cooking-sparse-tree-main ()
+    (interactive)
+    (org-match-sparse-tree t "+TODO=\"TODO\"+TYPE=\"main\""))
+#+end_src
+
+And now you can simply bind this command (thats what an interactive
+function is called) to whatever you like:
+
+#+begin_src emacs-lisp
+  (define-key org-mode-map (kbd "<f1> c") 'my-cooking-sparse-tree-main)
+#+end_src
 ******* images
 ******** functions to insert images
 ********** Automatic screenshot insertion- Suggested by Russell Adams

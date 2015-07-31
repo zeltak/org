@@ -33455,6 +33455,22 @@ If FILEXT is provided, return files with extension FILEXT instead."
 
 
 #+END_SRC
+******** create a sparese tree function
+You create an interactive function that simply calls
+`org-match-sparse-tree' with the right match string:
+
+#+begin_src emacs-lisp
+  (defun my-cooking-sparse-tree-main ()
+    (interactive)
+    (org-match-sparse-tree t "+TODO=\"TODO\"+TYPE=\"main\""))
+#+end_src
+
+And now you can simply bind this command (thats what an interactive
+function is called) to whatever you like:
+
+#+begin_src emacs-lisp
+  (define-key org-mode-map (kbd "<f1> c") 'my-cooking-sparse-tree-main)
+#+end_src
 ******* images
 ******** functions to insert images
 ********** Automatic screenshot insertion- Suggested by Russell Adams
@@ -40186,20 +40202,10 @@ servercmd = /usr/bin/unison
 #+END_EXAMPLE
 
 ***** Merging
+****** details intro
+As Unison works on the level of files, it will trigger a /conflict/ if both files have changed since the last synchronization. In that case one can only choose which file to keep, which is not satisfying. Unison offers the possibility to use external tools to merge the files. There is an [[http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#merge][extensive manual section]] regarding this, we'll just describe how to use emacs and ediff to do it.
 
-As Unison works on the level of files, it will trigger a /conflict/ if both
-files have changed since the last synchronization. In that case one can only
-choose which file to keep, which is not satisfying. Unison offers the
-possibility to use external tools to merge the files. There is an 
-[[http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#merge][extensive
-manual section]] regarding this, we'll just describe how to use emacs and ediff 
-to
-do it.
-
-For better merging, we will ask unison to keep the last synchronized version of
-every org file on the client; this way we can use ediff with ancestor. These
-~currentbackup~ files may live alongside the synchronized files (with names of
-the form ~.bak.version.name~, which is configurable) or in a central location.
+For better merging, we will ask unison to keep the last synchronized version of every org file on the client; this way we can use ediff with ancestor. These ~currentbackup~ files may live alongside the synchronized files (with names of the form ~.bak.version.name~, which is configurable) or in a central location.
 
 Here is the modified configuration file.
 
@@ -40247,6 +40253,19 @@ merge = Name .org -> emacsclient -c --eval '(ediff-merge-files "CURRENT1"
 "CURRENT2" nil "NEW")'
 
 #+END_EXAMPLE
+****** zeltak methods
+$Note$ the left side will be the file changed locally ("CURRENT1") while the right side will be the file changed remotely ("CURRENT2")  
+
+copy the required bits to the local (or remote if you preffer) file and save it
+then confirm the change in unison
+
+#+BEGIN_EXAMPLE
+###>>>>>>>   changed locally ("CURRENT1") ///// changed remotely ("CURRENT2")  
+merge = Name * -> meld CURRENT1 CURRENT2 
+diff = /usr/bin/meld CURRENT1 CURRENT2
+confirmmerge = true
+#+END_EXAMPLE
+
 
 **** ignoring folders/names
 use something like this
