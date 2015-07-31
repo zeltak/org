@@ -1,4 +1,3 @@
-
 Archived entries from file /home/zeltak/.emacs.d/settings.org
 
 
@@ -534,3 +533,151 @@ The super secret ingredient to all of this is emacs server and emacsclient. Emac
         (self-insert-command 1)))))
 
 #+END_SRC
+
+* TODO org refile with prefix
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-31 Fri 11:22
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Functions/org
+  :ARCHIVE_CATEGORY: settings
+  :ARCHIVE_TODO: TODO
+  :END:
+broken this way, causes erros in init 
+#+BEGIN_SRC emacs-lisp :results none
+;(fset 'z/prefix-org-refile (C-u M-x org-refile))   
+#+END_SRC
+
+
+
+
+* kill line when no region is active
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-31 Fri 12:31
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Settings/Editing
+  :ARCHIVE_CATEGORY: settings
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+;; kill line if no region active                      
+;; http://emacs-fu.blogspot.co.uk/2009/11/copying-lines-without-selecting-them.html
+(defadvice kill-region (before slick-cut activate compile)
+  "When called interactively with no active region, kill a single line instead."
+  (interactive
+   (if mark-active (list (region-beginning) (region-end))
+     (list (line-beginning-position)
+           (line-beginning-position 2)))))
+#+END_SRC
+
+
+* OLD wrap code block
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-31 Fri 16:21
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Functions/org/code blocks
+  :ARCHIVE_CATEGORY: settings
+  :END:
+** z/org-cblock-wrap-emacs-lisp
+#+begin_src emacs-lisp :results none
+(defun z/org-cblock-wrap-emacs-lisp ()
+   "Wrap region in quote block"
+   (interactive)
+   (save-excursion
+     (save-restriction
+       (and
+        (region-active-p)
+        (use-region-p)
+        (narrow-to-region (region-beginning) (region-end)))
+        (goto-char (point-min))
+        (insert "#+BEGIN_SRC emacs-lisp :results none\n")
+        (goto-char (point-max))
+        (insert "#+END_SRC\n")
+        (deactivate-mark))))
+#+end_src
+** z/org-cblock-wrap-example
+#+BEGIN_SRC emacs-lisp :results none
+(defun z/org-cblock-wrap-example ()
+   "Wrap region in quote block"
+   (interactive)
+   (save-excursion
+     (save-restriction
+       (and
+        (region-active-p)
+        (use-region-p)
+        (narrow-to-region (region-beginning) (region-end)))
+        (goto-char (point-min))
+        (insert "#+BEGIN_EXAMPLE\n")
+        (goto-char (point-max))
+        (insert "#+END_EXAMPLE\n")
+        (deactivate-mark))))
+#+END_SRC
+** z/org-cblock-wrap-sh 
+#+BEGIN_SRC emacs-lisp :results none
+(defun z/org-cblock-wrap-sh ()
+   "Wrap region in quote block"
+   (interactive)
+   (save-excursion
+     (save-restriction
+       (and
+        (region-active-p)
+        (use-region-p)
+        (narrow-to-region (region-beginning) (region-end)))
+        (goto-char (point-min))
+        (insert "#+BEGIN_SRC sh\n")
+        (goto-char (point-max))
+        (insert "#+END_SRC\n")
+        (deactivate-mark))))
+        
+#+END_SRC
+** z/org-cblock-wrap-R
+#+BEGIN_SRC emacs-lisp :results none
+(defun z/org-cblock-wrap-R ()
+   "Wrap region in quote block"
+   (interactive)
+   (save-excursion
+     (save-restriction
+       (and
+        (region-active-p)
+        (use-region-p)
+        (narrow-to-region (region-beginning) (region-end)))
+        (goto-char (point-min))
+        (insert "#+BEGIN_SRC R\n")
+        (goto-char (point-max))
+        (insert "#+END_SRC\n")
+        (deactivate-mark))))
+
+#+END_SRC
+** z/org-cblock-wrap-qoute
+#+BEGIN_SRC emacs-lisp :results none
+(defun z/org-cblock-wrap-qoute ()
+   "Wrap region in quote block"
+   (interactive)
+   (save-excursion
+     (save-restriction
+       (and
+        (region-active-p)
+        (use-region-p)
+        (narrow-to-region (region-beginning) (region-end)))
+        (goto-char (point-min))
+        (insert "#+BEGIN_QUOTE\n")
+        (goto-char (point-max))
+        (insert "#+END_QUOTE\n")
+        (deactivate-mark))))
+#+END_SRC 
+** z/org-cblock-wrap-sas
+#+BEGIN_SRC emacs-lisp :results none
+(defun z/org-cblock-wrap-sas ()
+   "Wrap region in quote block"
+   (interactive)
+   (save-excursion
+     (save-restriction
+       (and
+        (region-active-p)
+        (use-region-p)
+        (narrow-to-region (region-beginning) (region-end)))
+        (goto-char (point-min))
+        (insert "#+BEGIN_SRC sas\n")
+        (goto-char (point-max))
+        (insert "#+END_SRC\n")
+        (deactivate-mark))))
+#+END_SRC
+
