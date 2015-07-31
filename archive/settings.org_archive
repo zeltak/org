@@ -512,3 +512,25 @@ The super secret ingredient to all of this is emacs server and emacsclient. Emac
 )
 #+END_SRC
 
+
+* expand code block keys 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-31 Fri 09:29
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Functions/org
+  :ARCHIVE_CATEGORY: settings
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+(defun pl/hot-expand (str)
+  "Expand org template."
+  (insert str)
+  (org-try-structure-completion))
+
+(with-eval-after-load "org"
+  (define-key org-mode-map "<"
+    (lambda () (interactive)
+      (if (looking-back "^")
+          (hydra-org-template/body)
+        (self-insert-command 1)))))
+
+#+END_SRC
