@@ -1397,3 +1397,562 @@ Ahmhed:
   :ARCHIVE_CATEGORY: TODO
   :ARCHIVE_TODO: TODO
   :END:
+
+* TODO org babel terminal
+    :PROPERTIES:
+    :ID:       938c0de7-3df3-49e1-9e7b-3932a978d410
+    :ARCHIVE_TIME: 2015-08-01 Sat 17:30
+    :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+    :ARCHIVE_OLPATH: Linux/Org
+    :ARCHIVE_CATEGORY: TODO
+    :ARCHIVE_TODO: TODO
+    :END:
+
+#+begin_src emacs-lisp
+(defadvice org-babel-execute:sh (around sacha activate)
+  (if (assoc-default :term (ad-get-arg 1) nil)
+    (let ((buffer (make-term "babel" "/bin/zsh")))
+      (with-current-buffer buffer
+        (insert (org-babel-expand-body:generic
+             body params (org-babel-variable-assignments:sh params)))
+        (term-send-input)))
+    ad-do-it))
+#+end_src
+
+
+
+* TODO C-u C-c C-l solves all problems. Now I can link any file (PDF etc.) from anywhere within org and with tab completion. Thanks.
+  :PROPERTIES:
+  :ID:       6810f526-f19c-400a-923f-44951a00d963
+  :ARCHIVE_TIME: 2015-08-01 Sat 17:30
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Org
+  :ARCHIVE_CATEGORY: TODO
+  :ARCHIVE_TODO: TODO
+  :END:
+
+* jump to parent
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 17:40
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Org
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+ how can you jump to the parent node of whatever area │ elik         
+               │                         | you're in?                                           │ farn         
+               │12:48:23         nslater | so if you have:                                      │ framling     
+               │12:48:24         nslater | * A                                                  │ frumious-    
+               │12:48:27         nslater | ** 1                                                 │ fsbot        
+               │12:48:43         nslater | and you're on ** 1, then this function would take    │ Fuco         
+               │                         | you to * A                                           │ funnel       
+               │12:50:27       YoungFrog | perhaps C-c C-p                                      │ garrison     
+               │12:50:53       YoungFrog | oh, parent.                                          │ gds          
+               │12:51:01       YoungFrog | then C-c C-u                                         │ gko          
+               │13:22:26         nslater | found it. thanks!                                    │ iderrick
+
+* look at hippie expand and add A-/ shortcut
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 17:43
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Org
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+
+* make a disable/enable org-inline function (refresh images)
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 17:50
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Org
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+
+* check org sync with goog using webdav
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 17:51
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Org
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+    :PRO:PROPERTIES:
+
+           eb0b0883-9d41-4e9d-8d10-7a86532ef458
+    :
+httpww.osomac.com/2013/09/23/org-mode-moving-forward/
+
+* export to odf dosent work 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 17:51
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Org
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+
+* correct commenting out in bable org mode
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 17:51
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Org
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+
+* google calander sync
+    :PROPERTIES:
+    :ARCHIVE_TIME: 2015-08-01 Sat 17:52
+    :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+    :ARCHIVE_OLPATH: Linux/Org
+    :ARCHIVE_CATEGORY: TODO
+    :END:
+dd512bb5-813c-4311-a8a4-1f6b651b6e9a
+    :
+httpgithub.com/dengste/org-caldav
+
+* Remember last posiiton of file when reopen/jump to last position
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 17:53
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Org
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+206142d8-4b8c-46e1-aa7c-dad5091871d8
+  :
+
+* C-x 5 0 > other key
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 17:54
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Org
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+2b274086-00f1-4ec7-90c7-dfaf7c92f876
+  :
+
+* auto close capture windows
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 17:55
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Org
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+
+* style the tags with colors in theme
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 17:55
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Org
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+
+* org scrape capture/scrape text areas and text+images (In Example a recipe)
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 17:55
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Org
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+
+* org scraper project
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 17:55
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Org
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+    :PRO:PROPERTIES:
+
+           4f2569ae-ffb3-4936-b08d-06a614d52b1e
+    :
+!ide
+saveebpage (inluding images)
+delell non png and jpeg files
+convthat html to org using pandoc
+rech the image pathes from XXX to a subfolder with same name as org doc ~/orgfile.org/scrape1
+
+for ', open in emacs to manually scrape with pandoc:
+#+besrc js
+//!jcript
+
+var ctClone = function()
+{
+    type = arguments[0];
+    root;
+    image_count = 0;
+    imageMapping = null;
+
+    type == "selection")
+    
+    var fragment = window.getSelection().getRangeAt(0).cloneContents();
+    if (fragment)
+    {
+        root = document.createElement("span");
+        root.appendChild(fragment);
+    }
+    
+    
+    
+    doc = document.implementation.createDocument(document.namespaceURI, null, null);
+    root = doc.importNode(document.documentElement, true);
+    
+    !root)
+    
+    return null;
+    
+
+    y.prototype.forEach.call(root.querySelectorAll("img"), function(img) {
+    imageMapping = imageMapping || {};
+    var image = "image_" + image_count++;
+    if (/^\/\//.test(img.src))
+        imageMapping["http:" + img.src] = image;
+    else if (/https?:\/\//.test(img.src))
+    {
+        imageMapping[img.src] = image;
+    }
+    else
+    {
+        imageMapping[location.protocol + "//" + location.hostname + img.src] = image;
+    }
+    img.setAttribute("src",  image);
+    
+
+    rn {
+    html : root.innerHTML,
+    images : imageMapping
+    
+};
+
+func spawn(directory, selection)
+{
+    tmpfile = "/tmp/" + script.generateId() + ".html";
+    output = directory + "/tmp.org";
+    rite(tmpfile, "w", selection);
+    em.spawn("sh -c 'pandoc -s -S " + tmpfile + " -o " + output + "; emacs " + output + "'");
+    em.spawn("rm " + tmpfile);
+}
+
+func clone(type)
+{
+    selection = JSON.parse(tabs.current.focusedFrame.inject(injectClone, type));
+    !selection)
+    return;
+
+    directory = "/tmp/emacs_org_" + tabs.current.mainFrame.domain;
+    em.mkdir(directory, 0700);
+
+    pending = 0;
+    selection.images)
+    
+    for (var link in selection.images) {
+        var d = new WebKitDownload(link);
+        d.destinationUri = "file:///" + directory + "/" + selection.images[link];
+        pending++;
+        d.start(function(download) {
+            switch (download.status)
+            {
+            case DownloadStatus.finished:
+            case DownloadStatus.error:
+            case DownloadStatus.cancelled:
+                pending--;
+                break;
+                default : return;
+            }
+            if (pending == 0)
+            {
+                spawn(directory, selection.html);
+            }
+        });
+    }
+    
+    
+    
+    spawn(directory, selection.html);
+    
+}
+binds", clone.bind(null, "selection").debug(script), "clone_selection");
+bindf", clone.bind(null, "full").debug(script), "clone_full");
+#+enc
+
+#+BESRC js
+//!jcript
+
+func org_protocol_store_link () {
+    cmd = 'emacsclient';
+    title = tabs.current.title || "" ;
+    uri = tabs.current.uri || "";
+    args = "'2f6d720053b5240c19cc9c7b35feef5d846ba3a6quot;org-protocol://store-link://" +
+    encodeURIComponent(uri) +
+    "/" +
+    encodeURIComponent(title) +
+    "2f6d720053b5240c19cc9c7b35feef5d846ba3a6quot;'";
+    em.spawn(cmd + " " + args);
+}
+
+func org_protocol_capture (w) {
+    cmd = 'emacsclient';
+    sel = clipboard.get(Selection.primary) || "";
+    title = tabs.current.title || "";
+    uri = tabs.current.uri || "";
+    args = "-n '" +
+    "2f6d720053b5240c19cc9c7b35feef5d846ba3a6quot;org-protocol://capture://" +
+    encodeURIComponent(uri) +
+    "/" +
+    encodeURIComponent(title) +
+    "/" +
+    encodeURIComponent(sel) +
+    "2f6d720053b5240c19cc9c7b35feef5d846ba3a6quot;'";
+    em.spawn(cmd + " " + args);
+
+}
+
+bind", org_protocol_store_link, "orgstring");
+bind", org_protocol_capture, "orgcapture");
+#+ENC
+
+
+* org sync files
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 17:55
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Org
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+** sol1
+With Dropbox I've had a some "conflicted copy" issues; this is annoying (and is
+the sort of thing that would have been solved much more easily with version
+control) but happens very rarely. What I like about this is that my frequent
+changes in org files get propagated without the need for an explicit version
+control command.
+
+
+However, for safety and for tracking, I run a nightly job with bazaar where I
+commit all changes (this is done in only one of the machines, of course). This
+has actually proven extremely useful when, by mistake, I have deleted a complete
+subtree and only realized maybe a month later.
+** sol 2
+https://github.com/simonthum/git-sync
+** s3
+   http://translate.google.com/translate?hl=en&sl=auto&tl=en&u=http://www.mkblog.org/2011/12/zwei-rechner-daten-verloren-dokumente-fehlen/
+
+* keys for kill buffer C-x k
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 17:56
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Emacs
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+
+* emacs mode on a specific frame   
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 17:56
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Emacs
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+
+* explore terminal integration 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 17:57
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Emacs
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+
+* TODO Emacs 24.4 has the new command isearch-forward-symbol-at-point
+    :PROPERTIES:
+    :ID:       06883f77-7f39-4327-8ef3-ae5fb7355f23
+    :ARCHIVE_TIME: 2015-08-01 Sat 17:58
+    :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+    :ARCHIVE_OLPATH: Linux/Emacs
+    :ARCHIVE_CATEGORY: TODO
+    :ARCHIVE_TODO: TODO
+    :END:
+this is like vimes C-*
+
+* emacs add dunst support/notify
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 18:00
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Emacs
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+
+* customize menus/toolbar (color,bold other)
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 18:01
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Emacs
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+
+* ess-sas an r
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 18:01
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Emacs
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+  :PRO:PROPERTIES:
+
+	 7cf88c53-5680-4944-b8b4-5e6a68590d8a
+  :
+
+* crash recvocery
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 18:01
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Emacs
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+
+* org-download
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 18:01
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+
+* revise password global system
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 18:01
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Misc
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+passes> keepss
+docs-org
+internt pass -last pass
+2 pass system
+
+strong-
+
+
+* A fantastic font
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 18:06
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Misc
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+I've tried several fonts, and all of them were nice, but came up short on some way. Some didn't have italic variants, some had dotted zeroes instead of dashed zeroes, some even had entirely clear zeroes which make them look like O's, others had boring-looking parentheses4. Not Fantasque Sans Mono5, 6, it is awesome. If your web browser supports web fonts you should also see it used in the code blocks here.
+
+For normal Emacs setups you might use the set-frame-font function like so:
+
+(set-frame-font "Fantasque Sans Mono 13" nil t)
+
+* Look at synergy for sharing betwee office pc and laptopz 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 18:07
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Misc
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+
+* automate git commit with script_cron daily 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 18:07
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Misc
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+
+* Dunst color per application
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 18:07
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Misc
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+ :PRO:PROPERTIES:
+
+	6948b8bf-bf06-4491-8b91-415161f29cf3
+ :
+
+* gmvalut laptop work>transfer to Server
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 18:07
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Misc
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+ :PRO:PROPERTIES:
+
+	097eb08f-ef41-43d1-b3fa-08b774b2205c
+ :
+
+
+* look at lan wakeup for laptop for backup/rsync?
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 18:07
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux/Misc
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+ :PRO:PROPERTIES:
+
+	45239772-46d4-4acc-a505-57c52816f0db
+ :
+
+* Misc
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 18:08
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+** Xdotool-gui
+  :PRO:PROPERTIES:
+
+	 d3c75d51-8439-4f8b-bbbc-a2a7172db86d
+  :
+
+* Cantata
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 18:08
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+** requests
+*** file type on player upper bar
+*** crashes in cantata when issuin mpc commands
+*** keyboard only interface
+*** dynamic mode -> add critereas not played in last 2 weeks, from specific playlist etc
+
+* worker
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 20:53
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+** filter by date
+ i tried looking for documentation on the set filter command but only found general filtering commands. is there a way to filter views by date (modified time etc) that could be very useful. 
+** DONE colored tabs
+ option to color tab by name/location/other
+** DONE copy to clip/paste from clip?
+** NEXT Filter indicator
+     :PROPERTIES:
+     :ID:       0c51d716-e089-4b64-bda8-d0ee9c9bd81c
+     :END:
+ i know there is a star but can i request an option make the listview or modtime/name bar different colored when filtered
+ perhaps clearer syntax ₆In example₆ (N)
+** DONE Toggle sort mode
+ is there a way toggle a sort mode, so that the same button pressed once would sort asecding and then second press descinding? if not is there a way to maybe script this
+
+* devils pie
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 20:53
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: Linux
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+** set a window to open on a specific screen
+I believe you are forced to use a method where you place the
+windows non-dynamically on the required screen - if you have two
+screens both with 1280 width, placing a window at 1280 should put it on
+the right screen. (That's not very dynamic, but it could be a start to
+work on something at least).
+
+You should be able to get the total screen area (All screens added),
+and via that calculate if you have one or two screens attached. Not
+much for this kind of thing is implemented in devilspie2 though.
+
