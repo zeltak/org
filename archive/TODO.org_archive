@@ -1129,3 +1129,35 @@ tried this but didn't send the command (its waiting for a password)
   :ARCHIVE_OLPATH: @TODAY@
   :ARCHIVE_CATEGORY: TODO
   :END:
+
+* hydra
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-07-31 Fri 21:19
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: @TODAY@
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+(defface hydra-face-orange
+    '((t (:foreground "orange" :bold t)))
+  "Orange face. For fun.")
+
+(defhydra hydra-projectile (:color blue
+                            :columns 4)
+  "Projectile"
+  ("a" projectile-ag "ag" :face 'hydra-face-orange)
+  ("b" projectile-switch-to-buffer "switch to buffer")
+  ("c" projectile-invalidate-cache "cache clear")
+  ("d" projectile-find-dir "dir")
+  ("s-f" projectile-find-file "file")
+  ("ff" projectile-find-file-dwim "file dwim")
+  ("fd" projectile-find-file-in-directory "file curr dir")
+  ("g" ggtags-update-tags "update gtags")
+  ("i" projectile-ibuffer "Ibuffer")
+  ("K" projectile-kill-buffers "Kill all buffers")
+  ("o" projectile-multi-occur "multi-occur")
+  ("p" projectile-switch-project "switch")
+  ("r" projectile-recentf "recent file")
+  ("x" projectile-remove-known-project "remove known")
+  ("X" projectile-cleanup-known-projects "cleanup non-existing")
+  ("z" projectile-cache-current-file "cache current")
+  ("q" nil "cancel"))
