@@ -32701,11 +32701,6 @@ use ~C-c C-w~ to refile it
 ******** launch org capture from command line (for quick WM binds)
 	 :PROPERTIES:
 	 :END:
-*********  method 2
-
-#+BEGIN_SRC sh
-/usr/bin/emacsclient -nw -e '(org-capture)'   
-#+END_SRC
 ********* new method 
 issue this line:
 #+BEGIN_SRC sh
@@ -40207,10 +40202,20 @@ servercmd = /usr/bin/unison
 #+END_EXAMPLE
 
 ***** Merging
-****** details intro
-As Unison works on the level of files, it will trigger a /conflict/ if both files have changed since the last synchronization. In that case one can only choose which file to keep, which is not satisfying. Unison offers the possibility to use external tools to merge the files. There is an [[http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#merge][extensive manual section]] regarding this, we'll just describe how to use emacs and ediff to do it.
 
-For better merging, we will ask unison to keep the last synchronized version of every org file on the client; this way we can use ediff with ancestor. These ~currentbackup~ files may live alongside the synchronized files (with names of the form ~.bak.version.name~, which is configurable) or in a central location.
+As Unison works on the level of files, it will trigger a /conflict/ if both
+files have changed since the last synchronization. In that case one can only
+choose which file to keep, which is not satisfying. Unison offers the
+possibility to use external tools to merge the files. There is an 
+[[http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#merge][extensive
+manual section]] regarding this, we'll just describe how to use emacs and ediff 
+to
+do it.
+
+For better merging, we will ask unison to keep the last synchronized version of
+every org file on the client; this way we can use ediff with ancestor. These
+~currentbackup~ files may live alongside the synchronized files (with names of
+the form ~.bak.version.name~, which is configurable) or in a central location.
 
 Here is the modified configuration file.
 
@@ -40258,19 +40263,6 @@ merge = Name .org -> emacsclient -c --eval '(ediff-merge-files "CURRENT1"
 "CURRENT2" nil "NEW")'
 
 #+END_EXAMPLE
-****** zeltak methods
-$Note$ the left side will be the file changed locally ("CURRENT1") while the right side will be the file changed remotely ("CURRENT2")  
-
-copy the required bits to the local (or remote if you preffer) file and save it
-then confirm the change in unison
-
-#+BEGIN_EXAMPLE
-###>>>>>>>   changed locally ("CURRENT1") ///// changed remotely ("CURRENT2")  
-merge = Name * -> meld CURRENT1 CURRENT2 
-diff = /usr/bin/meld CURRENT1 CURRENT2
-confirmmerge = true
-#+END_EXAMPLE
-
 
 **** ignoring folders/names
 use something like this
