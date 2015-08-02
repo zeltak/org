@@ -1,0 +1,2096 @@
+#+TITLE: xbmc
+
+* xbmc
+** location of logs files for xbmc
+ 
+~/.xbmc/temp/
+
+it will be called xbmc.log the xbmc-old.log is fromt he previous time
+you ran it
+
+** banner-fanart tips
+
+*to refresh all fanart
+*delete /.xbmc/userdata/Thumbnails/XXX*X
+**Default size of banners in XBMC
+*758x140
+ Folder artwork in xbmcfolder.jpeg is used for banner/season/folder view
+ fanart.jpeg is used for fanart/wall
+ Examples for User-Defined Thumbnails:
+ Single Video File
+ The following example "videofilename.avi" will now use the thumbnail
+"videofilename.tbn".
+ Videos\path\videofilename.tbn
+ Videos\path\videofilename.avi
+ TV Show Season Thumbnail
+ In the following example, the thumbnail will be used for the
+appropriate season in the Video Library season node. Where xx is 01, 02
+etc.
+ TV\showfolder\seasonxx.tbn
+ Multi Part (Stacked) Movie Files
+ You can either use the filename of the first file in the stack or the
+name of the stack, so for:
+ Movies\path\moviename-CD1.avi
+ Movies\path\moviename-CD2.avi
+ Either of the below would work:
+ Movies\path\moviename-CD1.tbn
+ Movies\path\moviename.tbn
+ The same goes for playlists, and internet-stream files, example:
+ Playlists\path\videoplaylistname.pls
+ Playlists\path\videoplaylistname.tbn
+ Streams\path\videostreamname.strm
+ Streams\path\videostreamname.tbn
+ Thumnails and folder icons info - XBMC Wiki
+ Thumbnailing Individual Items in a Single Directory
+ Name the icon file the same as the file you would like it to display
+for with a .tbn extension ie: Transformers.avi, Transformers.tbn. This
+is particularly useful for using custom thumbnails for movies.
+ Example:
+ Movies\path\moviename.avi
+ Movies\path\moviename.tbn
+ Folder Thumbnails
+ If you store each of your media files in separate subfolders to keep
+things organized, you can also make the folder have a custom thumbnail
+image. To do this you eiter need to save your JPG/PNG thumbnail as
+folder.jpg and place it inside your movie/album folder, or you can save
+it as <foldername>.tbn and place it at the same level as the folder in
+the directory tree.
+ * Remember, XBMC first checks for <foldername>.tbn before checking
+for folder.jpg.
+ * Some documentation suggests that folder.tbn can be used. In
+general folder.jpg is superior as it is detected during a scan i.e. XBMC
+will correctly use folder.jpg but not folder.tbn.
+ * Note that folder.jpg MUST be named .jpg, even if it is a .png
+format image.
+ Examples:
+ Movies\path\foldername\
+ Movies\path\foldername.tbn
+ or
+ Movies\path\moviename\folder.jpg
+ Music\path\album\folder.jpg
+ Now your media folder will have a lovely custom thumbnail-image.
+ You can via advancedsettings.xml change the default filename of the
+image that XBMC uses for music folders. See the <musicthumbs> tag. for
+more information.
+ 
+ Program Thumbnails
+ In order to display the image displayed for a game, emulator or
+application, simply rename the desired image default.tbn and place it in
+the folder where the corresponding default.XBE is located.
+ Music Thumbnails
+ Music Thumbnails are assigned as part of a multitier process. First,
+the Tag Reader runs and caches any embedded art using the album name and
+album artist (or song artist, if that is all that is available). If the
+album name or artist is unavailable, it is cached using the path name of
+the song. This assumes, of course, that you have tag reading enabled.
+ You can also use "Get Thumb" to download the album thumbnail from
+allmusic.com (AMG) for a specific album/folder or do a scan of all your
+music files in all shares.
+ Thumbnails also get downloaded when you rip AudioCD's to your XBox with
+XBMC (which is described in the Ripping CDs section).
+ Recomended is that you store each of your music-albums or artists in a
+separate subfolder to keep things organized. You can also of course make
+the folder have a custom thumbnail image.
+ 
+ Notes: Running a scan automatically enables 'tag reading' so
+everything can be cached. Once a scan is run, all your files and their
+associated thumbnails are stored in the database.
+ The Album Information dialog (available from the context menu) will
+allow you to choose between the cover art available for download from
+allmusic.com and any user-defined thumbnail you may have.
+ Press the "Get Thumb" button to bring up a choice of the local
+thumbnails you have, the currently assigned thumbnail and the
+allmusic.com thumbnail.
+ The code which assigns thumbnails to files runs and assigns thumbnails
+in the following order:
+ 1) Cached Album Thumbnail
+ This is all the embedded album art read by the tag reader and
+cached using the album name and album artist.
+ 2) Cached filename.tbn
+ This includes an embedded thumbnail cached with the fully qualified
+name.
+ 3) Remote filename.tbn
+ This is a filename.tbn on a remote share/folder which is then
+cached.
+ 4) Cached folder.jpg
+ This is a folder.jpg which is cached based off the folder path.
+ 5) Remote folder.jpg
+ This is a folder.jpg on a remote share/folder which is then cached.
+ 6) Remote foldername.tbn
+ This is a foldername.tbn on a remote share/folder which is then
+cached.
+ Examples:
+ In this example audiofilename.mp3 will use audiofilename.tbn as
+thumbnail:
+ Music\path\audiofilename.mp3
+ Music\path\audiofilename.tbn
+ The same goes for playlists, cue-sheets, SHOUTcast, and internet-stream
+files, example:
+ Music\path\audioplaylistname.m3u
+ Music\path\audioplaylistname.tbn
+ Music\path\cuelistname.cue
+ Music\path\cuelistname.mp3
+ Music\path\cuelistname.tbn
+ Music\path\shoutcastlinkname.pls
+ Music\path\shoutcastlinkname.tbn
+ Music\path\audiostreamname.strm
+ Music\path\audiostreamname.tbn
+ Video Thumbnails
+ You can either use your own custom thumbnails or XBMC can retreive
+video thumbnails from the internet via scrapers and cache them.
+ XBMC applies thumbnails to video files in the following order:
+ 1) Cached Thumbnail
+ Thumbnails are cached to UserData\Thumbnails\Video using the CRC of
+the path of the file or folder.
+ 2) User-Defined Thumbnail
+ For files: XBMC checks for <filename>.tbn and uses that if it
+exists.The thumbnail is cached the first time it is read.
+ For movies, movie.tbn will override any other thumb.
+ For folders: XBMC first checks for <foldername>.tbn in the same
+directory as the folder is in. If no <foldername>.tbn exists XBMC then
+checks for folder.jpg inside the movie-folder. In either case the first
+found thumb of those is cached.
+ 
+ Examples for User-Defined Thumbnails
+ Single Video File
+ The following example "videofilename.avi" will now use the thumbnail
+"videofilename.tbn".
+ Videos\path\videofilename.tbn
+ Videos\path\videofilename.avi
+ Multi Part (Stacked) Video Files
+ You can either use the filename of the first file in the stack or the
+name of the stack, so for:
+ Movies\path\moviename-CD1.avi
+ Movies\path\moviename-CD2.avi
+ Either of the below would work:
+ Movies\path\moviename-CD1.tbn
+ Movies\path\moviename.tbn
+ Movie
+ If content has been set to Movies, movie.tbn will override any other
+thumbs for media in that folder. In he following example
+"videofilename.avi" will now use the thumbnail "movie.tbn".
+ Videos\path\movie.tbn
+ Videos\path\videofilename.avi
+ TV Show Season Thumbnails
+ In the following example, the thumbnail will be used for the
+appropriate season in the Video Library season node. Where xx is 01, 02
+etc.
+ TV\showfolder\seasonxx.tbn
+ For specials:
+ TV\showfolder\season-specials.tbn
+ For the all seasons item:
+ TV\showfolder\season-all.tbn
+ Playlist and internet-stream file examples:
+ Playlists\path\videoplaylistname.pls
+ Playlists\path\videoplaylistname.tbn
+ Streams\path\videostreamname.strm
+ Streams\path\videostreamname.tbn
+ Picture Thumbnails
+ XBMC applies thumbnails to picture files in the following order:
+ 1) Cached Thumbnail
+ Thumbnails are cached to UserData\Thumbnails\Pictures using the CRC
+of the path of the file or folder.
+ 2) Images
+ EXIF thumbnail in JPEG images are then read. If no EXIF thumbnail
+is available, XBMC will load the image and generate a thumbnail from the
+image. These are then cached.
+ 3) Folders
+ <MyHolidayPictures>\folder.jpg is checked first. If that file
+doesn't exist, XBMC will generate a thumbnail from up to 4 random images
+inside that folder.
+ Thumbnails for Sources
+ You can change the thumbnail displayed for a source by editing
+UserData\sources.xml.
+ Note: Source thumbnails have to be in a folder on the local Xbox
+harddrive!
+ Simply modify your source as shown:
+ 
+ <source>
+ <name>Music</name>
+ <path>xbms://192.168.1.100:1400/Music/</path>
+ <thumbnail>F:\Apps\XBMC\thumbs\shares\thumb.png</thumbnail>
+ </source>
+ Auto Switch to Icon Mode
+ XBMC tries to automatically switch to Large Icon view when the View
+Mode is set to Auto in the Settings. It first checks if the skin has
+Large Icon view, failing that switches to Icon view. If neither is
+available it goes for List View.
+ The rules are as follows:
+ Programs
+ Auto switches to Icon view when 50% of all the items (files and folder)
+have thumbs.
+ Pictures
+ Auto switches to Thumbs view when the list contains more than 25%
+files. (In the case of Pictures, all items have thumbs as they are
+generated upon entering the folder.)
+ Videos
+ Auto switches to Thumb view when 50% of all the items (files and
+folder) have thumbs.
+ Music
+ Auto switches to Thumb view when the list contains at least 75% folders
+and at least 50% of them have thumbs. (Remember that playlist files like
+m3u, pls, etc, are treated as folders by default)
+ Hashing
+ The thumbnail .tbn file is created via a hashing function. As explained
+earlier, the hash is based off the CRC32 of the pathname (plus filename)
+in lowercase. Files which are local are hashed using their drive letter.
+Remote files are hashed using the smb:// protocol designation and
+optional username and password.
+ Examples
+ * 123456789 returns 0376e6e7
+ * F:\Videos\Nosferatu.avi returns 2a6ec78d
+ * smb://user:pass@server/share/directory/ returns c5559f13
+ * smb://user:pass@server/share/directory/file.ext returns 8ce36055
+ Remember:
+ * When hashing remote shares, use the path as displayed in the
+sources.xml file, which can include the username and password.
+ * When hashing directories for thumbnails, include the final slash.
+ Sample Code
+ The following code is written in C# and produces the same output as the
+XBMC hashing function.
+ public string Hash(string input)
+ {
+ uint m\_crc = 0xffffffff;
+ System.Text.ASCIIEncoding encoding = new
+System.Text.ASCIIEncoding();
+ bytes = encoding.GetBytes(input.ToLower());
+ foreach (byte myByte in bytes)
+ {
+ m\_crc \^= ((uint)(myByte) << 24);
+ for (int i = 0; i < 8; i++)
+ {
+ if ((System.Convert.ToUInt32(m\_crc) & 0x80000000) ==
+0x80000000)
+ {
+ m\_crc = (m\_crc << 1) \^ 0x04C11DB7;
+ }
+ else
+ {
+ m\_crc <<= 1;
+ }
+ }
+ }
+ return String.Format("{0:x8}", m\_crc);
+
+** advanced settings
+
+*Zeltaks Example for Video skip timea
+*
+ <advancedsettings>
+ <video>
+ <smallstepbackseconds>5</smallstepbackseconds>
+ <smallstepbacktries>5</smallstepbacktries>
+ <smallstepbackdelay>300</smallstepbackdelay>
+ <usetimeseeking>true</usetimeseeking>
+ <timeseekforward>15</timeseekforward>
+ <timeseekbackward>-10</timeseekbackward>
+ <timeseekforwardbig>180</timeseekforwardbig>
+ <timeseekbackwardbig>-60</timeseekbackwardbig>
+ <playcountminimumpercent>75</playcountminimumpercent>
+ </video>
+ </advancedsettings>
+ *advancedsettings.xml - XBMC Wiki
+*
+ The "advancedsettings.xml" file, which does not exist by default, may
+be created by a user in their "\UserData\" folder.
+ Please consult your plaform specific FAQ for the appropriate location.
+ This file can contain additional settings and pre-defined values for
+the settings available in the GUI (thus removing them from the GUI
+settings screens).
+ "advancedsettings.xml" is useful for advanced/expert users and for
+installers.
+ NOTE! This file will not exist unless created by the end-user,
+meaning YOU!
+ The XBMC software will never write to this file, so any settings you
+define will not be overwritten by any XBMC GUI settings.
+ So you can only edit this file manually on your computer, via a
+text-editor (like Notepad in Windows or a XML-editor).
+ All the settings available outside of the GUI are documented on this
+page.
+ NOTE: This file is CaSe SeNsItIvE and must contain the
+<advancedsettings> tag (see the layout section below), so make sure you
+use all lower-case tags or they will not be read properly by XBMC.
+ Contents
+ * 1 Layout
+ * 2 List of available settings
+ o 2.1 <loglevel>
+ o 2.2 <cddbaddress>
+ o 2.3 <nodvdrom>
+ o 2.4 <usepcdvdrom>
+ o 2.5 <detectasudf>
+ o 2.6 <disablemodchipdetection>
+ o 2.7 <cachepath>
+ o 2.8 <virtualshares>
+ o 2.9 <pictureextensions>
+ o 2.10 <musicextensions>
+ o 2.11 <videoextensions>
+ o 2.12 <languagecodes>
+ o 2.13 <sorttokens>
+ o 2.14 <samba>
+ o 2.15 <moviestacking>
+ o 2.16 <tvshowmatching>
+ o 2.17 <excludefromscan/excludefromlisting>
+ o 2.18 <pathsubstitution>
+ o 2.19 <forcedswaptime>
+ o 2.20 <playlistasfolders>
+ o 2.21 <playlistretries>
+ o 2.22 <playlisttimeout>
+ o 2.23 <songinfoduration>
+ o 2.24 <remoterepeat>
+ o 2.25 <controllerdeadzone>
+ o 2.26 <displayremotecodes>
+ o 2.27 <thumbsize>
+ o 2.28 <musicthumbs>
+ o 2.29 <musicfilenamefilters>
+ o 2.30 <dvdthumbs>
+ o 2.31 <masterlock>
+ o 2.32 <postprocessing>
+ o 2.33 <audio>
+ o 2.34 <video>
+ o 2.35 <musiclibrary>
+ o 2.36 <videolibrary>
+ o 2.37 <slideshow>
+ o 2.38 <lcd>
+ o 2.39 <network>
+ o 2.40 <tuxbox>
+ o 2.41 <playcountminimumpercent>
+ o 2.42 <ftpshowcache>
+ o 2.43 <screensaver>
+ o 2.44 <busydialogdelay>
+ o 2.45 <rootovershoot>
+ o 2.46 <hosts>
+ o 2.47 <fullscreen>
+ o 2.48 <navigatevirtualkeyboard>
+ o 2.49 <cputempcommand>
+ o 2.50 <gputempcommand>
+ o 2.51 <glrectanglehack>
+ * 3 How to include GUI settings
+ o 3.1 <trainerpath>
+ o 3.2 <recordingpath>
+ o 3.3 <cddaripperpath>
+ o 3.4 <playlistspath>
+ o 3.5 <screenshotpath>
+ Layout
+ The layout of advancedsettings.xml is as follows:
+ 
+ <advancedsettings>
+ <setting>value</setting>
+ ...
+ <setting>value</setting>
+ </advancedsettings>
+ where "setting" gives the name of the setting, and "value" gives it's
+value.
+ A list of the available "setting" strings and their values is given
+below.
+ List of available settings
+ <loglevel>
+ The logging level that XBMC will use to log errors and information.
+Available values are:
+ * -1 No logging, suppresses all log output.
+ * 0 Normal logging, only logging errors (Default)
+ * 1 Debug logging.
+ * 2 Debug logging with freemem, fps and cpu usage shown on screen.
+ * 3 Debug logging with freemem, fps and cpu usage and full smb
+logging.
+ <cddbaddress>
+ The address of the online CDDb database. You may set this to another
+freedb mirror if there is a more suitable one. Defaults to
+freedb.freedb.org
+ <nodvdrom>
+ Set to true if you have no DVD-ROM drive in your XBox, or if it's
+broken. Defaults to false.
+ <usepcdvdrom>
+ Set to true if you have replaced the XBox DVD-ROM drive with a standard
+PC DVD-ROM. Expect performance to be somewhat variable. Defaults to
+false.
+ removed for non XBox builds with r14123.
+ <detectasudf>
+ Set to true if you wish to detect joint ISO9660/UDF disks as UDF.
+Defaults to false.
+ <disablemodchipdetection>
+ Set to true to disable modchip detection. This is required for X2 chips
+to launch XBEs.
+ <cachepath>
+ Set to the path on the XBox Harddisk that XBMC should use for when it
+caches files (such as when caching subtitles or for unzipping or
+unrarring). Defaults to Z:\
+ <virtualshares>
+ Set to false to disable virtual shares like plugin, last.fm or
+shoutcast sources. Defaults to true.
+ <pictureextensions>
+ A list of additional file-extensions to allow (add) or exclude (remove)
+in the My Pictures window.
+ These are the current default extensions for PICTURES:
+ .png .jpg .jpeg .bmp .gif .ico .tif .tiff .tga .pcx .cbz .zip .cbr .rar
+.m3u
+ 
+ <pictureextensions>
+ <add>.ex1|.ex2</add>
+ <remove>.ex3|.ex4</remove>
+ </pictureextensions>
+ <musicextensions>
+ A list of additional file-extensions to allow (add) or exclude (remove)
+in the My Music windows.
+ These are the current default extensions for MUSIC:
+ .nsv .m4a .flac .aac .strm .pls .rm .mpa .wav .wma .ogg .mp3 .mp2 .m3u
+.mod .amf .669 .dmf .dsm .far .gdm .imf .it .m15 .med .okt .s3m .stm
+.sfx .ult .uni .xm .sid .ac3 .dts .cue .aif .aiff .wpl .ape .mac .mpc
+.mp+ .mpp .shn .zip .rar .wv .nsf .spc .gym .adplug .adx .dsp .adp .ymf
+.ast .afc .hps .xsp
+ 
+ <musicextensions>
+ <add>.ex1|.ex2</add>
+ <remove>.ex3|.ex4</remove>
+ </musicextensions>
+ <videoextensions>
+ A list of additional file-extensions to allow (add) or exclude (remove)
+in the My Video windows.
+ These are the current default extensions for VIDEOS:
+ .m4v .3gp .nsv .ts .ty .strm .rm .rmvb .m3u .ifo .mov .qt .divx .xvid
+.bivx .vob .nrg .img .iso .pva .wmv .asf .asx .ogm .m2v .avi .bin .dat
+.dvr-ms .mpg .mpeg .mp4 .mkv .avc .vp3 .svq3 .nuv .viv .dv .fli .flv
+.rar .001 .wpl .zip
+ 
+ <videoextensions>
+ <add>.ex1|.ex2</add>
+ <remove>.ex3|.ex4</remove>
+ </videoextensions>
+ <languagecodes>
+ Translation table for subtitle and audio names. Contains entries of the
+form
+ 
+ <code><short>alt</short><long>Alternate</long></code>
+ <sorttokens>
+ Allows you to specify additional tokens that will be ignored at the
+start of lines during sorting.
+ 
+ <sorttokens>
+ <token>the</token>
+ </sorttokens>
+ <samba>
+ 
+ <samba>
+ <doscodepage></doscodepage> <!-- code page to use for filenames -->
+ <clienttimeout>10</clienttimeout> <!-- timeout (in seconds) -->
+ <statfiles>true</statfiles> <!-- Set to false to disable smb stat()
+on files to speed up listings of large directories (over slow links) -->
+ </samba>
+ <moviestacking>
+ This tag used to be called <videostacking>.
+ Contains "Regular Expression" syntax (commonly refered to as "RegEx" or
+"RegExp") for use in matching filenames in a "stack" of video files. The
+regular expression must have a (...) surrounding the volume label
+portion. Text matching is compared case-insensitive. Anything matched by
+the regular expression will be removed from the titlename. If more than
+one (...) section is used, the first one will be the prefix, the second
+one the volume label, and the third one (if it exists) will be the
+suffix. Use this to keep extensions after matching. If more than one
+expression matches a particular filename, the first one will be used.
+ Default stacking:
+ 
+ <moviestacking>
+ <regexp>[ \_\.-]+cd[ \_\.-]*([0-9a-d]+)</regexp>
+ <regexp>[ \_\.-]+dvd[ \_\.-]*([0-9a-d]+)</regexp>
+ <regexp>[ \_\.-]+part[ \_\.-]*([0-9a-d]+)</regexp>
+ <regexp>[ \_\.-]+dis[ck][ \_\.-]*([0-9a-d]+)</regexp>
+ <regexp>()[ \_\.-]+([0-9]*[abcd]+)(\.....?)$</regexp>
+ <regexp>([a-z])([0-9]+)(\.....?)$</regexp>
+ <regexp>()([ab])(\.....?)$</regexp>
+ </moviestacking>
+ If the argument action="append" or append="yes" is supplied, the
+default videostacking regular expressions will remain intact and the
+user specified ones will be added to the end. Example:
+ 
+ <moviestacking action="append">
+ <regexp>custom[ \_\.-]*([0-9a-d]+)</regexp>
+ </moviestacking>
+ If the argument action="prepend" is supplied, the default videostacking
+regular expressions will remain intact and the user specified ones will
+be added to the beginning. Example:
+ 
+ <moviestacking action="prepend">
+ <regexp>custom[ \_\.-]*([0-9a-d]+)</regexp>
+ </moviestacking>
+ If no argument is supplied, or the argument append="no" is supplied,
+the default videostacking regular expressions are overwritten by the
+user specified ones.
+ <tvshowmatching>
+ Contains "Regular Expression" syntax (commonly refered to as "RegEx" or
+"RegExp") to match the season and episode numbers in filenames. Text
+matching is compared case-insensitive.
+ Default stacking:
+ 
+ <tvshowmatching>
+ <regexp>\[[Ss]([0-9]+)\]\_\[[Ee]([0-9]+)([\^\\/]*)</regexp> <!--
+foo\_[s01]\_[e01] -->
+ <regexp>[\.\_ \-]([0-9]+)x([0-9]+)([\^\\/]*)</regexp> <!-- foo.1x09
+-->
+ <regexp>[\.\_ \-][Ss]([0-9]+)[\.\-]?[Ee]([0-9]+)([\^\\/]*)</regexp>
+<!-- foo, s01e01, foo.s01.e01, foo.s01-e01 -->
+ <regexp>[\.\_ \-]([0-9]+)([0-9][0-9])([\.\_ \-][\^\\/]*)</regexp>
+<!-- foo.103 -->
+ </tvshowmatching>
+ The "append" and "action" arguments described in the videostacking
+section work the same for tvshowmatching tags. Examples of matching
+regexps for certain filenames can be found on the TV\_Shows page.
+ NOTE: for multi-episode matching to work, there needs to be a third set
+of parentheses on the end. This part is fed back into the regexp engine.
+ <excludefromscan/excludefromlisting>
+ Contains regular expressions to match filenames or folders which should
+be excluded from a library scan. This can be for both Video or Audio
+sections of advancedsettings.xml.
+ Default excludes:
+ 
+ <video>
+ <excludefromscan>
+ <regexp>[-\.\_ ](sample|trailer)[-\.\_ ]</regexp>
+ </excludefromscan>
+ </video>
+ The "append" and "action" arguments described in the videostacking
+section work the same for excludefromscan tags.
+ <pathsubstitution>
+ Path substitutions for use with playlist loading. These are processed
+in order, and are useful for substituting an absolute path on a PC with
+a path suitable for XBMC to handle. Default is no path substitutions
+defined. An example is:
+ 
+ <pathsubstitution>
+ <substitute>
+ <from>G:\dvds\</from>
+ <to>smb://somecomputer/g-share/dvds/</to>
+ </substitute>
+ </pathsubstitution>
+ <forcedswaptime>
+ Use to force a backbuffer->frontbuffer swap while vsync is enabled. Set
+to the time (in ms) to allow for the swap (eg
+<forcedswaptime>1</forcedswaptime> is typical). It defaults off.
+ <playlistasfolders>
+ In the recent releases, playlists are treated as folders. Selecting a
+playlist no longer plays it, but opens it, as if it were a folder.
+ Set to false to revert to the previous behavior. When you select a
+playlist, its content is added to the list of elements to be played.
+ NOTE! This setting will not affect smart playlists, they will always
+show as folders.
+ <playlistretries>
+ The default number of retries if for example a source is offline is
+100. With this control you can alter the number of consecutive failed
+items before a playlist fails.
+ 
+ <playlistretries>100</playlistretries>
+ <playlisttimeout>
+ The default timeout before item failure is 20 sec. It can be changed
+with this control
+ 
+ <playlisttimeout>20</playlisttimeout>
+ <songinfoduration>
+ This controls how long the song information will remain onscreen when
+the song changes during visualisations. The valid range is 1 to 15, in
+seconds. This does not include the duration of any transition effects.
+(The default is 2 seconds.)
+ 
+ <songinfoduration>10</songinfoduration>
+ <remoterepeat>
+ The repeat delay for the Infrared remote control, in milliseconds.
+Length of time a remote button needs to be held before it will start
+repeating (ie continuously sending button pushes while it's held down).
+Defaults to 480.
+ <controllerdeadzone>
+ Deadzone for controller thumb sticks. 0 indicates no deadzone at all. 1
+indicates all deadzone (ie no movement will be detected). Defaults to
+0.2
+ <displayremotecodes>
+ Set to true to have XBMC display the Infrared Remote's button codes
+(OBC's) on screen when you press buttons. Useful for assigning functions
+to the buttons on a universal remote control. Defaults to false. Affects
+only XBox.
+ <thumbsize>
+ Size of the square in pixels that XBMC will use to cache thumbnail
+images. If the thumb is smaller than this size it will be cached as-is.
+If it is larger it will be scaled so that the number of pixels is less
+than a square of this value. Default is 512 (192 on xbox), which refers
+to 512x512 = 262144 (for XBox 192x192 = 36864) pixels in total. The
+thumbnail will be cached at using the same aspect ratio as the original
+image, using up to 262144 (for XBox 36864) pixels.
+ <musicthumbs>
+ A list of additional files to try when searching for music thumbnail
+images. (The default is folder.jpg which can be removed.)
+ 
+ <musicthumbs>
+ <remove>folder.jpg</remove>
+ <add>thumb.jpg|cover.jpg</add>
+ </musicthumbs>
+ <musicfilenamefilters>
+ Contains filters to match music information (artist, title etc.) from a
+tagless music filename. The first <filter> to match completely is used.
+Matched items include:
+ %A - Artist %T - Title %B - Album %N - Track number %S - Part of set
+(disk number) %D - Duration %G - Genre %Y - Year %R - Rating
+ 
+ <musicfilenamefilters>
+ <filter>%A - %T</filter>
+ </musicfilenamefilters>
+ <dvdthumbs>
+ A list of additional files to try when searching for dvdrom thumbnail
+images. (The default is folder.jpg which can be removed.)
+ 
+ <dvdthumbs>
+ <remove>folder.jpg</remove>
+ <add>thumb.jpg|cover.jpg</add>
+ </dvdthumbs>
+ <masterlock>
+ If you enable any masterlock settings below, they will be removed from
+UI. Code needs to be MD5'd, and you can use this site to hash it.
+ 
+ 
+ <masterlock>
+ <startuplock>false</startuplock> <!-- true prompts user for code
+upon startup -->
+ <enableshutdown>false</enableshutdown> <!-- true shuts down xbox
+after 3 failed attempts to enter correct code -->
+ <automastermode>false</automastermode> <!-- automatically enters
+master mode if the master code is given -->
+ <loginlock>true</loginlock> <!-- whether to use locks on login
+screen or not -->
+ <!-- advancedsettings.xml ONLY: -->
+ <maxretries>3<maxretries> <!-- enter the max number of retries to
+input code, 3 is default. -->
+ </masterlock>
+ <postprocessing>
+ MPlayer postprocessing settings. This is unreliable, and so they're in
+here only.
+ 
+ <postprocessing>
+ <enable>false</enable> <!-- enable/disable postprocessing -->
+ <auto>true</auto> <!-- auto filter settings (overrides the below)
+-->
+ <verticaldeblocking>false</verticaldeblocking> <!-- use vertical
+deblocking -->
+ <verticaldeblocklevel>0</verticaldeblocklevel> <!-- level of
+vertical deblocking (0-100) -->
+ <horizontaldeblocking>false</horizontaldeblocking> <!-- use
+horizontal deblocking -->
+ <horizontaldeblocklevel>0</horizontaldeblocklevel> <!-- level of
+horizontal deblocking (0-100) -->
+ <autobrightnesscontrastlevels>false</autobrightnesscontrastlevels>
+<!-- whether to use mplayers colour balancing -->
+ <dering>false</dering> <!-- whether to apply the dering filter -->
+ </postprocessing>
+ <audio>
+ 
+ <audio>
+ <!-- Amount of headroom XBMC should use above the maximum volume
+level, in decibels. Defaults to 0, valid values 0, 6, 12. -->
+ <headroom>0</headroom>
+ <!-- Delay in sync to karaoke in seconds. Valid values are
+-3.0...3.0. -->
+ <karaokesyncdelay>0</karaokesyncdelay>
+ <!-- Default audio player: paplayer or dvdplayer (or mplayer on Xbox)
+-->
+ <defaultplayer>paplayer</defaultplayer>
+ <excludefromscan> <!-- Regular expressions that if evaluated to true
+won't be added to library. -->
+ <regexp>[-\.\_ ](podcast)[-\.\_ ]</regexp>
+ </excludefromscan>
+ <excludefromlisting> <!-- Regular expressions that if evaluated to
+true won't be displayed in Files View -->
+ <regexp>[-\.\_ ](podcast)[-\.\_ ]</regexp>
+ </excludefromlisting>
+ </audio>
+ <video>
+ 
+ <video> <!-- "VideoSettings" instead of "video" for builds prior to May
+22, 2006 -->
+ <subsdelayrange>10</subsdelayrange> <!-- Delay range for subtitles,
+in seconds. -->
+ <audiodelayrange>10</audiodelayrange> <!-- Delay range for
+audio/video sync, in seconds. -->
+ <smallstepbackseconds>7</smallstepbackseconds> <!-- Length of the
+small skip back (normally the BACK button) when playing a video -->
+ <smallstepbacktries>3</smallstepbacktries>
+ <smallstepbackdelay>300</smallstepbackdelay>
+ <usetimeseeking>true</usetimeseeking> <!-- Whether to use time based
+or percentage based seeking. -->
+ <timeseekforward>30</timeseekforward> <!-- Time to seek forward in
+seconds when doing a short seek. Defaults to 30. -->
+ <timeseekbackward>-30</timeseekbackward> <!-- Time to seek backward
+in seconds when doing a short seek. Defaults to -30. -->
+ <timeseekforwardbig>600</timeseekforwardbig> <!-- Time to seek
+forward in seconds when doing a long seek. Defaults to 600 (10 minutes).
+-->
+ <timeseekbackwardbig>-600</timeseekbackwardbig> <!-- Time to seek
+forward in seconds when doing a long seek. Defaults to -600 (10
+minutes). -->
+ <percentseekforward>2</percentseekforward> <!-- Amount to seek
+forward as a percentage, when doing a short seek. Defaults to 2. -->
+ <percentseekbackward>-2</percentseekbackward> <!-- Amount to seek
+backward as a percentage, when doing a short seek. Defaults to -2. -->
+ <percentseekforwardbig>10</percentseekforwardbig> <!-- Amount to seek
+forward as a percentage, when doing a long seek. Defaults to 10. -->
+ <percentseekbackwardbig>-10</percentseekbackwardbig> <!-- Amount to
+seek forward as a percentage, when doing a long seek. Defaults to -10.
+-->
+ <blackbarcolour>1</blackbarcolour> <!-- colour of the black bars
+(0->255), (black->white) on videos. -->
+ <fullscreenonmoviestart>true</fullscreenonmoviestart> <!-- Whether to
+go to fullscreen or not when starting a movie. Defaults to true. -->
+ <defaultplayer>mplayer</defaultplayer> <!-- Set the default video
+player: mplayer or dvdplayer (xbox only) / dvdplayer or extplayer
+(others). -->
+ <excludefromscan> <!-- Regular expressions that if evaluated to true
+won't be added to library. -->
+ <regexp>[-\.\_ ](sample|trailer)[-\.\_ ]</regexp>
+ </excludefromscan>
+ <excludefromlisting> <!-- Regular expressions that if evaluated to
+true won't be displayed in Files View -->
+ <regexp>[-\.\_ ](sample|trailer)[-\.\_ ]</regexp>
+ </excludefromlisting>
+ </video> <!-- use "VideoSettings" instead of "video" for builds prior
+to May 22, 2006 -->
+ <musiclibrary>
+ Options specific to the Music Library
+ 
+ <musiclibrary>
+ <hideallitems>true</hideallitems> <!-- removes the "*All" items
+from the music library -->
+ <allitemsonbottom>true</allitemsonbottom> <!-- sorts the "*All"
+items at the bottom of the list when in Ascending order -->
+ <!-- only shows primary album artists when at the unfiltered artist
+listing -->
+ <hidecompilationartists>true</hidecompilationartists>
+ <!-- at an albums listing, when you sort by artist, secondary sort
+will be year. -->
+ <albumssortbyartistthenyear>true</albumssortbyartistthenyear>
+ <albumformat>%B - %Y</albumformat> <!-- album label template,
+default is "%B" -->
+ <albumformatright>%A</albumformatright> <!-- album label template
+for right column, default is "%A" -->
+ <prioritiseapetags>true</prioritiseapetags> <!-- prioritise APEv2
+tags over ID3v1/2 tags, default is false. -->
+ <!-- separator used for multiple artists/genres in tags. Note, this
+*space* *slash* *space* -->
+ <itemseparator> / </itemseparator>
+ </musiclibrary>
+ <videolibrary>
+ Options specific to the Video Library
+ 
+ <videolibrary>
+ <allitemsonbottom>true</allitemsonbottom> <!-- sorts the "*All"
+items at the bottom of the list when in Ascending order -->
+ <backgroundupdate>true</backgroundupdate> <!-- set to hide the
+video scanner dialog from the gui -->
+ <cleanonupdate>true</cleanonupdate> <!-- set to false to prevent
+xbmc from removing items from the database while updating -->
+ <hideallitems>true</hideallitems> <!-- removes the "*All" items
+from the video library -->
+ <hideemptyseries>true</hideemptyseries> <!-- hide empty series in
+the video library -->
+ <hiderecentlyaddeditems>true</hiderecentlyaddeditems> <!-- removes
+the "Recently added ..." items from the video library. -->
+ <itemseparator> / </itemseparator> <!-- separator used for multiple
+artists/genres in tags. Note, this is *space* *slash* *space* -->
+ </videolibrary>
+ <slideshow>
+ 
+ <slideshow>
+ <!-- Amount to pan images as a percentage of the screen -->
+ <panamount>2.5</panamount>
+ <!-- Amount to zoom images as a percentage of the screen -->
+ <zoomamount>5.0</zoomamount>
+ <!-- Amount to compensate (zoom) images to attempt to reduce black
+bars. -->
+ <!-- Results in cropping of the longer length of the image in order
+to reduce the black bars on the shorter length of the image. -->
+ <!-- Defaults to 20. -->
+ <blackbarcompensation>20</blackbarcompensation>
+ </slideshow>
+ <lcd>
+ 
+ <lcd>
+ <rows>4</rows> <!-- Number of rows to use for the LCD. -->
+ <columns>20</columns> <!-- Number of columns to use for the LCD. -->
+ <address1>0</address1> <!-- Memory address for row 1. -->
+ <address2>20</address2> <!-- Memory address for row 2. -->
+ <address3>64</address3> <!-- Memory address for row 3. -->
+ <address4>84</address4> <!-- Memory address for row 4. -->
+ <heartbeat>true</heartbeat> <!-- Enables LCDprocs heartbeat symbol.
+Defaults to false. -->
+ <scrolldelay>2</scrolldelay> <!-- Delay of the scroller widget.
+Defaults to 1. -->
+ </lcd>
+ <network>
+ 
+ <network>
+ <autodetectpingtime>30</autodetectpingtime> <!-- Length in seconds
+between pinging the network to detect new xbox's -->
+ <curlclienttimeout>10</curlclienttimeout> <!-- Timeout in seconds for
+libcurl (http/ftp) connections -->
+ <curllowspeedtime>5</curllowspeedtime> <!-- Time in seconds for
+libcurl to consider a connection lowspeed -->
+ <httpproxyusername></httpproxyusername> <!-- username for Basic Proxy
+Authentication -->
+ <httpproxypassword></httpproxypassword> <!-- password for Basic Proxy
+Authentication -->
+ </network>
+ <tuxbox>
+ 
+ <tuxbox>
+ <!-- "audiochannelselection"; default is 'false', 'true' will popup
+the audio channel selection if
+ there is more then one audio stream !-->
+ <audiochannelselection>false</audiochannelselection>
+ <!-- "submenuselection"; default is 'false', 'true' will popup the
+Submenu selection !-->
+ <submenuselection>false</submenuselection>
+ <!-- "defaultrootmenu"; MODE: 0 = TV (Default), 1 = Radio, 2 =
+Data, 3 = Movies, 4 = Root !-->
+ <defaultrootmenu>0</defaultrootmenu>
+ <!-- "defaultsubmenu"; 1=Services 2=Satellites 3=Providers
+4=Bouquets (default) !-->
+ <defaultsubmenu>4</defaultsubmenu>
+ <!-- "pictureicon"; default is 'true', will use the Picture Icons
+from folder /UserData/PictureIcon/ !-->
+ <pictureicon>true</pictureicon>
+ <!-- "epgrequesttime"; default is '10', 0-3600, defines the time in
+seconds between epg queries, some tuxbox
+ devices need longer to response (Minimum: 1, Maximum: 3600)
+!-->
+ <epgrequesttime>10</epgrequesttime>
+ <!-- "zapwaittime"; default is '0' (0 = OFF), defines the time in
+seconds to wait for a valid PMT after the
+ zaping was send (Minimum: 0, Maximum: 120) !-->
+ <zapwaittime>0</zapwaittime>
+ </tuxbox>
+ <playcountminimumpercent>
+ Video: Minimum percentage that has to be played before it is marked as
+watched.
+ Music: Minimum percentage that has to be played before it is considered
+for incrementing in the Top 100 database view, or for last.fm submittal.
+ <ftpshowcache>
+ default is false, if set to true, shows cache (X Y Z) partitions in the
+root directory listing
+ <screensaver>
+ To avoid potential worries of plasma screen burn-in, you can set the
+Dim screensaver fade level to 0% here or in the Settings.
+ 
+ <screensaver>
+ <dimlevel>0</dimlevel> <!-- This will remove the Fade Level control
+from the settings screen altogether -->
+ </screensaver>
+ <busydialogdelay>
+ Set the delay in milliseconds before the busydialog pops up (default
+2000).
+ 
+ <busydialogdelay>2000</busydialogdelay>
+ <rootovershoot>
+ Disable root overshooting aka evil B(tm) navigation. 'Evil B'
+navigation refers to the 'previous folder' action returning to the
+parent window from the root location of a media window. Sometimes a user
+would just want to repeatedly hit the B button to reach the root
+location without worrying of overshooting to the previous window. For
+this you should disable evil b by setting this value to false.
+ 
+ <rootovershoot>false</rootovershoot>
+ <hosts>
+ Static dns entries which take precedence over your dns server.
+ 
+ <hosts>
+ <entry name="HOSTNAME">IPADDRESS</entry>
+ </hosts>
+ <fullscreen>
+ Starts XBMC in full screen (check resolutions!). The same as starting
+XBMC with -fs.
+ 
+ <fullscreen>false</fullscreen>
+ <navigatevirtualkeyboard>
+ Allows virtual keyboard navigation with remotes.
+ 
+ <navigatevirtualkeyboard>true</navigatevirtualkeyboard> <!-- This will
+activate virtual keyboard navigation, default is false -->
+ <cputempcommand>
+ Provide a shell command XBMC will use to get CPU temperature. It should
+print out only "[temp as integer] [scale as one of"CcFf"]".
+ 
+ <cputempcommand>sed -e 's/\([0-9]*\)[0-9]\{3\}.*/\1 C/'
+/sys/class/thermal/thermal\_zone0/temp</cputempcommand>
+ <gputempcommand>
+ Provide a shell command XBMC will use to get GPU temperature. It should
+print out only "[temp as integer] [scale as one of"CcFf"]".
+ 
+ <gputempcommand>echo "$(nvidia-settings -tq gpuCoreTemp)
+C"</gputempcommand>
+ <glrectanglehack>
+ Problems with ghosting or videos which are only played back in the left
+upper quarter? The following ATI hack may solve it.
+ 
+ <glrectanglehack>yes</glrectanglehack>
+ How to include GUI settings
+ You can also define the settings normally defined in the GUI in
+advancedsettings.xml. Any GUI based settings defined in
+advancedsettings.xml will override the GUI values, and the settings will
+be removed completely from the GUI (ie only alterable by editting
+advancedsettings.xml).
+ The easiest way to include a GUI setting is to first make sure it is
+set in the GUI to the value that you want, and then to open the
+UserData\guisettings.xml file and find the XML entry that corresponds to
+that setting.
+ Then just add that entry to the advancedsettings.xml file.
+ For instance, to set the Font Character Set for the GUI (found in the
+appearance setting, in the Look and Feel section), you'd open up
+guisettings.xml and find:
+ 
+ <lookandfeel>
+ <charset>Hebrew (Windows)</charset>
+ </lookandfeel>
+ Simply take that entry and place it in advancedsettings.xml. The GUI
+entry for the character set will then no longer appear, and XBMC will
+always use the Hebrew (Windows) character set.
+ Here are some special cases, if they aren't defined the user will be
+prompted first time he/she tries to access any of these paths:
+ Note: There are no default pre-set values
+ <trainerpath>
+ 
+ <myprograms>
+ <trainerpath>Q:\system\trainers</trainerpath>
+ </myprograms>
+ <recordingpath>
+ 
+ <mymusic>
+ <recordingpath>E:\Recordings</recordingpath>
+ </mymusic>
+ <cddaripperpath>
+ 
+ <cddaripper>
+ <path>E:\Recordings</path>
+ </cddaripper>
+ <playlistspath>
+ 
+ <system>
+ <playlistspath>E:\Playlists</playlistspath>
+ </system>
+ <screenshotpath>
+ 
+ <pictures>
+ <screenshotpath>E:\Screenshots</screenshotpath>
+ </pictures>
+
+** configuring remotes
+
+ *Jump points
+*
+ to jump to a video library section (tv for example)
+ ActivateWindow(MyVideos,TV Shows)
+ to jump to a directory in your shares (recordings for example), find
+the shares name in /userdata/sources.xml and issue the command
+ActivateWindow(videofiles,dir), for example
+ <start>ActivateWindow(videofiles,1.Recordings)</start>
+ List of most XBMC jump points
+ You can [Activate a Window] or run a [Built In Function], or specify
+one of the [Actions].
+ Below are valid secondary parameters for the applicable Window IDs
+ Example:
+ * You want a button in your skin or on your remote taking you
+directly to the movie listing you let that button do
+ xbmc.activatewindow(videolibrary,movietitles)
+ videolibrary:
+ videolibrary,videodb://1/ (video library root)
+ movies
+ moviegenres
+ movietitles
+ movieyears
+ movieactors
+ moviedirectors
+ recentlyaddedmovies
+ tvshows
+ tvshowgenres
+ tvshowtitles
+ tvshowyears
+ tvshowactors
+ recentlyaddedepisodes
+ musicvideotitles
+ usicvideos
+ musicvideogenres
+ musicvideodirectors
+ musicvideostudios
+ musicvideoartists
+ recentlyaddedmusicvideos
+ special://videoplaylists/
+ plugin://video/
+ musiclibrary:
+ musiclibrary,musicdb://1/ (music library root)
+ genres
+ artists
+ albums
+ songs
+ top100
+ top100songs
+ top100albums
+ recentlyaddedalbums
+ recentlyplayedalbums
+ compilations
+ playlists
+ years
+ special://musicplaylists/
+ plugin://music/*XBMC Actions
+*
+ Action  Description
+ Left Move left off a control.
+ Right Move right off a control.
+ Up Move up off a control.
+ Down Move down off a control.
+ Select Select a button, or an item from a list of thumb view.
+ PageUp Scroll up on page in a list, thumb, or text view.
+ PageDown Scroll down on page in a list, thumb, or text view.
+ Highlight Highlight an item in a list or thumb view.
+ ParentDir Go up a folder to the parent folder.
+ PreviousMenu Go back to the previous menu screen.
+ Info Show the information about the currently highlighted item, or
+currently playing item.
+ Pause Pause the currently playing item.
+ Stop Stop the currently playing item.
+ SkipNext Skip to the next item in a playlist.
+ SkipPrevious Skip to the previous item in a playlist.
+ FullScreen Toggles fullscreen modes (either visualisation or video
+playback)
+ AspectRatio Toggle through the various aspect ratio modes (Normal is
+the preferred option).
+ StepForward Step forward 1% in the movie.
+ StepBack Step back 1% in the movie.
+ BigStepForward Step forward 10% in the movie.
+ BigStepBack Step back 10% in the movie.
+ SmallStepBack Step back 7 seconds in the current video.
+ OSD Toggles the OSD while playing an item.
+ ShowVideoMenu Go to the DVD Video menu when playing a DVD.
+ ShowSubtitles Toggles whether subtitles are shown or not.
+ NextSubtitle Change to the next subtitle language, if there is more
+than one.
+ CodecInfo Show codec information about the currently playing item
+(during video or visualisation playback)
+ NextPicture Move to the next picture in a slideshow.
+ PreviousPicture Move to the previous picture in a slideshow.
+ ZoomOut Used in picture or slideshow to zoom out of the current
+image.
+ ZoomIn Used in picture or slideshow to zoom in to the current image.
+ Queue Queue the item to the current playlist
+ Playlist Toggle to playlist view from My Music or My Videos
+ ZoomNormal Normal (fullscreen) viewing in My Pictures
+ ZoomLevel1 Zoom to 120% in My Pictures
+ ZoomLevel2 Zoom to 150% in My Pictures
+ ZoomLevel3 Zoom to 200% in My Pictures
+ ZoomLevel4 Zoom to 280% in My Pictures
+ ZoomLevel5 Zoom to 400% in My Pictures
+ ZoomLevel6 Zoom to 600% in My Pictures
+ ZoomLevel7 Zoom to 900% in My Pictures
+ ZoomLevel8 Zoom to 1350% in My Pictures
+ ZoomLevel9 Zoom to 2000% in My Pictures
+ NextCalibration Used in Video + GUI calibration
+ ResetCalibration Used in Video + GUI calibration
+ AnalogMove Move in the calibration screens, and while zoomed in My
+Pictures.
+ Rotate Rotate a picture in My Pictures
+ Close Used to close a dialog
+ SubtitleDelayMinus Decrease the delay amount of subtitles (use if
+subtitles are displaying too late)
+ SubtitleDelayPlus Increase the delay amount of subtitles (use if
+subtitles are displaying too early)
+ AudioDelayMinus Decrease the delay amount of audio (use if audio is
+being heard too early)
+ AudioDelayPlus Increase the delay amount of audio (use if audio is
+being heard too late)
+ AudioNextLanguage Change to the next audio track in a video with
+multiple audio tracks.
+ NextResolution Used in Video calibration
+ Number0 Used to input the number 0
+ Number1 Used to input the number 1
+ Number2 Used to input the number 2
+ Number3 Used to input the number 3
+ Number4 Used to input the number 4
+ Number5 Used to input the number 5
+ Number6 Used to input the number 6
+ Number7 Used to input the number 7
+ Number8 Used to input the number 8
+ Number9 Used to input the number 9
+ FastForward Toggle the fastforward speed between normal play, 2x,
+4x, 8x, 16x, and 32x.
+ Rewind Toggle the rewind speed between normal play, 2x, 4x, 8x, 16x,
+and 32x.
+ Play Play the selected item (or folder of items), or unpause a
+paused item.
+ Delete Used in My Files to delete a file.
+ Copy Used in My Files to copy a file.
+ Move Used in My Files to move a file.
+ Rename Used in My Files to rename a file.
+ HideSubmenu <depreciated>
+ Screenshot Take a screenshot of the current screen.
+ PowerOff Shutdown and power off
+ VolumeUp Increase the volume of playback.
+ VolumeDown Decrease the volume of playback.
+ Mute Mute the volume.
+ BackSpace Used in the virtual keyboards to delete one letter.
+ ScrollUp Variable speed scroll up for analog keys (stick or
+triggers)
+ ScrollDown Variable speed scroll down for analog keys (stick or
+triggers)
+ AnalogFastForward Variable speed fast forward for analog keys (stick
+or triggers)
+ AnalogRewind Variable speed rewind for analog keys (stick or
+triggers)
+ AnalogSeekForward Variable speed seeking for analog keys (stick or
+triggers)
+ AnalogSeekBack Variable speed seeking for analog keys (stick or
+triggers)
+ MoveItemUp Used to rearrange playlists
+ MoveItemDown Used to rearrange playlists
+ ContextMenu Pops up a contextual menu
+ Shift Used in Virtual Keyboard to switch to upper or lower case
+letters
+ Symbols Used in Virtual Keyboard to switch to or from symbols mode
+ CursorLeft Used in Virtual Keyboard to move the current cursor point
+to the left
+ CursorRight Used in Virtual Keyboard to move the current cursor
+point to the right
+ ShowTime Used to show the current play time in music + video
+playback
+ ShowPreset Shows the current visualisation preset
+(milkdrop/spectrum)
+ PresetList Pops up the visualisation preset list (milkdrop/spectrum)
+ NextPreset Next visualisation preset
+ PreviousPreset Previous visualisation preset
+ LockPreset Lock the current visualisation preset
+ RandomPreset Switch to a new random preset
+ IncreaseRating Unused
+ DecreaseRating Unused
+ ToggleWatched Toggles watched/unwatched status for Videos
+
+*** basic remote setup
+
+*Edit, Change and make sense of XBMC lirc/keymap : Zeltaks guide*
+ 1. the way it works is that you need to create or better copy from
+*/usr/share/xmbc/system*
+ the files remote.xml to */home/zeltak/.xbmc/usrdata/keymaps
+*
+ and
+ lircmap.xml to */home/zeltak/.xbmc/usrdata/
+*
+ 2.after installing lirc:
+ -use irw from the CLI to get the remote irw names and codes
+ Or look at
+ */etc/lirc/lircd.conf*
+ to see the key names
+ example output:
+ zeltak@ztpc:~$ irw
+ 00000000000017bb 00 Go Hauppauge\_350
+ 00000000000017bd 00 Power Hauppauge\_350
+ 000000000000179c 00 TV Hauppauge\_350
+ 3. edit the file Lircmap.xml :
+ -make sure remote name fits the one you got in irw (Hauppauge\_350 in
+this case) and that the name inside brackets fits the name in the irw
+output ("TV" in this example<mytv>TV</mytv>)
+ example:
+ <lircmap>
+ <remote device="Hauppauge\_350">
+ <pause>Pause</pause>
+ <stop>Stop</stop>
+ <forward>Forward</forward>
+ <reverse>Rewind</reverse>
+ <left>Left</left>
+ <right>Right</right>
+ <up>Up</up>
+ <down>Down</down>
+ <select>OK</select>
+ <pageplus>Ch+</pageplus>
+ <pageminus>Ch-</pageminus>
+ <back>Guide</back>
+ <menu>Radio</menu>
+ <title>Prev.Ch</title>
+ <info>Menu/i</info>
+ <skipplus>Skip</skipplus>
+ <skipminus>Replay</skipminus>
+ <display>Go</display>
+ <start>Back/Exit</start>
+ <record>Record</record>
+ <volumeplus>Vol+</volumeplus>
+ <volumeminus>Vol-</volumeminus>
+ <mute>Mute</mute>
+ <power>Power</power>
+ <myvideo>Videos</myvideo>
+ <mymusic>Music</mymusic>
+ <mypictures>Pictures</mypictures>
+ <mytv>TV</mytv>
+ <one>1</one>
+ <two>2</two>
+ <three>3</three>
+ <four>4</four>
+ <five>5</five>
+ <six>6</six>
+ <seven>7</seven>
+ <eight>8</eight>
+ <nine>9</nine>
+ <zero>0</zero>
+ <star>Asterix</star>
+ <hash>Blue</hash>
+ </remote>
+ 3. edit the remote.xml (prev keymap.xml) file:
+ Since XBMC DHARMA the location of the Keymap.xml file changed. It is
+now named remote.xml and can be found in:
+ *$HOME/.xbmc/userdata/keymaps/remote.xml*
+ look for the remote section and edit the outside brackets to fit the
+lircmap file (button names can be found at
+
+[[http://wiki.xbmc.org/?title=Keymap.xml][http://wiki.xbmc.org/?title=Keymap.xml]]
+ and here
+
+[[http://forum.xbmc.org/showthread.php?t=45972][http://forum.xbmc.org/showthread.php?t=45972]]
+ use only button names that are in the link under universal remote (IE
+<star> etc...) , own names will not work!!
+ b. modify the inside bracket to whatever xbmc command you want (see
+[[http://wiki.xbmc.org/index.php?title=Window_IDs][http://wiki.xbmc.org/index.php?title=Window\_IDs]])
+ example:
+ <keymap>
+ <global>
+ <remote>
+ <three>VolumeUp</three>
+ <six>VolumeDown</six>
+ <nine>Mute</nine>
+ <play>Play</play>
+ <pause>Pause</pause>
+ <stop>Stop</stop>
+ <forward>FastForward</forward>
+ <reverse>Rewind</reverse>
+ <left>Left</left>
+ <right>Right</right>
+ <up>Up</up>
+ <down>Down</down>
+ <select>Select</select>
+ <pageplus>PageUp</pageplus>
+ <pageminus>PageDown</pageminus>
+ <back>ParentDir</back>
+ <menu>PreviousMenu</menu>
+ <title>ContextMenu</title>
+ <info>Info</info>
+ <skipplus>SkipNext</skipplus>
+ <skipminus>SkipPrevious</skipminus>
+ <display>FullScreen</display>
+ <start>PreviousMenu</start>
+ <record>Screenshot</record>
+ <volumeplus>VolumeUp</volumeplus>
+ <volumeminus>VolumeDown</volumeminus>
+ <mute>Mute</mute>
+ <power>XBMC.ShutDown()</power>
+ <myvideo>XBMC.ActivateWindow(MyVideos)</myvideo>
+ <mymusic>XBMC.ActivateWindow(MyMusic)</mymusic>
+ <mypictures>XBMC.ActivateWindow(MyPictures)</mypictures>
+ <mytv>XBMC.ActivateWindow(Home)</mytv>
+ <star>XBMC.ActivateWindow(favourites)</star>
+ <hash>ActivateWindow(PlayerControls)</hash>
+ </remote>
+
+*** set sms like remote pad
+
+*
+ set sms like remote pad*
+ If you're using a remote, you'll want to use "SMS" style jumping, where
+the "2" key is letters "A, B, and C", "3" is "D, E, and F", etc.
+ So, press "2" once and jump to "A", press twice, jump to "B", etc.
+ Place the following in keymap.xml
+ Code:
+ <number2>JumpSMS2</number2>
+ <number3>JumpSMS3</number3>
+ <number4>JumpSMS4</number4>
+ <number5>JumpSMS5</number5>
+ <number6>JumpSMS6</number6>
+ <number7>JumpSMS7</number7>
+ <number8>JumpSMS8</number8>
+ <number9>JumpSMS9</number9>
+
+*** Jump points
+
+ *Jump points
+*
+ to jump to a video library section (tv for example)
+ ActivateWindow(MyVideos,TV Shows)
+ to jump to a directory in your shares (recordings for example), find
+the shares name in /userdata/sources.xml and issue the command
+ActivateWindow(videofiles,dir), for example
+ <start>ActivateWindow(videofiles,1.Recordings)</start>
+ List of most XBMC jump points
+ You can [Activate a Window] or run a [Built In Function], or specify
+one of the [Actions].
+ Below are valid secondary parameters for the applicable Window IDs
+ Example:
+ * You want a button in your skin or on your remote taking you
+directly to the movie listing you let that button do
+ xbmc.activatewindow(videolibrary,movietitles)
+ videolibrary:
+ videolibrary,videodb://1/ (video library root)
+ movies
+ moviegenres
+ movietitles
+ movieyears
+ movieactors
+ moviedirectors
+ recentlyaddedmovies
+ tvshows
+ tvshowgenres
+ tvshowtitles
+ tvshowyears
+ tvshowactors
+ recentlyaddedepisodes
+ musicvideotitles
+ usicvideos
+ musicvideogenres
+ musicvideodirectors
+ musicvideostudios
+ musicvideoartists
+ recentlyaddedmusicvideos
+ special://videoplaylists/
+ plugin://video/
+ musiclibrary:
+ musiclibrary,musicdb://1/ (music library root)
+ genres
+ artists
+ albums
+ songs
+ top100
+ top100songs
+ top100albums
+ recentlyaddedalbums
+ recentlyplayedalbums
+ compilations
+ playlists
+ years
+ special://musicplaylists/
+ plugin://music/*XBMC Actions
+*
+ Action  Description
+ Left Move left off a control.
+ Right Move right off a control.
+ Up Move up off a control.
+ Down Move down off a control.
+ Select Select a button, or an item from a list of thumb view.
+ PageUp Scroll up on page in a list, thumb, or text view.
+ PageDown Scroll down on page in a list, thumb, or text view.
+ Highlight Highlight an item in a list or thumb view.
+ ParentDir Go up a folder to the parent folder.
+ PreviousMenu Go back to the previous menu screen.
+ Info Show the information about the currently highlighted item, or
+currently playing item.
+ Pause Pause the currently playing item.
+ Stop Stop the currently playing item.
+ SkipNext Skip to the next item in a playlist.
+ SkipPrevious Skip to the previous item in a playlist.
+ FullScreen Toggles fullscreen modes (either visualisation or video
+playback)
+ AspectRatio Toggle through the various aspect ratio modes (Normal is
+the preferred option).
+ StepForward Step forward 1% in the movie.
+ StepBack Step back 1% in the movie.
+ BigStepForward Step forward 10% in the movie.
+ BigStepBack Step back 10% in the movie.
+ SmallStepBack Step back 7 seconds in the current video.
+ OSD Toggles the OSD while playing an item.
+ ShowVideoMenu Go to the DVD Video menu when playing a DVD.
+ ShowSubtitles Toggles whether subtitles are shown or not.
+ NextSubtitle Change to the next subtitle language, if there is more
+than one.
+ CodecInfo Show codec information about the currently playing item
+(during video or visualisation playback)
+ NextPicture Move to the next picture in a slideshow.
+ PreviousPicture Move to the previous picture in a slideshow.
+ ZoomOut Used in picture or slideshow to zoom out of the current
+image.
+ ZoomIn Used in picture or slideshow to zoom in to the current image.
+ Queue Queue the item to the current playlist
+ Playlist Toggle to playlist view from My Music or My Videos
+ ZoomNormal Normal (fullscreen) viewing in My Pictures
+ ZoomLevel1 Zoom to 120% in My Pictures
+ ZoomLevel2 Zoom to 150% in My Pictures
+ ZoomLevel3 Zoom to 200% in My Pictures
+ ZoomLevel4 Zoom to 280% in My Pictures
+ ZoomLevel5 Zoom to 400% in My Pictures
+ ZoomLevel6 Zoom to 600% in My Pictures
+ ZoomLevel7 Zoom to 900% in My Pictures
+ ZoomLevel8 Zoom to 1350% in My Pictures
+ ZoomLevel9 Zoom to 2000% in My Pictures
+ NextCalibration Used in Video + GUI calibration
+ ResetCalibration Used in Video + GUI calibration
+ AnalogMove Move in the calibration screens, and while zoomed in My
+Pictures.
+ Rotate Rotate a picture in My Pictures
+ Close Used to close a dialog
+ SubtitleDelayMinus Decrease the delay amount of subtitles (use if
+subtitles are displaying too late)
+ SubtitleDelayPlus Increase the delay amount of subtitles (use if
+subtitles are displaying too early)
+ AudioDelayMinus Decrease the delay amount of audio (use if audio is
+being heard too early)
+ AudioDelayPlus Increase the delay amount of audio (use if audio is
+being heard too late)
+ AudioNextLanguage Change to the next audio track in a video with
+multiple audio tracks.
+ NextResolution Used in Video calibration
+ Number0 Used to input the number 0
+ Number1 Used to input the number 1
+ Number2 Used to input the number 2
+ Number3 Used to input the number 3
+ Number4 Used to input the number 4
+ Number5 Used to input the number 5
+ Number6 Used to input the number 6
+ Number7 Used to input the number 7
+ Number8 Used to input the number 8
+ Number9 Used to input the number 9
+ FastForward Toggle the fastforward speed between normal play, 2x,
+4x, 8x, 16x, and 32x.
+ Rewind Toggle the rewind speed between normal play, 2x, 4x, 8x, 16x,
+and 32x.
+ Play Play the selected item (or folder of items), or unpause a
+paused item.
+ Delete Used in My Files to delete a file.
+ Copy Used in My Files to copy a file.
+ Move Used in My Files to move a file.
+ Rename Used in My Files to rename a file.
+ HideSubmenu <depreciated>
+ Screenshot Take a screenshot of the current screen.
+ PowerOff Shutdown and power off
+ VolumeUp Increase the volume of playback.
+ VolumeDown Decrease the volume of playback.
+ Mute Mute the volume.
+ BackSpace Used in the virtual keyboards to delete one letter.
+ ScrollUp Variable speed scroll up for analog keys (stick or
+triggers)
+ ScrollDown Variable speed scroll down for analog keys (stick or
+triggers)
+ AnalogFastForward Variable speed fast forward for analog keys (stick
+or triggers)
+ AnalogRewind Variable speed rewind for analog keys (stick or
+triggers)
+ AnalogSeekForward Variable speed seeking for analog keys (stick or
+triggers)
+ AnalogSeekBack Variable speed seeking for analog keys (stick or
+triggers)
+ MoveItemUp Used to rearrange playlists
+ MoveItemDown Used to rearrange playlists
+ ContextMenu Pops up a contextual menu
+ Shift Used in Virtual Keyboard to switch to upper or lower case
+letters
+ Symbols Used in Virtual Keyboard to switch to or from symbols mode
+ CursorLeft Used in Virtual Keyboard to move the current cursor point
+to the left
+ CursorRight Used in Virtual Keyboard to move the current cursor
+point to the right
+ ShowTime Used to show the current play time in music + video
+playback
+ ShowPreset Shows the current visualisation preset
+(milkdrop/spectrum)
+ PresetList Pops up the visualisation preset list (milkdrop/spectrum)
+ NextPreset Next visualisation preset
+ PreviousPreset Previous visualisation preset
+ LockPreset Lock the current visualisation preset
+
+** scripts
+
+*start xbmc from script
+*
+ use the backup script or create new script with this inside
+ #!/bin/bash
+ PROCESS=`ps -ef | grep xbmc.bin | grep -v grep`
+ if [ "$PROCESS" = "" ]
+ then
+ rm -f /home/xbmc/core*
+ DISPLAY=:0 /usr/bin/xbmc &
+ else
+ killall -v -s9 xbmc.bin
+ fi
+ later add this script to irexec to a button in lirc, example:
+ begin
+ remote = Hauppauge\_350
+ prog = irexec
+ button = Blue
+ repeat = 4
+ config = /home/zeltak/Scripts/xbmc.sh
+ end*make sure Irexec is UP and runing
+*
+ create a script in /usr/bin/ and paste this
+ #!/bin/sh
+ while true; do
+ irexec
+ sleep 5
+ done
+ Make sure the script is executable and owned by zeltak with
+permissions.
+ Add it to the autostart folder and in addition nake sure irxevent and
+irexec also autostart at bootup
+
+** mythtv integration
+
+*Add MythTV as a Video Source*
+ 0.add ip adress of mythserver (ztpc) to host list and then add
+hostname instead of ip
+ 1. Once XBMC is installed and running on your Xbox go to "Videos"
+and select "Add Source"
+ 2. In the "Enter the paths or browse for the media locations." field
+you will need to enter the properly formatted username, password, and IP
+information for your mythconverg database. This information should be
+prefixed with "myth://" and follow standard linux network access
+formatting of: "username:password@ipaddress". For example, if your
+mythconverg database is located on a machine whose ip address is
+192.168.1.116 and uses the username "mythtv" and the password "password"
+you should enter the following:
+ myth://mythtv:<pwd>@localhost (myth://mythtv:<pwd>@<ip>)
+ user (mythtv) = mysql username from mysql.txt
+ pass = pass from mysql.txt.
+ Examples
+ myth://mythtv:password@192.168.1.116
+ or
+ myth://mythtv:password@ztpc
+ 3. Input a name for this source in the "Enter a name for this Media
+Source" field. This name is what will appear in the "Videos" list of
+XBMC.
+ 4. Click on "OK" to add this source to the "Videos" list.
+
+** hebrew issues
+
+*get hebrew working in XBMC
+*
+ Make sure that arial is set as a font in appearnace!
+
+** nfos
+
+*How to create custom nfo's
+*
+ name movie files S01E01-filename1, S01E02-filename2, etc. and put them
+into a folder.
+ Then run Yang to generate the movie nfo files (nfo files with the same
+exact name of the movie file).
+ After Yang creates the nfo files edit them with Notepad
+ then create the tvshow.nfo file in a text editor and drop it into the
+folder of the above movies.*tv show example-XBMC wiki
+*
+ he filename of the NFO should be "tvshow.nfo" (Exact, NOT the name of
+the actual TV show) and it should be in the root folder of the TV show.
+ The nfo xml file may contain a valid <episodeguideurl> to allow online
+updates. If not, only episodes with nfo files will be added.
+ <tvshow>
+ <title>My TV Show</title>
+
+<episodeguideurl>http://www.thetvdb.com/api/1D62F2F90030C444/series/seriesid/all/language.zip<episodeguideurl>
+ <!-- select the correct seriesid and language (en.zip) -->
+ <rating>9.900</rating>
+ <episode>0</episode>
+ <plot>The best TV show in the world</plot>
+ <genre>Action and Adventure / Drama</genre>
+ <premiered>2000-01-01</premiered>
+ <studio></studio>
+ <actor>
+ <name>Big John</name>
+ <role>Jack of all trades</role>
+ <thumb></thumb>
+ </actor>
+ </tvshow>
+ TV Episodes
+ The *.nfo must be named exactly as the episode filename (i.e.
+episodename.avi and episodename.nfo) and in the same folder, allowing
+multiple episode and *.nfo files within the same folder.
+ <episodedetails>
+ <title>My TV Episode</title>
+ <rating>10.00</rating>
+ <season>2</season>
+ <episode>1</episode>
+ <plot>he best episode in the world</plot>
+ <credits>Writer</credits>
+ <director>Mr. Vision</director>
+ <aired>2000-01-01</aired>
+ <actor>
+ <name>Little Suzie</name>
+ <role>Pole Jumper/Dancer</role>
+ </actor>
+ </episodedetails>
+ Movie example-XBMC wiki
+ Movie.nfo will override all and any nfo files in the same folder as the
+media files. If there is only one nfo file in a folder, The scraper will
+use it for all media files in that folder. If there are multiple media
+files in a folder, the *.nfo must be named exactly the same as the video
+file it is representing (ie. moviename.avi and moviename.nfo). In the
+case of multi-part (stacked) video stacking, name the file either
+moviename.nfo or moviename-CD1.nfo where the first filename is
+moviename-CD1.avi.
+ <movie>
+ <title>Who knows</title>
+ <originaltitle>Who knows for real</originaltitle>
+ <rating>6.100000</rating>
+ <year>2008</year>
+ <top250>0</top250>
+ <votes>50</votes>
+ <outline>A look at the role of the Buckeye State in the 2004
+Presidential Election.</outline>
+ <plot>A look at the role of the Buckeye State in the 2004
+Presidential Election.</plot>
+ <tagline></tagline>
+ <runtime>90 min</runtime>
+
+<thumb>http://ia.ec.imdb.com/media/imdb/01/I/25/65/31/10f.jpg</thumb>
+ <mpaa>Not available</mpaa>
+ <playcount>0</playcount>
+ <watched>false</watched>
+ <id>tt0432337</id>
+ <filenameandpath>c:\Dummy\_Movie\_Files\Movies\...So Goes The
+Nation.avi</filenameandpath>
+ <trailer></trailer>
+ <genre></genre>
+ <credits></credits>
+ <director>Adam Del Deo</director>
+ <actor>
+ <name>Paul Begala</name>
+ <role>Himself</role>
+ </actor>
+ <actor>
+ <name>George W. Bush</name>
+ <role>Himself</role>
+ </actor>
+ <actor>
+ <name>Mary Beth Cahill</name>
+ <role>Herself</role>
+ </actor>
+ <actor>
+ <name>Ed Gillespie</name>
+ <role>Himself</role>
+ </actor>
+ <actor>
+ <name>John Kerry</name>
+ <role>Himself</role>
+ </actor>
+ </movie>*TV Show- Zeltak Example
+*
+ name the file tvshow.nfo and paste below in file
+ add to the root of the TV show
+ Show
+ <tvshow>
+ <title>TV Dinners</title>
+ <rating>5</rating>
+ <episode>0</episode>
+ <plot>TV dinners with Hugh Fearnley-Whittingstall</plot>
+ <genre>Food</genre>
+ <premiered>2000-01-01</premiered>
+ <studio></studio>
+ </tvshow>
+ For each episode either generate with YANG ot paste below for each
+episode
+ Episode
+ <movie>
+ <title>S01E01 - Flowers&Vietnamese</title>
+ <genre>Food</genre>
+ <movie>
+ *How To Manually add a folder/series Tips
+*
+ create a folder named as a TV show or anything else, for example to
+bunch all shows about sports create a folder called sports
+ add files and name them as you want to appear in XBMC library
+ Run YANG and create nfo for each espisode
+ create a tvshow.nfo (see above examples)
+ add numbering to the shows and change the episode nfo's accordingly to
+match the avi files
+ This can be all done with krename using this mask:
+ S01E0#-$
+
+** offline/deleted media
+
+*** create 'stub' files to represent offline/deleted media
+
+media stub files represent media outside of the online digital
+infrastructure and allow XBMC's library to catalogue your "offline"
+media collection, as well as ask for the media when selected for
+playback.
+ By default these files have a .disc extension (modifiable via
+advancedsettings.xml).
+ In cooperation with Confluence Skin's (and possibly others) feature to
+search for words like DVD, Bluray, and HDDVD in the filename it is
+possible to create a disc stub file that will show correct media flags
+in the skin.
+ For example, if you have Finding Nemo on DVD, you could create an empty
+file called:
+ "Finding Nemo (2003).dvd.disc"
+ and add it to your library. In the XBMC libray this file will show up
+with the DVD media flag in the Confluence Skin and when selected you
+will be prompted to insert the Finding Nemo DVD.
+ To mark a disc stub as BluRay add the words "bluray" or "bdrip" to the
+file name (as explained above). For HDDVD add "hddvd". For DVD add
+"dvd". For TV add "pdtv", "hdtv", or "dsr". For VHS add "vhs".
+ XBMC now has support for adding a custom message to be displayed when
+attempting to play a Disc Stub file. This is accomplished by treating
+the disc stub file as an xml file with the following layout:
+ <discstub>
+ <message>Message to be displayed</message>
+ </discstub>
+ The message will be displayed on the second line of the dialog box that
+asks you to insert a disc when selecting a disc stub file for playback.
+This added feature allows users who use a numbered library for their
+disc media to also take advantage of this new Disc Stub file support in
+XBMC.
+ example of a file stub name:
+ transformers.dvd.disc
+
+*** batch create stub files from list
+
+[[xbmc_files/attach/deleted_stub.dvd.disc][Attachment #01
+(deleted\_stub.dvd.disc)]]
+ use this command:
+ *cat LISTFILE.txt| while read name; do cp deleted\_stub.dvd.disc
+"$name.dvd.disc"; done
+ NOTE: you can find the stub template attached*
+
+** Dl2XBMC process
+
+*** 1.move DL files to proccessing Dir
+
+after the file has been Downloaded to the P2P folder, move each files
+based on type to the processing folder:
+ /media/raid/thd/$tools/xbmc\_prep/
+ and the subfolder: movies, TV, music. Comic
+
+*** 2.clean DL files from crap
+
+use the following command on the folder of choice:
+ *
+*find . '(' -iname '*.jpg' -o -iname '*.tbn' -o -iname '*.jpeg' -o
+-iname '*.png' -o -iname '*.rar' -o -iname '*.srt' -o -iname '*.txt' -o
+-iname '*.nfo' -o -iname '*.url' -o -iname '*.pdf' -o -iname '*.m3u' -o
+-iname '*.db' -o -iname '*.html' -o -iname '*.cue' -o -iname '*.log' -o
+-iname '*.txt' -o -iname '*.ffp' -o -iname '*.htm' -o -iname '*.md5' -o
+-iname '*.gif' -o -iname '*.torrent' -o -iname '*.log' -o -iname '*.tmp'
+-o -iname '*.folder' -o -iname '*.doc'-o -iname '*.mood' -o -iname
+'*.JPEG' ')' -exec rm {} \;
+ this will get rid of all files but the media files
+
+*** 3.use 'the renamer' under Win VM
+
+open a VM (the 'XXXx' VM)
+ use the 'The renamer' app to rename movies and move them to own folder
+
+*** 3a.create folders for files
+
+if not using the renamer (step 2) then do it manually
+ first create a text files from the files needed:
+ ls >> filelist.txt
+ use the following command:
+ create dirs from a a files text
+ cat k.txt |while read i; do mkdir "$i"; done *make sure to del *.avi
+from text file if exists before issuing the command*
+
+*** move a bunch of .avi into corresponding dirs
+
+move a bunch of .avi into corresponding dirs
+ for f in *; do mv "$f" /somewhere/else/"$f"/; done
+ Note: the dirs need to be name DIRNAME.avi
+
+*** create dirs from a a files text
+
+create dirs from a a files text
+ cat k.txt |while read i; do mkdir "$i"; done
+ make sure to del *.avi from text file if exists before issuing the
+command
+
+*** move files from one folder to another based on file type
+
+*Move files from one folder to another based on file type
+*
+ in this example we are moving all media files:
+ find /media/mova/ '(' -iname '*.avi' -o -iname '*.mpeg' -o -iname
+'*.divx' -o -iname '*.ogm' ')' -exec mv {} /media/movt \;
+
+* openelec
+** ssh root
+user: root
+pass:openelec
+
+** remote
+
+OE uses it's own modified version of lirc so you need to be editing the
+lircmap.xml.
+ simple change the remote device to "*devinput*" and reboot:
+ "<remote device="devinput">"
+
+** add system config files
+
+the filesystem is read only therefore just stick the same files in the
+/storage/.config IE:
+ /storage/.config/modprobe.d/
+
+** find out which version of openelec is installed
+
+connect through ssh and look for the info
+ [[xbmc_files/img/Image.png]]
+ also:
+ when OE boots there will be a version number in the upper left corner
+
+** manual update
+
+﻿
+
+First of all, head over to the downloads page and download the latest
+release of OpenELEC. Use your favourite archiving utility to extract the
+files from the archive you've downloaded (7zip is my favourite Windows
+archiver).
+
+Now, from your PC, open a Explorer window and browse to the IP address
+of the OpenELEC machine (if you don't know what the IP address is, go to
+the menu of the OpenELEC machine, and browse to the main item "System"
+and then its subitem "System Info". This will open a page that shows the
+IP address amongst other information.
+
+So type this into the address bar of the explorer window. For example,
+if your IP address is 192.168.1.92, browse to:
+
+ \\192.168.1.92
+ [[xbmc_files/img/Howto-samba-img1.png]]
+
+[[http://wiki.openelec.tv/index.php?title=File:Howto-samba-img1.png][
+]]Once the window appears, open the "Update" folder share. There
+shouldn't be anything inside this share, unless you have another update
+pending.
+
+From the folder you extracted the new release into, open the target
+folder. Inside you should find four files. Grab *KERNEL*, *KERNEL.md5*,
+*SYSTEM* and *SYSTEM.md5* from here (*/dont ignore the MD5 files/*) and
+copy/extract them to the Update share on the OpenELEC machine.
+
+ Finish
+
+Once the files have been copied, reboot the OpenELEC machine. OpenELEC
+will recognize the new system files and update them internally. A second
+reboot will follow automatically to activate the new system files.
+
+ Pasted from
+<[[http://wiki.openelec.tv/index.php?title=Updating_OpenELEC][http://wiki.openelec.tv/index.php?title=Updating\_OpenELEC]]>
+
+* XbmcBuntu
+
+** install streamzap remote
+
+First, I plug in USB receiver.
+ Second, I install LIRC from the Ubuntu repository:
+
+sudo apt-get install lirc
+
+ Third, I start to configure LIRC for the streamzap remote:
+
+sudo dpkg-reconfigure lirc
+
+ Fourth, I select "Streamzap PC Remote" as the receiving device and
+"None" as the transmitting device in the configuration window, which
+completes the configuration.
+ Fifth, I verify that the configuration is correct in
+/etc/lirc/hardware.conf and /etc/lirc/lircd.conf (both are the same as
+what's listed in the wiki).
+ Sixth, I restart LIRC:
+
+sudo /etc/init.d/lirc restart
+
+ Seventh, I try to get a signal from the remote by pressing buttons
+after typing the following command:
+
+irw
+
+* mysql
+
+** setting mysql
+
+*﻿Setting up the MySQL server*
+
+You'll need to choose which of your computers, XBMC devices, or
+[[http://wiki.xbmc.org/index.php?title=NAS][NAS]] will be the MySQL
+server. The server needs to be on 24/7 or have wake-on-lan (preferably
+the former), and needs to have a local static IP. You will probably want
+the XBMC device that is hosting most or all of your videos and music to
+also be the MySQL server, but this is not required.
+
+ *On your server/pc install mysql as instructed by distro instructions*
+ IE for ARCH see the linux NC notebook
+ for ubuntu see the xbmc guide:
+
+[[http://wiki.xbmc.org/index.php?title=HOW-TO:Synchronize_multiple_XBMC_libraries][http://wiki.xbmc.org/index.php?title=HOW-TO:Synchronize\_multiple\_XBMC\_libraries]]
+ *Create a password when asked.*
+ Then restart MySQL:
+
+systemctl start mysqld.service
+
+ Create a password when asked
+ To configure MySQL to listen for connections from network hosts, edit
+/etc/mysql/my.cnf and change the bind-address directive to the server's
+IP address:
+ from:
+ #bind-address = 127.0.0.1
+ to:
+ bind-address = 192.168.0.5
+ Note: Replace 192.168.0.5 with the appropriate address.
+ Note: Alternatively you can comment out bind-address using a hash(#) to
+allow local and remote access.
+ Restart your MySQL server.
+ Get into the MySQL command line utility:
+
+ $mysql -u root -p
+
+ Enter the following commands:
+ Type in:
+
+ CREATE USER 'xbmc' IDENTIFIED BY 'xbmc';
+
+ Type in:
+
+ GRANT ALL ON *.* TO 'xbmc';
+
+ Close out the command line tool with
+
+ \q
+
+*SELECT host,user from mysql.user;
+ SHOW DATABASES;
+*
+ *note: on arch linux make sure to enable the mysqld in the hosts.allow
+*
+
+** setup xbmc with mysql
+
+*Setting up XBMC
+*
+ 1)Open XBMC on the computer that has the library you want to share*(If
+you have not created a library yet you can skip this step)*
+ Notice: If your existing library was set up with local file paths
+rather than network shares, then you will need to follow the conversion
+guide in addition to sharing the files on the network.
+ Export the Video Library by doing the following:
+ Go to System/Settings -> Video -> Library and select Export
+library
+ Select Single file
+ Export the Music Library by doing the following:
+ Go to System/Settings -> Music -> Library and select Export
+library
+ Select Single file
+ 2) Create (or add to, if you already have one) an advancedsettings.xml
+file:
+ Open up a plain text editor and Copy and paste the text below
+into a new text document:
+ <advancedsettings>
+ <videodatabase>
+ <type>mysql</type>
+ <host>***.***.***.***</host>
+ <port>3306</port>
+ <user>xbmc</user>
+ <pass>xbmc</pass>
+ </videodatabase>
+ <musicdatabase>
+ <type>mysql</type>
+ <host>***.***.***.***</host>
+ <port>3306</port>
+ <user>xbmc</user>
+ <pass>xbmc</pass>
+ </musicdatabase>
+ </advancedsettings>
+ Replace the two instances of ***.***.***.*** with local network IP
+address of your MySQL server
+ Save the file as advancedsettings.xml
+ 4)Copy this advancedsettings.xml file you just created to the userdata
+folder of every XBMC install you want to sync with:
+ Windows XP: *Documents and Settings\<your\_user\_name>\Application
+Data\XBMC\userdata\advancedsettings.xml*
+ Vista/Windows 7:
+*Users\<your\_user\_name>\AppData\Roaming\XBMC\userdata\advancedsettings.xml*
+ Mac OS X: */Users/<your\_user\_name>/Library/Application
+Support/XBMC/userdata/advancedsettings.xml*
+ iOS:
+*/private/var/mobile/Library/Preferences/XBMC/userdata/advancedsettings.xml*
+ Linux: *$HOME/.xbmc/userdata/advancedsettings.xml*
+ 5) Open any of your XBMC installs and re-import your library data (*If
+you have not created a library yet you can skip this step*)
+ Import the Video Library by doing the following:
+ Go to System/Settings -> Video -> Library and select Import
+library
+ Select the file you saved from the first step when you
+exported your video library
+ 
+ Import the Music Library by doing the following:
+ Go to System/Settings -> Music -> Library and select Import
+library
+ Select the file you saved from the first step when you
+exported your music library
+ 6) You can now add files and update the library from any of your XBMC
+boxes and the library for all of them will stay in sync.
+ NOTE: If you want to update the library from any of the XBMC
+devices then they must all have the same sources set. See the Sources
+section of Part 6 for one method of keeping them in sync.
+ NOTE: If you encounter error 1062, then you'll need to change your
+paths from "\\" to "//" as MySQL has trouble understanding "\\"
+ 
+
+** Syncing thumbnails and fanart
+
+Syncing thumbnails and fanart
+ While syncing thumbnails and fanart is not required for sharing
+multiple XBMC libraries, doing so is highly recommended as it:
+ -saves storage space by having thumbnails and fanart in just one
+network shared location
+ -saves time by not having to re-download the images separately for each
+XBMC device
+ The Thumbnail folder in XBMC contains both thumbnails and fanart. If
+you have imported from pre-existing media libraries then you can use
+your old thumbnail folder to save time on re-downloading images, but
+only if you did not use local file paths and only had network shares on
+your exported library. Otherwise you will have to update your library to
+re-download thumbnails and fanart.
+ add to advancedsettings.xml:
+ Copy the text from below and add it to your advancedsettings.xml file,
+but make sure you add the text before the </advancedsettings> tag at the
+end.
+ <pathsubstitution>
+ <substitute>
+ <from>special://masterprofile/Thumbnails/</from>
+ <to>REPLACE\_THIS\_TEXT</to>
+ </substitute>
+ </pathsubstitution>
+ Share your existing Thumbnail folder or a new folder via NFS, SMB, or
+AFP.
+ It's easiest to do this from the same computer/device as your MySQL
+server.
+ Windows XP: Documents and
+Settings\<your\_user\_name>\Application Data\XBMC\userdata\Thumbnails\
+ Vista/Windows 7:
+Users\<your\_user\_name>\AppData\Roaming\XBMC\userdata\Thumbnails\
+ Mac OS X: /Users/<your\_user\_name>/Library/Application
+Support/XBMC/userdata/Thumbnails/
+ iOS:
+/private/var/mobile/Library/Preferences/XBMC/userdata/Thumbnails/
+ Linux: $HOME/.xbmc/userdata/Thumbnails/
+ Copy the network path of your shared Thumbnails folder and use that to
+replace REPLACE\_THIS\_TEXT.
+ Make sure all XBMC devices that are being synced have this addition to
+their advancedsettings.xml file.
+
+* Raspbmc
+
+** install
+
+on Linux:
+
+ wget
+[[http://svn.stmlabs.com/svn/raspbmc/testing/installers/python/install.py][http://svn.stmlabs.com/svn/raspbmc/testing/installers/python/install.py]]
+ chmod +x install.py
+
+ Now we need to run the installation script with root privileges as we
+will be writing to an SD card. In some distributions you can do this by
+prefixing the command withsudowhereas in some you will need tosu
+root. You should consult your OS documentation for more help on this
+matter. But in the case of a standard Debian install, one would run:
+
+ sudo python install.py
+
+ You will then be greeted with a screen similar to the one below. You
+are now using the installer. Simply follow the instructions and you
+should be fine.
+
+[[xbmc_files/img/installPython.png]][[http://www.raspbmc.com/wp-content/uploads/2012/06/installPython.png][
+]]
+
+** install on usb drive (not SD card)
+
+after the installer finished and formats the SD cars use touch to create
+an empty file called usb on the sd card
+
+ touch /dev/mmcblk0 usb

@@ -32701,6 +32701,11 @@ use ~C-c C-w~ to refile it
 ******** launch org capture from command line (for quick WM binds)
 	 :PROPERTIES:
 	 :END:
+*********  method 2
+
+#+BEGIN_SRC sh
+/usr/bin/emacsclient -nw -e '(org-capture)'   
+#+END_SRC
 ********* new method 
 issue this line:
 #+BEGIN_SRC sh

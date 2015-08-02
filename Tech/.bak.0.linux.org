@@ -26490,6 +26490,31 @@ use ?C-h k? , followed by the keybind
 #+BEGIN_SRC emacs-lisp :results none
 (org-todo "COOK") 
 #+END_SRC
+******** add notification in a command 
+add a shell command like
+
+#+BEGIN_SRC emacs-lisp :results none
+(shell-command "notify-send fb uploaded")
+#+END_SRC
+
+₆In example₆ 
+
+#+begin_src emacs-lisp
+
+(defun z/dired-fb-upload ()
+  (interactive)
+  (sr-term)
+  (let* ((fmt "fb %s\n")
+         (file (sr-clex-file sr-selected-window))
+         (command (format fmt file)))
+    (if (not (equal sr-terminal-program "eshell"))
+        (term-send-raw-string command)
+      (insert command)
+      (eshell-send-input)
+      (shell-command "notify-send fb uploaded")
+)))
+#+end_src
+
 ******* Functions
 ******** basic info
 only interactive functions are available with ~M-x~

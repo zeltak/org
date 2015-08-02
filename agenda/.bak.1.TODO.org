@@ -8,32 +8,8 @@
   :PROPERTIES:
   :ID:       70feaa43-c66b-4675-89f5-9ae26bddc03e
   :END:
-** custom agenda example 
-I use a "@Q2" tag for things that are
-important and not urgent, and I reserve some time to work on them. The
-ones I'm currently working on are scheduled, and they are shown in my
-custom agenda view using this:
-
-#+begin_src emacs-lisp
-("q" "Q2 tasks"
- ((agenda
-   ""
-   ((org-agenda-overriding-header "Q2 Scheduled")
-    (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp ":@Q2:"))))
-  (tags-todo
-   "@Q2/!-HOLD-WAITING"
-   ((org-agenda-overriding-header "Q2")
-    (org-agenda-todo-ignore-deadlines t)
-    (org-agenda-todo-ignore-scheduled t)))))
-#+end_src
-
-
-** TODO tackle org capture DE popup
+** TODO tackle org capture DE/WM  popup
 ** macro for close window and focus previous one as full frame 
-
-
-
-
 ** sunrise
 *** questions 
 1) REQUEST: if there is only 1 match left in fuzzy match- can SR auto select it (that is enter dir)
@@ -99,31 +75,6 @@ Storing links from Sunrise-commander
 
 
 
-** hydra
-(defface hydra-face-orange
-    '((t (:foreground "orange" :bold t)))
-  "Orange face. For fun.")
-
-(defhydra hydra-projectile (:color blue
-                            :columns 4)
-  "Projectile"
-  ("a" projectile-ag "ag" :face 'hydra-face-orange)
-  ("b" projectile-switch-to-buffer "switch to buffer")
-  ("c" projectile-invalidate-cache "cache clear")
-  ("d" projectile-find-dir "dir")
-  ("s-f" projectile-find-file "file")
-  ("ff" projectile-find-file-dwim "file dwim")
-  ("fd" projectile-find-file-in-directory "file curr dir")
-  ("g" ggtags-update-tags "update gtags")
-  ("i" projectile-ibuffer "Ibuffer")
-  ("K" projectile-kill-buffers "Kill all buffers")
-  ("o" projectile-multi-occur "multi-occur")
-  ("p" projectile-switch-project "switch")
-  ("r" projectile-recentf "recent file")
-  ("x" projectile-remove-known-project "remove known")
-  ("X" projectile-cleanup-known-projects "cleanup non-existing")
-  ("z" projectile-cache-current-file "cache current")
-  ("q" nil "cancel"))
 ** bookmark+ link to orgid
 I guess someone who uses OrgMode (I don’t) would need to code that up. But have you tried just bookmarking a header line location? When you bookmark a position, bookmarking keeps track of the immediately surrounding text, to use to relocate the position when the buffer gets modified. Or try bookmarking some text immediately preceding or following a header
 ** keys reahual
@@ -439,6 +390,26 @@ idealy: a function to copy current line, ask which file to copy to (like refile)
 ◈ ⚫ ⚑ ⚒ ✔✓ ✜ ✙ ✠ ✥ ✤ ✪
 ✬✱✹ ✾ ✽ ❤ ➠ ⭤⮀☍⛢
 ** a new Emacs pop up window for helm chrome bookmarks
+** custom agenda example 
+I use a "@Q2" tag for things that are
+important and not urgent, and I reserve some time to work on them. The
+ones I'm currently working on are scheduled, and they are shown in my
+custom agenda view using this:
+
+#+begin_src emacs-lisp
+("q" "Q2 tasks"
+ ((agenda
+   ""
+   ((org-agenda-overriding-header "Q2 Scheduled")
+    (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp ":@Q2:"))))
+  (tags-todo
+   "@Q2/!-HOLD-WAITING"
+   ((org-agenda-overriding-header "Q2")
+    (org-agenda-todo-ignore-deadlines t)
+    (org-agenda-todo-ignore-scheduled t)))))
+#+end_src
+
+
 ** change stow so no more common configs
 check patst.sh in ZH_tmp
 check tarman
@@ -1367,4 +1338,3 @@ much for this kind of thing is implemented in devilspie2 though.
   add reload all tabs
   keybind to quickly enable/disable cvim
 * tst
-

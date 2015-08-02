@@ -1956,3 +1956,292 @@ You should be able to get the total screen area (All screens added),
 and via that calculate if you have one or two screens attached. Not
 much for this kind of thing is implemented in devilspie2 though.
 
+
+* paste as a code block
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 20:55
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: @TODAY@
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+ask about pasting clipbored text as a codeblock
+
+
+* create org task to go over org refile every week 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 21:20
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: @TODAY@
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+
+* help file revison
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 21:20
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: @TODAY@
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+try to find a way to do a refile/archive/function like thing that will copy a line/header to a defined file
+idealy: a function to copy current line, ask which file to copy to (like refile) and open file in next buffer. bonus check if that line start already exist and if so warn and paste below  that line.
+
+* org sparese
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 21:29
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: @TODAY@
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+punchagan | zeltak: it looks like properties need to be all upper case. 
+ punchagan | zeltak: for instance I changed Ammount to AMMOUNT
+ punchagan | and it workd.. 
+    zeltak | wow ok let me try
+    zeltak | holy crap
+    zeltak | it worked
+    zeltak | so what was it..wow i guess i missed it in the manual
+ punchagan | zeltak: and it's a bug.. :)
+    zeltak | hehe :)
+ punchagan | zeltak: I don't think there is a hard and fast rule specified anywhere in the manual
+ punchagan | in face the properties section in the manual has an example .. that doesn't do this
+ punchagan | Imagine maintaining a file where you document bugs and plan releases for a piece of software. Instead of using
+           | tags like ‘:release_1:’, ‘:release_2:’, you can use a property, say ‘:Release:’, that in different subtrees has |
+           | different values, such as ‘1.0’ or ‘2.0’                                                                        |
+    zeltak | punchagan: i see
+    zeltak | ok good to know its a bug :)
+    zeltak | appriciate the help!
+    zeltak | can one sparese tree match on 2 properties?
+ punchagan | zeltak: no problem! and thanks for the recipes.. I see you have an Indian tag. me checks out.. 
+    zeltak | punchagan: your welcome! :)
+ punchagan | zeltak: you can do all kinds of stuff with `C-c / m' or `C-c \'. 
+ punchagan | zeltak: FAV="y"+Indian+TODO="SHOP"
+ punchagan | would work.. 
+ punchagan | (modulo the bug..)
+    zeltak | punchagan: cool thx!
+-mode
+
+
+* http://shelve.sourceforge.net/
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 21:30
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: @TODAY@/explore memacs
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+
+* fix wraps
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 21:30
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: @TODAY@
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+https://github.com/tj64/org-dp
+
+* ,----[ C-h f helm-do-grep RET ]
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 21:32
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: @TODAY@
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+| helm-do-grep is an interactive autoloaded Lisp function in                      |
+| `helm-grep.el'.                                                                 |
+|                                                                                 |
+| It is bound to C-x c M-g s, <menu-bar> <tools> <Helm> <Tools> <Grep>.           |
+|                                                                                 |
+| (helm-do-grep)                                                                  |
+|                                                                                 |
+| Preconfigured helm for grep.                                                    |
+| Contrarily to Emacs `grep', no default directory is given, but                  |
+| the full path of candidates in ONLY.                                            |
+| That allow to grep different files not only in `default-directory' but anywhere |
+| by marking them (C-<SPACE>). If one or more directory is selected               |
+| grep will search in all files of these directories.                             |
+| You can also use wildcard in the base name of candidate.                        |
+| If a prefix arg is given use the -r option of grep (recurse).                   |
+| The prefix arg can be passed before or after start file selection.              |
+| See also `helm-do-grep-1'.                                                      |
+
+* dp wrap blocks 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 21:33
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: @TODAY@/bbdb
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+Hi List,
+
+I've written the "eierlegende Wollmilchsau" of wrap-in-block functions
+(i.e. the 'all-inclusive mother of all wrap-in-block functions').
+
+To check it out, you need to
+jjk 1. Clone or fork the git repo (https://github.com/tj64/org-dp)
+ 2. (add-to-list 'load-path "/path/to/org-dp/") and
+ 3. (require 'org-dp-lib') in your init file
+
+`org-dp-wrap-in-block' works on/with all kinds of Org blocks, and can be
+called interactively or non-interactively.
+
+It
+
+ - inserts a new block when called on an empty line without arguments
+
+ - wraps sexp or region or '+/- X lines from point' into a newly created
+   block
+
+ - when called with point inside a block, it either
+
+   + unwraps the blocks content, i.e. deletes the surrounding block or
+
+   + replaces the surrounding block with a different block
+
+It takes full account of affiliated keywords. In case of src-blocks,
+it puts src-block parameters on the block's headline, but with
+`org-dp-toggle-headers' its easy to toggle between parameters
+
+,----
+| #+begin_src R :noweb yes |
+`----
+
+and headers
+
+,----
+| #+header: :noweb yes |
+| #+begin_src R        |
+`----
+
+This function takes into account so many options that combinatorics hits
+you badly when trying to test all of them. Everything I tried works now
+with the current version, but its not unlikely that daily usage will
+discover some bugs or untreated corner cases. Please report them with
+backtrace.
+
+The good news is that besides its complexity, its not one
+mega-convoluted monolithic function for a single task only. Instead I
+outfactored the core functionality into the 'org-dp.el' library
+("Declarative Programming with Org Elements") which offers potentially
+massive time (and headache) savings when programming with Org Elements
+on the local level.
+
+'org-dp' acts on the internal representation of Org elements, and due to
+the total uniformity of this representation it is possible to do diverse
+actions on diverse elements in a very uniform way, thus the 3 functions
+
+ - `org-dp-create'
+
+ - `org-dp-rewire'
+
+ - `org-dp-prompt'
+
+should be all you need for all kinds of programming
+tasks. `org-dp-wrap-in-block' is one example of how to program with
+org-dp, `org-dp-toggle-headers' is another one.
+
+Hope that this is useful.
+
+PS
+
+For the sake of completeness, here the docstring of
+`org-dp-wrap-in-block':
+
+,----[ C-h f org-dp-wrap-in-block RET ]
+| org-dp-wrap-in-block is an interactive Lisp function in              |
+| `org-dp-lib.el'.                                                     |
+|                                                                      |
+| It is bound to C-c w w.                                              |
+|                                                                      |
+| (org-dp-wrap-in-block &optional LINES USER-INFO)                     |
+|                                                                      |
+| Wrap sexp-at-point or region in Org block.                           |
+|                                                                      |
+| A region instead of the sexp-at-point is wrapped if either           |
+|                                                                      |
+| - optional arg LINES is an (positive or negative) integer or         |
+|                                                                      |
+| - the region is active                                               |
+|                                                                      |
+| In the first case the region is determined by moving +/- LINES       |
+| forward/backward from point using `forward-line', in the second      |
+| case the active region is used.                                      |
+|                                                                      |
+| If point is already inside of a block, modify it or unwrap its       |
+| content/value instead of wrapping it in another block, except if     |
+| explicitly asked for by user.                                        |
+|                                                                      |
+| If USER-INFO is given, it should be a list in the format returned by |
+| `org-dp-prompt', i.e.                                                |
+|                                                                      |
+| (elem-type contents replace affiliated args)                         |
+|                                                                      |
+| Look up that function's docstring for more information about the     |
+| list's elements. A non-nil USER-INFO suppresses calls to             |
+| `org-dp-prompt' and is used instead of its return value.             |
+|                                                                      |
+
+
+
+* fix HD res issues
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 21:33
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: @TODAY@
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+SOLVED (Solution can be found on the bottom)
+Hi there I really hope someone can help me...
+
+If got my new XPS13 (2015) yesterday and even though it's a really nice pice of hardware there are some problems (obviously ^^)
+
+So I've got the QHD display (3200x1800) which doesn't quite work with all applications (like google chrome is awfull and isn't affected by the window scaling)
+
+So I thought...
+Well lets simpley change the resolution to 1920x1080 for now so I can at least work. Sadly apart from the original 3200x1800 there are only 4:3 ratio resolution (non of them is usable) so I added the 1920x1080 myself using xrandr.
+But everytime I set the resolution to use my new one, it sets it, display flickers for a moment and than falls back to the original 3200x1080 (all via command-line). Same happen if I use the UI though.
+Next I tried using a custom X11 conf which (it looks like) does set the 1920x1080 while beeing on the lockscreen (I'm using gdm btw) but once I log in, it falls back to the 3200x1800.
+
+Solution
+Problem: Changing to the new, manually added, resolution did not work because it immediately switched back to the original one
+Solution: (For me at least) removing ~/.config/monitors.xml did the trick. You might have to restart GDM after removing/renaming the file﻿
+
+* TODO create same level header
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 21:34
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: @TODAY@
+  :ARCHIVE_CATEGORY: TODO
+  :ARCHIVE_TODO: TODO
+  :END:
+how does one map universal header (c-u) before a command
+
+* change date in header
+    :PROPERTIES:
+    :ID:       a13f3051-ec0b-4b6e-bd55-65a5c4526d38
+    :ARCHIVE_TIME: 2015-08-01 Sat 21:34
+    :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+    :ARCHIVE_OLPATH: @TODAY@
+    :ARCHIVE_CATEGORY: TODO
+    :END:
+Try setting before-save-hook.  See "(elisp) Saving Buffers".
+catz and baicye 
+-Dave
+
+http://lists.gnu.org/archive/html/emacs-orgmode/2013-07/msg01015.html
+
+
+* Emacs TRAMP
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 21:35
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: @TODAY@
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+
+
+* filbot qnap
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-01 Sat 21:35
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: @TODAY@
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+http://www.filebot.net/forums/viewtopic.php?f=8&t=2335&p=13416&hiilt=qnap#p13416
