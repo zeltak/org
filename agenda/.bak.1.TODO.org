@@ -8,8 +8,17 @@
   :PROPERTIES:
   :ID:       70feaa43-c66b-4675-89f5-9ae26bddc03e
   :END:
+** send to "kitchen tablet" recipe
 ** TODO tackle org capture DE/WM  popup
 ** macro for close window and focus previous one as full frame 
+** capture via gmail
+You could also use a %x in a capture template to assist in capturing a   
+selection made on your gmail message.  Eg, select Subject: line, then    
+capture that to a TODO.                                                  
+The other thing that might help would be custom links. Is there a way to form a URL to a gmail message on the web?  If so, you  
+could make a "gmail:XXXXX" link that org would expand to a full URL
+
+
 ** sunrise
 *** questions 
 1) REQUEST: if there is only 1 match left in fuzzy match- can SR auto select it (that is enter dir)
@@ -786,6 +795,16 @@ track replace like album replace
 ** TODO create same level header
 how does one map universal header (c-u) before a command
 ** search text in all orgfiles    
+** change date in header
+    :PROPERTIES:
+    :ID:       a13f3051-ec0b-4b6e-bd55-65a5c4526d38
+    :END:
+Try setting before-save-hook.  See "(elisp) Saving Buffers".
+catz and baicye 
+-Dave
+
+http://lists.gnu.org/archive/html/emacs-orgmode/2013-07/msg01015.html
+
 ** i3 REVAMP
 *** fix grid
 *** cretae a nag menu of move to workspace    
@@ -807,534 +826,37 @@ Twitter    : http://twitter.com/sdf_pubnix
 ** filbot qnap
 http://www.filebot.net/forums/viewtopic.php?f=8&t=2335&p=13416&hiilt=qnap#p13416
 ** flexget  
+** make a code block read only
+   :PROPERTIES:
+   :ID:       5e59de3b-e7ec-4a8d-b1a1-b2d6dbf8cd01
+   :END: 
+
 ** 16.5 weight  
    :PROPERTIES:
    :ID:       08864a30-4105-4ea2-b5cb-554610b07304
    :END:
 83.3
+** explore habits org mod
+http://orgmode.org/manual/Tracking-your-habits.html
 **  [[https://github.com/djcb/sauron][djcb/sauron - https://github.com/]][[https://github.com/djcb/sauron][djcb/sauron - https://github.com/]]
-* Home
-** flight ROME
-
-
-El Al Israel Airlines
-	Flight 	LY383
-Depart 	Tel Aviv Ben Gurion International Apt, IL (TLV)
-	14-Nov-14 (Fri) 10:45a
-Arrive 	Rome Fiumicino Apt, IT (FCO)
-	14-Nov-14 (Fri) 01:35p
-Flight Time 	03hr 50min | Economy
-Aircraft 	Boeing 737-800
-Stops 	nonstop
-
-El Al Israel Airlines
-	Flight 	LY386
-Depart 	Rome Fiumicino Apt, IT (FCO)
-	18-Nov-14 (Tue) 10:10a
-Arrive 	Tel Aviv Ben Gurion International Apt, IL (TLV)
-	18-Nov-14 (Tue) 02:40p
-Flight Time 	03hr 30min | Economy
-Aircraft 	Boeing 737-900
-Stops 	nonstop 
-Airline	Confirmation Code	Phone Number
-El Al Israel Airlines (LY)	5TI6L5	1.800.223.6700
-  
-** el al frequent flyer
-** hack airport wifi
-
-Scan for wireless networks at the airport and you'll probably find a Boingo hotspot. You may already know that you can very easily access some sites without paying. Connect to the network and click the The Good Stuff box. This gives you access to a limited number of complementary sites, but after clicking it, try opening a new tab in your browser and going somewhere else—you might just find it works.
-
- 
-Get Free Airport Wi-Fi with a Simple URL Hack
-Blogger Felix Geisendorfer points out a clever URL hack that scored him free Wi-Fi at the Atlanta…
-Read more
-But there's another trick to free airport Wi-Fi. WonderHowTo explains:
-
-Many paywall sites, Boingo or not, simply block the address bar so that you can't freely roam the web. This is great news for you, because you can access a website without an address bar via your web console and inserting window.location.href="https://www.sitename.com" for instant access. Web developer tools are a great way to get around blocked content, and in some cases, they can also help you get around blocked Wi-Fi access.
-You'll need to access your browser's developer tools to try this. In Firefox, click the menu button and select Developer > Web Console, or press Ctrl+Shift+K. Click next to the double blue arrow to the bottom left of the screen and type window.location.href="URL of site to visit" and press Enter.
-
-In Chrome, click the menu button and select Tools > Developer tools, or press Ctrl+Shift+I, and then head to the Console section. Use the same syntax to bypass any paywall that may be in place. You may notice that a security warning appears when connecting to sites in this way.
-
-This technique is not guaranteed to work with every hotspot in every airport, but it's definitely worth a try before you shell out for pricey airport Wi-Fi. Click the link below for more information.
-
-
-Blogger Felix Geisendorfer points out a clever URL hack that scored him free Wi-Fi at the Atlanta airport.
-I found that I could easily visit sites like slashdot, Google, or even this weblog, when adding a at the end of the url. The next logical step was to automate that. I downloaded Greasemonkey and wrote a 4 line script that would add ?.jpg to every link in a document. That way I was able to browse most sites without a hassle.
-This trick will only work on Wi-Fi networks that allow images to go through without a redirect, and though it may seem like a bit of a stretch, it's better than shelling out $7 for 30 minutes of Wi-Fi. Unfortunately the author didn't make the Greasemonkey script available, but even without it you could get in some decent browsing. The post isn't new, and I haven't tested this, so if you've ever used this trick or you're at an airport or Wi-Fi hotspot and can give it a try, let's hear how it worked for you in the comments
-
-** diet
-*** Low cal veggies
-  cauliflour
-  zucchini
-  mushrooms
-  brussel sprouts
-  brocolli
-  spinich
-  pumpkin
-  fennel
-  celery
-  carrots
-
-
-  added flavour:
-  lemons-added flavour with no calories
-  garlic-same flavour no calories
-  onions
-  chili
-*** other food to try
-  beans
-  qinoa
-*** low cal fruits
-  apples
-  citrus
-*** snacks?
-  low calorie candies? werters original etc
-** TODO austrian citizenship
-     :PROPERTIES:
-     :ID:       538d140d-e984-4740-85e7-0eba8264b45f
-     :END:
-  dan asan
-  03-56636006
-  mailto:citizenship2@danassan.com
-
-
-** freedns
-  zeltak.mooo.com
-** Gnus
-  Gnus can connect to the gmail server in two ways: by POP3, or by IMAP. Each protocol behaves in a different way, so you can select the one which better suits your needs. Furthermore, as a third solution you can download your mail with an external program like fetchmail and let Gnus handle it locally.
-
-  This page describes how to configure Gnus to read and send mails from your gmail account, and should also explain how to do in Gnus what you’re able to do through the web interface.
-
-** GARDEN
-*** TODO place to order stuff for garden kimhi
-    :PROPERTIES:
-    :ID:       7a396cc0-0df9-4a59-81ec-fc5acebc2b70
-    :END:
-  קמחי ובניו חומרי בניין
-
-   כתובת הפלס 9 עמק שרה באר שבע הגדל מפה שעות פעילות
-  יום א' - יום ה'	17:30 - 07:00
-  יום שישי	13:30 - 07:00
-phone 08-6232172  
-
-somsomit 135 for 450 kg
-*** TODO rahat gardning
-    :PROPERTIES:
-    :ID:       97481008-e279-40a8-9c99-b0b2cd3deaa4
-    :END:
-Ahmhed:
-08-9912099
-050-4566004  
-
-*** renting equipment
-  http://www.brener.co.il/
-
-  ברנר שמעון - מחירון 2014
-  ציוד להשכרה, חשמל ובנזין לבנין ולתעשיה
-  באר שבע, רח. מורדי הגיטאות 70, טל. בעבודה: 08-6277737 נייד שמעון: 050-5284031 
-  נייד משה: 050-5408724 * טלפון חינם: 1-800-200-330 * פקס: 08-6278249
-*** שתילי בזיליקום תאי אפשר לקנות ברוב המשתלות שמחזיקות צמחי תבלין, לפעמים תחת השם מלכת סיאם.
-** Pikod haoref
-  הנך משוייך לאזור התרעה: באר שבע 286 (45 שניו
-** menaka from company: amira   
-** mom ows me
-  NIS 377
-** add to uni
-   :PROPERTIES:
-   :ID:       f80460b4-f7b6-4119-8bca-549b7ae9d808
-   :END:
-  outdoor comes indoor
-  studies indoor are done but expensive and short period
-  this 
-* Linux
-** Org
-*** TODO Chain babel blocks, ₆In example₆ launch multiple blocks togheter 
-    :PROPERTIES:
-    :ID:       fb029f96-1704-475c-9083-14b7e3855130
-    :END:
-*** TODO explore #+CALL
-    :PROPERTIES:
-    :ID:       9c99a02a-1d60-4802-8c7e-c5ff032d2259
-    :END:
-*** TODO why is org-capture taking ~ 10-20 seconds to come up?
-    :PROPERTIES:
-    :ID:       f7b6a3d8-b1b4-422f-a05f-4e71ca03dc9e
-    :END:
-*** TODO org babel terminal
-    :PROPERTIES:
-    :ID:       938c0de7-3df3-49e1-9e7b-3932a978d410
-    :END:
-
-#+begin_src emacs-lisp
-(defadvice org-babel-execute:sh (around sacha activate)
-  (if (assoc-default :term (ad-get-arg 1) nil)
-    (let ((buffer (make-term "babel" "/bin/bash")))
-      (with-current-buffer buffer
-        (insert (org-babel-expand-body:generic
-             body params (org-babel-variable-assignments:sh params)))
-        (term-send-input)))
-    ad-do-it))
-#+end_src
-
-
-#+begin_src sh :term t
-ls -l
-#+end_src
-*** TODO C-u C-c C-l solves all problems. Now I can link any file (PDF etc.) from anywhere within org and with tab completion. Thanks.
-    :PROPERTIES:
-    :ID:       6810f526-f19c-400a-923f-44951a00d963
-    :END:
-*** jump to parent
- how can you jump to the parent node of whatever area │ elik         
-               │                         | you're in?                                           │ farn         
-               │12:48:23         nslater | so if you have:                                      │ framling     
-               │12:48:24         nslater | * A                                                  │ frumious-    
-               │12:48:27         nslater | ** 1                                                 │ fsbot        
-               │12:48:43         nslater | and you're on ** 1, then this function would take    │ Fuco         
-               │                         | you to * A                                           │ funnel       
-               │12:50:27       YoungFrog | perhaps C-c C-p                                      │ garrison     
-               │12:50:53       YoungFrog | oh, parent.                                          │ gds          
-               │12:51:01       YoungFrog | then C-c C-u                                         │ gko          
-               │13:22:26         nslater | found it. thanks!                                    │ iderrick
-*** capture via gmail
-You could also use a %x in a capture template to assist in capturing a   
-selection made on your gmail message.  Eg, select Subject: line, then    
-capture that to a TODO.                                                  
-The other thing that might help would be custom links. Is there a way to form a URL to a gmail message on the web?  If so, you  
-could make a "gmail:XXXXX" link that org would expand to a full URL
-
-*** look at hippie expand and add A-/ shortcut
-*** change date in header
-    :PROPERTIES:
-    :ID:       a13f3051-ec0b-4b6e-bd55-65a5c4526d38
-    :END:
-Try setting before-save-hook.  See "(elisp) Saving Buffers".
-catz and baicye 
--Dave
-
-http://lists.gnu.org/archive/html/emacs-orgmode/2013-07/msg01015.html
-*** send to "kitchen tablet" recipe
-*** make a disable/enable org-inline function (refresh images)
-*** check org sync with goog using webdav
-    :PRO:PROPERTIES:
-
-           eb0b0883-9d41-4e9d-8d10-7a86532ef458
-    :
-httpww.osomac.com/2013/09/23/org-mode-moving-forward/
-*** export to odf dosent work 
-*** make a code block read only
-    :PROPERTIES:
-    :ID:       5e59de3b-e7ec-4a8d-b1a1-b2d6dbf8cd01
-    :END: 
-*** correct commenting out in bable org mode
-*** google calander sync
-    :PROPERTIES:
-           dd512bb5-813c-4311-a8a4-1f6b651b6e9a
-    :
-httpgithub.com/dengste/org-caldav
-*** Habits mod
-    :PROPERTIES:
-           b1454b3b-887a-4c7c-8be9-2ab7135ed2d9
-    :
-httprgmode.org/manual/Tracking-your-habits.html
-
-*** Remember last posiiton of file when reopen/jump to last position
-    :PROPERTIES:
-           206142d8-4b8c-46e1-aa7c-dad5091871d8
-    :
-*** C-x 5 0 > other key
-    :PROPERTIES:
-           2b274086-00f1-4ec7-90c7-dfaf7c92f876
-    :
-*** org_build a menu of faces to choose from, or snippets for it (maybe Mymenu)?
-*** auto close capture windows
-*** style the tags with colors in theme
-*** org scrape capture/scrape text areas and text+images (In Example a recipe)
-*** org scraper project
-    :PRO:PROPERTIES:
-
-           4f2569ae-ffb3-4936-b08d-06a614d52b1e
-    :
-!ide
-saveebpage (inluding images)
-delell non png and jpeg files
-convthat html to org using pandoc
-rech the image pathes from XXX to a subfolder with same name as org doc ~/orgfile.org/scrape1
-
-for ', open in emacs to manually scrape with pandoc:
-#+besrc js
-//!jcript
-
-var ctClone = function()
-{
-    type = arguments[0];
-    root;
-    image_count = 0;
-    imageMapping = null;
-
-    type == "selection")
-    
-    var fragment = window.getSelection().getRangeAt(0).cloneContents();
-    if (fragment)
-    {
-        root = document.createElement("span");
-        root.appendChild(fragment);
-    }
-    
-    
-    
-    doc = document.implementation.createDocument(document.namespaceURI, null, null);
-    root = doc.importNode(document.documentElement, true);
-    
-    !root)
-    
-    return null;
-    
-
-    y.prototype.forEach.call(root.querySelectorAll("img"), function(img) {
-    imageMapping = imageMapping || {};
-    var image = "image_" + image_count++;
-    if (/^\/\//.test(img.src))
-        imageMapping["http:" + img.src] = image;
-    else if (/https?:\/\//.test(img.src))
-    {
-        imageMapping[img.src] = image;
-    }
-    else
-    {
-        imageMapping[location.protocol + "//" + location.hostname + img.src] = image;
-    }
-    img.setAttribute("src",  image);
-    
-
-    rn {
-    html : root.innerHTML,
-    images : imageMapping
-    
-};
-
-func spawn(directory, selection)
-{
-    tmpfile = "/tmp/" + script.generateId() + ".html";
-    output = directory + "/tmp.org";
-    rite(tmpfile, "w", selection);
-    em.spawn("sh -c 'pandoc -s -S " + tmpfile + " -o " + output + "; emacs " + output + "'");
-    em.spawn("rm " + tmpfile);
-}
-
-func clone(type)
-{
-    selection = JSON.parse(tabs.current.focusedFrame.inject(injectClone, type));
-    !selection)
-    return;
-
-    directory = "/tmp/emacs_org_" + tabs.current.mainFrame.domain;
-    em.mkdir(directory, 0700);
-
-    pending = 0;
-    selection.images)
-    
-    for (var link in selection.images) {
-        var d = new WebKitDownload(link);
-        d.destinationUri = "file:///" + directory + "/" + selection.images[link];
-        pending++;
-        d.start(function(download) {
-            switch (download.status)
-            {
-            case DownloadStatus.finished:
-            case DownloadStatus.error:
-            case DownloadStatus.cancelled:
-                pending--;
-                break;
-                default : return;
-            }
-            if (pending == 0)
-            {
-                spawn(directory, selection.html);
-            }
-        });
-    }
-    
-    
-    
-    spawn(directory, selection.html);
-    
-}
-binds", clone.bind(null, "selection").debug(script), "clone_selection");
-bindf", clone.bind(null, "full").debug(script), "clone_full");
-#+enc
-
-#+BESRC js
-//!jcript
-
-func org_protocol_store_link () {
-    cmd = 'emacsclient';
-    title = tabs.current.title || "" ;
-    uri = tabs.current.uri || "";
-    args = "'2f6d720053b5240c19cc9c7b35feef5d846ba3a6quot;org-protocol://store-link://" +
-    encodeURIComponent(uri) +
-    "/" +
-    encodeURIComponent(title) +
-    "2f6d720053b5240c19cc9c7b35feef5d846ba3a6quot;'";
-    em.spawn(cmd + " " + args);
-}
-
-func org_protocol_capture (w) {
-    cmd = 'emacsclient';
-    sel = clipboard.get(Selection.primary) || "";
-    title = tabs.current.title || "";
-    uri = tabs.current.uri || "";
-    args = "-n '" +
-    "2f6d720053b5240c19cc9c7b35feef5d846ba3a6quot;org-protocol://capture://" +
-    encodeURIComponent(uri) +
-    "/" +
-    encodeURIComponent(title) +
-    "/" +
-    encodeURIComponent(sel) +
-    "2f6d720053b5240c19cc9c7b35feef5d846ba3a6quot;'";
-    em.spawn(cmd + " " + args);
-
-}
-
-bind", org_protocol_store_link, "orgstring");
-bind", org_protocol_capture, "orgcapture");
-#+ENC
-
-*** org sync files
-**** sol1
-With Dropbox I've had a some "conflicted copy" issues; this is annoying (and is
-the sort of thing that would have been solved much more easily with version
-control) but happens very rarely. What I like about this is that my frequent
-changes in org files get propagated without the need for an explicit version
-control command.
-
-
-However, for safety and for tracking, I run a nightly job with bazaar where I
-commit all changes (this is done in only one of the machines, of course). This
-has actually proven extremely useful when, by mistake, I have deleted a complete
-subtree and only realized maybe a month later.
-**** sol 2
-https://github.com/simonthum/git-sync
-**** s3
-     http://translate.google.com/translate?hl=en&sl=auto&tl=en&u=http://www.mkblog.org/2011/12/zwei-rechner-daten-verloren-dokumente-fehlen/
-** Emacs
-*** keys for kill buffer C-x k
-*** emacs mode on a specific frame   
-*** auto complete load dictnionary and load specific dictnionary per mode/file
-*** explore terminal integration 
-*** TODO Emacs 24.4 has the new command isearch-forward-symbol-at-point
-    :PROPERTIES:
-    :ID:       06883f77-7f39-4327-8ef3-ae5fb7355f23
-    :END:
-this is like vimes C-*
-*** emacs add dunst support/notify
-*** customize menus/toolbar (color,bold other)
-*** ess-sas an r
-    :PRO:PROPERTIES:
-
-           7cf88c53-5680-4944-b8b4-5e6a68590d8a
-    :
-*** crash recvocery
-** org-download
-** Misc
-*** revise password global system
-passes> keepss
-docs-org
-internt pass -last pass
-
-2 pass system
-
-weak-salt21salar
-strong-
-
-*** A fantastic font
-I've tried several fonts, and all of them were nice, but came up short on some way. Some didn't have italic variants, some had dotted zeroes instead of dashed zeroes, some even had entirely clear zeroes which make them look like O's, others had boring-looking parentheses4. Not Fantasque Sans Mono5, 6, it is awesome. If your web browser supports web fonts you should also see it used in the code blocks here.
-
-For normal Emacs setups you might use the set-frame-font function like so:
-
-(set-frame-font "Fantasque Sans Mono 13" nil t)
-*** Look at synergy for sharing betwee office pc and laptopz 
-*** automate git commit with script_cron daily 
-*** Dunst color per application
-   :PRO:PROPERTIES:
-
-          6948b8bf-bf06-4491-8b91-415161f29cf3
-   :
-*** clipboad sense
-   :PRO:PROPERTIES:
-
-          f5dd9e7d-f91a-4515-b72e-7925fe0d9ae5
-   :
-   oclip currently shows primary- IE classic copy commad
-*** gmvalut laptop work>transfer to Server
-   :PRO:PROPERTIES:
-
-          097eb08f-ef41-43d1-b3fa-08b774b2205c
-   :
-
-*** look at lan wakeup for laptop for backup/rsync?
-   :PRO:PROPERTIES:
-
-          45239772-46d4-4acc-a505-57c52816f0db
-   :
-*** Flexget
-   :PRO:PROPERTIES:
-
-          21e79f5e-7652-42de-b0e7-5022c6098124
-   :
-*** Xdotool-gui
-   :PRO:PROPERTIES:
-
-          d3c75d51-8439-4f8b-bbbc-a2a7172db86d
-   :
-** Cantata
-*** requests
-**** file type on player upper bar
-**** crashes in cantata when issuin mpc commands
-**** keyboard only interface
-**** dynamic mode -> add critereas not played in last 2 weeks, from specific playlist etc
+** org_build a menu of faces to choose from, or snippets for it (maybe Mymenu)?
+** auto complete load dictnionary and load specific dictnionary per mode/file (for food)
+** clipboad sense
+** Flexget
 ** beets
-  - cant get original_year: yes to work , ₆In Example₆ aqualung jethro tull always defaults to 1984
+- cant get original_year: yes to work , ₆In Example₆ aqualung jethro tull always defaults to 1984
   -create a rating field
   -copy comments to that field
   -create a demnu entry to my mpd script to rate the current playing song
   - get switches for beet import for multiple scenarios (₆In example₆ single:)
-** worker
-*** filter by date
-  i tried looking for documentation on the set filter command but only found general filtering commands. is there a way to filter views by date (modified time etc) that could be very useful. 
-*** DONE colored tabs
-  option to color tab by name/location/other
-*** DONE copy to clip/paste from clip?
-*** NEXT Filter indicator
-      :PROPERTIES:
-      :ID:       0c51d716-e089-4b64-bda8-d0ee9c9bd81c
-      :END:
-  i know there is a star but can i request an option make the listview or modtime/name bar different colored when filtered
-  perhaps clearer syntax ₆In example₆ (N)
-*** DONE Toggle sort mode
-  is there a way toggle a sort mode, so that the same button pressed once would sort asecding and then second press descinding? if not is there a way to maybe script this
-*** tmep pnames
-
-
-
-** devils pie
-*** set a window to open on a specific screen
-I believe you are forced to use a method where you place the
-windows non-dynamically on the required screen - if you have two
-screens both with 1280 width, placing a window at 1280 should put it on
-the right screen. (That's not very dynamic, but it could be a start to
-work on something at least).
-
-You should be able to get the total screen area (All screens added),
-and via that calculate if you have one or two screens attached. Not
-much for this kind of thing is implemented in devilspie2 though.
 
 ** cvim
-  visual mode, act start visual block/line option
-  VIUSAL clues to some command like : copied link to clip (yy) etc
-  `extensiuon to mark in numbers tabs?`
-  :bookmarks /<folder> (autocomplete) , how does that work, can we browse bookmark with levels so you can manually enter folders?
-  add retsart chrome
-  add reload all tabs
-  keybind to quickly enable/disable cvim
-* tst
+visual mode, act start visual block/line option
+VIUSAL clues to some command like : copied link to clip (yy) etc
+`extensiuon to mark in numbers tabs?`
+:bookmarks /<folder> (autocomplete) , how does that work, can we browse bookmark with levels so you can manually enter folders?
+add retsart chrome
+add reload all tabs
+keybind to quickly enable/disable cvim
+
+
