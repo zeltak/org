@@ -1,7 +1,7 @@
 #+TITLE: Research 
 #+TODO: TODO(t) EXP(e) | SUBMITTED(s) K_TRACK(k) PAUSED(p) DONE(d) 
 #+CATEGORY: work
-#+TAGS:  allan(a) joel(j) meytar(t) boris(b) BGU(u) maayan(m) adar(d) omer(o) lara(l) hila(h) students(s)
+#+TAGS:  allan(a) joel(j) meytar(t) boris(b) BGU(u) maayan(m) adar(d) omer(o) lara(l) hila(h) students(s) itai (i)
 #+STARTUP: overview  inlineimages eval: (org-columns)
 #+OPTIONS: toc:nil 
 
@@ -31,11 +31,35 @@ quit;
 *** TD MODEL.Ta.FRANCE
 revise for journal so the text is differnt
 *** explore
+**** added 
+#+BEGIN_SRC R
+  n=dim(x)[1]
+  kk=floor(n*0.9) #create train and test datasets DT.
+  ran_row=sample(1:n,kk ) #random sample of 90% of the data (NAN's excluded)
+  train=x[ran_row,]
+  test=(x[-ran_row,])
+
+  #run simple mm by year
+    #lmer
+  f1=as.formula(pm25 ~ aod+as.factor(m)*aod+(1+aod|day))
+
+  MM1=lmer(f1, data=train)#,control=lmerControl(check.nobs.vs.nlev = "ignore", check.nobs.vs.rankZ = "ignore", check.nobs.vs.nRE="ignore"))
+  test$pred=predict(object=MM1,newdata=test,allow.new.levels=TRUE,re.form=NULL) 
+
+
+  r=lm(test$pm25~test$pred)
+  s=as.numeric(summary(r)$r.squared)
+#+END_SRC
+
+
+
 *** related papers
 **** Read Queue
 **** Paper Summary
 **** Writing Material
 
+**** Read Queue
+**** Paper Summary
 *** Manuscript
 **** how will we differentiate it from NE paper:
 -emphasize how the performance is not known in Europe, and in more mountainous areas, and can allow studies of temperature and health to include people not in big cities. 
@@ -58,7 +82,6 @@ I think the emphasis should be 1) existing health studies of temperature effect 
 *** related papers
 **** Read Queue
 **** Paper Summary
-
 *** Manuscript
 ** [#A] MODEL.PM.Israel
 *** info file
@@ -66,9 +89,14 @@ I think the emphasis should be 1) existing health studies of temperature effect 
 file:/home/zeltak/org/files/Uni/Projects/code/P046.Israel_MAIAC
 *** meetings
 *** TD MODEL.PM.Israel
-**** TODO check spciaction from MOEP to see which componenets (traffic vs secondary ) are in each city and vs rural areas
+**** [#A] prepare report to alexei				     :meytar:
+**** TODO Ask ILAN : check spciaction from MOEP to see which componenets (traffic vs secondary ) are in each city and vs rural areas
+     SCHEDULED: <2015-08-11 Tue>
 ask david about that
 borrow a haravrd based filter- talk to petros
+**** TODO Exclude high percentiles in PM-AOD data in israel (clean data)
+after first performing box plot and outlier analysis and trying to understand the origin of the “errors”
+
 *** explore
 **** low yearly aod values and compared to DB which is higher in south of israel
 we should look at wind speed from reanalysis data/station to see if these areas have low or high ws values
@@ -94,11 +122,53 @@ put that in the paper teom is limited
 -a mean 20km mpm excluding the actual monitoring data. works very well as predictor but we have mod 2 problem. Also David dosent like it.
 **** israel next paper: check how model preforms in lag baomer and yom kipur
 
+**** Check the fit of the model in two different holidays: Yom Kipur and Lag Baomer. Check with David if he has someone working on this topic.
+**** use as a base model the LUR and see how much the aod add to it (rather than the other way)
+**** try use in the model both the abs error (norm 1) the sqrt of it (norm 2) to learn what gives most of the errors (season?, special daily conditions?, etc.).
+**** Use % dark pixles in both maiac and DB as variable and see if it explains some of the variability :meytar:
+**** explore aod predictions in images at haifa specifically
 *** related papers
 **** Read Queue
 **** Paper Summary
-** OSM project
-*** paper focus
+*** Manuscript
+** [#A] MODEL.PM.France
+*** info file
+id:23371787-acbe-41fa-8bab-5a2e91c1e61e
+*** code
+file:/home/zeltak/org/files/Uni/Projects/code/P031.MAIAC.France
+*** meetings
+*** TD MODEL.PM.France
+**** TODO Use sqrt transforms instead of log transform for skewed variables (after first checking the variable distribution etc.). :meytar:
+**** check data completeness
+***** check missing ndvi France
+***** TODO Check missing met (temp,WS) France
+Try to use prev post day lags for areas missing Met
+***** DONE PM10.25 analysis
+***** TODO take a look at the us data and check the correlations between trimesters
+
+**** TODO create 24h mean pm10/25 for each station in france	     :meytar:
+**** TODO ndvi and temperature data TS availability 		       :itai:
+**** TODO run nested analysis by cluster			     :meytar:
+pm means, temperature, elev, RH
+each aod point will get the cluster id of the closest PM point to it.
+try ratio later (all co located)
+
+**** TODO Validation of stage (3) in observations where (a) PM locations with PM data and missing aod data or/and (b) exclude known PM locations with both aod and PM available data for validation process. Namely – perform cross validation also of phase 3 !!!
+*** explore
+*** related papers
+**** Read Queue
+**** Paper Summary
+**** Writing Material
+
+
+** OSM Project
+*** info file
+id:
+*** code
+file:
+*** meetings
+*** TD OSM Project
+*** explore
 **** 1st paper
 should be on:
  OSM use as a valid and readly avilable data/exposure source in envrinonmental health 
@@ -145,19 +215,86 @@ compare then how they work in "bad" areas such as africa?
  send the road network data
  eurodata at 50m comapre to OSM data
 
+*** related papers
+**** Read Queue
+**** Paper Summary
+*** Manuscript
 ** peripheral artery disease (PAD), AE and PM2.5 in NE USA 	     :maayan:
-**** idea
-By reading this paper it came back to my mind that there is another orphan cardiovascular disease in air pollution research: peripheral artery disease. This is usually due to atherosclerosis and narrowing of the arteries in the limbs and an lead to severe outcomes such as amputation.
-It makes sense to be affected by air pollution, but last time I checked no one had published anything on this. With a large database and geospatial resolution, PAD would be an obvious one to look at.
-**** data from antonella
-when there is no 2, it means that they are created form first diagnosis, when there is the 2 it means that are created based on 1 and up to 5 secondary diagnosis
-so the ones with the 2 should have higher numbers of hospitalizations    
+*** info file
+[[file:~/org/files/Uni/Projects/PAD_NEMIA.org::*PAD]]
+*** code
+file:
+*** meetings
+*** TD peripheral artery disease (PAD), AE and PM2.5 in NE USA 	     :maayan:
 **** TODO schedule a talk with maayan to start PAD/AE and PM  project :maayan:
+*** explore
+*** related papers
+**** Read Queue
+**** Paper Summary
+*** Manuscript
 **** journal options for publishing
 European Journal of Internal Medicine
 http://www.journals.elsevier.com/european-journal-of-internal-medicine/
 
-** Mexico PM model 
+** MODEL.PM.MEXICO
+*** info file
+id:
+*** code
+file:
+*** meetings
+*** TD MODEL.PM.MEXICO
+**** can I extract cloudiness from NOAA dataset?		      :allan:
+**** [#D] can we construct a surrogate for particle color composition?
+look at agnstram exponent and correlate it with ratio
+**** validate at schools					      :allan:
+To show that AOD is helping
+compare mod3 predictions with measures at schools
+how does this compare to assigning the closest real mon?
+**** LUR-Mex: Why is our mod1 dropping UIZ and SJA in much of 2007 - it looks like there was daymean measured there before
+**** compare two approaches to imputing at sites missing all AOD (in a year)
+    - after stage 3, assign the closest grid cell prediction (or average the near ones)
+    - fill in those grid cells with stage 2 predictions and then run the smooth mod3 part
+    - add land use terms later on to improve these predictions further
+
+**** transform elevation so that it isn't correlated with intercept (subtract min before log)
+
+**** look at a plot of the random slopes and intercepts as a function of time
+**** can we get traffic data from google
+**** if points are completely missing				    :newdata:
+  wait and see if after the new data we still have missing grids
+  take average of closest non-missing bestpred by day - to smooth over them
+
+**** use OpenStreetMap roadways (downloaded July 31, 2013)
+**** show relation of PBL height and how well AOD agrees with monitor (is this unique to MCMA?)
+**** show importance of roadway network as a source - maybe fit model without a rden and show how gridcell estimates differ as a function of the proportion of heavy roadways
+
+
+
+**** incorporate MODIS characteristics for aodid grid cells (or other landcover dataset)
+especially since these could change over the decade
+**** Checking new data						  :coremodel:
+aeronet: AOT_440 in 2003 2004 vs schools PM
+look at REDMA (filter based PM2.5) 
+look hour of flyover PM2.5 (could diurnal throw us off) using dat.hr
+interaction with rain (rain scatter looks like particles)
+Redo time series plot dropping points on rain days
+**** some monitors are poorly correlated with aod:		    :newdata:
+why is this? geography (notheast of the city); 
+political boundaries (outside df run by different agency)?; 
+elevation? proximity to local sources?
+**** additional covs. 
+Data to integrate/other data sources:
+Use spatially distributed precipitation data (but maybe only DF, see also conagua?)
+Add in some representation of point sources (layer in GIS)
+ Use land use/greenspace
+
+*** explore
+*** related papers
+**** Read Queue
+**** Paper Summary
+*** Manuscript
+
+ 
 *** Health outcome studies
 ***** Birth outcome analysis
 ****** Derive predictions for different lag times/prenatal periods 
@@ -348,26 +485,6 @@ compare this to tel aviv and hadera
 this is done per SSA in haifa and tel aviv and hadera for the whole city
 
 
-** [#A] MODEL.PM.France
-*** info file
-id:23371787-acbe-41fa-8bab-5a2e91c1e61e
-*** code
-file:/home/zeltak/org/files/Uni/Projects/code/P031.MAIAC.France
-*** meetings
-*** TD MODEL.PM.France
-**** check data completeness
-***** check missing ndvi France
-***** TODO Check missing met (temp,WS) France
-Try to use prev post day lags for areas missing Met
-***** DONE PM10.25 analysis
-***** TODO take a look at the us data and check the correlations between trimesters
-
-*** explore
-*** related papers
-**** Read Queue
-**** Paper Summary
-**** Writing Material
-
 ** OSM-environmental health project (lara)
 *** info file
 id:
@@ -536,6 +653,10 @@ look into svm model with mixed effect and if that doesn't help look into taking 
 *** TD Ratio global project
 **** TODO slowly start organize data to publishable state	     :meytar:
 *** explore
+**** results
+lower ratio means more pm10
+₆In example₆ ratio of 0.2 means more pm2.5
+
 regress and calibrate 2.5/10 ration but take into account long term dust trends (indicator)
 run it region by region and use lu/temporal terms to get a regional prediction.
 Add view Geometry
@@ -549,6 +670,7 @@ the AOD>>PM model to each PM fraction.
 Understanding if different ratios in different areas that are affected from different sources 
 reveal different fits. Global database: Israel, USA, Italy, Mexico, Spain etc. 
 The hypothesis is that the final graph will look schematically like this:
+
 *** related papers
 **** Read Queue
 **** Paper Summary
@@ -556,29 +678,16 @@ The hypothesis is that the final graph will look schematically like this:
 * Future Project Ideas
 ** Model.PM 
 *** Ideas (NEED TO QUEUE BY PRIORITY)
-**** predict pm25 from 10
+**** apply a SVM model in mod4 (localPM)			       :itai:
+**** [#B] predict pm25 from 10 					     :meytar:
 weight the predicted pm2.5 as lower weights opposed to true PM10
-**** Compare results between correlation to MAIAC/MODIS C06 AOD data with overpass data (i.e. mixed effect model).
-**** Use sqrt transforms instead of log transform for skewed variables (after first checking the variable distribution etc.).
-**** Use SVM
+**** [#D] Compare results between correlation to MAIAC/MODIS C06 AOD data with overpass data (i.e. mixed effect model).
+**** Use SVM with random statement				      :allan:
 tried with mediocre success so far- is there a way to include a random statement
-**** Exclude high percentiles in PM-AOD data
-after first performing box plot and outlier analysis and trying to understand the origin of the “errors”
-**** Evaluate chosen regions
-if there are enough monitors examine the spatial variability, temporal correlations among stations, examine common(?) geo-climatic patters, topography, land cover, ...
-Use correlation between nearby stations as a spatial variable
-!no! I do not think this belongs to phase 1. Maybe to phase 2??? When you apply the model and have only aod how whould you apply this term? I think it is the same cheating as using random intercept that accounts for the AQM station. If there are links between stations ayo ushould see them via the above (previous item).
-**** Add time effect - interaction between aod and as.factor(month) 
-**** Run model annually per country per region in different countries
+**** [#C] Run model annually per country per region in different countries
 (do the regions with poor results have similar characteristics?) but present evaluation on a daily basis – show annual distribution of daily r2, rmse. Etc.
-**** Check with Brent Coull the possibility of incorporating the predicted temp (from the temp model) into the PM model.
-**** Consider validation of stage (3) in observations where (a) PM locations with PM data and missing aod data or/and (b) exclude known PM locations with both aod and PM available data for validation process. Namely – perform cross validation also of phase 3 !!!
-**** Run the model separately on subsets of the available collocated data based on high/low PM conc.
-**** Check the fit of the model in two different holidays: Yom Kipur and Lag Baomer. Check with David if he has someone working on this topic.
-
-**** use as a base model the LUR and see how much the aod add to it (rather than the other way)
-**** try use in the model both the abs error (norm 1) the sqrt of it (norm 2) to learn what gives most of the errors (season?, special daily conditions?, etc.).
-**** Use % dark pixles in both maiac and DB as variable and see if it explains some of the variability
+**** [#D] Check with Brent Coull the possibility of incorporating the predicted temp (from the temp model) into the PM model.
+**** [#D] Run the model separately on subsets of the available collocated data based on high/low PM conc.
 **** Study the angles during retrievals (and their link to the % dark pixles)
 **** examine and report statistics of the daily results
 (possibly averaged over long time but not only) and not only annual results (averages). Why? – because if there is a threshold than exposure to -10% may not be identical to exposure to +10% although the may (a) cancel each other in norm 1 (abs error),and add to each other in norm 2 (sqrt) where as in practice 9and o one knows if I am right or wrong) mybe only one of them matters 9due to the threshold). So – various metrics should be reported, and on daily basis. (e.g. error histogram, various moments of the error distribution statistics, etc.)
@@ -588,83 +697,23 @@ pm~aod+aod01
 if prev day isnt avilable we use the same day twice
 **** to borrow information across space create a variable that weights and down weights low aod observations per day
 **** [#A] LUR; space-time smoothing; nearby cells weighted for missing and previous day (if gone, use today)
-**** is the ground monitoring data under a cloud otherwise the same as when not clouded (apart from precip events)?
-**** does relationship of Aqua and Terra give us info? early pollutant build-up vs continuous across the day? :newdata:
-**** can I extract cloudiness from NOAA dataset?
-**** can we construct a surrogate for particle color composition?
-**** pick satellite (Aqua vs Terra) based on which one has lower uncertainty in gridcells that join to monitors :newdata:
-**** validate at schools
-  To show that AOD is helping
-  compare mod3 predictions with measures at schools
-  how does this compare to assigning the closest real mon?
+**** [#B] does relationship of Aqua and Terra give us info? early pollutant build-up vs continuous across the day? :newdata:
+pick satellite (Aqua vs Terra) based on which one has lower uncertainty in gridcells that join to monitors 
+**** [#D]  Use aeronet - maybe as a super-monitor (weighted?) Use other satellite data?
 
-**** LUR-Mex: Why is our mod1 dropping UIZ and SJA in much of 2007 - it looks like there was daymean measured there before
-**** compare two approaches to imputing at sites missing all AOD (in a year)
-    - after stage 3, assign the closest grid cell prediction (or average the near ones)
-    - fill in those grid cells with stage 2 predictions and then run the smooth mod3 part
-    - add land use terms later on to improve these predictions further
-
-**** transform elevation so that it isn't correlated with intercept (subtract min before log)
-
-**** running all years at once vs 1 year at a time (mod1 in particular)
-**** are there temporal trends? 
-**** look at a plot of the random slopes and intercepts as a function of time
-**** can we get traffic data from google
-**** if points are completely missing				    :newdata:
-  wait and see if after the new data we still have missing grids
-  take average of closest non-missing bestpred by day - to smooth over them
-
-**** use OpenStreetMap roadways (downloaded July 31, 2013)
-**** show relation of PBL height and how well AOD agrees with monitor (is this unique to MCMA?)
-**** show importance of roadway network as a source - maybe fit model without a rden and show how gridcell estimates differ as a function of the proportion of heavy roadways
-
-**** stage 4 model (local PM)t					  :coremodel:
-  take residuals from stage 3 model and then regress that with 
-  very fine resolution (50 or 100 or 200m) spatial and temporal terms
-  this could be added back to overall prediction - much more detail because not just on 1x1 scale
-
-**** Try removing (in mod1&2) aodid gridcells that have very few passable days (<100) :newdata:
-  since they may have ground conditions that are weird
-
-**** incorporate MODIS characteristics for aodid grid cells (or other landcover dataset)
-  especially since these could change over the decade
-
-
-**** Checking new data						  :coremodel:
-  aeronet: AOT_440 in 2003 2004 vs schools PM
-  look at REDMA (filter based PM2.5) 
-  look hour of flyover PM2.5 (could diurnal throw us off) using dat.hr
-  interaction with rain (rain scatter looks like particles)
-  Redo time series plot dropping points on rain days
-
-**** some monitors are poorly correlated with aod:		    :newdata:
-  why is this? geography (notheast of the city); 
-   political boundaries (outside df run by different agency)?; 
-   elevation? proximity to local sources?
-**** additional covs. 
-  Data to integrate/other data sources:
-
-  Use spatially distributed precipitation data (but maybe only DF, see also conagua?)
-
-  Add in some representation of point sources (layer in GIS)
-
-  Use land use/greenspace
-    
-**** Use aeronet - maybe as a super-monitor (weighted?) Use other satellite data?
 
 
 **** Use a latent class linear mixed model (LCLMM) to generate PBL patterns as predictors (see ?lcmm::hlme); 
-  See also Schafer et al.
-
+See also Schafer et al.
 **** Proportion of the day with wind from the north (if point sources matter)?
-**** Andrew Ng's strategy for assessing bias vs variance in prediction algorithms (see coursera videos)
+**** Andrew Ng's strategy for assessing bias vs variance in prediction algorithms (see coursera videos) :allan:
 ****  Should we try to impute missing PBL (especially runs of multiple missing days) 
 **** Construct directional buffers and intersect these with road density for each point;
   consider upwind traffic on each day (directional road density weighted by daily wind)
 
 **** spatial join to best close point
-  Instead of taking the closest AOD point to each monitor for each day, what if we took each of the points within some distance and ran a regression then preferentially weight our selection AOD points to pick those sites with best agreement to monitor (likely a function of local land use features). The best agreement could be not the closest point, but the one downwind the most, or with the most similar amount of roadway, etc... This could really impact calibration in Mod1.
-  see also LUR_Mex_4b_2_vignette_spatialjoin.R
+ Instead of taking the closest AOD point to each monitor for each day, what if we took each of the points within some distance and ran a regression then preferentially weight our selection AOD points to pick those sites with best agreement to monitor (likely a function of local land use features). The best agreement could be not the closest point, but the one downwind the most, or with the most similar amount of roadway, etc... This could really impact calibration in Mod1.
+ see also LUR_Mex_4b_2_vignette_spatialjoin.R
 
 ****  Are there better predictions at stations with their own met monitoring?
   does it matter if you have the spatial/temporal covs from your own monitor Vs. borrowing it from nearby
@@ -1127,16 +1176,16 @@ use the Satellite data to classify dust days and once you have this classificati
   :PROPERTIES:
   :ID:       2668bdf2-f4de-40cd-b57f-101a88076ba7
   :END:
-** info
+*** info
 The variable thromb is based on the first main diagnosis of admission, while thromb2 is based on primary and secondary admissions.
 The ICD are below
 thromb=0;
 if (icd11 in (415, 451, 453)) then thromb=1;
-** secondary stage
-*** Ask antonella about medical history, prev admisons, causes
+*** secondary stage
+**** Ask antonella about medical history, prev admisons, causes
 -look into weather had cancer yes/no
 -hospitalized last 90 days
-*** add interactions
+**** add interactions
 :PROPERTIES:
      :ID:       bd8bcdf7-4bbc-44f4-a7f2-eb65bdd2d333
      :END:
@@ -1144,14 +1193,13 @@ if (icd11 in (415, 451, 453)) then thromb=1;
 - interact with ndvi/percet of open space in both short and long term
   (CXover and Ts)
 -look at interacting with season (winter vs summer)
-*** Survival analysis
+**** Survival analysis
      :PROPERTIES:
      :ID:       8e80e09e-3dba-4bb1-a09e-50c09b8b28f5
      :END:
 Try running a survival anlysis or maybe a posion survival analyis (SA) (look at johana 6 city paper)
 if running a posion SA we can extract the random slopes fro every zipcode and with smoothing create a spatial map showing risk areas
-** Smooth the random slopes to create risk maps
-
+*** Smooth the random slopes to create risk maps[
 * Grants
 ** K_TRACK EHF grant: birth weight outcomes (defects, Ultra sound measurements and Ta,PM2.5
    :PROPERTIES:

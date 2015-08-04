@@ -3717,3 +3717,67 @@ study of nursing home cases, dont move much good for 1x1 km data
   :ARCHIVE_OLPATH: Future Project Ideas
   :ARCHIVE_CATEGORY: work
   :END:
+
+* Evaluate chosen regions
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-04 Tue 11:51
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Future Project Ideas/Model.PM/Ideas (NEED TO QUEUE BY PRIORITY)
+  :ARCHIVE_CATEGORY: work
+  :END:
+if there are enough monitors examine the spatial variability, temporal correlations among stations, examine common(?) geo-climatic patters, topography, land cover, ...
+Use correlation between nearby stations as a spatial variable
+!no! I do not think this belongs to phase 1. Maybe to phase 2??? When you apply the model and have only aod how whould you apply this term? I think it is the same cheating as using random intercept that accounts for the AQM station. If there are links between stations ayo ushould see them via the above (previous item).
+
+* Add time effect - interaction between aod and as.factor(month) 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-04 Tue 11:51
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Future Project Ideas/Model.PM/Ideas (NEED TO QUEUE BY PRIORITY)
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* is the ground monitoring data under a cloud otherwise the same as when not clouded (apart from precip events)?
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-04 Tue 11:59
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Future Project Ideas/Model.PM/Ideas (NEED TO QUEUE BY PRIORITY)
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* running all years at once vs 1 year at a time (mod1 in particular)
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-04 Tue 12:04
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Future Project Ideas/Model.PM/Ideas (NEED TO QUEUE BY PRIORITY)
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* are there temporal trends? 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-04 Tue 12:04
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Future Project Ideas/Model.PM/Ideas (NEED TO QUEUE BY PRIORITY)
+  :ARCHIVE_CATEGORY: work
+  :END:
+
+* stage 4 model (local PM)t					  :coremodel:
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-04 Tue 12:08
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Future Project Ideas/Model.PM/Ideas (NEED TO QUEUE BY PRIORITY)
+  :ARCHIVE_CATEGORY: work
+  :END:
+take residuals from stage 3 model and then regress that with 
+very fine resolution (50 or 100 or 200m) spatial and temporal terms
+this could be added back to overall prediction - much more detail because not just on 1x1 scale
+
+
+* Try removing (in mod1&2) aodid gridcells that have very few passable days (<100) :newdata:
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-04 Tue 12:09
+  :ARCHIVE_FILE: ~/org/files/agenda/Research.org
+  :ARCHIVE_OLPATH: Future Project Ideas/Model.PM/Ideas (NEED TO QUEUE BY PRIORITY)
+  :ARCHIVE_CATEGORY: work
+  :END:
+since they may have ground conditions that are weird
