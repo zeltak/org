@@ -508,7 +508,7 @@ $NOTE: Before starting with aur installs make sure the /etc/makepkg.conf is conf
 
 
 #+BEGIN_SRC sh
-pacaur -S rofi-git clerk-git teiler-git caudec vte3-select-text termite-git mpdcron-git ttf-droid dropbox  teamviewer xshowkeys terminus-font-ttf puddletag culmus ffcast  flacon worker xdotool xdotool-gui xchainkeys jmtpfs acroread android-sdk copyq dunst gpodder3 i3blocks ranger-git surfraw-git termite-git chromium-pepper-flash ttf-ms-fonts jmtpfs
+pacaur -S rofi-git clerk-git teiler-git caudec vte3-select-text termite-git mpdcron-git ttf-droid dropbox  teamviewer xshowkeys terminus-font-ttf puddletag culmus ffcast  flacon worker xdotool xdotool-gui xchainkeys jmtpfs acroread android-sdk copyq dunst gpodder3 i3blocks ranger-git surfraw-git termite-git chromium-pepper-flash ttf-ms-fonts jmtpfs dzen2-xft-xpm-xinerama-git
 #for bgu vpn support
 lib32-pam snx
 #for beets
@@ -40200,9 +40200,7 @@ Assuming the media is stored locally (and the server paths are empty), this will
 
 **** Synchronizing org files with Unison
 This describes how to synchronize org files using the [[http://www.cis.upenn.edu/~bcpierce/unison/][Unisonfile synchronizer]], as well as how to configure it to use an external tool to merge conflicting edits. also see:
-
 http://orgmode.org/worg/org-tutorials/unison-sync.html
-
 ***** Synchronization
 
 Unison is a file synchronizer, thus it may be used to synchronize org files. To
@@ -40745,6 +40743,12 @@ After changing the configuration, reload the agent by piping the RELOADAGENT str
 echo RELOADAGENT | gpg-connect-agent
 #+END_SRC
 The shell should print OK.
+**** generate random passwords
+use the pwgen command ₆In example₆ 
+
+#+BEGIN_SRC sh
+pwgen 8
+#+END_SRC
 ** bash
 *** shortcuts
 
