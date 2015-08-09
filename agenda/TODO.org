@@ -8,12 +8,16 @@
   :PROPERTIES:
   :ID:       70feaa43-c66b-4675-89f5-9ae26bddc03e
   :END:
-** TODO move between windows Emacs!!! all directions like tmuxL
+** rofi tmux switch to pane
+write a script that takes an input of all tmux open panes and switches to it
+** macro for close window and focus previous one as full frame 
+** make changing windows similar to i3 and tmux
+** update new configs (rofi stuff( in stow))
+** add example block to F4
 ** fasd
 https://github.com/clvv/fasd
 ** gnus
 *** inline images
-** macro for close window and focus previous one as full frame 
 ** capture via gmail
 You could also use a %x in a capture template to assist in capturing a   
 selection made on your gmail message.  Eg, select Subject: line, then    
@@ -87,10 +91,6 @@ Storing links from Sunrise-commander
 
 ** bookmark+ link to orgid
 I guess someone who uses OrgMode (I don’t) would need to code that up. But have you tried just bookmarking a header line location? When you bookmark a position, bookmarking keeps track of the immediately surrounding text, to use to relocate the position when the buffer gets modified. Or try bookmarking some text immediately preceding or following a header
-** keys reahual
-*** Emacs
-make changing windows similar to i3 and tmux
-change C-S up/down to move lines 
 ** org latex CV
 Unlike the others who've commented, I moved my CV from LaTeX to org-mode and I'm happy with the results. Two things make it work well.
 
@@ -367,13 +367,6 @@ xset dpms 600
 ** screen saver time length by location (IP)
 ** i3 revise
 *** TODO have win+grave cycle through clients of same type
-
-** rofi tmux switch to pane
-** list of known laptop issues
-*** network drops
-happnes both with LAN and wifi
-happens with dock connected and with local laptop adaptor
-could be just internet and not network related? maybe the internet drops and not network..
 ** bind keys at debian PC to ssh and control MPD
 ** create a daily agenda in orgmode somwhow
 will show me things to do today ranked 

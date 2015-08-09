@@ -3999,6 +3999,55 @@ make sure that there are no more then 31 tags
  subtle currently cant have more then 31 tags
 
 ** Tiling WM's
+*** Define default X applications
+**** method 1- using mime
+https://github.com/march-linux/mimi
+
+you can define a list of 'how-to-open' in file:~/.config/mimi/mime.conf
+₆In example₆ 
+
+#+begin_EXAMPLE
+text/: gvim
+application/pdf: 
+video/: mpv
+image/: gthumb
+audio/: vlc
+application/x-tar: file-roller
+application/x-gzip: file-roller
+application/x-bzip2: file-roller
+application/x-rar: file-roller
+application/x-xz: file-roller
+application/zip: file-roller
+inode/directory: spacefm
+http: chromium
+https: chromium
+magnet: transmission-remote-gtk
+spotify: spotify
+#+end_EXAMPLE
+$Note$ the above syntax can be simplified by using:
+rar: xterm -e 2a
+but if you have time, using mime-type is more precise
+
+or you are lazy, mimi will search a best-fit app using .desktop file. Best fit is defined as the first option sorted by mime order and then , if they have the same mime order, reverse sorted by generality
+For example, the best-fit app says it can open 'text/html' in the very beginning of its mime definition. if two or more apps have the same priority, then we choose the app that can open the most number of file types.
+
+search order
+for example, I want to define how to open 'text/html'. mime will search in order like this
+
+'txt' in your config
+in your config (i.e. http, ftp, magnet) ...etc.
+'text/html' in your config
+'text/' in your config
+'text/html' in .desktop
+'text/' in .desktop
+if mimi still cannot find anything, it will open dmenu and bug you.
+note:
+
+sometimes, mimi is smart enough to figure out protocol based on mime-type when it searches for .desktop.
+sometimes, if an app requires a terminal to run (ncurses programs), mimi is able to find one terminal app in .desktop.
+
+
+
 *** General
 **** xprop-check window name/class					:Fav:
 issue the following in the term:
@@ -13223,6 +13272,27 @@ You thenb Paste that text into your teamocil config:
       - commands:
          - watch free -m
 #+END_SRC
+***** getting info on sessions
+
+#+BEGIN_SRC sh
+tmux lsp -aF'#{session_name}:#{window_index}.#{pane_index}  #{window_name}   #{pane_current_command}   "#{pane_title}" '
+#output
+Lap:1.1  Home   tmux   "zx1voics"
+Lap:1.2  Home   zsh   "zx1voics"
+Lap:1.3  Home   zsh   "zx1voics"
+Lap:2.1  git/rsync   zsh   "zx1voics"
+Lap:2.2  git/rsync   zsh   "zx1voics"
+Lap:3.1  htop   htop   "zx1voics"
+Lap:4.1  Mm_services   zsh   "zx1voics"
+#+END_SRC
+in the above example:
+session_name=Lap
+window_index=1
+pane_index=2,        
+window_name=Home
+pane_current_command=zsh            
+pane_title=zx1voics     
+default title is the hostname, if nothing has set it tosomething else                                         
 
 **** urxvt
 ***** install perl-scripts
