@@ -1260,3 +1260,38 @@ mu4e-compose-dont-reply-to-self t                  ; don't reply to myself
   :ARCHIVE_OLPATH: Functions
   :ARCHIVE_CATEGORY: settings
   :END:
+
+* TODO Email
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-10 Mon 08:39
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Macros/org faces
+  :ARCHIVE_CATEGORY: settings
+  :ARCHIVE_TODO: TODO
+  :END:
+http://kitchingroup.cheme.cmu.edu/blog/2015/06/21/Clickable-email-addresses-in-emacs/
+
+#+BEGIN_SRC emacs-lisp :results none
+  ;; (defun highlight-email-addresses ()
+  ;;   "Add button to email address. Clicking or RET will open a compose email window."
+  ;;   (button-lock-set-button
+  ;;    "\\w+\\(\\.\\w+\\)?@\\(\\w\\|\\.\\)+"
+  ;;    (lambda ()
+  ;;      (interactive)
+  ;;      (let ((start) (end) (email-address))
+  ;;        (while (get-text-property (point) 'email-address)
+  ;;          (backward-char))
+  ;;        (forward-char)
+  ;;        (setq start (point))
+  ;;        (while (get-text-property (point) 'email-address)
+  ;;          (forward-char))
+  ;;        (setq end (point))
+  ;;        (setq email-address (buffer-substring start end))
+  ;;        (mu4e~compose-mail email-address)))
+  ;;      :face '((:background "gray80") (:underline t))
+  ;;      :help-echo "click to send mu4e email"
+  ;;      :keyboard-binding (kbd "RET")
+  ;;      :additional-property 'email-address))
+
+  ;; (add-hook 'text-mode-hook 'highlight-email-addresses)
+#+END_SRC 

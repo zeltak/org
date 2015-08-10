@@ -40293,7 +40293,6 @@ Assuming the media is stored locally (and the server paths are empty), this will
 **** Synchronizing org files with Unison
 This describes how to synchronize org files using the [[http://www.cis.upenn.edu/~bcpierce/unison/][Unisonfile synchronizer]], as well as how to configure it to use an external tool to merge conflicting edits. also see:
 http://orgmode.org/worg/org-tutorials/unison-sync.html
-***** Synchronization
 
 Unison is a file synchronizer, thus it may be used to synchronize org files. To
 configure Unison, on uses a /profile/ which states where the things to
@@ -40321,8 +40320,8 @@ root = ssh://address@hidden/relative/path/to/dir2
 servercmd = /usr/bin/unison
 #+END_EXAMPLE
 
-***** Merging
-****** details intro
+**** Merging
+***** details intro
 As Unison works on the level of files, it will trigger a /conflict/ if both files have changed since the last synchronization. In that case one can only choose which file to keep, which is not satisfying. Unison offers the possibility to use external tools to merge the files. There is an [[http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#merge][extensive manual section]] regarding this, we'll just describe how to use emacs and ediff to do it.
 
 For better merging, we will ask unison to keep the last synchronized version of every org file on the client; this way we can use ediff with ancestor. These ~currentbackup~ files may live alongside the synchronized files (with names of the form ~.bak.version.name~, which is configurable) or in a central location.
@@ -40343,6 +40342,11 @@ merge = Name .org -> emacsclient -c --eval '(ediff-merge-files-with-ancestor
 "CURRENT1" "CURRENT2" "CURRENTARCH" nil "NEW")'
 
 #+END_EXAMPLE
+
+`CURRENT1` is replaced by the name of (a temporary copy of) the local variant of the file.
+`CURRENT2` is replaced by the name of a temporary file, into which the contents of the remote variant of the file have been transferred by Unison prior to performing the merge.
+
+
 
 The ~backupcurrent~ option tells unison to keep a backup of the last
 synchronized version of ever file with an ~org~ extension. The location of the
@@ -40373,7 +40377,7 @@ merge = Name .org -> emacsclient -c --eval '(ediff-merge-files "CURRENT1"
 "CURRENT2" nil "NEW")'
 
 #+END_EXAMPLE
-****** zeltak methods
+***** zeltak methods
 $Note$ the left side will be the file changed locally ("CURRENT1") while the right side will be the file changed remotely ("CURRENT2")  
 
 copy the required bits to the local (or remote if you preffer) file and save it
