@@ -57,7 +57,6 @@ revise for journal so the text is differnt
 **** Read Queue
 **** Paper Summary
 **** Writing Material
-
 **** Read Queue
 **** Paper Summary
 *** Manuscript
@@ -88,21 +87,68 @@ I think the emphasis should be 1) existing health studies of temperature effect 
 *** code
 file:/home/zeltak/org/files/Uni/Projects/code/P046.Israel_MAIAC
 *** meetings
-*** TD MODEL.PM.Israel
-**** [#A] prepare report to alexei				     :meytar:
-**** TODO ILAN YUVAL meeting
-     SCHEDULED: <2015-08-11 Tue>
+**** ILAN YUVAL meeting
 ****** base for meeting
- no real need for 3 competing models
- combine all into 1 model
-****** aod data
- we don't expect a good liear corr between aod and pm
+no real need for 3 competing models
+combine all into 1 model
+****** SPACE TIME DATASET
+******* data available
+******** monitor data
+data base by yuval
+half hourley data based on MOE monitoring network
+most pollutants in israel and meteorological variables
+Itai's student is working on met data from all stations in Israel (not only MOE) - will contact yuval
+check if he has data from-MISRAD HAHAKLAUT AND MACHON METEOROLOGY
+also met data
+ozone
+toluene/benzene
+etc
+traffic data from "decell"-traffic velocity and density (Ako to BSV including Jerusalem)
+David's student Shimi is working on a model based on the "decell" data with weekends/holidays/seasons
+POPULATION DENSITY-2012
+point emission inventory (shimi has been working with it), nox,sox,pm2.5,pm10,nvoc
+VOC from populTION-population density*factor; how much does it affect the model??
+Hourly wind direction/speed field 3km resolution
+PM and dust
+street map
+
+Itai 
+NDVI-1km
+surface reflectance-create land use map based on the sr data (future project)
+Roads map
+LU
+
+MOE
+country predictive model  - emission rate from traffic - 4 metropolins (from 2002)
+annual data based on working days and private cars
+
+LANDSAT
+PBL- Beit dagan and davis studetn
+elev-from aster
+analyze raw satellite radiance data and relation to pm
+
+
+****Ideas****
+diurnal cycle of pm data
+analyze raw satellite radiance data and relation to pm
+speciciation of particles - jeremy data from 2007, get samples  data from MOE (ilan)
+Yael Etzion and David are working on number concentrations DYLOS technology
+we are creating a database - who will be in charge ? david/itai
+
+next meeting - october 2015
+meytar send raw aod data to ilan~
+
 ****** state strength and weakness of all models
+******* aod data
+we don't expect a good liear corr between aod and pm
 ****** see which spatial/temporal data each group has and combine them into a joint pool for all future exposre studies
 ****** check spciaction from MOEP to see which componenets (traffic vs secondary ) are in each city and vs rural areas
-   will be also good for goescehm model
-   ask david about that
-   borrow a haravrd based filter- talk to petros
+will be also good for goescehm model
+ask david about that
+borrow a haravrd based filter- talk to petros
+
+*** TD MODEL.PM.Israel
+**** [#A] prepare report to alexei				     :meytar:
 **** TODO Exclude high percentiles in PM-AOD data in israel (clean data)
 after first performing box plot and outlier analysis and trying to understand the origin of the “errors”
 *** explore
@@ -117,9 +163,11 @@ talk to petros
 compare EC and OC from speciation and compare
 we want to show that one picks up traffic well while the other picks up transported PM mainly
 **** look at aod azimuths
+     :PROPERTIES:
+     :ID:       b1be0a3f-9680-4827-b327-7ac82c5881a2
+     :END:
 use data with 30 degree azimuths that should be better:
 either subset data by that or play with these azimuths as weights in a model 
-
 **** EXP check in Israel for next iteration
 composition of PM in israel
 teom at 50 celsius  may over measure and introduce noise to pm25.
@@ -128,8 +176,6 @@ put that in the paper teom is limited
 -why do we correlate 24h and not by overpass
 -better regions
 -a mean 20km mpm excluding the actual monitoring data. works very well as predictor but we have mod 2 problem. Also David dosent like it.
-**** israel next paper: check how model preforms in lag baomer and yom kipur
-
 **** Check the fit of the model in two different holidays: Yom Kipur and Lag Baomer. Check with David if he has someone working on this topic.
 **** use as a base model the LUR and see how much the aod add to it (rather than the other way)
 **** try use in the model both the abs error (norm 1) the sqrt of it (norm 2) to learn what gives most of the errors (season?, special daily conditions?, etc.).
@@ -153,7 +199,6 @@ file:/home/zeltak/org/files/Uni/Projects/code/P031.MAIAC.France
 Try to use prev post day lags for areas missing Met
 ***** DONE PM10.25 analysis
 ***** TODO take a look at the us data and check the correlations between trimesters
-
 **** TODO create 24h mean pm10/25 for each station in france	     :meytar:
 **** TODO ndvi and temperature data TS availability 		       :itai:
 **** TODO run nested analysis by cluster			     :meytar:
@@ -487,6 +532,15 @@ look at change in delta air pollution vs delta of change in outcome
 compare this to tel aviv and hadera
 this is done per SSA in haifa and tel aviv and hadera for the whole city
 
+
+**** Hila
+created mean head circumference (HC)  and BW per ssa
+creates maps of exposure by SSA from each contour pollutant
+cluster and hot spots getis ord score
+annova- HC and BW per cluster
+TODO:
+t- test for each cluster
+if the annova is signficant then run a regression and report results
 
 ** OSM-environmental health project (lara)
 *** info file
@@ -1080,7 +1134,8 @@ lowest level
 ** Model.Ta 
 *** stage 3 regression by grid cell
 You do not need to run a model with a random effect for each grid cell. Instead, you can run a separate regression for each gridcell, regressing the non-missing predicted Ta against the mean of monitored Ta within 100km. This gives you 1 million regressions to do, but you can divide the gridcells into 100 groups and run 100 jobs on the cluster and it will run in an hour. We do this when we regress the 5000,000 methylation sites against predictors in the NAS.  Also, we need some of the land use terms.
-
+*** tmin tmax use 4 measuremtns per day and use aqua and terra talk to
+*** calibrate aqua and terra seperatly and then average them after the callibration stage (pre mod2)
 ** Future exposure models 
    :PROPERTIES:
    :ID:       03c79a3e-10b4-4295-b91f-d0c4f38e9497
@@ -1374,6 +1429,35 @@ look at time series analysis
  -lets take one year 2004  and focus on this. we will send you pm data. lets try to debug this
  issues we hypothesis: humidity and salt along the near shore area.
 
+** Alexandra
+*** shai kaplan
+**** works on WRF model to first look at geo-climate changes in israel 2010 compared to 2050
+**** TODO another paper looking at these changes and what they mean for urban planning and urban development-perhaps cobine forces there?
+**** BSV and different climate scenarios- the WRF 1km data level is to coarse for that
+*** ADAR
+**** EHF aim 1- develop spatio temporal Air temperture modles for israel
+
+COMPARE  4 models :
+alexandra model  (lansat)
+adar model
+kriging
+monitor statiobns
+*** MAIAC
+**** base correlation in israel pretty bad
+AOD-PM raw regression sucks 0.1-0.15 R2
+what cleaning methods do you do
+do you see temporal diffranecs and or spatial differences in israel
+**** model for epi study Haifa-BSV area
+**** low yearly aod values and compared to DB which is higher in south of israel
+     :PROPERTIES:
+     :ID:       2e8f3c0f-f1a7-4cd3-a9f8-e7a716aec127
+     :END:
+we should look at wind speed from reanalysis data/station to see if these areas have low or high ws values
+
+**** look at azimiths
+**** meeting with Alexei- Joel invited him 
+do you have any questions to raise
+**** composition of PM in israel
 * gmail recovery
 ** לגבי ה-IDW, לא חובה לעבוד עם אובייקטים מרחביים (SpatialPointsDataFrame), אפשר לעבוד עם data.frame.
 https://mail.google.com/mail/u/0/#search/%3Cmichael.dorman%40mail.huji.ac.il%3E+Re%3A+Link/14e07836f0d509d7
@@ -1394,3 +1478,4 @@ heburris@bidmc.harvard.edu RE: paperwork issues
 ** TODO ask allan						      :allan:
 how to address cells missing with people when building a TS dataset with 1km exposure metrics
 how to deal with cells with people but not cases
+** TODO open a bgu lab github

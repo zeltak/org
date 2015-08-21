@@ -3999,6 +3999,55 @@ make sure that there are no more then 31 tags
  subtle currently cant have more then 31 tags
 
 ** Tiling WM's
+*** Define default X applications
+**** method 1- using mime
+https://github.com/march-linux/mimi
+
+you can define a list of 'how-to-open' in file:~/.config/mimi/mime.conf
+₆In example₆ 
+
+#+begin_EXAMPLE
+text/: gvim
+application/pdf: 
+video/: mpv
+image/: gthumb
+audio/: vlc
+application/x-tar: file-roller
+application/x-gzip: file-roller
+application/x-bzip2: file-roller
+application/x-rar: file-roller
+application/x-xz: file-roller
+application/zip: file-roller
+inode/directory: spacefm
+http: chromium
+https: chromium
+magnet: transmission-remote-gtk
+spotify: spotify
+#+end_EXAMPLE
+$Note$ the above syntax can be simplified by using:
+rar: xterm -e 2a
+but if you have time, using mime-type is more precise
+
+or you are lazy, mimi will search a best-fit app using .desktop file. Best fit is defined as the first option sorted by mime order and then , if they have the same mime order, reverse sorted by generality
+For example, the best-fit app says it can open 'text/html' in the very beginning of its mime definition. if two or more apps have the same priority, then we choose the app that can open the most number of file types.
+
+search order
+for example, I want to define how to open 'text/html'. mime will search in order like this
+
+'txt' in your config
+in your config (i.e. http, ftp, magnet) ...etc.
+'text/html' in your config
+'text/' in your config
+'text/html' in .desktop
+'text/' in .desktop
+if mimi still cannot find anything, it will open dmenu and bug you.
+note:
+
+sometimes, mimi is smart enough to figure out protocol based on mime-type when it searches for .desktop.
+sometimes, if an app requires a terminal to run (ncurses programs), mimi is able to find one terminal app in .desktop.
+
+
+
 *** General
 **** xprop-check window name/class					:Fav:
 issue the following in the term:
@@ -13223,6 +13272,27 @@ You thenb Paste that text into your teamocil config:
       - commands:
          - watch free -m
 #+END_SRC
+***** getting info on sessions
+
+#+BEGIN_SRC sh
+tmux lsp -aF'#{session_name}:#{window_index}.#{pane_index}  #{window_name}   #{pane_current_command}   "#{pane_title}" '
+#output
+Lap:1.1  Home   tmux   "zx1voics"
+Lap:1.2  Home   zsh   "zx1voics"
+Lap:1.3  Home   zsh   "zx1voics"
+Lap:2.1  git/rsync   zsh   "zx1voics"
+Lap:2.2  git/rsync   zsh   "zx1voics"
+Lap:3.1  htop   htop   "zx1voics"
+Lap:4.1  Mm_services   zsh   "zx1voics"
+#+END_SRC
+in the above example:
+session_name=Lap
+window_index=1
+pane_index=2,        
+window_name=Home
+pane_current_command=zsh            
+pane_title=zx1voics     
+default title is the hostname, if nothing has set it tosomething else                                         
 
 **** urxvt
 ***** install perl-scripts
@@ -40223,7 +40293,6 @@ Assuming the media is stored locally (and the server paths are empty), this will
 **** Synchronizing org files with Unison
 This describes how to synchronize org files using the [[http://www.cis.upenn.edu/~bcpierce/unison/][Unisonfile synchronizer]], as well as how to configure it to use an external tool to merge conflicting edits. also see:
 http://orgmode.org/worg/org-tutorials/unison-sync.html
-***** Synchronization
 
 Unison is a file synchronizer, thus it may be used to synchronize org files. To
 configure Unison, on uses a /profile/ which states where the things to
@@ -40251,8 +40320,8 @@ root = ssh://address@hidden/relative/path/to/dir2
 servercmd = /usr/bin/unison
 #+END_EXAMPLE
 
-***** Merging
-****** details intro
+**** Merging
+***** details intro
 As Unison works on the level of files, it will trigger a /conflict/ if both files have changed since the last synchronization. In that case one can only choose which file to keep, which is not satisfying. Unison offers the possibility to use external tools to merge the files. There is an [[http://www.cis.upenn.edu/~bcpierce/unison/download/releases/stable/unison-manual.html#merge][extensive manual section]] regarding this, we'll just describe how to use emacs and ediff to do it.
 
 For better merging, we will ask unison to keep the last synchronized version of every org file on the client; this way we can use ediff with ancestor. These ~currentbackup~ files may live alongside the synchronized files (with names of the form ~.bak.version.name~, which is configurable) or in a central location.
@@ -40273,6 +40342,11 @@ merge = Name .org -> emacsclient -c --eval '(ediff-merge-files-with-ancestor
 "CURRENT1" "CURRENT2" "CURRENTARCH" nil "NEW")'
 
 #+END_EXAMPLE
+
+`CURRENT1` is replaced by the name of (a temporary copy of) the local variant of the file.
+`CURRENT2` is replaced by the name of a temporary file, into which the contents of the remote variant of the file have been transferred by Unison prior to performing the merge.
+
+
 
 The ~backupcurrent~ option tells unison to keep a backup of the last
 synchronized version of ever file with an ~org~ extension. The location of the
@@ -40303,7 +40377,7 @@ merge = Name .org -> emacsclient -c --eval '(ediff-merge-files "CURRENT1"
 "CURRENT2" nil "NEW")'
 
 #+END_EXAMPLE
-****** zeltak methods
+***** zeltak methods
 $Note$ the left side will be the file changed locally ("CURRENT1") while the right side will be the file changed remotely ("CURRENT2")  
 
 copy the required bits to the local (or remote if you preffer) file and save it

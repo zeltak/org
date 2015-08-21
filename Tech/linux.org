@@ -17850,6 +17850,14 @@ you only edit the gist on the github website
 ₆In example₆ https://gist.github.com/zeltak/287a9f894d3c06a7568a
 
 then you add the above adress to the cvim setting, save and press sync
+*** qutebrowser 
+**** settings
+user configuration
+You will find the configuration files of qutebrowser in your XDG_CONFIG_HOME (or ~/.config) under qutebrowser/. The main configuration happens in the file qutebrowser.conf, which is organized in sections like an ini-file. For example, under [searchengines] you can configure your search engines as described by the comment. To add a shortcut for searching the the arch wiki, add these two lines:
+archwiki = https://wiki.archlinux.org/?search={}
+aw = ${archwiki}
+Now - in qutebrowser - you can search the arch wiki for an article about qutebrowser via :open aw qutebrowser which will bring you to this page. As per the standard configuration the key mapping 'o' will subsitute :open, so typing o aw <your search term> will henceforth allow you to quickly search the arch wiki.
+
 
 ** multimedia
 *** filebot
@@ -25469,6 +25477,22 @@ distribution, such as from Carbon emacs, Aquamacs, ErgoEmacs. Starting
 emacs with "-Q" is like running a bare bone GNU Emacs.
 
 ******* .emacs
+******** start an alternate .init file
+start Emacs like this
+
+#+BEGIN_SRC sh
+emacs -q --load "/path/to/init.el"
+#+END_SRC
+where init.el is your custom init
+if you use a orgmode type setting setup in the custom init make sure to point to that custom org config
+
+#+BEGIN_EXAMPLE
+(require 'org)
+(org-babel-load-file
+(expand-file-name "mu4esettings.org"
+                   user-emacs-directory))
+#+END_EXAMPLE
+
 ******** Org mode file as a emacs config
 
 For a simple example of usage, follow these 5 steps:
@@ -28556,7 +28580,31 @@ Example of key sequence starting with the ▤ Menu key.:
 
  (global-set-key (kbd "<menu>") 'xah-fly-leader-key-map) 
 #+END_SRC
+******** The difference between "<return>" and "RET" (and TAB <tab>)
 
+What's the difference between emacs "<return>" and "RET" key notation?
+"<return>" is the Return ↩ key while emacs runs in a graphical user interface.
+
+"RET" is the Return ↩ key while emacs runs in a terminal.
+
+"RET" is also equivalent to "C-m" (【Ctrl+m】). (For why, see: Emacs's Key Notations Explained (/r ^M C-m RET <return> M- meta))
+
+if you define:
+
+(global-set-key (kbd "<return>") 'backward-char)
+and run emacs in terminal, your keybinding will have no effect.
+
+you need to use:
+
+(global-set-key (kbd "RET") 'backward-char)
+But the problem is, by binding (kbd "RET"), you are also binding (kbd "C-m"), regardless you run emacs in terminal or GUI.
+
+What's the difference between emacs "<tab>" and "TAB" key notation?
+Same situation for "<return>" vs "RET".
+
+Here, "TAB" is equivalent to "C-i".
+
+Same for "ESC" == "C-[".
 ******* look and feel
 ******** fonts
 ******** faces 	 
@@ -31401,6 +31449,25 @@ Note: emacs's regex is not the same as Perl or Python's, but similar. For a summ
 use regex search (M-C-%)
 and enter this as a search pattern
 [0-9]
+******** flush lines (delete query regex based lines )
+Emacs makes it easy to remove the answers using
+
+M-x flush-lines  ^ANS
+
+As it says in the documentation, flush-lines deletes lines containing matches for REGEXP (in this case all lines starting with ANS)
+
+Use flush-lines to delete blank lines as follows:
+
+M-x flush-lines ^$
+
+M-x keep-lines is the inverse of flush-lines, handy if you want a sheet with the answers only
+
+M-x how-many returns the number of occurrences of REGEXP following the point. Handy for counting how many ANS: there are.
+
+M-x occur opens a buffer showing all lines in the current buffer containing a match for REGEXP.  See this post on stylesheets for more on this.
+
+Lastly, map-query-replace-regexp will replace a matches for a regexp in rotation. As a simple example, suppose you want assign a group to a collection of students:
+
 ******* setting (lisp)
 ******** setting common variables at once (setq)
 
@@ -38999,11 +39066,14 @@ crontab -e
 #+BEGIN_EXAMPLE
 */3 * * * * /usr/bin/mbsync gmail >> /tmp/mbsynclog 2>&1
 #+END_EXAMPLE
+**** restaring if some services don't work (offlineimap etc)
+if you see that some services (₆In example₆ offline imap ) stopped working just restart cronie
 
+#+BEGIN_SRC sh
+sudo systemctl restart cronie 
+#+END_SRC
 **** intro
-Cron-Intro
- 
- For cron to run user-scheduled tasks, it reads a file called crontab.
+For cron to run user-scheduled tasks, it reads a file called crontab.
  Each user has her own version of this file, which is stored in the
 /var/spool/cron/crontabs directory.
  This file can be edited in a text editor, but a special command should
@@ -40319,6 +40389,34 @@ root = ssh://address@hidden/relative/path/to/dir2
 
 servercmd = /usr/bin/unison
 #+END_EXAMPLE
+**** Backups
+Keeping Backups
+
+When Unison overwrites a file or directory by propagating a new version from the other replica, it can keep the old version around as a backup. There are several preferences that control precisely where these backups are stored and how they are named.
+
+To enable backups, you must give one or more backup preferences. Each of these has the form
+    backup = <pathspec>
+where <pathspec> has the same form as for the ignore preference. For example,
+    backup = Name *
+causes Unison to keep backups of all files and directories. The backupnot preference can be used to give a few exceptions: it specifies which files and directories should not be backed up, even if they match the backup pathspec. 
+
+It is important to note that the pathspec is matched against the path that is being updated by Unison, not its descendants. For example, if you set backup = Name *.txt and then delete a whole directory named foo containing some text files, these files will not be backed up because Unison will just check that foo does not match *.txt. Similarly, if the directory itself happened to be called foo.txt, then the whole directory and all the files in it will be backed up, regardless of their names. 
+
+Backup files can be stored either centrally or locally. This behavior is controlled by the preference backuplocation, whose value must be either central or local. (The default is central.) 
+
+When backups are stored locally, they are kept in the same directory as the original.
+
+When backups are stored centrally, the directory used to hold them is controlled by the preference backupdir and the environment variable UNISONBACKUPDIR. (The environment variable is checked first.) If neither of these are set, then the directory .unison/backup in the user's home directory is used.
+
+The preference maxbackups controls how many previous versions of each file are kept (including the current version). 
+
+By default, backup files are named .bak.VERSION.FILENAME, where FILENAME is the original filename and VERSION is the backup number (1 for the most recent, 2 for the next most recent, etc.). This can be changed by setting the preferences backupprefix and/or backupsuffix. If desired, backupprefix may include a directory prefix; this can be used with backuplocation = local to put all backup files for each directory into a single subdirectory. For example, setting
+    backuplocation = local
+    backupprefix = .unison/$VERSION.
+    backupsuffix = 
+will put all backups in a local subdirectory named .unison. Also, note that the string $VERSION in either backupprefix or backupsuffix (it must appear in one or the other) is replaced by the version number. This can be used, for example, to ensure that backup files retain the same extension as the originals.
+
+For backward compatibility, the backups preference is also supported. It simply means backup = Name * and backuplocation = local.
 
 **** Merging
 ***** details intro

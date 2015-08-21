@@ -10,9 +10,10 @@
 libname cc 'Y:\Projects\P042_Medicare_DVT\3.1.10.4.Work\2.Gather_data\FN008_cases\' ;
 
 data cases ;
-set cc.pecases;
+set xo.ap_counts;
 drop pmnew--temp_fmayear;
 run; 
+
 
 
 libname xo 'Y:\Projects\P042_Medicare_DVT\3.1.10.4.Work\3.Analysis\AN001_CasesXover\' ;
@@ -157,7 +158,7 @@ proc sort data=exposures; by  date;run;
 	 run;
 
 
-data xo.try_all_PE; set hazard3;
+data xo.try_all_ap; set hazard3;
 *dow=weekday(date2);
 /*white=0;black=0;othrace=0;*/
 /*if race2=1 then white=1; *white;*/
@@ -198,8 +199,6 @@ options nonotes nosource nosource2 ;
 
 
 
-
-
 /*VVVV*/
 
 proc printto log="f:\Uni\Projects\P020_Temprature_NE_MIA\3.Work\3.Analysis\AN_001_mods\filename.log"; run;
@@ -213,7 +212,7 @@ if pmnewma1 > 35 then delete;
 run; 
 
 
-	proc phreg data=xo.try_all_PE  nosummary;
+	proc phreg data=xo.try_all_AP  nosummary;
     model time*case(0) = pmnewma1 temp_fma1 sex age wd1--wd6;
     strata  QID  date;
 	ods output ParameterEstimates=Tpmnewma1;

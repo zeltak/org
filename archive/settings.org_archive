@@ -1295,3 +1295,15 @@ http://kitchingroup.cheme.cmu.edu/blog/2015/06/21/Clickable-email-addresses-in-e
 
   ;; (add-hook 'text-mode-hook 'highlight-email-addresses)
 #+END_SRC 
+
+* ob-sudo
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-08-15 Sat 17:45
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages
+  :ARCHIVE_CATEGORY: settings
+  :END:
+@Warning-this breaks mu4e for some reason@   
+#+BEGIN_SRC emacs-lisp :results none
+(add-to-list 'load-path "/home/zeltak/.emacs.g/ob-sudo/")
+#+END_SRC

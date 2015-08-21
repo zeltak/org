@@ -1,3 +1,5 @@
+# -*- mode:org; epa-file-encrypt-to: ("ikloog@gmail.com") -*-
+
 #+TAGS: Fav(f) Most_used(m) PreR(p)
 #+TITLE: TODO
 #+STARTUP: overview  inlineimages eval: (org-columns)
@@ -8,15 +10,33 @@
   :PROPERTIES:
   :ID:       70feaa43-c66b-4675-89f5-9ae26bddc03e
   :END:
+** org agenda
+use multi occur hotkeys?
 ** rofi tmux switch to pane
 write a script that takes an input of all tmux open panes and switches to it
 ** macro for close window and focus previous one as full frame 
 ** robust password store /gnupg/ .ssh backup
-** add example block to F4
+** bloody org links make sense of it
+*** fix helm menu
+[[id:b9436f8a-478b-4f98-8bc8-65697ffb8c78][link to any header]]
 ** fasd
 https://github.com/clvv/fasd
+** investigate repeat last command Emacs
+C-x za
+** Better CLI Linux tools for sysadmin:
+  htop/atop > top
+ss > netstat
+ip > ifconfig
+dig > nslookup
+mtr > ping+traceroute
+collectl > sar
+less > more
+multitail /log/file1 file2 > tail -f /log/file
+** Volume levels for sys AND mpd on i3 blocks 
 ** gnus
 *** inline images
+** start using lists
+http://orgmode.org/manual/Plain-lists.html#Plain-lists
 ** capture via gmail
 You could also use a %x in a capture template to assist in capturing a   
 selection made on your gmail message.  Eg, select Subject: line, then    
@@ -672,11 +692,37 @@ keybind to quickly enable/disable cvim
 http://pragmaticemacs.com/emacs/searching-multiple-files-with-rgrep/
 ** encrypt org files
 <2015-08-06 Thu 07:29>
-
 http://orgmode.org/worg/org-tutorials/encrypting-files.html
 
- 
+@Warning Emacs Backup Files - a Warning.@
 
+With org-crypt, if you have autosave turned on and decrypt the entries, the autosave file will contain the entries in plain text. For this reason your should disable autosave for encrypted files.
 
+*** Encrypting the Whole File Using EasyPG.
 
+If you want to encrypt the whole file using gnupg, but still have the decrypted file recognized as an org file, you should make:
 
+# -*- mode:org; epa-file-encrypt-to: ("me@mydomain.com") -*-
+the first line in the file. Where "me@mydomain.com" is the email address associated with your default gnupg key. Note that gpg encrypted files should be saved with the default extension of .gpg.
+
+When you open the file you will be prompted for your password and Emacs will display the decrypted contents in org-mode. When you save the file it would automatically be encrypted.
+*** Encrypting Specific Entries in an org File with org-crypt.
+
+If you just want to encrypt the text of an entry, but not the headline, or properties you can use org-crypt. In order to use org-crypt you need to add something like the following to your .emacs:
+
+(require 'org-crypt)
+(org-crypt-use-before-save-magic)
+(setq org-tags-exclude-from-inheritance (quote ("crypt")))
+;; GPG key to use for encryption
+;; Either the Key ID or set to nil to use symmetric encryption.
+(setq org-crypt-key nil)
+Now any text below a headline that has a :crypt: tag will be automatically be encrypted when the file is saved. If you want to use a different tag just customize the "org-crypt-tag-matcher" setting.
+
+Preventing tag inheritance stops you having encrypted text inside encrypted text.
+
+To decrypt the text just call "M-x org-decrypt-entry" and the encrypted text where the point is will be replaced with the plain text. If you use this feature a lot, you will probably want to bind "M-x org-decrypt-entry" to a key.
+
+Entries with a :crypt: tag will be automatically be encrypted when you save the file.
+
+If you have autosave turn
+** test efile

@@ -1,8 +1,8 @@
-libname full 'Z:\Projects\P042_Medicare_DVT\3.1.10.1.Raw_data\PM\' ;
+libname full 'Y:\Projects\P042_Medicare_DVT\3.1.10.1.Raw_data\PM\' ;
 
 
 
-libname cc 'Z:\Projects\P042_Medicare_DVT\3.1.10.4.Work\2.Gather_data\FN008_cases\' ;
+libname cc 'Y:\Projects\P042_Medicare_DVT\3.1.10.4.Work\2.Gather_data\FN008_cases\' ;
 
 data cases ;
 set cc.cases;
@@ -147,7 +147,7 @@ run;
 
 
 PROC EXPORT DATA= WORK.times7
-            OUTFILE= "Z:\Projects\P042_Medicare_DVT\3.1.10.4.Work\3.Analysis\AN002_timeseries\all_0008_PE.csv" 
+            OUTFILE= "Y:\Projects\P042_Medicare_DVT\3.1.10.4.Work\3.Analysis\AN002_timeseries\all_0008_PE.csv" 
             DBMS=CSV REPLACE;
      PUTNAMES=YES;
 RUN;
@@ -166,10 +166,18 @@ RUN;
 
 /*create AP data*/
 
-data pecases;
+data apcases;
 set cases;
 where Partery2=1;
 run;
+
+
+data cc.apcases;
+set cases;
+where PulmEmb2=1;
+run;
+
+
 
 
 
@@ -177,6 +185,10 @@ data pecases;
 set pecases;
 count=1;
 run;
+
+
+
+
 
 
 /*This step creates a dataeset with counts per day (date) for cases*/
@@ -291,7 +303,7 @@ run;
 
 
 PROC EXPORT DATA= WORK.times7
-            OUTFILE= "Z:\Projects\P042_Medicare_DVT\3.1.10.4.Work\3.Analysis\AN002_timeseries\all_0008_AP.csv" 
+            OUTFILE= "Y:\Projects\P042_Medicare_DVT\3.1.10.4.Work\3.Analysis\AN002_timeseries\all_0008_AP.csv" 
             DBMS=CSV REPLACE;
      PUTNAMES=YES;
 RUN;

@@ -8083,7 +8083,7 @@ f11-f12 > go up down nicklist
  f5-f6 > go up down buffers
 
 ***** Creating an Alias
-
+      
 To create an Alias to better/quicker operation us the alias command
  for example
 
@@ -8438,8 +8438,17 @@ issue:
 
  the positions shoud be saved for the next session
 
-**** google command line
+***** How to use global history (instead of buffer history) with up and down keys?
+You can bind the up and down keys on global history (default keys for global history are Ctrl+↑ and Ctrl+↓).
 
+Example:
+
+/key bind meta2-A /input history_global_previous
+/key bind meta2-B /input history_global_next
+Note
+Keys "meta2-A" and "meta2-B" may be different in your terminal. To find key code press Alt+k then key (up or down).
+
+**** google command line
 ***** picasa
 
 ***** dl a folder
@@ -13770,6 +13779,7 @@ issue:
  pacgraph -c | fb
 
 **** sxhkd
+https://github.com/baskerville/sxhkd
 ***** Config
 The keysym names are given by the output of `xev`
 
@@ -13825,6 +13835,8 @@ file.
 
 If no configuration file is specified through the -c option, the
 following is used: $XDG_CONFIG_HOME/sxhkd/sxhkdrc.
+***** find out keyname
+use `xev` to find out which key to use with sxhkd 
 ***** reload config
 to reload config after you change it use a SIGUSR1 signal, it will reload its configuration file.
 you can issue a SIGUSR1 with
@@ -27784,8 +27796,11 @@ use the function below and bind it to a key of your liking
       (setq comint-buffer-maximum-size old-max))) 
  #+END_SRC 
 
-******* gnus
+******* Gnus
 http://www.emacswiki.org/emacs/GnusGmail
+******** keys
+delete mail N【B DEL】
+mark multiple emails with # (and unmark with M-#)
 ******** terms
 article-one information piece-email,article etc terms
 backend-a way to get article, mailbox , rss, news backends
@@ -28654,6 +28669,10 @@ $Note$- you can change font,color, weight etc..
 
 also $Note$ that the above is relevant to leuven but other theme configs may be differently configed
 
+********* launch Emacs from command line  with a specific theme 
+#+BEGIN_SRC sh
+emacs  --eval="(load-theme 'wombat)"  
+#+END_SRC
 ******** menus
 ********* create custom menus
 the best way is to use easy menu:
@@ -31923,8 +31942,51 @@ Switch back to the startup visibility of the buffer, i.e., whatever is requested
 To read the on-line documentation try:
 ?M-x org-info ?
 ******** Install
-********* Downloading Org as an archive					:Fav:
+********* Using Emacs packaging system from org repp (RECOMMENDED WAY)
+orgmode.org hosts Org ELPA archives.
 
+Add this to your Emacs init file to be able to list the Org mode archives:
+
+#+begin_src emacs-lisp
+(require 'package)
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+#+end_src
+
+Then M-x list-packages RET will list both the latest` org` and `org-plus-contrib` packages.
+!you need to install both!
+
+org-contains the same set of files that are included in GNU Emacs.
+org-plus-contrib- contains these files plus all contribs files, the ones you find in contrib/ from the git repo.       
+********* install from Git
+ You can clone Org's repository and install Org like this:
+
+ #+BEGIN_EXAMPLE
+ cd ~/.emacs.d/src/org-mode/
+ git clone git://orgmode.org/org-mode.git
+ make autoloads
+ #+END_EXAMPLE
+
+ Note that in this case, =make autoloads= is mandatory: it defines Org's
+ version in org-version.el and Org's autoloads in org-loaddefs.el.
+
+ Remember to add the correct load-path as described in the method above.
+
+ You can also compile with =make=, generate the documentation with
+ =make doc=, create a local configuration with =make config= and install
+ Org with =make install=. Please run =make help= to get the list of
+ compilation/installation options.
+
+ For more detailed explanations on Org's build system, please check the
+ Org Build System page on
+ [[http://orgmode.org/worg/dev/org-build-system.html][Worg]].
+
+to update :
+ #+BEGIN_EXAMPLE 
+ cd ~/.emacs.d/src/org-mode/
+ git pull 
+ make autoloads
+ #+END_EXAMPLE
+********* Downloading Org as an archive					:Fav:
 You can download Org latest release from [[http://orgmode.org/][Org's website]] and simply extract them to where you want, in my case
 
 file:/home/zeltak/.emacs.d/nonelpa/org
@@ -31941,61 +32003,6 @@ your load-path:
 #+BEGIN_SRC lisp
 (add-to-list 'load-path "~/path/to/orgdir/contrib/lisp" t)
 #+END_SRC
-
-********* Using Emacs packaging system
-
-Recent Emacs distributions include a packaging system which lets you
-install Elisp libraries. You can install Org with M-x package-install
-RET org. You need to do this in a session where no =.org= file has been
-visited. Then, to make sure your Org configuration is taken into
-account, initialize the package system with =(package-initialize)= in
-your .emacs before setting any Org option. If you want to use Org's
-package repository, check out the [[http://orgmode.org/elpa.html][Org ELPA page]].
-
-********* Using Org's git repository
-       
-
-You can clone Org's repository and install Org like this:
-
-#+BEGIN_EXAMPLE
-cd ~/src/
-git clone git://orgmode.org/org-mode.git
-make autoloads
-#+END_EXAMPLE
-
-Note that in this case, =make autoloads= is mandatory: it defines Org's
-version in org-version.el and Org's autoloads in org-loaddefs.el.
-
-Remember to add the correct load-path as described in the method above.
-
-You can also compile with =make=, generate the documentation with
-=make doc=, create a local configuration with =make config= and install
-Org with =make install=. Please run =make help= to get the list of
-compilation/installation options.
-
-For more detailed explanations on Org's build system, please check the
-Org Build System page on
-[[http://orgmode.org/worg/dev/org-build-system.html][Worg]].
-******** `Update org from Git`
-
-#+BEGIN_EXAMPLE 
-cd ~/.emacs.d/src/org-mode/
-git pull 
-make autoloads
-#+END_EXAMPLE
-
-******** Basic setup
-Here are a few things about basic setup that many people change.
-
-org-directory
-Where are my Org files typically located? Org acutally uses this variable only under rare circumstances, like when filing remember notes in an interactive way and prompting you for an Org file to put the note into.
-org-agenda-files
-Which files do I want to be checked for entries when compiling my agenda? Many people do not customize this one, but just use C-c [ and C-c ] to add or remove the current file, respectively.
-org-startup-folded
-When visiting an Org file, in what folding state do I first want to see it? Many use #+STARTUP options to set this on a per-file basis.
-org-archive-location
-When archiving an entry, where will it go?
-
 ******* table 
 ******** find which row/column your in
  The easiest way to learn about references is to type C-c ? while you are in a field.
@@ -33897,6 +33904,20 @@ use this
 :VISIBILITY: folded
 :END:
 #+END_EXAMPLE
+
+******** Applying Markup to Strings in org-mode
+Normally, org-mode ignores your attempts to markup text that starts with " or '. That’s probably a safe measure because "~/" is a very common string to write but ~ is one of Org’s markup elements.
+
+Fixing that is a simple matter, but it takes a bit of digging around. We just need to remove those two characters from the 3rd element of org-emphasis-regexp-components.
+#+begin_src emacs-lisp
+;; This HAS to come before (require 'org)
+(setq org-emphasis-regexp-components
+      '("     ('\"{“”"
+        "-   .,!?;''“”\")}/\\“”"
+        "    \r\n,"
+        "."
+        1))
+#+end_src
 
 ******* org-google sync 
 ******** org-gcal
