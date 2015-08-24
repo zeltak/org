@@ -296,6 +296,11 @@ Input vector Layer – the layer that contains the source objects
 Buffer Distance – the distance the buffer will extend from the source objects
 Buffer Distance Field – alternatively QGIS can use a value from a numeric field, this makes drawing variable width buffers for features in the same layer easy e.g. Sites rated High Sensitivity could be updated with a buffer distance of 1,000m, sites rated Medium Sensitivity could be updated with a buffer distance of 500m.
 Dissolve Buffer Results. The default is to combine the buffers into one region. Enabling this creates a separate region for each source object.
+*** Add XY centroids to polygons
+**** option 1
+Load in your polygon
+Go to the menu -> Vector -> Geometry tools -> polygon centroid and create a centroid point layer
+Export the coordinates of the created centroid to the attribute
 ** raster
 *** gdal related
 **** bugs/errors
