@@ -24852,6 +24852,26 @@ you will need to restart synergy
 make sure client is marked in gui (and the server is unchecked)
 add the IP of the server
 start both server and client synergys and your good to go
+*** fasd
+
+to setup put in zshrc/bashrc
+
+#+BEGIN_SRC sh
+#fasd
+eval "$(fasd --init auto)"
+#+END_SRC
+
+useful fasd arguments
+-s         list paths with ranks
+-l         list paths without ranks
+-i         interactive mode
+ 
+
+a shell function "z" is part if fasd that resembles the functionality of "autojump."
+
+Tab support is available in bash/zsh
+
+        
 ** virtualizations
 *** virtualbox
 **** vbox on arch
@@ -26441,6 +26461,195 @@ then call align-regexp  you get:
 ******** How do I met to the menu in Emacs in console mode
 M-x menu-bar-open, which is usually bound to ?F10? (or ?C-F10?). This works with and without menu-bar-mode (which just shows the names of the menus at the top of the screen).
 ******* config/Elisp
+******** Emacs base functions 
+********* setq
+Function: (setq [ SYM VAL ]…)
+
+Comment: A really fundamental function for customizing Emacs settings. An Emacs setting is really just a variable. Emacs has GUI for changing setting, but setq a variable is also equivalent.
+
+Example:
+
+#+begin_src emacs-lisp
+(setq global-mark-ring-max 50000)
+#+end_src
+********* load 
+Function: (load FILE &optional NOERROR NOMESSAGE NOSUFFIX MUST-SUFFIX)
+
+Comment: This function allows you to load a file. FILE is the a filename that is looked up in the variable load-path. Do you notice &optional keyword? When you see this keyword, it means everything after &optional is, optional. The parameters NOERROR, NOMESSAGE, NOSUFFIX, MUST-SUFFIX are not required to be passed into the function if you don't need. However, if you want to pass an argument into the place of one a parameter, you must also pass arguments to all the parameters to the left of your chosen parameter. For example, if you want to pass an argument into NOSUFFIX, you are required to pass arguments into NOERROR, NOMESSAGE first. You are safe to ignore everything after your chosen parameter, and in our example, it's MUST-SUFFIX.
+
+Example:
+#+begin_src emacs-lisp
+(load (substitute-in-file-name "$HOME/.emacs.d/module")) ;; first try to load module.elc; if not found, try to load module.el
+(load (substitute-in-file-name "$HOME/.emacs.d/module.el")) ;; only load module.el
+(load (substitute-in-file-name "$HOME/.emacs.d/module.elc")) ;; only load module.elc
+(load "module") ; search for the file module.el or module.elc in variable load-path
+#+end_src
+********* require
+Function: (require FEATURE &optional FILENAME NOERROR)
+
+Comment: If you install a package from M-x list-packages, to load that package, use (require 'installed-package).
+
+Example: For example, you installed package volatile-highlights, to load it:
+#+begin_src emacs-lisp
+
+(require 'volatile-highlights)
+#+end_src
+********* provide 
+Function: (provide FEATURE &optional SUBFEATURES)
+
+Comment: You can use this function at the end of a file to turn the file into a loadable module that is only loaded when called with require.
+
+Example:
+
+Suppose that in a file setup-editing.el, you put this line at the bottom:
+
+#+begin_src emacs-lisp
+(provide 'setup-editing)
+#+end_src
+
+Then, even if you load it with load function, it won't be activated. To activate, you have to execute (require 'setup-editing).
+********* add to list
+Function: (add-to-list LIST-VAR ELEMENT &optional APPEND COMPARE-FN)
+
+Comment: Add an element ELEMENT to a list named LIST-VAR.
+
+Example:
+#+begin_src emacs-lisp
+(add-to-list 'load-path "~/.emacs.d/personal") ; add personal to load-path,
+                                               ; so "load" function can search for files in it
+#+end_src
+
+********* add hook
+Function: (add-hook HOOK FUNCTION &optional APPEND LOCAL)
+
+Comment: A hook is a Lisp variable which holds a list of functions, to be called on some well-defined occasion. (This is called running the hook. You can search for hook using C-h v and enter -hook suffix then TAB. Or you can find hooks in Customization Groups.
+
+Example:
+#+begin_src emacs-lisp
+(add-hook 'prog-mode-hook 'linum-mode)
+#+end_src
+
+After you add the function linum-mode - which activates line number on the left margin of your Emacs - then every time you enter a prog-mode, which is the root all programming major modes derive from. A programming mode can be c-mode, asm-mode, emacs-lisp-mode, java-mode…
+
+********* global-set-key
+Function: (global-set-key KEY COMMAND)
+
+Comment: This function binds a command to a key, as you can see in the function interface.
+
+Example:
+
+You can bind in one of the following ways:
+
+(global-set-key (kbd "C-x C-b") 'ibuffer) ;; bind "C-x C-b" to ibuffer command
+(global-set-key "\C-x\C-b" 'ibuffer)  ;; bind "C-x C-b to ibuffer command, but modifier 
+                                      ;; keys must be escaped with the backslash
+(global-set-key [?\C-x?\C-b] 'ibuffer) ;; use vector instead of a string
+
+%I recommend you to use (kbd ...) function because we can write key bindings using our familiar key notations without adding unnecessary characters.%
+
+Vector is array in other languages. Vector was used for mapping function keys, 
+
+such as [left], [right], [up], [down], [f1]...[f12]. But now, you can also map function keys in (kbd ...) function using angle brackets:
+
+(global-set-key (kbd "<f3>") 'kmacro-start-macro-or-insert-counter)
+
+Here are common function keys (remember to wrap them in a pair of angle bracket):
+
+Key	Description
+left, up, right, down	Cursor arrow keys
+begin, end, home, next, prior	Other cursor re-positioning keys
+ 	prior means PageUp
+ 	next means PageDOwn
+select, print, execute, backtab	Miscellaneous keys
+insert, undo, redo, clearline	backtab means S-TAB or C-iso-tab
+insertline, deleteline, insertchar, deletechar	 
+f1, f2, ... F35	Numbered function keys on top of your keyboard
+kp-add, kp-subtract, kp-multiply, kp-divide	Keypad keys (to the right of the regular keyboard)
+kp-backtab, kp-space, kp-tab, kp-enter	, with names or punctuation.
+kp-separator, kp-decimal, kp-equal	 
+kp-0, kp-1, ... kp-9	Keypad keys with digits.
+kp-f1, kp-f2, kp-f3, kp-f4	Keypad PF keys.
+********* define key 
+Function: (define-key KEYMAP KEY DEF)
+
+Comment:
+
+This function binds a definition DEF, usually a command, to a key sequence KEY. A definition can be other things that you can find in the built-in documentation.
+
+A key sequence (key, for short) is a sequence of input events that have a meaning as a unit. Input events include characters, function keys and mouse buttons—all the inputs that you can send to the computer. A key sequence gets its meaning from its binding, which says what command it runs.
+
+When a key sequence KEY is pressed, Emacs runs the associated function. A keymap KEYMAP stores a list of bindings between KEY and definition DEF. Major mode or minor mode uses keymap to provide its own key bindings. A keymap usually has -mode-map suffix, i.e. dired-mode-map; if you want to change or add a key binding in a major mode or minor mode, you use define-key function like this:
+
+Example:
+
+#+begin_src emacs-lisp
+;; Dired uses "e", "f" or RET to open a file
+;; you can reuse one of these keys for different purpose
+;; for example, you can bind it to wdired-change-to-wdired-mode
+;; wdired-change-to-wdired-mode allows you to edit your Dired buffer
+;; like a normal text buffer, such as edit file/directory names,
+;; permission bits.. and then commit the changes to disk.
+;;
+;; "e" is short for "edit"
+;; After finish your editing, "C-c C-c" to commit, "C-c C-k" to abort
+(define-key dired-mode-map (kbd "e") 'wdired-change-to-wdired-mode)
+
+#+end_src
+********* defalias 
+Function: (defalias SYMBOL DEFINITION &optional DOCSTRING)
+
+Comment: defalias allows you to rename a command. It is usually used to abbreviate command name.
+
+Example: Put the following aliases in your init.el:
+
+#+begin_src emacs-lisp
+(defalias 'yes-or-no-p 'y-or-n-p) ; y or n is enough
+(defalias 'list-buffers 'ibuffer) ; always use ibuffer
+
+                                        ; elisp
+(defalias 'eb 'eval-buffer)
+(defalias 'er 'eval-region)
+(defalias 'ed 'eval-defun)
+
+                                        ; minor modes
+(defalias 'wsm 'whitespace-mode)
+#+end_src
+
+********* defun
+
+Macro: (defun NAME ARGLIST &optional DOCSTRING DECL &rest BODY)
+
+Comment: defun is a Lisp macro that allows you to define a function, like any other language. A function is a collection of Lisp forms to be executed. The return value is the last form.
+
+Example:
+
+Create a normal function (Not available in M-x):
+#+begin_src emacs-lisp
+(defun demo ()
+  (message "Hello World" number string))
+#+end_src
+
+Create a command (Available in M-x):
+#+begin_src emacs-lisp
+(defun demo ()
+  (interactive)
+  (message "Hello World"))
+#+end_src
+
+%interactive is a special form that turns a function into a command and allow a command to accept various types of prefix arguments, such as a number, a string, symbol, buffer names…%
+ You can C-h f and type interactive to find out more.
+********* mapc
+Function: (mapc FUNCTION SEQUENCE)
+
+Comment: mapc calls the function FUNCTION on each element of the sequence SEQUENCE.
+
+Example:
+
+#+begin_src emacs-lisp
+;; load every .el file inside ~/.emacs.d/custom/
+(mapc 'load (directory-files "~/.emacs.d/custom" t ".*\.el"))
+
+#+end_src
 ******** issue commands based on hostname in emacs config
 you can config emacs so that some specific commands (such as paths, themes anything really) run on a specific machine while others run on another machine. this can be done based on hostname. 
 here is an example of defining a path for a org-mode plugin based on which machine emacs is run
@@ -31864,7 +32073,7 @@ Keep writing as follows, also made a .folders following HOME
 First, you can start with the Mx wl.
 ******* Terminals
 ******** ansi term 
-	 refixing actions that aren’t recognized by their standard key commands with ‘C-x’. For example, ‘M-x’ becomes ‘C-x M-x’.
+refixing actions that aren’t recognized by their standard key commands with ‘C-x’. For example, ‘M-x’ becomes ‘C-x M-x’.
 *** 'org-mode'
        :PROPERTIES:
        :ID:       be4759e1-2951-4c91-a155-056bc2a16d9f
