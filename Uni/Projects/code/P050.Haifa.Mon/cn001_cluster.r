@@ -71,9 +71,12 @@ ssa$noxclus<-fit$cluster
 ssa <- ssa[noxclus  == 1 , noxclus_o  := "high"]
 ssa <- ssa[noxclus  == 2 , noxclus_o  := "low"]
 ssa <- ssa[noxclus  == 3 , noxclus_o  := "mid"]
-summary(ssa)
+
 #export for mapping
 write.csv(ssa,"/media/NAS/Uni/Projects/P050_Haifa/2.work/SSA/poll_clusters.csv")
+
+
+
 
 #set ztable opt
 options(ztable.type="html")
@@ -81,7 +84,7 @@ options(ztable.type="html")
 
 #PM25 annova 
 #head
-aov.ex1 = aov(Avg_Head1_~as.factor(pmclus),data=ssa)  #do the analysis of variance
+aov.ex1 = aov(Avg_Head1_~pmclus_o,data=ssa)  #do the analysis of variance
 summary(aov.ex1)                                    #show the summary table
 print(model.tables(aov.ex1,"means"),digits=3)       #report the means and the number of subjects/cell
 
@@ -91,7 +94,7 @@ dev.off()
 TukeyHSD(aov.ex1)
 
 #Birth weight
-aov.ex2 = aov(Avg_Weight~as.factor(pmclus),data=ssa)  #do the analysis of variance
+aov.ex2 = aov(Avg_Weight~as.factor(pmclus_o),data=ssa)  #do the analysis of variance
 summary(aov.ex2)                                    #show the summary table
 print(model.tables(aov.ex2,"means"),digits=3)       #report the means and the number of subjects/cell
 png(filename="/media/NAS/Uni/Projects/P050_Haifa/3.results/images/an.pm.bw.png")
@@ -99,38 +102,51 @@ boxplot(Avg_Weight~pmclus,data=ssa)        #graphical summary
 dev.off()
 TukeyHSD(aov.ex2)
 
-
-
-
-
-
-aov.ex1 = aov(Avg_Head1_~as.factor(noxclus),data=ssa)  #do the analysis of variance
+#so2 annova 
+#head
+aov.ex1 = aov(Avg_Head1_~so2clus_o,data=ssa)  #do the analysis of variance
 summary(aov.ex1)                                    #show the summary table
 print(model.tables(aov.ex1,"means"),digits=3)       #report the means and the number of subjects/cell
-boxplot(Avg_Head1_~noxclus,data=ssa)        #graphical summary
-TukeyHSD(aov.ex1)
 
-#annova Birth weight
-aov.ex2 = aov(Avg_Weight~as.factor(noxclus),data=ssa)  #do the analysis of variance
-summary(aov.ex2)                                    #show the summary table
-print(model.tables(aov.ex2,"means"),digits=3)       #report the means and the number of subjects/cell
-boxplot(Avg_Weight~noxclus,data=ssa)        #graphical summary
-TukeyHSD(aov.ex2)
-
-
-#annova head circumfrance
-
-aov.ex1 = aov(Avg_Head1_~as.factor(so2clus),data=ssa)  #do the analysis of variance
-summary(aov.ex1)                                    #show the summary table
-print(model.tables(aov.ex1,"means"),digits=3)       #report the means and the number of subjects/cell
+png(filename="/media/NAS/Uni/Projects/P050_Haifa/3.results/images/an.so2.head.png")
 boxplot(Avg_Head1_~so2clus,data=ssa)        #graphical summary
+dev.off()
 TukeyHSD(aov.ex1)
 
-#annova Birth weight
-aov.ex2 = aov(Avg_Weight~as.factor(so2clus),data=ssa)  #do the analysis of variance
+#Birth weight
+aov.ex2 = aov(Avg_Weight~as.factor(so2clus_o),data=ssa)  #do the analysis of variance
 summary(aov.ex2)                                    #show the summary table
 print(model.tables(aov.ex2,"means"),digits=3)       #report the means and the number of subjects/cell
+png(filename="/media/NAS/Uni/Projects/P050_Haifa/3.results/images/an.so2.bw.png")
 boxplot(Avg_Weight~so2clus,data=ssa)        #graphical summary
+dev.off()
 TukeyHSD(aov.ex2)
+
+#nox annova 
+#head
+aov.ex1 = aov(Avg_Head1_~noxclus_o,data=ssa)  #do the analysis of variance
+summary(aov.ex1)                                    #show the summary table
+print(model.tables(aov.ex1,"means"),digits=3)       #report the means and the number of subjects/cell
+
+png(filename="/media/NAS/Uni/Projects/P050_Haifa/3.results/images/an.nox.head.png")
+boxplot(Avg_Head1_~noxclus,data=ssa)        #graphical summary
+dev.off()
+TukeyHSD(aov.ex1)
+
+#Birth weight
+aov.ex2 = aov(Avg_Weight~as.factor(noxclus_o),data=ssa)  #do the analysis of variance
+summary(aov.ex2)                                    #show the summary table
+print(model.tables(aov.ex2,"means"),digits=3)       #report the means and the number of subjects/cell
+png(filename="/media/NAS/Uni/Projects/P050_Haifa/3.results/images/an.nox.bw.png")
+boxplot(Avg_Weight~noxclus,data=ssa)        #graphical summary
+dev.off()
+TukeyHSD(aov.ex2)
+
+
+#regressions
+
+
+
+
 
 
