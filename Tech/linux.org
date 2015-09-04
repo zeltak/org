@@ -18283,6 +18283,12 @@ $Note- the -k3,3 part must match the field- ₆In example₆ if the first field 
 #+BEGIN_EXAMPLE
 mp3/Star Anna/2012 Keep On/01-Keep On.mp3
 #+END_EXAMPLE
+***** control mpd on another machine through mpc
+₆In example₆ 
+
+#+BEGIN_SRC sh
+MPD_HOST=132.72.154.204 MPD_PORT=6600 mpc prev 
+#+END_SRC
 
 **** errors
 ***** see verbose output when mpd is broken
