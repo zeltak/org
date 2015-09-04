@@ -1392,28 +1392,29 @@ user-defined format for writing the data.
  366 (8) newvar=put(oldvar, date9.); 01jan1961 (9)
 
 ** Rename variables
-
 *** rename variables
-
 To rename a variable in SAS issue set=DB and data=new dataset. in the
 set command add the (rename=(OLD\_name=NEW\_name)) command to rename the
 variable:
- for example:
+for example:
+
  data merg.T2000\_All\_AOD\_step1;
  set merg.T2000\_All\_AOD(rename=(date\_=date2));
  run;
+
  if you have multiple variables use:
  data HDAT.death1\_s2;
  set HDAT.death1(rename=(longitude=x latitude=y));
  run;
- NOTE: SAS dosent change the variable lables so dont get confused
- or in data step:
- **
+
+
+NOTE: SAS dosent change the variable lables so dont get confused
+or in data step:
 
 data allx;
- set all;
- rename lon=x lat=y;
- *run*;
+set all;
+rename lon=x lat=y;
+run;
 
 *** rename method2
 

@@ -1,17 +1,12 @@
 
 libname cc 'Y:\Projects\P042_Medicare_DVT\3.1.10.4.Work\2.Gather_data\FN008_cases\' ;
-
-data cases ;
-set xo.ap_counts;
-drop pmnew--temp_fmayear;
-run; 
-
-
-
 libname xo 'Y:\Projects\P042_Medicare_DVT\3.1.10.4.Work\3.Analysis\AN001_CasesXover\' ;
 libname full 'Y:\Projects\P042_Medicare_DVT\3.1.10.1.Raw_data\PM\' ;
 
-
+data cases ;
+set xo.apd_counts;
+drop pmnew--temp_fmayear;
+run; 
 
 
 data  poll_v3;
@@ -19,12 +14,16 @@ set full.fullpm;
 run; 
 
 
+/*rename*/
+data cases ;
+set cases (rename=(date=INDATE));
+run; 
 
 
-/*Create data with: ID (EncounterID), event date (indate)
+/*Create data with: ID (QID), event date (indate)
 /***Create control days***/
 /***same day of the week within same month***/
-data CVA;set diag;
+data CVA;set cases;
 DOW=WEEKDAY(INDATE);
 CONTROL1=INDATE-7;
 CONTROL2=INDATE-14;
@@ -62,18 +61,22 @@ run;
 data cva;set cva (rename=(indate=control0));run;
 
 /*Sort by ID*/
-%sort(work,cva,EncounterID);
+
+ proc sort data= cva;
+ by QID;
+ run;
 
 /*Restracture*/
 PROC TRANSPOSE DATA=cva OUT=cva1
  PREFIX=control;
  VAR control0-control8 ;
- BY EncounterID;
+ BY QID;
  run;
 
  /*Delete dates that were not within the same month*/
- data cva1;set cva1 (keep=EncounterID _NAME_ control1);
+ data cva1;set cva1 (keep=QID _NAME_ control1);
  where control1>.;run;
+
 
  /***Rename as case day and control days***/
  data cva1;set cva1;
@@ -81,6 +84,11 @@ PROC TRANSPOSE DATA=cva OUT=cva1
  if case=1 then Time=1;else Time=2;
  run;
  proc freq data=cva1;table case;run;
+
+
+data cva1;set cva1 (rename=(control1=day));
+FORMAT CONTROL1 DDMMYY9.;
+run;
 
 /*Merge aodid by subject ID*/
 
