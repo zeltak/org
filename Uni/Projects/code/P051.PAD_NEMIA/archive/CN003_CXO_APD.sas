@@ -1,18 +1,12 @@
 
-libname cc 'Y:\Projects\P042_Medicare_DVT\3.1.10.4.Work\2.Gather_data\FN008_cases\' ;
-libname xo 'Y:\Projects\P042_Medicare_DVT\3.1.10.4.Work\3.Analysis\AN001_CasesXover\' ;
+
+
 libname full 'Y:\Projects\P042_Medicare_DVT\3.1.10.1.Raw_data\PM\' ;
 
 data cases ;
 set xo.apd_counts;
 drop pmnew--temp_fmayear;
 run; 
-
-
-data  poll_v3;
-set full.fullpm;
-run; 
-
 
 /*rename*/
 data cases ;
@@ -83,13 +77,11 @@ PROC TRANSPOSE DATA=cva OUT=cva1
  if _NAME_="control0" then case=1;else case=0;
  if case=1 then Time=1;else Time=2;
  run;
- proc freq data=cva1;table case;run;
-
 
 data cva1;set cva1 (rename=(control1=day));
-FORMAT CONTROL1 DDMMYY9.;
+FORMAT day DDMMYY9.;
 run;
 
-/*Merge aodid by subject ID*/
 
- /*Merge PM by aodid and date*/
+ 
+

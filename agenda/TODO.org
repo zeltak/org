@@ -10,14 +10,7 @@
   :PROPERTIES:
   :ID:       70feaa43-c66b-4675-89f5-9ae26bddc03e
   :END:
-** revel.js
-https://github.com/yjwen/org-reveal#the-hlevel
-** bulk remote editing
-mark vs mark for bulk diff?
-in general how to I mark a bunch of entries like in dired and execurte del/archive/change state etc
-** adda macro/functin close:
-move over to other window and close the winow you came from 
-** org revison
+** @org revison@
 *** TODO todo
 **** TODO gen 
 bind keys for specific todo/spare functions (₆In example₆ allan) 
@@ -136,28 +129,121 @@ use a dropbox repo and add you book you want to sync back to the laptop via drop
  use multi occur hotkeys?
 *** create a daily agenda in orgmode somwhow
 will show me things to do today ranked
-** test new clerk
-   -- | [rasi_] is away: Away (Grund)                                                                
-rasi_ | it's a separate branch for a reason                                                          
-rasi_ | because i am not done with all menus. but i really would like some feedback :P               
-rasi_ | https://github.com/carnager/clerk/archive/tabbed.zip                                         
-      | [http://is.gd/FMEn0I] |
-rasi_ | backup ~/.config/clerk/ before                                                               
-rasi_ | because it will create cache files that are not compatible with current clerk                
-rasi_ | ok, not anymore                                                                              
-rasi_ | cp -a ~/.config/clerk ~/.config/clerk2    ~                                                   
-rasi_ | then get the zip above, extract it, cd to it, run ./clerk                                    
-rasi_ | ehm, ./clerk --update first                                                                  
-rasi_ | its important to run it from the folder itself with ./ - because i call ./clerk_helper inside
-      | the script |
-** Emacs pacakges to try 
-duplicate-thing
-Package: volatile-highlights
-** look for better Emacs diff app 
+** @sync//backup project@
+*** Relevant IP's
+
+| Machine          |             IP | Ports open                                                                       | Comments |
+|------------------+----------------+----------------------------------------------------------------------------------+----------|
+| Linux PC         | 132.72.155.204 | github,                                                                          |          |
+| Synology NAS     | 132.72.152.204 | FTP into machine,github, ssh (22), btsync (UDP/TCP 9999 ,UDP/TCP 8888, UDP 3000) |          |
+| Linux Laptop     | 132.72.154.204 | github                                                                           |          |
+| home qnap        |       10.0.0.2 |                                                                                  |          |
+| hope laptop wifi |      10.0.0.12 |                                                                                  |          |
+
+*** Sync methods     
+**** for all textfile-git
+***** create a central bare repo (or use github)
+****** using github as a central repo
+-create a repo (named zorg) on github
+-cuurently this repo is private
+****** daily workflow for work/lapop
+******* for work
+every morning when i get to work:
+run the ugs.sh script
+
+file:/home/zeltak/bin/ugs.sh
+
+@do not use laptop during the day to edit@
+all editing should be done on work PC
+
+before leaving work run the same script
+
+file:/home/zeltak/bin/ugs.sh
+
+******* for laptop
+once i get home run this script
+
+file:/home/zeltak/bin/lgs.sh
+
+then before i leave home in the morning run the same script again
+
+file:/home/zeltak/bin/lgs.sh
+
+also at work i connect it to the LAN:
+ip: 132.72.153.174
+
+******* mobile (android phone/tablet)
+******** use pocket git
+https://play.google.com/store/apps/details?id=com.aor.pocketgit&hl=en
+
+********* Pull data 
+I use this for android to pull my whole git repo (org) and have a copy of it on my mobile device
+
+********* TODO you can also git push back changes
+******** Mobile org 
+i used that for agenda notes to have a more accesable way to quick read notes from there
+**** Binary files (images,pdfs etc)-Unison
+I use unison to sync the following folders
+I create a profile called sync under file:/home/zeltak/.unison/sync.prf
+
+this syncs the following folders between workPC (zuni) and laptop (zlap):
+
+file:/~/Sync/
+file:/~/Uni/
+file:/~/org/attach/
+***** Unison sync folder structure
+ I used the following organizing structure:
+****** Scans 
+ This has all my scanned documents organized as follows: 
+  -year
+   -- BGU
+   -- docs
+   -- receipts
+   -- family 
+****** Uni
+   -- CV
+   -- PDF library
+   -- signatures
+****** VT - Personal sensetive docs
+****** attach
+ org mode attached files and pictures 
+
+ $Note$ this needs to be changed yearly in the Emacs config (under org-downlaod section): 
+
+ #+BEGIN_SRC emacs-lisp :results none
+ (setq-default org-download-image-dir "/home/zeltak/org/attach/images_2015")
+ #+END_SRC
+**** browser related
+user chrome/firefox built in sync mechanisms
+**** passwords
+using password-store. more info [[id:d57aa1cc-33ce-4081-9811-c6f2782b8eee][password-store]]
+*** Backup 
+**** family photos 
+**** daily backups
+     :PROPERTIES:
+     :ID:       7b98d815-4327-4f65-8c60-dfd9711859bd
+     :END:
+***** rsync 
+****** TODO rsync to push data from laptop to synology nas (use urs.sh)
+       :PROPERTIES:
+       :ID:       b35e3749-464e-4465-b927-3b1cf5f1385f
+       :END:
+
+       #+BEGIN_SRC sh
+rsync -aRPz --delete -e ssh /home/zeltak/dotfiles/  root@132.72.152.204:/volume1/rsync/    
+       #+END_SRC
+
+****** TODO rsync to push data from laptop to QNAP nas
+       :PROPERTIES:
+       :ID:       d4f672c5-6ced-4670-ae67-4e785f17ea79
+       :END:
+use this script created in ~bin:
+file:/home/zeltak/bin/lrs
+
+**** robust password store /gnupg/ .ssh backup
 ** rofi tmux switch to pane
 write a script that takes an input of all tmux open panes and switches to it
 also crazy idea: foucs Emacs client and switch to a specific buffers
-** robust password store /gnupg/ .ssh backup
 ** bloody org links make sense of it
 *** fix helm menu
 [[id:b9436f8a-478b-4f98-8bc8-65697ffb8c78][link to any header]]
@@ -209,6 +295,8 @@ selection made on your gmail message.  Eg, select Subject: line, then
 capture that to a TODO.                                                  
 The other thing that might help would be custom links. Is there a way to form a URL to a gmail message on the web?  If so, you  
 could make a "gmail:XXXXX" link that org would expand to a full URL
+** revel.js
+https://github.com/yjwen/org-reveal#the-hlevel
 ** sunrise
 *** questions 
 1) REQUEST: if there is only 1 match left in fuzzy match- can SR auto select it (that is enter dir)
@@ -391,117 +479,6 @@ chromium.desktop; done
 
 
 #+END_SRC
-
-** @sync//backup project@
-*** Relevant IP's
-
-| Machine          |             IP | Ports open                                                                       | Comments |
-|------------------+----------------+----------------------------------------------------------------------------------+----------|
-| Linux PC         | 132.72.155.204 | github,                                                                          |          |
-| Synology NAS     | 132.72.152.204 | FTP into machine,github, ssh (22), btsync (UDP/TCP 9999 ,UDP/TCP 8888, UDP 3000) |          |
-| Linux Laptop     | 132.72.154.204 | github                                                                           |          |
-| home qnap        |       10.0.0.2 |                                                                                  |          |
-| hope laptop wifi |      10.0.0.12 |                                                                                  |          |
-
-*** Sync methods     
-**** for all textfile-git
-***** create a central bare repo (or use github)
-****** using github as a central repo
--create a repo (named zorg) on github
--cuurently this repo is private
-****** daily workflow for work/lapop
-******* for work
-every morning when i get to work:
-run the ugs.sh script
-
-file:/home/zeltak/bin/ugs.sh
-
-@do not use laptop during the day to edit@
-all editing should be done on work PC
-
-before leaving work run the same script
-
-file:/home/zeltak/bin/ugs.sh
-
-******* for laptop
-once i get home run this script
-
-file:/home/zeltak/bin/lgs.sh
-
-then before i leave home in the morning run the same script again
-
-file:/home/zeltak/bin/lgs.sh
-
-also at work i connect it to the LAN:
-ip: 132.72.153.174
-
-******* mobile (android phone/tablet)
-******** use pocket git
-https://play.google.com/store/apps/details?id=com.aor.pocketgit&hl=en
-
-********* Pull data 
-I use this for android to pull my whole git repo (org) and have a copy of it on my mobile device
-
-********* TODO you can also git push back changes
-******** Mobile org 
-i used that for agenda notes to have a more accesable way to quick read notes from there
-**** Binary files (images,pdfs etc)-Unison
-I use unison to sync the following folders
-I create a profile called sync under file:/home/zeltak/.unison/sync.prf
-
-this syncs the following folders between workPC (zuni) and laptop (zlap):
-
-file:/~/Sync/
-file:/~/Uni/
-file:/~/org/attach/
-***** Unison sync folder structure
- I used the following organizing structure:
-****** Scans 
- This has all my scanned documents organized as follows: 
-  -year
-   -- BGU
-   -- docs
-   -- receipts
-   -- family 
-****** Uni
-   -- CV
-   -- PDF library
-   -- signatures
-****** VT - Personal sensetive docs
-****** attach
- org mode attached files and pictures 
-
- $Note$ this needs to be changed yearly in the Emacs config (under org-downlaod section): 
-
- #+BEGIN_SRC emacs-lisp :results none
- (setq-default org-download-image-dir "/home/zeltak/org/attach/images_2015")
- #+END_SRC
-**** browser related
-user chrome/firefox built in sync mechanisms
-**** passwords
-using password-store. more info [[id:d57aa1cc-33ce-4081-9811-c6f2782b8eee][password-store]]
-*** Backup 
-**** family photos 
-**** daily backups
-     :PROPERTIES:
-     :ID:       7b98d815-4327-4f65-8c60-dfd9711859bd
-     :END:
-***** rsync 
-****** TODO rsync to push data from laptop to synology nas (use urs.sh)
-       :PROPERTIES:
-       :ID:       b35e3749-464e-4465-b927-3b1cf5f1385f
-       :END:
-
-       #+BEGIN_SRC sh
-rsync -aRPz --delete -e ssh /home/zeltak/dotfiles/  root@132.72.152.204:/volume1/rsync/    
-       #+END_SRC
-
-****** TODO rsync to push data from laptop to QNAP nas
-       :PROPERTIES:
-       :ID:       d4f672c5-6ced-4670-ae67-4e785f17ea79
-       :END:
-use this script created in ~bin:
-file:/home/zeltak/bin/lrs
 
 ** explore memacs
 ** find out how to create org table with manual breaks

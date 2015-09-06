@@ -420,7 +420,14 @@ PROC IMPORT OUT= met2003
 
 ** Export
 *** Export csv
-
+#+BEGIN_SRC sas
+/*export to r*/
+PROC EXPORT DATA= WORK.times7
+            OUTFILE= "f:\Uni\Projects\P042_Medicare_THROM\3.1.10.4.Work\3.Analysis\AN002_timeseries\all_0008.csv" 
+            DBMS=CSV REPLACE;
+     PUTNAMES=YES;
+RUN;
+#+END_SRC
 *** export dbf
 
 *** Export Tab Delimited
