@@ -302,7 +302,7 @@ run;
 
 data cguid ;
 set xo.apd_counts;
-keep qid guid;
+keep qid guid age sex race;
 run;
 
  proc sort data= cguid;
@@ -348,13 +348,24 @@ run;
  if case=. then delete;
  run;
 
+ data cva5;
+ set cva4;
+ dow=weekday(day);
+ if dow=1 then wd1=1; else wd1=0;
+if dow=2 then wd2=1; else wd2=0;
+if dow=3 then wd3=1; else wd3=0;
+if dow=4 then wd4=1; else wd4=0;
+if dow=5 then wd5=1; else wd5=0;
+if dow=6 then wd6=1; else wd6=0;
+ run;
+
 
 
  /*export to r*/
 
 
-PROC EXPORT DATA= WORK.times7
-            OUTFILE= "/media/NAS/Uni/Projects/P051.PAD_NEMIA/2.work/CXO_APD_counts.csv" 
+PROC EXPORT DATA= cva5
+            OUTFILE= "Y:\Projects\P051.PAD_NEMIA\2.work\CXO_APD_counts.csv" 
             DBMS=CSV REPLACE;
      PUTNAMES=YES;
 RUN;

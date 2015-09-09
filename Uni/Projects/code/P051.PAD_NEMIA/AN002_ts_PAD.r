@@ -17,7 +17,9 @@ library(survival)
 ### long term analysis
 
 AP<-fread("/media/NAS/Uni/Projects/P042_Medicare_DVT/3.1.10.4.Work/3.Analysis/AN002_timeseries/all_0008_AP.csv")
+AP2<-fread("/media/NAS/Uni/Projects/P051.PAD_NEMIA/2.work/TS_APD_counts.csv")
 
+head(AP)
 names(AP)
 AP[,c("_TYPE_","_FREQ_"):=NULL]
 
@@ -29,7 +31,5 @@ summary(APres)$tTable
 #import cases
 cases<-fread("/media/NAS/Uni/Projects/P051.PAD_NEMIA/2.work/CXO_APD_counts.csv")
 head(cases)
-
-
-
 modcc1<-coxph(Surv(Time, case) ~ pmnew+Temp_F+strata(QID),data=cases)
+summary(modcc1)

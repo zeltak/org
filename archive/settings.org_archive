@@ -1307,3 +1307,22 @@ http://kitchingroup.cheme.cmu.edu/blog/2015/06/21/Clickable-email-addresses-in-e
 #+BEGIN_SRC emacs-lisp :results none
 (add-to-list 'load-path "/home/zeltak/.emacs.g/ob-sudo/")
 #+END_SRC
+
+* org-ispell
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-09-08 Tue 18:29
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Functions/org
+  :ARCHIVE_CATEGORY: settings
+  :END:
+check in org files slipping code blocks etc
+#+BEGIN_SRC emacs-lisp :results none
+(defun z/org-ispell ()
+  "Configure `ispell-skip-region-alist' for `org-mode'."
+  (make-local-variable 'ispell-skip-region-alist)
+  (add-to-list 'ispell-skip-region-alist '(org-property-drawer-re))
+  (add-to-list 'ispell-skip-region-alist '("~" "~"))
+  (add-to-list 'ispell-skip-region-alist '("=" "="))
+  (add-to-list 'ispell-skip-region-alist '("^#\\+BEGIN_SRC" . "^#\\+END_SRC")))
+(add-hook 'org-mode-hook #'endless/org-ispell)
+#+END_SRC
