@@ -5,14 +5,60 @@
 #+STARTUP: overview  inlineimages eval: (org-columns)
 #+LaTeX_CLASS_OPTIONS: [garamond]
 
-
-
 * `TODO` 							  :CANCELLED:
   :PROPERTIES:
   :ID:       70feaa43-c66b-4675-89f5-9ae26bddc03e
   :END:
-** capture template for travel
-** capture refile to a specifc file.₆In example₆ only ask to refile to headers in a pre defined files
+** TODO capture questions 
+Hi all!
+
+I finally had time to properly setup capture for orgmode and i have a few questions
+
+1) can one define default and/or completion values for capture properties in the property drawers, in example:
+
+%^{Rating}p
+
+so that when I launch the capture and it goes through entering a specific property value I will get some defaults to choose from or a completion option?
+
+2) can one customize the help line (the one with hints like C-c C-k to kill etc..) to include more hints?
+
+3) im looking for a way to better insert a sub header
+currently my template looks like this
+
+;;;; food simple template
+("f" "food" entry (file+headline "/home/zeltak/org/files/agenda/food.org" "Inbox")
+"* COOK %^{Description}   %^g
+%t 
+%^{Time}p
+%^{Rating}p
+%^{Source}p
+%^{Ammount}p
+%^{Fav}p
+%^{prompt|** Ingridients}
+%?
+%^{prompt|** Preperation}
+"
+ )
+
+Note that I use %^{prompt|** Ingridients} to force a subheader, which seems to be odd. I couldn't find a better way to do that without getting lisp errors
+
+
+4) can one use multikeys as capture keys such as 
+("xd" "nix_TD" entry (file+headline "~/org/files/agenda/TODO.org" "TODO")
+ "*  %^{Description}" )
+the use of 2 keys like 'xd' doesn't seem to work here
+
+5)can I capture and automatically refile to a specific file. In example only ask to refile to headers in a pre 
+defined files?
+
+6)has anyone tried using hydra for org capture (instead of dispatch), this will have nicer looks and color support etc :) is this possible?
+** change location of unison sync files
+** figure out Emacs region and mearks (vim like C-v//V)
+** ask org mail
+convert a simple list of lines each to a orgmode header
+** check out avy-timeout-seconds settings 
+** clean org file
+find a way to get rid of ' and ? 
 ** @org revison@
 *** TODO todo
 **** TODO gen 
@@ -28,6 +74,7 @@ for example todo with allan (tag)
 **** TODO Tasks in multiple projects?
 Tasks can live in multiple projects, so there’s no need to duplicate work. This is especially useful for cross-functional Teams.
 **** Merge Duplicate Tasks?
+**** check orgmode
 *** calander
 *** email
 *** refrence library
@@ -120,14 +167,13 @@ You can now refer to this graph in the text using [[my-bmi-graph]].
 
 *** org capture
 *** TODO mobile (using orglzy)
-!REFILE under linux when finished!
-Workflow:
 **** for all read only notes
 create a folder sync repo for each subfolder under the `git`root folder. then sync and you will see the org files  appearing in your book lists as books
 **** from phone to org
-use a dropbox repo and add you book you want to sync back to the laptop via dropox. make sure to refile the notes there from time to time
-
-
+Workflow: create a $Note$ (I called it n6) from orgzy and link it to a dropbox folder
+this will sync that $Note$ to your laptop
+once every X days make sure to refile that note
+*** From Web browsers
 *** org agenda
  use multi occur hotkeys?
 *** create a daily agenda in orgmode somwhow
@@ -226,25 +272,27 @@ using password-store. more info [[id:d57aa1cc-33ce-4081-9811-c6f2782b8eee][passw
      :PROPERTIES:
      :ID:       7b98d815-4327-4f65-8c60-dfd9711859bd
      :END:
-***** rsync 
-****** TODO rsync to push data from laptop to synology nas (use urs.sh)
+***** Rsync 
+****** TODO UNI (urs.sh)-rsync to push data from laptop to synology NAS
        :PROPERTIES:
        :ID:       b35e3749-464e-4465-b927-3b1cf5f1385f
        :END:
+
+file:/home/zeltak/bin/urs.sh
 
        #+BEGIN_SRC sh
 rsync -aRPz --delete -e ssh /home/zeltak/dotfiles/  root@132.72.152.204:/volume1/rsync/    
        #+END_SRC
 
-****** TODO rsync to push data from laptop to QNAP nas
+****** TODO HOME (lrg.sh)-rsync to push data from laptop to QNAP NAS
        :PROPERTIES:
        :ID:       d4f672c5-6ced-4670-ae67-4e785f17ea79
        :END:
 use this script created in ~bin:
-file:/home/zeltak/bin/lrs
+file:/home/zeltak/bin/lrs.sh
 
 **** robust password store /gnupg/ .ssh backup
-** get a handle on tabkes (using hydra) for spreadsheet like stuff
+** get a handle on tables (using hydra) for spreadsheet like stuff
 ** rofi tmux switch to pane
 write a script that takes an input of all tmux open panes and switches to it
 also crazy idea: foucs Emacs client and switch to a specific buffers
@@ -444,11 +492,10 @@ xset dpms 600
 implemented check it
 
 ** source in R with output
- zeltak: source("blah.r",verbose=TRUE) ?                                                      
- yeah happy holidays etc etc                                                                  
- bosie: thx ill try that :)                                                                   
- zeltak: source("blah.r",verbose=TRUE, print.eval=TRUE) maybe
-
+zeltak: source("blah.r",verbose=TRUE) ?                                                      
+yeah happy holidays etc etc                                                                  
+bosie: thx ill try that :)                                                                   
+zeltak: source("blah.r",verbose=TRUE, print.eval=TRUE) maybe
 ** a new Emacs pop up window for helm chrome bookmarks
 ** custom agenda example 
 I use a "@Q2" tag for things that are
@@ -609,6 +656,9 @@ the first line in the file. Where "me@mydomain.com" is the email address associa
 
 When you open the file you will be prompted for your password and Emacs will display the decrypted contents in org-mode. When you save the file it would automatically be encrypted.
 *** Encrypting Specific Entries in an org File with org-crypt.
+    :PROPERTIES:
+    :ID:       8797ec49-d59d-4c11-9d9d-0939705c6b1b
+    :END:
 
 If you just want to encrypt the text of an entry, but not the headline, or properties you can use org-crypt. In order to use org-crypt you need to add something like the following to your .emacs:
 
@@ -628,6 +678,8 @@ Entries with a :crypt: tag will be automatically be encrypted when you save the 
 
 If you have autosave turn
 
-* Home TD's
 
  
+
+
+

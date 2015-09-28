@@ -3,14 +3,23 @@
 #+TODO: COOK SHOP | DONE 
 #+TAGS: Indian(d) Thai(t) Vietnamese(v) Asian(a) Israeli(i) Italian(l) American(n) EastEuro(e) Mexican(m) main(M) side(S) starter(T) sweets(Y) drinks(D) sauce(C)
 
-* easy menu
+* easy to cook menu
+  :PROPERTIES:
+  :ID:       34fb19f4-49af-4820-b057-0e7fe4f74360
+  :END:
+
 Display a list of to 'COOK' (TODO items) headlines with tag TAG 
+enter link with usual C-c C-l and choose `tag`
 %With prefix argument, also display headlines without a TODO keyword%
+
+[[elisp:(org-agenda%20nil%20"f")][TO-COOK]]
 
 [[tag:Thai][Thai recipes]]
 [[tag:Indian][Indian recipes]]
 [[tag:Israeli][Israeli recipes]]
 [[tag:Vietnamese][Vietnamese recipes]]
+[[tag:drink][drink]]
+
 
 * How to use
 `For the food notebook:`
@@ -29,7 +38,7 @@ use sparse tree ?C-c /? to initiate searches:
 main,side,sweet
 
 * Inbox
-** SHOP Thai Fried Rice Recipe with Shrimp (Khao Pad Goong ข้าวผัดกุ้ง) :Thai:main:
+** COOK Thai Fried Rice Recipe with Shrimp (Khao Pad Goong ข้าวผัดกุ้ง) :Thai:main:
    :PROPERTIES:
    :Time:     30
    :Rating:   3
@@ -43,7 +52,6 @@ main,side,sweet
 #+DOWNLOADED: /tmp/screenshot.png @ 2014-07-11 18:25:05
 #+attr_html: :width 300px
  [[/home/zeltak/org/attach/images_2014/screenshot_2014-07-11_18:25:05.png]]
-
 *** Ingridients
 
 
@@ -82,6 +90,7 @@ Lastly, toss in your green onions, stir it a few more seconds, and it’s ready
 Immediately dish your fried rice onto a plate
 Slice off a wedge of lime, and serve it on the plate next to the rice
 For the final touch, I like to sprinkle some freshly ground black pepper on top to give some extra flavor
+
 
 ** COOK home made "meorav yerushalmi"
    
@@ -143,51 +152,6 @@ For the final touch, I like to sprinkle some freshly ground black pepper on top 
 #+DOWNLOADED: /tmp/screenshot.png @ 2014-07-19 12:13:09
 #+attr_html: :width 300px
  [[/home/zeltak/org/attach/images_2014/screenshot_2014-07-19_12:13:09.png]]
-** COOK Chorizo con Papas					    :Mexican:
-   :PROPERTIES:
-   :Time:     30
-   :Rating: 
-   :Source:   http://www.bazekalim.com/2012/12/14/chorizo-con-papas/
-   :Ammount:  12 tortias
-   :Fav: 
-   :Type: 
-   :END:
-
-
-#+DOWNLOADED: /tmp/screenshot.png @ 2014-07-19 12:51:24
-#+attr_html: :width 300px
- [[/home/zeltak/org/attach/images_2014/screenshot_2014-07-19_12:51:24.png]]
-*** Ingridients
-3-4 chorizo ​​sausages of any kind like (about 350 g)
-2 medium potatoes (about 1/2kg)
-1 teaspoon cumin
-1 Teaspoon Coriander powder
-2-3 teaspoons paprika (preferably smoked)
-About a third of a teaspoon of chili flakes
-To serve:
-About 12 tortillas
-Radish slices
-slices of ripe avocado
-cilantro or parsley,
-tomatoes
-salsa
-lemon wedges   
-*** Preperation
-#+BEGIN_EXAMPLE
-מפשירים 3-4 נקניקיות צ'וריסו (בערך 350 גר' פלוס מינוס) מכל סוג שאוהבים (חזיר / בקר / חריף / לא חריף)
-
-. קולפים וקוצצים 2 תפוחי אדמה בינוניים (חצי קילו בערך) לקוביות בגודל 1 ס"מ. מכסים במים ומביאים לרתיחה בסיר בינוני. 
-מרתיחים 6-8 דקות נוספות על אש גבוהה, או עד שהתפוחים מתחילים להתרכך, אך לא מוכנים לגמרי. מסננים.
-
-
- בינתיים קוצצים גס בצל בינוני ונפטרים מהציפוי של הנקניקיות כדי שיישאר רק הבפנוכו – בשר טחון (ושומני להפליא!).
-
- מטגנים את בשר הצ'וריסו במחבת גדולה וחמה (אין צורך בשמן) כ-5 דקות ומפרקים לגושים. מוסיפים את הבצל ותפוחי האדמה המבושלים-חלקית. מתבלים לפי הטעם בכ-1 כפית כמון, 1 כפית כוסברה טחונה, 2-3 כפיות פפריקה לא חריפה (מומלץ מעושנת), כשליש כפית פתיתי צ'ילי חריף (או כל צ'ילי שאוהבים, לפי הטעם) ומלח ופלפל
-
-. התיבול מאוד תלוי בסוג הצ'וריסו שלכם. מוסיפים יותר או פחות לפי הטעם. מטגנים כ-10-12 דקות נוספות עד שהתפודים מוכנים ושחומים. הבשר השומני אמור לסכך את המחבת והתפודים כהוגן, אבל אם הם נדבקים או נשרפים, אפשר להוסיף מעט שמן. 
-
-מגישים חם, בטורטיות או פיתות, עם שלל טופינגז לפי המרגש.    
-#+END_EXAMPLE
 ** COOK Agua de Horchata/Rice and Cinnamon Drink	     :Mexican:drinks:
    :PROPERTIES:
    :Time:     60
@@ -569,35 +533,6 @@ For each bowl, place a portion of the noodles on a vertical-handle strainer (or 
 13. Top each bowl of noodles with chicken, arranging the slices flat. Place a mound of yellow onion in the center and then shower some scallion and cilantro on top. Finish with a sprinkle of pepper.
 
 14. Raise the heat and bring the broth to a rolling boil. Do a final tasting and make any last-minute flavor adjustments. Ladle about 2 cups broth into each bowl, distributing the hot liquid evenly to warm all the ingredients. Serve immediately with the garnishes.
-** COOK Churos							     :sweets:
-   :PROPERTIES:
-   :Time:
-   :Rating:
-   :Source:   http://www.ynet.co.il/articles/0,7340,L-4456501,00.html
-   :Ammount:
-   :Fav:
-   :END:
-*** Ingridients
-המרכיבים:
-315 מ"ל מים
-1/2 כף חמאה
-250 גרם קמח
-5 גרם סוכר
-5 גרם מלח
-2 גרם אבקת אפייה
-שמן לטיגון
- 
-לקישוט:
-סוכר
-שוקולד חם
- 
-כלים: סיר, מיקסר, קערה לבצק, שק זילוף    
-*** Preperation
-אופן ההכנה:
-מרתיחים בסיר מים וחמאה. שמים במיקסר את החומרים היבשים וכשתערובת המים והחמאה מגיעה לרתיחה, מוזגים ממנה בעדינות למיקסר.
-מפעילים את המיקסר עם ראש גיטרה עד שהבלילה נעשית אחידה, מוציאים את הבצק לכלי, מכסים בניילון נצמד ומכניסים למקרר לעשר דקות.
-מוציאים את הבצק מהמקרר ומעבירים לשק זילוף. מזלפים חתיכות מעל שמן רותח ומטגנים עד להזהבה.
-מוציאים מהשמן, מגלגלים בסוכר, טובלים בשוקולד ואוכלים.
 ** COOK Granola							   :American:
    :PROPERTIES:
    :Time:
@@ -801,61 +736,6 @@ For each bowl, place a portion of the noodles on a vertical-handle strainer (or 
 אופן ההכנה:
 מערבבים בקערה את כל החומרים. מעבירים לצנצנת בעלת סגירה הרמטית ושומרים
 במקום קריר ויבש.
-** COOK chestnut soup
-   :PROPERTIES:
-   :Time:
-   :Rating:
-   :Source:   http://www.ptitim.com/chestnuts-soup/?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+ptitim+%28%E2%80%AB%D7%A4%D7%AA%D7%99%D7%AA%D7%99%D7%9D%E2%80%AC%29
-   :Ammount:  6
-   :Fav:
-   :END:
-
-
-#+DOWNLOADED: /tmp/screenshot.png @ 2014-11-26 13:32:53
-#+attr_html: :width 300px
- [[/home/zeltak/org/attach/images_2014/screenshot_2014-11-26_13:32:53.png]]
-
-*** Ingridients
-לציר
-
-2-3 גזרים
-בצל גדול
-חופן מקלות סלרי או ראש סלרי קטן
-2 עלי דפנה
-
-
-#+DOWNLOADED: /tmp/screenshot.png @ 2014-11-26 13:34:05
-#+attr_html: :width 300px
- [[/home/zeltak/org/attach/images_2014/screenshot_2014-11-26_13:34:05.png]]
-
-למרק הערמונים
-
-(6 מנות אישיות או 12 כוסות אספרסו)
-4 כוסות ציר (זה שלמעלה)
-קוביית חמאה
-2 בצלים קטנים
-2 תפוחי אדמה קטנים
-ענף טימין
-2 שקיות ערמונים של 100 גר' כל אחת (מותר גם 3)
-חצי מיכל שמנת מתוקה 32%
-כפית רוטב ברביקיו
-מלח שחור להגשה (מעושן וטעים, כדאי אבל לא חובה)
-
-
-#+DOWNLOADED: /tmp/screenshot.png @ 2014-11-26 13:34:26
-#+attr_html: :width 300px
- [[/home/zeltak/org/attach/images_2014/screenshot_2014-11-26_13:34:26.png]]
-    
-*** Preperation
-מכינים ציר – גזר, בצל, סלרי ועלי דפנה בסיר. מוסיפים ליטר וחצי מים, מרתיחים וממשיכים לבשל על אש קטנה במשך שעה. מסננים ושומרים את הנוזל.
-מטגנים את הבצל בחמאה וקצת שמן, כשהוא שחום מוסיפים את קוביות תפוחי האדמה לטיגון קצר.
-מוסיפים להם 4 כוסות ציר וטימין ומנמיכים את האש.
-כשתפוח האדמה רך מוסיפים את הערמונים וחצי גזר מהציר ומבשלים עוד רבע שעה.
-מוציאים כוס מהמרק ושומרים.
-טוחנים, מוסיפים חצי מיכל שמנת ומדללים בחזרה בנוזלים. להשאיר סמיך.
-לתבל רק בשלב הזה במלח ופלפל, וברביקיו אם יש.
-להגיש בכוסות קטנות, לפזר מלח שחור (אם יש) וכמה טיפות שמנת או אפילו חלב מוקצף.
-
 ** COOK peanut butter chuncky snacks				   :American:
    :PROPERTIES:
    :Time:
@@ -1326,7 +1206,7 @@ http://www.bazekalim.com/2014/10/25/sprite-dumplings/?utm_source=feedburner&utm_
 #+DOWNLOADED: /tmp/screenshot.png @ 2014-11-27 20:56:54
 #+attr_html: :width 300px
 [[/home/zeltak/org/attach/images_2014/screenshot_2014-11-27_20:56:54.png]]
-** COOK Simple fried rice					      :Asian:
+** Simple fried rice						      :Asian:
    :PROPERTIES:
    :Time:
    :Rating:
@@ -1418,7 +1298,7 @@ http://www.bazekalim.com/2014/10/25/sprite-dumplings/?utm_source=feedburner&utm_
 4. מזלפים למרכז כל מנה אישית ממרח קלאסי בגודל "גולה". אופים מיד או מקפיאים ואופים לפני ההגשה.
 
 5. אפייה: בתנור שחומם ל-160 מעלות כ-15 דקות. יש לשים לב לא לאפות מדי, כדי שמרכז העוגה יישאר רך. מחכים 2-3 דקות ומשחררים בעדינות מהתבנית, מגישים חם.
-** COOK Xmas potatos
+** COOK [#B] Xmas potatos
    :PROPERTIES:
    :Time:
    :Rating:
@@ -1483,6 +1363,9 @@ http://www.bazekalim.com/2014/10/25/sprite-dumplings/?utm_source=feedburner&utm_
 
 4.	מנמיכים את האש, מכסים ומבשלים 25 דקות. מוסיפים בורגול, מלח, פלפל ונענע, מערבבים ומבשלים עוד 10 דקות או עד שהמרק מסמיך והאורז רך.
 ** COOK Ezogelin çorbası (lentil turkish soup) 
+   :PROPERTIES:
+   :ID:       fa9a8a4e-184b-4dd5-9035-e20c496af9ff
+   :END:
 http://www.ynet.co.il/articles/0,7340,L-4583216,00.html
 המרכיבים ל-6 סועדים:
 3 כוסות עדשים כתומות
@@ -1807,6 +1690,9 @@ Preheat the oven to 250C (500° F). Bring 1 quart of water to a simmer in the bo
 #+attr_html: :width 300px
  [[~/org/attach/images_2015/screenshot_2015-05-03_21:21:51.png]]
 *** Ingridients
+    :PROPERTIES:
+    :ID:       bcb67ed1-f194-4947-aa02-7293ccbd3d1b
+    :END:
 
 2 cinnamon sticks
 2 cardamom pieces
@@ -2059,11 +1945,8 @@ http://www.bazekalim.com/2015/05/22/caramelized-white-chocolate/?utm_source=feed
 לשושנת מלוואח: מורחים כף גנאש מקורמל על עלה מלוואח מופשר, זורים חופן אגוזים קצוצים דק, מכסים בעוד עלה מלוואח, פורסים צורת שמש ומסובבים כל שרוול סביב עצמו. אופים על 180 למשך כ-20 עד 30 דק או עד ששחום בטירוף בשוליים.
 
 
-** COOK Make Sticky Thai Rice with a Spatter Guard and Bowl
-   SCHEDULED: <2015-08-14 Fri>
-   :PROPERTIES:
-   :ID:       c337cb14-509b-49e8-853e-c185df325a34
-   :END:
+** COOK [#A] Make Sticky Thai Rice with a Spatter Guard and Bowl
+
 http://www.foodcanon.com/2011/10/making-perfect-glutinous-sticky-rice.html
 $Note-You should know that glutinous rice needs to be soaked beforehand, preferably overnight$ 
 Food blog The Food Cannon shows us a simple way to make perfect sticky rice. Note that with glutinous rice, you will need to soak the rice in water overnight first. When you’re ready to steam, fill a pan with water up to about 2 or 3 inches from the top. Lay the splatter guard on top and cover it with about a cup of rice. Place a large bowl on top that will keep as much steam in as possible. Wood is a good choice because you can move it easily without burning your hands. Steam for about 40 minutes. The tiny holes in the splatter guard ensure that steam is delivered evenly over all the rice.
@@ -2096,7 +1979,7 @@ http://www.bazekalim.com/2015/06/15/turkey-burgers/?utm_source=feedburner&utm_me
    :END:
 
 http://food52.com/blog/13793-stop-throwing-out-the-best-part-of-the-watermelon
-** Cook shurub vinager juice 					     :drinks:
+** COOK Cook shurub vinager juice				     :drinks:
    :PROPERTIES:
    :Time:
    :Rating:
@@ -2107,7 +1990,7 @@ http://food52.com/blog/13793-stop-throwing-out-the-best-part-of-the-watermelon
    :ID:
    :END:
 http://food52.com/blog/13831-how-to-make-shrubs-aka-drinking-vinegars-without-a-recipe
-** Cook Faluda 							    :Israeli:
+** COOK Cook Faluda						    :Israeli:
    :PROPERTIES:
    :Time:
    :Rating:
@@ -2139,8 +2022,108 @@ Thinly sliced red onion and cilantro leaves (for serving)
 Heat oil in a large nonstick or cast-iron skillet over high. Cook mushrooms, tossing, until just brown, about 1 minute. Pour in eggs and stir vigorously 10 seconds. Add rice; pat it down and spread out in an even layer, breaking up any clumps, then vigorously toss everything together. Continue patting and tossing process until grains dry out and separate, about 3 minutes. 
 Add white onion, beef jerky, scallions, raw sugar, and ½ cup potato chips to rice mixture; season with salt. Cook, tossing, until onion is slightly softened, about 2 minutes. Pour broth around edges of skillet and continue to cook rice mixture, tossing, until broth evaporates.  
 Serve fried rice topped with red onion, cilantro, and more potato chips.
+** COOK [#B] Israeli bagel					    :Israeli:
+   :PROPERTIES:
+   :Time:
+   :Rating:
+   :Source:   http://xnet.ynet.co.il/food/articles/0,14567,L-3109600,00.html?dcMaa=ynet&utm_source=ynet&utm_medium=homepage&utm_campaign=small_articles
+   :Ammount:
+   :Fav:
+   :END:
+*** Ingridients
+מרכיבים
+40 בייגלים
+ 
+לבצק
+1 ק"ג קמח
+1 כף מלח
+1 כף סוכר
+2 כפות שמרים יבשים
+3 עד 3/4 3 כוסות מים פושרים    
+
+לבישול ולאפייה
+3 כוסות מים
+3 כפות סילאן
+1 תיון (רגיל או ארל גריי)
+1 ביצה טרופה
+מלח גס, שומשום וזעת
+
+*** Preparation
+אופן ההכנה
+לשים במיקסר או ביד את כל מרכיבי הבצק עד שמתקבל בצק קשה למדי, אבל גמיש. כדאי להוסיף בהתחלה רק 3 כוסות מים, ובמידת הצורך להוסיף מים נוספים בהדרגה, עד שמגיעים למרקם הנכון.
+מתפיחים את הבצק 10 דקות בדיוק ולא יותר.
+מחממים את התנור ל-200 מעלות.
+מעצבים את הבייגלים: מחלקים את הבצק ל-40 חתיכות קטנות ומרדדים כל חתיכה ל"נחש" באורך כ-30 ס"מ. מקפלים כל נחש לשניים, מסובבים סביב עצמו ומהדקים את שני הקצוות זה לזה לקבלת בייגל עגול.
+מרתיחים את המים עם התה והסילאן, וטובלים כל בייגל לשנייה-שתיים בנוזל הרותח. מניחים את הבייגלים בתבנית מרופדת בנייר אפייה, מברישים בביצה טרופה ומפזרים מעל מלח גס, שומשום וזעתר.
+אופים את הבייגלים 20-15 דקות, עד שהם משחימים.
+אפשר להקפיא את הבייגלים בכלי אטום ולחמם אותם לפני ההגשה ב-150 מעלות.
+** COOK salted-honey-toffee-squares				   :American:
+   :PROPERTIES:
+   :Time:
+   :Rating:
+   :Source:   http://www.bazekalim.com/2015/09/07/salted-honey-toffee-squares/?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed:+bazekalim+(???+????)
+   :Ammount:
+   :Fav:
+   :END:
+*** Ingridients
+
+15-18 ביסקוויטים או "קרקר זהב"
+100 גר' חמאה
+רבע כוס דבש
+2 כפות סוכר
+1 כוס שקדים: שלמים או פרוסים
+–
+6 דובשניות (עוגיות דבש)
+50 גר' שוקולד מריר
+מלח גס
+–
+–
+    
+*** Preperation
+מסדרים כ-15-18 קרקרים או ביסקוויטים בצפיפות על תבנית עם נייר אפייה. מפזרים על הקרקרים 1 כוס שקדים (פרוסים או שלמים, קצוצים גס), ו-6 דובשניות מפוררות גס (לא חובה). ממיסים בסיר קטן רבע כוס דבש עם 100 גר' חמאה ו-2 כפות סוכר. כשנמס עוברים לאש גבוהה ומרתיחים 2 דקות. מוזגים באחידות על הביסקוויטים עם כל הטופינגז. אופים על 180 מעלות כ-6 עד 8 דקות או עד שמבעבע ומזהיב מאוד בשוליים. מוציאים ובזמן שזה חם מפזרים 50 גר' שוקולד מריר קצוץ גס, וקורט נדיב מלח גס, ומניחים לצינון חלקי. חותכים לריבועים עם גלגלת פיצה ומצננים לטמפ' החדר.
+** COOK Thai Chili Paste/Chili Jam – Nam Prik Pao		      :Asian:
+   :PROPERTIES:
+   :Time:
+   :Rating:
+   :Source:   http://hot-thai-kitchen.com/thai-chili-paste/
+   :Ammount:
+   :Fav:
+   :END:
+*** Ingridients
+8-10 large dried chilies (I use spur chilies, but you can use any type of mild dried chilies)
+2 Tbsp dried shrimp
+10 cloves garlic, whole, peeled
+4 heads shallots, peeled and cut into large chunks
+2-3 Tbsp tamarind juice
+¼ tsp salt
+1 Tbsp fish sauce
+3 Tbsp palm sugar, finely chopped, packed
+¼ tsp shrimp paste, optional
+¼ cup vegetable oil (see note)
+Note: you can add more oil for a thinner consistency.    
+*** Preparation
+If dried chilies feel dusty, dunk them for just a few seconds in cold water and dry them off on paper towel. Cut them into large chunks with scissors and remove the seeds and pith to reduce spiciness. If you want a spicier chili paste, you can leave some of the seeds in.
+
+Toast the dried chilies in a dry saute pan over medium heat, stirring constantly, until they are charred in some spots and smell smoky. Remove from pan and set aside. In the same pan, add garlic and shallots and toast, stirring constantly, until they are charred. Remove from pan.
+
+In a coffee grinder or a mortar and pestle, grind dried chilies into a powder. Add dried shrimp and grind until fine.
+
+In a food processor or a blender, add all ingredients except the oil and grind into a fine paste. If it needs more liquid to grind properly, add some or all of the oil. If using a food processor, scrape the sides down occasionally.
+
+Transfer the chili paste into a pot or a wok along with any remaining vegetable oil. Cook over low heat, stirring constantly, for about 10-12 minutes to cook the herbs and to thicken the paste to a desired consistency. If you are making a large batch, it will take more time to cook.
+
+Store in a glass jar, and it’ll keep in the fridge for a few months or in the freezer indefinitely. Use as a spread on crackers, toast, burgers and sandwiches, or use in any of these recipes: Cashew Chicken, Tom Yum Goong, Shrimp & Chili Paste Stir-Fry, Roast Pork Salad, Thai Tuna Salad, Wing Bean Salad
+** Watch "Five-Spice Powder Recipe ผงพะโล้ - Hot Thai Kitchen" on YouTube
+
+ https://youtu.be/49lLYqJmnZs
+
+** Watch "Five-Spice Roasted Cauliflower ดอกกะหล่ำผัดพะโล้ - Hot Thai Kitchen" on YouTube
+
+ https://youtu.be/zSelibPPxFI
+
 * shopping
 ** SHOP greek oregano
+** SHOP  hel (cardamon)
 * Library
   :PROPERTIES:
   :COLUMNS:  %33ITEM %TAGS %Fav %Time %TODO
@@ -4354,6 +4337,61 @@ after a few minutes put the veggies into the soup and spice it with mustard, pep
   4)serve immediately!
   NOTE- if needed to be prepared in advance store only first part
   without seafood and add seafood just before serving!    
+**** chestnut soup
+     :PROPERTIES:
+     :Time:
+     :Rating: 3
+     :Source:   http://www.ptitim.com/chestnuts-soup/?utm_source=feedburner&utm_medium=feed&utm_campaign=Feed%3A+ptitim+%28%E2%80%AB%D7%A4%D7%AA%D7%99%D7%AA%D7%99%D7%9D%E2%80%AC%29
+     :Ammount:  6
+     :Fav:
+     :END:
+
+
+  #+DOWNLOADED: /tmp/screenshot.png @ 2014-11-26 13:32:53
+  #+attr_html: :width 300px
+   [[/home/zeltak/org/attach/images_2014/screenshot_2014-11-26_13:32:53.png]]
+
+***** Ingridients
+  לציר
+
+  2-3 גזרים
+  בצל גדול
+  חופן מקלות סלרי או ראש סלרי קטן
+  2 עלי דפנה
+
+
+  #+DOWNLOADED: /tmp/screenshot.png @ 2014-11-26 13:34:05
+  #+attr_html: :width 300px
+   [[/home/zeltak/org/attach/images_2014/screenshot_2014-11-26_13:34:05.png]]
+
+  למרק הערמונים
+
+  (6 מנות אישיות או 12 כוסות אספרסו)
+  4 כוסות ציר (זה שלמעלה)
+  קוביית חמאה
+  2 בצלים קטנים
+  2 תפוחי אדמה קטנים
+  ענף טימין
+  2 שקיות ערמונים של 100 גר' כל אחת (מותר גם 3)
+  חצי מיכל שמנת מתוקה 32%
+  כפית רוטב ברביקיו
+  מלח שחור להגשה (מעושן וטעים, כדאי אבל לא חובה)
+
+
+  #+DOWNLOADED: /tmp/screenshot.png @ 2014-11-26 13:34:26
+  #+attr_html: :width 300px
+   [[/home/zeltak/org/attach/images_2014/screenshot_2014-11-26_13:34:26.png]]
+    
+***** Preperation
+  מכינים ציר – גזר, בצל, סלרי ועלי דפנה בסיר. מוסיפים ליטר וחצי מים, מרתיחים וממשיכים לבשל על אש קטנה במשך שעה. מסננים ושומרים את הנוזל.
+  מטגנים את הבצל בחמאה וקצת שמן, כשהוא שחום מוסיפים את קוביות תפוחי האדמה לטיגון קצר.
+  מוסיפים להם 4 כוסות ציר וטימין ומנמיכים את האש.
+  כשתפוח האדמה רך מוסיפים את הערמונים וחצי גזר מהציר ומבשלים עוד רבע שעה.
+  מוציאים כוס מהמרק ושומרים.
+  טוחנים, מוסיפים חצי מיכל שמנת ומדללים בחזרה בנוזלים. להשאיר סמיך.
+  לתבל רק בשלב הזה במלח ופלפל, וברביקיו אם יש.
+  להגיש בכוסות קטנות, לפזר מלח שחור (אם יש) וכמה טיפות שמנת או אפילו חלב מוקצף.
+
 **** Corn soup from a can 					      :Asian:
    :PROPERTIES:
    :Time:     25
@@ -5351,6 +5389,35 @@ take out and don't touch until cool otherwise it will fall apart
  גיוון:
  ניתן להחליף את השוקולד הלבן בשוקולד חלב ואת מחית הפסיפלורה במחית מנגו,
 אננס, חלב קוקוס או פרי אחר.
+**** Churos							     :sweets:
+     :PROPERTIES:
+     :Time:
+     :Rating:
+     :Source:   http://www.ynet.co.il/articles/0,7340,L-4456501,00.html
+     :Ammount:
+     :Fav:
+     :END:
+***** Ingridients
+  המרכיבים:
+  315 מ"ל מים
+  1/2 כף חמאה
+  250 גרם קמח
+  5 גרם סוכר
+  5 גרם מלח
+  2 גרם אבקת אפייה
+  שמן לטיגון
+ 
+  לקישוט:
+  סוכר
+  שוקולד חם
+ 
+  כלים: סיר, מיקסר, קערה לבצק, שק זילוף    
+***** Preperation
+  אופן ההכנה:
+  מרתיחים בסיר מים וחמאה. שמים במיקסר את החומרים היבשים וכשתערובת המים והחמאה מגיעה לרתיחה, מוזגים ממנה בעדינות למיקסר.
+  מפעילים את המיקסר עם ראש גיטרה עד שהבלילה נעשית אחידה, מוציאים את הבצק לכלי, מכסים בניילון נצמד ומכניסים למקרר לעשר דקות.
+  מוציאים את הבצק מהמקרר ומעבירים לשק זילוף. מזלפים חתיכות מעל שמן רותח ומטגנים עד להזהבה.
+  מוציאים מהשמן, מגלגלים בסוכר, טובלים בשוקולד ואוכלים.
 **** Marzipan
      :PROPERTIES:
      :type:
@@ -5824,12 +5891,9 @@ let stand outside of fridge for 24 hours
      :Ammount:  2 jars
      :Fav:      y
      :END:
-
-
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-05-03 21:14:46
 #+attr_html: :width 300px
-   [[~/org/attach/images_2015/screenshot_2015-05-03_21:14:46.png]]
-
+ [[~/org/attach/images_2015/screenshot_2015-05-03_21:14:46.png]]
 ***** Ingridients
   200 g rose petals
   800 g sugar @try it with less- 800g was way to sweet@
@@ -7203,8 +7267,145 @@ Albondigas (Eggplant meatballs)
  [[~/org/attach/images_2012/Image_I-85fG2Mfa4WAo19ogQ2lA_0001.jpg]]
 ***** Kababs
 ****** assorted kabas from around the world
- [[~/org/attach/images_2012/Image_XpVNraqSLRFjWw3Qav1Wiw_0001.jpg]]
+
+http://www.ynet.co.il/articles/0,7340,L-4649339,00.html
+
+    1. קבב רומני
+
+    המרכיבים:
+    1 ק"ג בשר בקר טרי עם אחוזי שומן ניכרים, למשל שפונדרה וצוואר טחונים בטחינה כפולה
+    2-3 שיני שום כתוש
+    1/2 כפית מלח
+    1 כפית פלפל שחור
+    3/4 כוס ציר בקר, אפשר מאבקה
+    1 כפית גדושה סודה לשתייה
+ 
+    אופן ההכנה:
+    ממיסים את הסודה לשתיה במרק, כשהוא פושר.
+    מערבבים היטב יחד את כל המרכיבים. ובידיים רטובות יוצרים קציצות ומניחים ללילה של מנוחה.
+    צולים על רשת ומגישים עם קיסמים וחרדל.
+ 
+    2. קבב הבית
+    הקבב הביתי והקבוע שלנו בבית. מתכון פשוט ומנצח
+
+    המרכיבים:
+    1 ק"ג בשר בקר טרי עם אחוזי שומן ניכרים, למשל שפונדרה וצוואר טחונים בטחינה כפולה
+    1/2 כפית מלח
+    1 כפית פלפל שחור
+    1/2 כפית פלפל אנגלי טחון
+    3 בצלים גדולים, פרוסים לחתיכות ומטוגנים עד כדי השחמה רצינית
+    1 כף חומץ בלסמי
+    2 שיני שום כתוש
+    צרור פטרוזיליה קצוצה
+ 
+    אופן ההכנה:
+    טוחנים את הבשר עם הבצל והפטרוזיליה ויתר המרכיבים במעבד מזון. יוצרים קציצות ומניחים ללילה במקרר.
+    מטגנים במחבת טפלון או על הגריל מכל הצדדים ועד להזהבה ומגישים על חצי פיתה קלויה, עם טחינה ועגבנייה טרייה.
+ 
+    3. קבב חריף
+ 
+    המרכיבים:
+    500 גרם בשר צוואר, טחון גס
+    500 גרם בשר קשתית (שפונדרה), טחון גס
+    250 גרם נתח פלדה של טלה, טחון גס
+    1-2 פלפל חריף, לפי כוח הסיבולת
+    1 ביצה טרופה
+    1 כפית מלח
+    1כפית פלפל שחור
+    1/2 כפית פלפל אנגלי טחון
+    1/2 כפית כמון
+    1 בצל גדול, קצוץ וסחוט
+    1/2 חבילת פטרוזיליה, קצוצה
+ 
+    אופן ההכנה:
+    קולים את הפלפל החריף במשך מספר דקות על מחבת חמה. חותכים אותו לאורך ומוציאים את הגרעינים. קוצצים דק.
+    שמים את תערובת הבשרים בקערה עמוקה ומוסיפים את התבלינים, הביצה הטרופה, הבצל הפלפל החריף, והפטרוזיליה ומערבבים היטב.
+    יוצרים צורות של קציצות מהתערובת ושמים במקרר למשך כמה שעות או אפילו לכל הלילה.
+    מניחים את הקבב על נייר אפייה וצולים אותו בתנור שחומם מראש לטמפרטורה של 200 מעלות, במשך כ-6 דקות משני צידיו.
+    מגישים את הקבב איך לא, עם קצת טחינה בצד וגם ירקות קלויים. 
+      (צילום: תום להט)
+    (צילום: תום להט)
+
+    4. קבב עם בצל מטוגן
+ 
+    המרכיבים ל-18 קבבים גדולים:
+    600 גרם שפונדרה ו-600 גרם צוואר, טחונים ומעורבבים
+    1 כפית פלפל שחור גרוס
+    1 בצל בינוני קצוץ דק
+    1 כפית שטוחה מלח
+    1 כפית סודה לשתייה מומסת בשליש כוס מים פושרים
+ 
+    אופן ההכנה:
+    1. מטגנים את הבצל במעט שמן. מקררים ושומרים את השמן.
+    2. מערבבים את היטב את כל המרכיבים, יוצרים קציצות ומניחים במקרר למשך הלילה במקרר. למחרת צולים על הגריל (ניתן לשמור את הקציצות במקפיא).
+ 
+    5. קבב עדין בסגנון רוסי
+    מי שלא אוהב תיבול גס – זה הקבב המושלם עבורו, כשהעסיסיות מקורה – לא תאמינו! – במיונז שבתערובת שגם מקנה לו מרקם רך ונעים. הכנה מוקדמת ומנוחה של לילה תעזור לבשר להיקשר ולא להתפרק על הגריל.
+ 
+    המרכיבים ל-10-12 קציצות:
+    800 גרם צוואר בקר
+    200 גרם פלדה טלה
+    1/2 כפית מלח
+    1/2 כפית פלפל שחור
+    1/2 כפית פפריקה מתוקה
+    1 כף חרדל דיזון חלק
+    2 כפות מיונז
+    1 בצל סגול קטן, קצוץ דק
+    מעט נענע קצוצה
+ 
+    אופן ההכנה:
+    מערבבים את כל המרכיבים בעודם קרירים ויוצרים קציצות. מצננים לילה במקרר או 6 שעות לפחות.
+    צולים על אש יחסית חמה עד לדרגה הרצויה. מומלץ להגיש לצד חרדל חריף או חזרת
+
+
 ** world cuisine
+*** mexican
+*** Chorizo con Papas						    :Mexican:
+    :PROPERTIES:
+    :Time:     30
+    :Rating:
+    :Source:   http://www.bazekalim.com/2012/12/14/chorizo-con-papas/
+    :Ammount:  12 tortias
+    :Fav:
+    :Type:
+    :END:
+
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2014-07-19 12:51:24
+ #+attr_html: :width 300px
+  [[/home/zeltak/org/attach/images_2014/screenshot_2014-07-19_12:51:24.png]]
+**** Ingridients
+ 3-4 chorizo ​​sausages of any kind like (about 350 g)
+ 2 medium potatoes (about 1/2kg)
+ 1 teaspoon cumin
+ 1 Teaspoon Coriander powder
+ 2-3 teaspoons paprika (preferably smoked)
+ About a third of a teaspoon of chili flakes
+ To serve:
+ About 12 tortillas
+ Radish slices
+ slices of ripe avocado
+ cilantro or parsley,
+ tomatoes
+ salsa
+ lemon wedges   
+**** Preperation
+ #+BEGIN_EXAMPLE
+ מפשירים 3-4 נקניקיות צ'וריסו (בערך 350 גר' פלוס מינוס) מכל סוג שאוהבים (חזיר / בקר / חריף / לא חריף)
+
+ . קולפים וקוצצים 2 תפוחי אדמה בינוניים (חצי קילו בערך) לקוביות בגודל 1 ס"מ. מכסים במים ומביאים לרתיחה בסיר בינוני. 
+ מרתיחים 6-8 דקות נוספות על אש גבוהה, או עד שהתפוחים מתחילים להתרכך, אך לא מוכנים לגמרי. מסננים.
+
+
+  בינתיים קוצצים גס בצל בינוני ונפטרים מהציפוי של הנקניקיות כדי שיישאר רק הבפנוכו – בשר טחון (ושומני להפליא!).
+
+  מטגנים את בשר הצ'וריסו במחבת גדולה וחמה (אין צורך בשמן) כ-5 דקות ומפרקים לגושים. מוסיפים את הבצל ותפוחי האדמה המבושלים-חלקית. מתבלים לפי הטעם בכ-1 כפית כמון, 1 כפית כוסברה טחונה, 2-3 כפיות פפריקה לא חריפה (מומלץ מעושנת), כשליש כפית פתיתי צ'ילי חריף (או כל צ'ילי שאוהבים, לפי הטעם) ומלח ופלפל
+
+ . התיבול מאוד תלוי בסוג הצ'וריסו שלכם. מוסיפים יותר או פחות לפי הטעם. מטגנים כ-10-12 דקות נוספות עד שהתפודים מוכנים ושחומים. הבשר השומני אמור לסכך את המחבת והתפודים כהוגן, אבל אם הם נדבקים או נשרפים, אפשר להוסיף מעט שמן. 
+
+ מגישים חם, בטורטיות או פיתות, עם שלל טופינגז לפי המרגש.    
+ #+END_EXAMPLE
+
 *** indian
 **** gujarati potatos
      :PROPERTIES:

@@ -154,7 +154,7 @@ after first performing box plot and outlier analysis and trying to understand th
 *** explore
 **** low yearly aod values and compared to DB which is higher in south of israel
 we should look at wind speed from reanalysis data/station to see if these areas have low or high ws values
-**** EXP use of aqua and terra as 2 separate exposure:
+**** TODO use of aqua and terra as 2 separate exposure:
 instead of calibrating: one would be a peak level exposure and one a "background" exposure
 calibrate with hourly 
 terra > 9:30
@@ -168,7 +168,7 @@ we want to show that one picks up traffic well while the other picks up transpor
      :END:
 use data with 30 degree azimuths that should be better:
 either subset data by that or play with these azimuths as weights in a model 
-**** EXP check in Israel for next iteration
+**** TODO check in Israel for next iteration
 composition of PM in israel
 teom at 50 celsius  may over measure and introduce noise to pm25.
 look at average residual in monitors 
@@ -214,7 +214,7 @@ try ratio later (all co located)
 **** Writing Material
 
 
-** OSM Project
+** OSM Project							       :lara:
 *** info file
 id:
 *** code
@@ -432,7 +432,7 @@ impute pm2.5 from pm10 data in low pm2.5 years
 **** TODO send massimo AOD Sweden
 **** ill create euro wide grids					     :meytar:
 Talk to myetar to make csv for single hdf lat/longs
-**** TODO [#A] send qian pm2.5 10 data in israel italy france
+**** TODO [#A]  send qian pm2.5 10 data in israel italy france
 **** Archive							    :ARCHIVE:
 ***** TODO open a ftp 
       :PROPERTIES:
@@ -499,7 +499,7 @@ antonella dosent have sulfate data, is it from EPA data website?
 **** israel contacts
 Shuki Cohen from Matat, or Shlomo may also be able to help you
   
-*** TODO talk to omer about sending kees the ma proposal      :omer:students:
+*** TODO [#A] send sending kees the ma proposal		      :omer:students:
 also look at the imperial coleage model and comparing it to his LUR regression
 ** Haifa Monitoring project
 *** info file
@@ -1398,6 +1398,8 @@ send email back to alexei
 
 **** perhaps noise exposure modeling? I have a student that is working on this- tis very hard to model, need a "moitoring campagin", height, buliding material etc
 **** crime-data availability?
+** ENSANUT mexico grant
+
 ** Grant with german group- Josepg
 1.  the Volksvaben grant
 
@@ -1412,7 +1414,32 @@ If you are a scientist or scholar from Germany you can profit from our support a
 As an intermediary organisation for German foreign cultural and educational policy we promote international cultural dialogue and academic exchange.
 * scheduled mail/calls/meetings
 ** Alexei Mount Sinai[2015-09-18 Fri] 
-*** issues: 
+*** actual talk
+**** india 
+india should start processing soon (talk to alexei about it)
+Joel has collaborations in the south of India
+we need to maybe organize a skype call between all groups
+**** send israel pm data					     :meytar:
+send alexei pm25/10 data over israel (mainly tel aviv and haifa)
+**** explore different slopes based on MAIAC proccesing path or type of algorithm
+ask alexei in an email for details on that and when can we get it in the data
+**** why is pm 10 better then pm25
+perhaps road dust that keeps circulating in the air
+**** talk to alexei about dynamic models
+different models in summer vs winter.
+maybe coast vs other models since humidity is a big isssue in maiaic. the model assumes that particle size growth grows with high humidity
+**** stratify corr models by humidity
+**** look at using maiac ndvi 
+use already available data
+Rb2-Rb1/Rb1+Rb2
+**** ratio between column water vapor and AOD- ask meytar to talk to bob chatfield about this:
+this seems to work better for aqua?
+**** particle counter measurement on the ground- more aeronet stations to calibrate can improve the model greatly.
+**** look at the SD and range of pm and aod in each station
+**** Joel imputes AOD from geoschem when maiac is missing?
+**** characterize lu,vegetation,surface brightness etc in each bad a good aod-pm corr pixels
+**** long term- look into VIIRS and goess-R for future aod and maiac aod solutions 
+*** issues 
 **** cloud cover issue in Mexico; grid cells being masked because of bright surfaces (false clouds) and dropping of clear days- (long time series with no scene coverage)
 **** Israel data subsets with no raw correlation - Itai will send examples to Alexei (related: not certain why we have big differences in R2 from year to year in Israel and Mexico)
 **** dust days not caught by MAIAC (in Israel); Itai and Meytar sending a few examples
@@ -1498,4 +1525,4 @@ https://mail.google.com/mail/u/0/#search/Robert+Wright+%3Cem%40editorialmanager.
 
 ** helen burress paperowk
 heburris@bidmc.harvard.edu RE: paperwork issues
-** TODO open a bgu lab github
+** TODO [#A] open a bgu lab github

@@ -486,7 +486,9 @@ file:~/.config/fontconfig/fonts.conf
 systemctl enable avahi-daemon.service
 systemctl enable NetworkManager
 systemctl start sshd.service
+systemctl enable rpcbind
 systemctl enable rpc-mountd.service
+systemctl enable nfs-server
 systemctl enable webmin.service
 systemctl enable smbd.service
 systemctl enable cronie
@@ -498,10 +500,11 @@ systemctl enable cronie
 #+BEGIN_SRC sh
 pacman -S emacs rsync tree ncdus nfs-utils rpcbind terminator r mc  flac lame abiword keepassx dzen2 zip unzip unrar mtpaint krename gmrun aspell aspell-en findutils inkscape python-lxml gcolor2 easytag kdiff3  htop p7zip vlc smb4k screen tmux speedcrunch mlocate vim gvim mpd mpc atool lynx profont fb-client feh keychain picard  gdb mp3gain pacgraph sqliteman grep awk leafpad less lxappearance pavucontrol net-tools sshfs xterm zsh samba xclip lxtask pydf xorg-xkill nmap acpi audacity nmon  powertop ttf-inconsolata sxhkd git zsh firefox chromium ncmpcpp gmpc gcc filezilla gimp jre7-openjdk kdegraphics-okular
 meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  mosh w3m imagemagick graphicsmagick thunar pinta dconf-editor icedtea-web remmina tigervnc  android-tools mediainfo
+# for usb mounting
+udisks2 udiskie
 #+END_SRC
 !Special repo for laptops:!
 laptop-mode-tools
-
 ***** AUR
 
 $NOTE: Before starting with aur installs make sure the /etc/makepkg.conf is configured correctly >>> $  [[prerequisites][prerequisites]] and the gpg issues
@@ -1750,7 +1753,24 @@ traditional:
  IE:
 
 sudo mount -t ntfs-3g /dev/sdf1 /media/tmount/
+**** mounting usb drives
+use udiskie for that
+https://github.com/coldfix/udiskie
+https://wiki.archlinux.org/index.php/Udisks
 
+first make sure xinitrc is executable ₆In example₆ 
+
+#+BEGIN_SRC sh
+chmod +x ~/.xinitrc
+#+END_SRC
+
+then add the following line
+
+#+BEGIN_EXAMPLE
+udiskie -2 -s &
+#+END_EXAMPLE
+
+when you relogin the service of auto-mounting should be working and you will get a try icon when the system is mounted
 ** kde
 *** Kde in arch
 **** install
@@ -24845,6 +24865,26 @@ This directory can be restored in a similar way:
 #+BEGIN_SRC sh :results none
 $ gpg --decrypt < password-store-backup.tar.gz.gpg  | tar -xz 
 #+END_SRC
+**** utils
+***** passed
+https://github.com/jreinert/passed
+A simple script to modify password store entries with sed commands
+
+
+#+BEGIN_SRC sh
+yes | ruby /path/to/passed 's/UserName/user/' 
+or
+yes | ruby /path/to/passed 's/URL/url/' 
+#+END_SRC
+
+$Note$- not using the yes part will popup a yes request for each entry
+**** Reset git repo in password store dir
+just do the following 
+#+BEGIN_SRC sh
+cd ~/.password-store
+rm -fr .git
+pass git init
+#+END_SRC
 
 *** synergy
 on server (in my case the beast) configure as server. then press the configure server button and define position if the client and enter the name `screen name` (in my case `x1`)
@@ -33021,13 +33061,13 @@ to fix this disable linium mode in org with the following hook
 
 #+END_SRC
 ******* capture
-******** setup
+******** org setup
 make sure you have 
 #+BEGIN_SRC emacs-lisp :results none
 (require 'org-protocol)
 #+END_SRC
 in your init file before you start capturing
-******** setup capture from chrome-Registering Org-Protocol with XDG-open
+******** setup capture from Chrome Browser (Registering Org-Protocol with XDG-open)
 
 http://tech.memoryimprintstudio.com/?p=160
 
@@ -33086,19 +33126,16 @@ javascript:location.href='org-protocol://capture://w/'+encodeURIComponent(locati
 7. Select some text in a website and click on the Boolmarklet you just created
 $Note- add the “/usr/bin/emacsclient” program if prompted$
 8. You should see the pop up capture pane in one of the emacsclients open
-******** keybinds
-use ~C-c C-s~ (org-schedule) to schedule it for a particular day
-set the deadline with ~C-c C-d~ (org-deadline),
-use ~C-c C-w~ to refile it
 ******** launch org capture from command line (for quick WM binds)
 	 :PROPERTIES:
 	 :END:
-*********  method 2
-
+********* `CURRENT used method`
 #+BEGIN_SRC sh
 /usr/bin/emacsclient -nw -e '(org-capture)'   
+##binding in wm example
+terminator --geometry=1200x900 -c ocapture -e "emacsclient -nw -e '(org-capture)'"  
 #+END_SRC
-********* new method 
+*********  alternative method 1
 issue this line:
 #+BEGIN_SRC sh
 emacsclient -nw org-protocol:/capture:/URL/TITLE/BODY
@@ -33110,7 +33147,7 @@ you can also execute a specific capture templeate by adding the shortcut after t
 emacsclient -nw org-protocol:/capture:/x/URL/TITLE/BODY
 #+END_SRC
 
-********* old method (still works but more cumbersome)
+********* alternative method 2 (still works but more cumbersome)
 
 1.add this code in your .emacs
 
@@ -33144,18 +33181,14 @@ frame"
 #+end_src
  
 ******** default keybinds
-
 C-c c     (org-capture)
 Call the command org-capture. Note that this keybinding is global and not active by default: you need to install it. If you have templates defined see Capture templates, it will offer these templates for selection or use a new Org outline node as the default template. It will insert the template into the target file and switch to an indirect buffer narrowed to this new node. You may then insert the information you want.
-
 
 C-c C-c     (org-capture-finalize)
 Once you have finished entering information into the capture buffer, C-c C-c will return you to the window configuration before the capture process, so that you can resume your work without further distraction. When called with a prefix arg, finalize and then jump to the captured item.
 
-
 C-c C-w     (org-capture-refile)
 Finalize the capture process by refiling (see Refile and copy) the note to a different place. Please realize that this is a normal refiling command that will be executedso the cursor position at the moment you run this command is important. If you have inserted a tree with a parent and children, first move the cursor back to the parent. Any prefix argument given to this command will be passed on to the org-refile command.
-
 
 C-c C-k     (org-capture-kill)
 Abort the capture process and return to the previous state.
@@ -33170,6 +33203,13 @@ Visit the last stored capture item in its buffer.
 You can also jump to the bookmark org-capture-last-stored, which will automatically be created unless you set org-capture-bookmark to nil.
 
 To insert the capture at point in an Org buffer, call org-capture with a C-0 prefix argument.
+
+use ~C-c C-s~ (org-schedule) to schedule it for a particular day
+set the deadline with ~C-c C-d~ (org-deadline),
+use ~C-c C-w~ to refile it
+
+I added a following key
+C-c x】 to capture in close elegantly in the command line
 ******** Templates
 ********* base
 see the help file below for full details. in short:
@@ -33196,21 +33236,19 @@ example:
 ("x" "todo_nix" entry (file+headline "~/org/files/agenda/TODO.org" "Linux")
 #+END_SRC
 
-********** keys 
+********** Keys 
 that willselect the template, as a string, characters only, for example "a" for a template to be selected with a single key, or "bt" for selection with two keys. When using several keys, keys using the same prefix key must be sequential in the list and preceded by a 2-element entry explaining the prefix key, for example
 
-#+BEGIN_EAMPLE
+#+BEGIN_EXAMPLE
 ("b" "Temlates for marking stuff to buy")
-#+END_EXAPLE
+#+END_EXAMPLE
+
 If you donot define a template for the C key, this key will be used to open the customize buffer for this complex variable.
 
-********** description
-
+********** Description
 A short sring describing the template, which will be shown during selection.
-
-********** type
-
-The type f entry, a symbol. Valid values are:
+********** Type
+The type for entry, a symbol. Valid values are:
 
 `entry`
 An Org moe node, with a headline. Will be filed as the child of the target entry or as a top-level entry. The target file should be an Org mode file.
@@ -33221,11 +33259,11 @@ A plain lst item, placed in the first plain list at the target location. Again t
 `checkite`
 A checkbo item. This only differs from the plain list item by the default template.
 
-`table-lie`
-a new lin in the first table at the target location. Where exactly the line will be inserted depends on the properties :prepend and :table-line-pos (see below).
+`table-line`
+a new line in the first table at the target location. Where exactly the line will be inserted depends on the properties :prepend and :table-line-pos (see below).
 
 `plain`
-Text to b inserted as it is. 
+Text to be inserted as it is. 
 
 ********** Target
 
@@ -33263,12 +33301,17 @@ Valid values are:
 (function function-finding-location)
     Most general way, write your own function to find both file and location. 
 
-********** template
+********** Template
 The template for creating the capture item. If you leave this empty, an appropriate default template will be used. Otherwise this is a string with escape codes, which will be replaced depending on time and context of the capture call. The string with escapes may be loaded from a template file, using the special syntax (file "path/to/template"). See below for more details. 
-********** Template expansion 
 
 In the template itself, special '%-escapes'
 allow dynamic insertion of content.If you need one of these sequences literally, escape the '%' with a backslash. The templates are expanded in the order given here:
+
+another special property is
+
+%^{Description}
+
+this will give you a prompt to the header name
 
 #+BEGIN_EXAMPLE
 %[file]     Insert the contents of the file given by file.
@@ -33400,7 +33443,7 @@ add as text between 2 :, ₆In example₆
  "  %x :Pre_Release: " )
 #+END_EXAMPLE
 
-********** add a elips  function (Sexp) as part of capture
+********** add a elips function (Sexp) as part of capture
 use %(sexp) ₆In example₆ 
 #+BEGIN_SRC emacs-lisp :results none
 ("F" "food" entry (file+headline "/home/zeltak/org/files/agenda/food.org" "Inbox")
@@ -34247,6 +34290,11 @@ Since it is in org mode I can now categorize and tag these links. I can take not
 I am slowly adding systems in as I need them. I have found the ability to keep notes and a basic log of what and why I was there to be invaluable.
 
 If you need to access a lot of random systems you should try this, it has made my life sane
+******** add a link to a org todo view
+use this format with the elisp function 
+#+BEGIN_SRC emacs-lisp :results none
+[[elisp:(org-agenda%20nil%20"w")][TO-COOK]]
+#+END_SRC
 
 ******* attach
 ******** set default dir
@@ -38541,7 +38589,6 @@ job (not the PID) number.
 ** systemd
 **** systemctl
 The main command used to introspect and control systemd is systemctl. Some of its uses are examining the system state and managing the system and services. Note: systemadm is the official graphical frontend for systemctl. It is provided by the systemd-ui-git package from the AUR.
-
 ***** Analyzing the system state
 List running units:
 
@@ -38799,7 +38846,8 @@ Job for emacs@zeltak.service failed. See 'systemctl status emacs@zeltak.service'
 make sure there are no other instances of emacs running (you can use killall emacs)
 
 and stop/start emacs again via systemd
-
+***** NFS
+enable/start: nfs-server and rpcbind
 ***** offlineimap 
 @General Note: Please be careful when you shutdown your computer. If offlineimap is running, there is a high probability that one of the databases become corrupted.@
 
@@ -40721,6 +40769,13 @@ you can also ignore specific folders by name yet it will only ignore the top lev
 #+BEGIN_EXAMPLE
 ignore = path {.svn}
 #+END_EXAMPLE
+**** Repeat (dropbox like continous sync)
+you can add a repeat option to continuously sync your files in a dropbox like manner. 
+the time you give is in seconds for example for a sync each 5 seconds use 
+
+#+BEGIN_SRC sh
+unison sync -repeat 5
+#+END_SRC
 *** fscheck
 **** cancel fscheck
 
@@ -44607,7 +44662,11 @@ follows:
  3)To bring an interface up or take it down again use
  
  sudo ifconfig <interface> (up/down)
-
+*** ip
+**** get all ip addresses 
+#+BEGIN_SRC emacs-lisp :results none
+ip a
+#+END_SRC
 *** resolv.conf
 
 set up DNS

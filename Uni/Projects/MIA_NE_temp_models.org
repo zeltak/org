@@ -234,6 +234,31 @@ MIA_NE_temp_models_files/img/SS-2011-04-26_15.27.46.png]]
 [[
 MIA_NE_temp_models_files/img/Image_owwqUrxD7Lyx2ey2prMabQ_0001.png]]
 
+
+Information on how to convert the digital values ("digital numbers" or DN) in satellite remote sensing data that is operationally produced and distributed into physical quantities of interest is generally found in the data user guide. In this case, you need the user guide for the MODIS 11 Level 2 product. Under "scientific data sets (SDS" there is a table that contains the relevant information for the land surface temperature:
+
+SDS Name: LST
+Long Name: Land-surface temperature
+Number Type: uint16 
+Unit: K 
+Valid Range: 7500-65535
+Fill Value: 0   
+scale factor: 0.02  
+add offset: 0.0
+"Scale factor" and "add offset" are used for a linear re-scaling of the DN values (which are going to be between 7500 and 65535) to temperatures in K. As the page explains:
+
+The effective calibration formula for the "LST" SDS is LST = the SDS data in uint16 * 0.02, giving a value in the range of 150-1310.7K.
+
+`Temperature in °C will be`:
+DN * 0.02 - 273.15.
+
+
+
+** Columns_per_ 
+Global_Grid_Row	Columns per row in the MODLAND 
+integerized sinusoidal grid	int32	none	0-43200	0	1	0
+* The scale_factor 0.0001 was changed to 0.0004 since v2.3.6 and to 0.0005 since v2.5.1
+
 **** MODIS Tiling system
 
 [[file:MIA_NE_temp_models_files/img/sn_10deg.gif]]

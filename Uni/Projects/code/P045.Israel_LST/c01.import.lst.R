@@ -13,32 +13,59 @@ library(ggmap)
 library(broom)
 library(splines)
 library(DataCombine)
+library(readr)
 #sourcing
 # returns string w/o leading or trailing whitespace
 #trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
 #import clipped grid
-fullgrid<-read_csv("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/gird/ISAREL.grid.csv")
+fullgrid<-fread("/media/NAS/Uni/Projects/P045_Israel_LST/2.work/gridXY_IL.csv")
 
 ####################
 ## 2003
 ####################
 ###Read 1 csv per tile
-out1 <- read_csv("/media/NAS/Uni/Data/MV3/Out/MAIAC_Aq.h00v01.2003.csv")
-out2 <- read_csv("/media/NAS/Uni/Data/MV3/Out/MAIAC_Aq.h00v02.2003.csv")
-out3 <- read_csv("/media/NAS/Uni/Data/MV3/Out/MAIAC_Aq.h01v01.2003.csv")
-out4 <- read_csv("/media/NAS/Uni/Data/MV3/Out/MAIAC_Aq.h01v02.2003.csv")
-out<-rbind(out1,out2,out3,out4)
-rm(out1,out2,out3,out4)
-gc()
+out <- read_csv("/media/NAS/Uni/Data/Israel/MODIS_LST_IL/out/AqIsr_2003.csv")
+#describe(out$NIGHT)
+head(out)
+#recode fill values of '0'- they are NA
+# note: you can use comma or ampersand to represent AND condition
+out[DAY==0, DAY:= "NA"]
+
+
+#convert LST to temperature
+#apply a scale factor
+out$d.tempc<-out$DAY* 0.02 - 273.15
+out$n.tempc<-out$NIGHT* 0.02 - 273.15
+out$emissivity <- out$EMIS*0.002+0.49
+##correction we dont apply anymore
+#NTckin=  dtc/(emis_scale**0.25);
+#NTckin=  ntc/(emis_scale**0.25);
+out<-as.data.frame(out)
+head(out)
 #create lstid and unique grid
 setnames(out,"Lat","lat_lst")
 setnames(out,"Lon","long_lst")
+names(out)
+out$DAY<-NULL
+out$NIGHT<-NULL
+out$EMIS<-NULL
+out<-as.data.frame(out)
 #create lstid
 out$lstid<-paste(out$long_lst,out$lat_lst,sep="-")
+
+#create full unclipped grid
+yy <-out %>%
+    group_by(lstid) %>%
+    summarise(lat_lst = mean(lat_lst, na.rm=TRUE),  long_lst = mean(long_lst, na.rm=TRUE))
+
+write.csv(yy,"/media/NAS/Uni/Projects/P045_Israel_LST/2.work/unclip.lstXY.csv")
+
+
 ##at this stage clip the data based france grid
-out<- out[out$lstid %in% fullgrid$lstid, ]
-#dates
+outclip <- out[out$lstid %in% fullgrid$lstid, ]
+
+
 #contatanate feilds
 out$date<-paste(out$Day,out$Month,out$Year,sep="/")
 #create R date format
