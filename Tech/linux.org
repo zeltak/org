@@ -33523,6 +33523,15 @@ Then use this in an Org file:
 
 This way, if Google decides to change it's url structure, all you have
 to do is redefine your link type, instead of all email links.
+******** use multi letter binds
+You need to define the overarching capture section for multi-key usage..
+so:
+
+#+begin_src emacs-lisp
+("x" "My Section") ;; this is the name of the section and will open the below submenu
+("xd" "nix_TD" entry (file+headline "~/org/files/agenda/TODO.org" "TODO")
+ "*  %^{Description}" ) 
+#+end_src
 
 ******* column view
 ******** base keys 
@@ -34328,6 +34337,9 @@ Fixing that is a simple matter, but it takes a bit of digging around. We just ne
 
 ******* org-google sync 
 ******** org-gcal
+	 :PROPERTIES:
+	 :ID:       20c1b2ad-bd42-4c37-9354-5c54c5fa8382
+	 :END:
 https://github.com/myuhe/org-gcal.el
 
 org-gcal is now available in the famous emacs package repo MELPA, so the recommended way is to install it through Emacs package management system.
