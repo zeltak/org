@@ -88,7 +88,11 @@ data times6;
 set times5;
 if guid=. then delete;
 deltapm=pmnewma1-mpmguid;
+deltapm0=pmnew_l0-mpmguid;
+deltapm2=pmnewma3-mpmguid;
 run;
+
+
 
 proc means data=times6 n min max mean std nmiss p25 p50 p75;
 var Avg_p_A65--Avg_P05300; 

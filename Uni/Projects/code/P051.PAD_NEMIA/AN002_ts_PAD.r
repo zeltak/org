@@ -24,6 +24,28 @@ head(AP2)
 names(AP2)
 AP[,c("_TYPE_","_FREQ_"):=NULL]
 
+
+
+#main-DELTA PM's
+APres <- (glmmPQL(count ~ ns(date,df=45)+deltapm+mpmguid+temp_fmayear+Avg_P05300+Avg_per_mi+Avg_p_A65, random = ~ 1 | guid, family = poisson, data = AP2))
+summary(APres)$tTable
+
+
+#main-DELTA PM's la0
+APres <- (glmmPQL(count ~ ns(date,df=45)+deltapm0+mpmguid+temp_fmayear+Avg_P05300+Avg_per_mi+Avg_p_A65, random = ~ 1 | guid, family = poisson, data = AP2))
+summary(APres)$tTable
+
+
+#main-DELTA PM's la2
+APres <- (glmmPQL(count ~ ns(date,df=45)+deltapm2+mpmguid+temp_fmayear+Avg_P05300+Avg_per_mi+Avg_p_A65, random = ~ 1 | guid, family = poisson, data = AP2))
+summary(APres)$tTable
+
+#main-DELTA interactions
+APres <- (glmmPQL(count ~ ns(date,df=45)+deltapm+mpmguid+temp_fmayear+Avg_P05300+min_bin_m+min_bin_m*deltapm+Avg_p_A65, random = ~ 1 | guid, family = poisson, data = AP2))
+summary(APres)$tTable
+
+
+
 #main
 APres <- (glmmPQL(count ~ ns(date,df=45)+pmnewmayear+temp_fmayear+Avg_P05300+Avg_per_mi+Avg_p_A65, random = ~ 1 | guid, family = poisson, data = AP2))
 summary(APres)$tTable
@@ -46,16 +68,6 @@ summary(APres)$tTable
 APres <- (glmmPQL(count ~ ns(date,df=45)+ pmnew+pmnewmayear+temp_fmayear+Avg_P05300+Avg_per_mi+Avg_p_A65+col_bin_m*pmnewmayear, random = ~ 1 | guid, family = poisson, data = AP2))
 summary(APres)$tTable
 
-
-
-#main-DELTA PM's
-APres <- (glmmPQL(count ~ ns(date,df=45)+deltapm+mpmguid+temp_fmayear+Avg_P05300+Avg_per_mi+Avg_p_A65, random = ~ 1 | guid, family = poisson, data = AP2))
-summary(APres)$tTable
-
-
-#main-DELTA PM's
-APres <- (glmmPQL(count ~ ns(date,df=45)+deltapm+mpmguid+temp_fmayear+Avg_P05300+Avg_per_mi+Avg_p_A65, random = ~ 1 | guid, family = poisson, data = AP2))
-summary(APres)$tTable
 
 
 

@@ -16,35 +16,63 @@ library(splines)
 library(DataCombine)
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/geomerge_alpha.r")
 
-#load clipped israel grid 
-fgrid <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/gird/grid.csv")
+#import clipped grid
+fullgrid<-fread("/media/NAS/Uni/Projects/P045_Israel_LST/2.work/gridXY_IL.csv")
 
 #load LST data
-aqua.2003<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/lst.AQ.2003.rds")
+aqua.2003<-readRDS("/media/NAS/Uni/Projects/P045_Israel_LST/2.work/lst.AQ.2003.rds")
+head(aqua.2003)
 # #get rid of dplyr tbl_df until bug gets fixed
 # aqua.2003<-as.data.frame(aqua.2003)
 # aqua.2003<-as.data.table(aqua.2003)
 
 #create full LU TS
 days<-seq.Date(from = as.Date("2003-01-01"), to = as.Date("2003-12-31"), 1)
-
 #create date range
-days2003 <- data.table(expand.grid(lstid = fgrid[, unique(lstid)], day = days))
-
+days2003 <- data.table(expand.grid(lstid = fullgrid[, unique(lstid)], day = days))
 #merge
 setkey(aqua.2003,lstid,day)
 setkey(days2003 ,lstid,day)
 db2003 <- merge(days2003,aqua.2003, all.x = T)
 
+fullgrid<-select(fullgrid,lstid ,  stn,   itm_e ,     itm_n ,   ELEVATION,  ASPECT  ,   roadden ,   DENS_POP,   ndviid  ,   long_ndvi , lat_ndvi  )
 
 #######spatial 
 #bring in all spatial components
-lu <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/france.grid.allLU.rds")
     #merge
     setkey(db2003,lstid)
-    setkey(lu ,lstid)
-    db2003 <- merge(db2003,lu, all.x = T)  
+    setkey(fullgrid ,lstid)
+    db2003 <- merge(db2003,fullgrid, all.x = T)  
 gc()
+head(db2003)
+
+#add month
+db2003[, m := as.numeric(format(day, "%m")) ]
+#add season
+#1-winter, 2-spring,3-summer,4-autum
+db2003$season<-recode(db2003$m,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")
+#1-winter, 2-summer
+db2003$seasonSW<-recode(db2003$m,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;12=1")
+
+
+#join NDVI to lst
+fin.ndvi<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN006_NDVI_yearly/ndvi.rds")
+fin.ndvi<-filter(fin.ndvi,year==2003)
+gc() 
+key.ndvi<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ndvi.rds")
+#add ndvi-key
+setkey(db2003,lstid)
+setkey(key.ndvi,lstid)
+db2003 <- merge(db2003, key.ndvi, all.x = T)
+#add ndvi
+setkey(db2003,ndviid,m)
+setkey(fin.ndvi,ndviid,m)
+db2003 <- merge(db2003, fin.ndvi[,list(ndviid,ndvi,m)], all.x = T)
+#cleanup
+keep(fgrid,db2003,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+gc()
+
+
 
 
 
@@ -65,33 +93,6 @@ db2003 <- merge(db2003, aqua.met[,list(day,wsavg,lstid)], all.x = T)
 keep(fgrid,db2003,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
 db2003$LUlstid<-NULL
 gc()
-
-
-#add month
-db2003[, m := as.numeric(format(day, "%m")) ]
-#add season
-#1-winter, 2-spring,3-summer,4-autum
-db2003$season<-recode(db2003$m,"1=1;2=1;3=2;4=2;5=2;6=3;7=3;8=3;9=4;10=4;11=4;12=1")
-#1-winter, 2-summer
-db2003$seasonSW<-recode(db2003$m,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;12=1")
-
-#join NDVI to lst
-fin.ndvi<-readRDS("/media/NAS/Uni/Data/Europe/france/ndvi_france/out/fin.ndvi.rds")
-fin.ndvi<-filter(fin.ndvi,year==2003)
-gc() 
-key.ndvi<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ndvi.rds")
-#add ndvi-key
-setkey(db2003,lstid)
-setkey(key.ndvi,lstid)
-db2003 <- merge(db2003, key.ndvi, all.x = T)
-#add ndvi
-setkey(db2003,ndviid,m)
-setkey(fin.ndvi,ndviid,m)
-db2003 <- merge(db2003, fin.ndvi[,list(ndviid,ndvi,m)], all.x = T)
-#cleanup
-keep(fgrid,db2003,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
-gc()
-
 #################STOP 
 
 #mean Ta calculations
