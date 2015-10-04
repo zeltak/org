@@ -52,6 +52,66 @@ the use of 2 keys like 'xd' doesn't seem to work here
 defined files?
 
 6)has anyone tried using hydra for org capture (instead of dispatch), this will have nicer looks and color support etc :) is this possible?
+
+**** answer
+
+I finally had time to properly setup capture for orgmode and i have a few questions
+
+1) can one define default and/or completion values for capture properties in the property drawers, in example:
+
+%^{Rating}p
+
+so that when I launch the capture and it goes through entering a specific property value I will get some defaults to choose from or a completion option?
+
+Yes, here is an example from my .dotfiles. Pay attention to the backtick and the comma in the org-capture-template there.
+
+https://github.com/elationfoundation/.dotfiles/blob/master/bin/elisp/org-project.org#project-capture
+ 
+
+2) can one customize the help line (the one with hints like C-c C-k to kill etc..) to include more hints?
+
+3) im looking for a way to better insert a sub header
+currently my template looks like this
+
+;;;; food simple template
+("f" "food" entry (file+headline "/home/zeltak/org/files/agenda/food.org" "Inbox")
+"* COOK %^{Description}   %^g
+%t 
+%^{Time}p
+%^{Rating}p
+%^{Source}p
+%^{Ammount}p
+%^{Fav}p
+%^{prompt|** Ingridients}
+%?
+%^{prompt|** Preperation}
+"
+ )
+
+Note that I use %^{prompt|** Ingridients} to force a subheader, which seems to be odd. I couldn't find a better way to do that without getting lisp errors
+
+
+Was "** %^{prompt|Ingridients}" not working for you? What errors were you getting?
+ 
+
+4) can one use multikeys as capture keys such as 
+("xd" "nix_TD" entry (file+headline "~/org/files/agenda/TODO.org" "TODO")
+ "*  %^{Description}" )
+the use of 2 keys like 'xd' doesn't seem to work here
+
+You need to define the overarching capture section for multi-key usage..
+
+("x" "My Section")
+("xd" "nix_TD" entry (file+headline "~/org/files/agenda/TODO.org" "TODO")
+ "*  %^{Description}" ) 
+
+
+5)can I capture and automatically refile to a specific file. In example only ask to refile to headers in a pre 
+defined files?
+
+I don't understand the question. You use file+headline in this example which does that.
+
+
 ** ask org mail
 convert a simple list of lines each to a orgmode header
 ** clean org file
