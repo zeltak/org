@@ -19,6 +19,7 @@ library(zoo)
 library(DataCombine)
 library(readr)
 library(ztable)
+library(stargazer)
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/geomerge_alpha_ex-1.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/geomerge_alpha.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/lsR.r")
@@ -144,9 +145,91 @@ TukeyHSD(aov.ex2)
 
 
 #regressions
+#clean data from missing
+ssa[ssa == -999] <- NA
+setnames(ssa,"ssapm25","PM2.5")
+setnames(ssa,"sasnox","NOx")
+setnames(ssa,"ssaso2","SO2")
+
+#for head circumfereance
+
+#for data
+m1.formula <- as.formula(Avg_Head1_~Avg_ApgarF+ Avg_Pregna+Avg_Educat+JEWS+INCOME+AVERAGE_HH+ BAGRUT+OWNERSHIP+PM2.5) 
+m2.formula <- as.formula(Avg_Head1_~Avg_ApgarF+ Avg_Pregna+Avg_Educat+JEWS+INCOME+AVERAGE_HH+ BAGRUT+OWNERSHIP+NOx) 
+m3.formula <- as.formula(Avg_Head1_~Avg_ApgarF+ Avg_Pregna+Avg_Educat+JEWS+INCOME+AVERAGE_HH+ BAGRUT+OWNERSHIP+SO2) 
+m4.formula <- as.formula(Avg_Head1_~Avg_ApgarF+ Avg_Pregna+Avg_Educat+JEWS+INCOME+AVERAGE_HH+ BAGRUT+OWNERSHIP+PM2.5+NOx+SO2) 
+
+m1 <- lm(m1.formula,data=ssa)
+m2 <- lm(m2.formula,data=ssa)
+m3 <- lm(m3.formula,data=ssa)
+m4 <- lm(m4.formula,data=ssa)
+# summary(m1)
+# summary(m2)
+# summary(m3)
+# summary(m4)
+
+#txt
+stargazer(m1, m2, m3, m4,
+type="text",
+dep.var.labels=c("Head Circumference"),
+column.labels=c("PM2.5 model","NOx model","SO2 model","Multi exposure model"),
+covariate.labels=c("Afgar","Gestational age","mothers education","% Jewish population","Mean Income","mean household income","% of Bagrut","% House owners"), 
+title="SSA level regression results: Head Circumference",
+intercept.bottom = FALSE,
+omit.stat = c("rsq", "f","adj.rsq","ser"),
+out="/media/NAS/Uni/Projects/P050_Haifa/3.results/report_2015/models.txt")
+
+#html
+stargazer(m1, m2, m3, m4,
+type="html",
+dep.var.labels=c("Head Circumference"),
+column.labels=c("PM2.5","NOx","SO2","All exposures"),
+covariate.labels=c("Afgar","Gestational age","mothers education","% Jewish population","Mean Income","mean household income","% of Bagrut","% House owners"), 
+title="SSA level regression results: Head Circumference",
+intercept.bottom = FALSE,
+omit.stat = c("rsq", "f","adj.rsq","ser"),
+out="/media/NAS/Uni/Projects/P050_Haifa/3.results/report_2015/models.htm")
 
 
 
 
+#for Birth weight
+
+#for data
+r1.formula <- as.formula(Avg_Weight~Avg_ApgarF+ Avg_Pregna+Avg_Educat+JEWS+INCOME+AVERAGE_HH+ BAGRUT+OWNERSHIP+PM2.5) 
+r2.formula <- as.formula(Avg_Weight~Avg_ApgarF+ Avg_Pregna+Avg_Educat+JEWS+INCOME+AVERAGE_HH+ BAGRUT+OWNERSHIP+NOx) 
+r3.formula <- as.formula(Avg_Weight~Avg_ApgarF+ Avg_Pregna+Avg_Educat+JEWS+INCOME+AVERAGE_HH+ BAGRUT+OWNERSHIP+SO2) 
+r4.formula <- as.formula(Avg_Weight~Avg_ApgarF+ Avg_Pregna+Avg_Educat+JEWS+INCOME+AVERAGE_HH+ BAGRUT+OWNERSHIP+PM2.5+NOx+SO2) 
+
+r1 <- lm(r1.formula,data=ssa)
+r2 <- lm(r2.formula,data=ssa)
+r3 <- lm(r3.formula,data=ssa)
+r4 <- lm(r4.formula,data=ssa)
+# summary(r1)
+# summary(r2)
+# summary(r3)
+# summary(r4)
+
+#txt
+stargazer(r1, r2, r3, r4,
+type="text",
+dep.var.labels=c("Head Circumference"),
+column.labels=c("PM2.5 model","NOx model","SO2 model","Multi exposure model"),
+covariate.labels=c("Afgar","Gestational age","mothers education","% Jewish population","Mean Income","mean household income","% of Bagrut","% House owners"), 
+title="SSA level regression results: Head Circumference",
+intercept.bottom = FALSE,
+omit.stat = c("rsq", "f","adj.rsq","ser"),
+out="/media/NAS/Uni/Projects/P050_Haifa/3.results/report_2015/models_bw.txt")
+
+#html
+stargazer(r1, r2, r3, r4,
+type="html",
+dep.var.labels=c("Head Circumference"),
+column.labels=c("PM2.5","NOx","SO2","All exposures"),
+covariate.labels=c("Afgar","Gestational age","mothers education","% Jewish population","Mean Income","mean household income","% of Bagrut","% House owners"), 
+title="SSA level regression results: Head Circumference",
+intercept.bottom = FALSE,
+omit.stat = c("rsq", "f","adj.rsq","ser"),
+out="/media/NAS/Uni/Projects/P050_Haifa/3.results/report_2015/models_bw.htm")
 
 

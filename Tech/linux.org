@@ -31386,6 +31386,23 @@ on arch to get it working issue this (at startup)
 #+BEGIN_SRC sh
 grep -q "^avfsd $HOME/.avfs " /proc/mounts || avfsd ~/.avfs -o auto_cache     
 #+END_SRC
+********* Yasnippet
+********** choose pre defined values on expansion
+use the yas-choose-value command
+₆In example₆ 
+#+BEGIN_SRC emacs-lisp :results none
+  :PROPERTIES:
+    :ID: 
+    :Time:  ${1:$$(yas-choose-value '("10" "15" "30" "60"))}
+    :Rating:  ${2:$$(yas-choose-value '("1" "2" "3" "4" "5"))} 
+    :Source: $3
+    :Cuisine:  ${4:$$(yas-choose-value '("Indian" "Thai" "Asian" "Vietnamese" "Chinese" "Israeli" "Italian" "American" "EastEuro" "Mexican" "French" "Persian" "Austria" ))}
+    :Type:   ${5:$$(yas-choose-value '("main" "side" "starter" "sweets" "drinks" "sauce" "breakfast"))}   
+    :Serves:  ${6:$$(yas-choose-value '("1" "2" "4" "6" "8"))} 
+    :Fav: $7
+    :END:
+
+#+END_SRC
 ********* Transmission
 install from melpa
 to define and config it issue customize-group >> transmission
@@ -33534,8 +33551,140 @@ so:
 #+end_src
 
 ******* column view
-******** base keys 
-see the cheat sheet id:a093cf5d-e70e-4127-b605-047bfbcee113                                        
+******** Scope of column definitions
+To define a column format for an entire file, use a line like
+#+BEGIN_EXAMPLE
+ #+COLUMNS: %25ITEM %TAGS %PRIORITY %TODO
+#+END_EXAMPLE
+
+To specify a format that only applies to a specific tree, add a :COLUMNS: property to the top node of that tree, for example:
+
+#+BEGIN_EXAMPLE
+     Top node for columns view
+        :PROPERTIES:
+        :COLUMNS: %25ITEM %TAGS %PRIORITY %TODO
+        :END:
+
+#+END_EXAMPLE
+If a :COLUMNS: property is present in an entry, it defines columns for the entry itself, and for the entire subtree below it. Since the column definition is part of the hierarchical structure of the document, you can define columns on level 1 that are general enough for all sublevels, and more specific columns further down, when you edit a deeper part of the tree.
+******** keys
+Use 【v】 to display the field value in the minibuffer.
+
+Use 【e】 to interactively select/edit the value.
+
+Use 【S-left/right】 to cycle through the allowed values in a field.
+
+Use 【a】 to edit the allowed values for this property.
+
+******** Column attributes                  
+	 A column definition sets the attributes of a column. The general
+	 definition looks like this:
+
+	 #+BEGIN_EXAMPLE
+	   %[width]property[(title)][{summary-type}]
+	 #+END_EXAMPLE
+
+	 Except for the percent sign and the property name, all items are
+	 optional. The individual parts have the following meaning:
+
+	 |----------------+-----------------------------------------------------------------------------------------------------|
+	 | width          | An integer specifying the width of the column in characters.                                        |
+	 |                | If omitted, the width will be determined automatically.                                             |
+	 |----------------+-----------------------------------------------------------------------------------------------------|
+	 | property       | The property that should be edited in this column.                                                  |
+	 |                | Special properties representing meta data are allowed here as well (see [[@Special-properties][Special properties]])         |
+	 |----------------+-----------------------------------------------------------------------------------------------------|
+	 | title          | The header text for the column.  If omitted, the property name is used.                             |
+	 |----------------+-----------------------------------------------------------------------------------------------------|
+	 | {summary-type} | The summary type.  If specified, the column values for parent nodes are computed from the children. |
+	 |                | Supported summary types are:                                                                        |
+	 |                | {\+}       Sum numbers in this column.                                                              |
+	 |                | {\+;%.1f}  Like ‘+’, but format result with ‘%.1f’.                                                 |
+	 |                | {$}       Currency, short for ‘+;%.2f’.                                                             |
+	 |                | {:}       Sum times, HH:MM, plain numbers are hours.                                                |
+	 |                | {X}       Checkbox status, ‘[X]’ if all children are ‘[X]’.                                         |
+	 |                | {X/}      Checkbox status, ‘[n/m]’.                                                                 |
+	 |                | {X%}      Checkbox status, ‘[n%]’.                                                                  |
+	 |                | {min}     Smallest number in column.                                                                |
+	 |                | {max}     Largest number.                                                                           |
+	 |                | {mean}    Arithmetic mean of numbers.                                                               |
+	 |                | {:min}    Smallest time value in column.                                                            |
+	 |                | {:max}    Largest time value.                                                                       |
+	 |                | {:mean}   Arithmetic mean of time values.                                                           |
+	 |                | {@min}    Minimum age (in days/hours/mins/seconds).                                                 |
+	 |                | {@max}    Maximum age (in days/hours/mins/seconds).                                                 |
+	 |                | {@mean}   Arithmetic mean of ages (in days/hours/mins/seconds).                                     |
+	 |                | {est+}    Add ‘low-high’ estimates.                                                                 |
+	 |----------------+-----------------------------------------------------------------------------------------------------|
+
+	 Be aware that you can only have one summary type for any property
+	 you include. Subsequent columns referencing the same property
+	 will all display the same summary information.
+
+	 The =est+= summary type requires further explanation. It is used
+	 for combining estimates, expressed as ‘low-high' ranges or plain
+	 numbers.  For example, instead of estimating a particular task
+	 will take 5 days, you might estimate it as 5--6 days if you're
+	 fairly confident you know how much work is required, or 1--10
+	 days if you don't really know what needs to be done. Both ranges
+	 average at 5.5 days, but the first represents a more predictable
+	 delivery.
+
+	 When combining a set of such estimates, simply adding the lows
+	 and highs produces an unrealistically wide result. Instead,
+	 =est+= adds the statistical mean and variance of the sub-tasks,
+	 generating a final estimate from the sum. For example, suppose
+	 you had ten tasks, each of which was estimated at 0.5 to 2 days
+	 of work. Straight addition produces an estimate of 5 to 20 days,
+	 representing what to expect if everything goes either extremely
+	 well or extremely poorly. In contrast, =est+= estimates the full
+	 job more realistically, at 10--15 days.
+
+	 Numbers are right-aligned when a format specifier with an
+	 explicit width like =%5d= or =%5.1f= is used.
+
+	 Here is an example for a complete columns definition, along with
+	 allowed values.
+
+	 #+BEGIN_EXAMPLE
+	   :COLUMNS:  %25ITEM %9Approved(Approved?){X} %Owner %11Status \ [fn:FOOT64]
+                              %10Time_Estimate{:} %CLOCKSUM %CLOCKSUM_T
+	   :Owner_ALL: Tammy Mark Karl Lisa Don
+	   :Status_ALL: "In progress" "Not started yet" "Finished" ""
+	   :Approved_ALL: "[ ]" "[X]"
+	 #+END_EXAMPLE
+
+	 The first column, ‘%25ITEM', means the first 25 characters of the
+	 item itself, i.e., of the headline. You probably always should
+	 start the column definition with the ‘ITEM' specifier. The other
+	 specifiers create columns ‘Owner' with a list of names as allowed
+	 values, for ‘Status' with four different possible values, and for
+	 a checkbox field ‘Approved'. When no width is given after the ‘%'
+	 character, the column will be exactly as wide as it needs to be
+	 in order to fully display all values. The ‘Approved' column does
+	 have a modified title (‘Approved?', with a question
+	 mark). Summaries will be created for the ‘Time_Estimate' column
+	 by adding time duration expressions like HH:MM, and for the
+	 ‘Approved' column, by providing an ‘[X]' status if all children
+	 have been checked. The ‘CLOCKSUM' and ‘CLOCKSUM_T' columns are
+	 special, they lists the sums of CLOCK intervals in the subtree,
+	 either for all clocks or just for today.
+******** Create allowed values for a particular property 
+You may define the allowed values for a particular property ‘:Xyz:’ by setting a property ‘:Xyz_ALL:’. This special property is inherited, so if you set it in a level 1 entry, it will apply to the entire tree. When allowed values are defined, setting the corresponding property becomes easier and is less prone to typing errors. For the example with the CD collection, we can predefine publishers and the number of disks in a box like this:
+#+BEGIN_EXAMPLE
+       CD collection
+       :PROPERTIES:
+       :NDisks_ALL:  1 2 3 4
+       :Publisher_ALL: "Deutsche Grammophon" Philips EMI
+       :END:
+#+END_EXAMPLE
+
+If you want to set properties that can be inherited by any entry in a file, use a line like
+#+BEGIN_EXAMPLE
+     #+PROPERTY: NDisks_ALL 1 2 3 4
+#+END_EXAMPLE
+Contrary to properties set from a special drawer, you have to refresh the buffer with C-
+
 ******* export
 ******** export in file options
 The table of contents is normally inserted directly before the first headline of the file. The depth of the table is by default the same as the number of headline levels, but you can choose a smaller number, or turn off the table of contents entirely, by configuring the variable org-export-with-toc, or on a per-file basis with a line like
