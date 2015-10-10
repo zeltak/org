@@ -432,7 +432,6 @@ impute pm2.5 from pm10 data in low pm2.5 years
 **** TODO send massimo AOD Sweden
 **** ill create euro wide grids					     :meytar:
 Talk to myetar to make csv for single hdf lat/longs
-**** TODO [#A]  send qian pm2.5 10 data in israel italy france
 **** Archive							    :ARCHIVE:
 ***** TODO open a ftp 
       :PROPERTIES:
@@ -499,8 +498,6 @@ antonella dosent have sulfate data, is it from EPA data website?
 **** israel contacts
 Shuki Cohen from Matat, or Shlomo may also be able to help you
   
-*** TODO [#A] send sending kees the ma proposal		      :omer:students:
-also look at the imperial coleage model and comparing it to his LUR regression
 ** Haifa Monitoring project
 *** info file
 id:
@@ -754,6 +751,23 @@ The hypothesis is that the final graph will look schematically like this:
 ** Model.PM 
 *** Ideas (NEED TO QUEUE BY PRIORITY)
 **** apply a SVM model in mod4 (localPM)			       :itai:
+**** Joels random intercepts per cell
+I have been thinking about the issue of the random intercepts for cells, specifically why they help and what they do. A random intercept for a person in a repeated measures study represents the fact that on average their level of outcome differs from the mean. I basically captures the mean residual for subject over the repeated measures. Similarly a random intercept for a cell captures the mean residual for that cell for that year. It says that some cells, on average, have mean positive or mean negative residuals. So it can help with spatial R2 but not temporal. 
+Now putting in the random intercept in calculating R2 is cheating because we don't have a random intercept for cells without monitors. But suppose we did. Suppose that the spatial pattern of the random intercepts was not high frequency noise, but actually showed some pattern? Then we can take the annual mean residual for each cell in a region that has a monitor, and smooth it spatially. For example,
+
+spat<-gam(resmean~te(lat,long))
+Then 
+pred<-predict(spat, newdata)
+where newdata has the lat and long of every grid cell centroid.
+Now we do have a value that we can add to each grid cell to improve spatial R2. And if we do5-fold  cross-validation with leave out monitors we will not overestimate our spatial R2. We do this for each year and that should help.
+Another approach (which can be combined) is to think that one reason the grid cell prediction is different from the measurement is that the monitor is not located in a typical location for the grid cell. We can capture that by adding some land use terms within 100 m of the monitor.
+
+For temporal variability, the only reason I can think for having a lower R2 than expected is that temporal change in the AOD is not capturing all of the temporal change in the monitors. Why? 
+One reason is that there is always some dust coming from the Sahara when the wind is from the south, so I think a dummy for wind from 181-365 degrees may help. The AAI from OMI may also help, and Qian Di is working on that for you.
+Another is wood smoke, which produces primary organic aerosols, which AOD is not great at detecting. Again OMI may help. 
+Another is secondary  aerosols. Our GEOS-Chem modeling shows bands of OC outlining roads (but wider than the EC bands). So I think that NOx emissions may help capture this. 
+Finally, when Qian gets a chance, I will have him run GEOS-Chem for Italy. We have the preliminary run done, but we need to calibrate it with the monitors. I know he got monitors from Kees, and Itai said there were more, but I forget if you sent them to him.
+
 **** [#B] predict pm25 from 10 					     :meytar:
 weight the predicted pm2.5 as lower weights opposed to true PM10
 **** [#D] Compare results between correlation to MAIAC/MODIS C06 AOD data with overpass data (i.e. mixed effect model).
@@ -1526,5 +1540,7 @@ predict(object = model, newdata = towns)
 https://mail.google.com/mail/u/0/#search/Robert+Wright+%3Cem%40editorialmanager.com%3E+Current+Opinion+in+Pediatrics/14e48fbf2720ec29
 
 ** helen burress paperowk
+   :PROPERTIES:
+   :ID:       58de772d-c07b-42fe-a5d0-0be6a5ad79b7
+   :END:
 heburris@bidmc.harvard.edu RE: paperwork issues
-** TODO [#A] open a bgu lab github
