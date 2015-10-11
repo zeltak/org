@@ -4483,20 +4483,20 @@ modify this GNU manual.”
    to use them in queries. The following property names are special
    and should not be used as keys in the properties drawer:
 
-   | =ALLTAGS=      | All tags, including inherited ones.                |
-   | =BLOCKED=      | "t" if task is currently blocked by children or siblings. |
-   | =CLOCKSUM=     | The sum of CLOCK intervals in the subtree.  =org-clock-sum= must be run first to compute the values in the current buffer. |
+   | =ALLTAGS=      | All tags, including inherited ones.                                                                                                       |
+   | =BLOCKED=      | "t" if task is currently blocked by children or siblings.                                                                                 |
+   | =CLOCKSUM=     | The sum of CLOCK intervals in the subtree.  =org-clock-sum= must be run first to compute the values in the current buffer.                |
    | =CLOCKSUM_T=   | The sum of CLOCK intervals in the subtree for today. =org-clock-sum-today= must be run first to compute the values in the current buffer. |
-   | =CLOSED=       | When was this entry closed?                        |
-   | =DEADLINE=     | The deadline time string, without the angular brackets. |
-   | =FILE=         | The filename the entry is located in.              |
-   | =ITEM=         | The headline of the entry, with stars.             |
-   | =PRIORITY=     | The priority of the entry, a string with a single letter. |
-   | =SCHEDULED=    | The scheduling timestamp, without the angular brackets. |
-   | =TAGS=         | The tags defined directly in the headline.         |
-   | =TIMESTAMP=    | The first keyword-less timestamp in the entry.     |
-   | =TIMESTAMP_IA= | The first inactive timestamp in the entry.         |
-   | =TODO=         | The TODO keyword of the entry.                     |
+   | =CLOSED=       | When was this entry closed?                                                                                                               |
+   | =DEADLINE=     | The deadline time string, without the angular brackets.                                                                                   |
+   | =FILE=         | The filename the entry is located in.                                                                                                     |
+   | =ITEM=         | The headline of the entry, with stars.                                                                                                    |
+   | =PRIORITY=     | The priority of the entry, a string with a single letter.                                                                                 |
+   | =SCHEDULED=    | The scheduling timestamp, without the angular brackets.                                                                                   |
+   | =TAGS=         | The tags defined directly in the headline.                                                                                                |
+   | =TIMESTAMP=    | The first keyword-less timestamp in the entry.                                                                                            |
+   | =TIMESTAMP_IA= | The first inactive timestamp in the entry.                                                                                                |
+   | =TODO=         | The TODO keyword of the entry.                                                                                                            |
 
 ** 7.3 Property searches                                              <<@Property-searches>>
 
@@ -13407,28 +13407,28 @@ modify this GNU manual.”
 
    Code blocks in the following languages are supported.
 
-   | *Language*       | *Identifier*   | *Language*   | *Identifier*   |
-   |------------------+----------------+--------------+----------------|
-   | Asymptote        | asymptote      | Awk          | awk            |
-   | C                | C              | C++          | C++            |
-   | Clojure          | clojure        | CSS          | css            |
-   | D                | d              | ditaa        | ditaa          |
-   | Graphviz         | dot            | Emacs Calc   | calc           |
-   | Emacs Lisp       | emacs-lisp     | Fortran      | fortran        |
-   | gnuplot          | gnuplot        | Haskell      | haskell        |
-   | Java             | java           | Javascript   | js             |
-   | LaTeX            | latex          | Ledger       | ledger         |
-   | Lisp             | lisp           | Lilypond     | lilypond       |
-   | MATLAB           | matlab         | Mscgen       | mscgen         |
-   | Objective Caml   | ocaml          | Octave       | octave         |
-   | Org mode         | org            | Oz           | oz             |
-   | Perl             | perl           | Plantuml     | plantuml       |
-   | Processing.js    | processing     | Python       | python         |
-   | R                | R              | Ruby         | ruby           |
-   | Sass             | sass           | Scheme       | scheme         |
-   | GNU Screen       | screen         | Sed          | sed            |
-   | shell            | sh             | SQL          | sql            |
-   | SQLite           | sqlite         |              |                |
+   | *Language*     | *Identifier* | *Language* | *Identifier* |
+   |----------------+--------------+------------+--------------|
+   | Asymptote      | asymptote    | Awk        | awk          |
+   | C              | C            | C++        | C++          |
+   | Clojure        | clojure      | CSS        | css          |
+   | D              | d            | ditaa      | ditaa        |
+   | Graphviz       | dot          | Emacs Calc | calc         |
+   | Emacs Lisp     | emacs-lisp   | Fortran    | fortran      |
+   | gnuplot        | gnuplot      | Haskell    | haskell      |
+   | Java           | java         | Javascript | js           |
+   | LaTeX          | latex        | Ledger     | ledger       |
+   | Lisp           | lisp         | Lilypond   | lilypond     |
+   | MATLAB         | matlab       | Mscgen     | mscgen       |
+   | Objective Caml | ocaml        | Octave     | octave       |
+   | Org mode       | org          | Oz         | oz           |
+   | Perl           | perl         | Plantuml   | plantuml     |
+   | Processing.js  | processing   | Python     | python       |
+   | R              | R            | Ruby       | ruby         |
+   | Sass           | sass         | Scheme     | scheme       |
+   | GNU Screen     | screen       | Sed        | sed          |
+   | shell          | sh           | SQL        | sql          |
+   | SQLite         | sqlite       |            |              |
 
    Language-specific documentation is available for some languages. If
    available, it can be found at
