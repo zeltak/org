@@ -32713,7 +32713,32 @@ use the tags key word and syntax like this
 )
 #+END_SRC
 in above example we are looking at a property "cuisine" in the property drawer with entry "American".
+********* add multi key agenda items (sub menus)
+use this 
 
+#+BEGIN_SRC emacs-lisp :results none
+;;first define the key
+("f" . "Food commands")
+
+;;;;then add the following keys
+("fb" "food" todo "COOK" 
+         (
+         (org-agenda-files '("~/org/files/agenda/food.org")) 
+    (org-agenda-sorting-strategy '(priority-down)) ;;  Sort by prioirty where prioirty goes first.
+
+)
+)
+
+;;;;;;;;;;;;;COOKING;;;;;;;;;;;
+("fc" "to cook"  tags "Cuisine=\"American\""
+          (
+         (org-agenda-files '("~/org/files/agenda/food.org")) 
+    (org-agenda-sorting-strategy '(priority-down)) ;;  Sort by prioirty where prioirty goes first.
+
+)
+)
+
+#+END_SRC
 ********* bulk vs marking in agenda buffer
 "m" adds a mark to the heading under point, "M-m" toggles the mark. So multiple "m"s will always leave the heading marked, while multiple
 
