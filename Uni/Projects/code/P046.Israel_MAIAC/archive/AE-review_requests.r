@@ -36,6 +36,10 @@ data.m3.2012<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather
 data.m3.2013<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/mod3.AQ.PM25.2013.pred3.rds")
 mod3<-rbindlist(list(data.m3.2003,data.m3.2004,data.m3.2005,data.m3.2006,data.m3.2007,data.m3.2008,data.m3.2009,data.m3.2010,data.m3.2011,data.m3.2012,data.m3.2013))
 
+#save
+bp<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.PM25.bestpred.rds")
+head(bp)
+
 
 #########################
 #prepare for m3.R2
@@ -44,7 +48,64 @@ mod3<-rbindlist(list(data.m3.2003,data.m3.2004,data.m3.2005,data.m3.2006,data.m3
 m1.all <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1C.AQ.PM25.pred.rds")
 m1.all[,aodid:= paste(m1.all$long_aod.x,m1.all$lat_aod.x,sep="-")]
 m1.all<-m1.all[,c("aodid","day","PM25","pred.m1","stn","c"),with=FALSE]
+#R2.m3
+setkey(mod3,day,aodid)
+setkey(m1.all,day,aodid)
+m1.all <- merge(m1.all,mod3[, list(day,aodid,pred.m3)], all.x = T)
 
-tlv<-m1.all[stn==c("ANT","IRD","YLB","REM","PTR","TMM","HOL")]
+
+#########################
+#prepare for m3.R2 bp
+#########################
+#load mod1
+m1.all <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1C.AQ.PM25.pred.rds")
+m1.all[,aodid:= paste(m1.all$long_aod.x,m1.all$lat_aod.x,sep="-")]
+m1.all<-m1.all[,c("aodid","day","PM25","pred.m1","stn","c"),with=FALSE]
+#R2.m3
+setkey(bp,day,aodid)
+setkey(m1.all,day,aodid)
+m1.all <- merge(m1.all,bp[, list(day,aodid,pred.m3,bestpred)], all.x = T)
+
+
+
+### Per regions
+tlv<-m1.all[stn==c("ANT","IRD","PTR","TMM","HOL")]
 haf<-m1.all[stn==c("AHU","NSH","NES","AZB","BIA","BIN","ATA")]
 jer<-m1.all[stn==c("AGR","BIL","EFR")]
+
+summary(tlv)
+summary(haf)
+summary(jer)
+
+
+
+#pm10
+
+
+#save
+bp<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod3.AQ.PM10.bestpred.rds")
+
+#########################
+#prepare for m3.R2 bp
+#########################
+#load mod1
+m1.all <-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN000_RWORKDIR/Xmod1C.AQ.PM10.pred.rds")
+m1.all[,aodid:= paste(m1.all$long_aod.x,m1.all$lat_aod.x,sep="-")]
+m1.all<-m1.all[,c("aodid","day","PM10","pred.m1","stn","c"),with=FALSE]
+#R2.m3
+setkey(bp,day,aodid)
+setkey(m1.all,day,aodid)
+m1.all <- merge(m1.all,bp[, list(day,aodid,pred.m3,bestpred)], all.x = T)
+
+
+
+### Per regions
+tlv<-m1.all[stn==c("ANT","IRD","PTR","TMM","HOL")]
+haf<-m1.all[stn==c("AHU","NSH","NES","AZB","BIA","BIN","ATA")]
+jer<-m1.all[stn==c("AGR","BIL","EFR")]
+
+summary(tlv)
+summary(haf)
+summary(jer)
+
+

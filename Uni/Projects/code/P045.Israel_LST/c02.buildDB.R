@@ -14,14 +14,35 @@ library(ggmap)
 library(broom)
 library(splines)
 library(DataCombine)
+#function to join on both space and time
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/geomerge_alpha.r")
 
 #import clipped grid
 fullgrid<-fread("/media/NAS/Uni/Projects/P045_Israel_LST/2.work/gridXY_IL.csv")
 
+#load met
+Temp<-fread("/media/NAS/Uni/Projects/P045_Israel_LST/2.work/final_stations2.csv")
+setnames(Temp,"long ","long")
+Temp<-filter(Temp,stn != "NA")
+Temp[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
+Temp[, c := as.numeric(format(day, "%Y")) ]
+Temp[,c("V1","date","serial number","start"):=NULL]
+Temp[,c("V1"):=NULL]
+Temp<-filter(Temp,c != "NA")
+Temp<-filter(Temp, itm_e != "NA")
+summary(Temp)
+
+
+# try2 <- Temp[is.na(day)]
+# head(try2)
+# #create full grid
+# try3 <-try2 %>%
+#     group_by(stn) %>%
+#      summarise(data = n())
+
 #load LST data
 aqua.2003<-readRDS("/media/NAS/Uni/Projects/P045_Israel_LST/2.work/lst.AQ.2003.rds")
-head(aqua.2003)
+aqua.2003<-as.data.table(aqua.2003)
 # #get rid of dplyr tbl_df until bug gets fixed
 # aqua.2003<-as.data.frame(aqua.2003)
 # aqua.2003<-as.data.table(aqua.2003)
@@ -35,6 +56,7 @@ setkey(aqua.2003,lstid,day)
 setkey(days2003 ,lstid,day)
 db2003 <- merge(days2003,aqua.2003, all.x = T)
 
+#subset fgird, take out unwanted variables/columns
 fullgrid<-select(fullgrid,lstid ,  stn,   itm_e ,     itm_n ,   ELEVATION,  ASPECT  ,   roadden ,   DENS_POP,   ndviid  ,   long_ndvi , lat_ndvi  )
 
 #######spatial 
@@ -57,43 +79,56 @@ db2003$seasonSW<-recode(db2003$m,"1=1;2=1;3=1;4=2;5=2;6=2;7=2;8=2;9=2;10=1;11=1;
 
 #join NDVI to lst
 fin.ndvi<-readRDS("/media/NAS/Uni/Projects/P046_Israel_MAIAC/3.Work/2.Gather_data/FN006_NDVI_yearly/ndvi.rds")
-fin.ndvi<-filter(fin.ndvi,year==2003)
-gc() 
-key.ndvi<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ndvi.rds")
-#add ndvi-key
-setkey(db2003,lstid)
-setkey(key.ndvi,lstid)
-db2003 <- merge(db2003, key.ndvi, all.x = T)
+fin.ndvi<-filter(fin.ndvi,c==2003)
 #add ndvi
 setkey(db2003,ndviid,m)
 setkey(fin.ndvi,ndviid,m)
 db2003 <- merge(db2003, fin.ndvi[,list(ndviid,ndvi,m)], all.x = T)
-#cleanup
-keep(fgrid,db2003,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
 gc()
+summary(db2003)
+
+
+#fix ITM data
+db2003$itm_e <- gsub(",", "",db2003$itm_e)
+db2003$itm_e<-as.numeric(db2003$itm_e)
+db2003$itm_n <- gsub(",", "",db2003$itm_n)
+db2003$itm_n<-as.numeric(db2003$itm_n)
+
+
+#################
+# need to subset the datasets to day and night datasets!
+#########
+
+
+#Tempperature
+Temp2003<-filter(Temp,c==2003)
+
+
+
+
+#spatio temporal join
+
+#matrix for temperature 
+met.m <- makepointsmatrix(Temp2003, "itm_e", "itm_n", "stn")
+setkey(db2003, lstid)
+lu.m <- makepointsmatrix(db2003[db2003[,unique(lstid)], list(itm_e, itm_n, lstid), mult = "first"], "itm_e", "itm_n", "lstid")
+
+closestaodse<- nearestbyday(lu.m ,met.m , 
+                            db2003, Temp[, list(day,tempcmean,stn)], 
+                            "lstid", "stn", "meanT", "Temp.im", knearest = 5, maxdistance = NA)
+setkey(db2003,aodid,day)
+setkey(closestaodse,aodid,day)
+m4 <- merge(db2003, closestaodse[,list(day,Temp.im,aodid)], all.x = T)
 
 
 
 
 
-#load met
-Temp<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/met/fin.met.rds")
-Temp<-filter(Temp,c==2003)
-
-#wsavg
-aqua.met <- nearestbyday(lu.m ,met.m , 
-                            db2003, Temp[, list(day,wsavg,stn)], 
-                            "lstid", "stn", "cloesetSTN", "wsavg", knearest = 10, maxdistance = 20000)
-setkey(db2003,lstid,day)
-setkey(aqua.met,lstid,day)
-db2003 <- merge(db2003, aqua.met[,list(day,wsavg,lstid)], all.x = T)
 
 
-#WS cleanup
-keep(fgrid,db2003,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
-db2003$LUlstid<-NULL
-gc()
-#################STOP 
+
+
+
 
 #mean Ta calculations
 Ta<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/Ta.rds")

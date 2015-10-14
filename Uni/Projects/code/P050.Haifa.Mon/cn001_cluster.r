@@ -177,7 +177,7 @@ covariate.labels=c("Afgar","Gestational age","mothers education","% Jewish popul
 title="SSA level regression results: Head Circumference",
 intercept.bottom = FALSE,
 omit.stat = c("rsq", "f","adj.rsq","ser"),
-out="/media/NAS/Uni/Projects/P050_Haifa/3.results/report_2015/models.txt")
+out="/media/NAS/Uni/Projects/P050_Haifa/3.results/report_2015/models_HC.txt")
 
 #html
 stargazer(m1, m2, m3, m4,
@@ -186,9 +186,9 @@ dep.var.labels=c("Head Circumference"),
 column.labels=c("PM2.5","NOx","SO2","All exposures"),
 covariate.labels=c("Afgar","Gestational age","mothers education","% Jewish population","Mean Income","mean household income","% of Bagrut","% House owners"), 
 title="SSA level regression results: Head Circumference",
-intercept.bottom = FALSE,
+intercept.bottom = TRUE,
 omit.stat = c("rsq", "f","adj.rsq","ser"),
-out="/media/NAS/Uni/Projects/P050_Haifa/3.results/report_2015/models.htm")
+out="/media/NAS/Uni/Projects/P050_Haifa/3.results/report_2015/models_HC.htm")
 
 
 
@@ -228,7 +228,7 @@ dep.var.labels=c("Head Circumference"),
 column.labels=c("PM2.5","NOx","SO2","All exposures"),
 covariate.labels=c("Afgar","Gestational age","mothers education","% Jewish population","Mean Income","mean household income","% of Bagrut","% House owners"), 
 title="SSA level regression results: Head Circumference",
-intercept.bottom = FALSE,
+intercept.bottom = TRUE,
 omit.stat = c("rsq", "f","adj.rsq","ser"),
 out="/media/NAS/Uni/Projects/P050_Haifa/3.results/report_2015/models_bw.htm")
 

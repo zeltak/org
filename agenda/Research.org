@@ -689,7 +689,7 @@ file:
  Data from european sattelite - We here in my Lab are looking into this and possible future applications
 
 ** Storke and PM10 in israel					     :maayan:
-*** TODO ask allan abour long term analysis glmpql cells with 0	      :allan:
+*** TODO ask allan about long term analysis glmpql cells with 0       :allan:
 how to address cells missing with people when building a TS dataset with 1km exposure metrics
 how to deal with cells with people but not cases
 ** MODEL.PM.Swiss
@@ -702,7 +702,6 @@ file:
 
 **** kees [2015-08-05 Wed] 
 ***** ask about imperial noise model links
-***** TODO ask meytar to send sides to kees 			     :meytar:
 ***** places to visit: lyden, delv, harlem,rotterndam 
 *** TD MODEL.PM.Swiss
 *** explore
@@ -1238,6 +1237,7 @@ As the difference in RH between the ground and satellite measurements may derive
 
 ** Dust classification project with India/Italy			     :meytar:
 **** TODO ask Victor
+     DEADLINE: <2015-10-15 Thu>
 how many hours of dust exposure is relevant to see an effect, did you guys look at daily means, or hourly data by any chance? know of relevant studies on that, weight exposure by ammount of hours of dust days.
 **** application of prev methodology in italy india-define dust events based on PM10 and modeling
 - output will be definition of dust event- hourly (0,1)
@@ -1430,11 +1430,16 @@ If you are a scientist or scholar from Germany you can profit from our support a
 As an intermediary organisation for German foreign cultural and educational policy we promote international cultural dialogue and academic exchange.
 * scheduled mail/calls/meetings
 ** Alexei Mount Sinai[2015-09-18 Fri] 
+   :PROPERTIES:
+   :ID:       2886dd90-c077-4621-92c8-f810d30cc5d3
+   :END:
 *** actual talk
-**** India 
+**** India
 india should start processing soon (talk to alexei about it)
 Joel has collaborations in the south of India
 we need to maybe organize a skype call between all groups
+**** TODO organize a big skype call
+talk to Varanasi professor. 
 **** send israel pm data					     :meytar:
 send alexei pm25/10 data over israel (mainly tel aviv and haifa)
 **** explore different slopes based on MAIAC proccesing path or type of algorithm
@@ -1454,15 +1459,16 @@ this seems to work better for aqua?
 **** look at the SD and range of pm and aod in each station
 **** Joel imputes AOD from geoschem when maiac is missing?
 **** characterize lu,vegetation,surface brightness etc in each bad a good aod-pm corr pixels
-**** long term- look into VIIRS and goess-R for future aod and maiac aod solutions 
+**** long term-look into VIIRS and goess-R for future aod and maiac aod solutions
+**** night AOD
 *** issues 
 **** cloud cover issue in Mexico; grid cells being masked because of bright surfaces (false clouds) and dropping of clear days- (long time series with no scene coverage)
 **** Israel data subsets with no raw correlation - Itai will send examples to Alexei (related: not certain why we have big differences in R2 from year to year in Israel and Mexico)
 **** dust days not caught by MAIAC (in Israel); Itai and Meytar sending a few examples
 **** both areas-Focus on improving a single year to speed iteration - we nominate 2004 - hopefully this lets us communicate back and forth.
 **** PM10 in Israel performs much better than PM2.5
- the differences are huge- CV R2 pm10=0.82 and pm25 ~0.7
- over fitting isn't the issue since also in a parsimonious model we still get this drop
+the differences are huge- CV R2 pm10=0.82 and pm25 ~0.7
+over fitting isn't the issue since also in a parsimonious model we still get this drop
 ***** histogram on dust days of AOD
 
  #+DOWNLOADED: /tmp/screenshot.png @ 2015-02-11 09:15:22
@@ -1497,11 +1503,21 @@ look at time series analysis
 ** Itzik
 itzik has where each dessert strom arrived from- could be useful for health outcome studies
 what we have here is teom- env monitor- cost 
-*** TODO david call
-we have a post doc for 6 months..what to do with her:
+** david skype call [2015-10-13 Tue]
+Alexei meeting [[id:2886dd90-c077-4621-92c8-f810d30cc5d3][Alexei Mount Sinai{2015-09-18 Fri}]]
+I have a post doc for 6 months..what to do with her:
 ask about southern campign
 aeronet campign
-vertical profile 
+vertical profile
+*** TODO explore with alexei sun photometer
+*** TODO write brent about mixed model meeting
+*** TODO talk to allan about the intercept vs day
+*** TODO talk to josef and a grant , is it a big grant or a travel grant
+*** TODO dylos monitor-check google 
+total count not mass
+have local tel aviv , jeruslaem etc devices $750
+
+*** ask about the MOST  ad BGU RA to see 
 ** Alexandra
 *** shai kaplan
 **** works on WRF model to first look at geo-climate changes in israel 2010 compared to 2050
@@ -1542,12 +1558,15 @@ predict(object = model, newdata = towns)
 
 האובייקט model בדוגמה הנ"ל, מהמחלקה gstat, מכיל את כל המידע הנחוץ לביצוע חיזוי או cross-validation בשיטה שנבחרה (IDW) עם נתוני הכיול הרלוונטיים. בחירת השיטה, דרך אגב, מתבצעת אוטומטית עפ"י סט הארגומנטים של הפונקציה (אתה יכול לראות את זה בשקף 20 של המצגת המצורפת). הסט הנ"ל קובע שהמודל יהיה IDW, עם סט שונה של ארגומנטים ייבחר kriging וכו'. רצוי שהקואורדינטות יהיו ב-projection ולא קווי אורך ורוחב כי עובדים עם מרחקים, אבל באזור קטן כמו ישראל זה לא כל כך משנה. מצ"ב קוד עם דוגמה שאפשר לשחזר.
 
-** Current Opinion in Pediatrics review paper
+** TODO Current Opinion in Pediatrics review paper
+   DEADLINE: <2015-10-30 Fri>
 
 https://mail.google.com/mail/u/0/#search/Robert+Wright+%3Cem%40editorialmanager.com%3E+Current+Opinion+in+Pediatrics/14e48fbf2720ec29
-
-** helen burress paperowk
-   :PROPERTIES:
-   :ID:       58de772d-c07b-42fe-a5d0-0be6a5ad79b7
-   :END:
+** TODO generate 200m predictions for 2009, the greater boston area [2015-10-14 Wed]
+   DEADLINE: <2015-10-23 Fri>
+200mn
+also generate 1km for the entire 2009
+** TODO [#A] helen burress paperwork
+   DEADLINE: <2015-10-15 Thu>
 heburris@bidmc.harvard.edu RE: paperwork issues
+** TODO check return money from HUJI which I havent recived yet

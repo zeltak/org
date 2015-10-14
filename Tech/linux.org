@@ -1099,7 +1099,10 @@ remove:
  IE:
 
  sudo rm /var/lib/pacman/db.lck
-
+***** list all packages and the repo they belong to
+#+BEGIN_SRC sh
+pacman -Ss | grep installed
+#+END_SRC
 ***** ignore a package on upgrade (don't upgrade a specific package)
 add the package name in the pacman.conf file, ₆In example₆ 
 

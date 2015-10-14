@@ -8453,6 +8453,33 @@ install.packages("colorout_1.1-0.tar.gz", type = "source", repos = NULL)
 #+END_SRC
 ** Stargazer
 http://jakeruss.com/cheatsheets/stargazer.html
+*** example of output to html
+#+BEGIN_SRC R
+#html
+stargazer(m1, m2, m3, m4,
+type="html",
+dep.var.labels=c("Head Circumference"),
+column.labels=c("PM2.5","NOx","SO2","All exposures"),
+covariate.labels=c("Afgar","Gestational age","mothers education","% Jewish population","Mean Income","mean household income","% of Bagrut","% House owners"), 
+title="SSA level regression results: Head Circumference",
+intercept.bottom = TRUE,
+omit.stat = c("rsq", "f","adj.rsq","ser"),
+out="/media/NAS/Uni/Projects/P050_Haifa/3.results/report_2015/models_HC.htm")
+#+END_SRC
+*** example of output to txt
+#+BEGIN_SRC R
+#txt
+stargazer(m1, m2, m3, m4,
+type="text",
+dep.var.labels=c("Head Circumference"),
+column.labels=c("PM2.5 model","NOx model","SO2 model","Multi exposure model"),
+covariate.labels=c("Afgar","Gestational age","mothers education","% Jewish population","Mean Income","mean household income","% of Bagrut","% House owners"), 
+title="SSA level regression results: Head Circumference",
+intercept.bottom = FALSE,
+omit.stat = c("rsq", "f","adj.rsq","ser"),
+out="/media/NAS/Uni/Projects/P050_Haifa/3.results/report_2015/models_HC.txt")
+#+END_SRC
+
 ** pryr- size of objects 
 #+BEGIN_SRC R :results none
 library(pryr)
