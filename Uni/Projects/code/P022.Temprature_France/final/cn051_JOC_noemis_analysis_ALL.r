@@ -51,12 +51,11 @@ mod1$T_Day<-NULL
 mod1<-na.omit(mod1)
 mod1[, c := as.numeric(format(day, "%Y")) ]
 
+
 #year 2000
 
 mod1.2000 <-filter(mod1,c == 2000)
-m1.formula <- as.formula(tm ~ NTckin+elev_m+pcturb+NDVI +(1+NTckin|date)) 
-
-
+m1.formula <- as.formula(tm ~ T_Night+elev_m+pcturb+NDVI +(1+T_Night|date)) 
 
 
 #---------------->>>> CV
@@ -155,5 +154,1210 @@ tempoall.cv$delpm <-tempoall.cv$tm-tempoall.cv$barpm
 tempoall.cv$delpred <-tempoall.cv$pred.m1.cv-tempoall.cv$barpred
 mod_temporal.cv <- lm(delpm ~ delpred, data=tempoall.cv)
 res[res$type=="2000", 't.r2'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.cv))$r.squared)
+
+
+
+#year 2001
+
+mod1.2001 <-filter(mod1,c == 2001)
+m1.formula <- as.formula(tm ~ NTckin+elev_m+pcturb+NDVI +(1+NTckin|date)) 
+
+
+
+
+#---------------->>>> CV
+#s1
+splits_s1 <- splitdf(mod1.2001 )
+test_s1 <- splits_s1$testset
+train_s1 <- splits_s1$trainset
+out_train_s1 <- lmer(m1.formula,data =  train_s1)
+test_s1$pred.m1.cv <- predict(object=out_train_s1 ,newdata=test_s1,allow.new.levels=TRUE,re.form=NULL )
+test_s1$iter<-"s1"
+#s2
+splits_s2 <- splitdf(mod1.2001 )
+test_s2 <- splits_s2$testset
+train_s2 <- splits_s2$trainset
+out_train_s2 <- lmer(m1.formula,data =  train_s2)
+test_s2$pred.m1.cv <- predict(object=out_train_s2 ,newdata=test_s2,allow.new.levels=TRUE,re.form=NULL )
+test_s2$iter<-"s2"
+#s3
+splits_s3 <- splitdf(mod1.2001 )
+test_s3 <- splits_s3$testset
+train_s3 <- splits_s3$trainset
+out_train_s3 <- lmer(m1.formula,data =  train_s3)
+test_s3$pred.m1.cv <- predict(object=out_train_s3 ,newdata=test_s3,allow.new.levels=TRUE,re.form=NULL )
+test_s3$iter<-"s3"
+#s4
+splits_s4 <- splitdf(mod1.2001 )
+test_s4 <- splits_s4$testset
+train_s4 <- splits_s4$trainset
+out_train_s4 <- lmer(m1.formula,data =  train_s4)
+test_s4$pred.m1.cv <- predict(object=out_train_s4 ,newdata=test_s4,allow.new.levels=TRUE,re.form=NULL )
+test_s4$iter<-"s4"
+#s5
+splits_s5 <- splitdf(mod1.2001 )
+test_s5 <- splits_s5$testset
+train_s5 <- splits_s5$trainset
+out_train_s5 <- lmer(m1.formula,data =  train_s5)
+test_s5$pred.m1.cv <- predict(object=out_train_s5 ,newdata=test_s5,allow.new.levels=TRUE,re.form=NULL )
+test_s5$iter<-"s5"
+#s6
+splits_s6 <- splitdf(mod1.2001 )
+test_s6 <- splits_s6$testset
+train_s6 <- splits_s6$trainset
+out_train_s6 <- lmer(m1.formula,data =  train_s6)
+test_s6$pred.m1.cv <- predict(object=out_train_s6 ,newdata=test_s6,allow.new.levels=TRUE,re.form=NULL )
+test_s6$iter<-"s6"
+#s7
+splits_s7 <- splitdf(mod1.2001 )
+test_s7 <- splits_s7$testset
+train_s7 <- splits_s7$trainset
+out_train_s7 <- lmer(m1.formula,data =  train_s7)
+test_s7$pred.m1.cv <- predict(object=out_train_s7 ,newdata=test_s7,allow.new.levels=TRUE,re.form=NULL )
+test_s7$iter<-"s7"
+#s8
+splits_s8 <- splitdf(mod1.2001 )
+test_s8 <- splits_s8$testset
+train_s8 <- splits_s8$trainset
+out_train_s8 <- lmer(m1.formula,data =  train_s8)
+test_s8$pred.m1.cv <- predict(object=out_train_s8 ,newdata=test_s8,allow.new.levels=TRUE,re.form=NULL )
+test_s8$iter<-"s8"
+#s9
+splits_s9 <- splitdf(mod1.2001 )
+test_s9 <- splits_s9$testset
+train_s9 <- splits_s9$trainset
+out_train_s9 <- lmer(m1.formula,data =  train_s9)
+test_s9$pred.m1.cv <- predict(object=out_train_s9 ,newdata=test_s9,allow.new.levels=TRUE,re.form=NULL )
+test_s9$iter<-"s9"
+#s10
+splits_s10 <- splitdf(mod1.2001 )
+test_s10 <- splits_s10$testset
+train_s10 <- splits_s10$trainset
+out_train_s10 <- lmer(m1.formula,data =  train_s10)
+test_s10$pred.m1.cv <- predict(object=out_train_s10 ,newdata=test_s10,allow.new.levels=TRUE,re.form=NULL )
+test_s10$iter<-"s10"
+
+#BIND 1 dataset
+mod1.2001.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s6,test_s7,test_s8,test_s9, test_s10))
+
+#2001
+m1.fit.all.cv<-lm(tm~pred.m1.cv,data=mod1.2001.cv)
+res[res$type=="2001", 'R2'] <- print(summary(lm(tm~pred.m1.cv,data=mod1.2001.cv))$r.squared)
+res[res$type=="2001", 'Bias'] <-print(summary(lm(tm~pred.m1.cv,data=mod1.2001.cv))$coef[2,1])
+#RMSPE
+res[res$type=="2001", 'RMSPE'] <- print(rmse(residuals(m1.fit.all.cv)))
+
+#spatial
+spatialall.cv<-mod1.2001.cv %>%
+    group_by(num_insee) %>%
+    summarise(barpm = mean(tm, na.rm=TRUE), barpred = mean(pred.m1.cv, na.rm=TRUE)) 
+m1.fit.all.cv.s <- lm(barpm ~ barpred, data=spatialall.cv)
+res[res$type=="2001", 's.r2'] <-  print(summary(lm(barpm ~ barpred, data=spatialall.cv))$r.squared)
+res[res$type=="2001", 's.RMSPE'] <- print(rmse(residuals(m1.fit.all.cv.s)))
+
+#temporal
+tempoall.cv<-left_join(mod1.2001.cv,spatialall.cv)
+tempoall.cv$delpm <-tempoall.cv$tm-tempoall.cv$barpm
+tempoall.cv$delpred <-tempoall.cv$pred.m1.cv-tempoall.cv$barpred
+mod_temporal.cv <- lm(delpm ~ delpred, data=tempoall.cv)
+res[res$type=="2001", 't.r2'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.cv))$r.squared)
+
+
+
+#year 2002
+
+mod1.2002 <-filter(mod1,c == 2002)
+m1.formula <- as.formula(tm ~ NTckin+elev_m+pcturb+NDVI +(1+NTckin|date)) 
+
+
+
+
+#---------------->>>> CV
+#s1
+splits_s1 <- splitdf(mod1.2002 )
+test_s1 <- splits_s1$testset
+train_s1 <- splits_s1$trainset
+out_train_s1 <- lmer(m1.formula,data =  train_s1)
+test_s1$pred.m1.cv <- predict(object=out_train_s1 ,newdata=test_s1,allow.new.levels=TRUE,re.form=NULL )
+test_s1$iter<-"s1"
+#s2
+splits_s2 <- splitdf(mod1.2002 )
+test_s2 <- splits_s2$testset
+train_s2 <- splits_s2$trainset
+out_train_s2 <- lmer(m1.formula,data =  train_s2)
+test_s2$pred.m1.cv <- predict(object=out_train_s2 ,newdata=test_s2,allow.new.levels=TRUE,re.form=NULL )
+test_s2$iter<-"s2"
+#s3
+splits_s3 <- splitdf(mod1.2002 )
+test_s3 <- splits_s3$testset
+train_s3 <- splits_s3$trainset
+out_train_s3 <- lmer(m1.formula,data =  train_s3)
+test_s3$pred.m1.cv <- predict(object=out_train_s3 ,newdata=test_s3,allow.new.levels=TRUE,re.form=NULL )
+test_s3$iter<-"s3"
+#s4
+splits_s4 <- splitdf(mod1.2002 )
+test_s4 <- splits_s4$testset
+train_s4 <- splits_s4$trainset
+out_train_s4 <- lmer(m1.formula,data =  train_s4)
+test_s4$pred.m1.cv <- predict(object=out_train_s4 ,newdata=test_s4,allow.new.levels=TRUE,re.form=NULL )
+test_s4$iter<-"s4"
+#s5
+splits_s5 <- splitdf(mod1.2002 )
+test_s5 <- splits_s5$testset
+train_s5 <- splits_s5$trainset
+out_train_s5 <- lmer(m1.formula,data =  train_s5)
+test_s5$pred.m1.cv <- predict(object=out_train_s5 ,newdata=test_s5,allow.new.levels=TRUE,re.form=NULL )
+test_s5$iter<-"s5"
+#s6
+splits_s6 <- splitdf(mod1.2002 )
+test_s6 <- splits_s6$testset
+train_s6 <- splits_s6$trainset
+out_train_s6 <- lmer(m1.formula,data =  train_s6)
+test_s6$pred.m1.cv <- predict(object=out_train_s6 ,newdata=test_s6,allow.new.levels=TRUE,re.form=NULL )
+test_s6$iter<-"s6"
+#s7
+splits_s7 <- splitdf(mod1.2002 )
+test_s7 <- splits_s7$testset
+train_s7 <- splits_s7$trainset
+out_train_s7 <- lmer(m1.formula,data =  train_s7)
+test_s7$pred.m1.cv <- predict(object=out_train_s7 ,newdata=test_s7,allow.new.levels=TRUE,re.form=NULL )
+test_s7$iter<-"s7"
+#s8
+splits_s8 <- splitdf(mod1.2002 )
+test_s8 <- splits_s8$testset
+train_s8 <- splits_s8$trainset
+out_train_s8 <- lmer(m1.formula,data =  train_s8)
+test_s8$pred.m1.cv <- predict(object=out_train_s8 ,newdata=test_s8,allow.new.levels=TRUE,re.form=NULL )
+test_s8$iter<-"s8"
+#s9
+splits_s9 <- splitdf(mod1.2002 )
+test_s9 <- splits_s9$testset
+train_s9 <- splits_s9$trainset
+out_train_s9 <- lmer(m1.formula,data =  train_s9)
+test_s9$pred.m1.cv <- predict(object=out_train_s9 ,newdata=test_s9,allow.new.levels=TRUE,re.form=NULL )
+test_s9$iter<-"s9"
+#s10
+splits_s10 <- splitdf(mod1.2002 )
+test_s10 <- splits_s10$testset
+train_s10 <- splits_s10$trainset
+out_train_s10 <- lmer(m1.formula,data =  train_s10)
+test_s10$pred.m1.cv <- predict(object=out_train_s10 ,newdata=test_s10,allow.new.levels=TRUE,re.form=NULL )
+test_s10$iter<-"s10"
+
+#BIND 1 dataset
+mod1.2002.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s6,test_s7,test_s8,test_s9, test_s10))
+
+#2002
+m1.fit.all.cv<-lm(tm~pred.m1.cv,data=mod1.2002.cv)
+res[res$type=="2002", 'R2'] <- print(summary(lm(tm~pred.m1.cv,data=mod1.2002.cv))$r.squared)
+res[res$type=="2002", 'Bias'] <-print(summary(lm(tm~pred.m1.cv,data=mod1.2002.cv))$coef[2,1])
+#RMSPE
+res[res$type=="2002", 'RMSPE'] <- print(rmse(residuals(m1.fit.all.cv)))
+
+#spatial
+spatialall.cv<-mod1.2002.cv %>%
+    group_by(num_insee) %>%
+    summarise(barpm = mean(tm, na.rm=TRUE), barpred = mean(pred.m1.cv, na.rm=TRUE)) 
+m1.fit.all.cv.s <- lm(barpm ~ barpred, data=spatialall.cv)
+res[res$type=="2002", 's.r2'] <-  print(summary(lm(barpm ~ barpred, data=spatialall.cv))$r.squared)
+res[res$type=="2002", 's.RMSPE'] <- print(rmse(residuals(m1.fit.all.cv.s)))
+
+#temporal
+tempoall.cv<-left_join(mod1.2002.cv,spatialall.cv)
+tempoall.cv$delpm <-tempoall.cv$tm-tempoall.cv$barpm
+tempoall.cv$delpred <-tempoall.cv$pred.m1.cv-tempoall.cv$barpred
+mod_temporal.cv <- lm(delpm ~ delpred, data=tempoall.cv)
+res[res$type=="2002", 't.r2'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.cv))$r.squared)
+
+
+
+#year 2003
+
+mod1.2003 <-filter(mod1,c == 2003)
+m1.formula <- as.formula(tm ~ NTckin+elev_m+pcturb+NDVI +(1+NTckin|date)) 
+
+
+
+
+#---------------->>>> CV
+#s1
+splits_s1 <- splitdf(mod1.2003 )
+test_s1 <- splits_s1$testset
+train_s1 <- splits_s1$trainset
+out_train_s1 <- lmer(m1.formula,data =  train_s1)
+test_s1$pred.m1.cv <- predict(object=out_train_s1 ,newdata=test_s1,allow.new.levels=TRUE,re.form=NULL )
+test_s1$iter<-"s1"
+#s2
+splits_s2 <- splitdf(mod1.2003 )
+test_s2 <- splits_s2$testset
+train_s2 <- splits_s2$trainset
+out_train_s2 <- lmer(m1.formula,data =  train_s2)
+test_s2$pred.m1.cv <- predict(object=out_train_s2 ,newdata=test_s2,allow.new.levels=TRUE,re.form=NULL )
+test_s2$iter<-"s2"
+#s3
+splits_s3 <- splitdf(mod1.2003 )
+test_s3 <- splits_s3$testset
+train_s3 <- splits_s3$trainset
+out_train_s3 <- lmer(m1.formula,data =  train_s3)
+test_s3$pred.m1.cv <- predict(object=out_train_s3 ,newdata=test_s3,allow.new.levels=TRUE,re.form=NULL )
+test_s3$iter<-"s3"
+#s4
+splits_s4 <- splitdf(mod1.2003 )
+test_s4 <- splits_s4$testset
+train_s4 <- splits_s4$trainset
+out_train_s4 <- lmer(m1.formula,data =  train_s4)
+test_s4$pred.m1.cv <- predict(object=out_train_s4 ,newdata=test_s4,allow.new.levels=TRUE,re.form=NULL )
+test_s4$iter<-"s4"
+#s5
+splits_s5 <- splitdf(mod1.2003 )
+test_s5 <- splits_s5$testset
+train_s5 <- splits_s5$trainset
+out_train_s5 <- lmer(m1.formula,data =  train_s5)
+test_s5$pred.m1.cv <- predict(object=out_train_s5 ,newdata=test_s5,allow.new.levels=TRUE,re.form=NULL )
+test_s5$iter<-"s5"
+#s6
+splits_s6 <- splitdf(mod1.2003 )
+test_s6 <- splits_s6$testset
+train_s6 <- splits_s6$trainset
+out_train_s6 <- lmer(m1.formula,data =  train_s6)
+test_s6$pred.m1.cv <- predict(object=out_train_s6 ,newdata=test_s6,allow.new.levels=TRUE,re.form=NULL )
+test_s6$iter<-"s6"
+#s7
+splits_s7 <- splitdf(mod1.2003 )
+test_s7 <- splits_s7$testset
+train_s7 <- splits_s7$trainset
+out_train_s7 <- lmer(m1.formula,data =  train_s7)
+test_s7$pred.m1.cv <- predict(object=out_train_s7 ,newdata=test_s7,allow.new.levels=TRUE,re.form=NULL )
+test_s7$iter<-"s7"
+#s8
+splits_s8 <- splitdf(mod1.2003 )
+test_s8 <- splits_s8$testset
+train_s8 <- splits_s8$trainset
+out_train_s8 <- lmer(m1.formula,data =  train_s8)
+test_s8$pred.m1.cv <- predict(object=out_train_s8 ,newdata=test_s8,allow.new.levels=TRUE,re.form=NULL )
+test_s8$iter<-"s8"
+#s9
+splits_s9 <- splitdf(mod1.2003 )
+test_s9 <- splits_s9$testset
+train_s9 <- splits_s9$trainset
+out_train_s9 <- lmer(m1.formula,data =  train_s9)
+test_s9$pred.m1.cv <- predict(object=out_train_s9 ,newdata=test_s9,allow.new.levels=TRUE,re.form=NULL )
+test_s9$iter<-"s9"
+#s10
+splits_s10 <- splitdf(mod1.2003 )
+test_s10 <- splits_s10$testset
+train_s10 <- splits_s10$trainset
+out_train_s10 <- lmer(m1.formula,data =  train_s10)
+test_s10$pred.m1.cv <- predict(object=out_train_s10 ,newdata=test_s10,allow.new.levels=TRUE,re.form=NULL )
+test_s10$iter<-"s10"
+
+#BIND 1 dataset
+mod1.2003.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s6,test_s7,test_s8,test_s9, test_s10))
+
+#2003
+m1.fit.all.cv<-lm(tm~pred.m1.cv,data=mod1.2003.cv)
+res[res$type=="2003", 'R2'] <- print(summary(lm(tm~pred.m1.cv,data=mod1.2003.cv))$r.squared)
+res[res$type=="2003", 'Bias'] <-print(summary(lm(tm~pred.m1.cv,data=mod1.2003.cv))$coef[2,1])
+#RMSPE
+res[res$type=="2003", 'RMSPE'] <- print(rmse(residuals(m1.fit.all.cv)))
+
+#spatial
+spatialall.cv<-mod1.2003.cv %>%
+    group_by(num_insee) %>%
+    summarise(barpm = mean(tm, na.rm=TRUE), barpred = mean(pred.m1.cv, na.rm=TRUE)) 
+m1.fit.all.cv.s <- lm(barpm ~ barpred, data=spatialall.cv)
+res[res$type=="2003", 's.r2'] <-  print(summary(lm(barpm ~ barpred, data=spatialall.cv))$r.squared)
+res[res$type=="2003", 's.RMSPE'] <- print(rmse(residuals(m1.fit.all.cv.s)))
+
+#temporal
+tempoall.cv<-left_join(mod1.2003.cv,spatialall.cv)
+tempoall.cv$delpm <-tempoall.cv$tm-tempoall.cv$barpm
+tempoall.cv$delpred <-tempoall.cv$pred.m1.cv-tempoall.cv$barpred
+mod_temporal.cv <- lm(delpm ~ delpred, data=tempoall.cv)
+res[res$type=="2003", 't.r2'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.cv))$r.squared)
+
+
+
+#year 2004
+
+mod1.2004 <-filter(mod1,c == 2004)
+m1.formula <- as.formula(tm ~ NTckin+elev_m+pcturb+NDVI +(1+NTckin|date)) 
+
+
+
+
+#---------------->>>> CV
+#s1
+splits_s1 <- splitdf(mod1.2004 )
+test_s1 <- splits_s1$testset
+train_s1 <- splits_s1$trainset
+out_train_s1 <- lmer(m1.formula,data =  train_s1)
+test_s1$pred.m1.cv <- predict(object=out_train_s1 ,newdata=test_s1,allow.new.levels=TRUE,re.form=NULL )
+test_s1$iter<-"s1"
+#s2
+splits_s2 <- splitdf(mod1.2004 )
+test_s2 <- splits_s2$testset
+train_s2 <- splits_s2$trainset
+out_train_s2 <- lmer(m1.formula,data =  train_s2)
+test_s2$pred.m1.cv <- predict(object=out_train_s2 ,newdata=test_s2,allow.new.levels=TRUE,re.form=NULL )
+test_s2$iter<-"s2"
+#s3
+splits_s3 <- splitdf(mod1.2004 )
+test_s3 <- splits_s3$testset
+train_s3 <- splits_s3$trainset
+out_train_s3 <- lmer(m1.formula,data =  train_s3)
+test_s3$pred.m1.cv <- predict(object=out_train_s3 ,newdata=test_s3,allow.new.levels=TRUE,re.form=NULL )
+test_s3$iter<-"s3"
+#s4
+splits_s4 <- splitdf(mod1.2004 )
+test_s4 <- splits_s4$testset
+train_s4 <- splits_s4$trainset
+out_train_s4 <- lmer(m1.formula,data =  train_s4)
+test_s4$pred.m1.cv <- predict(object=out_train_s4 ,newdata=test_s4,allow.new.levels=TRUE,re.form=NULL )
+test_s4$iter<-"s4"
+#s5
+splits_s5 <- splitdf(mod1.2004 )
+test_s5 <- splits_s5$testset
+train_s5 <- splits_s5$trainset
+out_train_s5 <- lmer(m1.formula,data =  train_s5)
+test_s5$pred.m1.cv <- predict(object=out_train_s5 ,newdata=test_s5,allow.new.levels=TRUE,re.form=NULL )
+test_s5$iter<-"s5"
+#s6
+splits_s6 <- splitdf(mod1.2004 )
+test_s6 <- splits_s6$testset
+train_s6 <- splits_s6$trainset
+out_train_s6 <- lmer(m1.formula,data =  train_s6)
+test_s6$pred.m1.cv <- predict(object=out_train_s6 ,newdata=test_s6,allow.new.levels=TRUE,re.form=NULL )
+test_s6$iter<-"s6"
+#s7
+splits_s7 <- splitdf(mod1.2004 )
+test_s7 <- splits_s7$testset
+train_s7 <- splits_s7$trainset
+out_train_s7 <- lmer(m1.formula,data =  train_s7)
+test_s7$pred.m1.cv <- predict(object=out_train_s7 ,newdata=test_s7,allow.new.levels=TRUE,re.form=NULL )
+test_s7$iter<-"s7"
+#s8
+splits_s8 <- splitdf(mod1.2004 )
+test_s8 <- splits_s8$testset
+train_s8 <- splits_s8$trainset
+out_train_s8 <- lmer(m1.formula,data =  train_s8)
+test_s8$pred.m1.cv <- predict(object=out_train_s8 ,newdata=test_s8,allow.new.levels=TRUE,re.form=NULL )
+test_s8$iter<-"s8"
+#s9
+splits_s9 <- splitdf(mod1.2004 )
+test_s9 <- splits_s9$testset
+train_s9 <- splits_s9$trainset
+out_train_s9 <- lmer(m1.formula,data =  train_s9)
+test_s9$pred.m1.cv <- predict(object=out_train_s9 ,newdata=test_s9,allow.new.levels=TRUE,re.form=NULL )
+test_s9$iter<-"s9"
+#s10
+splits_s10 <- splitdf(mod1.2004 )
+test_s10 <- splits_s10$testset
+train_s10 <- splits_s10$trainset
+out_train_s10 <- lmer(m1.formula,data =  train_s10)
+test_s10$pred.m1.cv <- predict(object=out_train_s10 ,newdata=test_s10,allow.new.levels=TRUE,re.form=NULL )
+test_s10$iter<-"s10"
+
+#BIND 1 dataset
+mod1.2004.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s6,test_s7,test_s8,test_s9, test_s10))
+
+#2004
+m1.fit.all.cv<-lm(tm~pred.m1.cv,data=mod1.2004.cv)
+res[res$type=="2004", 'R2'] <- print(summary(lm(tm~pred.m1.cv,data=mod1.2004.cv))$r.squared)
+res[res$type=="2004", 'Bias'] <-print(summary(lm(tm~pred.m1.cv,data=mod1.2004.cv))$coef[2,1])
+#RMSPE
+res[res$type=="2004", 'RMSPE'] <- print(rmse(residuals(m1.fit.all.cv)))
+
+#spatial
+spatialall.cv<-mod1.2004.cv %>%
+    group_by(num_insee) %>%
+    summarise(barpm = mean(tm, na.rm=TRUE), barpred = mean(pred.m1.cv, na.rm=TRUE)) 
+m1.fit.all.cv.s <- lm(barpm ~ barpred, data=spatialall.cv)
+res[res$type=="2004", 's.r2'] <-  print(summary(lm(barpm ~ barpred, data=spatialall.cv))$r.squared)
+res[res$type=="2004", 's.RMSPE'] <- print(rmse(residuals(m1.fit.all.cv.s)))
+
+#temporal
+tempoall.cv<-left_join(mod1.2004.cv,spatialall.cv)
+tempoall.cv$delpm <-tempoall.cv$tm-tempoall.cv$barpm
+tempoall.cv$delpred <-tempoall.cv$pred.m1.cv-tempoall.cv$barpred
+mod_temporal.cv <- lm(delpm ~ delpred, data=tempoall.cv)
+res[res$type=="2004", 't.r2'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.cv))$r.squared)
+
+
+
+#year 2005
+
+mod1.2005 <-filter(mod1,c == 2005)
+m1.formula <- as.formula(tm ~ NTckin+elev_m+pcturb+NDVI +(1+NTckin|date)) 
+
+
+
+
+#---------------->>>> CV
+#s1
+splits_s1 <- splitdf(mod1.2005 )
+test_s1 <- splits_s1$testset
+train_s1 <- splits_s1$trainset
+out_train_s1 <- lmer(m1.formula,data =  train_s1)
+test_s1$pred.m1.cv <- predict(object=out_train_s1 ,newdata=test_s1,allow.new.levels=TRUE,re.form=NULL )
+test_s1$iter<-"s1"
+#s2
+splits_s2 <- splitdf(mod1.2005 )
+test_s2 <- splits_s2$testset
+train_s2 <- splits_s2$trainset
+out_train_s2 <- lmer(m1.formula,data =  train_s2)
+test_s2$pred.m1.cv <- predict(object=out_train_s2 ,newdata=test_s2,allow.new.levels=TRUE,re.form=NULL )
+test_s2$iter<-"s2"
+#s3
+splits_s3 <- splitdf(mod1.2005 )
+test_s3 <- splits_s3$testset
+train_s3 <- splits_s3$trainset
+out_train_s3 <- lmer(m1.formula,data =  train_s3)
+test_s3$pred.m1.cv <- predict(object=out_train_s3 ,newdata=test_s3,allow.new.levels=TRUE,re.form=NULL )
+test_s3$iter<-"s3"
+#s4
+splits_s4 <- splitdf(mod1.2005 )
+test_s4 <- splits_s4$testset
+train_s4 <- splits_s4$trainset
+out_train_s4 <- lmer(m1.formula,data =  train_s4)
+test_s4$pred.m1.cv <- predict(object=out_train_s4 ,newdata=test_s4,allow.new.levels=TRUE,re.form=NULL )
+test_s4$iter<-"s4"
+#s5
+splits_s5 <- splitdf(mod1.2005 )
+test_s5 <- splits_s5$testset
+train_s5 <- splits_s5$trainset
+out_train_s5 <- lmer(m1.formula,data =  train_s5)
+test_s5$pred.m1.cv <- predict(object=out_train_s5 ,newdata=test_s5,allow.new.levels=TRUE,re.form=NULL )
+test_s5$iter<-"s5"
+#s6
+splits_s6 <- splitdf(mod1.2005 )
+test_s6 <- splits_s6$testset
+train_s6 <- splits_s6$trainset
+out_train_s6 <- lmer(m1.formula,data =  train_s6)
+test_s6$pred.m1.cv <- predict(object=out_train_s6 ,newdata=test_s6,allow.new.levels=TRUE,re.form=NULL )
+test_s6$iter<-"s6"
+#s7
+splits_s7 <- splitdf(mod1.2005 )
+test_s7 <- splits_s7$testset
+train_s7 <- splits_s7$trainset
+out_train_s7 <- lmer(m1.formula,data =  train_s7)
+test_s7$pred.m1.cv <- predict(object=out_train_s7 ,newdata=test_s7,allow.new.levels=TRUE,re.form=NULL )
+test_s7$iter<-"s7"
+#s8
+splits_s8 <- splitdf(mod1.2005 )
+test_s8 <- splits_s8$testset
+train_s8 <- splits_s8$trainset
+out_train_s8 <- lmer(m1.formula,data =  train_s8)
+test_s8$pred.m1.cv <- predict(object=out_train_s8 ,newdata=test_s8,allow.new.levels=TRUE,re.form=NULL )
+test_s8$iter<-"s8"
+#s9
+splits_s9 <- splitdf(mod1.2005 )
+test_s9 <- splits_s9$testset
+train_s9 <- splits_s9$trainset
+out_train_s9 <- lmer(m1.formula,data =  train_s9)
+test_s9$pred.m1.cv <- predict(object=out_train_s9 ,newdata=test_s9,allow.new.levels=TRUE,re.form=NULL )
+test_s9$iter<-"s9"
+#s10
+splits_s10 <- splitdf(mod1.2005 )
+test_s10 <- splits_s10$testset
+train_s10 <- splits_s10$trainset
+out_train_s10 <- lmer(m1.formula,data =  train_s10)
+test_s10$pred.m1.cv <- predict(object=out_train_s10 ,newdata=test_s10,allow.new.levels=TRUE,re.form=NULL )
+test_s10$iter<-"s10"
+
+#BIND 1 dataset
+mod1.2005.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s6,test_s7,test_s8,test_s9, test_s10))
+
+#2005
+m1.fit.all.cv<-lm(tm~pred.m1.cv,data=mod1.2005.cv)
+res[res$type=="2005", 'R2'] <- print(summary(lm(tm~pred.m1.cv,data=mod1.2005.cv))$r.squared)
+res[res$type=="2005", 'Bias'] <-print(summary(lm(tm~pred.m1.cv,data=mod1.2005.cv))$coef[2,1])
+#RMSPE
+res[res$type=="2005", 'RMSPE'] <- print(rmse(residuals(m1.fit.all.cv)))
+
+#spatial
+spatialall.cv<-mod1.2005.cv %>%
+    group_by(num_insee) %>%
+    summarise(barpm = mean(tm, na.rm=TRUE), barpred = mean(pred.m1.cv, na.rm=TRUE)) 
+m1.fit.all.cv.s <- lm(barpm ~ barpred, data=spatialall.cv)
+res[res$type=="2005", 's.r2'] <-  print(summary(lm(barpm ~ barpred, data=spatialall.cv))$r.squared)
+res[res$type=="2005", 's.RMSPE'] <- print(rmse(residuals(m1.fit.all.cv.s)))
+
+#temporal
+tempoall.cv<-left_join(mod1.2005.cv,spatialall.cv)
+tempoall.cv$delpm <-tempoall.cv$tm-tempoall.cv$barpm
+tempoall.cv$delpred <-tempoall.cv$pred.m1.cv-tempoall.cv$barpred
+mod_temporal.cv <- lm(delpm ~ delpred, data=tempoall.cv)
+res[res$type=="2005", 't.r2'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.cv))$r.squared)
+
+
+
+#year 2006
+
+mod1.2006 <-filter(mod1,c == 2006)
+m1.formula <- as.formula(tm ~ NTckin+elev_m+pcturb+NDVI +(1+NTckin|date)) 
+
+
+
+
+#---------------->>>> CV
+#s1
+splits_s1 <- splitdf(mod1.2006 )
+test_s1 <- splits_s1$testset
+train_s1 <- splits_s1$trainset
+out_train_s1 <- lmer(m1.formula,data =  train_s1)
+test_s1$pred.m1.cv <- predict(object=out_train_s1 ,newdata=test_s1,allow.new.levels=TRUE,re.form=NULL )
+test_s1$iter<-"s1"
+#s2
+splits_s2 <- splitdf(mod1.2006 )
+test_s2 <- splits_s2$testset
+train_s2 <- splits_s2$trainset
+out_train_s2 <- lmer(m1.formula,data =  train_s2)
+test_s2$pred.m1.cv <- predict(object=out_train_s2 ,newdata=test_s2,allow.new.levels=TRUE,re.form=NULL )
+test_s2$iter<-"s2"
+#s3
+splits_s3 <- splitdf(mod1.2006 )
+test_s3 <- splits_s3$testset
+train_s3 <- splits_s3$trainset
+out_train_s3 <- lmer(m1.formula,data =  train_s3)
+test_s3$pred.m1.cv <- predict(object=out_train_s3 ,newdata=test_s3,allow.new.levels=TRUE,re.form=NULL )
+test_s3$iter<-"s3"
+#s4
+splits_s4 <- splitdf(mod1.2006 )
+test_s4 <- splits_s4$testset
+train_s4 <- splits_s4$trainset
+out_train_s4 <- lmer(m1.formula,data =  train_s4)
+test_s4$pred.m1.cv <- predict(object=out_train_s4 ,newdata=test_s4,allow.new.levels=TRUE,re.form=NULL )
+test_s4$iter<-"s4"
+#s5
+splits_s5 <- splitdf(mod1.2006 )
+test_s5 <- splits_s5$testset
+train_s5 <- splits_s5$trainset
+out_train_s5 <- lmer(m1.formula,data =  train_s5)
+test_s5$pred.m1.cv <- predict(object=out_train_s5 ,newdata=test_s5,allow.new.levels=TRUE,re.form=NULL )
+test_s5$iter<-"s5"
+#s6
+splits_s6 <- splitdf(mod1.2006 )
+test_s6 <- splits_s6$testset
+train_s6 <- splits_s6$trainset
+out_train_s6 <- lmer(m1.formula,data =  train_s6)
+test_s6$pred.m1.cv <- predict(object=out_train_s6 ,newdata=test_s6,allow.new.levels=TRUE,re.form=NULL )
+test_s6$iter<-"s6"
+#s7
+splits_s7 <- splitdf(mod1.2006 )
+test_s7 <- splits_s7$testset
+train_s7 <- splits_s7$trainset
+out_train_s7 <- lmer(m1.formula,data =  train_s7)
+test_s7$pred.m1.cv <- predict(object=out_train_s7 ,newdata=test_s7,allow.new.levels=TRUE,re.form=NULL )
+test_s7$iter<-"s7"
+#s8
+splits_s8 <- splitdf(mod1.2006 )
+test_s8 <- splits_s8$testset
+train_s8 <- splits_s8$trainset
+out_train_s8 <- lmer(m1.formula,data =  train_s8)
+test_s8$pred.m1.cv <- predict(object=out_train_s8 ,newdata=test_s8,allow.new.levels=TRUE,re.form=NULL )
+test_s8$iter<-"s8"
+#s9
+splits_s9 <- splitdf(mod1.2006 )
+test_s9 <- splits_s9$testset
+train_s9 <- splits_s9$trainset
+out_train_s9 <- lmer(m1.formula,data =  train_s9)
+test_s9$pred.m1.cv <- predict(object=out_train_s9 ,newdata=test_s9,allow.new.levels=TRUE,re.form=NULL )
+test_s9$iter<-"s9"
+#s10
+splits_s10 <- splitdf(mod1.2006 )
+test_s10 <- splits_s10$testset
+train_s10 <- splits_s10$trainset
+out_train_s10 <- lmer(m1.formula,data =  train_s10)
+test_s10$pred.m1.cv <- predict(object=out_train_s10 ,newdata=test_s10,allow.new.levels=TRUE,re.form=NULL )
+test_s10$iter<-"s10"
+
+#BIND 1 dataset
+mod1.2006.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s6,test_s7,test_s8,test_s9, test_s10))
+
+#2006
+m1.fit.all.cv<-lm(tm~pred.m1.cv,data=mod1.2006.cv)
+res[res$type=="2006", 'R2'] <- print(summary(lm(tm~pred.m1.cv,data=mod1.2006.cv))$r.squared)
+res[res$type=="2006", 'Bias'] <-print(summary(lm(tm~pred.m1.cv,data=mod1.2006.cv))$coef[2,1])
+#RMSPE
+res[res$type=="2006", 'RMSPE'] <- print(rmse(residuals(m1.fit.all.cv)))
+
+#spatial
+spatialall.cv<-mod1.2006.cv %>%
+    group_by(num_insee) %>%
+    summarise(barpm = mean(tm, na.rm=TRUE), barpred = mean(pred.m1.cv, na.rm=TRUE)) 
+m1.fit.all.cv.s <- lm(barpm ~ barpred, data=spatialall.cv)
+res[res$type=="2006", 's.r2'] <-  print(summary(lm(barpm ~ barpred, data=spatialall.cv))$r.squared)
+res[res$type=="2006", 's.RMSPE'] <- print(rmse(residuals(m1.fit.all.cv.s)))
+
+#temporal
+tempoall.cv<-left_join(mod1.2006.cv,spatialall.cv)
+tempoall.cv$delpm <-tempoall.cv$tm-tempoall.cv$barpm
+tempoall.cv$delpred <-tempoall.cv$pred.m1.cv-tempoall.cv$barpred
+mod_temporal.cv <- lm(delpm ~ delpred, data=tempoall.cv)
+res[res$type=="2006", 't.r2'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.cv))$r.squared)
+
+
+
+#year 2007
+
+mod1.2007 <-filter(mod1,c == 2007)
+m1.formula <- as.formula(tm ~ NTckin+elev_m+pcturb+NDVI +(1+NTckin|date)) 
+
+
+
+
+#---------------->>>> CV
+#s1
+splits_s1 <- splitdf(mod1.2007 )
+test_s1 <- splits_s1$testset
+train_s1 <- splits_s1$trainset
+out_train_s1 <- lmer(m1.formula,data =  train_s1)
+test_s1$pred.m1.cv <- predict(object=out_train_s1 ,newdata=test_s1,allow.new.levels=TRUE,re.form=NULL )
+test_s1$iter<-"s1"
+#s2
+splits_s2 <- splitdf(mod1.2007 )
+test_s2 <- splits_s2$testset
+train_s2 <- splits_s2$trainset
+out_train_s2 <- lmer(m1.formula,data =  train_s2)
+test_s2$pred.m1.cv <- predict(object=out_train_s2 ,newdata=test_s2,allow.new.levels=TRUE,re.form=NULL )
+test_s2$iter<-"s2"
+#s3
+splits_s3 <- splitdf(mod1.2007 )
+test_s3 <- splits_s3$testset
+train_s3 <- splits_s3$trainset
+out_train_s3 <- lmer(m1.formula,data =  train_s3)
+test_s3$pred.m1.cv <- predict(object=out_train_s3 ,newdata=test_s3,allow.new.levels=TRUE,re.form=NULL )
+test_s3$iter<-"s3"
+#s4
+splits_s4 <- splitdf(mod1.2007 )
+test_s4 <- splits_s4$testset
+train_s4 <- splits_s4$trainset
+out_train_s4 <- lmer(m1.formula,data =  train_s4)
+test_s4$pred.m1.cv <- predict(object=out_train_s4 ,newdata=test_s4,allow.new.levels=TRUE,re.form=NULL )
+test_s4$iter<-"s4"
+#s5
+splits_s5 <- splitdf(mod1.2007 )
+test_s5 <- splits_s5$testset
+train_s5 <- splits_s5$trainset
+out_train_s5 <- lmer(m1.formula,data =  train_s5)
+test_s5$pred.m1.cv <- predict(object=out_train_s5 ,newdata=test_s5,allow.new.levels=TRUE,re.form=NULL )
+test_s5$iter<-"s5"
+#s6
+splits_s6 <- splitdf(mod1.2007 )
+test_s6 <- splits_s6$testset
+train_s6 <- splits_s6$trainset
+out_train_s6 <- lmer(m1.formula,data =  train_s6)
+test_s6$pred.m1.cv <- predict(object=out_train_s6 ,newdata=test_s6,allow.new.levels=TRUE,re.form=NULL )
+test_s6$iter<-"s6"
+#s7
+splits_s7 <- splitdf(mod1.2007 )
+test_s7 <- splits_s7$testset
+train_s7 <- splits_s7$trainset
+out_train_s7 <- lmer(m1.formula,data =  train_s7)
+test_s7$pred.m1.cv <- predict(object=out_train_s7 ,newdata=test_s7,allow.new.levels=TRUE,re.form=NULL )
+test_s7$iter<-"s7"
+#s8
+splits_s8 <- splitdf(mod1.2007 )
+test_s8 <- splits_s8$testset
+train_s8 <- splits_s8$trainset
+out_train_s8 <- lmer(m1.formula,data =  train_s8)
+test_s8$pred.m1.cv <- predict(object=out_train_s8 ,newdata=test_s8,allow.new.levels=TRUE,re.form=NULL )
+test_s8$iter<-"s8"
+#s9
+splits_s9 <- splitdf(mod1.2007 )
+test_s9 <- splits_s9$testset
+train_s9 <- splits_s9$trainset
+out_train_s9 <- lmer(m1.formula,data =  train_s9)
+test_s9$pred.m1.cv <- predict(object=out_train_s9 ,newdata=test_s9,allow.new.levels=TRUE,re.form=NULL )
+test_s9$iter<-"s9"
+#s10
+splits_s10 <- splitdf(mod1.2007 )
+test_s10 <- splits_s10$testset
+train_s10 <- splits_s10$trainset
+out_train_s10 <- lmer(m1.formula,data =  train_s10)
+test_s10$pred.m1.cv <- predict(object=out_train_s10 ,newdata=test_s10,allow.new.levels=TRUE,re.form=NULL )
+test_s10$iter<-"s10"
+
+#BIND 1 dataset
+mod1.2007.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s6,test_s7,test_s8,test_s9, test_s10))
+
+#2007
+m1.fit.all.cv<-lm(tm~pred.m1.cv,data=mod1.2007.cv)
+res[res$type=="2007", 'R2'] <- print(summary(lm(tm~pred.m1.cv,data=mod1.2007.cv))$r.squared)
+res[res$type=="2007", 'Bias'] <-print(summary(lm(tm~pred.m1.cv,data=mod1.2007.cv))$coef[2,1])
+#RMSPE
+res[res$type=="2007", 'RMSPE'] <- print(rmse(residuals(m1.fit.all.cv)))
+
+#spatial
+spatialall.cv<-mod1.2007.cv %>%
+    group_by(num_insee) %>%
+    summarise(barpm = mean(tm, na.rm=TRUE), barpred = mean(pred.m1.cv, na.rm=TRUE)) 
+m1.fit.all.cv.s <- lm(barpm ~ barpred, data=spatialall.cv)
+res[res$type=="2007", 's.r2'] <-  print(summary(lm(barpm ~ barpred, data=spatialall.cv))$r.squared)
+res[res$type=="2007", 's.RMSPE'] <- print(rmse(residuals(m1.fit.all.cv.s)))
+
+#temporal
+tempoall.cv<-left_join(mod1.2007.cv,spatialall.cv)
+tempoall.cv$delpm <-tempoall.cv$tm-tempoall.cv$barpm
+tempoall.cv$delpred <-tempoall.cv$pred.m1.cv-tempoall.cv$barpred
+mod_temporal.cv <- lm(delpm ~ delpred, data=tempoall.cv)
+res[res$type=="2007", 't.r2'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.cv))$r.squared)
+
+
+
+#year 2008
+
+mod1.2008 <-filter(mod1,c == 2008)
+m1.formula <- as.formula(tm ~ NTckin+elev_m+pcturb+NDVI +(1+NTckin|date)) 
+
+
+
+
+#---------------->>>> CV
+#s1
+splits_s1 <- splitdf(mod1.2008 )
+test_s1 <- splits_s1$testset
+train_s1 <- splits_s1$trainset
+out_train_s1 <- lmer(m1.formula,data =  train_s1)
+test_s1$pred.m1.cv <- predict(object=out_train_s1 ,newdata=test_s1,allow.new.levels=TRUE,re.form=NULL )
+test_s1$iter<-"s1"
+#s2
+splits_s2 <- splitdf(mod1.2008 )
+test_s2 <- splits_s2$testset
+train_s2 <- splits_s2$trainset
+out_train_s2 <- lmer(m1.formula,data =  train_s2)
+test_s2$pred.m1.cv <- predict(object=out_train_s2 ,newdata=test_s2,allow.new.levels=TRUE,re.form=NULL )
+test_s2$iter<-"s2"
+#s3
+splits_s3 <- splitdf(mod1.2008 )
+test_s3 <- splits_s3$testset
+train_s3 <- splits_s3$trainset
+out_train_s3 <- lmer(m1.formula,data =  train_s3)
+test_s3$pred.m1.cv <- predict(object=out_train_s3 ,newdata=test_s3,allow.new.levels=TRUE,re.form=NULL )
+test_s3$iter<-"s3"
+#s4
+splits_s4 <- splitdf(mod1.2008 )
+test_s4 <- splits_s4$testset
+train_s4 <- splits_s4$trainset
+out_train_s4 <- lmer(m1.formula,data =  train_s4)
+test_s4$pred.m1.cv <- predict(object=out_train_s4 ,newdata=test_s4,allow.new.levels=TRUE,re.form=NULL )
+test_s4$iter<-"s4"
+#s5
+splits_s5 <- splitdf(mod1.2008 )
+test_s5 <- splits_s5$testset
+train_s5 <- splits_s5$trainset
+out_train_s5 <- lmer(m1.formula,data =  train_s5)
+test_s5$pred.m1.cv <- predict(object=out_train_s5 ,newdata=test_s5,allow.new.levels=TRUE,re.form=NULL )
+test_s5$iter<-"s5"
+#s6
+splits_s6 <- splitdf(mod1.2008 )
+test_s6 <- splits_s6$testset
+train_s6 <- splits_s6$trainset
+out_train_s6 <- lmer(m1.formula,data =  train_s6)
+test_s6$pred.m1.cv <- predict(object=out_train_s6 ,newdata=test_s6,allow.new.levels=TRUE,re.form=NULL )
+test_s6$iter<-"s6"
+#s7
+splits_s7 <- splitdf(mod1.2008 )
+test_s7 <- splits_s7$testset
+train_s7 <- splits_s7$trainset
+out_train_s7 <- lmer(m1.formula,data =  train_s7)
+test_s7$pred.m1.cv <- predict(object=out_train_s7 ,newdata=test_s7,allow.new.levels=TRUE,re.form=NULL )
+test_s7$iter<-"s7"
+#s8
+splits_s8 <- splitdf(mod1.2008 )
+test_s8 <- splits_s8$testset
+train_s8 <- splits_s8$trainset
+out_train_s8 <- lmer(m1.formula,data =  train_s8)
+test_s8$pred.m1.cv <- predict(object=out_train_s8 ,newdata=test_s8,allow.new.levels=TRUE,re.form=NULL )
+test_s8$iter<-"s8"
+#s9
+splits_s9 <- splitdf(mod1.2008 )
+test_s9 <- splits_s9$testset
+train_s9 <- splits_s9$trainset
+out_train_s9 <- lmer(m1.formula,data =  train_s9)
+test_s9$pred.m1.cv <- predict(object=out_train_s9 ,newdata=test_s9,allow.new.levels=TRUE,re.form=NULL )
+test_s9$iter<-"s9"
+#s10
+splits_s10 <- splitdf(mod1.2008 )
+test_s10 <- splits_s10$testset
+train_s10 <- splits_s10$trainset
+out_train_s10 <- lmer(m1.formula,data =  train_s10)
+test_s10$pred.m1.cv <- predict(object=out_train_s10 ,newdata=test_s10,allow.new.levels=TRUE,re.form=NULL )
+test_s10$iter<-"s10"
+
+#BIND 1 dataset
+mod1.2008.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s6,test_s7,test_s8,test_s9, test_s10))
+
+#2008
+m1.fit.all.cv<-lm(tm~pred.m1.cv,data=mod1.2008.cv)
+res[res$type=="2008", 'R2'] <- print(summary(lm(tm~pred.m1.cv,data=mod1.2008.cv))$r.squared)
+res[res$type=="2008", 'Bias'] <-print(summary(lm(tm~pred.m1.cv,data=mod1.2008.cv))$coef[2,1])
+#RMSPE
+res[res$type=="2008", 'RMSPE'] <- print(rmse(residuals(m1.fit.all.cv)))
+
+#spatial
+spatialall.cv<-mod1.2008.cv %>%
+    group_by(num_insee) %>%
+    summarise(barpm = mean(tm, na.rm=TRUE), barpred = mean(pred.m1.cv, na.rm=TRUE)) 
+m1.fit.all.cv.s <- lm(barpm ~ barpred, data=spatialall.cv)
+res[res$type=="2008", 's.r2'] <-  print(summary(lm(barpm ~ barpred, data=spatialall.cv))$r.squared)
+res[res$type=="2008", 's.RMSPE'] <- print(rmse(residuals(m1.fit.all.cv.s)))
+
+#temporal
+tempoall.cv<-left_join(mod1.2008.cv,spatialall.cv)
+tempoall.cv$delpm <-tempoall.cv$tm-tempoall.cv$barpm
+tempoall.cv$delpred <-tempoall.cv$pred.m1.cv-tempoall.cv$barpred
+mod_temporal.cv <- lm(delpm ~ delpred, data=tempoall.cv)
+res[res$type=="2008", 't.r2'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.cv))$r.squared)
+
+
+
+#year 2009
+
+mod1.2009 <-filter(mod1,c == 2009)
+m1.formula <- as.formula(tm ~ NTckin+elev_m+pcturb+NDVI +(1+NTckin|date)) 
+
+
+
+
+#---------------->>>> CV
+#s1
+splits_s1 <- splitdf(mod1.2009 )
+test_s1 <- splits_s1$testset
+train_s1 <- splits_s1$trainset
+out_train_s1 <- lmer(m1.formula,data =  train_s1)
+test_s1$pred.m1.cv <- predict(object=out_train_s1 ,newdata=test_s1,allow.new.levels=TRUE,re.form=NULL )
+test_s1$iter<-"s1"
+#s2
+splits_s2 <- splitdf(mod1.2009 )
+test_s2 <- splits_s2$testset
+train_s2 <- splits_s2$trainset
+out_train_s2 <- lmer(m1.formula,data =  train_s2)
+test_s2$pred.m1.cv <- predict(object=out_train_s2 ,newdata=test_s2,allow.new.levels=TRUE,re.form=NULL )
+test_s2$iter<-"s2"
+#s3
+splits_s3 <- splitdf(mod1.2009 )
+test_s3 <- splits_s3$testset
+train_s3 <- splits_s3$trainset
+out_train_s3 <- lmer(m1.formula,data =  train_s3)
+test_s3$pred.m1.cv <- predict(object=out_train_s3 ,newdata=test_s3,allow.new.levels=TRUE,re.form=NULL )
+test_s3$iter<-"s3"
+#s4
+splits_s4 <- splitdf(mod1.2009 )
+test_s4 <- splits_s4$testset
+train_s4 <- splits_s4$trainset
+out_train_s4 <- lmer(m1.formula,data =  train_s4)
+test_s4$pred.m1.cv <- predict(object=out_train_s4 ,newdata=test_s4,allow.new.levels=TRUE,re.form=NULL )
+test_s4$iter<-"s4"
+#s5
+splits_s5 <- splitdf(mod1.2009 )
+test_s5 <- splits_s5$testset
+train_s5 <- splits_s5$trainset
+out_train_s5 <- lmer(m1.formula,data =  train_s5)
+test_s5$pred.m1.cv <- predict(object=out_train_s5 ,newdata=test_s5,allow.new.levels=TRUE,re.form=NULL )
+test_s5$iter<-"s5"
+#s6
+splits_s6 <- splitdf(mod1.2009 )
+test_s6 <- splits_s6$testset
+train_s6 <- splits_s6$trainset
+out_train_s6 <- lmer(m1.formula,data =  train_s6)
+test_s6$pred.m1.cv <- predict(object=out_train_s6 ,newdata=test_s6,allow.new.levels=TRUE,re.form=NULL )
+test_s6$iter<-"s6"
+#s7
+splits_s7 <- splitdf(mod1.2009 )
+test_s7 <- splits_s7$testset
+train_s7 <- splits_s7$trainset
+out_train_s7 <- lmer(m1.formula,data =  train_s7)
+test_s7$pred.m1.cv <- predict(object=out_train_s7 ,newdata=test_s7,allow.new.levels=TRUE,re.form=NULL )
+test_s7$iter<-"s7"
+#s8
+splits_s8 <- splitdf(mod1.2009 )
+test_s8 <- splits_s8$testset
+train_s8 <- splits_s8$trainset
+out_train_s8 <- lmer(m1.formula,data =  train_s8)
+test_s8$pred.m1.cv <- predict(object=out_train_s8 ,newdata=test_s8,allow.new.levels=TRUE,re.form=NULL )
+test_s8$iter<-"s8"
+#s9
+splits_s9 <- splitdf(mod1.2009 )
+test_s9 <- splits_s9$testset
+train_s9 <- splits_s9$trainset
+out_train_s9 <- lmer(m1.formula,data =  train_s9)
+test_s9$pred.m1.cv <- predict(object=out_train_s9 ,newdata=test_s9,allow.new.levels=TRUE,re.form=NULL )
+test_s9$iter<-"s9"
+#s10
+splits_s10 <- splitdf(mod1.2009 )
+test_s10 <- splits_s10$testset
+train_s10 <- splits_s10$trainset
+out_train_s10 <- lmer(m1.formula,data =  train_s10)
+test_s10$pred.m1.cv <- predict(object=out_train_s10 ,newdata=test_s10,allow.new.levels=TRUE,re.form=NULL )
+test_s10$iter<-"s10"
+
+#BIND 1 dataset
+mod1.2009.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s6,test_s7,test_s8,test_s9, test_s10))
+
+#2009
+m1.fit.all.cv<-lm(tm~pred.m1.cv,data=mod1.2009.cv)
+res[res$type=="2009", 'R2'] <- print(summary(lm(tm~pred.m1.cv,data=mod1.2009.cv))$r.squared)
+res[res$type=="2009", 'Bias'] <-print(summary(lm(tm~pred.m1.cv,data=mod1.2009.cv))$coef[2,1])
+#RMSPE
+res[res$type=="2009", 'RMSPE'] <- print(rmse(residuals(m1.fit.all.cv)))
+
+#spatial
+spatialall.cv<-mod1.2009.cv %>%
+    group_by(num_insee) %>%
+    summarise(barpm = mean(tm, na.rm=TRUE), barpred = mean(pred.m1.cv, na.rm=TRUE)) 
+m1.fit.all.cv.s <- lm(barpm ~ barpred, data=spatialall.cv)
+res[res$type=="2009", 's.r2'] <-  print(summary(lm(barpm ~ barpred, data=spatialall.cv))$r.squared)
+res[res$type=="2009", 's.RMSPE'] <- print(rmse(residuals(m1.fit.all.cv.s)))
+
+#temporal
+tempoall.cv<-left_join(mod1.2009.cv,spatialall.cv)
+tempoall.cv$delpm <-tempoall.cv$tm-tempoall.cv$barpm
+tempoall.cv$delpred <-tempoall.cv$pred.m1.cv-tempoall.cv$barpred
+mod_temporal.cv <- lm(delpm ~ delpred, data=tempoall.cv)
+res[res$type=="2009", 't.r2'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.cv))$r.squared)
+
+
+
+#year 2010
+
+mod1.2010 <-filter(mod1,c == 2010)
+m1.formula <- as.formula(tm ~ NTckin+elev_m+pcturb+NDVI +(1+NTckin|date)) 
+
+
+
+
+#---------------->>>> CV
+#s1
+splits_s1 <- splitdf(mod1.2010 )
+test_s1 <- splits_s1$testset
+train_s1 <- splits_s1$trainset
+out_train_s1 <- lmer(m1.formula,data =  train_s1)
+test_s1$pred.m1.cv <- predict(object=out_train_s1 ,newdata=test_s1,allow.new.levels=TRUE,re.form=NULL )
+test_s1$iter<-"s1"
+#s2
+splits_s2 <- splitdf(mod1.2010 )
+test_s2 <- splits_s2$testset
+train_s2 <- splits_s2$trainset
+out_train_s2 <- lmer(m1.formula,data =  train_s2)
+test_s2$pred.m1.cv <- predict(object=out_train_s2 ,newdata=test_s2,allow.new.levels=TRUE,re.form=NULL )
+test_s2$iter<-"s2"
+#s3
+splits_s3 <- splitdf(mod1.2010 )
+test_s3 <- splits_s3$testset
+train_s3 <- splits_s3$trainset
+out_train_s3 <- lmer(m1.formula,data =  train_s3)
+test_s3$pred.m1.cv <- predict(object=out_train_s3 ,newdata=test_s3,allow.new.levels=TRUE,re.form=NULL )
+test_s3$iter<-"s3"
+#s4
+splits_s4 <- splitdf(mod1.2010 )
+test_s4 <- splits_s4$testset
+train_s4 <- splits_s4$trainset
+out_train_s4 <- lmer(m1.formula,data =  train_s4)
+test_s4$pred.m1.cv <- predict(object=out_train_s4 ,newdata=test_s4,allow.new.levels=TRUE,re.form=NULL )
+test_s4$iter<-"s4"
+#s5
+splits_s5 <- splitdf(mod1.2010 )
+test_s5 <- splits_s5$testset
+train_s5 <- splits_s5$trainset
+out_train_s5 <- lmer(m1.formula,data =  train_s5)
+test_s5$pred.m1.cv <- predict(object=out_train_s5 ,newdata=test_s5,allow.new.levels=TRUE,re.form=NULL )
+test_s5$iter<-"s5"
+#s6
+splits_s6 <- splitdf(mod1.2010 )
+test_s6 <- splits_s6$testset
+train_s6 <- splits_s6$trainset
+out_train_s6 <- lmer(m1.formula,data =  train_s6)
+test_s6$pred.m1.cv <- predict(object=out_train_s6 ,newdata=test_s6,allow.new.levels=TRUE,re.form=NULL )
+test_s6$iter<-"s6"
+#s7
+splits_s7 <- splitdf(mod1.2010 )
+test_s7 <- splits_s7$testset
+train_s7 <- splits_s7$trainset
+out_train_s7 <- lmer(m1.formula,data =  train_s7)
+test_s7$pred.m1.cv <- predict(object=out_train_s7 ,newdata=test_s7,allow.new.levels=TRUE,re.form=NULL )
+test_s7$iter<-"s7"
+#s8
+splits_s8 <- splitdf(mod1.2010 )
+test_s8 <- splits_s8$testset
+train_s8 <- splits_s8$trainset
+out_train_s8 <- lmer(m1.formula,data =  train_s8)
+test_s8$pred.m1.cv <- predict(object=out_train_s8 ,newdata=test_s8,allow.new.levels=TRUE,re.form=NULL )
+test_s8$iter<-"s8"
+#s9
+splits_s9 <- splitdf(mod1.2010 )
+test_s9 <- splits_s9$testset
+train_s9 <- splits_s9$trainset
+out_train_s9 <- lmer(m1.formula,data =  train_s9)
+test_s9$pred.m1.cv <- predict(object=out_train_s9 ,newdata=test_s9,allow.new.levels=TRUE,re.form=NULL )
+test_s9$iter<-"s9"
+#s10
+splits_s10 <- splitdf(mod1.2010 )
+test_s10 <- splits_s10$testset
+train_s10 <- splits_s10$trainset
+out_train_s10 <- lmer(m1.formula,data =  train_s10)
+test_s10$pred.m1.cv <- predict(object=out_train_s10 ,newdata=test_s10,allow.new.levels=TRUE,re.form=NULL )
+test_s10$iter<-"s10"
+
+#BIND 1 dataset
+mod1.2010.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s6,test_s7,test_s8,test_s9, test_s10))
+
+#2010
+m1.fit.all.cv<-lm(tm~pred.m1.cv,data=mod1.2010.cv)
+res[res$type=="2010", 'R2'] <- print(summary(lm(tm~pred.m1.cv,data=mod1.2010.cv))$r.squared)
+res[res$type=="2010", 'Bias'] <-print(summary(lm(tm~pred.m1.cv,data=mod1.2010.cv))$coef[2,1])
+#RMSPE
+res[res$type=="2010", 'RMSPE'] <- print(rmse(residuals(m1.fit.all.cv)))
+
+#spatial
+spatialall.cv<-mod1.2010.cv %>%
+    group_by(num_insee) %>%
+    summarise(barpm = mean(tm, na.rm=TRUE), barpred = mean(pred.m1.cv, na.rm=TRUE)) 
+m1.fit.all.cv.s <- lm(barpm ~ barpred, data=spatialall.cv)
+res[res$type=="2010", 's.r2'] <-  print(summary(lm(barpm ~ barpred, data=spatialall.cv))$r.squared)
+res[res$type=="2010", 's.RMSPE'] <- print(rmse(residuals(m1.fit.all.cv.s)))
+
+#temporal
+tempoall.cv<-left_join(mod1.2010.cv,spatialall.cv)
+tempoall.cv$delpm <-tempoall.cv$tm-tempoall.cv$barpm
+tempoall.cv$delpred <-tempoall.cv$pred.m1.cv-tempoall.cv$barpred
+mod_temporal.cv <- lm(delpm ~ delpred, data=tempoall.cv)
+res[res$type=="2010", 't.r2'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.cv))$r.squared)
+
+
+
+#year 2011
+
+mod1.2011 <-filter(mod1,c == 2011)
+m1.formula <- as.formula(tm ~ NTckin+elev_m+pcturb+NDVI +(1+NTckin|date)) 
+
+
+
+
+#---------------->>>> CV
+#s1
+splits_s1 <- splitdf(mod1.2011 )
+test_s1 <- splits_s1$testset
+train_s1 <- splits_s1$trainset
+out_train_s1 <- lmer(m1.formula,data =  train_s1)
+test_s1$pred.m1.cv <- predict(object=out_train_s1 ,newdata=test_s1,allow.new.levels=TRUE,re.form=NULL )
+test_s1$iter<-"s1"
+#s2
+splits_s2 <- splitdf(mod1.2011 )
+test_s2 <- splits_s2$testset
+train_s2 <- splits_s2$trainset
+out_train_s2 <- lmer(m1.formula,data =  train_s2)
+test_s2$pred.m1.cv <- predict(object=out_train_s2 ,newdata=test_s2,allow.new.levels=TRUE,re.form=NULL )
+test_s2$iter<-"s2"
+#s3
+splits_s3 <- splitdf(mod1.2011 )
+test_s3 <- splits_s3$testset
+train_s3 <- splits_s3$trainset
+out_train_s3 <- lmer(m1.formula,data =  train_s3)
+test_s3$pred.m1.cv <- predict(object=out_train_s3 ,newdata=test_s3,allow.new.levels=TRUE,re.form=NULL )
+test_s3$iter<-"s3"
+#s4
+splits_s4 <- splitdf(mod1.2011 )
+test_s4 <- splits_s4$testset
+train_s4 <- splits_s4$trainset
+out_train_s4 <- lmer(m1.formula,data =  train_s4)
+test_s4$pred.m1.cv <- predict(object=out_train_s4 ,newdata=test_s4,allow.new.levels=TRUE,re.form=NULL )
+test_s4$iter<-"s4"
+#s5
+splits_s5 <- splitdf(mod1.2011 )
+test_s5 <- splits_s5$testset
+train_s5 <- splits_s5$trainset
+out_train_s5 <- lmer(m1.formula,data =  train_s5)
+test_s5$pred.m1.cv <- predict(object=out_train_s5 ,newdata=test_s5,allow.new.levels=TRUE,re.form=NULL )
+test_s5$iter<-"s5"
+#s6
+splits_s6 <- splitdf(mod1.2011 )
+test_s6 <- splits_s6$testset
+train_s6 <- splits_s6$trainset
+out_train_s6 <- lmer(m1.formula,data =  train_s6)
+test_s6$pred.m1.cv <- predict(object=out_train_s6 ,newdata=test_s6,allow.new.levels=TRUE,re.form=NULL )
+test_s6$iter<-"s6"
+#s7
+splits_s7 <- splitdf(mod1.2011 )
+test_s7 <- splits_s7$testset
+train_s7 <- splits_s7$trainset
+out_train_s7 <- lmer(m1.formula,data =  train_s7)
+test_s7$pred.m1.cv <- predict(object=out_train_s7 ,newdata=test_s7,allow.new.levels=TRUE,re.form=NULL )
+test_s7$iter<-"s7"
+#s8
+splits_s8 <- splitdf(mod1.2011 )
+test_s8 <- splits_s8$testset
+train_s8 <- splits_s8$trainset
+out_train_s8 <- lmer(m1.formula,data =  train_s8)
+test_s8$pred.m1.cv <- predict(object=out_train_s8 ,newdata=test_s8,allow.new.levels=TRUE,re.form=NULL )
+test_s8$iter<-"s8"
+#s9
+splits_s9 <- splitdf(mod1.2011 )
+test_s9 <- splits_s9$testset
+train_s9 <- splits_s9$trainset
+out_train_s9 <- lmer(m1.formula,data =  train_s9)
+test_s9$pred.m1.cv <- predict(object=out_train_s9 ,newdata=test_s9,allow.new.levels=TRUE,re.form=NULL )
+test_s9$iter<-"s9"
+#s10
+splits_s10 <- splitdf(mod1.2011 )
+test_s10 <- splits_s10$testset
+train_s10 <- splits_s10$trainset
+out_train_s10 <- lmer(m1.formula,data =  train_s10)
+test_s10$pred.m1.cv <- predict(object=out_train_s10 ,newdata=test_s10,allow.new.levels=TRUE,re.form=NULL )
+test_s10$iter<-"s10"
+
+#BIND 1 dataset
+mod1.2011.cv<- data.table(rbind(test_s1,test_s2,test_s3,test_s4,test_s5,test_s6,test_s7,test_s8,test_s9, test_s10))
+
+#2011
+m1.fit.all.cv<-lm(tm~pred.m1.cv,data=mod1.2011.cv)
+res[res$type=="2011", 'R2'] <- print(summary(lm(tm~pred.m1.cv,data=mod1.2011.cv))$r.squared)
+res[res$type=="2011", 'Bias'] <-print(summary(lm(tm~pred.m1.cv,data=mod1.2011.cv))$coef[2,1])
+#RMSPE
+res[res$type=="2011", 'RMSPE'] <- print(rmse(residuals(m1.fit.all.cv)))
+
+#spatial
+spatialall.cv<-mod1.2011.cv %>%
+    group_by(num_insee) %>%
+    summarise(barpm = mean(tm, na.rm=TRUE), barpred = mean(pred.m1.cv, na.rm=TRUE)) 
+m1.fit.all.cv.s <- lm(barpm ~ barpred, data=spatialall.cv)
+res[res$type=="2011", 's.r2'] <-  print(summary(lm(barpm ~ barpred, data=spatialall.cv))$r.squared)
+res[res$type=="2011", 's.RMSPE'] <- print(rmse(residuals(m1.fit.all.cv.s)))
+
+#temporal
+tempoall.cv<-left_join(mod1.2011.cv,spatialall.cv)
+tempoall.cv$delpm <-tempoall.cv$tm-tempoall.cv$barpm
+tempoall.cv$delpred <-tempoall.cv$pred.m1.cv-tempoall.cv$barpred
+mod_temporal.cv <- lm(delpm ~ delpred, data=tempoall.cv)
+res[res$type=="2011", 't.r2'] <-  print(summary(lm(delpm ~ delpred, data=tempoall.cv))$r.squared)
+
+write.csv(res,"/media/NAS/Uni/Projects/P022_Temprature_France/4.results/review/no_emis.csv")
+
+
+#region analysis 
+
+m1.all <-rbindlist(list(mod1.2000.cv,mod1.2001.cv,mod1.2002.cv,mod1.2003.cv,mod1.2004.cv,mod1.2005.cv,mod1.2006.cv,mod1.2007.cv,mod1.2008.cv,mod1.2009.cv,mod1.2010.cv,mod1.2011.cv))
+
+
+#create CV table
+res <- data.frame(type=character(10), R2=numeric(10),Bias=numeric(10),RMSPE=numeric(10),s.r2=numeric(10),s.RMSPE=numeric(10),t.r2=numeric(10))
+#name columns
+res$type <- c("overall" , "mountain climate", "ocianic climate", "degraded ocianic climate", "mediterranean climate", "continental climate", "winter","summer","urban","rural")
+# 
+# #create full grid
+# m1.all.cv <-mod1 %>%
+#     group_by(num_insee) %>%
+#     summarise(X = mean(Longitude , na.rm=TRUE),  Y = mean(Latitude  , na.rm=TRUE))
+# #write
+# write.csv(m1.all.cv,"/media/NAS/Uni/Projects/P022_Temprature_France/3.work/fn007_keytables/metnum_inseeXY.csv")
+#import back climate zone
+climz<-fread("/media/NAS/Uni/Projects/P022_Temprature_France/3.work/fn007_keytables/metstnXY._czone.csv")
+climz$id<-NULL
+setkey(m1.all,num_insee)
+setkey(climz,num_insee)
+m1.all <- merge(m1.all,climz[,list(num_insee,cid)], all.x = T)
+m1.all<-m1.all[, c := as.numeric(format(day, "%Y")) ]
+
 
 

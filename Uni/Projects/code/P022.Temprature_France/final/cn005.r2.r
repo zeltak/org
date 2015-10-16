@@ -18,8 +18,6 @@ library(DataCombine)
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
 
-
-
 #mod1
 mod1res<-fread("/media/NAS/Uni/Projects/P022_Temprature_France/4.results/r2/mod1.csv")
 options(ztable.type="html")
