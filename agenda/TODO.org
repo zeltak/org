@@ -11,6 +11,99 @@
   :END:
 ** weechat disconnects 
 /reconnect -all
+** wl
+*** Wanderlust is asking me all these questions about how to open an attachment! How do I make Wanderlust just open it?
+First,
+
+(setq mime-view-mailcap-files '("~/.mailcap"))
+This needs to be done before SEMI is loaded. You can use customize-variable for this. Next, use the following (and only the following) in your ~/.mailcap file:
+
+application/*; xdg-open %s
+image/*; xdg-open %s
+text/*; xdg-open %s
+video/*; xdg-open %s
+audio/*; xdg-open %s
+Finally:
+
+(setq mime-play-find-every-situations nil
+  mime-play-delete-file-immediately nil
+  process-connection-type nil)
+On very new versions of Wanderlust, setting process-connection-type should no longer be necessary.
+
+This depends on having a command, xdg-open, that can deal with all types of files. This should be present on modern Linux desktops. I believe 
+*** WL hangs when I wake from hibernation
+http://www.emacswiki.org/emacs/WlFaq#toc18
+
+The problem seems to be that elmo doesn’t realize that the connection its IMAP or other connection has timed out on the other side, and so keeps trying it. You can work around it by typing M-t M-t when you come back from hibernation.
+
+If you want this to happen automatically, you will need your system to run a command approximately like this before hibernation:
+
+    /usr/bin/emacsclient --socket-name /tmp/emacs1000/server --eval "(wl-toggle-plugged 'off)"
+and then toggle back on after resume.
+
+Since hibernation/suspend-to-ram sometiems happen in ways you can’t control – e.g., if you leave your laptop on somewhere and run out of battery power – it’s best to havethis doen automatically.
+
+If you use the hibernate script for hibernation/suspend, you can add a scriptlet /etc/hibernate/scriptlets.d/wanderlust that will do this for you automatically; here’s a very simple example:
+
+AddConfigHandler WanderlustOptions
+
+WanderlustSuspend() {
+    /usr/bin/emacsclient --socket-name /tmp/emacs1000/server --eval "(wl-toggle-plugged 'off)"
+}
+
+WanderlustResume() {
+    /usr/bin/emacsclient --socket-name /tmp/emacs1000/server --eval "(wl-toggle-plugged 'on)"
+}
+
+WanderlustOptions() {
+    case $1 in
+        *)
+            return 1
+    esac
+
+    if [ -z "$WANDERLUST_HOOKED" ] ; then
+        AddSuspendHook 01 WanderlustSuspend
+        AddResumeHook 01 WanderlustResume
+        WANDERLUST_HOOKED=1
+    fi
+    return 0
+}
+A better way to do this would be to check each running emacsserver instance. In any case I found this didn’t always solve the problem, possibly because plugging back in after resume may occur before your new internet connection has been negotiated, which would give you the same issue.
+
+I now use pm-utils instead, and have this in /etc/pm/sleep.d/09_wl_fix:
+
+. "${PM_FUNCTIONS}"
+
+suspend_wl()
+{
+	# Get WL to go offline
+        /usr/bin/emacsclient --socket-name /tmp/emacs1000/server --eval "(wl-toggle-plugged 'off)"
+}
+
+resume_wl()
+{
+	# Wake up NetworkManager and make it do a new connection
+        echo "waking up -- wl is plugged off"
+}
+
+case "$1" in
+	hibernate|suspend)
+		suspend_wl
+		;;
+	thaw|resume)
+		resume_wl
+		;;
+	*) exit $NA
+		;;
+esac
+
+for now it’s doing the trick!
+*** signature
+     ;; Automatic signature insertion
+      signature-file-name "~/Maildir/Signatures/XxxxXXXAddress"
+      signature-insert-at-eof t
+      signature-delete-blank-lines-at-eof t
+
 
 ** TODO capture questions 
 Hi all!

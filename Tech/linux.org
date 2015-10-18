@@ -32083,7 +32083,6 @@ set should write to init.el is
 (autoload 'wl-draft "wl" "Write draft with Wanderlust." t)
 #+END_SRC
 
-Only this.
 ********* .wl
 We want to create a .wl to HOME below. This file EmacsWiki quote from
 #+BEGIN_SRC emacs-lisp :results none
@@ -32125,18 +32124,54 @@ We want to create a .wl to HOME below. This file EmacsWiki quote from
 #+END_SRC
 ********* .folders
 
-Keep writing as follows, also made a .folders following HOME
+So, that was the basic setup. Now we need to tell wanderlust about the folders we'd like to see in the user-interface: ~/.folders. Wanderlust does not automatically use all the folder in your ~/Maildir. The folder names in ~/.folders can refer to maildirs, newsgroups, POP-account, IMAP-folders and a couple of other ones. In particular, you can combine folders to show as aggregate folders in Wanderlust.
+
+Wanderlust distinguishes the kind of folder something is by looking at a special prefix character. For maildirs, this is a dot ('.'), IMAP-folders get a '+', newsgroups get a '-' and so on. After the mailbox name, you can have a 'friendly name' in quotes, which is what will show up in the user-interface.
+
+Something like this:
+
+#+BEGIN_EXAMPLE
+# WL folders (put the '#' always at the beginning of the line)
+.inbox     "Inbox"
+.bulk      "Mailinglists"
+.drafts    "Drafts"
+.sent      "Sent Mail"
+.trash     "Junk
+#+END_EXAMPLE
+
+
+Note, the little format has some more tricks; e.g., if you had some folders, you cold have something like:
+#+BEGIN_EXAMPLE
+# WL folders (put the '#' always at the beginning of the line)
+# 'Lists' will be a tree node with three elements
+Lists {
+        .mailinglist1 "A mailinglist"
+        .mailinglist2 "Another Mailinglist" 
+        .mailinglist3 "Yet one more mailinglist"
+}
+
+# you make virtual folders from combined lists with the '*'
+AllMyMailingLists  *.mailinglist1,.mailinglist2,.mailinglist3
+#+END_EXAMPLE
+
+example:
+make a file:~/.folders and put the following
 
 #+BEGIN_SRC emacs-lisp :results none
-%inbox  "Inbox"
-%Sent   "Sent"
-%Trash  "Trash"
-%Junk   "Junk"
-+draft  "Draft"
+GMAIL{
+   %INBOX:ikloog/clear@imap.gmail.com:993!         "In"
+   %[Gmail]/Sent:ikloog/clear@imap.gmail.com:993!  "Sent"
+   %[Gmail]/Draft:ikloog/clear@imap.gmail.com:993! "Draft"
+   %[Gmail]/Trash:ikloog/clear@imap.gmail.com:993! "Trash"
+   }
 #+END_SRC
 
 ********* How to use
 First, you can start with the Mx wl.
+********* cache  items
+cached items go locally to ~/.elmo/cache.
+********* attachment
+M-x mime-edit-insert-file RET and answer some questions (file name, content type and subtype and transfer encoding). Encoding base64 seems to work. Then don’t touch the text that is added to your message. When you send the mail, the file will be included.
 ******* Terminals
 ******** ansi term 
 refixing actions that aren’t recognized by their standard key commands with ‘C-x’. For example, ‘M-x’ becomes ‘C-x M-x’.
