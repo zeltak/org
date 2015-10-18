@@ -1,0 +1,750 @@
+# -*- mode:org; epa-file-encrypt-to: ("ikloog@gmail.com") -*-
+
+#+TAGS: Fav(f) Most_used(m) PreR(p)
+#+TITLE: TODO
+#+STARTUP: overview  inlineimages eval: (org-columns)
+#+LaTeX_CLASS_OPTIONS: [garamond]
+
+* `TODO` 							  :CANCELLED:
+  :PROPERTIES:
+  :ID:       70feaa43-c66b-4675-89f5-9ae26bddc03e
+  :END:
+** weechat disconnects 
+/reconnect -all
+
+** TODO capture questions 
+Hi all!
+
+I finally had time to properly setup capture for orgmode and i have a few questions
+
+1) can one define default and/or completion values for capture properties in the property drawers, in example:
+
+%^{Rating}p
+
+so that when I launch the capture and it goes through entering a specific property value I will get some defaults to choose from or a completion option?
+
+2) can one customize the help line (the one with hints like C-c C-k to kill etc..) to include more hints?
+
+3) im looking for a way to better insert a sub header
+currently my template looks like this
+
+;;;; food simple template
+("f" "food" entry (file+headline "/home/zeltak/org/files/agenda/food.org" "Inbox")
+"* COOK %^{Description}   %^g
+%t 
+%^{Time}p
+%^{Rating}p
+%^{Source}p
+%^{Ammount}p
+%^{Fav}p
+%^{prompt|** Ingridients}
+%?
+%^{prompt|** Preperation}
+"
+ )
+
+Note that I use %^{prompt|** Ingridients} to force a subheader, which seems to be odd. I couldn't find a better way to do that without getting lisp errors
+
+
+4) can one use multikeys as capture keys such as 
+("xd" "nix_TD" entry (file+headline "~/org/files/agenda/TODO.org" "TODO")
+ "*  %^{Description}" )
+the use of 2 keys like 'xd' doesn't seem to work here
+
+5)can I capture and automatically refile to a specific file. In example only ask to refile to headers in a pre 
+defined files?
+
+6)has anyone tried using hydra for org capture (instead of dispatch), this will have nicer looks and color support etc :) is this possible?
+
+**** answer
+
+I finally had time to properly setup capture for orgmode and i have a few questions
+
+1) can one define default and/or completion values for capture properties in the property drawers, in example:
+
+%^{Rating}p
+
+so that when I launch the capture and it goes through entering a specific property value I will get some defaults to choose from or a completion option?
+
+Yes, here is an example from my .dotfiles. Pay attention to the backtick and the comma in the org-capture-template there.
+
+https://github.com/elationfoundation/.dotfiles/blob/master/bin/elisp/org-project.org#project-capture
+ 
+
+2) can one customize the help line (the one with hints like C-c C-k to kill etc..) to include more hints?
+
+3) im looking for a way to better insert a sub header
+currently my template looks like this
+
+;;;; food simple template
+("f" "food" entry (file+headline "/home/zeltak/org/files/agenda/food.org" "Inbox")
+"* COOK %^{Description}   %^g
+%t 
+%^{Time}p
+%^{Rating}p
+%^{Source}p
+%^{Ammount}p
+%^{Fav}p
+%^{prompt|** Ingridients}
+%?
+%^{prompt|** Preperation}
+"
+ )
+
+Note that I use %^{prompt|** Ingridients} to force a subheader, which seems to be odd. I couldn't find a better way to do that without getting lisp errors
+
+
+Was "** %^{prompt|Ingridients}" not working for you? What errors were you getting?
+ 
+
+4) can one use multikeys as capture keys such as 
+("xd" "nix_TD" entry (file+headline "~/org/files/agenda/TODO.org" "TODO")
+ "*  %^{Description}" )
+the use of 2 keys like 'xd' doesn't seem to work here
+
+You need to define the overarching capture section for multi-key usage..
+
+("x" "My Section")
+("xd" "nix_TD" entry (file+headline "~/org/files/agenda/TODO.org" "TODO")
+ "*  %^{Description}" ) 
+
+
+5)can I capture and automatically refile to a specific file. In example only ask to refile to headers in a pre 
+defined files?
+
+I don't understand the question. You use file+headline in this example which does that.
+
+
+** ask org mail
+convert a simple list of lines each to a orgmode header
+** ask rasi new stuff i3 4.11
+** clean org file
+find a way to get rid of ' and ? 
+** @org revison@
+*** TODO todo
+**** TODO gen 
+bind keys for specific todo/spare functions (₆In example₆ allan) 
+general- small letter todo list , CAPITAL sparse tree
+**** WORK files
+located at 2 files: research and bgu
+research for all Sci stuff
+BGU for all admin/student/etc
+**** misc
+create todos based on tags and TODO
+for example todo with allan (tag)
+**** TODO Tasks in multiple projects?
+Tasks can live in multiple projects, so there’s no need to duplicate work. This is especially useful for cross-functional Teams.
+**** Merge Duplicate Tasks?
+**** check orgmode
+*** calander
+*** email
+*** refrence library
+**** change and clean lib
+change key to exclude ()
+clean umicode
+**** helm-bibtex
+***** exclude search items
+ ₆In example₆ 
+ xebar - in progress 
+ (I want to exclude in progress articles not published yet)
+
+***** define default enter command
+***** open in Emacs PDF viwer
+
+***** TODO create filed for projects? maybe use the tag field?
+**** org-ref- to insert citations
+https://github.com/jkitchin/org-ref/blob/master/org-ref.org
+check out:
+***** jmax-bibtex-hydra/body
+***** TODO org-ref-clean-bibtex-entry
+
+figure this out 
+***** COMMENT workflow
+C-] 
+org-ref-helm-insert-cite-link
+to insert ref into orgmode buffer 
+
+clicking/C-c o on a link will give you a helm buffer with options 
+
+for multiple cites just use C-space in the helm buffer to choose
+
+shift-arrows move around
+
+org-ref-sort-citation-link will sort by year
+
+org-ref-extract-bibtex-entries to create a list of all cites used in document
+
+org-ref
+to check buffer for ref issues and a menu of org-ref options 
+
+**** reftex?
+http://tex.stackexchange.com/questions/18848/workflow-for-managing-references/18855#18855
+**** biber?
+look into how to convert to biber
+**** biblatex 							  :CANCELLED:
+**** bib2bib
+http://www.cse.msu.edu/~cse914/F02/Public/Papers/Bibtex/bibtex2html-doc.htm
+**** cb2Bib
+**** bibtool
+http://www.gerd-neugebauer.de/software/TeX/BibTool/index.en.html
+generate keys?
+*** revise leuven for better agenda/TODO color scheme
+*** R
+**** update template to use codeblock name
+also see:
+On top of the line starting with #+RESULTS:, we shall add two more lines, to give the table a title and a name. Note that both the code block and the result of the code block have separate names.
+#+NAME: bmi-table-output
+#+CAPTION: Average BMI, by country
+#+RESULTS: bmi-table-code
+**** Code blocks that produce a graph to be included in the document
+
+These code blocks can have a series of commands. The last command produces a graph that we would like to be included in the document.
+
+The following code shows an example of a code block that produces a graph.
+
+#+NAME: mygraph-code
+#+BEGIN_SRC R :results output graphics :file bmi2.png :width 825 :height 1050 :fonts serif
+
+#+END_SRC
+As before, for creating your graph, you first write the #+NAME, BEGIN_SRC and the END_SRC lines, and then go into a temporary ESS buffer by using C-c ‘.
+
+Once in this temporary ESS buffer, you can write the R commands for making your graph.
+As you write, you can evaluate the commands using C-j, C-r and C-b and see what your output looks like.
+The output is displayed on your screen using the default graphic device used by R (X11, quartz or windows graphic device depending upon your operating system).
+Once you have finalised your graph, you press C-c ’ and come back to the Org buffer.
+Note that creation of the image file is left to appropriate switches in the #+BEGIN_SRC line. Org automatically chooses appropriate graphic device to produce the file. When you evaluate this code using C-c C-c, the results are displayed below the code block as follows.
+
+#+RESULTS: mygraph-code
+[[bmi2.png]]
+Note that, taking the file name from our #+BEGIN_SRC line, a file called bmi2.png was automatically created and linked, so that the graph would be inserted in the document when you produce the formatted output.[fn:5] Every time you evaluate the code using C-c C-c, the underlying image file containing the graph is overwritten by a new file.
+
+As with the tables, we shall add a caption and a name to it as follows
+
+#+NAME: my-bmi-graph
+#+CAPTION: Average BMI, by Country
+#+RESULTS: mygraph-code
+[[gini.png]]
+You can now refer to this graph in the text using [[my-bmi-graph]].
+
+*** org capture
+*** TODO mobile (using orglzy)
+**** for all read only notes
+create a folder sync repo for each subfolder under the `git`root folder. then sync and you will see the org files  appearing in your book lists as books
+**** from phone to org
+Workflow: create a $Note$ (I called it n6) from orgzy and link it to a dropbox folder
+this will sync that $Note$ to your laptop
+once every X days make sure to refile that note
+*** From Web browsers
+*** org agenda
+ use multi occur hotkeys?
+*** create a daily agenda in orgmode somwhow
+will show me things to do today ranked
+** @sync//backup project@
+*** Relevant IP's
+
+| Machine          |             IP | Ports open                                                                       | Comments |
+|------------------+----------------+----------------------------------------------------------------------------------+----------|
+| Linux PC         | 132.72.155.204 | github,                                                                          |          |
+| Synology NAS     | 132.72.152.204 | FTP into machine,github, ssh (22), btsync (UDP/TCP 9999 ,UDP/TCP 8888, UDP 3000) |          |
+| Linux Laptop     | 132.72.154.204 | github                                                                           |          |
+| home qnap        |       10.0.0.2 |                                                                                  |          |
+| hope laptop wifi |      10.0.0.12 |                                                                                  |          |
+
+*** Sync methods     
+**** for all textfile-git
+***** create a central bare repo (or use github)
+****** using github as a central repo
+-create a repo (named zorg) on github
+-cuurently this repo is private
+****** daily workflow for work/lapop
+******* for work
+every morning when i get to work:
+run's the ugs.sh script
+
+file:/home/zeltak/bin/ugs.sh
+
+@do not use laptop during the day to edit@
+all editing should be done on work PC
+
+before leaving work run the same script
+
+file:/home/zeltak/bin/ugs.sh
+
+******* for laptop
+once i get home run this script
+
+file:/home/zeltak/bin/lgs.sh
+
+then before i leave home in the morning run the same script again
+
+file:/home/zeltak/bin/lgs.sh
+
+also at work i connect it to the LAN:
+ip: 132.72.153.174
+
+******* mobile (android phone/tablet)
+******** use pocket git
+https://play.google.com/store/apps/details?id=com.aor.pocketgit&hl=en
+
+********* Pull data 
+I use this for android to pull my whole git repo (org) and have a copy of it on my mobile device
+
+********* TODO you can also git push back changes
+******** Mobile org 
+i used that for agenda notes to have a more accesable way to quick read notes from there
+**** Binary files (images,pdfs etc)-Unison
+I use unison to sync the following folders
+I create a profile called sync under file:/home/zeltak/.unison/sync.prf
+
+this syncs the following folders between workPC (zuni) and laptop (zlap):
+
+file:/~/Sync/
+file:/~/Uni/
+file:/~/org/attach/
+***** Unison sync folder structure
+ I used the following organizing structure:
+****** Scans 
+ This has all my scanned documents organized as follows: 
+  -year
+   -- BGU
+   -- docs
+   -- receipts
+   -- family 
+****** Uni
+   -- CV
+   -- PDF library
+   -- signatures
+****** VT - Personal sensetive docs
+****** attach
+ org mode attached files and pictures 
+
+ $Note$ this needs to be changed yearly in the Emacs config (under org-downlaod section): 
+
+ #+BEGIN_SRC emacs-lisp :results none
+ (setq-default org-download-image-dir "/home/zeltak/org/attach/images_2015")
+ #+END_SRC
+**** browser related
+user chrome/firefox built in sync mechanisms
+**** passwords
+using password-store. more info [[id:d57aa1cc-33ce-4081-9811-c6f2782b8eee][password-store]]
+*** Backup 
+**** family photos 
+**** daily backups
+     :PROPERTIES:
+     :ID:       7b98d815-4327-4f65-8c60-dfd9711859bd
+     :END:
+***** Rsync 
+****** TODO UNI (urs.sh)-rsync to push data from laptop to synology NAS
+       :PROPERTIES:
+       :ID:       b35e3749-464e-4465-b927-3b1cf5f1385f
+       :END:
+
+file:/home/zeltak/bin/urs.sh
+
+       #+BEGIN_SRC sh
+rsync -aRPz --delete -e ssh /home/zeltak/dotfiles/  root@132.72.152.204:/volume1/rsync/    
+       #+END_SRC
+
+****** TODO HOME (lrg.sh)-rsync to push data from laptop to QNAP NAS
+       :PROPERTIES:
+       :ID:       d4f672c5-6ced-4670-ae67-4e785f17ea79
+       :END:
+use this script created in ~bin:
+file:/home/zeltak/bin/lrs.sh
+
+**** robust password store /gnupg/ .ssh backup
+** rofi tmux switch to pane
+write a script that takes an input of all tmux open panes and switches to it
+also crazy idea: foucs Emacs client and switch to a specific buffers
+** bloody org links make sense of it
+*** fix helm menu
+[[id:b9436f8a-478b-4f98-8bc8-65697ffb8c78][link to any header]]
+** Volume/brightness levels for sys AND mpd on i3 blocks 
+** gnus
+*** inline images
+** mu4e
+Here's the email-related capture snippet from my config. 
+
+
+(setq org-default-notes-file (concat org-directory "refile.org")) 
+
+(setq org-capture-templates 
+      (quote (("e" "Email Todo" entry (file org-default-notes-file) 
+               "* TODO Read Message%? (%:fromname about %:subject)\n%U\n%a\n")))) 
+
+
+The key part of the template is %a, which is the link that would be 
+created with org-store-link.  If you only want the link, then you can 
+get rid of the rest of the %-escapes. 
+
+The org-mode docs have a nice list of all the things you can include 
+
+  http://orgmode.org/manual/Template-expansion.html#Template-expansion 
+
+
+When applied to your message, the template produced the following item 
+in my refile.org file. 
+
+Read Message (Ken Mankoff about capturing current message in view mode w/ Org) 
+[2015-08-25 Tue 20:07] 
+[[mu4e:msgid:m...@gmail.com][capturing current message in view mode w/ Org]] 
+
+
+Note, this is the result when I'm viewing the message.  If I'm viewing 
+headers, the result of org-store-link is a link to the search that gave 
+me that particular headers view.  (I'm not sure how to change this; I 
+simply always view the message.) 
+
+> Note, this is the result when I'm viewing the message.  If I'm viewing 
+> headers, the result of org-store-link is a link to the search that gave 
+> me that particular headers view.  (I'm not sure how to change this; I 
+> simply always view the message.) 
+
+See: org-mu4e-link-query-in-headers-mode 
+** capture via gmail
+You could also use a %x in a capture template to assist in capturing a   
+selection made on your gmail message.  Eg, select Subject: line, then    
+capture that to a TODO.                                                  
+The other thing that might help would be custom links. Is there a way to form a URL to a gmail message on the web?  If so, you  
+could make a "gmail:XXXXX" link that org would expand to a full URL
+** revel.js
+https://github.com/yjwen/org-reveal#the-hlevel
+** sunrise
+*** questions 
+1) REQUEST: if there is only 1 match left in fuzzy match- can SR auto select it (that is enter dir)
+
+3) how is checkpoint different from boomarks? the documentation is sparse on this point, when I issue sr-restore-checkpoint I still get my normal Emacs boomakrs there as well
+
+5) for sr-show-files-info can the return info be in MB/GB (and not fubytes :))
+
+
+Hi again zeltak :-)
+
+In order:
+
+1) M-x customize-variable [RET] sr-show-file-attributes [RET]
+2) That's weird. Can you find a way to reproduce the problem reliably?
+3) Just adding (define-key sr-mode-map (kbd "/") 'sr-fuzzy-narrow) to your .emacs file should do the trick
+4) That's because you can create only one tab per directory. If you move to another directory you'll be able to create another tab.
+5) I don't know what that configuration is for, but all you should need to care about is having avfsd correctly configured and running and having the `sr-avfs-root' variable pointing to the directory where avfs is mounted. Take a look at this tip: http://www.emacswiki.org/emacs/Sunrise_Commander_Tips#toc12
+6) Press r -- it will reverse whatever order you have selected and it's sticky.
+7) What kind of commands would you like to write? Shell commands? Actually the best way would be to know a little Emacs lisp, but without it there's still a few things one can do:
+7.a) Learn how to create and save keyboard macros (http://www.gnu.org/software/emacs/manual/html_node/emacs/Keyboard-Macros.html#Keyboard-Macros) -- then you'll be able to record your command as a macro, bind it to a key and replay it anytime you want.
+7.b) Write regular scripts (e.g. shell scripts), save them into a bookmarked directory so you can easily find them whenever you need and execute any of them by pressing the "X" key in SC (of course, the script must have the executable flag set for this to work.)
+7.c) In any case, nothing gives you as much rope as learning some Emacs lisp. And it's not at all difficult. Here's some good reading that may convince you better than I could: https://www.gnu.org/software/emacs/manual/html_node/eintr/ -- if this succeeds at whetting your appetite, as I hope, why not start right away? https://www.gnu.org/software/emacs/manual/html_node/eintr/
+
+
+*** Navigation
+Advanced navigation and location tracking.
+Sunrise offers a few advanced mechanisms for moving around and keeping track of locations besides the traditional point-and-click. You can:
+
+Press Return (or click) on any point of the directory path at the top of any of the panes to jump directly to that location in the file system.
+Install the sunrise-x-modeline extension to get a similar path in the mode line, where you can see it all the time, even when scrolling long dirs.
+Install the sunrise-x-tree extension to rapidly move to any directory in the file system using a tree-like hierarchical view like the one offered by navigator-style file managers.
+Install the sunrise-x-tabs extension to be able to put pane buffers in tabs and to keep them around with all their marks and state untouched (tabs can be persisted across sessions using the DeskTop feature.)
+Use the listings of recent files (C-c C-r) and recent directories (C-c C-d) to reuse the paths to already visited files and directories. Recent files are managed by recentf and automatically persisted across emacs sessions. If you want the same for recent directories you can use the savehist persistence mechanism:
+            1. M-x customize-group RET savehist RET
+            2. Set savehist-mode to ON
+            3. Add sr-history-registry to ``Savehist Additional Variables''
+            4. Click on ``Save for future sessions''
+Use Sunrise checkpoints. Checkpoints are special bookmarks you can create for both panes simultaneously by pressing C-> (or C-c > in the console) and giving a name for the checkpoint. To recall it, press C-. (or C-c . in the console). On Emacs 23 checkpoints can be listed along with all your other bookmarks using the bookmark-bmenu-list command (C-x r l). On Emacs 22 there is no other way to list the currently defined checkpoints than M-: sr-checkpoint-registry RET, but they may be saved across Emacs session too with savehist (the variable to persist is sr-checkpoint-registry). Since version 4 of the Sunrise Commander, checkpoints are provided as a separate extension: sunrise-x-checkpoints for Emacs 23 or upgraded versions of the bookmarks.el library, and sunrise-x-old-checkpoints for Emacs 22.
+Make you own “favorites” virtual directories. Assign an extension to sunrise virtual buffers (there’s an explanation of how to do it in the comments to the Sunrise Commander) and press C-c C-v to create a pure virtual buffer. You can copy files and directories from the other pane to this one, and then save it as a file with your extension. Whenever you open the file later, Sunrise will see it as a directory like any other, where you can copy, rename, delete, etc. CAREFUL! what you delete in a virtual dir gets removed from the file system too! to remove a line only from your virtual dir just mark it (m), kill it (k) and save the file. You can create as many files like this for work, hobbies and whatnot and keep them at hand in you home directory.
+Use path projection to quickly navigate within similar directory trees. If you have, say, the trunk version of a project from SVN in directory trunk/ and your latest and greatest branch in directory branch/, whenever your active pane is displaying branch/some/deeply/nested/dir and your passive pane is at trunk/ (or trunk/some, or trunk/some/deeply) you can jump directly to directory trunk/some/deeply/nested/dir in the passive pane by simply pressing C‐M‐o in the active one. It’s a bit similar to synchronizing the panes (M‐o), but constrained to the directory being currently displayed in the passive pane. If there is more than one possible target you can alternate through all of them by simply pressing C-M-o repeatedly.
+
+
+*** TODO Org Links in Sunrise Commander
+https://github.com/bnbeckwith/bnb-Emacs
+
+
+Storing links from Sunrise-commander
+
+(add-hook 'org-store-link-functions 'org-diredish-store-link)
+
+(defun org-diredish-store-link ()
+  "Store link to files/directories from dired."
+  (when (derived-mode-p 'dired-mode)
+    (let ((f (dired-filename-at-point)))
+      (setq link (concat "file+system" ":" f)
+            desc (concat f " (dired)"))
+      (org-add-link-props :link link :description desc)
+      link)))
+*** AVFS
+'(sr-virtual-listing-switches "-al --group-directories-first")
+
+
+
+
+** bookmark+ link to orgid
+I guess someone who uses OrgMode (I don’t) would need to code that up. But have you tried just bookmarking a header line location? When you bookmark a position, bookmarking keeps track of the immediately surrounding text, to use to relocate the position when the buffer gets modified. Or try bookmarking some text immediately preceding or following a header
+** org latex CV
+Unlike the others who've commented, I moved my CV from LaTeX to org-mode and I'm happy with the results. Two things make it work well.
+
+First, a "cv" class added to org-latex-classes:
+#+BEGIN_SRC emacs-lisp :results none
+(add-to-list '("cv" "\\documentclass[10pt]{article}\n\\usepackage[margin=.75in]{geometry}\n%\\usepackage{palatino}\n\\usepackage{sectsty}\n\\sectionfont{\\normalsize\\selectfont\\itshape}\n\\usepackage[T1]{fontenc}\n\\usepackage{libertine}\n\\renewcommand*\\oldstylenums[1]{{\\fontfamily{fxlj}\\selectfont #1}}"
+  ("\\section{%s}" . "\\section*{%s}")))
+#+END_SRC
+
+Second, something like the following at the top of the org file (replace with your particulars):
+
+#+OPTIONS: author:nil timestamp:nil
+#+TITLE:
+#+DATE:
+#+LaTeX_CLASS: cv
+
+#+BEGIN_LATEX
+\begin{flushleft}
+  \bfseries\Large Curriculum Vitae\hfill Daniel M. Griswold\normalfont
+\end{flushleft}
+
+\vspace{-12pt}%
+\begin{flushright}
+  69 Stratton Road\\
+  Rochester, NY 14610\\
+  (585) xxx-xxxx\\
+  dgriswol@xxxxx.com\\
+  \hrulefill
+\end{flushright}
+#+END_LATEX
+
+Main headings are things like:
+
+*** Education
+*** Specialization
+*** Employment
+*** Publications
+*** Awards and Honors
+and the details below each of these headings are simply unordered lists
+** helm bibtex notes
+I worked on the note-files branch and as far as I’m concerned it
+is ready to be merged into master.  There are several changes:
+
+When one big notes file is used:
+
+- The new default template for notes is simpler than what org-ref uses
+  but it should be compatible because it uses the Custom_ID property to
+  store the key.
+- Note templates can be defined in `helm-bibtex-notes-template`.
+- The list of publications now shows a mark if notes are available for a
+  publication.
+- Finding the correct entry is now robust because the code looks for
+  `Custom_ID: key` not just for the key.
+
+Multiple note files (one for each publication):
+
+- The template for notes is used to populate new note
+  files.  (Previously it was only used in the case with one big notes
+  file.)
+
+** look at org sh links
+[[shell:sudo%20pacman%20-Syu][http://orgmode.org/manual/External-links.html#External-links
+shell:sudo pacman]] 
+** screen blanking 
+loQok at 
+xset dpms 600
+** screen saver time length by location (IP)
+** i3 REVAMP
+*** TODO have win+grave cycle through clients of same type
+*** fix grid
+*** cretae a nag menu of move to workspace    
+** bind keys at debian PC to ssh and control MPD
+** TODO ask rasi for clerk 2 listen menu entry where it would go over a 2play playlist
+implemented check it
+
+** source in R with output
+zeltak: source("blah.r",verbose=TRUE) ?                                                      
+yeah happy holidays etc etc                                                                  
+bosie: thx ill try that :)                                                                   
+zeltak: source("blah.r",verbose=TRUE, print.eval=TRUE) maybe
+** a new Emacs pop up window for helm chrome bookmarks
+** custom agenda example 
+I use a "@Q2" tag for things that are
+important and not urgent, and I reserve some time to work on them. The
+ones I'm currently working on are scheduled, and they are shown in my
+custom agenda view using this:
+
+#+begin_src emacs-lisp
+("q" "Q2 tasks"
+ ((agenda
+   ""
+   ((org-agenda-overriding-header "Q2 Scheduled")
+    (org-agenda-skip-function '(org-agenda-skip-entry-if 'notregexp ":@Q2:"))))
+  (tags-todo
+   "@Q2/!-HOLD-WAITING"
+   ((org-agenda-overriding-header "Q2")
+    (org-agenda-todo-ignore-deadlines t)
+    (org-agenda-todo-ignore-scheduled t)))))
+#+end_src
+
+
+** change stow so no more common configs
+check patst.sh in ZH_tmp
+check tarman
+org habit s
+** set all mime related to web to chromium
+#+BEGIN_SRC sh
+for mime in $(awk -F'=' '/Mime/ {print $2}' /usr/share/applications/chromium.desktop |  
+tr ';' ' '); do xdg-mime default chromium.desktop $mime; gvfs-mime --set $mime          
+chromium.desktop; done                                                                  
+#sets chromium as default handler for all protocols it supports                          
+
+
+#+END_SRC
+
+** explore memacs
+** find out how to create org table with manual breaks
+** TODO a way to auto exce a command on specific file save emacs
+   :PROPERTIES:
+   :ID:       bd2d30ef-83b2-4c10-b2c2-d04b4d02b04e
+   :END:
+#+BEGIN_EXAMPLE
+well, it wouldn't be trivial. you'd need to add an after-save-hook that looks for the specific file and then do     │
+what you want then.                                                                                                 │
+but my tip jar is looking a bit sad right now                                                                       │
+hehe OK thx nicferrier                                                                                              │
+but that's what you'd do.                                                                                           │
+nicferrier: perhaps than a simple function to save and exe command that i can run manually?                         │
+no.                                                                                                                 │
+so id dosent need to be file aware                                                                                  │
+but you could make one of those easily                                                                              │
+save-buffer and shell-command-to-string look good.                                                                  │
+nicferrier: ok ill look them up thx!                                                                                │
+np!                                                                                                                 │
+zeltak_:  (add-hook 'after-save-hook (lambda () (when (string= "/tmp/your-file" (buffer-file-name                   │
+(current-buffer))) (shell-command "ls"))))                                                                          │
+pjb: cool ill try it now :)                                                                                         │
+zeltak_: but you should rather do what you want to do in emacs lisp.  This will have the advantage of working even  │
+on MS-Windows and in different unix environments.                                                                   │
+Instead of (shell-command "whatever") write (whatever) and (defun whatever () …) in elisp.                          │
+I'm with Bastien and see no need for namespaces in Emacs Lisp.                                                      │
+https://lists.gnu.org/archive/html/emacs-devel/2013-07/msg00801.html                                                │
+[http://is.gd/GEilTO]                                                                                               │
+pjb: perhaps a simpler method then. as save buffer, exit buffer (but not emacs) and run bash command. would you     │
+mind shwoing me the elisp code for that                                                                             │
+zeltak_: what does your bash command do?                                                                            │
+pjb: pkill -USR1 -x sxhkd                                                                                           │
+pjb: that was silly. I told zeltak_ most of what was needed. it was a learning opportunity.                         │
+instead of that you gave a lecture.                                                                                 │
+nicferrier: hehe i am learning this way                                                                             │
+:)                                                                                                                  │
+i learn best via examples                                                                                           │
+kensanata: The only reason I'd like to see namespaces is better compositability. I don't think that's in any of the │
+Lisp-based namespace thingies, so not really relevant. Having a de-facto standard for namespace separation vs. word │
+divider would be great, though.                                                                                     │
+Working in MS-Windows encourages users to use proprietary software.                                                 │
+i will read about the commands as well                                                                              │
+/mode -rms                                                                                                          │
+Ok, emacs cannot easily send a unix signal to another random process.  So shell-command will do in this case.       │
+lol.                                                                                                                │
+forcer: What do you mean by compositability?                                                                        │
+zeltak_: you should also consider that you often save files that are half edited.  So you may not really want to    │
+systematically have it processed after C-x C-s.                                                                     │
+It may be dangerous.                                                                                                │
+pjb: true. thats why maybe the 2nd option of manually executing the save&pkill would be safer                       │
+its an app that you need to send a user sig1 to refreash it every time toy edit a config which i find annoying :)   │
+If you don't want to get out of emacs to kill, you can write a emacs command to do it: (defun update-sxhkd ()       │
+(interactive) (shell-command "pkill …"))  So you can C-x C-s and when you want M-x update-sxhkd RET                 │
+pjb: thx that could work well, appriciate the help!                                                                 │
+
+#+END_EXAMPLE
+
+** bbdb
+** clerk
+select rating has to have a album/track indicator in rofi..confusing
+the rating mpd/beets issue, is it solvable?
+the recent albums also needs header as in 'recent albums'
+track replace like album replace
+   
+** search text in all orgfiles    
+use maybe helm-do-grep or swish-e or recoll?
+** sdf
+Login      : zeltak
+Name       : itai
+YoB        : 1975
+Origin     : 01800
+E-mail     : zeltak@sdfeu.org
+IRC        : irc.sdf.org
+Jabber     : jabber.sdfeu.org                      (after validation)
+WWW URL    : http://zeltak.sdfeu.org            (after 'mkhomepg')
+WWW Gopher : gopher://sdfeu.org/users/zeltak       (after 'mkgopher')
+Webmail    : https://sdfeu.org/webmail             (after validation)
+Twitter    : http://twitter.com/sdf_pubnix
+
+** flexget  
+** make a code block read only
+   :PROPERTIES:
+   :ID:       5e59de3b-e7ec-4a8d-b1a1-b2d6dbf8cd01
+   :END: 
+
+** explore habits org mod
+http://orgmode.org/manual/Tracking-your-habits.html
+** org_build a menu of faces to choose from, or snippets for it (maybe Mymenu)?
+** auto complete load dictnionary and load specific dictnionary per mode/file (for food)
+** X-clipboad sense
+** Flexget
+** beets
+- cant get original_year: yes to work , ₆In Example₆ aqualung jethro tull always defaults to 1984
+  -create a rating field
+  -copy comments to that field
+  -create a demnu entry to my mpd script to rate the current playing song
+  - get switches for beet import for multiple scenarios (₆In example₆ single:)
+
+** cvim
+visual mode, act start visual block/line option
+VIUSAL clues to some command like : copied link to clip (yy) etc
+`extensiuon to mark in numbers tabs?`
+:bookmarks /<folder> (autocomplete) , how does that work, can we browse bookmark with levels so you can manually enter folders?
+add retsart chrome
+add reload all tabs
+keybind to quickly enable/disable cvim
+** Explore more Rgrep
+http://pragmaticemacs.com/emacs/searching-multiple-files-with-rgrep/
+** encrypt org files
+<2015-08-06 Thu 07:29>
+http://orgmode.org/worg/org-tutorials/encrypting-files.html
+
+@Warning Emacs Backup Files - a Warning.@
+
+With org-crypt, if you have autosave turned on and decrypt the entries, the autosave file will contain the entries in plain text. For this reason your should disable autosave for encrypted files.
+
+*** Encrypting the Whole File Using EasyPG.
+
+If you want to encrypt the whole file using gnupg, but still have the decrypted file recognized as an org file, you should make:
+
+# -*- mode:org; epa-file-encrypt-to: ("me@mydomain.com") -*-
+the first line in the file. Where "me@mydomain.com" is the email address associated with your default gnupg key. Note that gpg encrypted files should be saved with the default extension of .gpg.
+
+When you open the file you will be prompted for your password and Emacs will display the decrypted contents in org-mode. When you save the file it would automatically be encrypted.
+*** Encrypting Specific Entries in an org File with org-crypt.
+    :PROPERTIES:
+    :ID:       8797ec49-d59d-4c11-9d9d-0939705c6b1b
+    :END:
+
+If you just want to encrypt the text of an entry, but not the headline, or properties you can use org-crypt. In order to use org-crypt you need to add something like the following to your .emacs:
+
+(require 'org-crypt)
+(org-crypt-use-before-save-magic)
+(setq org-tags-exclude-from-inheritance (quote ("crypt")))
+;; GPG key to use for encryption
+;; Either the Key ID or set to nil to use symmetric encryption.
+(setq org-crypt-key nil)
+Now any text below a headline that has a :crypt: tag will be automatically be encrypted when the file is saved. If you want to use a different tag just customize the "org-crypt-tag-matcher" setting.
+
+Preventing tag inheritance stops you having encrypted text inside encrypted text.
+
+To decrypt the text just call "M-x org-decrypt-entry" and the encrypted text where the point is will be replaced with the plain text. If you use this feature a lot, you will probably want to bind "M-x org-decrypt-entry" to a key.
+
+Entries with a :crypt: tag will be automatically be encrypted when you save the file.
+
+If you have autosave turn
+
+
+ 
+
+
+
+
+
+
+
+
