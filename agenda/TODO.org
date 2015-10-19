@@ -11,6 +11,16 @@
   :END:
 ** weechat disconnects 
 /reconnect -all
+** or org-download-image-dir (if it's not nil).
+
+org-download-image-dir becomes buffer-local when set, so each file can customize this value, e.g with:
+
+    -*- mode: Org; org-download-image-dir: "~/Pictures/foo"; -*-
+To set it for all files at once, use this:
+
+    (setq-default org-download-image-dir "~/Pictures/foo")
+** cycle thorugh a list of files in Emacs- for org groups
+the idea is to have some common groups per Emacs window one can quickly cycle through
 ** wl
 *** Wanderlust is asking me all these questions about how to open an attachment! How do I make Wanderlust just open it?
 First,
@@ -98,7 +108,7 @@ case "$1" in
 esac
 
 for now it’s doing the trick!
-*** signature
+*** signat
      ;; Automatic signature insertion
       signature-file-name "~/Maildir/Signatures/XxxxXXXAddress"
       signature-insert-at-eof t
