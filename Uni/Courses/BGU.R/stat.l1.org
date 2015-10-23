@@ -1,6 +1,8 @@
-#+Title: שיטות מחקר כמותיות
+-*- mode: Org; org-download-image-dir: "~/ZH_tmp/"; org-download-heading-lvl: nil; -*-
+#+Title:שיטות כמותיות למתקדמים
 #+Author: ד"ר איתי קלוג 
 #+Email: ikloog@bgu.ac.il
+#+REVEAL_TITLE_SLIDE_BACKGROUND: /home/zeltak/org/attach/bgu/courses/BGU.R/images/stat_large.jpg
 
 #+OPTIONS: reveal_center:t reveal_progress:t reveal_history:nil reveal_control:t
 # #+OPTIONS: reveal_center:t 
@@ -11,167 +13,257 @@
 #+REVEAL_MARGIN: 0.1
 #+REVEAL_MIN_SCALE: 0.5
 #+REVEAL_MAX_SCALE: 2.5
-#+REVEAL_TRANS: concave
-#+REVEAL_THEME: sky
+#+REVEAL_TRANS: linear
+#+REVEAL_SPEED: default
+#+REVEAL_THEME: white
 #+REVEAL_HLEVEL: 2
 #+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Org-Reveal Introduction.">
 #+REVEAL_POSTAMBLE: <p> Created by itai Kloog. </p>
-#+REVEAL_PLUGINS: (highlight markdown notes)
+# REVEAL_PLUGINS: (highlight markdown notes)
 #+REVEAL_EXTRA_CSS: ./local.css
 #+REVEAL_SLIDE_NUMBER: t
+#+OPTIONS: ^:nil
 
 
-*  
-Dr. Itai Kloog\\
-The Department of Geography and Environmental Development \\
-Ben-Gurion University of the Negev\\
-P.O.B. 653 Beer Sheva, Israel\\
-Email: ikloog@bgu.ac.il\\
+
+* Week 1-Admin and Intro to R
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 09:45:28
-#+attr_html: :width 300px
- [[~/Sync/attach/images_2015/screenshot_2015-10-19_09-45-28.png]]
-** מנהלות
- סילבוס\\
-
- מתרגלים:\\
- שעות קבלה:\\
- לפני השיעור 12:00-13:00 \\
-
- פרטים ורקע שלי:\\
- ikloog@bgu.ac.il\\
-
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:17:10
-#+attr_html: :width 300px
- [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-17-10.png]]
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:17:23
-#+attr_html: :width 300px
- [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-17-23.png]]
-** 
-שעור 12:15-14:30 (45X3 ברצף עם הפסקות אישיות בזמן התרגול)
-** אופי הקורס
-
-בוחן אמצע X2 -> סגירת פערים בתרגילים.\\
-עבודה מסכמת (הגשה חודש משעור אחרון)\\
-הרצאה+ תרגול בכיתה (מה שלא מספיקים יש להשלים למבחן אמצע\מבחן)\\
-ההרצאות ינועו מהקל אל הכבד בהדרגה\\
-רצוי להשלים מה שלא הספקתם בכתה, כל שעור מתבסס על הקודם\\
-** 
-הרבה מהמושגים באנגלית- בלתי אפשרי לתרגם\\
-
-זה לא קורס תכנות בחוג למחשבים\\
-    
-לא מצופה מכם בסוף הקורס להיות מסוגלים לתכנת את האלטרנטיבה ל Whatsapp \\
-
-וכמו כן הקורס הזה לא יסדר לכם עבודה בגוגל (כנראה…( \\
-
-יש דרכים להתמקצע בתכנות...\\
-** 
-מספר גישות להוראת תוכנות מחשב בכלל וסטטיסטיקה בפרט\\
-
-1.לתת רק תאוריה (התרגול, אם בכלל, באחריות הסטודנט).\\
-
-.2 מעבדה עצמאית של סטודנטים.\\
-
-3. הדגמה של המרצה ועבודה משותפת עם המרצה בתרגול.\\
-
-* Programming and Open Source
-** Programming basics
-code or source code: The sequence of instructions in a program.
-
-syntax: The set of legal structures and commands that can be used in a particular programming language.
-
-output: The messages printed to the user by a program.
-
-console: The text box onto which output is printed.
-Some source code editors pop up the console as an external window, and others contain their own console window.
-** Open source
-
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:03:27
-#+attr_html: :width 500px
- [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-03-27.png]]
-** 
-קוד פתוח משמש בעולם התוכנה לציון תוכנה שקוד המקור (source code) שלה פתוח ונגיש לכל מי שחפץ בו.
-
-הקוד חופשי לשימוש, לצפייה, לעריכת שינויים ולהפצה מחודשת לכל אחד ואחת. 
-
-
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:04:18
 #+attr_html: :width 600px
- [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-04-18.png]]
-** 
-שיטת פיתוח כזו מאפשרת בעצם לכל מי שחפץ בכך לקחת חלק בפיתוח התוכנה ולתרום לשיפורה.
+ [[~/Sync/attach/images_2015/screenshot_2015-10-19_09-45-28.png]]
 
- מושג קרוב במשמעותו הוא "תוכנה חופשית" Free software  אבל לא freeware. לעתים כוללים את שניהם ביחד כ"תוכנה חופשית וקוד פתוח"
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 11:58:28
+#+attr_html: :width 500px
+ [[~/Sync/attach/images_2015/screenshot_2015-10-19_11-58-28.png]]
 
-FOSS או  FLOSS  באנגלית: Free/Libre and Open Source Software
 
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:05:59
+
+** *מנהלות*
+
+*פרטים ורקע שלי*
+
+ד"ר איתי קלוג
+
+ראש תוכנית טמג
+
+ראש המעבדה להערכת חשיפה סביבתית
+http://in.bgu.ac.il/humsos/eeal/Pages/default.aspx
+
+ikloog@gmail.com
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-21 18:21:25
 #+attr_html: :width 400px
- [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-05-59.png]]
-**  OPEN SOURCE VS. CLOSED SOURCE
-View/Modify the source code of an application or software.
-Open source software is released to the development community and undergoes a secondary phase of evolution, but closed source software is developed in isolation with a small team of developers.
-Developer support and large community to help.
+ [[~/Sync/attach/images_2015/screenshot_2015-10-21_18-21-25.png]]
 
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:07:03
+*** סילבוס
+אתר הקורס
+http://moodle2.bgu.ac.il/
+
+*מתרגלים*
+שעות הקבלה בתאום מראש
 #+attr_html: :width 300px
- [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-07-03.png]]
-** 
-סביב מושג הקוד הפתוח קיימת תפיסת עולם הטוענת כי התוכנות שייכות להמונים, ועל כן כל החפצים בכך יכולים להיכנס לקוד ולערוך בו שינויים
+[[~/Sync/attach/images_2015/screenshot_2015-10-19_10-17-10.png]]  [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-17-23.png]]
 
-זאת, בניגוד לקוד סגור, אשר מזוהה, על פי רוב, עם יצרני התוכנה הגדולים. לאדם הקונה תוכנות מבית מיקרוסופט, למשל, אין אפשרות פשוטה לצפות, בפרטי התהליכים שמרכיבים את התוכנות שרכש  (NSA....)
+*** הפסקות 
+בזמן התרגול ניתן לצאת מתי שרוצים
 
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:10:49
-#+attr_html: :width 300px
- [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-10-49.png]]
-** 
+לכן השיעור יהיה בין 09:00 ל 11:15 רצוף
 
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:14:44
-#+attr_html: :width 300px
- [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-14-44.png]]
-** 
+(45 minutes X3)
 
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:15:53
-#+attr_html: :width 300px
- [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-15-53.png]]
-* Introduction to R
+
+*** אופי הקורס
+
+בוחן אמצע X2 -סגירת פערים בתרגילים
+
+עבודה מסכמת- הגשה חודש משעור אחרון
+
+(הרצאה+ תרגול בכיתה (מה שלא מספיקים יש להשלים למבחן אמצע\מבחן
+
+ההרצאות ינועו מהקל אל הכבד בהדרגה
+רצוי להשלים מה שלא הספקתם בכתה, כל שעור מתבסס על הקודם
+*** *ENGLISH!* 
+ הרבה מהמושגים באנגלית- בלתי אפשרי לתרגם\\
+
+ זה לא קורס תכנות בחוג למחשבים\\
+    
+ לא מצופה מכם בסוף הקורס להיות מסוגלים לתכנת את האלטרנטיבה ל Whatsapp \\
+
+ וכמו כן הקורס הזה לא יסדר לכם עבודה בגוגל...כנראה 
+
+ יש דרכים להתמקצע בתכנות\\
+
+*** שיטת הלימוד
+ מספר גישות להוראת תוכנות מחשב בכלל וסטטיסטיקה בפרט\\
+
+לתת רק תאוריה...התרגול, אם בכלל, באחריות הסטודנט\\
+
+מעבדה עצמאית של סטודנטים\\
+
+הדגמה של המרצה ועבודה משותפת עם המרצה בתרגול\\
+
+** Programming and Open Source
+  :PROPERTIES:
+	  :reveal_background: /home/zeltak/org/attach/bgu/courses/BGU.R/images/hist_BD.jpg
+	  :END:
+*** Programming basics
+ *code or source code*: The sequence of instructions in a program.
+
+ *syntax*: The set of legal structures and commands that can be used in a particular programming language.
+
+ *output*: The messages printed to the user by a program.
+
+*console*: The text box onto which output is printed.
+
+Some source code editors pop up the console as an external window, and others contain their own console window.
+*** Open source
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:03:27
+ #+attr_html: :width 500px
+  [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-03-27.png]]
+*** Open source
+קוד פתוח משמש בעולם התוכנה לציון תוכנה שקוד המקור שלה פתוח ונגיש לכל מי שחפץ בו
+
+הקוד חופשי לשימוש, לצפייה, לעריכת שינויים ולהפצה מחודשת לכל אחד ואחת 
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:04:18
+ #+attr_html: :width 600px
+  [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-04-18.png]]
+*** Open source 
+ שיטת פיתוח כזו מאפשרת בעצם לכל מי שחפץ בכך לקחת חלק בפיתוח התוכנה ולתרום לשיפורה
+
+ FOSS או  FLOSS  באנגלית: Free/Libre and Open Source Software
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:05:59
+ #+attr_html: :width 400px
+  [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-05-59.png]]
+***  OPEN SOURCE VS. CLOSED SOURCE
+
+ View/Modify the source code of an application or software.
+ Open source software is released to the development community and undergoes a secondary phase of evolution, but closed source software is developed in isolation with a small team of developers.
+ Developer support and large community to help.
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:07:03
+ #+attr_html: :width 300px
+  [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-07-03.png]]
+*** Open source 
+ סביב מושג הקוד הפתוח קיימת תפיסת עולם הטוענת כי התוכנות שייכות להמונים, ועל כן כל החפצים בכך יכולים להיכנס לקוד ולערוך בו שינויים
+
+ זאת, בניגוד לקוד סגור, אשר מזוהה, על פי רוב, עם יצרני התוכנה הגדולים
+
+ לאדם הקונה תוכנות מבית מיקרוסופט, למשל, אין אפשרות פשוטה לצפות, בפרטי התהליכים שמרכיבים את התוכנות שרכש 
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:10:49
+ #+attr_html: :width 400px
+  [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-10-49.png]]
+*** Open source
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:14:44
+ #+attr_html: :width 900px
+  [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-14-44.png]]
+*** Open source in Israel 
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:15:53
+ #+attr_html: :width 990px
+  [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-15-53.png]]
+** Introduction to R
+  :PROPERTIES:
+	  :reveal_background: /home/zeltak/org/attach/bgu/courses/BGU.R/images/hist_BD.jpg
+	  :END:
 *** What is R
- R היא שפת תכנות וסביבת עבודה למחשוב וגרפיקה סטטיסטיים
 
- שפת R נמצאת בשימוש נרחב בקרב סטטיסטיקאים וכורי נתונים ומשמשת לפיתוח תוכנה סטטיסטית וניתוח נתונים.
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-21 16:43:18
+#+attr_html: :width 150px
+ [[~/Sync/attach/images_2015/screenshot_2015-10-21_16-43-18.png]]
+שפת תכנות וסביבת עבודה למחשוב וגרפיקה סטטיסטיים
 
- סקרים ומחקרים שנערכו הראו כי הפופולריות של R גדלה באופן משמעותי ובעשור השני של המאה ה-21 היא כבר נחשבת לסטנדרט ביצירה של תוכנות סטטיסטיות
+נמצאת בשימוש נרחב בקרב סטטיסטיקאים וכורי נתונים ומשמשת לפיתוח תוכנה סטטיסטית וניתוח נתונים
+
+בעלת רשיון קוד פתוח
+
+עובדת על כך מערכת הפעלה אפשרית
+
 *** What is R 
- R היא יישום של שפת התכנות S בשילוב עם סמנטיקה לקסיקלית בהשראת שפת התכנות "Scheme". היא נוצרה על ידי רוס איהקה ורוברט ג'נטלמן באוניברסיטת אוקלנד בניו זילנד. השפה קיבלה את שמה מהאות הראשונה של שמם של יוצריה וכמחווה לשפת ה-S.
+בעלת ממשק משתמש גרפי ולא גרפית-שורת הפקודה
 
- R מוגדרת כתוכנה חופשית, כחלק מפרויקט גנו, ומופצת לפי תנאי הרישיון הציבורי הכללי של גנו (גרסה 2). קוד המקור שלה כתוב בבסיסו בשפת C, R ופורטרן.
+בפיתוח מתמיד על ידי אנשי אקדמייה ותעשייה
 
- ל-R יש ממשק שורת פקודה, אולם זמינים גם מספר ממשקי משתמש גרפיים לשימוש עם R.
+מיקוסופט ואינטל מפתחים פעילים של השפה  
+*** What about Excel?
+
+ -  serious data manipulation is impossible
+
+ -  better visually see what is happening... But: graphics are poor!
+
+ -  Limited statistical possibles and many things Excel just cannot do...
+
+ -  Use the right tool!
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-21 16:52:26
+#+attr_html: :width 300px
+ [[~/Sync/attach/images_2015/screenshot_2015-10-21_16-52-26.png]]
+
+*** What are the strengths of R?
+
+ -  Comprehensive set of statistical analysis techniques:
+
+    -  Classical statistical tests
+
+    -  Linear and nonlinear modeling
+
+    -  Time-series analysis
+
+    -  Classification and cluster analysis
+
+    -  Spatial statistics
+
+    -  Bayesian statistics
+
+ -  Virtually every statistical technique is either already built into R,
+    or a user-contributed package
+*** What are the strengths of R?
+
+ -  Completely open-source
+
+    -  Users contribute and create new packages
+
+    -  Existing R functions can be edited and expanded
+
+    -  Free
+
+    -  Huge community of scientists using R
+
+    -  Easy to replicate your work from data to finished product
+
+ -  Publication-quality graphics
+
+    -  Many default graphics
+
+    -  Full control of graphics
+
+    -  vibrant and exciting
+*** Learning it
+R is a programming language, the learning curve can be steep
+
+Very rewarding to become fluent: you can do more
+
+Be patient and creative
+
+Lots of help files, online sources, books, and graduate students in your lab
 *** היסטוריה
- R היא מימוש חופשי של סביבת תכנות בשם S
+R is an implementation of the S programming language combined with lexical scoping semantics inspired by Scheme
 
- מערכת S נוצרה בשנת 1976 במעבדות בל כתוכנה לחישובים מתמטיים
+Created by Ross Ihaka and Robert Gentleman at the University of Auckland, New Zealand
 
- מטרתה הבסיסית הייתה לאפשר התממשקות נוחה לספריות תוכנה שכתובות בשפת פורטרן (ובהמשך גם C ושפות נוספות), לקבל משם מספרים ולהציג אותם בצורה נוחה
+currently developed by the R Development Core Team
+
 *** אבני דרך חשובות
 
 
- | Release      | Date	 | Description                                                                                                                                                       |
- | 0.49	 |   1997-04-23 | 	This is the oldest available source release, CRAN is started on this date, with 3 mirrors that initially hosted 12 packages.  shortly after this version. |
- | 0.60	 |   1997-12-05 | 	R becomes an official part of the GNU Project. The code is hosted and maintained on CVS.                                                                  |
- | 1.0	  |   2000-02-29 | 	Considered by its developers stable enough for production use                                                                                             |
- | 1.4	  |   2001-12-19 | 	S4 methods are introduced and the first version for Mac OS X is made available soon after.                                                                |
- | 2.0	  |   2004-10-04 | 	Introduced lazy loading, which enables fast loading of data with minimal expense of system memory.                                                        |
- | 2.1	  |   2005-04-18 | 	Support for UTF-8 encoding, and the beginnings of internationalization and localization for different languages.                                          |
- | 2.11	 |   2010-04-22 | 	Support for Windows 64 bit systems.                                                                                                                       |
- | 2.13	 |   2011-04-14 | 	Adding a new compiler function that allows speeding up functions by converting them to byte-code.                                                         |
- | 2.14	 |   2011-10-31 | 	Added mandatory namespaces for packages. Added a new parallel package.                                                                                    |
- | 2.15	 |   2012-03-30 | 	New load balancing functions. Improved serialization speed for long vectors.                                                                              |
- | 3.0	  |   2013-04-03 | 	Support for numeric index values 231 and larger on 64 bit systems.                                                                                        |
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-21 18:38:00
+#+attr_html: :width 1200px
+ [[~/Sync/attach/images_2015/screenshot_2015-10-21_18-38-00.png]]
 
 *** Graphics 
-
  #+BEGIN_SRC R  :session Rorg  :results none
  library(caTools) # library to write.gif
  jet.colors <- colorRampPalette(c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F",
@@ -188,127 +280,298 @@ Developer support and large community to help.
  }
  write.gif(X, "Mandelbrot.gif", col=jet.colors, delay=800)
  #+END_SRC 
-
- #+attr_html: :width 400px
- file:/home/zeltak/ZH_tmp/Mandelbrot_Creation_Animation.gif
+#+attr_html: :width 300px
+file:/home/zeltak/ZH_tmp/Mandelbrot_Creation_Animation.gif
 
 *** Graphical user interfaces (GUI)
+Architect – cross-platform open source IDE for data science based on Eclipse and StatET \\
+Deducer – GUI for menu driven data analysis (similar to SPSS/JMP/Minitab).\\
+Java GUI for R – cross-platform stand-alone R terminal and editor based on Java (also known as JGR).\\
+R Commander – cross-platform menu-driven GUI based on tcltk (several plug-ins to Rcmdr are also available).\\
+Revolution R Productivity Environment (RPE) – Revolution Analytics provided Visual Studio based IDE, and has plans for web based point and click interface.\\
+RGUI – comes with the pre-compiled version of R for Microsoft Windows.\\
+RKWard – extensible GUI and IDE for R.\\
+*RStudio – cross-platform open source IDE (which can also be run on a remote linux server).*
+** Starting with R
+  :PROPERTIES:
+	  :reveal_background: /home/zeltak/org/attach/bgu/courses/BGU.R/images/hist_BD.jpg
+	  :END:
+*** CRAN
+ go to https://cran.r-project.org/
 
- Architect – cross-platform open source IDE for data science based on Eclipse and StatET
- Deducer] – GUI for menu driven data analysis (similar to SPSS/JMP/Minitab).
- Java GUI for R – cross-platform stand-alone R terminal and editor based on Java (also known as JGR).
- Rattle GUI – cross-platform GUI based on RGtk2 and specifically designed for data mining.
- R Commander – cross-platform menu-driven GUI based on tcltk (several plug-ins to Rcmdr are also available).
- Revolution R Productivity Environment (RPE) – Revolution Analytics provided Visual Studio based IDE, and has plans for web based point and click interface.
- RGUI – comes with the pre-compiled version of R for Microsoft Windows.
- RKWard – extensible GUI and IDE for R.
- *RStudio* – cross-platform open source IDE (which can also be run on a remote linux server).
-* Starting with R
-** CRAN
-go to https://cran.r-project.org/
 
+ #+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:47:20
+ #+attr_html: :width 800px
+  [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-47-20.png]]
+*** CRAN 
 
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:47:20
+ #+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:48:02
+ #+attr_html: :width 900px
+  [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-48-02.png]]
+*** CRAN  
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:48:22
+ #+attr_html: :width 800px
+  [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-48-22.png]]
+*** Install on PC
+Open and run the file you just downloaded R-3.1.2-win.exe  \\
+There is no need to change the default installation!\\
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 12:57:44
+#+attr_html: :width 150px
+ [[~/Sync/attach/images_2015/screenshot_2015-10-19_12-57-44.png]]
+*** install process
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 12:59:02
 #+attr_html: :width 600px
- [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-47-20.png]]
-** 
+ [[~/Sync/attach/images_2015/screenshot_2015-10-19_12-59-02.png]]
+*** Load up R
 
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:48:02
-#+attr_html: :width 500px
- [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-48-02.png]]
-** 
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-21 17:57:42
+#+attr_html: :width 700px
+ [[~/Sync/attach/images_2015/screenshot_2015-10-21_17-57-42.png]]
 
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:48:22
+ - luckily for you you don't have to use plain R anymore...
+*** Rstudio
+It is tedious to write R code in the command line..
+
+Old style: create a text file (e.g. Notepad) and copy the code you want to run, to the command line
+
+New Style: use RStudio. Why? 
+
+- Multiple files
+
+- View variable values, color coding
+
+- Built-in help
+
+- Quick running of code
+
+- Easy file handling
+
+- Easy package installation
+
+- Many other reasons
+*** Rstudio look
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-21 17:59:31
+#+attr_html: :width 900px
+ [[~/Sync/attach/images_2015/screenshot_2015-10-21_17-59-31.png]]
+*** Installing RStudio
+Go to http://www.rstudio.com/ and click on Desktop
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 13:00:49
+#+attr_html: :width 600px
+ [[~/Sync/attach/images_2015/screenshot_2015-10-19_13-00-49.png]]
+*** Rtudio install 
+Select DOWNLOAD RSTUDIO DESKTOP
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 13:01:30
+#+attr_html: :width 800px
+ [[~/Sync/attach/images_2015/screenshot_2015-10-19_13-01-30.png]]
+
+*** Rtudio install 
+Download the installer for Windows
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 13:01:43
+#+attr_html: :width 800px
+ [[~/Sync/attach/images_2015/screenshot_2015-10-19_13-01-43.png]]
+*** Rtudio install 
+Open and run the file you just downloaded RStudio-0.98.1091.exe 
+
+You don't have to change any of the defaults for the installation
+*** Rtudio install 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 13:02:08
+#+attr_html: :width 900px
+ [[~/Sync/attach/images_2015/screenshot_2015-10-19_13-02-08.png]]
+*** RStudio tips
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-21 18:00:48
+#+attr_html: :width 900px
+ [[~/Sync/attach/images_2015/screenshot_2015-10-21_18-00-48.png]]
+*** R scripts
+
+ R scripts
+
+ -  A text file (e.g. lab1.r) that contains all your R code
+
+ -  Scientific method: complete record of your analyses
+
+ -  Reproducible: rerunning your code is easy for you or someone else
+
+ -  Easily modified and rerun
+
+ -  In RStudio, select code and type <ctrl+enter> to run the code in the
+    R console
+
+ -  SAVE YOUR SCRIPTS
+
+*** R scripts
+
+  You can work directly in R, but most users prefer a graphical interface. For starters:
+
+  *RStudio*, an Integrated Development Environment (IDE)\\
+
+  Deducer, a Graphical User Interface (GUI)\\
+
+  More advanced users may prefer a good text editor with plugins for syntax highlighting, code completion, etc. for R such as:\\
+
+  Vim\\
+
+  *Emacs* + ESS \\
+
+  Eclipse + StatET\\
+*** packages
+A way to extend R basic functionality
+
+can add graphic, statistics, GIS, etc 
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-22 15:50:12
 #+attr_html: :width 300px
- [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-48-22.png]]
-** Options for coding in R
-You can work directly in R, but most users prefer a graphical interface.
-For starters:
-*RStudio*, an Integrated Development Environment (IDE)
-Deducer, a Graphical User Interface (GUI)
-More advanced users may prefer a good text editor with plugins for syntax highlighting, code completion, etc. for R such as:
-Vim
-*Emacs* + ESS 
-Eclipse + StatET
-** Installing package
-*** GUI- Via Rstudio
+ [[~/Sync/attach/images_2015/screenshot_2015-10-22_15-50-12.png]]
+*** installing via GUI- Via Rstudio
 
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:52:09
-#+attr_html: :width 500px
- [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-52-09.png]]
-*** CODE
+ #+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:52:09
+ #+attr_html: :width 500px
+  [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-52-09.png]]
+*** Installing via CODE
 To use packages in R, we must first install them using the install.packages function, which typically downloads the package from CRAN and installs it for use
 
-#+BEGIN_SRC R
-install.packages("foreign")
-install.packages("xlsx")
-install.packages("dplyr")
-install.packages("reshape2")
-install.packages("ggplot2")
-install.packages("GGally")
-install.packages("vcd")
-#+END_SRC
-** Loading Packages
+ #+BEGIN_SRC R
+ install.packages("foreign")
+ install.packages("xlsx")
+ install.packages("dplyr")
+ install.packages("reshape2")
+ install.packages("ggplot2")
+ install.packages("GGally")
+ install.packages("vcd")
+ #+END_SRC
+*** Loading Packages
 If we know we will need a particular package for our current R session, we must load it into the R environment using the library or require functions
-#+BEGIN_SRC R
-library(foreign)
-library(xlsx)
-#+END_SRC
-** sessionInfo
-Basic info on R session
-To get a description of the version of R and its attached packages used in the current session, we can use the sessionInfo function
+ #+BEGIN_SRC R
+ library(foreign)
+ library(xlsx)
+ #+END_SRC
+*** sessionInfo()
+ Basic info on R session
+ To get a description of the version of R and its attached packages used in the current session, we can use the sessionInfo function
 
-#+BEGIN_SRC R  :session Rorg  :results none
-sessionInfo()
-#+END_SRC
+  #+BEGIN_SRC R  :session Rorg  :results none
+  sessionInfo()
+  #+END_SRC
+*** R workspaces
+ R workspaces
+
+ -  When you close your R session, you can save data and analyses in an R
+    workspace
+
+ -  This saves everything run in your R console
+
+ -  Generally not recommended
+
+    -  Exception: working with an enormous dataset
+
+ -  Better to start with a clean, empty workspace so that past analyses
+    don't interfere with current analyses
+
+ -  rm(list = ls()) clears out your workspace
+
+ -  Summary: save your R script, don't save your workspace
+
+
 ** R programming
+  :PROPERTIES:
+	  :reveal_background: /home/zeltak/org/attach/bgu/courses/BGU.R/images/hist_BD.jpg
+	  :END:
+*** R programming 
 R code can be entered into the command line directly or saved to a script, which can be run inside a session using the source function
 
 Commands are separated either by a ; or by a newline.
 
 R is case sensitive.
 
-Help files for R functions are accessed by preceding the name of the function with ? (e.g. ?require).
+Help files for R functions are accessed by preceding the name of the function with ?
+you can also use ?? for keyword searhc
 
-??keyword searches R documentation for keyword (e.g. ??logistic)
-** commenting
+#+BEGIN_SRC R  :session Rorg  :results none
+?require
+??logistic
+#+END_SRC 
+
+*** commenting
 The # character at the beginning of a line signifies a comment, which is not executed\\
 Start comments with #, rest of line is ignored\\
-#+BEGIN_SRC R  :session Rorg  :results none
-#sessionInfo is cool..
-sessionInfo()
+ #+BEGIN_SRC R  :session Rorg  :results none
+ #sessionInfo is cool..
+ sessionInfo()
+ #+END_SRC
+*** data store
+ R stores both data and output from data analysis (as well as everything else) in objects
+
+ Things are assigned to and stored in objects using the <- or = operator
+
+ A list of all objects in the current session can be obtained with ls()
+
+ #+BEGIN_SRC R  :session Rorg  :results none
+ # assign the number 3 to object called abc
+ abc <- 3
+ # list all objects in current session
+ ls()
+ #+END_SRC
+*** Variables
+A basic concept in (statistical) programming is called a variable.
+
+A variable allows you to store a value (e.g. 4) or an object (e.g. a function description) in R.
+
+You can then later use this variable's name to easily access the value or the object that is stored within this variable.
+
+You can assign a value 4 to a variable MYVAR with the command
+#+BEGIN_SRC R :session Rorg  :results none
+MYVAR <- 4
 #+END_SRC
-** data store
-R stores both data and output from data analysis (as well as everything else) in objects
 
-Things are assigned to and stored in objects using the <- or = operator
+*** Basic data types in R
+Decimals values like 4.5 are called numerics.\\
+Natural numbers like 4 are called integers. Integers are also numerics.\\
+Boolean values (TRUE or FALSE) are called logical (TRUE can be abbreviated to T and FALSE to F).\\
+Text (or string) values are called characters.\\
 
-A list of all objects in the current session can be obtained with ls()
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 15:36:27
+#+attr_html: :width 300px
+ [[~/Sync/attach/images_2015/screenshot_2015-10-19_15-36-27.png]]
+*** arithmetics with R
+In its most basic form R can be used as a simple calculator. Consider the following arithmetic operators:\\
 
-#+BEGIN_SRC R  :session Rorg  :results none
-# assign the number 3 to object called abc
-abc <- 3
-# list all objects in current session
-ls()
-#+END_SRC
-** Entering and Importing Data
-R works most easily with datasets stored as text files. Typically, values in text files are separated, or delimited, by tabs or spaces:
+#+BEGIN_QUOTE
+Addition: +\\
+Subtraction: -\\
+Multiplication: *\\
+Division: /\\
+Exponentiation: ^\\
+#+END_QUOTE
 
-#+BEGIN_EXAMPLE
-gender id race ses schtyp prgtype read write math science socst
-0 70 4 1 1 general 57 52 41 47 57
-1 121 4 2 1 vocati 68 59 53 63 31
-0 86 4 3 1 general 44 33 54 58 31
-0 141 4 3 1 vocati 63 44 47 53 56
-#+END_EXAMPLE
-or by commas (CSV file):
-#+BEGIN_EXAMPLE
-gender,id,race,ses,schtyp,prgtype,read,write,math,science,socst
-0,70,4,1,1,general,57,52,41,47,57
-1,121,4,2,1,vocati,68,59,53,63,61
-0,86,4,3,1,general,44,33,54,58,31
-0,141,4,3,1,vocati,63,44,47,53,56
-#+END_EXAMPLE
+*** Entering and Importing Data
+ R works most easily with datasets stored as text files. Typically, values in text files are separated, or delimited, by tabs or spaces:
+
+ #+BEGIN_EXAMPLE
+ gender id race ses schtyp prgtype read write math science socst
+ 0 70 4 1 1 general 57 52 41 47 57
+ 1 121 4 2 1 vocati 68 59 53 63 31
+ 0 86 4 3 1 general 44 33 54 58 31
+ 0 141 4 3 1 vocati 63 44 47 53 56
+ #+END_EXAMPLE
+ or by commas (CSV file):
+ #+BEGIN_EXAMPLE
+ gender,id,race,ses,schtyp,prgtype,read,write,math,science,socst
+ 0,70,4,1,1,general,57,52,41,47,57
+ 1,121,4,2,1,vocati,68,59,53,63,61
+ 0,86,4,3,1,general,44,33,54,58,31
+ 0,141,4,3,1,vocati,63,44,47,53,56
+ #+END_EXAMPLE
 *** read data-Base
  Base R functions *read.table* and *read.csv* can read in data stored as text files, delimited by almost anything (notice the sep = option)
 
@@ -358,43 +621,384 @@ gender,id,race,ses,schtyp,prgtype,read,write,math,science,socst
  # Read a csv file into a data frame
  fread.csv <- fread("/home/zeltak/org/attach/bgu/courses/BGU.R/data/hsb2.csv")
  #+END_SRC
-** Viewing Data
-*** Head
-R has ways to look at the dataset at a glance or as a whole.
+*** Viewing Data (Head)
+ R has ways to look at the dataset at a glance or as a whole.
 
-#+BEGIN_SRC R :session Rorg  :results none
-# first few rows
-head(dat.csv)
-##    id female race ses schtyp prog read write math science socst
-## 1  70      0    4   1      1    1   57    52   41      47    57
-## 2 121      1    4   2      1    3   68    59   53      63    61
-## 3  86      0    4   3      1    1   44    33   54      58    31
-## 4 141      0    4   3      1    3   63    44   47      53    56
-## 5 172      0    4   2      1    2   47    52   57      53    61
-## 6 113      0    4   2      1    2   44    52   51      63    61
-#+END_SRC
+ #+BEGIN_SRC R :session Rorg  :results none
+ # first few rows
+ head(dat.csv)
+ ##    id female race ses schtyp prog read write math science socst
+ ## 1  70      0    4   1      1    1   57    52   41      47    57
+ ## 2 121      1    4   2      1    3   68    59   53      63    61
+ ## 3  86      0    4   3      1    1   44    33   54      58    31
+ ## 4 141      0    4   3      1    3   63    44   47      53    56
+ ## 5 172      0    4   2      1    2   47    52   57      53    61
+ ## 6 113      0    4   2      1    2   44    52   51      63    61
+ #+END_SRC
 *** Tail
-#+BEGIN_SRC R :session Rorg  :results none
-# last few rows
-tail(dat.csv)
-##      id female race ses schtyp prog read write math science socst
-## 195 179      1    4   2      2    2   47    65   60      50    56
-## 196  31      1    2   2      2    1   55    59   52      42    56
-## 197 145      1    4   2      1    3   42    46   38      36    46
-## 198 187      1    4   2      2    1   57    41   57      55    52
-## 199 118      1    4   2      1    1   55    62   58      58    61
-## 200 137      1    4   3      1    2   63    65   65      53    61
-#+END_SRC
+ #+BEGIN_SRC R :session Rorg  :results none
+ # last few rows
+ tail(dat.csv)
+ ##      id female race ses schtyp prog read write math science socst
+ ## 195 179      1    4   2      2    2   47    65   60      50    56
+ ## 196  31      1    2   2      2    1   55    59   52      42    56
+ ## 197 145      1    4   2      1    3   42    46   38      36    46
+ ## 198 187      1    4   2      2    1   57    41   57      55    52
+ ## 199 118      1    4   2      1    1   55    62   58      58    61
+ ## 200 137      1    4   3      1    2   63    65   65      53    61
+ #+END_SRC
 *** variable names
 to show all the variable names in the data use *names* or *View* commands
 
-#+BEGIN_SRC R :session Rorg  :results none
+ #+BEGIN_SRC R :session Rorg  :results none
 # variable names
 names(dat.csv)
 ##  [1] "id"      "female"  "race"    "ses"     "schtyp"  "prog"    "read"   
 ##  [8] "write"   "math"    "science" "socst"
 # pop-up view of entire data set (uncomment to run)
-View(dat.csv)
+#View(dat.csv)
+ #+END_SRC
+*** Data frames
+Once read in, datasets in R are typically stored as *data frames*, which have a matrix structure.\\
+
+Observations are arranged as *rows* and *variables*, either numerical or categorical, are arranged as columns.\\
+
+data frames are often referenced as DF
+
+*** Data frames
+#+BEGIN_SRC R :session Rorg  :results none
+tag <- c(2, 3, 5, 7, 8, 9, 15, 21, 23, 26) 
+weight <- c(14.8, 21, 19.7, 23.2, 16, 16.1, 20, 29.3, 17.8, 21.2) 
+condition <- c("good", "fair", "fair", "poor", "fair", "good", "good", "fair", "fair", "poor") 
+#create a DF from 3 vectors
+fishData <- data.frame(tag, weight, condition) 
+head(fishData, n=2) 
+#  tag weight condition 
+#1   2   14.8      good 
+#2   3   21.0      fair
 #+END_SRC
-** Data frames
+*** Access Individual rows, columns and cells
+Individual rows, columns and cells in a data frame can be accessed through many methods of indexing
+
+We most commonly use:
+#+BEGIN_EXAMPLE
+object[row,column] 
+#+END_EXAMPLE
+
+#+BEGIN_SRC R :session Rorg  :results none
+# single cell value
+dat.csv[2,3]
+## [1] 4
+#+END_SRC
+*** omitting rows,columns
+omitting row value implies all rows; here all rows in column 3
+
+#+BEGIN_SRC R :session Rorg  :results none
+dat.csv[,3]
+##   [1] 4 4 4 4 4 4 3 1 4 3 4 4 4 4 3 4 4 4 4 4 4 4 3 1 1 3 4 4 4 2 4 4 4 4 4
+##  [36] 4 4 4 1 4 4 4 4 3 4 4 3 4 4 1 2 4 1 4 4 1 4 1 4 1 4 4 4 4 4 4 4 4 4 1
+##  [71] 4 4 4 4 4 1 4 4 4 1 4 4 4 1 4 4 4 4 4 4 2 4 4 1 4 4 4 4 1 4 4 4 3 4 4
+## [106] 4 4 4 3 4 4 1 4 4 1 4 4 4 4 3 1 4 4 4 3 4 4 2 4 3 4 2 4 4 4 4 4 3 1 3
+## [141] 1 4 4 1 4 4 4 4 1 3 3 4 4 1 4 4 4 4 4 3 4 4 4 4 4 4 4 4 4 4 4 1 3 2 3
+## [176] 4 4 4 4 4 4 4 4 4 2 2 4 2 4 3 4 4 4 2 4 2 4 4 4 4
+# omitting column values implies all columns; here all columns in row 2
+dat.csv[2,]
+##    id female race ses schtyp prog read write math science socst
+## 2 121      1    4   2      1    3   68    59   53      63    61
+
+#+END_SRC
+*** ranges
+#+BEGIN_SRC R :session Rorg  :results none
+# can also use ranges - rows 2 and 3, columns 2 and 3
+dat.csv[2:3, 2:3]
+##   female race
+## 2      1    4
+## 3      0    4
+#+END_SRC
+*** More variable indexing
+
+We can also access variables directly by using their names, either with object[,"variable"] notation or object$variable notation.
+
+#+BEGIN_SRC R :session Rorg  :results none
+# get first 10 rows of variable female using two methods
+dat.csv[1:10, "female"]
+##  [1] 0 1 0 0 0 0 0 0 0 0
+dat.csv$female[1:10]
+##  [1] 0 1 0 0 0 0 0 0 0 0
+#+END_SRC
+*** Combing values into a vector
+The c function is widely used to combine values of common type together to form a vector.
+
+For example, it can be used to access non-sequential rows and columns from a data frame.
+
+#+BEGIN_SRC R :session Rorg  :results none
+# get column 1 for rows 1, 3 and 5
+dat.csv[c(1,3,5), 1]
+## [1]  70  86 172
+# get row 1 values for variables female, prog and socst
+dat.csv[1,c("female", "prog", "socst")]
+##   female prog socst
+## 1      0    1    57
+#+END_SRC
+*** Variable Names
+If there were no variable names, or we wanted to change the names, we could use colnames.
+
+#+BEGIN_SRC R :session Rorg  :results none
+colnames(dat.csv) <- c("ID", "Sex", "Ethnicity", "SES", "SchoolType",
+  "Program", "Reading", "Writing", "Math", "Science", "SocialStudies")
+
+# to change one variable name, just use indexing
+colnames(dat.csv)[1] <- "ID2"
+#+END_SRC
+*** set names with data.table
+alternitavly you can use the data.table setname command
+#+BEGIN_SRC R :session Rorg  :results none
+# to change one variable name with setnames
+setnames(DT,"OLD" "NEW")
+#example
+setnames(dat.csv,"ID" "ID2")
+#+END_SRC
+*** Saving Data
+most of the time we will save data in *.csv format
+
+We can also save our data in a number of formats, including text, Excel .xlsx, and in other statistical software formats like Stata .dta. 
+
+The function write.dta comes from the foreign package, while write.xlsx comes from the xlsx package.
+
+#+BEGIN_SRC R :session Rorg  :results none
+write.csv(dat.csv, file = "path/to/save/filename.csv")
+#write.dta(dat.csv, file = "path/to/save/filename.dta")
+#write.xlsx(dat.csv, file = "path/to/save/filename.xlsx", sheetName="hsb2")
+#+END_SRC
+
+*** save to native R format
+We can also save to to binary R format (can save multiple datasets and R objects)
+#+BEGIN_SRC R :session Rorg  :results none
+# save to binary R format 
+save(dat.csv, dat.dta, dat.spss, dat.txt, file = "path/to/save/filename.RData")
+#+END_SRC
+** Exploring Data
+  :PROPERTIES:
+	  :reveal_background: /home/zeltak/org/attach/bgu/courses/BGU.R/images/hist_BD.jpg
+	  :END:
+*** Exploring Data
+Now we're going to read some data in and store it in the object, d. We prefer short names for objects that we will use frequently.
+
+We can now easily explore and get to know these data, which contain a number of school, test, and demographic variables for 200 students.
+
+#+BEGIN_SRC R :session Rorg  :results none
+d <- read.csv("http://www.ats.ucla.edu/stat/data/hsb2.csv")
+#+END_SRC
+*** Description of Dataset
+Using dim, we get the number of observations (rows) and variables (columns) in d.
+
+Using str, we get the structure of d, including the class(type) of all variables
+
+#+BEGIN_SRC R :session Rorg  :results none
+dim(d)
+## [1] 200  11
+str(d)
+## 'data.frame':	200 obs. of  11 variables:
+##  $ id     : int  70 121 86 141 172 113 50 11 84 48 ...
+##  $ female : int  0 1 0 0 0 0 0 0 0 0 ...
+##  $ race   : int  4 4 4 4 4 4 3 1 4 3 ...
+##  $ ses    : int  1 2 3 3 2 2 2 2 2 2 ...
+##  $ schtyp : int  1 1 1 1 1 1 1 1 1 1 ...
+##  $ prog   : int  1 3 1 3 2 2 1 2 1 2 ...
+##  $ read   : int  57 68 44 63 47 44 50 34 63 57 ...
+##  $ write  : int  52 59 33 44 52 52 59 46 57 55 ...
+##  $ math   : int  41 53 54 47 57 51 42 45 54 52 ...
+##  $ science: int  47 63 58 53 53 63 53 39 58 50 ...
+##  $ socst  : int  57 61 31 56 61 61 61 36 51 51 ...
+#+END_SRC
+*** Descriptive Stats
+summary is a generic function to summarize many types of R objects, including datasets \\
+When used on a dataset, summary returns distributional summaries of variables in the data\\
+
+#+BEGIN_SRC R :session Rorg  :results none
+summary(d)
+##        id            female           race           ses      
+##  Min.   :  1.0   Min.   :0.000   Min.   :1.00   Min.   :1.00  
+##  1st Qu.: 50.8   1st Qu.:0.000   1st Qu.:3.00   1st Qu.:2.00  
+##  Median :100.5   Median :1.000   Median :4.00   Median :2.00  
+##  Mean   :100.5   Mean   :0.545   Mean   :3.43   Mean   :2.06  
+##  3rd Qu.:150.2   3rd Qu.:1.000   3rd Qu.:4.00   3rd Qu.:3.00  
+##  Max.   :200.0   Max.   :1.000   Max.   :4.00   Max.   :3.00  
+##      schtyp          prog           read          write     
+##  Min.   :1.00   Min.   :1.00   Min.   :28.0   Min.   :31.0  
+##  1st Qu.:1.00   1st Qu.:2.00   1st Qu.:44.0   1st Qu.:45.8  
+##  Median :1.00   Median :2.00   Median :50.0   Median :54.0  
+##  Mean   :1.16   Mean   :2.02   Mean   :52.2   Mean   :52.8  
+##  3rd Qu.:1.00   3rd Qu.:2.25   3rd Qu.:60.0   3rd Qu.:60.0  
+##  Max.   :2.00   Max.   :3.00   Max.   :76.0   Max.   :67.0  
+
+#+END_SRC
+*** Conditional Summaries 1
+If we want conditional summaries, for example only for those students with high reading scores (read >= 60), we first subset the data, then summarize as usual.
+
+R permits nested function calls, where the results of one function are passed directly as an argument to another function. Here, subset returns a dataset containing observations where read >= 60. This data subset is then passed to summary to obtain distributions of the variables in the subset.
+#+BEGIN_SRC R :session Rorg  :results none
+summary(subset(d, read >= 60))
+##        id            female           race          ses      
+##  Min.   :  3.0   Min.   :0.000   Min.   :1.0   Min.   :1.00  
+##  1st Qu.: 76.5   1st Qu.:0.000   1st Qu.:4.0   1st Qu.:2.00  
+##  Median :108.5   Median :0.000   Median :4.0   Median :3.00  
+##  Mean   :109.8   Mean   :0.482   Mean   :3.7   Mean   :2.38  
+##  3rd Qu.:143.2   3rd Qu.:1.000   3rd Qu.:4.0   3rd Qu.:3.00  
+##  Max.   :200.0   Max.   :1.000   Max.   :4.0   Max.   :3.00  
+#+END_SRC
+*** Descriptive statistics using Hmisc package 
+you can get a more detailed view using the describe function in Hmisc
+
+#+BEGIN_SRC R  :session Rorg  
+library(Hmisc)
+describe(d)
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+--------------------------------------------------------------------------------
+prog 
+      n missing  unique    Info    Mean 
+    200       0       3    0.83   2.025 
+
+1 (45, 22%), 2 (105, 52%), 3 (50, 25%) 
+--------------------------------------------------------------------------------
+read 
+      n missing  unique    Info    Mean     .05     .10     .25     .50     .75 
+    200       0      30    0.99   52.23    36.0    39.0    44.0    50.0    60.0 
+    .90     .95 
+   66.2    68.0 
+
+lowest : 28 31 34 35 36, highest: 66 68 71 73 76 
+--------------------------------------------------------------------------------
+#+END_EXAMPLE
+
+*** Histograms
+Typically it is easier to inspect variable distributions with graphics. Histograms are often used for continuous variable distributions
+#+BEGIN_SRC R :session Rorg  :results none
+hist(d$write)
+#+END_SRC
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 15:26:49
+#+attr_html: :width 600px
+ [[~/Sync/attach/images_2015/screenshot_2015-10-19_15-26-49.png]]
+* Homework-Week 1
+** Asthmatic's with R
+*** Little arithmetics with R
+run some of the following lines and Type 2^5 in the editor to calculate 2 to the power 5 (#Exponentiation).
+#+BEGIN_SRC R :session Rorg  :results none
+# An addition
+5 + 5 
+
+# A subtraction
+5 - 5 
+
+# A multiplication
+3 * 5
+
+ # A division
+(5 + 5)/2 
+
+# Exponentiation
+#+END_SRC
+*** Variable assignment
+complete the code in the editor such that it assigns the value 42 to the variable x in the editor.
+
+Notice that when you ask R to print x, the value 42 appears.
+
+#+BEGIN_SRC R :session Rorg  :results none
+# Assign the value 42 to 'x'
+x <- 
+
+# Print out the value of the variable 'x'
+x
+#+END_SRC
+*** Variable assignment (2)
+Type the following code in the editor: my_apples <- 5. This will assign the value 5 to my_apples.\\
+Type: my_apples below the second comment. This will print out the value of my_apples.\\
+#+BEGIN_SRC R :session Rorg  :results none
+# Assign the value 5 to the variable called 'my_apples'
+
+# Print out the value of the variable 'my_apples'
+
+#+END_SRC
+*** Variable assignment (3)
+Every tasty fruit basket needs oranges, so you decide to add six oranges.\\
+As a data analyst, your reflex is to immediately create the variable my_oranges and assign the value 6 to it.\\
+Next, you want to calculate how many pieces of fruit you have in total. Since you have given meaningful names to these values, you can now code this in a clear way:
+#+BEGIN_QUOTE
+my_apples + my_oranges
+#+END_QUOTE
+
+Assign to my_oranges the value 6.
+Add the variables my_apples and my_oranges and have R simply print the result.
+Combine the variables my_apples and my_oranges into a new variable my_fruit, which is the total amount of fruits in your fruit basket.
+
+#+BEGIN_SRC R :session Rorg  :results none
+# Assign a value to the variables called 'my_apples' and 'my_oranges'
+my_apples <- 5
+
+
+# Add these two variables together and print the result
+
+
+# Create the variable 'my_fruit'
+
+#+END_SRC
+*** Apples and Oranges
+Common knowledge tells you not to add apples and oranges. But hey, that is what you just did, no :-)? \\
+The my_apples and my_oranges variables both contained a number in the previous exercise. \\
+The + operator works with numeric variables in R. 
+If you really tried to add "apples" and "oranges", and assigned a text value to the variable my_oranges (see the below excessive)\\
+you would be trying to assign the addition of a numeric and a character variable to the variable my_fruit. This is not possible.\\
+Adjust the code so that R knows you have 6 oranges and thus a fruit basket with 11 pieces of fruit.
+
+#+BEGIN_SRC R :session Rorg  :results none
+# Assign a value to the variable called 'my_apples'
+my_apples <- 5 
+
+# Print out the value of 'my_apples'
+my_apples       
+
+# Assign a value to the variable 'my_oranges' and print it out
+my_oranges <- "six" 
+my_oranges 
+
+# New variable that contains the total amount of fruit
+my_fruit <- my_apples + my_oranges 
+my_fruit
+#+END_SRC
+
+** Basic data types in R
+Change the value of the:
+my_numeric variable to 42.
+my_character variable to "forty-two". Note that the quotation marks indicate that "forty-two" is a character.
+my_logical variable to FALSE.
+
+#+BEGIN_SRC R :session Rorg  :results none
+# What is the answer to the universe?
+my_numeric <- 42.5
+
+# The quotation marks indicate that the variable is of type character
+my_character <- "some text"
+
+my_logical <- TRUE
+#+END_SRC
+** What's that data type?
+Do you remember that when you added 5 + "six", you got an error due to a mismatch in data types? You can avoid such embarrassing situations by checking the data type of a variable beforehand. You can do this as follows:
+#+BEGIN_SRC R :session Rorg  :results none
+class(some_variable_name)
+#+END_SRC
+
+Complete the code in the editor and print the class of my_numeric, my_character and my_logical to the console.
+
+#+BEGIN_SRC R :session Rorg  :results none
+# Declare variables of different types
+my_numeric <- 42
+my_character <- "forty-two"
+my_logical <- FALSE 
+
+# Check which type these variables have:
+#+END_SRC
+
 

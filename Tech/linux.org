@@ -499,7 +499,9 @@ systemctl enable cronie
 
 #+BEGIN_SRC sh
 pacman -S emacs rsync tree ncdus nfs-utils rpcbind terminator r mc  flac lame abiword keepassx dzen2 zip unzip unrar mtpaint krename gmrun aspell aspell-en findutils inkscape python-lxml gcolor2 easytag kdiff3  htop p7zip vlc smb4k screen tmux speedcrunch mlocate vim gvim mpd mpc atool lynx profont fb-client feh keychain picard  gdb mp3gain pacgraph sqliteman grep awk leafpad less lxappearance pavucontrol net-tools sshfs xterm zsh samba xclip lxtask pydf xorg-xkill nmap acpi audacity nmon  powertop ttf-inconsolata sxhkd git zsh firefox chromium ncmpcpp gmpc gcc filezilla gimp jre7-openjdk kdegraphics-okular
-meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  mosh w3m imagemagick graphicsmagick thunar pinta dconf-editor icedtea-web remmina tigervnc  android-tools mediainfo tk 
+meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  mosh w3m imagemagick graphicsmagick thunar pinta dconf-editor icedtea-web remmina tigervnc  android-tools mediainfo tk
+#for R
+gcc-fortan
 # for usb mounting
 udisks2 udiskie
 #+END_SRC
@@ -7325,7 +7327,10 @@ when activated it shows the options for each command on the right:
  its useful to bind it to a key to make it appaear disappear when
 needed:
  /key bind ctrl-H /cmd help
-
+***** Reconnect all 
+#+BEGIN_SRC sh
+/reconnect -all
+#+END_SRC
 ***** mouse
 
 Enable mouse
@@ -32075,15 +32080,17 @@ C-S-u        update mail & reindex
 ******* wanderlust
 ******** setup
 ********* init.el
-
+%this step is optional%
 set should write to init.el is
-
 #+BEGIN_SRC emacs-lisp :results none
 (autoload 'wl "wl" "Wanderlust" t)
 (autoload 'wl-draft "wl" "Write draft with Wanderlust." t)
 #+END_SRC
 
 ********* .wl
+
+$Note-you can skip the use of a .wl file and have all the wl config in the emacs.d etc files$ 
+
 We want to create a .wl to HOME below. This file EmacsWiki quote from
 #+BEGIN_SRC emacs-lisp :results none
 
@@ -32123,10 +32130,13 @@ We want to create a .wl to HOME below. This file EmacsWiki quote from
       wl-default-spec "%")
 #+END_SRC
 ********* .folders
-
+********** basic syntax
 So, that was the basic setup. Now we need to tell wanderlust about the folders we'd like to see in the user-interface: ~/.folders. Wanderlust does not automatically use all the folder in your ~/Maildir. The folder names in ~/.folders can refer to maildirs, newsgroups, POP-account, IMAP-folders and a couple of other ones. In particular, you can combine folders to show as aggregate folders in Wanderlust.
 
 Wanderlust distinguishes the kind of folder something is by looking at a special prefix character. For maildirs, this is a dot ('.'), IMAP-folders get a '+', newsgroups get a '-' and so on. After the mailbox name, you can have a 'friendly name' in quotes, which is what will show up in the user-interface.
+
+Wanderlust distinguishes the kind of folder something is by looking at a special prefix character. For maildirs, this is a dot ('.'), IMAP-folders get a '+', newsgroups get a '-' and so on. After the mailbox name, you can have a 'friendly name' in quotes, which is what will show up in the user-interface.
+
 
 Something like this:
 
@@ -32153,19 +32163,32 @@ Lists {
 # you make virtual folders from combined lists with the '*'
 AllMyMailingLists  *.mailinglist1,.mailinglist2,.mailinglist3
 #+END_EXAMPLE
-
+********** setup with gmail using straight IMAP 
 example:
 make a file:~/.folders and put the following
 
 #+BEGIN_SRC emacs-lisp :results none
 GMAIL{
-   %INBOX:ikloog/clear@imap.gmail.com:993!         "In"
+   %INBOX:ikloog/clear@imap.gmail.com:993!         "Inbox"
    %[Gmail]/Sent:ikloog/clear@imap.gmail.com:993!  "Sent"
    %[Gmail]/Draft:ikloog/clear@imap.gmail.com:993! "Draft"
    %[Gmail]/Trash:ikloog/clear@imap.gmail.com:993! "Trash"
    }
 #+END_SRC
+********** setup using offlineimap
 
+Wanderlust *does not* automatically use all the folder in your ~/Maildir. 
+to use it with offlineimap and maildir you need to "map" the exact name (case sensitive) of the folder in your file:/home/zeltak/Maildir
+also each folder for MAILDIR config in wl has to be preceded with a .
+
+so a folder names INBOX will be .INBOX
+
+#+BEGIN_SRC emacs-lisp :results none
+.INBOX     "Inbox"
+.Drafts    "Drafts"
+.Starred   "Star"
+.Sent      "Sent Mail"
+#+END_SRC
 ********* How to use
 First, you can start with the Mx wl.
 ********* cache  items
@@ -33815,6 +33838,41 @@ or just %better% add something like this
 (require 'ox-odt)
 #+END_SRC
 its better to just have a bunch of (require 'ox-*) statements in your el files
+******** export each line as a line and not stitched
+solution: use a empty line
+ 
+Essentially you want each line to be a separate "paragraph" so simply leave a blank line in between:
+
+#+BEGIN_EXAMPLE
+Decimals values like 4.5 are called numerics
+
+Natural numbers like 4 are called integers. Integers are also numerics
+
+#+END_EXAMPLE
+
+for slides you can use lists if the text was intended for slides, as in:
+
+#+BEGIN_EXAMPLE
+  - Decimals values like 4.5 are called numerics
+  - Natural numbers like 4 are called integers. Integers are also numerics
+#+END_EXAMPLE
+
+
+******** disable certain latex symbols (super/subscripting etc) during export
+You can disable super/subscripting within an org file by adding the following line:
+
+#+BEGIN_EXAMPLE
+#+OPTIONS: ^:nil
+#+END_EXAMPLE
+Check the org manual for more options.
+The following command inserts a template containing all the options:  C-c C-e #
+
+you can also have
+#+BEGIN_EXAMPLE
+'^:{}'
+#+END_EXAMPLE
+this will still allow you to have subscript if you use curly braces, i.e. my_var won't give you subscript but F_{t} will. See also the org-mode manual: orgmode.org/manual/Export-options.html#Export-options 
+
 ******** export to latex error
 look for a buffer named
 #+BEGIN_EXAMPLE
@@ -34605,6 +34663,193 @@ org-gcal-sync
 #+END_SRC
 
 Sync between Org and Gcal. before syncing, execute org-gcal-fetch .
+******* org-reveal
+******** install
+********* Obtain Reveal.js
+Download Reveal.js packages from the website
+Extract Reveal.js folders from the downloaded zip file or just clone the repo using git
+move it to the desired location
+₆In example₆ 
+file://home/zeltak/apps/reveal.js
+********* Obtain Org-reveal
+Download the latest Org-reveal package from the Org-reveal GitHub page Or clone the GitHub repository:
+#+BEGIN_SRC sh
+$ git clone https://github.com/yjwen/org-reveal.git
+#+END_SRC
+then configure Emacs init to load at startup
+
+$Note$ you will need to also set the root of reveal-js using URI format (see below)
+The location of Reveal.js is the path to the top directory of the Reveal.js packages, the directory which contains file README.md, but not the one that contains the file reveal.js.
+
+#+BEGIN_SRC emacs-lisp :results none
+(add-to-list 'load-path "/home/zeltak/.emacs.g/org-reveal")
+(require 'ox-reveal)
+;;where the root reveal folder is
+(setq org-reveal-root  "file:///home/zeltak/apps/reveal.js")
+(load-library "ox-reveal")
+#+END_SRC
+******** Url form for file location
+
+For example if you cloned this repository to your home directory, this file in Mac OS X would be referred to as “file:///Users/username/org-reveal/readme.org”. This file in Ubuntu would be “file:///home/username/org-reveal/readme.org” and in Windows this file would be “file:///c:/Users/username/org-reveal/readme.org”. For more detail on this standard please refer to http://en.wikipedia.org/wiki/File_URI_scheme
+#+BEGIN_EXAMPLE
+#+REVEAL_ROOT: file:///d:/reveal.js
+;Set your REVEAL_ROOT to the following URL to download reveal.js from a CDN instead of downloading a local copy.
+#+REVEAL_ROOT: http://cdn.jsdelivr.net/reveal.js/3.0.0/
+#+END_EXAMPLE
+
+******** highlights
+make sure the highlight plug-in *isn't* marked/on
+#+BEGIN_EXAMPLE
+#$Note$ below is commented on
+# REVEAL_PLUGINS: (highlight markdown notes)
+#+END_EXAMPLE
+
+also make sure the library htmlize.el is installed.
+
+******** print to pdf 
+This feature requires that you use Google Chrome or Chromium.
+
+add a ?print-pdf to your URL
+#+BEGIN_EXAMPLE
+file:///home/zeltak/org/files/Uni/Courses/BGU.R/stat.l1.html?print-pdf
+#+END_EXAMPLE
+This triggers the default index HTML to load the PDF print stylesheet (css/print/pdf.css). You can test this with lab.hakim.se/reveal-js?print-pdf.
+Open the in-browser print dialog 
+Change the Destination setting to Save as PDF.
+Change the Layout to Landscape (may not be present in all chrome versions)
+Change the Margins to None.
+make sure background graphics are checked
+Click Save.
+******** headings
+If HLevel is 1, the default value, headings H2.1 and H2.1.1 will be mapped to vertical slides below the slides of heading H2.
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-20 12:32:54
+#+attr_html: :width 300px
+ [[~/Sync/attach/images_2015/screenshot_2015-10-20_12-32-54.png]]
+If HLevel is changed to 2, slides of heading H2.1 will be changed to the main horizontal queue, and slides of heading H2.1.1 will be a vertical slide below it
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-20 12:33:06
+#+attr_html: :width 300px
+ [[~/Sync/attach/images_2015/screenshot_2015-10-20_12-33-06.png]]
+
+Configure HLevel’s Value
+
+Change variable org-reveal-hlevel’s value to set HLevel globally.
+For example, add the following statement to your .emacs file.
+#+BEGIN_EXAMPLE
+(setq org-reveal-hlevel 2)
+;Setting Org files local HLevel to option REVEAL_HLEVEL.
+#+REVEAL_HLEVEL 2
+#+END_EXAMPLE
+******** split a large slide (force split)
+Force Split
+
+If one heading has too many things to fit into one slide, you can split the contents into multiple vertical slides manually, by inserting
+
+#+BEGIN_EXAMPLE
+#+REVEAL: split
+#+END_EXAMPLE
+
+example slide:
+#+BEGIN_EXAMPLE
+ code or source code: The sequence of instructions in a program.
+
+ syntax: The set of legal structures and commands that can be used in a particular programming language.
+#+REVEAL: split
+ output: The messages printed to the user by a program.
+
+ console: The text box onto which output is printed.
+ Some source code editors pop up the console as an external window, and others contain their own console window.
+#+END_EXAMPLE
+******** Select Theme and Transition
+
+Themes and transition styles are set globally throughout the whole file by setting options REVEAL_THEME, REVEAL_TRANS, and REVEAL_SPEED.
+
+For an example, please check the heading part of this document.
+
+Available themes can be found in “css/theme/” in the reveal.js directory.
+
+Available transitions are: default|cube|page|concave|zoom|linear|fade|none.
+******** slide options
+//Push each slide change to the browser history  
+history: false
+
+// Transition style
+    transition: default, // none/fade/slide/convex/concave/zoom
+******** keyboard
+【o】 overview mode
+【s】 slide notes
+【F】 full screen mode
+
+******** Set Slide Background
+Slide background can be set to a color, an image or a repeating image array by setting heading properties.
+Single Colored Background
+Set property reveal_background to either an RGB color value, or any supported CSS color format.
+********* Single Colored Background
+	  :PROPERTIES:
+	  :reveal_background: #123456
+	  :END:
+      Single Image Background
+
+      Set property reveal_background to an URL of background image. Set property reveal_background_trans to slide to make background image sliding rather than fading.
+
+********* Single Image Background
+	  :PROPERTIES:
+	  :reveal_background: /home/zeltak/org/attach/bgu/courses/BGU.R/images/hist_BD.jpg
+	  :END:	  
+********* Title Slide Background Image
+      To set the title slide’s background image, please specify the following options:
+
+      REVEAL_TITLE_SLIDE_BACKGROUND: A URL to the background image.
+      REVEAL_TITLE_SLIDE_BACKGROUND_SIZE: HTML size specification, e.g. 200px.
+      REVEAL_TITLE_SLIDE_BACKGROUND_REPEAT: set to repeat to repeat the image.
+******** Raw HTML in Slides (youtube)
+   Besides the Org contents, you can embed raw HTML contents into slides by placing a #+REVEAL_HTML keyword.
+   ₆In example₆ 
+   #+BEGIN_EXAMPLE
+   #+REVEAL_HTML: <iframe width="560" height="315" src="https://www.youtube.com/embed/kL1QbQeB37k" frameborder="0" allowfullscreen></iframe>
+   #+END_EXAMPLE
+******** images on the left and right
+Simply embed the image into your paragraph.
+
+Slide 1
+
+#+BEGIN_EXAMPLE
+Some text [[./some_image.jpg]].
+#+END_EXAMPLE
+
+But for a better control on the layout, table is suggested.
+
+#+BEGIN_EXAMPLE
+| Some text | [[./some_image.jpg]] |
+#+END_EXAMPLE
+******** Speaker Notes
+
+Reveal.js supports speaker notes, which are displayed in a separate browser window. Pressing ‘s’ on slide’s windows will pop up a window displaying the current slide, the next slide and the speaker notes on the current slide.
+
+Org-reveal recognize texts between #+BEGIN_NOTES and #+END_NOTES as speaker notes. See the example below.
+
+#+BEGIN_NOTES
+  Enter speaker notes here.
+#+END_NOTES
+
+Speaker notes requires the notes plug-in. If you changed default plug-in setting by specifying #+REVEAL_PLUGINS or by setting variable org-reveal-plugins, please make sure notes is in the plug-in list to enable speaker notes.
+
+Easy-Template for Speaker Notes
+
+Org-reveal registers ‘n’ as the key for speaker notes easy-template. So you can press ‘<’ followed by ‘n’ and then press TAB, the #+BEGIN_NOTES and #+END_NOTES pair is inserted automatically.
+
+Customize org-reveal-note-key-char to change the default key ‘n’. set it to nil will forbid the auto-completion for speaker notes.
+******** change the fonts size per slide or even better per specific line/region?
+You can use CSS to overwrite the style of any Reveal.js element.
+Org-reveal exports each slide into sections with id tag like <section id="slide-orgheadline1">, the tailing number changes for each slide. So you can overwrite one slide's style in a CSS like:
+
+#+BEGIN_EXAMPLE
+slide-orgheadline1 {
+ ...
+}
+#+END_EXAMPLE
 
 *** LateX
 **** intro

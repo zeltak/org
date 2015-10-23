@@ -9,111 +9,81 @@
   :PROPERTIES:
   :ID:       70feaa43-c66b-4675-89f5-9ae26bddc03e
   :END:
-** weechat disconnects 
-/reconnect -all
-** or org-download-image-dir (if it's not nil).
+** mail- gmail organize, move starred to org via wl
+** change Emacs font
+** spacefm
+** my next file
+#+BEGIN_SRC emacs-lisp :results none
+(setq my-files '("/home/zeltak/org/files/agenda/food.org" "/home/zeltak/org/files/agenda/travel.org" "/home/zeltak/org/files/agenda/home.org"))
 
-org-download-image-dir becomes buffer-local when set, so each file can customize this value, e.g with:
+(defun my-next-file ()
+ (interactive)
+ (let ((f (pop my-files)))
+   (add-to-list 'my-files f t)
+   (find-file f)))
+(defun my-previous-file ()
+  (interactive)
+  (let* ((r-my-files (reverse my-files))
+         (f (pop r-my-files)))
+    (add-to-list 'r-my-files f t)
+    (setq my-files (reverse r-my-files))
+    (find-file f)))
 
-    -*- mode: Org; org-download-image-dir: "~/Pictures/foo"; -*-
-To set it for all files at once, use this:
+#+END_SRC
 
-    (setq-default org-download-image-dir "~/Pictures/foo")
-** cycle thorugh a list of files in Emacs- for org groups
-the idea is to have some common groups per Emacs window one can quickly cycle through
-** wl
-*** Wanderlust is asking me all these questions about how to open an attachment! How do I make Wanderlust just open it?
-First,
+based on https://mail.google.com/mail/u/0/#inbox/1507e982da01a9eb
+** Another approach is to define a template based on your #+OPTIONS
+http://stackoverflow.com/questions/26636562/org-mode-weirdness-with-org-export-with-sub-superscripts
 
-(setq mime-view-mailcap-files '("~/.mailcap"))
-This needs to be done before SEMI is loaded. You can use customize-variable for this. Next, use the following (and only the following) in your ~/.mailcap file:
+example:
 
-application/*; xdg-open %s
-image/*; xdg-open %s
-text/*; xdg-open %s
-video/*; xdg-open %s
-audio/*; xdg-open %s
-Finally:
+here I have a template file to export to HTML which contains
+#+BEGIN_EXAMPLE
+---- level-0-html.org--------
+#+DRAWERS: HIDDEN PROPERTIES STATE CABECALHO COMENTARIOS
 
-(setq mime-play-find-every-situations nil
-  mime-play-delete-file-immediately nil
-  process-connection-type nil)
-On very new versions of Wanderlust, setting process-connection-type should no longer be necessary.
+:CABECALHO:
+# # desabilita o superscrito/subscrito  | não exporta programação
+#+OPTIONS: ^:nil p:nil
 
-This depends on having a command, xdg-open, that can deal with all types of files. This should be present on modern Linux desktops. I believe 
-*** WL hangs when I wake from hibernation
-http://www.emacswiki.org/emacs/WlFaq#toc18
+#+OPTIONS: tags:nil
+#+STARTUP: showeverything
 
-The problem seems to be that elmo doesn’t realize that the connection its IMAP or other connection has timed out on the other side, and so keeps trying it. You can work around it by typing M-t M-t when you come back from hibernation.
+#+STYLE: <link rel="stylesheet" type="text/css" href="../../css/leslie.css" />
 
-If you want this to happen automatically, you will need your system to run a command approximately like this before hibernation:
+#+LANGUAGE:  pt_BR
+#+OPTIONS:   H:2 num:t toc:f \n:nil @:t ::t |:t ^:t -:t f:t *:t <:t
+#+EXPORT_SELECT_TAGS: export
+#+EXPORT_EXCLUDE_TAGS: noexport
+#+TAGS: export(e) noexport(n) 
+#+LINK_UP:   
+#+LINK_HOME: 
+:END:
+#+TITLE: 
+#+AUTHOR: Leslie H. Watter
+#+EMAIL:  
+#+DATE:
+------------------------------------------------
 
-    /usr/bin/emacsclient --socket-name /tmp/emacs1000/server --eval "(wl-toggle-plugged 'off)"
-and then toggle back on after resume.
+#+END_EXAMPLE
 
-Since hibernation/suspend-to-ram sometiems happen in ways you can’t control – e.g., if you leave your laptop on somewhere and run out of battery power – it’s best to havethis doen automatically.
+and in my org-file that I'll export I have:
 
-If you use the hibernate script for hibernation/suspend, you can add a scriptlet /etc/hibernate/scriptlets.d/wanderlust that will do this for you automatically; here’s a very simple example:
+#+BEGIN_EXAMPLE
+----- presentation.org ------
+#+SETUPFILE: ~/org/templates/level-0-html.org
+#+TITLE: Gerência de Redes
+#+AUTHOR: Leslie H. Watter
+#+EMAIL:  hooorayyyy @ my domain .com 
 
-AddConfigHandler WanderlustOptions
+Gerência de Redes 
+(and here goes the entire file)
+------
+#+END_EXAMPLE
 
-WanderlustSuspend() {
-    /usr/bin/emacsclient --socket-name /tmp/emacs1000/server --eval "(wl-toggle-plugged 'off)"
-}
+This way I get a consistent way of exporting.
 
-WanderlustResume() {
-    /usr/bin/emacsclient --socket-name /tmp/emacs1000/server --eval "(wl-toggle-plugged 'on)"
-}
-
-WanderlustOptions() {
-    case $1 in
-        *)
-            return 1
-    esac
-
-    if [ -z "$WANDERLUST_HOOKED" ] ; then
-        AddSuspendHook 01 WanderlustSuspend
-        AddResumeHook 01 WanderlustResume
-        WANDERLUST_HOOKED=1
-    fi
-    return 0
-}
-A better way to do this would be to check each running emacsserver instance. In any case I found this didn’t always solve the problem, possibly because plugging back in after resume may occur before your new internet connection has been negotiated, which would give you the same issue.
-
-I now use pm-utils instead, and have this in /etc/pm/sleep.d/09_wl_fix:
-
-. "${PM_FUNCTIONS}"
-
-suspend_wl()
-{
-	# Get WL to go offline
-        /usr/bin/emacsclient --socket-name /tmp/emacs1000/server --eval "(wl-toggle-plugged 'off)"
-}
-
-resume_wl()
-{
-	# Wake up NetworkManager and make it do a new connection
-        echo "waking up -- wl is plugged off"
-}
-
-case "$1" in
-	hibernate|suspend)
-		suspend_wl
-		;;
-	thaw|resume)
-		resume_wl
-		;;
-	*) exit $NA
-		;;
-esac
-
-for now it’s doing the trick!
-*** signat
-     ;; Automatic signature insertion
-      signature-file-name "~/Maildir/Signatures/XxxxXXXAddress"
-      signature-insert-at-eof t
-      signature-delete-blank-lines-at-eof t
-
+References: http://orgmode.org/worg/org-tutorials/org-publish-html-tutorial.html#sec-6
 
 ** TODO capture questions 
 Hi all!
@@ -218,9 +188,7 @@ defined files?
 I don't understand the question. You use file+headline in this example which does that.
 
 
-** ask org mail
-convert a simple list of lines each to a orgmode header
-** ask rasi new stuff i3 4.11
+**  new stuff i3 4.11
 ** clean org file
 find a way to get rid of ' and ? 
 ** @org revison@
