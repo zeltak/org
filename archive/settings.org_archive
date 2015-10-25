@@ -1573,9 +1573,263 @@ https://raw.githubusercontent.com/dertuxmalwieder/My-Emacs-config/master/.gnus.e
                  (vertical 1.0 (article 1.0)))))
 #+END_SRC
 
+* Wanderlust 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-10-23 Fri 17:17
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_CATEGORY: settings
+  :END:
+
+http://wanderlust.github.io/wl-docs/wl.html
+
+** where is the .folder file located
+#+BEGIN_SRC emacs-lisp :results none
+(setq wl-folders-file "~/.emacs.d/.folders")
+#+END_SRC
+** smtp config (to send emails)
+#+BEGIN_SRC emacs-lisp :results none
+(setq message-send-mail-function 'smtpmail-send-it
+      smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+      smtpmail-auth-credentials '(("smtp.gmail.com" 587 "ikloog@gmail.com" nil))
+      smtpmail-default-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 587
+      smtpmail-local-domain "homepc")
+#+END_SRC
+** IMAP
+#+BEGIN_SRC emacs-lisp :results none
+;; IMAP, gmail:
+(setq elmo-imap4-default-server "imap.gmail.com"
+      elmo-imap4-default-user "ikloog@gmail.com"
+      elmo-imap4-default-authenticate-type 'clear
+      elmo-imap4-default-port '993
+      elmo-imap4-default-stream-type 'ssl
+     ;;for non ascii-characters in folder-names
+      elmo-imap4-use-modified-utf7 t)
+#+END_SRC
+** personal
+#+BEGIN_SRC emacs-lisp :results none
+;; Tell Emacs my E-Mail address
+;; Without this Emacs thinks my E-Mail is something like <myname>@ubuntu-asus
+(setq user-mail-address "<user>@gmail.com")
+#+END_SRC
+** Default folder
+#+BEGIN_SRC emacs-lisp :results none
+(setq wl-default-folder ".INBOX")
+(setq wl-auto-check-folder-name wl-default-folder)
+#+END_SRC
+** updates
+
+#+BEGIN_SRC emacs-lisp :results none
+(setq
+ wl-biff-check-interval 30 ;; check every 30 seconds
+  wl-biff-check-folder-list '(".INBOX") ;;
+  wl-biff-use-idle-timer nil ;; in the background
+)
+#+END_SRC
+
+and
+
+#+BEGIN_SRC emacs-lisp :results none
+(setq elmo-folder-update-threshold nil)
+(setq elmo-folder-update-confirm   nil)
+#+END_SRC
+
+** Jump to default folder on startup
+#+BEGIN_SRC emacs-lisp
+;; Jump to default folder on startup
+
+(defun wl-folder-jump-to-folder (folder &optional no-extra)
+  (let ((wl-inhibit-extra-check no-extra))
+    (wl-folder-jump-folder folder)
+    (wl-folder-jump-to-current-entity)))
+
+(defun wl-folder-jump-to-default-folder (&optional no-extra)
+  (interactive "P")
+  (wl-folder-jump-to-folder wl-default-folder no-extra))
+
+(add-hook 'wl-auto-check-folder-hook 'wl-folder-jump-to-default-folder)
+#+END_SRC
+
+** quick search
+#+BEGIN_SRC emacs-lisp :results none
+#+END_SRC
+** make the inbox "sticky"
+he buffer of the ‘sticky summary’ does not killed by typing q.
+
+By entering the summary by typing Shift RET in Folder mode or G in some suummary sticky summary buffer is created. Also typing M-s (wl-summary-stick) on the normal summary makes current one sticky.
+
+The buffer name of the sticky summary becomes like ‘Summary:folder-name’. You can visit the sticky summary at any time by C-x b (switch-to-buffer), or you can go round summary buffers by C-c C-n (wl-summary-previous-buffer) and C-c C-p (wl-summary-next-buffer) in summary mode.
+
+In sticky summary, the summary buffer is preserved after g or q. To delete sticky summary, type C-u q to exit or move to another summary by C-u g. Other operations in the sticky summary are same as normal summary.
+
+#+BEGIN_SRC emacs-lisp :results none
+(setq wl-summary-always-sticky-folder-list '("INBOX"))
+#+END_SRC
+** How can I remove the mime-buttons
+The mime buttons is what shows up in the beginning and end of your messages as [1 <text/plain; iso-8859-1 (quoted-printable)>]. You can toggle on/off with C-c m (in summary buffer) or: 
+$Note$ that turning this to nil (off) will make extracting attachments hard
+#+BEGIN_SRC emacs-lisp :results none
+;(setq mime-view-buttons-visible nil) 
+#+END_SRC
+** resort the summary buffer by date
+This has been reported for when getting email with offlineimap, they can appear unsorted in the summary buffer, if so this will help:
+#+BEGIN_SRC emacs-lisp
+  ;; sort the summary
+  (defun my-wl-summary-sort-hook ()
+    (wl-summary-rescan "date"))
+
+  (add-hook 'wl-summary-prepared-hook 'my-wl-summary-sort-hook)
+#+END_SRC
+
+
+** message headers
+The headers wl displays when viewing and editing a message are controlled by two variables: ‘wl-message-ignored-field-list’ and ‘wl-message-visible-field-list’. Both are lists whose elements are regular expressions that are used to determine which headers are displayed and which are not.
+
+If you for instance only want a basic set of headers like From:, To:, Cc:, Subject: and Date: to be displayed you could set these variables as followed:
+
+#+BEGIN_SRC emacs-lisp :results none
+;; ignore  all fields
+(setq wl-message-ignored-field-list '("^.*:"))
+
+;; ..but these five
+(setq wl-message-visible-field-list
+'("^To:"
+  "^Cc:"
+  "^From:"
+  "^Subject:"
+  "^Date:"
+  "^Content-Disposition:"
+))
+
+;;In addition you can control the order of these headers using the variable ‘wl-message-sort-field-list’:
+
+(setq wl-message-sort-field-list
+ '("^From:"
+   "^Subject:"
+   "^Date:"
+   "^To:"
+   "^Cc:"
+   "^Content-Disposition:"
+))
+#+END_SRC
+** auto clean cache
+#+BEGIN_SRC emacs-lisp :results none
+(setq
+; don't cache messages too long (I use maildir anyways)
+ elmo-cache-expire-by-age  14
+ elmo-cache-expire-by-size 1024
+)
+
+#+END_SRC
+** don't autosave every 1 second..
+How can I stop wl from autosaving my draft every second I make a change?
+Wanderlust automatically saves the draft every second there’s a change. If your draft folder is an IMAP, this gets tiresome fast.
+
+#+begin_src emacs-lisp
+;;Only save draft when I tell it to (C-x C-s or C-c C-s):
+(setq wl-auto-save-drafts-interval nil)
+#+end_src
+** Attachments
+*** open attachments
+#+BEGIN_SRC emacs-lisp :results none
+(setq mime-view-mailcap-files '("~/.mailcap"))
+
+(setq mime-play-find-every-situations nil
+  mime-play-delete-file-immediately nil
+  process-connection-type nil)
+#+END_SRC
+*** prevent WL from splitting large attachments into many messages
+ Add the following to your .wl file:
+ #+begin_src emacs-lisp
+ (setq mime-edit-split-message nil)
+ #+end_src
+
+*** attach multiple files
+ #+BEGIN_SRC emacs-lisp :results none
+ ;;Cobbled together from posts by Erik Hetzner & Harald Judt to
+ ;; wl-en@lists.airs.net by Jonathan Groll (msg 4128)
+
+ (defun mime-edit-insert-multiple-files ()
+   "Insert MIME parts from multiple files."
+   (interactive)
+   (let ((dir default-directory))
+     (let ((next-file (expand-file-name
+                       (read-file-name "Insert file as MIME message: "
+		       dir))))
+       (setq file-list (file-expand-wildcards next-file))
+       (while (car file-list)
+         (mime-edit-insert-file (car file-list))
+         (setq file-list (cdr file-list))))))
+
+ ;;(global-set-key "\C-c\C-x\C-a" 'mime-edit-insert-multiple-files)
+ #+END_SRC
+** for html
+#+BEGIN_SRC emacs-lisp :results none
+(require 'w3m)
+(require 'mime-w3m)
+(setq mime-view-text/html-previewer 'shr)
+#+END_SRC
+** Check for attachment
+#+BEGIN_SRC emacs-lisp :results none
+  ;; ;; note, this check could cause some false positives; anyway, better
+  ;; ;; safe than sorry...
+  ;; (defun djcb-wl-draft-attachment-check ()
+  ;;   "if attachment is mention but none included, warn the the user"
+  ;;   (save-excursion
+  ;;     (goto-char 0)
+  ;;     (unless ;; don't we have an attachment?
+
+  ;;       (re-search-forward "^Content-Disposition: attachment" nil t) 
+  ;;      (when ;; no attachment; did we mention an attachment?
+  ;;         (re-search-forward "attach" nil t)
+  ;;         (unless (y-or-n-p "Possibly missing an attachment. Send current draft?")
+  ;;           (error "Abort."))))))
+  ;; (add-hook 'wl-mail-send-pre-hook 'djcb-wl-draft-subject-check)
+  ;; (add-hook 'wl-mail-send-pre-hook 'djcb-wl-draft-attachment-check)
+#+END_SRC
+** Look and feel 
+*** left pane
+this will create a sticky left pane 
+#+BEGIN_SRC emacs-lisp :results none
+(setq 
+ 
+; wl-stay-folder-window t                       ;; show the folder pane (left)
+;; wl-folder-window-width 20                     ;; toggle on/off with 'i'
+)
+#+END_SRC
+*** TODO Faces
+Settings for "face" must be written in ~/.wl, because you can’t write them in .emacs (if you write it to .emacs, you’ll get an error). See Highlights.
+-seems to work as part of leauven theme?
+*** Forwarded mails should use Fwd:, not Forward:
+I wonder why this is not the default.
+
+#+begin_src emacs-lisp
+(setq
+  wl-forward-subject-prefix "Fwd: " )    ;; use "Fwd: " not "Forward: "
+#+end_src
+*** Summary view headers
+#+BEGIN_SRC emacs-lisp :results none
+(setq wl-summary-line-format "%T%P%t| %D.%M(%W) %h:%m  %15(%f%)      %s   ")
+#+END_SRC
+*** what name to give to the root tree in folder mode (folder view)
+#+BEGIN_SRC emacs-lisp :results none
+(setq wl-folder-desktop-name "Gmail")
+#+END_SRC
+** org integration
+   :PROPERTIES:
+   :ID:       a8c344b2-632e-4760-8bfc-ca411b22c5ad
+   :END:
+first you need to use the org-wl contib package (make sure org contrib is in your path)
+#+BEGIN_SRC emacs-lisp :results none
+(require 'org-wl)
+#+END_SRC
+
+then add to the capture templates>> [[id:2bf19d27-a0af-4e4c-91f1-9723a2dedf18][Capture templates]]  a relevant wl-email capture
+
 * mu4e
   :PROPERTIES:
-  :ARCHIVE_TIME: 2015-10-17 Sat 19:06
+  :ARCHIVE_TIME: 2015-10-24 Sat 12:26
   :ARCHIVE_FILE: ~/.emacs.d/settings.org
   :ARCHIVE_CATEGORY: settings
   :END:
@@ -1589,9 +1843,7 @@ for ubuntu
 
 #+BEGIN_SRC emacs-lisp :results none
 (require 'mu4e)
-(require 'mu4e-contrib) 
-;for below make sure the (mu4e-maildirs-extension) is installed from melpa/git
-
+;;(require 'mu4e-contrib) 
 ;;;;$Note-this may screw up header updates$ 
 ;(mu4e-maildirs-extension)
 ;; list of my email addresses.
@@ -1610,7 +1862,7 @@ for ubuntu
 #+END_SRC
 OLD:
 #+BEGIN_EXAMPLE
-(setq mu4e-get-mail-command "offlineimap")
+;;(setq mu4e-get-mail-command "offlineimap")
 #+END_EXAMPLE
 *** personal info
 #+BEGIN_SRC emacs-lisp :results none
@@ -1628,16 +1880,57 @@ OLD:
 
 *** mail folders 
 #+BEGIN_SRC emacs-lisp :results none
-;; default
-;;(setq mu4e-maildir "~/.mail/gmail/")
-(setq mu4e-maildir "/home/zeltak/Maildir")
+  (require 'mu4e)
 
-(setq mu4e-drafts-folder "/[Gmail].Drafts")
-(setq mu4e-sent-folder   "/[Gmail].Sent Mail")
-(setq mu4e-trash-folder  "/[Gmail].Trash")
-(setq mu4e-attachment-dir  "~/Downloads")
+  ;; default
+  ;; (setq mu4e-maildir "~/Maildir")
 
+  (setq mu4e-drafts-folder "/[Gmail].Drafts")
+  (setq mu4e-sent-folder   "/[Gmail].Sent Mail")
+  (setq mu4e-trash-folder  "/[Gmail].Trash")
+
+  ;; don't save message to Sent Messages, Gmail/IMAP takes care of this
+  (setq mu4e-sent-messages-behavior 'delete)
+
+  ;; (See the documentation for `mu4e-sent-messages-behavior' if you have
+  ;; additional non-Gmail addresses and want assign them different
+  ;; behavior.)
+
+  ;; setup some handy shortcuts
+  ;; you can quickly switch to your Inbox -- press ``ji''
+  ;; then, when you want archive some messages, move them to
+  ;; the 'All Mail' folder by pressing ``ma''.
+
+  (setq mu4e-maildir-shortcuts
+      '( ("/INBOX"               . ?i)
+         ("/[Gmail].Sent Mail"   . ?s)
+         ("/[Gmail].Trash"       . ?t)
+         ("/[Gmail].All Mail"    . ?a)))
+
+  ;; allow for updating mail using 'U' in the main view:
+  ;(setq mu4e-get-mail-command "offlineimap")
+
+  ;; sending mail -- replace USERNAME with your gmail username
+  ;; also, make sure the gnutls command line utils are installed
+  ;; package 'gnutls-bin' in Debian/Ubuntu
+
+  ;; don't keep message buffers around
+  (setq message-kill-buffer-on-exit t)
 #+END_SRC
+*** Sending mail
+#+BEGIN_SRC emacs-lisp :results none
+
+(require 'smtpmail)
+(setq message-send-mail-function 'smtpmail-send-it
+   starttls-use-gnutls t
+   smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
+   smtpmail-auth-credentials
+     '(("smtp.gmail.com" 587 "ikloog@gmail.com" nil))
+   smtpmail-default-smtp-server "smtp.gmail.com"
+   smtpmail-smtp-server "smtp.gmail.com"
+   smtpmail-smtp-service 587)
+#+END_SRC
+
 *** keybinds
 #+BEGIN_SRC emacs-lisp :results none
 ;; setup some handy shortcuts
@@ -1646,7 +1939,7 @@ OLD:
 ;; the 'All Mail' folder by pressing ``ma''.
 
 (setq mu4e-maildir-shortcuts
-    '( ("/INBOX"               . ?i)
+    '( ("INBOX"               . ?i)
        ("Starred"   . ?r)
        ("/[Gmail].Sent Mail"   . ?s)
        ("/[Gmail].Trash"       . ?t)
@@ -1662,15 +1955,6 @@ mu4e-compose-dont-reply-to-self t                  ; don't reply to myself
 #+END_SRC
 *** sending
 #+BEGIN_SRC emacs-lisp :results none
-(require 'smtpmail)
-(setq message-send-mail-function 'smtpmail-send-it
-   starttls-use-gnutls t
-   smtpmail-starttls-credentials '(("smtp.gmail.com" 587 nil nil))
-   smtpmail-auth-credentials
-     '(("smtp.gmail.com" 587 "ikloog@gmail.com" nil))
-   smtpmail-default-smtp-server "smtp.gmail.com"
-   smtpmail-smtp-server "smtp.gmail.com"
-   smtpmail-smtp-service 587)
 
 ;; don't save messages to Sent Messages, Gmail/IMAP takes care of this
 (setq mu4e-sent-messages-behavior 'delete)
@@ -1686,14 +1970,15 @@ mu4e-compose-dont-reply-to-self t                  ; don't reply to myself
 #+BEGIN_SRC emacs-lisp :results none
 (setq mu4e-date-format-long "%d/%m/%Y (%H:%M:%S)")
 (setq mu4e-headers-date-format "%d/%m/%Y (%H:%M:%S)")
+
 ;can define a horizontal or vertical split 
 (setq mu4e-split-view 'horizontal)
-
 
 ;; use 'fancy' non-ascii characters in various places in mu4e
 (setq mu4e-use-fancy-chars t)
 ;; attempt to show images when viewing messages
 (setq mu4e-view-show-images t)
+
 (when (fboundp 'imagemagick-register-types)
       (imagemagick-register-types))
 ;preffer html  
@@ -1817,6 +2102,5 @@ mu4e-compose-dont-reply-to-self t                  ; don't reply to myself
  '(message-cited-text ((t :inherit mu4e-rw-default :foreground "Gray10"))) 
 
 #+END_SRC
-
 
 

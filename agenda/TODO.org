@@ -188,11 +188,13 @@ defined files?
 I don't understand the question. You use file+headline in this example which does that.
 
 
-**  new stuff i3 4.11
+** new stuff i3 4.11
 ** clean org file
 find a way to get rid of ' and ? 
+** qgis grayscale
+http://nextgis.ru/en/blog/quickmapservices-in-gray/
 ** @org revison@
-*** TODO todo
+*** TODO org todo
 **** TODO gen 
 bind keys for specific todo/spare functions (₆In example₆ allan) 
 general- small letter todo list , CAPITAL sparse tree
@@ -433,53 +435,12 @@ also crazy idea: foucs Emacs client and switch to a specific buffers
 ** Volume/brightness levels for sys AND mpd on i3 blocks 
 ** gnus
 *** inline images
-** mu4e
-Here's the email-related capture snippet from my config. 
-
-
-(setq org-default-notes-file (concat org-directory "refile.org")) 
-
-(setq org-capture-templates 
-      (quote (("e" "Email Todo" entry (file org-default-notes-file) 
-               "* TODO Read Message%? (%:fromname about %:subject)\n%U\n%a\n")))) 
-
-
-The key part of the template is %a, which is the link that would be 
-created with org-store-link.  If you only want the link, then you can 
-get rid of the rest of the %-escapes. 
-
-The org-mode docs have a nice list of all the things you can include 
-
-  http://orgmode.org/manual/Template-expansion.html#Template-expansion 
-
-
-When applied to your message, the template produced the following item 
-in my refile.org file. 
-
-Read Message (Ken Mankoff about capturing current message in view mode w/ Org) 
-[2015-08-25 Tue 20:07] 
-[[mu4e:msgid:m...@gmail.com][capturing current message in view mode w/ Org]] 
-
-
-Note, this is the result when I'm viewing the message.  If I'm viewing 
-headers, the result of org-store-link is a link to the search that gave 
-me that particular headers view.  (I'm not sure how to change this; I 
-simply always view the message.) 
-
-> Note, this is the result when I'm viewing the message.  If I'm viewing 
-> headers, the result of org-store-link is a link to the search that gave 
-> me that particular headers view.  (I'm not sure how to change this; I 
-> simply always view the message.) 
-
-See: org-mu4e-link-query-in-headers-mode 
 ** capture via gmail
 You could also use a %x in a capture template to assist in capturing a   
 selection made on your gmail message.  Eg, select Subject: line, then    
 capture that to a TODO.                                                  
 The other thing that might help would be custom links. Is there a way to form a URL to a gmail message on the web?  If so, you  
 could make a "gmail:XXXXX" link that org would expand to a full URL
-** revel.js
-https://github.com/yjwen/org-reveal#the-hlevel
 ** sunrise
 *** questions 
 1) REQUEST: if there is only 1 match left in fuzzy match- can SR auto select it (that is enter dir)

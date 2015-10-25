@@ -3002,3 +3002,51 @@ for now it’s doing the trick!
      signature-delete-blank-lines-at-eof t
 
 
+
+* mu4e orgmode integration
+  :PROPERTIES:
+  :ID:       8a612642-3508-42cd-92d5-8faf4710aa65
+  :ARCHIVE_TIME: 2015-10-24 Sat 18:10
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+Here's the email-related capture snippet from my config. 
+
+(setq org-capture-templates 
+      (quote (("e" "Email Todo" entry (file org-default-notes-file) 
+               "* TODO Read Message%? (%:fromname about %:subject)\n%U\n%a\n")))) 
+
+
+The key part of the template is %a, which is the link that would be 
+created with org-store-link.  If you only want the link, then you can 
+get rid of the rest of the %-escapes. 
+
+The org-mode docs have a nice list of all the things you can include 
+
+  http://orgmode.org/manual/Template-expansion.html#Template-expansion 
+
+
+When applied to your message, the template produced the following item 
+in my refile.org file. 
+
+Read Message (Ken Mankoff about capturing current message in view mode w/ Org) 
+[2015-08-25 Tue 20:07] 
+[[mu4e:msgid:m...@gmail.com][capturing current message in view mode w/ Org]] 
+
+
+Note, this is the result when I'm viewing the message.  If I'm viewing 
+headers, the result of org-store-link is a link to the search that gave 
+me that particular headers view.  (I'm not sure how to change this; I 
+simply always view the message.) 
+
+See: org-mu4e-link-query-in-headers-mode 
+
+* revel.js
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-10-24 Sat 18:10
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+https://github.com/yjwen/org-reveal#the-hlevel

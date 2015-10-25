@@ -3207,6 +3207,19 @@ as.data.frame()*
 
 use the as.numeric command:
  zinc$rec <- as.numeric(zinc$Study)
+*** convert Degrees, Minutes, Seconds to Decimal Degrees
+
+this is the base formula
+
+Decimal degrees = Degrees + (Minutes/60) + (Seconds/3600)
+#+BEGIN_SRC R
+x<-fread("/media/NAS/Uni/Projects/P053_mex_temperature/RAW/ta.stn_XY/ta_stn_xy.csv")
+x$dd<- as.numeric(substr(x$Lat, 1, 2))
+x$mm<- as.numeric(substr(x$Lat, 4, 5))
+x$ss<- as.numeric(substr(x$Lat, 7, 8))
+x$latitude = x$dd + (x$mm/60) + (x$ss/3600)
+head(x)
+#+END_SRC
 
 ** Sorting with internal order command
 *** sorting with sort command
