@@ -32077,6 +32077,48 @@ C-c C-a      attach a file (pro-tip: drag & drop works as well)
 R Reply
 (mu4e-specific)
 C-S-u        update mail & reindex
+******** installing
+*********  install from git
+Alternatively, if you build from the git repository or use a tarball like the ones that github produces, the instructions are slightly different, and require you to have autotools (Autoconf, Automake, Libtool, and friends) installed:
+#+BEGIN_SRC sh
+
+# get from git (alternatively, use a github tarball)
+$ git clone git://github.com/djcb/mu.git
+
+$ cd mu
+$ autoreconf -i && ./configure && make
+# On the BSDs: use gmake instead of make
+$ sudo make install
+
+#(Xapian, GMime and their dependencies must be installed)- see ubuntu example below
+
+#+END_SRC
+After this, mu and mu4e should be installed 18 on your system, and be available from the command line in emacs.
+
+You may need to restart emacs, so it can find mu4e in its load-path. If, even after restarting, emacs cannot find mu4e, you may need to add it to your load-path explicitly; check where mu4e is installed, and add something like the following to your configuration before trying again:
+
+#+BEGIN_EXAMPLE
+;; the exact path may differ -- check it
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/mu4e")
+#+END_EXAMPLE
+
+********* debian dependencies
+Dependencies for Debian/Ubuntu
+
+#+BEGIN_SRC sh
+
+$ sudo apt-get install libgmime-2.6-dev libxapian-dev
+# if libgmime-2.6-dev is not available, try libgmime-2.4-dev
+
+# get emacs 23 or 24 if you don't have it yet
+$ sudo apt-get install emacs24
+
+# optional
+$ sudo apt-get install guile-2.0-dev html2text xdg-utils
+
+# optional: only needed for msg2pdf and mug (toy gtk+ frontend)
+$ sudo apt-get install libwebkit-dev
+#+END_SRC
 ******* wanderlust
 ******** setup
 ********* init.el
