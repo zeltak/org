@@ -1,4 +1,4 @@
--*- mode: Org; org-download-image-dir: "~/ZH_tmp/"; org-download-heading-lvl: nil; -*-
+# -*- mode: Org; org-download-image-dir: "~/ZH_tmp/"; org-download-heading-lvl: nil; -*-
 #+Title:שיטות כמותיות למתקדמים
 #+Author: ד"ר איתי קלוג 
 #+Email: ikloog@bgu.ac.il
@@ -24,9 +24,6 @@
 #+REVEAL_SLIDE_NUMBER: t
 #+OPTIONS: ^:nil
 
-
-
-
 * Week 1-Admin and Intro to R
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 09:45:28
@@ -39,7 +36,7 @@
 
 
 
-** *מנהלות*
+** Admin
 
 *פרטים ורקע שלי*
 
@@ -100,12 +97,23 @@ http://moodle2.bgu.ac.il/
 
 מעבדה עצמאית של סטודנטים\\
 
-הדגמה של המרצה ועבודה משותפת עם המרצה בתרגול\\
+*הדגמה של המרצה ועבודה משותפת עם המרצה בתרגול*
 
 ** Programming and Open Source
   :PROPERTIES:
 	  :reveal_background: /home/zeltak/org/attach/bgu/courses/BGU.R/images/hist_BD.jpg
 	  :END:
+*** Here be dragons... 
+Warning..English starts here :D
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-25 11:32:54
+#+attr_html: :width 300px
+[[~/ZH_tmp/screenshot_2015-10-25_11-32-54.png]]
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-25 10:39:02
+#+attr_html: :width 600px
+[[~/ZH_tmp/screenshot_2015-10-25_10-39-02.png]]
+
 *** Programming basics
  *code or source code*: The sequence of instructions in a program.
 
@@ -250,15 +258,14 @@ Very rewarding to become fluent: you can do more
 Be patient and creative
 
 Lots of help files, online sources, books, and graduate students in your lab
-*** היסטוריה
+*** history
 R is an implementation of the S programming language combined with lexical scoping semantics inspired by Scheme
 
-Created by Ross Ihaka and Robert Gentleman at the University of Auckland, New Zealand
+Created by *Ross Ihaka* and *Robert Gentleman* at the University of Auckland, New Zealand
 
 currently developed by the R Development Core Team
 
-*** אבני דרך חשובות
-
+*** Releases in R
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-10-21 18:38:00
 #+attr_html: :width 1200px
@@ -354,9 +361,8 @@ New Style: use RStudio. Why?
 
 - Many other reasons
 *** Rstudio look
-
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-10-21 17:59:31
-#+attr_html: :width 900px
+#+attr_html: :width 850px
  [[~/Sync/attach/images_2015/screenshot_2015-10-21_17-59-31.png]]
 *** Installing RStudio
 Go to http://www.rstudio.com/ and click on Desktop
@@ -425,38 +431,6 @@ You don't have to change any of the defaults for the installation
   *Emacs* + ESS \\
 
   Eclipse + StatET\\
-*** packages
-A way to extend R basic functionality
-
-can add graphic, statistics, GIS, etc 
-
-
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-22 15:50:12
-#+attr_html: :width 300px
- [[~/Sync/attach/images_2015/screenshot_2015-10-22_15-50-12.png]]
-*** installing via GUI- Via Rstudio
-
- #+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:52:09
- #+attr_html: :width 500px
-  [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-52-09.png]]
-*** Installing via CODE
-To use packages in R, we must first install them using the install.packages function, which typically downloads the package from CRAN and installs it for use
-
- #+BEGIN_SRC R
- install.packages("foreign")
- install.packages("xlsx")
- install.packages("dplyr")
- install.packages("reshape2")
- install.packages("ggplot2")
- install.packages("GGally")
- install.packages("vcd")
- #+END_SRC
-*** Loading Packages
-If we know we will need a particular package for our current R session, we must load it into the R environment using the library or require functions
- #+BEGIN_SRC R
- library(foreign)
- library(xlsx)
- #+END_SRC
 *** sessionInfo()
  Basic info on R session
  To get a description of the version of R and its attached packages used in the current session, we can use the sessionInfo function
@@ -503,6 +477,38 @@ you can also use ?? for keyword searhc
 ??logistic
 #+END_SRC 
 
+*** packages
+A way to extend R basic functionality
+
+can add graphic, statistics, GIS, etc 
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-22 15:50:12
+#+attr_html: :width 300px
+ [[~/Sync/attach/images_2015/screenshot_2015-10-22_15-50-12.png]]
+*** installing via GUI- Via Rstudio
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 10:52:09
+ #+attr_html: :width 500px
+  [[~/Sync/attach/images_2015/screenshot_2015-10-19_10-52-09.png]]
+*** Installing via CODE
+To use packages in R, we must first install them using the install.packages function, which typically downloads the package from CRAN and installs it for use
+
+ #+BEGIN_SRC R
+ install.packages("foreign")
+ install.packages("xlsx")
+ install.packages("dplyr")
+ install.packages("reshape2")
+ install.packages("ggplot2")
+ install.packages("GGally")
+ install.packages("vcd")
+ #+END_SRC
+*** Loading Packages
+If we know we will need a particular package for our current R session, we must load it into the R environment using the library or require functions
+ #+BEGIN_SRC R
+ library(foreign)
+ library(xlsx)
+ #+END_SRC
 *** commenting
 The # character at the beginning of a line signifies a comment, which is not executed\\
 Start comments with #, rest of line is ignored\\
@@ -581,12 +587,12 @@ Exponentiation: ^\\
  *Note* how we are assigning the loaded data to objects.
 
  #+BEGIN_SRC R :session Rorg  :results none
- # comma separated values- FILE
- dat.csv <- read.csv("/home/zeltak/org/attach/bgu/courses/BGU.R/data/hsb2.csv")
- # comma separated values- INTERNET
- dat.int.csv <- read.csv("http://www.ats.ucla.edu/stat/data/hsb2.csv")
- # tab separated values
- dat.int.tab <- read.table("http://www.ats.ucla.edu/stat/data/hsb2.txt",header=TRUE, sep = "\t")
+   # comma separated values- FILE
+   dat.csv <- read.csv("/home/zeltak/org/attach/bgu/courses/BGU.R/data/hsb2.csv")
+   # comma separated values- INTERNET
+   dat.int.csv <- read.csv("http://www.ats.ucla.edu/stat/data/hsb2.csv")
+   # tab separated values
+   dat.int.tab <- read.table("http://www.ats.ucla.edu/stat/data/hsb2.txt",header=TRUE, sep = "\t")
  #+END_SRC
 *** read from other software (spps,stata)
  We can read in datasets from other statistical analysis software using functions found in the foreign package
@@ -668,15 +674,15 @@ data frames are often referenced as DF
 
 *** Data frames
 #+BEGIN_SRC R :session Rorg  :results none
-tag <- c(2, 3, 5, 7, 8, 9, 15, 21, 23, 26) 
-weight <- c(14.8, 21, 19.7, 23.2, 16, 16.1, 20, 29.3, 17.8, 21.2) 
-condition <- c("good", "fair", "fair", "poor", "fair", "good", "good", "fair", "fair", "poor") 
-#create a DF from 3 vectors
-fishData <- data.frame(tag, weight, condition) 
-head(fishData, n=2) 
-#  tag weight condition 
-#1   2   14.8      good 
-#2   3   21.0      fair
+  tag <- c(2, 3, 5, 7, 8, 9, 15, 21, 23, 26) 
+  weight <- c(14.8, 21, 19.7, 23.2, 16, 16.1, 20, 29.3, 17.8, 21.2) 
+  condition <- c("good", "fair", "fair", "poor", "fair", "good", "good", "fair", "fair", "poor") 
+  #create a DF from 3 vectors
+  fishData <- data.frame(tag, weight, condition) 
+  head(fishData, n=2) 
+  #  tag weight condition 
+  #1   2   14.8      good 
+  #2   3   21.0      fair
 #+END_SRC
 *** Access Individual rows, columns and cells
 Individual rows, columns and cells in a data frame can be accessed through many methods of indexing
@@ -881,7 +887,7 @@ hist(d$write)
 #+END_SRC
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 15:26:49
-#+attr_html: :width 600px
+#+attr_html: :width 500px
  [[~/Sync/attach/images_2015/screenshot_2015-10-19_15-26-49.png]]
 * Homework-Week 1
 ** Asthmatic's with R
