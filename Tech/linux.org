@@ -4716,7 +4716,19 @@ settings manager -> keyboard -> application shortcuts
 Click Add
 Click Open and direct it to your script
 Assign a keyboard shortcut to it and wallah!
+*** change clock fonts and color in xfce panel
+Just the clock? Right-click the applet>Properties>Clock Options, set it to Custom. Now put a span tag around whatever is in there like this...
 
+#+BEGIN_EXAMPLE
+<span color="#000000">%R</span>
+#+END_EXAMPLE
+That example is black, insert whatever color hexadecimal code you want. 
+An easy and light GUI color hex color chooser in Debian is gcolor2. Here's an online one...
+http://www.2createawebsite.com/build/hex-colors.html
+You can also specify font properties, and give the clock some margins on the panel...
+#+BEGIN_EXAMPLE
+<span color="#FF004F" font="Liberation Sans Bold 12">  %R  </span>
+#+END_EXAMPLE
 *** move xfce panel
 do the following:
 Right Click on the Panel
@@ -33914,6 +33926,15 @@ you can also have
 '^:{}'
 #+END_EXAMPLE
 this will still allow you to have subscript if you use curly braces, i.e. my_var won't give you subscript but F_{t} will. See also the org-mode manual: orgmode.org/manual/Export-options.html#Export-options 
+******** export only specific header
+add this to the top of the file
+
+#+BEGIN_EXAMPLE
+#+EXCLUDE_TAGS: noexport
+#+END_EXAMPLE
+
+then for a section you want to export add the tag: 
+noexport
 
 ******** export to latex error
 look for a buffer named
