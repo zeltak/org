@@ -1,4 +1,4 @@
--*- mode: Org; org-download-image-dir: "/home/zeltak/org/attach/bgu/courses/BGU.R/images"; org-download-heading-lvl: nil; -*-
+# -*- mode: Org; org-download-image-dir: "/home/zeltak/org/attach/bgu/courses/BGU.R/images"; org-download-heading-lvl: nil; -*-
 #+Title:שיטות כמותיות למתקדמים
 #+Author: ד"ר איתי קלוג 
 #+Email: ikloog@bgu.ac.il
@@ -497,7 +497,24 @@ NaN is usually the product of some arithmetic operation, such as 0/0 that isn't 
 NaN- Stands for Not a Number
 NaN ≠ NA and there is a need for NaN and NA
 *** cbind
+cbind() function combines vector, matrix or data frame by* columns*.
+
+#+BEGIN_SRC R :session Rorg  :results none
+x <- data.frame(cbind(column1,column2))
+#+END_SRC
+
 *** rbind
+
+rbind() function combines vector, matrix or data frame by *rows*.
+
+#+BEGIN_SRC R :session Rorg  :results none
+rbind(x1,x2,...)
+x1,x2:vector, matrix, data frames
+x3 <- rbind(DF1,DF2)
+#+END_SRC
+
+
+
 *** Boolean logic (T or F)
 I carry an umbrella if it both rains and snows on the same day
 
@@ -518,7 +535,7 @@ I never carry an umbrella for rain, only for snow
 *** Boolean operators
 
 &  and (element wise)
-|  or (element wise)
+| or (element wise) |
 !  not
 <  less than
 >  greater than
@@ -612,6 +629,33 @@ as.numeric(rain=="Yes")
 #[1] FALSE
 #+END_SRC
 * Homework-Week 2
+
+** Little arithmetics with R
+run some of the following lines and Type 2^5 in the editor to calculate 2 to the power 5 (#Exponentiation).
+#+BEGIN_SRC R :session Rorg  :results none
+# An addition
+5 + 5 
+
+# A subtraction
+5 - 5 
+
+# A multiplication
+3 * 5
+
+ # A division
+(5 + 5)/2 
+
+# Exponentiation
+#+END_SRC
+
+** power and root
+Use R to calculate the following and write down the answers
+#+BEGIN_EXAMPLE
+1+2*(3+4)
+log(4^3+3^(2+1))
+sqrt((4+3)*(2+1))
+((1+2)/(3+4))^2
+#+END_EXAMPLE
 ** create a vector
 Assign the value "Here we go!" to the variable Vegas
 
@@ -696,6 +740,15 @@ poker_vector <- c(140, -50, 20, -120, 240)
 roulette_vector <-  c(-24,-50,100,-350,10)
 #+END_SRC
 
+** creating vectors
+Create vectors using seq() and rep(). Only use c() if absolutely necessary
+#+BEGIN_EXAMPLE
+Positive integers from 1 to 99
+Odd integers between 1 and 99
+The numbers 1,1,1, 2,2,2, 3,3,3
+The numbers 1,2,3,4,5,4,3,2,1,0
+#+END_EXAMPLE
+
 ** naming a vector 
 
 In the previous exercise, we created a vector with your winnings over the week. 
@@ -742,6 +795,11 @@ roulette_vector <- c(-24, -50, 100, -350, 10)
 names(poker_vector) <- c("Monday", "Tuesday", "Wednesday", "Thursday" , "Friday")
 names(roulette_vector) <- c("Monday", "Tuesday", "Wednesday", "Thursday" , "Friday")
 #+END_SRC
+
+
+
+
+
 
 ** Naming a vector (2)
 
@@ -992,7 +1050,7 @@ You did have a couple of Margarita cocktails at the end of the week…
 To answer that question, you only want to focus on a selection of the total_vector. In other words, our goal is to select specific elements of the vector. 
 To select elements of a vector (and later matrices, data frames, …), you can use square brackets. Between the square brackets, you indicate what elements to select. 
 
-For example, to select the first element of the vector, you type poker_vector[1]. To select the second element of the vector, you type poker_vector[2], etc.
+For example, to select the first element of the vector, you type poker_vector. To select the second element of the vector, you type poker_vector[2], etc.
 
 Instructions: Assign the poker results of Wednesday to the variable poker_wednesday.
 #+BEGIN_SRC R :session Rorg  :results none
@@ -1026,6 +1084,8 @@ names(poker_vector) <- days_vector
 # Define a new variable based on a selection
 poker_wednesday <- poker_vector[3]
 #+END_SRC
+
+
 ** Vector selection (2)
 Selecting multiple elements of poker_vector with c(2,3,4) is not very convenient.
 Many statisticians are lazy people by nature, so they created an easier way to do this:
