@@ -23031,12 +23031,6 @@ to add files for packing in peazip:
 
 [[/home/zeltak/org/attach/images/Image_l4zNJmeJswzlW4AAJ0ou2Q_0001.png]]
 
-***** launch as root from toolbar
-
-[[/home/zeltak/org/attach/images/Image_.png]]
- same as the normal launcher but use gksudo (in kde kdesuo) as command
-and the program in the parameters
-
 ***** Parameters
 look here for latest commands
 file:///usr/share/doublecmd/doc/en/index.html
@@ -23103,43 +23097,33 @@ Examples:
 
 
 
-***** how to create splitter at the buttons panel
-
-How to create splitter at the buttons panel?
- To get the splitter, you need to specify "-" at the tooltip part
- [[/home/zeltak/org/attach/images/Image_i3xKEQrKxbYXKr7LPucUzw_0001.png]]
-
-***** create a drop-down menu
-
-Set Command to:
- cm ShowButtonMenu
- and specify another .bar file with a suitable menu as Parameters
- See the 'default.bar' file located in: ~/.config/doublecmd/ (Linux) for
-details of the menu structure.
- 
- [[/home/zeltak/org/attach/images/Pasted.jpg]]
-
 ***** create and switch toolbars
-
-add a button with the:
+      add a button with the:
  cm OpenBar
  like this:
  [[/home/zeltak/org/attach/images/Image_GI9w5hbmBxFgcKrFFTtvUA_0001.jpg]]
  and state the bar you want to open
+***** run a terminal app 
+#+BEGIN_EXAMPLE
+command: /usr/bin/xterm
+parameters: -e fb %f
+#+END_EXAMPLE
 
-***** launch dc as root from toolbar
+***** create a DC root launcher from toolbar
+use the following:
 
-[[/home/zeltak/org/attach/images/Image_8KazTVdo4wegubS4s2si0g_0001.png]]
- Just type what should execute instead of command. For example toolbar
-button:
- Command: gksu (in kde kdesuo)
- Parameters: doublecmd
-
- Optional:
- You can try and set a path different from the default DC (remeber to
-have the option read config file as portable) in example:
- Start path: /opt/doublecmd
- Start DC with this button, enter password and you have DC as root.
+#+BEGIN_EXAMPLE
+DOUBLECMD#TOOLBAR#XMLDATA<?xml version="1.0" encoding="utf-8"?>
+<doublecmd>
+  <Program>
+    <ID>{5CEB4725-D8E3-4D60-BD88-7E2621F5A24D}</ID>
+    <Icon>doublecmd</Icon>
+    <Hint>SUDO doublecmd</Hint>
+    <Command>/usr/bin/gksudo</Command>
+    <Params>doublecmd %Dl %Dr</Params>
+  </Program>
+</doublecmd>
+#+END_EXAMPLE
 
 **** colors
 ***** file type colors
