@@ -34669,7 +34669,7 @@ use this format with the elisp function
  (setq org-attach-directory "/home/zeltak/org/attach/")
  #+END_EXAMPLE
 
-******* view
+******* look and feel
 ******** TODO make subfolders folded(hidden) by default
 use this
 
@@ -34692,7 +34692,18 @@ Fixing that is a simple matter, but it takes a bit of digging around. We just ne
         "."
         1))
 #+end_src
+******** Changing the org-mode ellipsis
+http://endlessparentheses.com/changing-the-org-mode-ellipsis.html?source=rss
+The dot-dot-dot ellipsis that org-mode uses to indicate hidden content is usually just fine. It’s only when you’re staring at a document where every line is a folded headline, that you start to feel like they’re a little too much “in your face”. I have a few org files with thousands of lines and hundreds of headlines, and changing that ... to something shorter greatly reduces visual clutter.
+The more straightforward option is to use a proper ellipsis character (the same effect with a third the length).
 
+#+BEGIN_SRC emacs-lisp
+(setq org-ellipsis "…")
+;The one I’m currently using is a cornered arrow.
+(setq org-ellipsis "⤵")
+#+END_SRC
+
+Other interesting characters are ▼, ↴, ⬎, ⤷, and ⋱.
 ******* org-google sync 
 ******** org-gcal
 	 :PROPERTIES:
