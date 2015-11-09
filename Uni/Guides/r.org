@@ -497,7 +497,6 @@ options(scipen = 99)
 
 In your .Rprofile or at the top of every script you will never get scientific notation.
 
-** Help/fixes
 ** can get rid of a workspace after restart
 
 if you can get rid of a workspace after restart
@@ -1032,20 +1031,12 @@ nrow=20000000,skip=20000000)                   
 
 *** import from dbf
 
-To read a dbf file, with variable names at the top we use the command
-read.dbf. You need to load the library "foreign" to use it.
+To read a dbf files you need to load the library "foreign" to use it.
 
------------------------------------------------------------------------------------------------------------------------
- library(foreign)
- data1 <- read.dbf("/PATH/TO/FILE/FILE.dbf")
-
------------------------------------------------------------------------------------------------------------------------
- library(foreign) - name of library
- data1-new R object created
- read.dbf-R command
- data1 <-
-read.dbf("/home/zeltak/2)PostDoc/Database/AOD\_NE/spss/lib/from
-SAS/samp\_f\_a2003.dbf")
+#+BEGIN_SRC R :session Rorg  :results none
+library(foreign)
+data1 <- read.dbf("/PATH/TO/FILE/FILE.dbf")
+#+END_SRC
 
 *** Import from Excel
 The best way to read an Excel file is to export it to a comma delimited file but if you really need to use this:
@@ -1261,7 +1252,6 @@ d2<-data$TableAq
 #+END_SRC
 
 ** Export
-
 *** Export csv
 
 to export to CSV:
@@ -1272,17 +1262,12 @@ SAS/aodmcF\_T2001\_aodmc.csv")
 
 *** export dbf
 
-To write (export) a dbf file you need to load the library "foreign" to
-use it.
+To write (export) a dbf file you need to load the library "foreign" to use it.
 
-------------------------------------------------------------------------------------------------------------------
- library(foreign)
- write.dbf(OBJECT,"/PATH/TO/FILE/FILE.dbf")
-
-------------------------------------------------------------------------------------------------------------------
- library(foreign)
- write.dbf (F\_T2000\_All,
-"/home/zeltak/2)PostDoc/Database/AOD\_NE/R/lib/import\_sas/AOD\_cleaned/final.t2000all.dbf")
+#+BEGIN_SRC R :session Rorg  :results none
+library(foreign)
+write.dbf(OBJECT,"/PATH/TO/FILE/FILE.dbf")
+#+END_SRC
 
 *** export Excel
 
@@ -1433,7 +1418,7 @@ needed)*
 simply issue:
  dev.off()
 
-** mISC
+** misc
 *** create a list from files in directory
 
 us the file.list command:
@@ -2171,7 +2156,6 @@ pm25.m1[,pden.s:= scale(pden)]
 
 
 *** Character functions
-
 [[R_files/img/Image_CaSfF5a6dSMOp0dbbA0Q3Q_0003.png]]
  Note that the functions grep(), sub(), and strsplit() can search for a
 text string
@@ -2184,7 +2168,6 @@ followed by at. The expression therefore matches hat, cat, and at, but
 not bat.
 
 *** Seed
-
 **** setting the seed for random number generation
 
 setting the seed for random number generation
@@ -2203,19 +2186,19 @@ used to generate pseudo-random numbers from a uni-
 
 *** row means/sums
 
-[[R_files/img/Image_aTBqfsWEwWi7HEQxNUownA_0003.png]]
- colSums (x, na.rm = FALSE, dims = 1)
- rowSums (x, na.rm = FALSE, dims = 1)
- colMeans(x, na.rm = FALSE, dims = 1)
- rowMeans(x, na.rm = FALSE, dims = 1)
- rowMeans(x, na.rm = TRUE)
- example:
- cvtable$mean<- rowMeans(cvtable[,2:10])
- *where:*
- we only want the mean of variables (columns) 2-10
- *In example:*
- F\_T2002\_All$meankin<-rowMeans(F\_T2002\_All[,18:19])
-*** create a log variable 
+colSums (x, na.rm = FALSE, dims = 1)
+rowSums (x, na.rm = FALSE, dims = 1)
+colMeans(x, na.rm = FALSE, dims = 1)
+rowMeans(x, na.rm = FALSE, dims = 1)
+rowMeans(x, na.rm = TRUE)
+
+example:
+
+#+BEGIN_SRC R :session Rorg  :results none
+cvtable$mean<- rowMeans(cvtable[,2:10])
+#+END_SRC
+
+*** create a log variable when you have zeros
 
 #+begin_src R
 m1_2003$logroad<-log(m1_2003$Mjrrdden_1 +.1)
@@ -2596,15 +2579,18 @@ where 1:4 is the numbers (levels) to be used, 5623 is the dimension of the datas
 
 ** Deleting Data
 *** Delete rows
-
 use this:
- x <- x[-n,]
- where n is the row (case) number
- IE:
- zinc <- read.csv("c:/2.Gather\_data/export to R/orig\_data\_raw.csv",
-header=T)
- zinc <- zinc[-*771*,]
- *771-*is the row number in the table (dataset)
+
+#+BEGIN_SRC R :session Rorg  :results none
+x <- x[-n,]
+#+END_SRC
+
+where n is the row (case) number
+
+#+BEGIN_SRC R :session Rorg  :results none
+zinc <- zinc[-771,]
+#+END_SRC
+
 
 *** delete duplicate cases
 to delete duplicate cases
@@ -2621,37 +2607,24 @@ tss<-ndviX[!duplicated(ndviX[,c("ndviid","m")]),]
 
 1.Excluding single Variable
 
+#+BEGIN_SRC R :session Rorg  :results none
 #+BEGIN_SRC sh
 dataframe$VAR <- NULL 
 #+END_SRC
 
-completely removes the variable.
-
-
-2.exclude multiple variables
- #*exclude* variables (this excludes *VAR1* and *VAR2* from newdata)
- DELLIST <- names(DATASETNAME) %in% c("*VAR1*", *"VAR2*")
- newdata <- DATASETNAME[*!*DELLIST]
- altentate way to exclude multiple variables
- # exclude all variable but the 66 to 76 variables
- newdata <- OLDDATA[c(66:76)]
- 3.Include multiple variables
- #*include* variables (this only includes *VAR1* and *VAR2* in newdata)
- DELLIST <- names(DATASETNAME) %in% c("*VAR1*", *"VAR2*")
- newdata <- DATASETNAME[DELLIST]
- *examples:
-*
- DELLIST <- names(grid\_2003) %in% c("OBJECTID.x", "Id.x", "X.x", "Y.x")
- grid\_2003 <- grid\_2003[!DELLIST]
-
 *** workspace/object deletions
 
-Delete temporary objects and objects that are no longer needed. The
-calll:
- *rm(list=ls())*
- will remove all objects from memory, providing a clean slate.
- Specific objects can be removed with
- *rm(object)*
+Delete temporary objects and objects that are no longer needed:
+
+#+BEGIN_SRC R :session Rorg  :results none
+rm(list=ls())
+#+END_SRC
+will remove all objects from memory, providing a clean slate.
+
+Specific objects can be removed with
+#+BEGIN_SRC R :session Rorg  :results none
+rm(object)
+#+END_SRC
 
 ** Missing Data
 *** delete missing cases from dataset based on a specific variables:
@@ -2668,27 +2641,20 @@ T2000_merged <- T2000_merged[complete.cases(T2000_merged$pred),]
 
 *** delete all missing data from all dataset (na.omit)
 
-The function na.omit() returns the object with listwise deletion of
-missing values.
- # create new dataset without missing data
- newdata <- na.omit(mydata)
- *NOTE:Carefull this could wipe out all DB..each cases with even 1
-missing variable data will be wiped!!)*
- newdata = na.omit(data\_10)
- where:
- newdata is the new datafile created
- na is the omiting parameters na=not avilabe (missing cases)
- omit is the command to delete the cases
- data\_10 is the source database
- To delete cases from a specific variable issue
- *to use it with a specific variable*
- newdata = na.omit(data\_10$predicted)
- where:
- newdata is the new datafile created
- na is the omiting parameters na=not avilabe (missing cases)
- omit is the command to delete the cases
- data\_10 is the source databas
- predicted is the variable used name
+The function na.omit() returns the object with listwise deletion of missing values.
+
+#+BEGIN_SRC R :session Rorg  :results none
+# create new dataset without missing data
+newdata <- na.omit(mydata)
+#+END_SRC
+
+*NOTE:Carefull this could wipe out all DB..each cases with even 1missing variable data will be wiped!!)*
+
+to use it with a specific variable
+
+#+BEGIN_SRC R :session Rorg  :results none
+newdata = na.omit(data_10$predicted)
+#+END_SRC
 
 *** exclude missing values from analysis
 
@@ -2783,7 +2749,6 @@ stage3_2000[stage3_2000 == -999] <- NA
 #+END_SRC
 
 *** Recoding a continuous variable into categorical variable
-
 to recode continous data into numeric
 
 #+BEGIN_SRC R
@@ -2861,7 +2826,6 @@ replace(x, list, values) #remember to assign this to some object i.e., x
  points200$elev<- replace(points200$elev, points200$elev<= 0 ,0)
 
 ** Rename variables
-
 *** with reshape package
 
 First a package named "reshape" needs to be add from the repositories
@@ -2929,29 +2893,19 @@ you can rename variables via the names() function . For example:
 ** Dates
 *** Basic
 
-Dates are typically entered into R as *character strings and then
-translated into date variables* that *are stored numerically*. The
-function *as.Date()* is used to make this translation. The syntax is
-*as.Date(x, "input\_format")* , where x is the character data and
-input\_format gives the appropriate format for reading the date
- [[R_files/img/Image_7db9ae9Qz4wQZm0915NJ1A_0005.png]]
- [[R_files/img/Image_7db9ae9Qz4wQZm0915NJ1A_0006.png]]
- The *default format* for inputting dates is yyyy-mm-dd. The statement
- mydates <- as.Date(c("2007-06-22", "2004-02-13"))
- converts the character data to dates using this default format. In
-contrast,
- strDates <- c("01/05/1965", "08/16/1975")
- dates <- as.Date(strDates, "%m/%d/%Y")
- reads the data using a mm/dd/yyyy format.
- use case
- *if the date is in SAS date9 format then use something like this:*
- test2 <- as.Date(test, format = "%d%b%Y")
- *or if its in a format common like this 08/25/2000:*
- mb2$rdate <- as.Date(mb1$date,format='%m/%d/%Y')
- NOTE: make sure to add special signs (like '/' or '-' if present in the
-orig date field and to use to correct symbol (%m vs %b) etc
+Dates are typically entered into R as character strings and then translated into date variables that *are stored numerically*. 
 
-*** convert from SAS/other date into R date
+The function *as.Date()* is used to make this translation.
+
+The syntax is *as.Date(X, "input_format")* 
+
+The *default format* for inputting dates is yyyy-mm-dd. 
+
+mydates <- as.Date(c("2007-06-22", "2004-02-13"))
+
+converts the character data to dates using this default format.
+
+*** convert from SAS/excel/other date into R date
 
 #+begin_src r
 mod1$day <- as.Date(strptime(mod1$DATE, "%m/%d/%y"))
@@ -3227,25 +3181,22 @@ head(x)
 
 ** Sorting with internal order command
 *** sorting with sort command
-
 Sorting Data
- To sort a dataframe in R, use the order( ) function. By default,
-sorting is ASCENDING.
- Prepend the sorting variable by a minus sign to indicate DESCENDING
-order.
- Here are some examples:
- # sorting examples using the mtcars dataset
- data(mtcars)
- # sort by mpg
- newdata <- mtcars[order(mpg),]
- # sort by mpg and cyl
- newdata <- mtcars[order(mpg, cyl),]
- #sort by mpg (ascending) and cyl (descending)
- newdata <- mtcars[order(mpg, -cyl),]
- *Example:*
- T2001c <- T2001c[order(T2001c$sitecode),]
- or for to sort by 2 variables:
- pmguidlumet <- pmguidlumet[order(pmguidlumet$guid,pmguidlumet$date),]
+
+To sort a dataframe in R, use the order( ) function. By default, sorting is ASCENDING.
+
+add a minus sign to indicate DESCENDING order
+
+Here are some examples:
+
+#+BEGIN_SRC R :session Rorg  :results none
+# sort by mpg
+newdata <- mtcars[order(mpg),]
+# sort by mpg and cyl
+newdata <- mtcars[order(mpg, cyl),]
+#sort by mpg (ascending) and cyl (descending)
+newdata <- mtcars[order(mpg, -cyl),]
+#+END_SRC
 
 ** Merging/appending Data
 *** intro
@@ -3724,7 +3675,6 @@ PM25.2013$latx <- gsub("\t", "",PM25.2013$lat)
 where the first argument is the string to be replaced followed by the replaced string (in this case a empty string)
 
 ** Functions
-
 *** Character Functions
 
 [[R_files/img/Image_2ESMMUL5R1Gy33GwZp53PQ_0002.jpg]]
@@ -3932,7 +3882,6 @@ finally the last line puts them all together
 %Tip:if you want to add X,Y you can merge back by ID%
 
 ** conversions
-
 *** convert from farenhight to celsius
 
 convert from farenhight to celsius:
