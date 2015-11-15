@@ -2104,3 +2104,122 @@ mu4e-compose-dont-reply-to-self t                  ; don't reply to myself
 #+END_SRC
 
 
+
+* TODO try 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-11-13 Fri 10:53
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages/dired plugins
+  :ARCHIVE_CATEGORY: settings
+  :ARCHIVE_TODO: TODO
+  :END:
+diredk
+
+
+* TODO try 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-11-13 Fri 10:54
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages/dired plugins
+  :ARCHIVE_CATEGORY: settings
+  :ARCHIVE_TODO: TODO
+  :END:
+diredk
+
+
+* TODO dired-filter
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-11-13 Fri 10:57
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages/dired plugins
+  :ARCHIVE_CATEGORY: settings
+  :ARCHIVE_TODO: TODO
+  :END:
+https://github.com/Fuco1/dired-hacks
+#+BEGIN_SRC emacs-lisp :results none
+(use-package dired-filter
+ :ensure t
+ :config
+ )
+#+END_SRC 
+
+* TODO easy-kill-extras
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-11-13 Fri 15:16
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages
+  :ARCHIVE_CATEGORY: settings
+  :ARCHIVE_TODO: TODO
+  :END:
+https://github.com/knu/easy-kill-extras.el
+#+BEGIN_SRC emacs-lisp :results none
+(use-package easy-kill-extras
+   :ensure t
+   :config
+   )
+#+END_SRC 
+
+This package contains extra functions for easy-kill/easy-mark:
+;;
+;; * easy-mark-word
+;; * easy-mark-sexp
+;; * easy-mark-to-char
+;; * easy-mark-up-to-char
+;;
+;; It also provides the following easy-kill/easy-mark targets:
+;;
+;; * `buffer'
+;;
+;;   This selects the whole buffer.
+;;
+;; * `buffer-before-point'
+;; * `buffer-after-point'
+;;
+;;   These work like vi's gg/G commands, respectively. 
+
+
+*  golden ratio
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-11-13 Fri 15:18
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages
+  :ARCHIVE_CATEGORY: settings
+  :END:
+https://github.com/roman/golden-ratio.el
+
+@this package can cause weird issue and thus disabled@
+
+allows to dynamically resize the non currently edited pane
+
+#+BEGIN_SRC emacs-lisp :results none
+  ;; (use-package golden-ratio
+  ;;  :ensure t
+  ;;  :config
+  ;;  (require 'golden-ratio)
+  ;; ; (golden-ratio-mode 1)
+  ;;  )
+#+END_SRC
+
+* TODO visible-mark
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-11-14 Sat 20:22
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages
+  :ARCHIVE_CATEGORY: settings
+  :ARCHIVE_TODO: TODO
+  :END:
+
+#+BEGIN_SRC emacs-lisp :results none
+  ;; (use-package  visible-mark 
+
+  ;;  :ensure t
+  ;;  :config
+  ;;  (defface visible-mark-active ;; put this before (require 'visible-mark)
+  ;;   '((((type tty) (class mono)))
+  ;;     (t (:background "magenta"))) "")
+  ;; (require 'visible-mark)
+  ;; (global-visible-mark-mode 1) ;; or add (visible-mark-mode) to specific hooks
+  ;; (setq visible-mark-max 2)
+  ;; (setq visible-mark-faces `(visible-mark-face1 visible-mark-face2))
+  ;;  )
+#+END_SRC 

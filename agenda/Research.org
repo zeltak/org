@@ -1,5 +1,5 @@
 #+TITLE: Research 
-#+TODO: TODO(t) EXP(e) | SUBMITTED(s) K_TRACK(k) PAUSED(p) DONE(d) 
+#+TODO: TODO(t) TASK(f) EXP(e) | PAUSED(p) DONE(d) 
 #+CATEGORY: work@
 #+TAGS:  allan(a) joel(j) meytar(t) boris(b) BGU(u) maayan(m) adar(d) omer(o) lara(l) hila(h) students(s) itai (i)
 #+STARTUP: overview  inlineimages eval: (org-columns)
@@ -149,12 +149,12 @@ borrow a haravrd based filter- talk to petros
 
 *** TD MODEL.PM.Israel
 **** [#A] prepare report to alexei				     :meytar:
-**** TODO Exclude high percentiles in PM-AOD data in israel (clean data)
+**** TASK Exclude high percentiles in PM-AOD data in israel (clean data)
 after first performing box plot and outlier analysis and trying to understand the origin of the “errors”
 *** explore
 **** low yearly aod values and compared to DB which is higher in south of israel
 we should look at wind speed from reanalysis data/station to see if these areas have low or high ws values
-**** TODO use of aqua and terra as 2 separate exposure:
+**** TASK use of aqua and terra as 2 separate exposure:
 instead of calibrating: one would be a peak level exposure and one a "background" exposure
 calibrate with hourly 
 terra > 9:30
@@ -168,7 +168,7 @@ we want to show that one picks up traffic well while the other picks up transpor
      :END:
 use data with 30 degree azimuths that should be better:
 either subset data by that or play with these azimuths as weights in a model 
-**** TODO check in Israel for next iteration
+**** TASK check in Israel for next iteration
 composition of PM in israel
 teom at 50 celsius  may over measure and introduce noise to pm25.
 look at average residual in monitors 
@@ -192,21 +192,21 @@ id:23371787-acbe-41fa-8bab-5a2e91c1e61e
 file:/home/zeltak/org/files/Uni/Projects/code/P031.MAIAC.France
 *** meetings
 *** TD MODEL.PM.France
-**** TODO Use sqrt transforms instead of log transform for skewed variables (after first checking the variable distribution etc.). :meytar:
+**** TASK Use sqrt transforms instead of log transform for skewed variables (after first checking the variable distribution etc.). :meytar:
 **** check data completeness
 ***** check missing ndvi France
-***** TODO Check missing met (temp,WS) France
+***** TASK Check missing met (temp,WS) France
 Try to use prev post day lags for areas missing Met
 ***** DONE PM10.25 analysis
-***** TODO take a look at the us data and check the correlations between trimesters
-**** TODO create 24h mean pm10/25 for each station in france	     :meytar:
-**** TODO ndvi and temperature data TS availability 		       :itai:
-**** TODO run nested analysis by cluster			     :meytar:
+***** TASK take a look at the us data and check the correlations between trimesters
+**** TASK create 24h mean pm10/25 for each station in france	     :meytar:
+**** TASK ndvi and temperature data TS availability		       :itai:
+**** TASK run nested analysis by cluster			     :meytar:
 pm means, temperature, elev, RH
 each aod point will get the cluster id of the closest PM point to it.
 try ratio later (all co located)
 
-**** TODO Validation of stage (3) in observations where (a) PM locations with PM data and missing aod data or/and (b) exclude known PM locations with both aod and PM available data for validation process. Namely – perform cross validation also of phase 3 !!!
+**** TASK Validation of stage (3) in observations where (a) PM locations with PM data and missing aod data or/and (b) exclude known PM locations with both aod and PM available data for validation process. Namely – perform cross validation also of phase 3 !!!
 *** explore
 *** related papers
 **** Read Queue
@@ -370,7 +370,7 @@ Add in some representation of point sources (layer in GIS)
   run three stages again
   minimal additional cloud cleaning
   draft results
-*** TODO explore road classifications 
+*** TASK explore road classifications 
 *** Mexico 2010 very low pm that year
 lur wont be able to deal with that we 
 
@@ -394,7 +394,7 @@ avg Per day, weighted average per grid cell
 *** grant reports,how do we publish so the grant doesent get annoyed, first author where, etc
 exposure paper- france -last or first
 exposure paper-massimo first/last
-*** TODO OMI OC
+*** OMI OC
 how well the maiac algo does with high OC (organic carbon) in southern italy.
 aerosol index OMI- second iteration
 from email:
@@ -419,7 +419,7 @@ file:
 ***** skype call to discuss meeting agenda
 ***** OSM project 
  see [[*OSM project][OSM project]]
-***** TODO create a pan euro dataset
+***** create a pan euro dataset
 **** Kees talk 03.06.2015
 ***** hired a ma student to work on OSM project
  perhaps organize a skype call soon between us? or start with getting her data
@@ -453,10 +453,10 @@ track`
 *** different calibration methids 
 *** comparing the wrf model in israel to our model as part of the methods paper
 *** consider inverse distance (1/dist) for all the dist variables  
-*** TODO talk to adar to include wrf parameters in model	       :adar:
+*** talk to adar to include wrf parameters in model		       :adar:
 ** Temperature and Birth outcomes
 *** discuss with maayan GDM abby paper. maybe do the same here
-*** TODO talk to meytar to run the LST matlab part		     :meyta:r
+*** talk to meytar to run the LST matlab part		     :meyta:r
 ** Sulfate analysis-explore calibrating the data we have with Sulfate instead of PM2.5
     :PROPERTIES:
     :ID:       d458a94c-40a6-4b76-9ebe-020f7b9a3fa8
@@ -504,10 +504,7 @@ id:
 file:
 *** meetings
 *** TD Haifa Monitoring project
-**** TODO check with tal money transfer autorization from haifa 
-**** TODO Return for 9500 Data layer
--Talk to rachel and then RA about billing the haifa grant
--also check about geocoding buy if not succesful
+**** check with tal money transfer autorization from haifa 
 *** explore
 **** double kernel exposure (will be as contour)
 beysian kriging- nox sox pm2.5 (used in some station from imputin from pm10 via a 0.45 ratio)
@@ -598,7 +595,7 @@ file:
  http://reverb.echo.nasa.gov/reverb/#utf8=%E2%9C%93&spatial_map=satellite&spatial_type=rectangle
 
  - We use 1 month time scales since NDVI does not vary dramitccly from day to day
-****** TODO We should also talk to peter james since he may already have NDVI data on a national scale and we can save use the download and proccesing time.
+****** We should also talk to peter james since he may already have NDVI data on a national scale and we can save use the download and proccesing time.
 ***** PBL 
  - I already have PBL data from 2000-2012 across the USA
  - we will need to download 2013-2014 data from North American Regional Reanalysis dataset
@@ -688,7 +685,7 @@ file:
  Data from european sattelite - We here in my Lab are looking into this and possible future applications
 
 ** Storke and PM10 in israel					     :maayan:
-*** TODO ask allan about long term analysis glmpql cells with 0       :allan:
+*** TASK ask allan about long term analysis glmpql cells with 0	      :allan:
 how to address cells missing with people when building a TS dataset with 1km exposure metrics
 how to deal with cells with people but not cases
 ** MODEL.PM.Swiss
@@ -711,7 +708,7 @@ file:
 
 
 ** SVM project with allan
-*** TODO prepare DB and ready mod1 for session on svm+random	      :allan:
+*** TASK prepare DB and ready mod1 for session on svm+random	      :allan:
 prepare the data for NY/NE/NJ area
 *** what to try:
 look into incorperating mixed model framework into svm
@@ -1235,7 +1232,7 @@ Compare PM estimation ability by AOD over land with data over coastal areas, exa
 As the difference in RH between the ground and satellite measurements may derive the discrepancies between these measurements, it's worth analyzing the contribution of the satellite-borne RH profile and maybe find a RH correction factor to use in PM prediction models.
 
 ** Dust classification project with India/Italy			     :meytar:
-**** TODO ask maayan
+**** ask maayan
      :PROPERTIES:
      :ID:       c14fab7f-6578-46ba-b9bc-48156f8c4fa9
      :END:
@@ -1303,10 +1300,6 @@ pass email
 **** preperation
 ***** use the GIF for birthweight stuff
 ***** use the CIG/ISF for exposure
-***** TODO Contact head of Tel-hashomer hospital gynocology department to get same data for central israel
-      :PROPERTIES:
-      :ID:       90365949-f2cd-462b-bb87-9c22bdb8776a
-      :END:
 **** Grant Aims
 ***** A1:develop a spatio-tepmoral Ta exposure model in israel
 ***** A2:look at Ta and outcomes:
@@ -1426,7 +1419,7 @@ As an intermediary organisation for German foreign cultural and educational poli
 india should start processing soon (talk to alexei about it)
 Joel has collaborations in the south of India
 we need to maybe organize a skype call between all groups
-**** TODO organize a big skype call
+**** organize a big skype call
 talk to Varanasi professor. 
 **** send israel pm data					     :meytar:
 send alexei pm25/10 data over israel (mainly tel aviv and haifa)
@@ -1437,7 +1430,7 @@ perhaps road dust that keeps circulating in the air
 **** talk to alexei about dynamic models
 different models in summer vs winter.
 maybe coast vs other models since humidity is a big isssue in maiaic. the model assumes that particle size growth grows with high humidity
-**** TODO stratify corr models by humidity
+**** TASK stratify corr models by humidity
 **** look at using maiac ndvi 
 use already available data
 Rb2-Rb1/Rb1+Rb2
@@ -1497,9 +1490,9 @@ I have a post doc for 6 months..what to do with her:
 ask about southern campign
 aeronet campign
 vertical profile
-*** TODO explore with alexei sun photometer
+*** TASK explore with alexei sun photometer
 *** TODO write brent about mixed model meeting
-*** TODO talk to allan about the intercept vs day
+*** talk to allan about the intercept vs day
 *** TODO talk to josef and a grant , is it a big grant or a travel grant
 *** TODO dylos monitor-check google 
 total count not mass
@@ -1547,6 +1540,9 @@ do you have any questions to raise
 bio staticiall grant with dealing with denominator availability and relevant statistical methods for that 
 multi exposure?
 non anthrpogentic dust?
+** Johanna [2015-11-10 Tue] 
+model 
+2004 vs 2011 in terms of sd and variation in each step
 ** indian meeting [2015-10-22 Thu]
 *** TODO [#A] arrange meeting with joel, bangalore
 * gmail recovery
@@ -1560,10 +1556,6 @@ predict(object = model, newdata = towns)
 
 האובייקט model בדוגמה הנ"ל, מהמחלקה gstat, מכיל את כל המידע הנחוץ לביצוע חיזוי או cross-validation בשיטה שנבחרה (IDW) עם נתוני הכיול הרלוונטיים. בחירת השיטה, דרך אגב, מתבצעת אוטומטית עפ"י סט הארגומנטים של הפונקציה (אתה יכול לראות את זה בשקף 20 של המצגת המצורפת). הסט הנ"ל קובע שהמודל יהיה IDW, עם סט שונה של ארגומנטים ייבחר kriging וכו'. רצוי שהקואורדינטות יהיו ב-projection ולא קווי אורך ורוחב כי עובדים עם מרחקים, אבל באזור קטן כמו ישראל זה לא כל כך משנה. מצ"ב קוד עם דוגמה שאפשר לשחזר.
 
-** TODO Current Opinion in Pediatrics review paper
-   DEADLINE: <2015-10-30 Fri>
-
-https://mail.google.com/mail/u/0/#search/Robert+Wright+%3Cem%40editorialmanager.com%3E+Current+Opinion+in+Pediatrics/14e48fbf2720ec29
 ** TODO generate 200m predictions for 2009, the greater boston area [2015-10-14 Wed]
    DEADLINE: <2015-10-28 Wed>
 200mn

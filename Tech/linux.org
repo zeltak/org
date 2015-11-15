@@ -9353,7 +9353,9 @@ directory with the following bash shell commands:
  "command". For example:
 
  todo.sh command ls
-
+**** offlineimap
+***** restart offline imap if it stops woking (cron)
+when you run offlineimap and it stops working use htop to kill all instances and wait for cron to start again automatically.
 *** Utils
 **** autojump     
 ***** navigate using autojump (j)
@@ -25484,6 +25486,8 @@ by mistake.
 ******** desktop-save-mode auto Save/Restore
 With desktop-save-mode on, now it automatically save/restore opened files, windows config (number of windows, size, position), when quit ＆ restart emacs.
 ******* !Debuging Emacs for Bugs/errors!
+******** create backtrace
+simply do M-: (setq debug-on-error t) to try for the current emacs session only
 ******** debugging your config file
 %Tip-a good way I found to do so is to open Emacs (non deamon mode) and open the conf file. then start binary splitting it and after each split you can open a new Emacs window (again non deamon) and see if the problem is solved % 
 ********* Binary search

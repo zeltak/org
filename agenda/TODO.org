@@ -6,12 +6,11 @@
 #+LaTeX_CLASS_OPTIONS: [garamond]
 
 * `TODO` 							  :CANCELLED:
-  :PROPERTIES:
-  :ID:       70feaa43-c66b-4675-89f5-9ae26bddc03e
-  :END:
+** merge add fix typo to abbrev and auto fix last entry 
 ** xfce
 try maximus or devilsdpie2 
 https://aur.archlinux.org/packages/maximus/
+
 ** mail- gmail organize, move starred to org via wl
 ** split and create mu4e and org agenda window
 ** fonts config 
@@ -686,7 +685,7 @@ zeltak_: you should also consider that you often save files that are half edited
 systematically have it processed after C-x C-s.                                                                     │
 It may be dangerous.                                                                                                │
 pjb: true. thats why maybe the 2nd option of manually executing the save&pkill would be safer                       │
-its an app that you need to send a user sig1 to refreash it every time toy edit a config which i find annoying :)   │
+its an app that you need to send a user sig1 to refreash it every time toy edit a config whichh i find annoying :)   │
 If you don't want to get out of emacs to kill, you can write a emacs command to do it: (defun update-sxhkd ()       │
 (interactive) (shell-command "pkill …"))  So you can C-x C-s and when you want M-x update-sxhkd RET                 │
 pjb: thx that could work well, appriciate the help!                                                                 │
@@ -765,8 +764,7 @@ When you open the file you will be prompted for your password and Emacs will dis
     :ID:       8797ec49-d59d-4c11-9d9d-0939705c6b1b
     :END:
 
-If you just want to encrypt the text of an entry, but not the headline, or properties you can use org-crypt. In order to use org-crypt you need to add something like the following to your .emacs:
-
+If you just want to encrypt mathe text of an entry, but not the headline, or properties you can use org-crypt. In order to use org-crypt you need to add something like the following to your .emacs:
 (require 'org-crypt)
 (org-crypt-use-before-save-magic)
 (setq org-tags-exclude-from-inheritance (quote ("crypt")))
@@ -780,16 +778,3 @@ Preventing tag inheritance stops you having encrypted text inside encrypted text
 To decrypt the text just call "M-x org-decrypt-entry" and the encrypted text where the point is will be replaced with the plain text. If you use this feature a lot, you will probably want to bind "M-x org-decrypt-entry" to a key.
 
 Entries with a :crypt: tag will be automatically be encrypted when you save the file.
-
-If you have autosave turn
-
-
- 
-
-
-
-
-
-
-
-
