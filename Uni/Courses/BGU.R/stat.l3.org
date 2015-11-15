@@ -32,7 +32,9 @@
 	  :reveal_background: /home/zeltak/org/attach/bgu/courses/BGU.R/images/hist_BD.jpg
 	  :END:
 *** Exploring Data
-Now we're going to read some data in and store it in the object, d. We prefer short names for objects that we will use frequently.
+Now we're going to read some data in and store it in the object d.
+
+We prefer short names for objects that we will use frequently.
 
 We can now easily explore and get to know these data, which contain a number of school, test, and demographic variables for 200 students.
 
@@ -47,7 +49,7 @@ library(help="datasets")
 This *length* function returns the number of elements in a vector and is very useful for generalizing code
 #+BEGIN_SRC R :session Rorg  :results none
 length(islands) 
-[1] 48 
+#[1] 48 
 #The vecor has 48 entries
 #+END_SRC
 *** Description of Dataset
@@ -72,28 +74,6 @@ str(d)
 ##  $ science: int  47 63 58 53 53 63 53 39 58 50 ...
 ##  $ socst  : int  57 61 31 56 61 61 61 36 51 51 ...
 #+END_SRC
-*** Descriptive Stats
-summary is a generic function to summarize many types of R objects, including datasets \\
-When used on a dataset, summary returns distributional summaries of variables in the data\\
-
-#+BEGIN_SRC R :session Rorg  :results none
-summary(d)
-##        id            female           race           ses      
-##  Min.   :  1.0   Min.   :0.000   Min.   :1.00   Min.   :1.00  
-##  1st Qu.: 50.8   1st Qu.:0.000   1st Qu.:3.00   1st Qu.:2.00  
-##  Median :100.5   Median :1.000   Median :4.00   Median :2.00  
-##  Mean   :100.5   Mean   :0.545   Mean   :3.43   Mean   :2.06  
-##  3rd Qu.:150.2   3rd Qu.:1.000   3rd Qu.:4.00   3rd Qu.:3.00  
-##  Max.   :200.0   Max.   :1.000   Max.   :4.00   Max.   :3.00  
-##      schtyp          prog           read          write     
-##  Min.   :1.00   Min.   :1.00   Min.   :28.0   Min.   :31.0  
-##  1st Qu.:1.00   1st Qu.:2.00   1st Qu.:44.0   1st Qu.:45.8  
-##  Median :1.00   Median :2.00   Median :50.0   Median :54.0  
-##  Mean   :1.16   Mean   :2.02   Mean   :52.2   Mean   :52.8  
-##  3rd Qu.:1.00   3rd Qu.:2.25   3rd Qu.:60.0   3rd Qu.:60.0  
-##  Max.   :2.00   Max.   :3.00   Max.   :76.0   Max.   :67.0  
-
-#+END_SRC
 *** Conditional Summaries 1
 If we want conditional summaries, for example only for those students with high reading scores (read >= 60), we first subset the data, then summarize as usual.
 
@@ -108,32 +88,6 @@ summary(subset(d, read >= 60))
 ##  3rd Qu.:143.2   3rd Qu.:1.000   3rd Qu.:4.0   3rd Qu.:3.00  
 ##  Max.   :200.0   Max.   :1.000   Max.   :4.0   Max.   :3.00  
 #+END_SRC
-*** Descriptive statistics using Hmisc package 
-you can get a more detailed view using the describe function in Hmisc
-
-#+BEGIN_SRC R  :session Rorg  
-library(Hmisc)
-describe(d)
-#+END_SRC
-
-#+BEGIN_EXAMPLE
---------------------------------------------------------------------------------
-prog 
-      n missing  unique    Info    Mean 
-    200       0       3    0.83   2.025 
-
-1 (45, 22%), 2 (105, 52%), 3 (50, 25%) 
---------------------------------------------------------------------------------
-read 
-      n missing  unique    Info    Mean     .05     .10     .25     .50     .75 
-    200       0      30    0.99   52.23    36.0    39.0    44.0    50.0    60.0 
-    .90     .95 
-   66.2    68.0 
-
-lowest : 28 31 34 35 36, highest: 66 68 71 73 76 
---------------------------------------------------------------------------------
-#+END_EXAMPLE
-
 *** Histograms
 Typically it is easier to inspect variable distributions with graphics. Histograms are often used for continuous variable distributions
 #+BEGIN_SRC R :session Rorg  :results none
@@ -143,7 +97,6 @@ hist(d$write)
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 15:26:49
 #+attr_html: :width 500px
  [[~/Sync/attach/images_2015/screenshot_2015-10-19_15-26-49.png]]
-** more programming with R
 *** Missing values (NA)
 See below vector, the *NA* stands for missing value
 #+BEGIN_SRC R  :session Rorg  :results none
@@ -164,7 +117,7 @@ na.omit(humidity)
 #[1] 63.33 64.63 68.38 79.10 77.46 
 #+END_SRC
 
-*NOTE:Carefull this could wipe out all DB..each cases with even 1missing variable data will be wiped!!)*
+*NOTE:Carefull this could wipe out all DB..each cases with even 1 missing variable data will be wiped!!)*
 
 to use it with a specific variable
 
@@ -211,6 +164,278 @@ mean(ds)
 #[1] 32.84768
 detach(ds)
 #+end_src
+*** launching a script
+you may either use from within R or
+
+#+BEGIN_EXAMPLE
+source("/home/jim/psych/adoldrug/partyuse1.R")
+#+END_EXAMPLE
+
+or on the system command line
+
+#+BEGIN_EXAMPLE
+R CMD BATCH /home/jim/psych/adoldrug/partyuse1.R
+#+END_EXAMPLE
+S*** Check current memory (gc)
+use the garbage collection option
+#+begin_src R
+gc()
+#to get more details
+gc(verbose=T)
+#+end_src
+
+
+*** row means/sums
+#+BEGIN_EXAMPLE
+colSums (x, na.rm = FALSE, dims = 1)
+rowSums (x, na.rm = FALSE, dims = 1)
+colMeans(x, na.rm = FALSE, dims = 1)
+rowMeans(x, na.rm = FALSE, dims = 1)
+rowMeans(x, na.rm = TRUE)
+#+END_EXAMPLE
+
+example:
+
+#+BEGIN_SRC R :session Rorg  :results none
+cvtable$mean<- rowMeans(cvtable[,2:10])
+#+END_SRC
+*** row/column Missing data
+#+BEGIN_SRC R :session Rorg  :results none
+rowSums(is.na(mydata)) # Number of missing per row
+colSums(is.na(mydata)) # Number of missing per column/variable
+#+END_SRC
+*** Delete rows
+use this:
+
+#+BEGIN_SRC R :session Rorg  :results none
+x <- x[-n,]
+#+END_SRC
+
+where n is the row (case) number
+
+#+BEGIN_SRC R :session Rorg  :results none
+zinc <- zinc[-771,]
+#+END_SRC
+
+
+*** Excluding (DROPPING-deleting) Variables
+1.Excluding single Variable
+
+#+BEGIN_SRC R :session Rorg  :results none
+#+BEGIN_SRC sh
+dataframe$VAR <- NULL 
+#+END_SRC
+
+*** workspace/object deletions
+Delete temporary objects and objects that are no longer needed:
+
+#+BEGIN_SRC R :session Rorg  :results none
+rm(list=ls())
+#+END_SRC
+will remove all objects from memory, providing a clean slate.
+
+Specific objects can be removed with
+#+BEGIN_SRC R :session Rorg  :results none
+rm(object)
+#+END_SRC
+
+*** sorting with sort command
+Sorting Data
+
+To sort a dataframe in R, use the order( ) function. By default, sorting is ASCENDING.
+
+add a minus sign to indicate DESCENDING order
+
+Here are some examples:
+
+#+BEGIN_SRC R :session Rorg  :results none
+# sort by mpg
+newdata <- mtcars[order(mpg),]
+# sort by mpg and cyl
+newdata <- mtcars[order(mpg, cyl),]
+#sort by mpg (ascending) and cyl (descending)
+newdata <- mtcars[order(mpg, -cyl),]
+#+END_SRC
+
+** Descriptive Statistics
+*** What are Descriptive statistics
+*Numerical*:
+
+Location: Mean, median, mode
+
+Spread: Standard deviation, variance, range, quantiles, IQR
+
+Correlation
+
+*Graphical*:
+
+Histograms, bar charts,dot charts, boxplots,scatter plots, etc.
+
+Good descriptive statistics leads to good decision making
+*** Summary
+The summary() function provides the minimum, maximum, quartiles, and the mean for numerical variables and frequencies for factors and logical vectors:
+
+ #+BEGIN_SRC R :session Rorg  :results none
+ # mean,median,25th and 75th quartiles,min,max
+ summary(mydata)
+ #+END_SRC
+*** Summary
+summary is a generic function to summarize many types of R objects, including datasets \\
+When used on a dataset, summary returns distributional summaries of variables in the data\\
+
+#+BEGIN_SRC R :session Rorg  :results none
+summary(d)
+##        id            female           race           ses      
+##  Min.   :  1.0   Min.   :0.000   Min.   :1.00   Min.   :1.00  
+##  1st Qu.: 50.8   1st Qu.:0.000   1st Qu.:3.00   1st Qu.:2.00  
+##  Median :100.5   Median :1.000   Median :4.00   Median :2.00  
+##  Mean   :100.5   Mean   :0.545   Mean   :3.43   Mean   :2.06  
+##  3rd Qu.:150.2   3rd Qu.:1.000   3rd Qu.:4.00   3rd Qu.:3.00  
+##  Max.   :200.0   Max.   :1.000   Max.   :4.00   Max.   :3.00  
+##      schtyp          prog           read          write     
+##  Min.   :1.00   Min.   :1.00   Min.   :28.0   Min.   :31.0  
+##  1st Qu.:1.00   1st Qu.:2.00   1st Qu.:44.0   1st Qu.:45.8  
+##  Median :1.00   Median :2.00   Median :50.0   Median :54.0  
+##  Mean   :1.16   Mean   :2.02   Mean   :52.2   Mean   :52.8  
+##  3rd Qu.:1.00   3rd Qu.:2.25   3rd Qu.:60.0   3rd Qu.:60.0  
+##  Max.   :2.00   Max.   :3.00   Max.   :76.0   Max.   :67.0  
+
+#+END_SRC
+
+*** fivenum
+The function fivenum() returns Tukey's five-number summary (minimum, lower-hinge, median, upper-hinge, and maximum). 
+ #+BEGIN_SRC R :session Rorg  :results none
+ # Tukey min,lower-hinge, median,upper-hinge,max
+ fivenum(x)
+ #+END_SRC
+*** summary subseted
+ #+BEGIN_SRC R :session Rorg  :results none
+summary(data$var[data$var == 1995])
+ #+END_SRC
+*** Quantiles and Percentiles
+Percentiles: For data, the pth percentile ,0<= p <= 100 , is the value of x such that p% of the data is less than or equal to x
+
+Quantiles same as percentiles except for scale:
+
+Percentiles are on a 0 to 100 scale
+
+Quantiles are on a 0 to 1 scale
+*** get basic IQR of variable
+Special percentiles:
+
+Minimum: 0th percentile (or 0 quantile)
+
+Median: 50th percentile (or 0.5 quantile)
+
+Maximum: 100th percentile (or 1.0 quantile)
+
+Quartiles: 25th and 75th percentiles
+
+Interquartile Range (IQR): IQR = 75th percentile - 25th percentile
+
+issue the internal *IQR* command:
+IE:
+
+#+BEGIN_SRC R :session Rorg  :results none
+IQR(DATA$VARIABLE)
+#+END_SRC
+
+*** Descriptive statistics using Hmisc package 
+you can get a more detailed view using the describe function in Hmisc
+The describe() function in the Hmisc package returns the number of variables and observations, the number of missing and unique values, the mean, quantiles, and the five highest and lowest values.
+
+#+BEGIN_SRC R  :session Rorg  
+library(Hmisc)
+describe(d)
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+--------------------------------------------------------------------------------
+prog 
+      n missing  unique    Info    Mean 
+    200       0       3    0.83   2.025 
+
+1 (45, 22%), 2 (105, 52%), 3 (50, 25%) 
+--------------------------------------------------------------------------------
+read 
+      n missing  unique    Info    Mean     .05     .10     .25     .50     .75 
+    200       0      30    0.99   52.23    36.0    39.0    44.0    50.0    60.0 
+    .90     .95 
+   66.2    68.0 
+
+lowest : 28 31 34 35 36, highest: 66 68 71 73 76 
+--------------------------------------------------------------------------------
+#+END_EXAMPLE
+
+
+*** Describe limit digits in output 
+use the dig=switch
+ #+BEGIN_SRC R
+describe(bda$sga,dig=2)
+ #+END_SRC
+*** Describe only a subset of the data
+ #+BEGIN_SRC R
+describe(bd$birthw[bd$mrn.n == 4])
+ #+END_SRC
+*** Get percents in dichotomous variable (0,1)
+ #+BEGIN_SRC R
+#$Note$ that you may need to manually run is at a factor to make hmisc know its not continous
+Hmisc::describe(as.factor(bd$lungd))
+ #+END_SRC
+results:
+ #+BEGIN_EXAMPLE
+ as.factor(bd$lungd) 
+       n missing  unique 
+  452316    1342       2 
+
+ 0 (437753, 97%), 1 (14563, 3%) 
+ #+END_EXAMPLE
+
+*** exclude missing
+ #+BEGIN_SRC R
+exclude.missing=TRUE
+ #+END_SRC
+
+*** pastecs
+gives the following:
+
+ #+BEGIN_EXAMPLE
+ # nbr.val, nbr.null, nbr.na, min max, range, sum,
+ # median, mean, SE.mean, CI.mean, var, std.dev, coef.var 
+ #+END_EXAMPLE
+
+ example:
+ using *stat.desc*
+
+ #+BEGIN_SRC R
+ stat.desc(bd$ta270)
+           nbr.val          nbr.null            nbr.na               min               max             range               sum            median 
+  453658.000000000       0.000000000       0.000000000      -0.419630007       8.376250511       8.795880518 1844219.041496962       4.122560722 
+              mean           SE.mean      CI.mean.0.95               var           std.dev          coef.var 
+       4.065218825       0.001191507       0.002335318       0.644053584       0.802529491       0.197413602 
+ 
+ #+END_SRC
+
+*** psych package
+# item name ,item number, nvalid, mean, sd,
+# median, mad, min, max, skew, kurtosis, se
+
+ #+BEGIN_SRC R
+ library(psych)
+ describe(bd$ta270)
+   vars      n mean  sd median trimmed  mad   min  max range  skew kurtosis se
+ 1    1 453658 4.07 0.8   4.12    4.13 0.74 -0.42 8.38   8.8 -1.15     2.43  0
+ #+END_SRC
+*** Descriptive statistics by group (Doby package)
+#+BEGIN_SRC R
+library(doBy)
+tden$count<-1
+summaryBy(count~guid, data=tden, FUN=sum)
+#+END_SRC
+*** Count number of occurances per variable
+ #+begin_src R
+count(df,"VAR")
+ #+end_src
 ** Boolean
 *** Boolean logic (T or F)
 I carry an umbrella if it both rains and snows on the same day\\
@@ -226,9 +451,9 @@ I never carry an umbrella for rain, only for snow\\
 #+attr_html: :width 300px
 [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-10-25_13-45-33.png]]
 *** Boolean operators
-
+#+BEGIN_EXAMPLE
 &  and (element wise)
-| or (element wise) |
+| or (element wise)
 !  not
 <  less than
 >  greater than
@@ -236,6 +461,7 @@ I never carry an umbrella for rain, only for snow\\
 >= greater than or equal to
 == equal to
 != not equal to
+#+END_EXAMPLE
 *** Boolean examples: single value
 #+BEGIN_SRC R :session Rorg  :results none
 x <- 3 
@@ -245,7 +471,7 @@ x < 10
 #[1] TRUE 
 x < -1 
 #[1] FALSE 
- x > 0 & x < 10 #Combine multiple conditions with AND (&) or OR (|)
+x > 0 & x < 10 #Combine multiple conditions with AND (&) or OR (|)
 #[1] TRUE
 #+END_SRC
 *** Boolean examples: vector of values
@@ -254,11 +480,11 @@ x < -1
  
 x == 3 
 #[1] FALSE FALSE TRUE FALSE FALSE 
- x < 10 
+x < 10 
 #[1] TRUE TRUE TRUE TRUE TRUE 
- x > 2 & x <= 4 
+x > 2 & x <= 4 
 #[1] FALSE FALSE TRUE TRUE FALSE 
- x != 2 
+x != 2 
 #[1] TRUE FALSE TRUE TRUE TRUE
 #+END_SRC
 *** Umbrella logic
@@ -320,93 +546,6 @@ as.numeric(rain=="Yes")
 #Are all elements true?
   all(rain=="Yes") 
 #[1] FALSE
-#+END_SRC
-** Advanced 
-*** launching a script
-you may either use from within R or
-
-#+BEGIN_EXAMPLE
-source("/home/jim/psych/adoldrug/partyuse1.R")
-#+END_EXAMPLE
-
-or on the system command line
-
-#+BEGIN_EXAMPLE
-R CMD BATCH /home/jim/psych/adoldrug/partyuse1.R
-#+END_EXAMPLE
-*** Check current memory (gc)
-use the garbage collection option
-#+begin_src R
-gc()
-#to get more details
-gc(verbose=T)
-#+end_src
-
-
-*** row means/sums
-colSums (x, na.rm = FALSE, dims = 1)
-rowSums (x, na.rm = FALSE, dims = 1)
-colMeans(x, na.rm = FALSE, dims = 1)
-rowMeans(x, na.rm = FALSE, dims = 1)
-rowMeans(x, na.rm = TRUE)
-
-example:
-
-#+BEGIN_SRC R :session Rorg  :results none
-cvtable$mean<- rowMeans(cvtable[,2:10])
-#+END_SRC
-
-*** Delete rows
-use this:
-
-#+BEGIN_SRC R :session Rorg  :results none
-x <- x[-n,]
-#+END_SRC
-
-where n is the row (case) number
-
-#+BEGIN_SRC R :session Rorg  :results none
-zinc <- zinc[-771,]
-#+END_SRC
-
-
-*** Excluding (DROPPING-deleting) Variables
-1.Excluding single Variable
-
-#+BEGIN_SRC R :session Rorg  :results none
-#+BEGIN_SRC sh
-dataframe$VAR <- NULL 
-#+END_SRC
-
-*** workspace/object deletions
-Delete temporary objects and objects that are no longer needed:
-
-#+BEGIN_SRC R :session Rorg  :results none
-rm(list=ls())
-#+END_SRC
-will remove all objects from memory, providing a clean slate.
-
-Specific objects can be removed with
-#+BEGIN_SRC R :session Rorg  :results none
-rm(object)
-#+END_SRC
-
-*** sorting with sort command
-Sorting Data
-
-To sort a dataframe in R, use the order( ) function. By default, sorting is ASCENDING.
-
-add a minus sign to indicate DESCENDING order
-
-Here are some examples:
-
-#+BEGIN_SRC R :session Rorg  :results none
-# sort by mpg
-newdata <- mtcars[order(mpg),]
-# sort by mpg and cyl
-newdata <- mtcars[order(mpg, cyl),]
-#sort by mpg (ascending) and cyl (descending)
-newdata <- mtcars[order(mpg, -cyl),]
 #+END_SRC
 
 ** Dates
@@ -487,3 +626,48 @@ where the 1 at the end of the file specifies the increment , thats is increment 
 as.Date("2001-01-01") + 45
 #+end_src
 
+* Homework-Week 3
+** Exercise 1 Infant birth weight
+In a study of infant birth weight for different occupational groups this was recorded for some first-time mothers hairdressers. The following table shows the results in grams (data specified in sorted order) for 20 births in total, 10 female births and 10 male births.
+
+#+BEGIN_SRC R :session Rorg  :results none
+Females (x) 2474 2547 2830 3219 3429 3448 3677 3872 4001 4116
+Males (y) 2844 2863 2963 3239 3379 3449 3582 3926 4151 4356
+#+END_SRC
+
+a) What is the sample mean, variance and standard deviation of female births? 
+b) Compute the same summary statistics of the male births. 
+c) Compare the two results, are they similar?
+** Course Grades
+To compare the difficulty of 2 different courses at a university the following grades distributions (given as number of pupils who achieved the grades) were registered:
+#+BEGIN_EXAMPLE
+          Course 1  Course 2 Total
+Grade 12  20         14      34
+Grade 10  14         14      28
+Grade 7   16         27      43
+Grade 4   20         22      42
+Grade 2   12         27      39
+Grade 0   16         17      33
+Grade -3  10         22      32
+Total     108       143      251
+#+END_EXAMPLE
+a) What is the median of the 251 achieved grades?
+b) What are the quartiles and the IQR (Inter Quartile Range)?
+** Cholesterol
+In a clinical trial of a cholesterol-lowering agent, 15 patients’ cholesterol (in mMol/l) was measured before treatment and 3 weeks after starting treatment. Data are listed in the following table:
+#+BEGIN_EXAMPLE
+Patient 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+Before 9.1 8.0 7.7 10.0 9.6 7.9 9.0 7.1 8.3 9.6 8.2 9.2 7.3 8.5 9.5
+After 8.2 6.4 6.6 8.5 8.0 5.8 7.8 7.2 6.7 9.8 7.1 7.7 6.0 6.6 8.4
+#+END_EXAMPLE
+
+a) What is the median of the cholesterol measurements for the patients before treatment,
+and similarly after treatment?
+
+b) Find the standard deviations of the cholesterol measurements of the patients before
+and after treatment
+** using hmisc 
+install the Hmisc package
+import the hsb2.csv file from the moodle website
+explore the same descriptive statistics as from previous steps using describe(from Hmisc)
+** 
