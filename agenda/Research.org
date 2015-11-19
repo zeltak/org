@@ -287,7 +287,14 @@ file:
 **** journal options for publishing
 European Journal of Internal Medicine
 http://www.journals.elsevier.com/european-journal-of-internal-medicine/
+** MODEL.temperature.MEXICO
+*** adar raw data
+פתרתי את הבעיה - היה צריך להכפיל את קווי האורך  ב מינוס1         כדי להפוך אותם מקו אורך 91 מזרח ל קו אורך 91 מערב..
+עכשיו הכל בסדר הכל ממוקם כמו שצריך 
+צירפתי את הנתונים של התחנות המטאורולוגיות    לקובץ המטהדאטה של התחנות.
 
+הנה הנתונים השלמים   גם קובץ המטהדאטה שמתאר 15 תחנות
+וגם הצירוף של  המטהדאטה  לנתונים המטאורולוגים 
 ** MODEL.PM.MEXICO
 *** info file
 id:
@@ -1148,7 +1155,49 @@ R package by lauren hunn
 -geoschem combine with aod qian 
 **** sattelite humidity
 lowest level
+*** TODO [#A] Joels ideas
+**** Idea for modeling PM2.5
+Let’s think about variations in air pollution concentrations. Some are spatial, some temporal, and some are spatio-temporal. Spatial variations are driven by variations in emissions, in topography, and in prevailing weather patterns. Land use attempts to capture these. Most land use terms capture emissions. Topography is an area that could be improved, as can prevailing weather. Can we classify places as in a valley? A plain? Downwind of prevailing weather patterns or upwind?  Near the sea or lakes? These are variables that may need some attention.
+Temporal variation can be conceptualized by thinking about a simple box model of the air above a location. The mixing height is the lid on the box. Wind speed moves emissions out of the box, but brings pollution from upwind. Hence it’s influence depends on the back trajectory of the air. That is, where the air over a city now was two days ago is an important predictor of its level. Importantly, it seems to me that what drives temporal variations is spatially homogeneous on a larger scale than what drives local spatial variation. That is why time series analyses work for large cities. The pollution is different, but goes up and down together. We need to capture this to improve our models.
+Another key issue I see is that the effect of PBL and wind speed depends on the local emissions. In a location with lower emissions, they will cause smaller fluctuations. That is, we expect their influence to be proportional, not additive. We have tried to accommodate that with interactions with land use terms. But really, the interaction should be will all emissions from the location, not just the ones we capture with those land use terms. And if there are seasonal differences in back trajectories, then wind speed may have seasonally varying effects.
+Finally, 1km is small, and concentrations that were upwind a few hours ago will be in this cell now. So it seems clear that concentrations at neighboring cells matter. The question is how to capture this.  
+So I think we should try the following. First, fit a model for annual average PM2.5. Use all the land use variables, the AOD and the UV AAI from OMI. Try to add in some topographical classification variables. And add the mean AOD in an 11 x 11 km cell that has the grid cell being modeled in its center as another predictor variable.
+Then, in each grid cell, instead of taking daily differences, take daily ratios to the annual average. Model these ratios as a function of PBL and wind speed, which are now proportionately changing concentrations of local emissions, not additively, as well as seasonal terms, weather, etc. Since we think relative (not absolute) temporal variation is spatially homogeneous, we can add in the mean daily ratio of  monitors within a 60 km buffer of the grid cell. The reanalysis data has estimated wind fields as well. So we can divide the 11x11 neighboring cells into 4 quadrants, look at the prevailing wind from the reanalysis data to pick a quadrant, and add in the ratio of the daily value of the 5x5 quadrant to its annual mean as another predictor. Finally, the daily surface reflectance value from the grid cell helped a bit in Qian’s models, so we should add that and NDVI. 
 
+ Meanwhile, in diagnosing Qian's model for the entire US we note that in areas with heterogeneous elevation, the model does worse. This may be because if the land is not flat the AOD computations are more noisy. Remember what Alexei said about the shadows effecting the measurement when it was not directly overhead. I believe the ARCGIS has some ability to produce estimates of this, and they might be useful information to include. Have we heard from Alexei on the angle of view variable?
+**** massimo response 
+Dear Joel,
+
+thank you very much for sharing with us your thoughts, and sorry if I am replying so late.
+
+I try to summarize below what I have understood of your message, and conclude with some practical questions:
+
+
+1. You are suggesting a very different approach, where we move from a full spatio-temporal model to two separate models, one for annual averages (chronic exposure) and another for daily ratios (acute exposures). I understand well your point, what I have not very clear is whether such approach would still allow to predict daily averages for each 1x1 location so to have epi models which evaluates short-term and long-term effects at the same time.
+In aother words, are we allowed to use the ratios predictions in the second model to obtain daily PM predictions useful for short-term evaluations?
+
+2. Let's go model by model. Annual average: I think that our predictors should allow us to characterize topography quite well. The Digital Elevation Model seems very accurate to estimate elevation of each location, distances from sea or lakes have been computed. What we are missing, but can be obtained from the Elevation Model, is a measure of the difference between elevation of the cell and elevation of a wider surrounding area, so to characterize whether we are in a valley or flat area VS a situation with changing terrain. However, we have ISA (Impervious Surface) which should tell us something about this. We have also CORINE land cover variables, but I guess they are less accurate. Finally, I don't have data on the prevailing winds as a spatial predictor, so if you have something of that kind I would be glad to add it.
+Concerning the spatial model, I understand that the model is fitted on the cells with PM monitors (~400), and then I get predictions of the expected annual average PM all over the Italian domain (~300,000). Is that right? Basically, this is very similar to conventional LUR models, only with annual estimates of AOD and UVAI from satellite. Right?
+
+3. Daily ratios: you say "in each grid cell, instead of taking daily differences, take daily ratios to the annual average". Again, I understand this model is fitted to the cells/days with PM monitors (~400*365). I model the ratio of daily PM
+over annual mean PM against all temporal predictors, and I finally get an estimate, for each day and 1x1 cell (~300,000*365) of such daily ratio. Right? I am not sure I completely understood the issue of wind quadrants, and I suppose the re-analysis you mention has been done in your group and is an additional variable we could add the to dataset, right?
+
+My final question, which goes back to the original one, is: are we allowed to use these predictions of daily ratios, from Model 2, to estimate daily concentrations? Basically, to apply the simple formula:
+
+E.PM10(ij) = E.PM10ratio(ij)*E.PM10annual(j)
+
+where:
+
+- E.PM10(ij) is what we seek, e.g. the estimate (E) of PM10 on grid cell j on day i, j=1...300,000, i=1...365
+
+- E.PM10ratio(ij) is the result of the second model, namely the estimated ratio between daily PM10 on day i and grid cell j, and its annual mean in grid cell j
+
+- E.PM10annual(j) is the result of the first model, namely the estimated annual PM10 concentration on grid cell j.
+
+
+Now let's go to the operative issues: If you agree, Joel, I would see your new approach not as a replacement of the original one but as alternative. In other words, I would proceed with the original approach (I have been working a lot on it and would like to show you some results), and would apply the new one on a test year, to see how they differ.
+
+Let me know what you think about this.
 ** Model.Ta 
 *** stage 3 regression by grid cell
 You do not need to run a model with a random effect for each grid cell. Instead, you can run a separate regression for each gridcell, regressing the non-missing predicted Ta against the mean of monitored Ta within 100km. This gives you 1 million regressions to do, but you can divide the gridcells into 100 groups and run 100 jobs on the cluster and it will run in an hour. We do this when we regress the 5000,000 methylation sites against predictors in the NAS.  Also, we need some of the land use terms.
@@ -1559,7 +1608,16 @@ USA. (each grid contained length of roads and other data..)
 3- an idea for future study - compare an epi paper that used
 commercial GIS data, and replace it with OSM data - see if there is a
 difference. 
-
 ** indian meeting [2015-10-22 Thu]
 *** TODO [#A] arrange meeting with joel, bangalore
 There are several things to ℅-ordinate. I am going to Mumbai for a meeting that Columbia is organizing that will be in part about air pollution in India. One piece will be using Geoschem for source apportionment. I don't know if the people you are talking to are involved in that, or interested in being involved. Can you check with them, because that may influence who we want on the call.
+** joel talk [2015-11-19 Thu]
+*** new qian mode 
+-will this replace aod based models? it seems like it preforms almost as well in NE
+-should we have a study comparing performance in a health outcome study?
+- the HEI representative in ISEE told me francesca won the grant, will this be used for the grant?
+*** recommendation letter
+need a really impressive "killer" over the top recommendation letter from full professor which never published with me. who do you recommend?
+doug dockert?
+Francesco forresteri? (is he accameimcal affiliated, that is a full professor somewhere?)
+
