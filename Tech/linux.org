@@ -25458,6 +25458,20 @@ Some terminal emulators under X support mouse clicks in the terminal window. In 
 ~M-x xterm-mouse-mode ~
 
 to enable simple use of the mouse--only single clicks are supported. The normal xterm mouse functionality is still available by holding down the SHIFT key when you press the mouse button. The Linux console supports this mode if it has support for the mouse enabled, e.g. using the gpm daemon.
+******** search for commands with apropos
+The apropos commands answer questions like, “What are the commands for working with files?” More precisely, you specify an apropos pattern, which means either a word, a list of words, or a regular expression.
+
+Each of the following apropos commands reads an apropos pattern in the minibuffer, searches for items that match the pattern, and displays the results in a different window.
+
+C-h a
+Search for commands (apropos-command). With a prefix argument, search for noninteractive functions too.
+
+M-x apropos
+Search for functions and variables. Both interactive functions (commands) and noninteractive functions can be found by this.
+
+C-h d
+Search for functions and variables whose documentation strings match the specified pattern (apropos-documentation).
+
 
 ******** start with systemd 
 look at the systemd entery [[id:6e5c769c-0f97-4001-8ce7-c19acdd8ce89][setup emacsclient as a systemd unit in Arch]]

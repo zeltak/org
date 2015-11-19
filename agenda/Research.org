@@ -1543,21 +1543,23 @@ non anthrpogentic dust?
 ** Johanna [2015-11-10 Tue] 
 model 
 2004 vs 2011 in terms of sd and variation in each step
+** Kees [2015-11-18 Wed] 
+1- the main idea of the paper will be to compare OSM data with
+governmental or commercial data for a simple epi study - maybe health
+impact assessment. 
+
+2- compare 3 developed countries: Israel, Switzerland and USA
+(Massachusetts). 
+
+3- ask Keis for Switzerland data.
+
+4- use the same grids that were used in Switzerland for Israel and
+USA. (each grid contained length of roads and other data..) 
+
+3- an idea for future study - compare an epi paper that used
+commercial GIS data, and replace it with OSM data - see if there is a
+difference. 
+
 ** indian meeting [2015-10-22 Thu]
 *** TODO [#A] arrange meeting with joel, bangalore
-* gmail recovery
-** לגבי ה-IDW, לא חובה לעבוד עם אובייקטים מרחביים (SpatialPointsDataFrame), אפשר לעבוד עם data.frame.
-https://mail.google.com/mail/u/0/#search/%3Cmichael.dorman%40mail.huji.ac.il%3E+Re%3A+Link/14e07836f0d509d7
-
-אם יש לך data.frame עם תצפיות (למשל rainfall) עם עמודות קואורדינטות (x ו-y) ועמודה של משתנה תלוי (annual) ו-data.frame של הנקודות עבורן אתה רוצה לבצע את החיזוי (למשל towns), גם כן עם עמודות קואורדינטות (x ו-y), מדובר בשתי שורות קוד -
-
-model = gstat(formula = annual ~ 1, locations = ~ x + y, data = rainfall)
-predict(object = model, newdata = towns)
-
-האובייקט model בדוגמה הנ"ל, מהמחלקה gstat, מכיל את כל המידע הנחוץ לביצוע חיזוי או cross-validation בשיטה שנבחרה (IDW) עם נתוני הכיול הרלוונטיים. בחירת השיטה, דרך אגב, מתבצעת אוטומטית עפ"י סט הארגומנטים של הפונקציה (אתה יכול לראות את זה בשקף 20 של המצגת המצורפת). הסט הנ"ל קובע שהמודל יהיה IDW, עם סט שונה של ארגומנטים ייבחר kriging וכו'. רצוי שהקואורדינטות יהיו ב-projection ולא קווי אורך ורוחב כי עובדים עם מרחקים, אבל באזור קטן כמו ישראל זה לא כל כך משנה. מצ"ב קוד עם דוגמה שאפשר לשחזר.
-
-** TODO generate 200m predictions for 2009, the greater boston area [2015-10-14 Wed]
-   DEADLINE: <2015-10-28 Wed>
-200mn
-also generate 1km for the entire 2009
-** TODO look at info online for AOD in mexico city and which location was it in. was it in rama or unam :meytar:
+There are several things to ℅-ordinate. I am going to Mumbai for a meeting that Columbia is organizing that will be in part about air pollution in India. One piece will be using Geoschem for source apportionment. I don't know if the people you are talking to are involved in that, or interested in being involved. Can you check with them, because that may influence who we want on the call.

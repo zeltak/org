@@ -134,17 +134,35 @@ https://mail.google.com/mail/u/0/#starred/14f4c74a30e279d0
 ** TODO  check bgu return for rest of italy- talk to miriam ben gal
  <2015-10-08 Thu 09:36>
 ** TODO explore the use of SSD swap for R RAM demands
+** TODO look at info online for AOD in mexico city and which location was it in. was it in rama or unam :meytar:
+** TODO generate 200m predictions for 2009, the greater boston area [2015-10-14 Wed]
+   DEADLINE: <2015-10-28 Wed>
+200mn
+also generate 1km for the entire 2009
+** לגבי ה-IDW, לא חובה לעבוד עם אובייקטים מרחביים (SpatialPointsDataFrame), אפשר לעבוד עם data.frame.
+https://mail.google.com/mail/u/0/#search/%3Cmichael.dorman%40mail.huji.ac.il%3E+Re%3A+Link/14e07836f0d509d7
+
+אם יש לך data.frame עם תצפיות (למשל rainfall) עם עמודות קואורדינטות (x ו-y) ועמודה של משתנה תלוי (annual) ו-data.frame של הנקודות עבורן אתה רוצה לבצע את החיזוי (למשל towns), גם כן עם עמודות קואורדינטות (x ו-y), מדובר בשתי שורות קוד -
+
+model = gstat(formula = annual ~ 1, locations = ~ x + y, data = rainfall)
+predict(object = model, newdata = towns)
+
+האובייקט model בדוגמה הנ"ל, מהמחלקה gstat, מכיל את כל המידע הנחוץ לביצוע חיזוי או cross-validation בשיטה שנבחרה (IDW) עם נתוני הכיול הרלוונטיים. בחירת השיטה, דרך אגב, מתבצעת אוטומטית עפ"י סט הארגומנטים של הפונקציה (אתה יכול לראות את זה בשקף 20 של המצגת המצורפת). הסט הנ"ל קובע שהמודל יהיה IDW, עם סט שונה של ארגומנטים ייבחר kriging וכו'. רצוי שהקואורדינטות יהיו ב-projection ולא קווי אורך ורוחב כי עובדים עם מרחקים, אבל באזור קטן כמו ישראל זה לא כל כך משנה. מצ"ב קוד עם דוגמה שאפשר לשחזר.
+
 ** TODO Return for 9500 Data layer
 -Talk to rachel and then RA about billing the haifa grant
 -also check about geocoding buy if not succesful
 * Department/faculty duties
 ** TODO arrange co operations with other geography departments internationally
 *** proposed departments:
-**** imperial college London
-**** UCLA
-**** Alabama
-**** Curtin college , Australia
-**** BC, Canada
+**** imperial college London (Itai)
+**** UCLA (Itzik)
+**** Alabama (Tal)
+**** Curtin college , Australia (oren)
+**** BC, Canada (Meidad)
+**** Melbourne University (Avinoam)
+**** Leeds UK (Eli)
+**** Utrecht university (Er an)
 *** Proposed cooperation's:
 - student exchange
 - Faculty exchange (giving summer courses here and there)
@@ -152,7 +170,43 @@ https://mail.google.com/mail/u/0/#starred/14f4c74a30e279d0
 - Referring MA/PhD students
 - Joint grant proposals (BSF,NSF,GIF,EU)
 - On-line joint course between the two departments
-*** Explore cooperation's with India and China institutions 
+*** Explore cooperation's with India and China institutions
+*** Letter
+
+Subject: Academic Cooperation between departments
+
+Dear prof. {NAME of DEPARTMENT CHAIR}
+
+I am writing to you on behalf of the Chair and all faculty members of the Department of Geography and Environmental Development, Ben-Guroin University of the Negev,Israel. 
+
+Im a faculty member of the department (Dr. Itai kloog) and I'm in charge of pursuing strong academic cooperation's with leading geography departments. Since there are already strong existing cooperation's between researchers from our departments ({ENTER NAMES OF RESEARCHERS HERE}) we thought that this could be a good opportunity to discuss further exansion of such cooperation's. 
+
+A very brief introduction of our department: We are one of the leading geography departments in Israel, with world renowned and prolific researchers in multi disciplinary fields of geography. We have three main study programs in GIT (Geographic Information Technologies), Physical Geography and Human Geography. We have over 9 laboratories headed by our faculty members (Geomorphology Laboratory,Earth and Planetary Image Facility (EPIF),Geographic Information Laboratory (GI-Lab), The Geo-Ecology Laboratory,Soil and Desert Dust Laboratory,Aeolian Simulation Laboratory,Planning Laboratory,The Sustainability and Environmental Policy Laboratory and Environmental exposure assessment Laboratory). We have strong global collaborations with well respected institutions such as Harvard, Cornell, Brown, Arizona state university, Southampton university, Imperial college, Curtin university and many others. 
+
+We thought that since our departments share mutual interest in fields of research, teaching, dissemination of knowledge and academic excellence it would be beneficial to explore and develop the following cooperation programs:
+
+a. Actively hosting and joining short-term visits and other exchange activities organized by either party (such as summer courses, seminars etc)
+b. Setting up a platform for scientific exchange between the two universities
+c. Exchange of students and post docs
+d. writing of joint grant proposals
+e. exploring educational cooperation's between the departments such as short summer courses and on-line courses developed by both departments)
+
+Please let me know if your department may have interest in such a cooperation and if so perhaps we can organize a web meeting or web call to further discuss how to move forward.
+
+kind regards
+
+Dr. Itai Kloog
+The Department of Geography and Environmental Development
+Ben-Gurion University of the Negev
+P.O.B. 653 Beer Sheva
+Israel
+
+
+
+
+
+
+
 * GIT program
 ** structure 
 Below are tables for both the new BA and MA GIT programs as we discussed I our previous meeting

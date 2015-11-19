@@ -250,11 +250,11 @@ Here are some examples:
 
 #+BEGIN_SRC R :session Rorg  :results none
 # sort by mpg
-newdata <- mtcars[order(mpg),]
+newdata <- mtcars[order(mycars$mpg),]
 # sort by mpg and cyl
-newdata <- mtcars[order(mpg, cyl),]
+newdata <- mtcars[order(mycars$mpg, mycars$cyl),]
 #sort by mpg (ascending) and cyl (descending)
-newdata <- mtcars[order(mpg, -cyl),]
+newdata <- mtcars[order(mycars$mpg, -mycars$cyl),]
 #+END_SRC
 
 ** Descriptive Statistics
@@ -627,7 +627,7 @@ as.Date("2001-01-01") + 45
 #+end_src
 
 * Homework-Week 3
-** Exercise 1 Infant birth weight
+** Infant birth weight
 In a study of infant birth weight for different occupational groups this was recorded for some first-time mothers hairdressers. The following table shows the results in grams (data specified in sorted order) for 20 births in total, 10 female births and 10 male births.
 
 #+BEGIN_SRC R :session Rorg  :results none
@@ -670,4 +670,4 @@ and after treatment
 install the Hmisc package
 import the hsb2.csv file from the moodle website
 explore the same descriptive statistics as from previous steps using describe(from Hmisc)
-** 
+
