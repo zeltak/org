@@ -4025,7 +4025,7 @@ make sure that there are no more then 31 tags
 
 ** Tiling WM's
 *** Define default X applications
-**** method 1- using mime
+**** method 1- using mimi
 https://github.com/march-linux/mimi
 
 you can define a list of 'how-to-open' in file:~/.config/mimi/mime.conf
@@ -4049,6 +4049,7 @@ https: chromium
 magnet: transmission-remote-gtk
 spotify: spotify
 #+end_EXAMPLE
+
 $Note$ the above syntax can be simplified by using:
 rar: xterm -e 2a
 but if you have time, using mime-type is more precise
@@ -4070,8 +4071,6 @@ note:
 
 sometimes, mimi is smart enough to figure out protocol based on mime-type when it searches for .desktop.
 sometimes, if an app requires a terminal to run (ncurses programs), mimi is able to find one terminal app in .desktop.
-
-
 
 *** General
 **** xprop-check window name/class					:Fav:
@@ -25226,27 +25225,14 @@ Android virtual machines. Click Start to run it.
  [[~/Dropbox/Org/Tech/linux_files/image186.png]]
 *** Teamviewer
 **** Bugs
-***** fix wierd issues on debian with VPN in BGU
+***** fix disappearing TVsever issues ssh or VPN in BGU
+****** SSH
 
-@note-on arch make aure latest version of `snx` package is installed thorugh AUR@
-
-https://aur.archlinux.org/packages/snx/
-
-
-1)log in with VPN in browser
-
-https://vpn.bgu.ac.il/extender.html
-
-U:ikloog@vpn
-Pass:4862
-
-2)log into machine with ssh
+1)log into machine with ssh
 
 #+BEGIN_SRC sh :term t
-ssh -X -C zeltak@132.72.155.204
+ssh zeltak@132.72.155.204
 #+END_SRC
-
-#+RESULTS:
 
 3)stop the TV processes and deamon (with htop,init or systemd)
 
@@ -25257,27 +25243,74 @@ sudo teamviewer --daemon stop
 4)use 'htop' to kill all non deamon TV processes
 
 5)and start the TV deamon again:
-#+NAME: 
 #+BEGIN_SRC sh
 sudo teamviewer --daemon start
-#+END_SRC
+ #+END_SRC
 $Note- this maybe done with systemd in future debian releases when systemd takes over$
 
-$Note$ you can skip VNC and try this if it works:
-
-
-#+NAME: 
+6)set the display to be able to launch 
 #+BEGIN_SRC sh
-DISPLAY=:0 teamviewer
+export DISPLAY=:0
+ #+END_SRC
+
+7) launch teamviewer
+#+BEGIN_SRC sh
+teamviewer
 #+END_SRC
 
-with VNC connect to debian machine:
-issue:
-#+NAME: 
-#+BEGIN_SRC sh
-x11vnc -display :0
-#+END_SRC
-then connect with vinagre or any VNC viwer and start TV through GUI
+****** VPN
+
+ @note-on arch make aure latest version of `snx` package is installed thorugh AUR@
+
+ https://aur.archlinux.org/packages/snx/
+
+
+ 1)log in with VPN in browser
+
+ https://vpn.bgu.ac.il/extender.html
+
+ U:ikloog@vpn
+ Pass:4862
+
+ 2)log into machine with ssh
+
+ #+BEGIN_SRC sh :term t
+ ssh -X -C zeltak@132.72.155.204
+ #+END_SRC
+
+ #+RESULTS:
+
+ 3)stop the TV processes and deamon (with htop,init or systemd)
+
+ #+BEGIN_SRC sh :term t
+ sudo teamviewer --daemon stop
+ #+END_SRC
+
+ 4)use 'htop' to kill all non deamon TV processes
+
+ 5)and start the TV deamon again:
+ #+NAME: 
+ #+BEGIN_SRC sh
+ sudo teamviewer --daemon start
+ #+END_SRC
+ $Note- this maybe done with systemd in future debian releases when systemd takes over$
+
+ $Note$ you can skip VNC and try this if it works:
+
+
+ #+NAME: 
+ #+BEGIN_SRC sh
+ DISPLAY=:0 teamviewer
+ #+END_SRC
+
+ with VNC connect to debian machine:
+ issue:
+ #+NAME: 
+ #+BEGIN_SRC sh
+ x11vnc -display :0
+ #+END_SRC
+ then connect with vinagre or any VNC viwer and start TV through GUI
+
 ** Editors
 *** 'Emacs'
        :PROPERTIES:
