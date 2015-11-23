@@ -1,0 +1,1024 @@
+# -*- mode: Org; org-download-image-dir: "/home/zeltak/org/attach/bgu/courses/BGU.R/images"; org-download-heading-lvl: nil; -*-
+#+Title:שיטות כמותיות למתקדמים
+#+Author: ד"ר איתי קלוג 
+#+Email: ikloog@bgu.ac.il
+#+REVEAL_TITLE_SLIDE_BACKGROUND: /home/zeltak/org/attach/bgu/courses/BGU.R/images/stat_large.jpg
+
+#+OPTIONS: reveal_center:t reveal_progress:t reveal_history:nil reveal_control:t
+#+OPTIONS: reveal_rolling_links:t reveal_keyboard:t reveal_overview:t num:nil
+#+OPTIONS: reveal_width:1200 reveal_height:800
+#+OPTIONS: toc:nil
+# #+REVEAL: split
+#+REVEAL_MARGIN: 0.1
+#+REVEAL_MIN_SCALE: 0.5
+#+REVEAL_MAX_SCALE: 2.5
+#+REVEAL_TRANS: linear
+#+REVEAL_SPEED: default
+#+REVEAL_THEME: white
+#+REVEAL_HLEVEL: 2
+#+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Org-Reveal Introduction.">
+#+REVEAL_POSTAMBLE: <p> Created by itai Kloog. </p>
+# REVEAL_PLUGINS: (highlight markdown notes)
+#+REVEAL_SLIDE_NUMBER: t
+#+OPTIONS: ^:nil
+#+EXCLUDE_TAGS: noexport
+#+TAGS: noexport(n)
+#+REVEAL_EXTRA_CSS: /home/zeltak/org/files/Uni/Courses/css/left.aligned.css
+
+
+
+* Week 4
+** Boolean
+*** Boolean logic (T or F)
+I carry an umbrella if it both rains and snows on the same day\\
+I carry an umbrella whenever it rains or snows\\
+I carry an umbrella for rain but never for snow\\
+I never carry an umbrella for rain, only for snow\\
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-25 13:39:20
+#+attr_html: :width 200px
+[[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-10-25_13-39-20.png]]
+*** boolean logic
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-25 13:45:33
+#+attr_html: :width 500px
+[[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-10-25_13-45-33.png]]
+*** Boolean operators
+#+BEGIN_EXAMPLE
+&  and (element wise)
+| or (element wise)
+!  not
+<  less than
+>  greater than
+<= less than or equal to
+>= greater than or equal to
+== equal to
+!= not equal to
+#+END_EXAMPLE
+
+Pro tip: In R, F is equivalent to FALSE and T is equivalent to TRUE. Most code uses T and F. 
+
+TRUE == T == 1 and FALSE == F == 0 (long-standing programming convention)
+
+*** Boolean examples: single value
+#+BEGIN_SRC R :session Rorg  :results none
+x <- 3 
+x == 3 
+#[1] TRUE 
+x < 10 
+#[1] TRUE 
+x < -1 
+#[1] FALSE 
+x > 0 & x < 10 #Combine multiple conditions with AND (&) or OR (|)
+#[1] TRUE
+#+END_SRC
+*** Boolean examples: vector of values
+#+BEGIN_SRC R :session Rorg  :results none
+x <- 1:5 #Now x is a vector of values
+x == 3 
+#[1] FALSE FALSE TRUE FALSE FALSE 
+x < 10 
+#[1] TRUE TRUE TRUE TRUE TRUE 
+x > 2 & x <= 4 
+#[1] FALSE FALSE TRUE TRUE FALSE 
+x != 2 
+#[1] TRUE FALSE TRUE TRUE TRUE
+#+END_SRC
+** Base R graphics
+  :PROPERTIES:
+  :reveal_background: /home/zeltak/org/attach/bgu/courses/BGU.R/images/hist_BD.jpg
+  :END:
+*** R graphics – Nice and Simple
+#+ATTR_HTML: :class left
+R has powerful graphics facilities for the production of publication-quality diagrams and plots.
+#+ATTR_HTML: :class left
+R Can produce traditional plots as well as 3D, animated, GIS and grid graphics.
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:11:05
+#+attr_html: :width 400px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:11:05.png]]
+
+#+REVEAL: split
+
+Drawing graphics in a window on the screen of a computer is very similar to drawing by hand on a sheet of paper.
+
+We begin a drawing by getting out a clean piece of paper and then deciding what scale to use in the drawing.
+
+With those basic decisions made, we can then start putting pen to paper.
+
+The steps in R are very similar
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 19:49:05
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_19:49:05.png]]
+
+#+REVEAL: split 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 19:55:55
+#+attr_html: :width 700px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_19:55:55.png]]
+
+#+REVEAL: split
+Graphics are important for conveying important features of the data:
+
+They can be used to examine Marginal distributions
+
+Relationships between variables
+
+Summary of very large data
+
+Important complement to many statistical and computational techniques
+
+*** Change parameters using par()
+A list of graphical parameters that define the default behavior of all plot functions.
+
+Just like other R objects, par elements are similarly modifiable, with slightly different syntax.
+
+e.g. par(“bg”=“lightcyan”)
+
+This would change the background color of all subsequent plots to light cyan
+
+When par elements are modified directly (as above, this changes all subsequent plotting behavior.
+#+REVEAL: split 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 19:46:58
+#+attr_html: :width 800px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_19:46:58.png]]
+
+#+REVEAL: split 
+Par examples modifiable from within plotting functions
+
+#+BEGIN_EXAMPLE
+bg – plot background color
+
+lty – line type (e.g. dot, dash, solid)
+
+lwd – line width
+
+col – color
+
+cex – text size inside plot
+
+xlab, ylab – axes labels
+
+main – title
+
+pch – plotting symbol
+#+END_EXAMPLE
+
+and many more (learn as you need them)
+
+#+REVEAL: split 
+Graphical Plotting Symbols:
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 19:47:38
+#+attr_html: :width 700px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_19:47:38.png]]
+
+#+REVEAL: split 
+Coloured Plotting Symbols:
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 19:48:18
+#+attr_html: :width 700px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_19:48:18.png]]
+*** Save the output
+Specify destination of graphics output or simply right click and copy
+#+BEGIN_EXAMPLE
+Not Scalable:
+
+JPG # not recommended, introduces blurry artifacts around the lines
+BMP
+PNG
+
+Scalable:
+
+Postscript     # preferred in LaTex
+Pdf            # great for posters
+#+END_EXAMPLE
+
+After you generate your graphics, simply close the device with  *dev.off()*
+
+#+REVEAL: split 
+
+#+BEGIN_SRC R :session Rorg  :results none
+setwd("")        # this is where the plot will be saved
+pdf(file="Puromycin.pdf“, width = , height = , res = )
+dev.off()
+#+END_SRC
+*** plot()
+*plot()* is the main graphing function
+it automatically produces simple plots for vectors, functions or data frames
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:55:51
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:55:51.png]]
+*** Plotting a Vector
+plot(v) will print the elements of the vector 'v' according to their index
+
+#+BEGIN_SRC R :session Rorg  :results none
+# Plot height for each observation
+plot(dataset$Height)
+# Plot values against their ranks
+plot(sort(dataset$Height))
+#+END_SRC
+
+#+REVEAL: split 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:15:31
+#+attr_html: :width 800px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:15:31.png]]
+
+#+REVEAL: split 
+
+#+BEGIN_SRC R :session Rorg  :results none
+plot(sort(dataset$Height), ylim = c(120,200),
+ylab = "Height (in cm)", xlab = "Rank", main = "Distribution of Heights")
+#+END_SRC
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:16:33
+#+attr_html: :width 800px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:16:33.png]]
+
+#+REVEAL: split 
+#+BEGIN_EXAMPLE
+Specifying labels:
+main – provides a title
+xlab – label for the x axis
+ylab – label for the y axis
+Specifying range limits:
+ylim – 2-element vector gives range for x axis
+xlim – 2-element vector gives range for y axis
+#+END_EXAMPLE
+*** Line Charts
+First we'll produce a very simple graph using the values in the car vector:
+#+BEGIN_SRC R :session Rorg  :results none
+# Define the cars vector with 5 values
+cars <- c(1, 3, 6, 4, 9)
+# Graph the cars vector with all defaults
+plot(cars)
+#+END_SRC
+
+*lets try it on your computer!*
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:57:03
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:57:03.png]]
+
+#+REVEAL: split 
+Let's add a title, a line to connect the points, and some color:
+#+BEGIN_SRC R :session Rorg  :results none
+# Define the cars vector with 5 values
+cars <- c(1, 3, 6, 4, 9)
+
+# Graph cars using blue points overlayed by a line 
+plot(cars, type="o", col="blue")
+
+# Create a title with a red, bold/italic font
+title(main="Autos", col.main="red", font.main=4)
+#+END_SRC
+*lets try it on your computer!*
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:57:51
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:57:51.png]]
+
+#+REVEAL: split 
+
+Now let's add a red line for trucks and specify the y-axis range directly so it will be large enough to fit the truck data:
+#+BEGIN_SRC R :session Rorg  :results none
+# Define 2 vectors
+cars <- c(1, 3, 6, 4, 9)
+trucks <- c(2, 5, 4, 5, 12)
+
+# Graph cars using a y axis that ranges from 0 to 12
+plot(cars, type="o", col="blue", ylim=c(0,12))
+
+# Graph trucks with red dashed line and square points
+lines(trucks, type="o", pch=22, lty=2, col="red")
+
+# Create a title with a red, bold/italic font
+title(main="Autos", col.main="red", font.main=4)
+#+END_SRC
+*lets try it on your computer!*
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 11:01:09
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_11:01:09.png]]
+*** Bar plots
+The bar chart is familiar to everyone and is a useful graphical tool that may be used in a variety of ways.
+
+The basic function is: barplot(data)
+
+#+REVEAL: split 
+here are some data on road deaths in Virginia. These data come with the basic distribution of R and are called VADeaths. 
+
+The means have been extracted below and assigned to the variable VADmeans. 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 13:15:39
+#+attr_html: :width 400px
+[[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_13:15:39.png]]
+
+#+REVEAL: split 
+We can see that there are four categories. To create a basic bar chart we simply call the barplot() function:
+
+#+BEGIN_SRC R :session Rorg  :results none
+barplot(VADmeans, main="Road Deaths in Virginia",xlab="Categories", ylab="Mean Deaths")
+#+END_SRC
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 13:20:38
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_13:20:38.png]]
+
+#+REVEAL: split 
+By break:
+
+The VADeaths dataset consists of a matrix of values with both column and row labels:
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 13:00:40
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_13:00:40.png]]
+
+#+REVEAL: split 
+If we attempt to produce a bar chart of these data we get something like the following:
+#+BEGIN_SRC R :session Rorg  :results none
+barplot(VADeaths, legend= rownames(VADeaths))
+#+END_SRC
+*lets try it on your computer!*
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 13:01:16
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_13:01:16.png]]
+
+This time a legend was added using the legend command along with the rownames of the dataset. We see that by default a stacked bar chart is produced
+
+#+REVEAL: split 
+Unstack bar plot:
+To unstack the bars and plot them alongside one another we use a new command:
+#+BEGIN_SRC R :session Rorg  :results none
+barplot(VADeaths, legend= rownames(VADeaths), beside= TRUE)
+#+END_SRC
+
+*lets try it on your computer!*
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 13:02:03
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_13:02:03.png]]
+
+#+REVEAL: split 
+adding color:
+This is fine but the colour scheme is kind of boring. Here is a new set of commands:
+#+BEGIN_SRC R :session Rorg  :results none
+barplot(VADeaths, beside = TRUE, col = c("lightblue", "mistyrose", "lightcyan","lavender", "cornsilk"), legend = rownames(VADeaths), ylim = c(0, 100))
+title(main = "Death Rates in Virginia", font.main = 4)
+#+END_SRC
+*lets try it on your computer!*
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 13:03:50
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_13:03:50.png]]
+
+#+REVEAL: split 
+We have specified a list of colours to use for the bars. Note how the list is in the form c(item1, item2, item3, item4). 
+
+The command ylim sets the limits of the y-axis. In this case a lower limit of 0 and an upper of 100. The command is in the form ylim= c(lower, upper) and note again the use of the c(item1, item2) format. 
+
+#+REVEAL: split
+
+The legend takes the names from the row names of the datafile. We set the y-axis limit to accommodate the legend box.
+
+It is possible to specify the title of the graph as a separate command, which is what was done above. The command title() achieves this but of course it only works when a graphics window is already open. The command font.main sets the typeface, 4 produces bold italic font.
+
+#+REVEAL: split 
+Horizontal bar plots:
+it is straightforward to rotate your plot so that the bars run horizontal rather than vertical (which is the default). 
+
+To produce a horizontal plot you add horizontal= TRUE to the command e.g.
+
+#+BEGIN_SRC R :session Rorg  :results none
+barplot(table(carb), horiz=T, col="lightgreen", xlab="Frequency", ylab="Range")
+title(main="Horizontal Bar Plot", font.main= 4)
+#+END_SRC
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 12:37:40
+#+attr_html: :width 400px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_12:37:40.png]]
+*** Histograms
+A histogram is very common plot. It plots the frequencies that data appears within certain ranges. 
+
+To plot a histogram of the data use the “hist” command:
+#+BEGIN_SRC R :session Rorg  :results none
+library(data.table)
+w1<-fread("/home/zeltak/org/attach/bgu/courses/BGU.R/data/l4class/w1.csv")
+hist(w1$vals)
+hist(w1$vals,main="Distribution of w1",xlab="w1")
+#+END_SRC
+*lets try it on your computer!* (the data w1 is on moodle)
+
+#+REVEAL: split 
+The parameter breaks specifies the number of categories to plot or specifies the breakpoints for each category
+
+You can specify the number of breaks to use using the breaks option. Here we look at the histogram for various numbers of breaks:
+
+#+BEGIN_SRC R :session Rorg  :results none
+hist(w1$vals,breaks=2)
+hist(w1$vals,breaks=4)
+hist(w1$vals,breaks=6)
+hist(w1$vals,breaks=8)
+hist(w1$vals,breaks=12)
+#+END_SRC
+*lets try it on your computer!*
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 19:03:37
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_19:03:37.png]]
+
+
+#+REVEAL: split 
+The col,xlab, ylab, xlim, ylim options work as in other plots
+
+#+BEGIN_SRC R :session Rorg  :results none
+# Create a histogram for autos in light blue with the y axis
+# ranging from 0-10
+hist(autos, col="lightblue", ylim=c(0,10))
+#+END_SRC
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 12:03:09
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_12:03:09.png]]
+
+#+REVEAL: split 
+#+BEGIN_SRC R :session Rorg  :results none
+hist(dataset$bp.sys, col = "lightblue",
+xlab = "Systolic Blood Pressure", main = "Blood Pressure")
+#+END_SRC
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:19:24
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:19:24.png]]
+
+#+REVEAL: split 
+sequence breaks:
+#+BEGIN_SRC R :session Rorg  :results none
+hist(dataset$bp.sys, col = "lightblue", breaks = seq(80,220,by=2),
+xlab = "Systolic Blood Pressure", main = "Blood Pressure")
+#+END_SRC
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:20:13
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:20:13.png]]
+*** Kernel Density Plots
+Kernal density plots are usually a much more effective way to view the distribution of a variable.
+
+They are used instead of histograms 
+
+simple Kernel Density Plot
+
+#+BEGIN_SRC R :session Rorg  :results none
+plot(density(mtcars$mpg))
+#+END_SRC
+*lets try it on your computer!*
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-23 07:23:54
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-23_07:23:54.png]]
+
+#+REVEAL: split 
+Filled Density Plot:
+#+BEGIN_SRC R :session Rorg  :results none
+d <- density(mtcars$mpg)
+plot(d, main = "Kernel Density of Miles Per Gallon")
+polygon(d, col = "red", border = "blue")
+#+END_SRC
+*lets try it on your computer!*
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-23 07:24:24
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-23_07:24:24.png]]
+*** Boxplots
+A boxplot provides a graphical view of the median, quartiles, maximum, and minimum of a data set.
+
+it allows you to convey a lot of information on one simple plot.
+
+useful when your data is not normally distributed 
+
+it is generated by the boxplot() function
+
+#+REVEAL: split 
+#+BEGIN_SRC R :session Rorg  :results none
+boxplot(w1$vals)
+#+END_SRC
+*lets try it on your computer!*
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 12:24:12
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_12:24:12.png]]
+
+What we see is a box with a line through it. 
+
+The line represents the median of the sample.
+
+The box itself shows the upper and lower quartiles.
+
+The whiskers show the range (i.e. the largest and smallest values).
+
+#+REVEAL: split 
+boxplots options  
+
+We can add axis labels, a main title and colour the box using simple commands. These commands are the same as for those used in producing barplots and histograms. For example:
+
+Again, this is a very plain graph, and the title and labels can be specified in exactly the same way as in the stripchart and hist commands:
+
+#+REVEAL: split 
+#+BEGIN_SRC R :session Rorg  :results none
+boxplot(w1$vals,
+          main='Leaf BioMass in High CO2 Environment',
+          ylab='BioMass of Leaves')
+#+END_SRC
+*lets try it on your computer!*
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 12:45:30
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_12:45:30.png]]
+
+#+REVEAL: split 
+A colored Boxplot
+#+BEGIN_SRC R :session Rorg  :results none
+boxplot(dataset, col = rainbow(6), ylab = "Appropriate Units")
+#+END_SRC
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:20:56
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:20:56.png]]
+
+#+REVEAL: split 
+Plotting several samples: 
+
+we can see how to represent a single sample but often we wish to compare samples.
+
+For example, we may have raised types of flies on various sugars. 
+
+We measure the size of the individual flies and record the diet for each.
+
+Our data file would consist of two columns; one for growth and one for sugar. e.g.
+
+#+REVEAL: split 
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 12:50:51
+#+attr_html: :width 150px
+
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_12:50:51.png]]
+
+#+REVEAL: split 
+We have one variable, growth, and several samples (i.e. the different sugars). 
+
+To plot these we use the boxplot command with slightly different syntax:
+
+boxplot(y ~ x). 
+
+TIP:This model syntax is used widely in R for setting-up ANOVA and regression analyses for example.
+
+To create a summary boxplot we type something like:
+
+#+BEGIN_SRC R :session Rorg  :results none
+boxplot(growth ~ sugar, data=fly, xlab="Sugar type", ylab="Growth", col="bisque", range=0)
+title(main="Growth against sugar type", font.main= 4)
+#+END_SRC
+
+#+REVEAL: split 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 12:52:49
+#+attr_html: :width 600px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_12:52:49.png]]
+
+Now we can see that the different sugar treatments appear to produce differing growth in our subjects.
+
+#+REVEAL: split 
+Horizontal box plots
+
+It is straightforward to rotate your plot so that the bars run horizontal rather than vertical (which is the default).
+
+To produce a horizontal plot you add horizontal= TRUE to the command e.g.
+
+#+BEGIN_SRC R :session Rorg  :results none
+boxplot(growth ~ sugar, data=fly, ylab="Sugar type", xlab="Growth", col="mistyrose", range=0, horizontal=TRUE)
+title(main="Growth against sugar type - horizontal", font.main= 4)
+#+END_SRC
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 12:53:32
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_12:53:32.png]]
+
+#+REVEAL: split 
+Adding Individual Observations
+rug() can add a tick for each observation to the side of a boxplot() and other plots. 
+The side parameter specifies where tickmarks are drawn
+#+BEGIN_SRC R :session Rorg  :results none
+boxplot(dataset$Weight, main = "Weight (in kg)", col = "red")
+rug(dataset$Weight, side = 2)
+#+END_SRC
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:22:05
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:22:05.png]]
+*** pie charts 
+
+A pie chart of a qualitative data sample consists of "pizza/cake" wedges that shows the frequency distribution graphically.
+
+R supports pie charts using the *pie* function.
+
+The pie function can accept, among other parameters, a vector of numbers and a list of strings to use as labels.
+
+#+REVEAL: split 
+#+BEGIN_SRC R :session Rorg  :results none
+parts =  c(22,65,10,3)
+states = c("New Jersey", "New York", "Pennsylvania", "Maryland")
+pie(parts,labels=states)
+#+END_SRC
+*lets try it on your computer!*
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-23 07:17:34
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-23_07:17:34.png]]
+
+#+REVEAL: split 
+To colorize the pie chart, we select a color palette and set it in the col argument of pie.
+
+#+BEGIN_SRC R :session Rorg  :results none
+colors = c("red", "yellow", "green", "violet", "orange", "blue", "pink", "cyan") 
+pie(school.freq,             # apply the pie function 
+  col=colors)                # set the color palette
+#+END_SRC
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-23 07:20:29
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-23_07:20:29.png]]
+
+#+REVEAL: split 
+3D Pie Chart:
+
+#+BEGIN_SRC R :session Rorg  :results none
+library(plotrix)
+slices <- c(10, 12, 4, 16, 8)
+lbls <- c("US", "UK", "Australia", "Germany", "France")
+pie3D(slices, labels = lbls, explode = 0.1, main = "Pie Chart of Countries ")
+#+END_SRC
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-23 07:21:35
+#+attr_html: :width 300px
+
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-23_07:21:35.png]]
+
+*** Multiple plots 
+The number of plots on a page, and their placement on the page, can be controlled using par() or layout().
+
+Set the mfrow or mfcol options
+• Take 2 dimensional vector as an argument
+• The first value specifies the number of rows
+• The second specifies the number of columns
+The 2 options differ in the order, individual plots are printed
+
+#+BEGIN_SRC R :session Rorg  :results none
+e.g. par(mfrow=c(3,2))        # Creates 6 figures arranged in 3 rows and 2 columns
+#+END_SRC
+
+#+REVEAL: split 
+#+BEGIN_SRC R :session Rorg  :results none
+par(mfcol = c(3,1))
+hist(dataset$Height, breaks = 10, main = "Height (in cm)", xlab = "Height")
+hist(dataset$Height * 10, breaks = 10, main = "Height (in mm)", xlab = "Height")
+hist(dataset$Height / 2.54, breaks = 10, main = "Height (in inches)", xlab = "Height")
+#+END_SRC
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:25:39
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:25:39.png]]
+*** Normal QQ Plots
+The final type of plot we will look at is the normal quantile plot. 
+
+This plot is used to determine if your data is close to being normally distributed. 
+
+You cannot be sure that the data is normally distributed, but you can rule out if it is not normally distributed. 
+
+The command to generate a normal quantile plot is qqnorm. You can give it one argument, the univariate data set of interest:
+#+BEGIN_SRC R :session Rorg  :results none
+qqnorm(w1$vals)
+#+END_SRC
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 12:30:36
+#+attr_html: :width 400px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_12:30:36.png]]
+
+*** qq options
+You can annotate the plot in exactly the same way as all of the other plotting commands given here:
+
+#+BEGIN_SRC R :session Rorg  :results none
+qqnorm(w1$vals,
+         main="Normal Q-Q Plot of the Leaf Biomass",
+         xlab="Theoretical Quantiles of the Leaf Biomass",
+         ylab="Sample Quantiles of the Leaf Biomass")
+#+END_SRC
+
+In this example you should see that the data is *not* quite normally distributed. 
+There are a few outliers, and it does not match up at the tails of the distribution.
+
+
+After you creat the normal quantile plot you can also add the theoretical line that the data should fall on if they were normally distributed:
+#+BEGIN_SRC R :session Rorg  :results none
+qqline(w1$vals)
+#+END_SRC
+
+
+*** Plotting Two Vectors (scatter plot)
+A scatter plot is used when you have two variables to plot against one another.
+
+R has a basic command to perform this task- The command is plot().
+
+As usual with R there are many additional parameters that you can add to customise your plots.
+
+The basic command is:
+#+BEGIN_SRC R :session Rorg  :results none
+plot(x, y)
+#+END_SRC
+#+REVEAL: split 
+Where x is the name of your x-variable and y is the name of your y-variable. This is fine if you have two variables but if they are part of a bigger data set then you have to remember to attach(data.file) your data set. A more powerful command is:
+
+#+BEGIN_SRC R :session Rorg  :results none
+plot(y ~ x, data= your.data)
+#+END_SRC
+
+#+REVEAL: split 
+ #+BEGIN_SRC R :session Rorg  :results none
+plot(dataset$Hip, dataset$Waist,xlab = "Hip", ylab = "Waist",main = "Circumference (in cm)", pch = 2, col = "blue")
+#+END_SRC
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:17:56
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:17:56.png]]
+
+#+REVEAL: split 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:18:35
+#+attr_html: :width 800px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:18:35.png]]
+
+** Dates
+*** Basic
+Dates are typically entered into R as character strings and then translated into date variables that *are stored numerically*. 
+
+The function *as.Date()* is used to make this translation.
+
+The syntax is *as.Date(X, "input_format")* 
+
+The *default format* for inputting dates is yyyy-mm-dd. 
+
+mydates <- as.Date(c("2007-06-22", "2004-02-13"))
+
+converts the character data to dates using this default format.
+
+*** convert from SAS/excel/other date into R date
+#+begin_src r
+mod1$day <- as.Date(strptime(mod1$DATE, "%m/%d/%y"))
+#+end_src
+*** advanced date variable table
+
+#+BEGIN_EXAMPLE
+ %a, %A Abbreviated and full weekday name.
+ %b, %B Abbreviated and full month name.
+ %d Day of the month (01---31).
+ %H Hours (00---23).
+ %I Hours (01---12).
+ %j Day of year (001---366).
+ %m Month (01---12).
+ %M Minute (00---59).
+ %p AM/PM indicator.
+ %S Second as decimal number (00---61).
+ %U Week (00---53); the first Sunday as day 1 of week 1.
+ %w Weekday (0--6, Sunday is 0).
+ %W Week (00---53); the first Monday as day 1 of week 1.
+ %y Year without century (00---99)
+ %Y Year with century.
+ %z (output only.) Offset from Greenwich; -0800 is 8 hours west of.
+ %Z (output only.) Time zone as a character string (empty if not
+available
+#+END_EXAMPLE
+
+*** Extract day of the year
+you can also extract parts of a date and create a variable
+
+#+begin_src r
+mod1$dayofyr <- as.numeric(format(mod1$day, "%j"))
+#+end_src
+
+*** subset by date range
+1. make sure the date field is converted to standard R date
+2. issue the followiing command
+
+#+BEGIN_SRC R
+NEWDATA <-subset(FULLDATA, as.Date(DATEFIELD) >= 'DATERANGE' & as.Date(DATEFIELD) <= 'DATERANGE')
+
+#example
+mb4 <-subset(mb3, as.Date(rdate) >= '2003-09-02' & as.Date(rdate) <= '2004-09-04')
+#+END_SRC
+*** create a date range/date time series
+**** simple date sequence
+#+begin_src R
+bd <- as.Date("2007-05-20")
+ed <- as.Date("2010-06-13")
+seqd <- seq(bd, ed, by="1 day")
+#+end_src
+**** to create a date range based on start and end points use`
+#+begin_src R
+days_2000<-seq.Date(from = as.Date("2000-01-01"), to = as.Date("2000-12-31"), 1)
+#+end_src
+where the 1 at the end of the file specifies the increment , thats is increment by 1 day
+*** adding days to date
+#+begin_src R
+as.Date("2001-01-01") + 45
+#+end_src
+* Homework-Week 4
+** Bar plots
+Let’s create a simple bar chart in R using the barplot() command, which is easy to use.
+First, we set up a vector of numbers. Then we count them using the table() command, and then we plot them.
+The table() command creates a simple table of counts of the elements in a data set.
+
+#+BEGIN_SRC R :session Rorg  :results none
+H <- c(2,3,3,3,4,5,5,5,5,6)
+#+END_SRC
+Now we count the elements using the table() command, as follows:
+#+BEGIN_SRC R :session Rorg  :results none
+counts <- table(H)
+counts
+#+END_SRC
+
+e1) Now plot the counts using the barplot command 
+
+you should get this:
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 11:06:37
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_11:06:37.png]]
+
+
+The horizontal axis records the values in your data set, while the vertical axis gives the counts of each value. You will see that the barplot() command does not perform the count directly, so we use the table() command first.
+
+You can plot your data directly if we omit the table() command. Now, the height of the bars matches the values in the data set. This is a useful technique if your data are already in the form of counts or if you wish to plot the magnitudes of each element.
+
+e2) create vector 'B' and plot it in the color "darkgreen"
+
+#+BEGIN_SRC R :session Rorg  
+B <- c(3, 2, 25, 37, 22, 34, 19)
+#+END_SRC
+
+we have one bar for each element, and the height gives the value of the element.
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 11:13:30
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_11:13:30.png]]
+
+
+e3)now create a complex bar plot with:
+1) a title "MY NEW BARPLOT"
+2) a x title "LETTERS"
+3) a y title "MY Y VALUES"
+4)the blocks should have a red color
+** Creating Histograms
+I’m sure you’ve heard that R creates beautiful graphics.
+
+It’s true, and it doesn’t have to be hard to do so.  Let’s start with a simple histogram using the hist() command, which is easy to use, but actually quite sophisticated.
+
+e4)First, set up a vector of numbers and then create a blank histogram.
+
+#+BEGIN_SRC R :session Rorg  :results none
+B <- c(2, 4, 5, 7, 12, 14, 16)
+#+END_SRC
+
+That was easy, but you need more from your histogram. Note that R decided on an appropriate bin width.  
+
+import the csv from moodle named hist4.csv and call it 'B', then take a look:
+
+#+BEGIN_EXAMPLE
+  James Robert David Anne
+1     1      2     4    3
+2     3      5     4    5
+3     6      4     6    6
+4     4      5     6    7
+5     9     12    16    6
+#+END_EXAMPLE
+
+e5) now create a histogram of B in dark green and include axis labels named:
+y- MY HISTOGRAM
+x-"FREQUENCY"
+
+it should look like this
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 11:28:11
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_11:28:11.png]]
+
+e6) However, controlling bin numbers can be problematic. Try setting the number of bins at 6 using the breaks argument and change color to red 
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 11:34:19
+#+attr_html: :width 300px
+
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_11:34:19.png]]
+
+You can see that R has taken the number of bins (6) as indicative only. However, setting up histogram bins as a vector gives you more control over the output. Now we set up the bins as a vector, each bin four units wide, and starting at zero.
+e7) create bins vector:
+#+BEGIN_SRC R :session Rorg  :results none
+bins<- c(0, 4, 8, 12, 16)
+#+END_SRC
+then recreate the histogram in blue with the breaks option using the vector
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 11:30:38
+#+attr_html: :width 300px
+
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_11:30:38.png]]
+
+Now we have four bins of the right width. That wasn’t so hard!
+
+e8) with the same bins data set create a kernel density plot with a green fill and a blue outline 
+** pie charts
+lets create a simple pie chart using the pie() command. As always, we set up a vector of numbers and then we plot them.
+
+#+BEGIN_SRC R :session Rorg  :results none
+B <- c(2, 4, 5, 7, 12, 14, 16)
+#+END_SRC
+
+e9) Create a very simple pie chart.
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 11:40:40
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_11:40:40.png]]
+
+
+Now let’s create a pie chart with a heading, using nice colours, and define our own labels using R’s rainbow palette.
+you can control the number of colours using length(B)
+again use vector 'B'
+#+BEGIN_SRC R :session Rorg  :results none
+B <- c(2, 4, 5, 7, 12, 14, 16)
+#+END_SRC
+e10) add labels to the pie charts for day of the week, a legend and change colors
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 11:42:42
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_11:42:42.png]]
+** Box plots
+
+e11) import the w1 data set from moodle , then create a simple box plot with:
+a main title of-'Leaf BioMass in High CO2 Environment'
+and a y title of 'BioMass of Leaves'
+
+e12) recreate the plot but flip the axis (make it horizontal)
+
+* Answers
+e2) create vector 'B' and plot it in the color "darkgreen"
+
+#+BEGIN_SRC R :session Rorg  
+B <- c(3, 2, 25, 37, 22, 34, 19)
+barplot(B, col="darkgreen")
+#+END_SRC
+e3)
+
+#+BEGIN_SRC R :session Rorg  :results none
+barplot(B, main="MY NEW BARPLOT", xlab="LETTERS", ylab="MY Y VALUES",col="red")
+#+END_SRC
+
+e4)
+#+BEGIN_SRC R :session Rorg  :results none
+B <- c(2, 4, 5, 7, 12, 14, 16)
+hist(B)
+#+END_SRC
+
+e5)
+
+#+BEGIN_SRC R :session Rorg  :results none
+hist(B, col="darkgreen", ylim=c(0,10), ylab ="MY HISTOGRAM", xlab="FREQUENCY")
+#+END_SRC
+
+e6)
+#+BEGIN_SRC R :session Rorg  :results none
+hist(B, col = "red", breaks=6, xlim=c(0,max), main="My Histogram", las=2, xlab = "Values", cex.lab = 1.3)
+#+END_SRC
+
+e7)
+hist(B, col = "blue", breaks=bins, xlim=c(0,max), main="My Histogram", las=2, xlab = "Values", cex.lab = 1.3)
+
+e10)
+#+BEGIN_SRC R :session Rorg  :results none
+pie(B, main="My Piechart", col=rainbow(length(B)), labels=c("Mon","Tue","Wed","Thu","Fri","Sat","Sun"))
+#+END_SRC
+
+e11)
+
+#+BEGIN_SRC R :session Rorg  :results none
+boxplot(w1$vals,
+          main='Leaf BioMass in High CO2 Environment',
+          ylab='BioMass of Leaves')
+#+END_SRC
