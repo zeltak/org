@@ -31,22 +31,91 @@
   :PROPERTIES:
   :reveal_background: /home/zeltak/org/attach/bgu/courses/BGU.R/images/hist_BD.jpg
   :END:
+*** Histograms
+A histogram is very common plot. It plots the frequencies that data appears within certain ranges. 
+
+To plot a histogram of the data use the “hist” command:
+#+BEGIN_SRC R :session Rorg  :results none
+library(data.table)
+w1<-fread("/home/zeltak/org/attach/bgu/courses/BGU.R/data/l4class/w1.csv")
+hist(w1$vals)
+hist(w1$vals,main="Distribution of w1",xlab="w1")
+#+END_SRC
+*lets try it on your computer!* (the data w1 is on moodle)
+
+#+REVEAL: split 
+The parameter breaks specifies the number of categories to plot or specifies the breakpoints for each category
+
+You can specify the number of breaks to use using the breaks option. Here we look at the histogram for various numbers of breaks:
+
+#+BEGIN_SRC R :session Rorg  :results none
+hist(w1$vals,breaks=2)
+hist(w1$vals,breaks=4)
+hist(w1$vals,breaks=6)
+hist(w1$vals,breaks=8)
+hist(w1$vals,breaks=12)
+#+END_SRC
+*lets try it on your computer!*
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 19:03:37
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_19:03:37.png]]
+
+
+#+REVEAL: split 
+The col,xlab, ylab, xlim, ylim options work as in other plots
+
+#+BEGIN_SRC R :session Rorg  :results none
+# Create a histogram for autos in light blue with the y axis
+# ranging from 0-10
+hist(autos, col="lightblue", ylim=c(0,10))
+#+END_SRC
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 12:03:09
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_12:03:09.png]]
+
+#+REVEAL: split 
+#+BEGIN_SRC R :session Rorg  :results none
+hist(dataset$bp.sys, col = "lightblue",
+xlab = "Systolic Blood Pressure", main = "Blood Pressure")
+#+END_SRC
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:19:24
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:19:24.png]]
+
+#+REVEAL: split 
+sequence breaks:
+#+BEGIN_SRC R :session Rorg  :results none
+hist(dataset$bp.sys, col = "lightblue", breaks = seq(80,220,by=2),
+xlab = "Systolic Blood Pressure", main = "Blood Pressure")
+#+END_SRC
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:20:13
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:20:13.png]]
+
+
 *** Saving Graphs
 Graphs can be saved using several different formats, such as PDFs, JPEGs, and BMPs, by using pdf(), jpeg() and bmp(), respectively.
 
 Graphs are saved to the current working directory.
 
 pdf() produces the highest quality graphics and are easy to include in LATEXdocuments if you use a PDF compiler.
- 
+
+#+REVEAL: split
+Example: 
 #+BEGIN_SRC R :session Rorg  :results none
 # Create a single pdf of figures, with one graph on each page
-pdf("SavingExample.pdf", width=7, height=5) # Start graphics device
+pdf("~/ZH_tmp/SavingExample.pdf", width=7, height=5) # Start graphics device
+#or use setwd("")        # this is where the plot will be saved
 x <- rnorm(100)
 hist(x, main="Histogram of X")
 plot(x, main="Scatterplot of X")
 dev.off() # Stop graphics device
 
-# Create multiple pdfs of figures, with one pdf per figure
+# Create multiple pdfs of figures, with one pdf per figure with onefile=FALSE
 pdf(width=7, height=5, onefile=FALSE)
 x <- rnorm(100)
 hist(x, main="Histogram of X")
@@ -61,7 +130,7 @@ The function colors() returns a vector of built-in color names.
 To create your own color use, rgb(), hsv() or hcl(), depending on what method of color specification you prefer
 Create a personal color palette using, palette(). When the argument
 col=number, R uses the color in the palette that is indexed by number.
-
+#+REVEAL: split
 #+BEGIN_SRC R :session Rorg  :results none
 # Create and use a custom color
 burnt.orange <- rgb(red=204, green=85, blue=0, max=255)
@@ -356,15 +425,77 @@ Where x is the name of your x-variable and y is the name of your y-variable. Thi
 plot(y ~ x, data= your.data)
 #+END_SRC
 
+To see a basic scatter plot try the following (using the built in dataset cars)
+
+#+BEGIN_SRC R :session Rorg  :results none
+plot(dist ~ speed, data= cars)
+#+END_SRC
+*lets try it on your computer!* 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-26 10:29:32
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-26_10:29:32.png]]
+
 #+REVEAL: split 
+This basic scatter takes the axes labels from the variables and uses open circles as the plotting symbol. 
+
+As usual with R we have a wealth of additional commands at our disposal to beef up the display.
+
+A useful additional command is to add a line of best-fit. This is a command that adds to the current plot (like the title() command). For the above example we'd type:
+
+#+BEGIN_SRC R :session Rorg  :results none
+abline(lm(dist ~ speed, data= cars))
+#+END_SRC
+*lets try it on your computer!* 
+
+The basic command uses abline(a, b), where a= slope and b= intercept. 
+
+#+REVEAL: split 
+If we combine this with a couple of extra lines we can produce a better looking plot:
+#+BEGIN_SRC R :session Rorg  :results none
+plot(dist ~ speed, data= cars, xlab="Speed", ylab="Distance", col= "blue")
+
+title(main="Scatter plot with best-fit line", font.main= 4)
+
+abline(lm(dist ~ speed, data= cars), col= "red")
+#+END_SRC
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-26 10:33:04
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-26_10:33:04.png]]
+#+REVEAL: split 
+remember: 
+We can alter the plotting symbol using the command pch= n, where n is a simple number.
+We can also alter the range of the x and y axes using xlim= c(lower, upper) and ylim= c(lower, upper). 
+
+The size of the plotted points is manipulated using the cex= n command, where n = the 'magnification' factor. 
+
+#+BEGIN_SRC R :session Rorg  :results none
+plot(dist ~ speed, data= cars, pch= 19, xlim= c(0,25), ylim= c(-20, 120), cex= 2)
+abline(lm(dist ~ speed, data= cars))
+title(main="Scatter plot with altered y-axis")
+#+END_SRC
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-26 10:34:19
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-26_10:34:19.png]]
+
+Here the plotting symbol is set to 19 (a solid circle) and expanded by a factor of 2. Both x and y axes have been rescaled. The labels on the axes have been left blank and default to the name of the variable (which is taken from the data set).
+
+
+#+REVEAL: split 
+
+Anther example:
  #+BEGIN_SRC R :session Rorg  :results none
 plot(dataset$Hip, dataset$Waist,xlab = "Hip", ylab = "Waist",main = "Circumference (in cm)", pch = 2, col = "blue")
 #+END_SRC
 
-
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:17:56
 #+attr_html: :width 300px
  [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:17:56.png]]
+
+can you spot the Outlier?
 
 #+REVEAL: split 
 
@@ -454,7 +585,7 @@ lets create a simple pie chart using the pie() command. As always, we set up a v
 B <- c(2, 4, 5, 7, 12, 14, 16)
 #+END_SRC
 
-e9) Create a very simple pie chart.
+e9) Create a very simple pie chart
 
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 11:40:40
@@ -468,7 +599,7 @@ again use vector 'B'
 #+BEGIN_SRC R :session Rorg  :results none
 B <- c(2, 4, 5, 7, 12, 14, 16)
 #+END_SRC
-e10) add labels to the pie charts for day of the week, a legend and change colors
+e10) add labels to the pie charts for day of the week, a legend and change colors and save the file as a pdf
 
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 11:42:42
@@ -481,6 +612,20 @@ a main title of-'Leaf BioMass in High CO2 Environment'
 and a y title of 'BioMass of Leaves'
 
 e12) recreate the plot but flip the axis (make it horizontal)
+** kernel density plots
+e13) using the built in `mtcars` dataset:
+-create a density plot with blue filling, green border that looks at the distribution of the variable qsec.
+
+** scatter plots
+e14) import the cherry dataset
+plot a scatter plot of the volume (as the dependent variable) vs the Girth
+add an abline top the plot
+then plot the log of volume (log transform the variable) vs the log of Girth
+save both files to a jpeg file.
+
+
+
+
 
 * Answers
 e2) create vector 'B' and plot it in the color "darkgreen"
@@ -526,4 +671,18 @@ e11)
 boxplot(w1$vals,
           main='Leaf BioMass in High CO2 Environment',
           ylab='BioMass of Leaves')
+#+END_SRC
+
+e13)
+#+BEGIN_SRC R :session Rorg  :results none
+d <- density(mtcars$qsec)
+plot(d, main = "Kernel Density of Miles Per Gallon")
+polygon(d, col = "blue", border = "green")
+
+#+END_SRC
+e14)
+#+BEGIN_SRC R :session Rorg  :results none
+  cherry<-fread("/home/zeltak/ZH_tmp/R datasets/cherry.csv")
+  plot(cherry$Girth, cherry$Volume)
+  plot(log(cherry$Girth), log(cherry$Volume))
 #+END_SRC

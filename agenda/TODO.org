@@ -10,6 +10,7 @@
 *** justify to the left and not centered
 ** merge add fix typo to abbrev and auto fix last entry 
 ** split and create mu4e and org agenda window
+** explore imv on arch (already installed)
 ** fonts config 
 if things go wrong go back to file:/home/zeltak/.config/fontconfig/fonts.conf
 
@@ -319,6 +320,13 @@ once every X days make sure to refile that note
  use multi occur hotkeys?
 *** create a daily agenda in orgmode somwhow
 will show me things to do today ranked
+** gwene
+http://onethingwell.org/post/46254462393/gwene
+** R links to explore
+http://www.computerworld.com/article/2921176/business-intelligence/great-r-packages-for-data-import-wrangling-visualization.html
+http://amsantac.co/blog/en/2015/10/31/qgis-r.html
+http://blog.rstudio.org/2015/09/29/purrr-0-1-0/
+https://github.com/hadley/multidplyr/blob/30f60f7108d1aba3687363a52c7cb20e5bab17e7/vignettes/multidplyr.md
 ** @sync//backup project@
 *** Relevant IP's
 
@@ -746,6 +754,47 @@ VIUSAL clues to some command like : copied link to clip (yy) etc
 add retsart chrome
 add reload all tabs
 keybind to quickly enable/disable cvim
+** xfce panel locations
+https://forum.xfce.org/viewtopic.php?id=6440
+t took me far to long to find a solution that works on my laptop and that's why i wanted to share my tiny Move xfce4-panel to external monitor script.
+Maybe it'll save you some time and frustration.
+---
+The script is executed on startup and i currently execute it again manually if the external monitor is connected/disconnected.
+Depending on your setup and layout (left of / right of) the xrandr lines below are probably not needed!
+The important part that actually moves the xfce4-panel to the external monitor and/or back to the internal are the lines that begin with xfconf-query.
+Notes:
+My internal laptop monitor is named LVDS-0 (1280x800)
+My external monitor is named VGA-0 (1920x1080)
+My external monitor is on the right!
+You need to replace all the display names, resolutions and positions with values fitting your system!
+To get the names of your connected displays execute this in a terminal:
+xrandr --query
+Here's the script: (~/setup-displays.sh)
+#!/bin/bash
+
+# Check if our external monitor name is in the list connected displays
+grep_output=`xrandr | grep VGA-0`
+
+if [ "$grep_output" != "" ]; then
+    # The external monitor IS connected. Put it right of there internal and move xfce-panel there
+
+    # Set up the displays
+    xrandr --output VGA-0 --mode 1920x1080 --preferred --primary --pos 1280x0 --output LVDS-0 --mode 1280x800 --pos 0x0
+
+    # And move the panel to the external display
+    xfconf-query -v -c xfce4-panel -p /panels/panel-0/output-name -s VGA-0
+else
+    # The external monitor IS NOT connected.
+    # Update monitor settings and move xfce-panel to internal monitor.
+    # This becomes necessary if the external display was connected before and is now gone this will re-setup everything for single monitor use.
+
+    # Set up the display
+    xrandr --verbose --output LVDS-0 --mode 1280x800 --pos 0x0
+
+    # And move the panel to the internal display
+    xfconf-query -v -c xfce4-panel -p /panels/panel-0/output-name -s LVDS-0
+fi
+exit
 ** Explore more Rgrep
 http://pragmaticemacs.com/emacs/searching-multiple-files-with-rgrep/
 ** encrypt org files
@@ -758,12 +807,12 @@ With org-crypt, if you have autosave turned on and decrypt the entries, the auto
 
 *** Encrypting the Whole File Using EasyPG.
 
-If you want to encrypt the whole file using gnupg, but still have the decrypted file recognized as an org file, you should make:
+  If you want to encrypt the whole file using gnupg, but still have the decrypted file recognized as an org file, you should make:
 
-# -*- mode:org; epa-file-encrypt-to: ("me@mydomain.com") -*-
-the first line in the file. Where "me@mydomain.com" is the email address associated with your default gnupg key. Note that gpg encrypted files should be saved with the default extension of .gpg.
+  # -*- mode:org; epa-file-encrypt-to: ("me@mydomain.com") -*-
+  the first line in the file. Where "me@mydomain.com" is the email address associated with your default gnupg key. Note that gpg encrypted files should be saved with the default extension of .gpg.
 
-When you open the file you will be prompted for your password and Emacs will display the decrypted contents in org-mode. When you save the file it would automatically be encrypted.
+  When you open the file you will be prompted for your password and Emacs will display the decrypted contents in org-mode. When you save the file it would automatically be encrypted.
 *** Encrypting Specific Entries in an org File with org-crypt.
     :PROPERTIES:
     :ID:       8797ec49-d59d-4c11-9d9d-0939705c6b1b
