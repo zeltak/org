@@ -122,14 +122,23 @@ hist(x, main="Histogram of X")
 plot(x, main="Scatterplot of X")
 dev.off() # Stop graphics device
 #+END_SRC
+#+REVEAL: split 
+Alternative method:
+#+BEGIN_SRC R :session Rorg  :results none
+#Save an existing plot) Try the following commands:
+plot(july$Day, july$Temp)
+dev.print(file="plotfile1.pdf", device=pdf)
+#+END_SRC
+
 *** Colors
     :PROPERTIES:
     :HTML_CONTAINER_CLASS: left
     :END:
 The function colors() returns a vector of built-in color names.
+
 To create your own color use, rgb(), hsv() or hcl(), depending on what method of color specification you prefer
-Create a personal color palette using, palette(). When the argument
-col=number, R uses the color in the palette that is indexed by number.
+
+Create a personal color palette using, palette(). When the argument col=number, R uses the color in the palette that is indexed by number.
 #+REVEAL: split
 #+BEGIN_SRC R :session Rorg  :results none
 # Create and use a custom color
@@ -346,12 +355,16 @@ pie3D(slices, labels = lbls, explode = 0.1, main = "Pie Chart of Countries ")
  [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-23_07:21:35.png]]
 
 *** Multiple plots 
-The number of plots on a page, and their placement on the page, can be controlled using par() or layout().
+The number of plots on a page, and their placement on the page, can be controlled using par() or layout()
 
 Set the mfrow or mfcol options
-• Take 2 dimensional vector as an argument
-• The first value specifies the number of rows
-• The second specifies the number of columns
+
+Take 2 dimensional vector as an argument
+
+The first value specifies the number of rows
+
+The second specifies the number of columns
+
 The 2 options differ in the order, individual plots are printed
 
 #+BEGIN_SRC R :session Rorg  :results none
@@ -432,9 +445,10 @@ plot(dist ~ speed, data= cars)
 #+END_SRC
 *lets try it on your computer!* 
 
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-26 10:29:32
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-26 15:57:59
 #+attr_html: :width 300px
- [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-26_10:29:32.png]]
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-26_15:57:59.png]]
 
 #+REVEAL: split 
 This basic scatter takes the axes labels from the variables and uses open circles as the plotting symbol. 
@@ -461,9 +475,11 @@ abline(lm(dist ~ speed, data= cars), col= "red")
 #+END_SRC
 
 
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-26 10:33:04
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-26 15:58:39
 #+attr_html: :width 300px
- [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-26_10:33:04.png]]
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-26_15:58:39.png]]
+
+
 #+REVEAL: split 
 remember: 
 We can alter the plotting symbol using the command pch= n, where n is a simple number.
@@ -477,9 +493,10 @@ abline(lm(dist ~ speed, data= cars))
 title(main="Scatter plot with altered y-axis")
 #+END_SRC
 
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-26 10:34:19
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-26 15:59:35
 #+attr_html: :width 300px
- [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-26_10:34:19.png]]
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-26_15:59:35.png]]
 
 Here the plotting symbol is set to 19 (a solid circle) and expanded by a factor of 2. Both x and y axes have been rescaled. The labels on the axes have been left blank and default to the name of the variable (which is taken from the data set).
 
@@ -616,12 +633,28 @@ e12) recreate the plot but flip the axis (make it horizontal)
 e13) using the built in `mtcars` dataset:
 -create a density plot with blue filling, green border that looks at the distribution of the variable qsec.
 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-26 15:48:45
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-26_15:48:45.png]]
+
+
 ** scatter plots
-e14) import the cherry dataset
+e14) import the cherry dataset using fread (remember to load/install the data.table package)
 plot a scatter plot of the volume (as the dependent variable) vs the Girth
 add an abline top the plot
 then plot the log of volume (log transform the variable) vs the log of Girth
 save both files to a jpeg file.
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-26 15:51:41
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-26_15:51:41.png]]
+
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-11-26 15:51:52
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-26_15:51:52.png]]
 
 
 
@@ -682,7 +715,9 @@ polygon(d, col = "blue", border = "green")
 #+END_SRC
 e14)
 #+BEGIN_SRC R :session Rorg  :results none
-  cherry<-fread("/home/zeltak/ZH_tmp/R datasets/cherry.csv")
-  plot(cherry$Girth, cherry$Volume)
-  plot(log(cherry$Girth), log(cherry$Volume))
+cherry<-fread("/home/zeltak/ZH_tmp/R datasets/cherry.csv")
+plot(cherry$Girth, cherry$Volume)
+abline(lm(Volume~Girth, data= cherry))
+plot(log(cherry$Girth), log(cherry$Volume))
 #+END_SRC
+

@@ -2260,3 +2260,56 @@ https://github.com/killdash9/buffer-flip.el/tree/0cb549f554cab8a28405edb55a78f43
 #+END_SRC 
 
 
+
+* docu 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-11-27 Fri 09:47
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages/link hint
+  :ARCHIVE_CATEGORY: settings
+  :END:
+** Browser Choice
+browse-url is used for opening urls, so in the case that the desired browser is not being used by default, the user can set browse-url-browser-function:
+
+#+BEGIN_EXAMPLE
+;; Use chromium to open urls
+(setq browse-url-browser-function 'browse-url-chromium)
+;; Use firefox to open urls
+(setq browse-url-browser-function 'browse-url-firefox)
+;; Use qutebrowser to open urls
+(setq browse-url-generic-program "qutebrowser")
+;; You can alternatively change this setting in the config
+(setq browse-url-generic-args '("--target" "tab"))
+(setq browse-url-browser-function 'browse-url-generic)
+
+#+END_EXAMPLE
+** Provided Commands
+
+This package provides the following commands for operating on links:
+#+BEGIN_EXAMPLE
+link-hint-open-link-at-point - Open the link at point.
+link-hint-copy-link-at-point - Copy link at point to kill ring (and optionally to the clipboard/primary).
+link-hint-open-link - Use avy to select and open a single visible link. If only one link is currently visible, it will be automatically opened without the need for selection.
+link-hint-open-multiple-links - Use avy to select multiple visible links and open them as soon as a key that does not correspond to a link (a key not in the avy overlay) is pressed (like pentadactyl’s g;).
+link-hint-open-all-links - Opens all links visible in the buffer.
+link-hint-copy-link - Use avy to select and copy a single visible link to the kill ring. select-enable-clipboard and select-enable-clipboard can each be set to a non-nil value to also use the clipboard and/or primary.
+link-hint-copy-multiple-links and link-hint-copy-all-links also exist, but they may not be useful very often.
+#+END_EXAMPLE
+
+This package does not bind any commands by default.
+
+** Ignoring Link Types
+
+link-hint-ignore-types, link-hint-act-on-multiple-ignore-types, and link-hint-act-on-all-ignore-types can be set by the user to change which link types will be operated on. For example, by default link-hint-open-all-links will ignore mu4e mailto addresses, mu4e attachments, info links, and help links. This is because it usually doesn’t make sense to open more than one of these links types. In some cases, it may be useful to set these variables locally for certain modes. They can also be used to create more specific commands:
+
+#+BEGIN_EXAMPLE
+(defun my/mu4e-open-all-attachments ()
+  "Open all visible mu4e attachments."
+  (interactive)
+  (let ((link-hint-ignore-types
+         (remove 'mu4e-attachment link-hint-all-types-list))
+        link-hint-act-on-all-ignore-types)
+    (link-hint-open-all-links)))
+#+END_EXAMPLE
+link-hint-copy-ignore-types can also be set by the user. However, note that by default it contains the types that there is no copy action for. Removing these types will result in some useless avy overlays over links (selecting them will have no effect).
+
