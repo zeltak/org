@@ -8,12 +8,15 @@
 * `TODO` 							  :CANCELLED:
 ** org-reveal
 *** justify to the left and not centered
+** elfeed
+org integration -send article to org todo?
 ** merge add fix typo to abbrev and auto fix last entry 
 ** split and create mu4e and org agenda window
 ** explore imv on arch (already installed)
 ** fonts config 
 if things go wrong go back to file:/home/zeltak/.config/fontconfig/fonts.conf
-
+** tdrop
+https://github.com/noctuid/tdrop
 ** change Emacs font
 ** org protocol
 http://sachachua.com/blog/2015/11/capturing-links-quickly-with-emacsclient-org-protocol-and-chrome-shortcut-manager-on-microsoft-windows-8/
@@ -832,6 +835,25 @@ Preventing tag inheritance stops you having encrypted text inside encrypted text
 To decrypt the text just call "M-x org-decrypt-entry" and the encrypted text where the point is will be replaced with the plain text. If you use this feature a lot, you will probably want to bind "M-x org-decrypt-entry" to a key.
 
 Entries with a :crypt: tag will be automatically be encrypted when you save the file.
+* test 
 
+http://stackoverflow.com/questions/18470240/org-mode-remote-r-not-working-with-org-8-0-7
 
+Update:
 
+An alternative way to execute R-code remotely is the following:
+
+Start a remote ssh connection with "M-x ssh", connect to your server, start R there and call "M-x ess-remote" in the remote buffer. Now, when specifying name of the remote R buffer as "session" it will execute the code remotely:
+
+#+BEGIN_SRC R :exports both :results output :session *ssh xxx*
+  system( "hostname" )
+#+END_SRC
+this will return the host name of the server (note, the "xxx" above will be your server name). Important ":results value" will lead to the same problem with the temporary files, only ":results output" seems to work by now.
+
+Update and solution:
+
+So the :results output is the way to go. This works also for the :dir remote code execution.
+
+#+BEGIN_SRC R :exports both :results output :session *ssh xxx*
+  system( "hostname" )
+#+END_SRC

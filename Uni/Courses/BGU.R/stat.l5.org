@@ -58,7 +58,7 @@ hist(w1$vals,breaks=12)
 *lets try it on your computer!*
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 19:03:37
-#+attr_html: :width 300px
+#+attr_html: :width 400px
  [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_19:03:37.png]]
 
 
@@ -72,7 +72,7 @@ hist(autos, col="lightblue", ylim=c(0,10))
 #+END_SRC
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 12:03:09
-#+attr_html: :width 300px
+#+attr_html: :width 500px
  [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_12:03:09.png]]
 
 #+REVEAL: split 
@@ -82,18 +82,18 @@ xlab = "Systolic Blood Pressure", main = "Blood Pressure")
 #+END_SRC
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:19:24
-#+attr_html: :width 300px
+#+attr_html: :width 500px
  [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:19:24.png]]
 
 #+REVEAL: split 
 sequence breaks:
 #+BEGIN_SRC R :session Rorg  :results none
-hist(dataset$bp.sys, col = "lightblue", breaks = seq(80,220,by=2),
+hist(dataset$bp.sys, col = "lightblue", breaks = seq(80,220,by=20,
 xlab = "Systolic Blood Pressure", main = "Blood Pressure")
 #+END_SRC
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:20:13
-#+attr_html: :width 300px
+#+attr_html: :width 600px
  [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:20:13.png]]
 
 
@@ -208,13 +208,8 @@ The box itself shows the upper and lower quartiles.
 The whiskers show the range (i.e. the largest and smallest values).
 
 #+REVEAL: split 
-boxplots options  
+We can add axis labels, a main title and colour the box using simple commands. These commands are the same as for those used in producing barplots and histograms.
 
-We can add axis labels, a main title and colour the box using simple commands. These commands are the same as for those used in producing barplots and histograms. For example:
-
-Again, this is a very plain graph, and the title and labels can be specified in exactly the same way as in the stripchart and hist commands:
-
-#+REVEAL: split 
 #+BEGIN_SRC R :session Rorg  :results none
 boxplot(w1$vals,
           main='Leaf BioMass in High CO2 Environment',
@@ -278,8 +273,6 @@ title(main="Growth against sugar type", font.main= 4)
 Now we can see that the different sugar treatments appear to produce differing growth in our subjects.
 
 #+REVEAL: split 
-Horizontal box plots
-
 It is straightforward to rotate your plot so that the bars run horizontal rather than vertical (which is the default).
 
 To produce a horizontal plot you add horizontal= TRUE to the command e.g.
@@ -289,9 +282,8 @@ boxplot(growth ~ sugar, data=fly, ylab="Sugar type", xlab="Growth", col="mistyro
 title(main="Growth against sugar type - horizontal", font.main= 4)
 #+END_SRC
 
-
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 12:53:32
-#+attr_html: :width 300px
+#+attr_html: :width 500px
  [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_12:53:32.png]]
 
 #+REVEAL: split 
@@ -374,17 +366,17 @@ e.g. par(mfrow=c(3,2))        # Creates 6 figures arranged in 3 rows and 2 colum
 #+REVEAL: split 
 #+BEGIN_SRC R :session Rorg  :results none
 par(mfcol = c(3,1))
-hist(dataset$Height, breaks = 10, main = "Height (in cm)", xlab = "Height")
-hist(dataset$Height * 10, breaks = 10, main = "Height (in mm)", xlab = "Height")
-hist(dataset$Height / 2.54, breaks = 10, main = "Height (in inches)", xlab = "Height")
+hist(dataset$Height,breaks = 10, main = "Height (in cm)", xlab = "Height")
+hist(dataset$Heigh*10,breaks = 10, main = "Height (in mm)", xlab = "Height")
+hist(dataset$Height/2.54,breaks = 10, main = "Height (in inches)", xlab = "Height")
 #+END_SRC
 
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:25:39
-#+attr_html: :width 300px
+#+attr_html: :width 400px
  [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:25:39.png]]
 *** Normal QQ Plots
-The final type of plot we will look at is the normal quantile plot. 
+We will now look at is the normal quantile plot. 
 
 This plot is used to determine if your data is close to being normally distributed. 
 
@@ -394,13 +386,14 @@ The command to generate a normal quantile plot is qqnorm. You can give it one ar
 #+BEGIN_SRC R :session Rorg  :results none
 qqnorm(w1$vals)
 #+END_SRC
-
+*lets try it on your computer!* 
+#+REVEAL: split 
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 12:30:36
-#+attr_html: :width 400px
+#+attr_html: :width 600px
  [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_12:30:36.png]]
 
-*** qq options
+#+REVEAL: split 
 You can annotate the plot in exactly the same way as all of the other plotting commands given here:
 
 #+BEGIN_SRC R :session Rorg  :results none
@@ -409,17 +402,21 @@ qqnorm(w1$vals,
          xlab="Theoretical Quantiles of the Leaf Biomass",
          ylab="Sample Quantiles of the Leaf Biomass")
 #+END_SRC
+*lets try it on your computer!* 
 
+#+REVEAL: split 
 In this example you should see that the data is *not* quite normally distributed. 
 There are a few outliers, and it does not match up at the tails of the distribution.
 
-
 After you creat the normal quantile plot you can also add the theoretical line that the data should fall on if they were normally distributed:
 #+BEGIN_SRC R :session Rorg  :results none
+qqnorm(w1$vals,
+         main="Normal Q-Q Plot of the Leaf Biomass",
+         xlab="Theoretical Quantiles of the Leaf Biomass",
+         ylab="Sample Quantiles of the Leaf Biomass")
 qqline(w1$vals)
 #+END_SRC
-
-
+*lets try it on your computer!* 
 *** Plotting Two Vectors (scatter plot)
 A scatter plot is used when you have two variables to plot against one another.
 
@@ -502,14 +499,12 @@ Here the plotting symbol is set to 19 (a solid circle) and expanded by a factor 
 
 
 #+REVEAL: split 
-
 Anther example:
  #+BEGIN_SRC R :session Rorg  :results none
 plot(dataset$Hip, dataset$Waist,xlab = "Hip", ylab = "Waist",main = "Circumference (in cm)", pch = 2, col = "blue")
 #+END_SRC
-
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:17:56
-#+attr_html: :width 300px
+#+attr_html: :width 500px
  [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:17:56.png]]
 
 can you spot the Outlier?
