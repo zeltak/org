@@ -1,7 +1,7 @@
 #+TITLE: Research 
 #+TODO: TODO(t) TASK(f) EXP(e) | PAUSED(p) DONE(d) 
 #+CATEGORY: work@
-#+TAGS:  allan(a) joel(j) meytar(t) boris(b) BGU(u) maayan(m) adar(d) omer(o) lara(l) hila(h) students(s) itai (i)
+#+TAGS:  allan(a) joel(j) meytar(t) boris(b) BGU(u) maayan(m) adar(d) omer(o) lara(l) hila(h) students(s) itai (i) alexandra (x)
 #+STARTUP: overview  inlineimages eval: (org-columns)
 #+OPTIONS: toc:nil 
 
@@ -461,6 +461,9 @@ track`
 *** comparing the wrf model in israel to our model as part of the methods paper
 *** consider inverse distance (1/dist) for all the dist variables  
 *** talk to adar to include wrf parameters in model		       :adar:
+*** TASK check usa data lst to see if we have wide range of lst up to 60
+*** TASK check weather 60c LST is plausible
+*** TASK check spatially where these outlier values are located 
 ** Temperature and Birth outcomes
 *** discuss with maayan GDM abby paper. maybe do the same here
 *** talk to meytar to run the LST matlab part		     :meyta:r
@@ -752,8 +755,11 @@ The hypothesis is that the final graph will look schematically like this:
 * Future Project Ideas
 ** Model.PM 
 *** Ideas (NEED TO QUEUE BY PRIORITY)
-**** apply a SVM model in mod4 (localPM)			       :itai:
-**** Joels random intercepts per cell
+**** [#B] use spatial regression (spatial error into the model)
+http://www.ats.ucla.edu/stat/r/faq/spatial_regression.htm
+**** [#B] comparing global spatial patterns ans errors in all modeled areas 
+**** [#C] apply a SVM model in mod4 (localPM)			       :itai:
+**** [#C] Joels random intercepts per cell
 I have been thinking about the issue of the random intercepts for cells, specifically why they help and what they do. A random intercept for a person in a repeated measures study represents the fact that on average their level of outcome differs from the mean. I basically captures the mean residual for subject over the repeated measures. Similarly a random intercept for a cell captures the mean residual for that cell for that year. It says that some cells, on average, have mean positive or mean negative residuals. So it can help with spatial R2 but not temporal. 
 Now putting in the random intercept in calculating R2 is cheating because we don't have a random intercept for cells without monitors. But suppose we did. Suppose that the spatial pattern of the random intercepts was not high frequency noise, but actually showed some pattern? Then we can take the annual mean residual for each cell in a region that has a monitor, and smooth it spatially. For example,
 
@@ -770,25 +776,20 @@ Another is wood smoke, which produces primary organic aerosols, which AOD is not
 Another is secondary  aerosols. Our GEOS-Chem modeling shows bands of OC outlining roads (but wider than the EC bands). So I think that NOx emissions may help capture this. 
 Finally, when Qian gets a chance, I will have him run GEOS-Chem for Italy. We have the preliminary run done, but we need to calibrate it with the monitors. I know he got monitors from Kees, and Itai said there were more, but I forget if you sent them to him.
 
-**** [#B] predict pm25 from 10 					     :meytar:
+**** [#A] predict pm25 from 10 					     :meytar:
 weight the predicted pm2.5 as lower weights opposed to true PM10
-**** [#D] Compare results between correlation to MAIAC/MODIS C06 AOD data with overpass data (i.e. mixed effect model).
-**** Use SVM with random statement				      :allan:
+**** [#C] Compare results between correlation to MAIAC/MODIS C06 AOD data with overpass data (i.e. mixed effect model). :alexandra:
+**** [#A] Use SVM with random statement				      :allan:
 tried with mediocre success so far- is there a way to include a random statement
-**** [#C] Run model annually per country per region in different countries
+**** [#A] Run model annually per country per region in different countries- FRANCE, johanna :meytar:
 (do the regions with poor results have similar characteristics?) but present evaluation on a daily basis – show annual distribution of daily r2, rmse. Etc.
 **** [#D] Check with Brent Coull the possibility of incorporating the predicted temp (from the temp model) into the PM model.
 **** [#D] Run the model separately on subsets of the available collocated data based on high/low PM conc.
-**** Study the angles during retrievals (and their link to the % dark pixles)
-**** examine and report statistics of the daily results
-(possibly averaged over long time but not only) and not only annual results (averages). Why? – because if there is a threshold than exposure to -10% may not be identical to exposure to +10% although the may (a) cancel each other in norm 1 (abs error),and add to each other in norm 2 (sqrt) where as in practice 9and o one knows if I am right or wrong) mybe only one of them matters 9due to the threshold). So – various metrics should be reported, and on daily basis. (e.g. error histogram, various moments of the error distribution statistics, etc.)
-
-**** lag terms for every day well have lags:
-pm~aod+aod01
-if prev day isnt avilable we use the same day twice
+run logistic model to classify high or low data. high data for pm like 200+ etc
+**** [#D] Study the angles during retrievals (and their link to the % dark pixles) and surface reflectance
 **** to borrow information across space create a variable that weights and down weights low aod observations per day
 **** [#A] LUR; space-time smoothing; nearby cells weighted for missing and previous day (if gone, use today)
-**** [#B] does relationship of Aqua and Terra give us info? early pollutant build-up vs continuous across the day? :newdata:
+**** [#A] does relationship of Aqua and Terra give us info? early pollutant build-up vs continuous across the day? :meytar:newdata:
 pick satellite (Aqua vs Terra) based on which one has lower uncertainty in gridcells that join to monitors 
 **** [#D]  Use aeronet - maybe as a super-monitor (weighted?) Use other satellite data?
 **** Use a latent class linear mixed model (LCLMM) to generate PBL patterns as predictors (see ?lcmm::hlme); 
@@ -803,15 +804,15 @@ See also Schafer et al.
  Instead of taking the closest AOD point to each monitor for each day, what if we took each of the points within some distance and ran a regression then preferentially weight our selection AOD points to pick those sites with best agreement to monitor (likely a function of local land use features). The best agreement could be not the closest point, but the one downwind the most, or with the most similar amount of roadway, etc... This could really impact calibration in Mod1.
  see also LUR_Mex_4b_2_vignette_spatialjoin.R
 
-****  Are there better predictions at stations with their own met monitoring?
+**** Are there better predictions at stations with their own met monitoring?
   does it matter if you have the spatial/temporal covs from your own monitor Vs. borrowing it from nearby
-****  Does open streetmap give the same predictions as municipal GIS
+**** Does open streetmap give the same predictions as municipal GIS
 **** For any pair of monitors, what is their correlation as a function of distance (manual semivariogram)
-****  Are seasonal patterns driven by rain alone or rain + other factors
-****  If there are temporal patterns (decreases) are any particular predictors major drivers of these trends (interaction by time)
-****  If we compare school monitor stations with closest SIMAT monitor - how good are they?
+**** Are seasonal patterns driven by rain alone or rain + other factors
+**** If there are temporal patterns (decreases) are any particular predictors major drivers of these trends (interaction by time)
+**** If we compare school monitor stations with closest SIMAT monitor - how good are they?
 **** Fix R code to convert latlon to UTM 14N
-****  Why is our mod1 dropping UIZ and SJA in much of 2007 - it looks like there was daymean measured there before :newdata:
+**** Why is our mod1 dropping UIZ and SJA in much of 2007 - it looks like there was daymean measured there before :newdata:
 **** Add no2 and co; indicator for days with high co to pm ratio (top third), same with no2	 	
   using additional monitoring data (co-pollutants) as an indicator of the composition (daily or by sub-region&day)
 **** Add pressure to data from noaa	 	
@@ -1631,6 +1632,9 @@ Qians nurel network- trains it with LU and geoschem in aod points to predict AOD
 http://www.hsph.harvard.edu/xlin/software.html
 
 we can use the additonal random statement to run a daily calibration
+** brent[2015-12-03 Thu] 
+*** [#D] Check with Brent Coull the possibility of incorporating the predicted temp (from the temp model) into the PM model.
+
 ** David and meytar[2015-11-24 Tue]
 *** Continue with pan israeli cooperation's
 when will be the next meeting?
