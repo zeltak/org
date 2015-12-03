@@ -1,0 +1,525 @@
+# -*- mode: Org; org-download-image-dir: "/home/zeltak/org/attach/bgu/courses/BGU.R/images"; org-download-heading-lvl: nil; -*-
+#+Title:שיטות כמותיות למתקדמים
+#+Author: ד"ר איתי קלוג 
+#+Email: ikloog@bgu.ac.il
+#+REVEAL_TITLE_SLIDE_BACKGROUND: /home/zeltak/org/attach/bgu/courses/BGU.R/images/stat_large.jpg
+
+#+OPTIONS: reveal_center:t reveal_progress:t reveal_history:nil reveal_control:t
+#+OPTIONS: reveal_rolling_links:t reveal_keyboard:t reveal_overview:t num:nil
+#+OPTIONS: reveal_width:1200 reveal_height:800
+#+OPTIONS: toc:nil
+# #+REVEAL: split
+#+REVEAL_MARGIN: 0.1
+#+REVEAL_MIN_SCALE: 0.5
+#+REVEAL_MAX_SCALE: 2.5
+#+REVEAL_TRANS: linear
+#+REVEAL_SPEED: default
+#+REVEAL_THEME: white
+#+REVEAL_HLEVEL: 2
+#+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Org-Reveal Introduction.">
+#+REVEAL_POSTAMBLE: <p> Created by itai Kloog. </p>
+# REVEAL_PLUGINS: (highlight markdown notes)
+#+REVEAL_SLIDE_NUMBER: t
+#+OPTIONS: ^:nil
+#+EXCLUDE_TAGS: noexport
+#+TAGS: noexport(n)
+#+REVEAL_EXTRA_CSS: /home/zeltak/org/files/Uni/Courses/css/left.aligned.css
+
+
+* Week 7
+** ggplot2
+*** Introduction
+ggplot2 is a powerful and a flexible R package, implemented by Hadley Wickham, for producing elegant graphics.
+
+http://ggplot2.org/
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-03 16:21:38
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-03_16:21:38.png]]
+
+#+REVEAL: split 
+The concept behind ggplot2 divides plot into three different fundamental parts:
+
+*Plot = data + Aesthetics + Geometry.*
+
+The principal components of every plot can be defined as follow:
+
+data is a data frame
+
+Aesthetics is used to indicate x and y variables. It can also be used to control the color, the size or the shape of points, the height of bars, etc…..
+
+Geometry defines the type of graphics (histogram, box plot, line plot, density plot, dot plot, ….)
+#+REVEAL: split 
+There are two major functions in ggplot2 package: qplot() and ggplot() functions.
+
+qplot() stands for quick plot, which can be used to produce easily simple plots.
+
+ggplot() function is more flexible and robust than qplot for building a plot piece by piece.
+
+#+REVEAL: split 
+
+Install and load ggplot2 package
+
+#+BEGIN_SRC R :session Rorg  :results none
+# Installation
+install.packages('ggplot2')
+
+# Loading
+library(ggplot2)
+#+END_SRC
+#+REVEAL: split 
+Data format and preparation
+
+The data should be a data.frame (columns are variables and rows are observations).
+
+The data set mtcars is used in the examples below:
+
+#+BEGIN_SRC R :session Rorg  :results none
+# Load the data
+data(mtcars)
+df <- mtcars[, c("mpg", "cyl", "wt")]
+head(df)
+##                    mpg cyl    wt
+## Mazda RX4         21.0   6 2.620
+## Mazda RX4 Wag     21.0   6 2.875
+## Datsun 710        22.8   4 2.320
+## Hornet 4 Drive    21.4   6 3.215
+## Hornet Sportabout 18.7   8 3.440
+## Valiant           18.1   6 3.460
+
+#+END_SRC
+#+REVEAL: split 
+
+** T-test intro 
+
+The t-statistic was introduced in 1908 by William Sealy Gosset, a chemist working for the Guinness brewery in Dublin, Ireland
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-03 09:15:33
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-03_09:15:33.png]]
+
+The t-test is one of the most frequently used procedures in statistics
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-03 09:17:10
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-03_09:17:10.png]]
+
+#+REVEAL: split 
+
+#+ATTR_HTML: :class left
+The t-test is used to determine differences between two samples.
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-03 09:17:34
+#+attr_html: :width 300px
+
+The one-sample t test used to compare an observed mean with a theoretical mean.
+
+the theoretical mean is usually the population mean (the average for the outcome of some population of interest). 
+
+The basic idea of the test is a comparison of the average of the sample (observed average) and the population (expected average)
+
+#+REVEAL: split 
+*What is independent t-test ?*
+
+Independent (or unpaired two sample) t-test is used to compare the means of two unrelated groups of samples.
+
+As an example, we have a cohort of 100 individuals (50 women and 50 men). The question is to test whether the average weight of women is significantly different from that of men?
+
+In this case, we have two independents groups of samples and unpaired t-test can be used to test whether the means are different.
+
+#+REVEAL: split 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-03 09:40:11
+#+attr_html: :width 700px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-03_09:40:11.png]]
+
+#+REVEAL: split 
+*What is paired t-test ?*
+
+Paired Student’s t-test is used to compare the means of two related samples.
+
+That is when you have two values (pair of values) for the same samples.
+
+For example, 20 mice received a treatment X for 3 months. 
+
+The question is to test whether the treatment X has an impact on the weight of the mice at the end of the 3 months treatment. 
+
+The weight of the 20 mice has been measured before and after the treatment. This gives us 20 sets of values before treatment and 20 sets of values after treatment from measuring twice the weight of the same mice.
+
+In this case, paired t-test can be used as the two sets of values being compared are related. We have a pair of values for each mouse (one before and the other after treatment).
+
+#+REVEAL: split 
+*T test assumptions : Normality and equal variances*
+Many of the statistical procedures including correlation, regression, t test, and analysis of variance assume that the data are *normally distributed*.
+
+Before using t test, you have to check :
+
+*For one-sample t test*: Whether the data are normally distributed
+
+
+*For independent two samples t test* : Whether the two groups of samples (x and y), being compared, are normally distributed;
+and whether the variances of the two samples are equal or not.
+
+*For paired t test* : Whether the difference d ( = x - y) is normally distributed
+#+REVEAL: split 
+*How to test the normality of data?*
+
+With large enough sample sizes (n > 30) the violation of the normality assumption should not cause major problems. 
+
+This implies that we can ignore the distribution of the data and use parametric tests if we are dealing with large sample sizes.
+
+Normality can be checked by visual inspection >>  Q-Q plot (quantile-quantile plot) we learned previously and histograms
+
+The histogram plot (frequency distribution) provides a visual judgment about whether the distribution is bell shaped.
+#+REVEAL: split 
+*How to test the equality of variances ?*
+
+The standard two independent samples t test assumes also that the samples have equal variances. 
+
+If the two samples, being compared, follow normal distribution, F test can be performed to compare the variances.
+
+The *null* hypothesis of F test is that the variances of the two populations are equal. 
+
+If the test is significant, null hypothesis are rejected and then we can conclude that the variances are significantly different.
+#+REVEAL: split 
+The following R code can be used for an F test to compare two variances:
+
+#+BEGIN_SRC R :session Rorg  :results none
+var.test(x,y)
+#+END_SRC
+data:  x and y
+
+#+BEGIN_EXAMPLE
+F = 0.8718, num df = 9, denom df = 9, p-value = 0.8414
+alternative hypothesis: true ratio of variances is not equal to 1
+95 percent confidence interval:
+ 0.2165 3.5099
+sample estimates:
+ratio of variances 
+            0.8718 
+#+END_EXAMPLE 
+
+The p-value of the F-test is = 0.8414. 
+It’s greater than the significance level alpha = 0.05. 
+
+In conclusion, there is no significant difference between the variances of the two sets of data. Therefore, we can use the classic t-test witch assume equality of the two variances.
+#+REVEAL: split 
+*What to do when the conditions are not met for t test ?*
+
+The following two-stage procedure is wide accepted:
+
+If normality is accepted, the t test is used;
+
+If the samples being compared are not normally distributed, a non-parametric test like Wilcoxon test is recommended as an alternative to the t test.
+
+If the two samples are normally distributed, but with unequal variances, the Welch t test can be used
+#+REVEAL: split 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-03 09:52:57
+#+attr_html: :width 600px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-03_09:52:57.png]]
+** t.test : R function to calculate t test
+The R function to use for t test statistics is t.test(). It can be used to calculate the different types of Student t test mentioned above.
+
+A simplified format of the function is:
+
+#+BEGIN_SRC R :session Rorg  :results none
+# One sample t test :
+# Comparison of an observed mean with a
+# a theoretical mean
+t.test(x, mu=0)
+
+# Independent t test
+# Comparison of the means of two independent samples (x & y)
+t.test(x, y)
+
+# Paired t test
+t.test(x, y, paired=TRUE)
+#+END_SRC
+*** One-sample t-test
+Example of data: Ten mice have been weighted. Their weight in grams is shown below
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-03 10:02:52
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-03_10:02:52.png]]
+
+#+REVEAL: split 
+The question is whether the average weight of the mice is significantly different from 200g?
+
+#+BEGIN_EXAMPLE
+Null hypothesis H0: the mean m = 200.
+#+END_EXAMPLE
+
+#+REVEAL: split 
+#+BEGIN_SRC R :session Rorg  :results none
+# Weight of the mice
+x<-c(442.7, 380.2, 406.8, 507.7, 615.1, 486.8, 438.7, 390.7, 399.5, 789.9)
+# One-sample t-test
+res<-t.test(x, mu=200)
+res # Printing the results
+#+END_SRC
+
+#+REVEAL: split 
+#+BEGIN_SRC R :session Rorg  :results none
+One Sample t-test
+data:  x
+t = 7.057, df = 9, p-value = 5.942e-05
+alternative hypothesis: true mean is not equal to 200
+95 percent confidence interval:
+394.2 577.4
+sample estimates:
+mean of x 
+485.81
+#+END_SRC
+
+In the result above:
+
+t is the t-test statistic value (t = 7.0567)
+
+df is the degrees of freedom (df= 9)
+
+p-value is the significance level of the t-test (p-value = 5.942 × 10-5).
+
+The confidence interval (conf.int) of the mean at 95% is also shown (conf.int= [394.1884, 577.4316]) 
+
+and finally, we have the mean value of x (mean = 485.81).
+#+REVEAL: split 
+The p-value of the test is is much less than the significance level alpha = 0.05. 
+
+We can then *reject null hypothesis* and conclude that:
+
+the mean weight of the mice is significantly different from 200g with a p-value = 5.942 × 10-5.
+#+REVEAL: split 
+Get the objects returned by t.test function:
+
+We can easily get each of the objects returned by t.test() function:
+
+#+BEGIN_SRC R :session Rorg  :results none
+# printing the p-value
+res$p.value
+#[1] 5.942e-05
+# printing the mean
+res$estimate
+#mean of x 
+#    485.8 
+# printing the confidence interval
+res$conf.int
+#[1] 394.2 577.4
+#attr(,"conf.level")
+#[1] 0.95
+#+END_SRC
+*** Independent t-test 
+As an example, we have a cohort of 20 individuals (10 women and 10 men).
+
+The question is to test whether women’s average weight is significantly different from men’s average weight? 
+
+The number of individuals considered here is obviously low. This is just to illustrate the usage of two-sample t-test.
+#+REVEAL: split
+Question : Does the women’s average weight is significantly different from that of men?
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-03 10:19:20
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-03_10:19:20.png]]
+#+REVEAL: split 
+Method 1 - The data are saved in two differents numeric vectors (x and y)
+
+#+BEGIN_SRC R :session Rorg  :results none
+set.seed(1234)
+# Women's weights
+x<- c(38.9, 61.2, 73.3, 21.8, 63.4, 64.6, 48.4, 48.8, 48.5, 43.6)
+# Men's weights
+y <- c(67.8, 60, 63.4, 76, 89.4, 73.3, 67.3, 61.3, 62.4, 111.2) 
+#In this case unpaired t-test can be performed as follow :
+res<-t.test(x,y)
+res
+#+END_SRC
+#+REVEAL: split 
+
+#+BEGIN_EXAMPLE
+
+Welch Two Sample t-test
+
+data:  x and y
+t = -3.17, df = 17.92, p-value = 0.005319
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -36.517  -7.403
+sample estimates:
+mean of x mean of y 
+    51.25     73.21 
+#+END_EXAMPLE
+#+REVEAL: split 
+Method 2 - The data are saved in a data.frame 
+
+In this case, unpaired t-test can be calculated using the following R code :
+
+#+BEGIN_SRC R :session Rorg  :results none
+#res<-t.test(d$weight ~ d$group) 
+res<-t.test(weight ~ group, data=d)
+res
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+Welch Two Sample t-test
+
+data:  weight by group
+t = 3.17, df = 17.92, p-value = 0.005319
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+  7.403 36.517
+sample estimates:
+  mean in group Man mean in group Woman 
+              73.21               51.25 
+#+END_EXAMPLE
+
+he two methods give the same results!
+#+REVEAL: split 
+t is the Student t-test statistics value (t = 3.17)
+
+df is the degrees of freedom (df= 17.916)
+
+p-value is the significance level of the t-test (p-value = 0.0053). 
+
+The confidence interval (conf.int) of the mean differences at 95% is also shown (conf.int= [7.4, 36.52])
+
+the means of the two groups of samples (average weight of women = 73.21, average weight of men =51.25).
+#+REVEAL: split 
+The p-value of the test is 0.0053, which is less than the significance level alpha = 0.05. 
+
+We can then reject the null hypothesis and conclude that women’s average weight is significantly different from men’s average weight with a p-value = 0.0053.
+
+#+REVEAL: split 
+By default, the R t.test() function makes the assumption that the variances of the two groups of samples, being compared, are different.
+
+ Therefore, *Welch t-test* is performed by default. Welch t-test is just an adaptation of t-test, and it is used when the two samples have possibly unequal variances.
+
+The argument “var.equal=TRUE” can be used to indicate to the t.test() function that the two samples have equal variances. However you have to check this assumption before using it.
+*** Paired t-test
+Ten mice received a treatment X for 3 months. The weight of the 10 mice has been determined before and after the treatment.
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-03 10:31:44
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-03_10:31:44.png]]
+
+#+REVEAL: split 
+The question is whether the weight of the mice was significantly changed after the 3 months treatment?
+
+In this case, paired t-test can be used as the two sets of the data to compare come from the same mice.
+
+The t-test can be performed as follow :
+
+#+BEGIN_SRC R :session Rorg  :results none
+# Weight of the mice before treatment
+x<-c(200.1, 190.9, 192.7, 213, 241.4, 196.9, 172.2, 185.5, 205.2, 193.7)
+# Weight of the mice after treatment
+y<-c(392.9, 393.2, 345.1, 393, 434, 427.9, 422, 383.9, 392.3, 352.2)
+res<-t.test(x, y, paired=TRUE)
+res
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+data:  x and y
+t = -20.88, df = 9, p-value = 6.2e-09
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -215.6 -173.4
+sample estimates:
+mean of the differences 
+                 -194.5 
+
+#+END_EXAMPLE
+#+REVEAL: split 
+
+t is the value of t-test statistics (t = -20.88)
+
+df is the degrees of freedom (df= 9)
+
+p-value is the significance level of the t-test (p-value = 6.2 × 10-9).
+
+The confidence interval (conf.int) of the mean differences at 95% is also shown (conf.int= [-215.56, -173.42]); 
+
+we have the difference of the means of the two samples (mean diff = -194.49).
+#+REVEAL: split 
+The p-value of the t-test is 6.2003 × 10-9, which is less than the significance level alpha = 0.05.
+
+We can then reject null hypothesis and conclude that the average weight of the mice before treatment is significantly different from the average weight after treatment with a p-value = 6.2003 × 10-9.
+** Dates
+*** Basic
+Dates are typically entered into R as character strings and then translated into date variables that *are stored numerically*. 
+
+The function *as.Date()* is used to make this translation.
+
+The syntax is *as.Date(X, "input_format")* 
+
+The *default format* for inputting dates is yyyy-mm-dd. 
+
+mydates <- as.Date(c("2007-06-22", "2004-02-13"))
+
+converts the character data to dates using this default format.
+
+*** convert from SAS/excel/other date into R date
+#+begin_src r
+mod1$day <- as.Date(strptime(mod1$DATE, "%m/%d/%y"))
+#+end_src
+*** advanced date variable table
+
+#+BEGIN_EXAMPLE
+ %a, %A Abbreviated and full weekday name.
+ %b, %B Abbreviated and full month name.
+ %d Day of the month (01---31).
+ %H Hours (00---23).
+ %I Hours (01---12).
+ %j Day of year (001---366).
+ %m Month (01---12).
+ %M Minute (00---59).
+ %p AM/PM indicator.
+ %S Second as decimal number (00---61).
+ %U Week (00---53); the first Sunday as day 1 of week 1.
+ %w Weekday (0--6, Sunday is 0).
+ %W Week (00---53); the first Monday as day 1 of week 1.
+ %y Year without century (00---99)
+ %Y Year with century.
+ %z (output only.) Offset from Greenwich; -0800 is 8 hours west of.
+ %Z (output only.) Time zone as a character string (empty if not
+available
+#+END_EXAMPLE
+
+*** Extract day of the year
+you can also extract parts of a date and create a variable
+
+#+begin_src r
+mod1$dayofyr <- as.numeric(format(mod1$day, "%j"))
+#+end_src
+
+*** subset by date range
+1. make sure the date field is converted to standard R date
+2. issue the followiing command
+
+#+BEGIN_SRC R
+NEWDATA <-subset(FULLDATA, as.Date(DATEFIELD) >= 'DATERANGE' & as.Date(DATEFIELD) <= 'DATERANGE')
+
+#example
+mb4 <-subset(mb3, as.Date(rdate) >= '2003-09-02' & as.Date(rdate) <= '2004-09-04')
+#+END_SRC
+*** create a date range/date time series
+**** simple date sequence
+#+begin_src R
+bd <- as.Date("2007-05-20")
+ed <- as.Date("2010-06-13")
+seqd <- seq(bd, ed, by="1 day")
+#+end_src
+**** to create a date range based on start and end points use`
+#+begin_src R
+days_2000<-seq.Date(from = as.Date("2000-01-01"), to = as.Date("2000-12-31"), 1)
+#+end_src
+where the 1 at the end of the file specifies the increment , thats is increment by 1 day
+*** adding days to date
+#+begin_src R
+as.Date("2001-01-01") + 45
+#+end_src
+* Sources
+http://www.sthda.com/english/wiki/t-test-analysis-is-it-always-correct-to-compare-means
+http://www.gardenersown.co.uk/education/lectures/r/basics.htm#t_test

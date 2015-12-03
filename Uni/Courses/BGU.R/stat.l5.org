@@ -215,7 +215,7 @@ boxplot(w1$vals,
           main='Leaf BioMass in High CO2 Environment',
           ylab='BioMass of Leaves')
 #+END_SRC
-*lets try it on your computer!*
+*lets try it on your computer!- $Note$ there will be no color in your plots*
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 12:45:30
 #+attr_html: :width 300px
@@ -514,81 +514,6 @@ can you spot the Outlier?
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 10:18:35
 #+attr_html: :width 800px
  [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_10:18:35.png]]
-** Dates
-*** Basic
-Dates are typically entered into R as character strings and then translated into date variables that *are stored numerically*. 
-
-The function *as.Date()* is used to make this translation.
-
-The syntax is *as.Date(X, "input_format")* 
-
-The *default format* for inputting dates is yyyy-mm-dd. 
-
-mydates <- as.Date(c("2007-06-22", "2004-02-13"))
-
-converts the character data to dates using this default format.
-
-*** convert from SAS/excel/other date into R date
-#+begin_src r
-mod1$day <- as.Date(strptime(mod1$DATE, "%m/%d/%y"))
-#+end_src
-*** advanced date variable table
-
-#+BEGIN_EXAMPLE
- %a, %A Abbreviated and full weekday name.
- %b, %B Abbreviated and full month name.
- %d Day of the month (01---31).
- %H Hours (00---23).
- %I Hours (01---12).
- %j Day of year (001---366).
- %m Month (01---12).
- %M Minute (00---59).
- %p AM/PM indicator.
- %S Second as decimal number (00---61).
- %U Week (00---53); the first Sunday as day 1 of week 1.
- %w Weekday (0--6, Sunday is 0).
- %W Week (00---53); the first Monday as day 1 of week 1.
- %y Year without century (00---99)
- %Y Year with century.
- %z (output only.) Offset from Greenwich; -0800 is 8 hours west of.
- %Z (output only.) Time zone as a character string (empty if not
-available
-#+END_EXAMPLE
-
-*** Extract day of the year
-you can also extract parts of a date and create a variable
-
-#+begin_src r
-mod1$dayofyr <- as.numeric(format(mod1$day, "%j"))
-#+end_src
-
-*** subset by date range
-1. make sure the date field is converted to standard R date
-2. issue the followiing command
-
-#+BEGIN_SRC R
-NEWDATA <-subset(FULLDATA, as.Date(DATEFIELD) >= 'DATERANGE' & as.Date(DATEFIELD) <= 'DATERANGE')
-
-#example
-mb4 <-subset(mb3, as.Date(rdate) >= '2003-09-02' & as.Date(rdate) <= '2004-09-04')
-#+END_SRC
-*** create a date range/date time series
-**** simple date sequence
-#+begin_src R
-bd <- as.Date("2007-05-20")
-ed <- as.Date("2010-06-13")
-seqd <- seq(bd, ed, by="1 day")
-#+end_src
-**** to create a date range based on start and end points use`
-#+begin_src R
-days_2000<-seq.Date(from = as.Date("2000-01-01"), to = as.Date("2000-12-31"), 1)
-#+end_src
-where the 1 at the end of the file specifies the increment , thats is increment by 1 day
-*** adding days to date
-#+begin_src R
-as.Date("2001-01-01") + 45
-#+end_src
-
 * Homework-Week 5
 ** pie charts
 lets create a simple pie chart using the pie() command. As always, we set up a vector of numbers and then we plot them.
@@ -605,13 +530,16 @@ e9) Create a very simple pie chart
  [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_11:40:40.png]]
 
 
-Now let’s create a pie chart with a heading, using nice colours, and define our own labels using R’s rainbow palette.
+Now let’s create a pie chart with a heading, using nice colours, you can choose your own colors
+
 you can control the number of colours using length(B)
+
 again use vector 'B'
 #+BEGIN_SRC R :session Rorg  :results none
 B <- c(2, 4, 5, 7, 12, 14, 16)
 #+END_SRC
-e10) add labels to the pie charts for day of the week, a legend and change colors and save the file as a pdf
+
+e10) add labels to the pie charts for day of the week, and save the file as a pdf
 
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 11:42:42

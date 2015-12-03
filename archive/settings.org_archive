@@ -2313,3 +2313,21 @@ link-hint-ignore-types, link-hint-act-on-multiple-ignore-types, and link-hint-ac
 #+END_EXAMPLE
 link-hint-copy-ignore-types can also be set by the user. However, note that by default it contains the types that there is no copy action for. Removing these types will result in some useless avy overlays over links (selecting them will have no effect).
 
+
+* esup
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-12-03 Thu 08:14
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages
+  :ARCHIVE_CATEGORY: settings
+  :END:
+
+#+BEGIN_SRC emacs-lisp :results none
+(use-package esup
+ :ensure t
+ :config
+ 
+ )
+#+END_SRC 
+
+

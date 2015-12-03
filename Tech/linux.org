@@ -34827,16 +34827,16 @@ The location of Reveal.js is the path to the top directory of the Reveal.js pack
 (setq org-reveal-root  "file:///home/zeltak/apps/reveal.js")
 (load-library "ox-reveal")
 #+END_SRC
-******** Url form for file location
+********* Url form for file location
 
-For example if you cloned this repository to your home directory, this file in Mac OS X would be referred to as “file:///Users/username/org-reveal/readme.org”. This file in Ubuntu would be “file:///home/username/org-reveal/readme.org” and in Windows this file would be “file:///c:/Users/username/org-reveal/readme.org”. For more detail on this standard please refer to http://en.wikipedia.org/wiki/File_URI_scheme
-#+BEGIN_EXAMPLE
-#+REVEAL_ROOT: file:///d:/reveal.js
-;Set your REVEAL_ROOT to the following URL to download reveal.js from a CDN instead of downloading a local copy.
-#+REVEAL_ROOT: http://cdn.jsdelivr.net/reveal.js/3.0.0/
-#+END_EXAMPLE
+ For example if you cloned this repository to your home directory, this file in Mac OS X would be referred to as “file:///Users/username/org-reveal/readme.org”. This file in Ubuntu would be “file:///home/username/org-reveal/readme.org” and in Windows this file would be “file:///c:/Users/username/org-reveal/readme.org”. For more detail on this standard please refer to http://en.wikipedia.org/wiki/File_URI_scheme
+ #+BEGIN_EXAMPLE
+ #+REVEAL_ROOT: file:///d:/reveal.js
+ ;Set your REVEAL_ROOT to the following URL to download reveal.js from a CDN instead of downloading a local copy.
+ #+REVEAL_ROOT: http://cdn.jsdelivr.net/reveal.js/3.0.0/
+ #+END_EXAMPLE
 
-******** highlights
+******** Code highlights
 make sure the highlight plug-in *isn't* marked/on
 #+BEGIN_EXAMPLE
 #$Note$ below is commented on
@@ -34949,7 +34949,7 @@ Set property reveal_background to either an RGB color value, or any supported CS
    #+BEGIN_EXAMPLE
    #+REVEAL_HTML: <iframe width="560" height="315" src="https://www.youtube.com/embed/kL1QbQeB37k" frameborder="0" allowfullscreen></iframe>
    #+END_EXAMPLE
-******** images on the left and right
+******** images on the left and right using tables
 Simply embed the image into your paragraph.
 
 Slide 1
@@ -34989,6 +34989,21 @@ slide-orgheadline1 {
  ...
 }
 #+END_EXAMPLE
+******** change slides alignment
+********* change for entire slide
+create a custom css file: file:/home/zeltak/org/files/Uni/Courses/css/left.aligned.css
+
+#+BEGIN_EXAMPLE
+.reveal p {
+    text-align: left;
+}
+#+END_EXAMPLE
+
+then call for the file in your org buffer header
+#+BEGIN_EXAMPLE
+#+REVEAL_EXTRA_CSS: /home/zeltak/org/files/Uni/Courses/css/left.aligned.css
+#+END_EXAMPLE
+all your slide should be left aligned
 
 *** LateX
 **** intro

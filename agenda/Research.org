@@ -550,6 +550,24 @@ TODO:
 t- test for each cluster
 if the annova is signficant then run a regression and report results
 
+BORIS:
+Since bw and head circumference are linear variable > use interpolation such as krigging to create a surface (also can use kernel density)
+
+add the following covarites 
+dist road
+add SSA and individual covariets
+
+
+bet zikuk (as quadratic effect)-each site gets a different distance!
+
+add each exposure separably
+nox worked, other didnt
+run regression
+
+add each exposure each time and see which one works well
+then add dist to in one by one
+
+
 ** OSM-environmental health project (lara)
 *** info file
 id:
@@ -1278,7 +1296,7 @@ Data from:
 
 Compare PM estimation ability by AOD over land with data over coastal areas, examine the coastal flag in MODIS/MAIAC algorithms.
 
-** Humidity models and profile from satellite observations	     :meytar:
+Humidity models and profile from satellite observations	     :meytar:
 As the difference in RH between the ground and satellite measurements may derive the discrepancies between these measurements, it's worth analyzing the contribution of the satellite-borne RH profile and maybe find a RH correction factor to use in PM prediction models.
 
 ** Dust classification project with India/Italy			     :meytar:
