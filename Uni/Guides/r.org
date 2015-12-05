@@ -8822,7 +8822,9 @@ m3d_agg <- (mod3[, list(LTPM =mean(pm_mod3, na.rm = TRUE),
 **** simple rename
 #+begin_src R
 setnames(DT,"MyName.1","MyNewName")
-#+end_src@WARNING:
+#+end_src 
+
+@WARNING:
 **** rena@me multiple variables/columns at once
 #+begin_src R
 setnames(DT,"b","B")               # by name; no match() needed
@@ -8831,6 +8833,11 @@ setnames(DT,2:3,c("D","E"))        # multiple
 setnames(DT,c("a","E"),c("A","F")) # multiple by name
 setnames(DT,c("X","Y","Z"))        # replace all
 #+end_src
+**** rename in batch multiple colunms
+#+BEGIN_SRC R
+setnames(TA,old=c("Slope", "Min"),new=c("sl", "M"))
+#+END_SRC
+
 *** rounding up data
 **** round up lat/long
 #+begin_src R
