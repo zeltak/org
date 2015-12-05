@@ -520,6 +520,8 @@ lib32-pam snx
 pip python-requests
 #show keyboard layouts
 xkblayout-state
+#fonts
+minionpro 
 #+END_SRC
 
 ***** unoffical repos
@@ -34002,15 +34004,39 @@ you can also have
 '^:{}'
 #+END_EXAMPLE
 this will still allow you to have subscript if you use curly braces, i.e. my_var won't give you subscript but F_{t} will. See also the org-mode manual: orgmode.org/manual/Export-options.html#Export-options 
-******** export only specific header
+******** export only specific header using tags
 add this to the top of the file
 
 #+BEGIN_EXAMPLE
 #+EXCLUDE_TAGS: noexport
 #+END_EXAMPLE
+then for a section you want to export add the tag: noexport
 
-then for a section you want to export add the tag: 
-noexport
+the :ignoreheading: tag is useful. This tag will allow you to export the content of a section or subsection, but it will hide the header from view
+
+******** export only specific header using drawers 
+Now why wouldn’t you just use tags all of the time? Because tags apply to headers (sections, subsections, etc.) and sometimes we don’t want to use headers to exclude text. In those cases, drawers are useful.
+
+To hide all drawers on export, you can add
+
+#+BEGIN_EXAMPLE
+#+OPTIONS: d:nil
+#+END_EXAMPLE
+
+to your org header.
+
+But suppose that I want to exclude the :OUTLINE: drawer and I have other drawers that I would still like to include in the export. In that case, I can use the following line: 
+
+#+BEGIN_EXAMPLE
+#+OPTIONS: d:(not "OUTLINE")
+#+END_EXAMPLE
+
+That will allow me to export drawers aside from :OUTLINE:
+
+Suppose that you wanted to exclude both :OUTLINE: and :SUMMARY: drawers, you would then just use this:
+#+BEGIN_EXAMPLE
+#+OPTIONS: d:(not "OUTLINE" not "SUMMARY")
+#+END_EXAMPLE
 
 ******** export to latex error
 look for a buffer named
@@ -43406,6 +43432,18 @@ cd into desired dir
 #+BEGIN_SRC sh
 find "$(pwd)" > /PATH/text.txt
 #+END_SRC
+*** pipe a command to a text file
+
+#+BEGIN_SRC sh
+bash -x clerk --queue show &> bla.txt
+#+END_SRC
+
+$Note$ the &> command 
+#+BEGIN_EXAMPLE
+&>filename # Redirect both stdout and stderr to file "filename."
+#+END_EXAMPLE
+
+
 ** hardware
 *** xset
 

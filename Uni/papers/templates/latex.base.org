@@ -1,0 +1,34 @@
+# Set the article class
+#+LaTeX_CLASS: article
+#+LaTeX_CLASS_OPTIONS: [12pt]
+
+# No need for a table of contents, unless your paper is quite long.
+#+OPTIONS: toc:nil
+
+# Use fancy looking fonts-MinionPro (isntalled from AUR)
+#+LATEX_HEADER: \usepackage[mathlf]{MinionPro}
+#+LATEX_HEADER: \usepackage[scaled=.875]{inconsolata}
+
+# Set the spacing to double, as required in most papers.
+#+LATEX_HEADER: \usepackage{setspace}
+#+LATEX_HEADER: \doublespacing
+
+# Fix the margins
+#+LATEX_HEADER: \usepackage[margin=1in]{geometry}
+
+# This line makes lists work better:
+# It eliminates whitespace before/within a list and pushes it tt the left margin
+#+LATEX_HEADER: \usepackage{enumitem}
+#+LATEX_HEADER: \setlist[enumerate,itemize]{noitemsep,nolistsep,leftmargin=*}
+
+# I always include this for my bibliographies
+#+LATEX_HEADER: \usepackage[notes,isbn=false,backend=biber]{biblatex-chicago}
+#+LATEX_HEADER: \addbibresource{/Users/clarkdonley/Files/Academic/Bibliography/main.bib}
+
+#+TITLE: Example Title for EEA Lab
+#+AUTHOR: itai kloog
+#+DATE: xx/yy/zzzz
+
+* the hair who lost its spectacle
+
+this is what we call in exposure assessment a missed call.

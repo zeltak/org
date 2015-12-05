@@ -2,6 +2,10 @@
 #+Title:שיטות כמותיות למתקדמים
 #+Author: ד"ר איתי קלוג 
 #+Email: ikloog@bgu.ac.il
+#+TAGS: answer(a)
+#+EXCLUDE_TAGS: answer
+#+OPTIONS: d:(not "answer")
+
 #+REVEAL_TITLE_SLIDE_BACKGROUND: /home/zeltak/org/attach/bgu/courses/BGU.R/images/stat_large.jpg
 
 #+OPTIONS: reveal_center:t reveal_progress:t reveal_history:nil reveal_control:t
@@ -21,8 +25,6 @@
 # REVEAL_PLUGINS: (highlight markdown notes)
 #+REVEAL_SLIDE_NUMBER: t
 #+OPTIONS: ^:nil
-#+EXCLUDE_TAGS: noexport
-#+TAGS: noexport(n)
 #+REVEAL_EXTRA_CSS: /home/zeltak/org/files/Uni/Courses/css/left.aligned.css
 
 
@@ -545,6 +547,19 @@ e10) add labels to the pie charts for day of the week, and save the file as a pd
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-11-22 11:42:42
 #+attr_html: :width 300px
  [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-11-22_11:42:42.png]]
+*** answer							     
+:answer:
+dasd
+asd
+asda
+:END:
+
+e10)
+#+BEGIN_SRC R :session Rorg  :results none
+pie(B, main="My Piechart", col=rainbow(length(B)), labels=c("Mon","Tue","Wed","Thu","Fri","Sat","Sun"))
+#+END_SRC
+
+
 ** Box plots
 
 e11) import the w1 data set from moodle , then create a simple box plot with:
