@@ -24892,6 +24892,17 @@ cd ~/.password-store
 rm -fr .git
 pass git init
 #+END_SRC
+*** Rofi-pass
+**** addpass
+the command `addpass` comes with rofi-pass and allows easy adding of passwords.
+to add a new pass use
+
+#+BEGIN_SRC sh
+addpass --name "my password file" +field1 "bla" +field2 "blub" +field3 "foo" +field4 "bar"
+
+#+END_SRC
+
+after this it will ask for a password and a group to file in.
 
 *** synergy
 on server (in my case the beast) configure as server. then press the configure server button and define position if the client and enter the name `screen name` (in my case `x1`)
