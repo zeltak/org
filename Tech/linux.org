@@ -2677,8 +2677,18 @@ online)
  sudo apt-get install libproj-dev
  #+END_SRC
 
- $Note-it is VERY likley you will get conflicts between lingdal-deb and QGIS. to solve this remove QGIS, install rgdal, remove libgdal and reintsall qgis :( $ 
+ $Note-it is VERY likley you will get conflicts between lingdal-deb and QGIS. to solve this remove QGIS, install rgdal, remove libgdal and reintsall qgis :( $
+**** LTS specific 
+Here are the steps to update "blank" ubuntu - version 14.04 only (see below for other ubuntu versions):
 
+#+BEGIN_SRC sh
+sudo apt-get update
+sudo apt-get install -y python-software-properties software-properties-common
+sudo add-apt-repository -y ppa:pi-rho/dev
+sudo apt-get update
+sudo apt-get install -y tmux=2.0-1~ppa1~t
+#+END_SRC
+now if you do tmux -V it should show tmux 2.0 which is a good version for tmux plugins
 ** Debian
 *** Fresh install
 **** teamviwer
