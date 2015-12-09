@@ -38,10 +38,7 @@ pm2009.nasse[, m := as.numeric(format(day, "%m")) ]
 #only relevant months needed
 pm2009.nassez <- pm2009.nasse[m %in% c(9, 8, 7,10), ]
 
-
-
-
-
+#for months
 setkey(mitp,guid)
 setkey(pm2009.nassez,guid)
 mitPM <- merge(pm2009.nassez, mitp, all.x = T,allow.cartesian=T)
@@ -49,10 +46,22 @@ mitPM <- merge(pm2009.nassez, mitp, all.x = T,allow.cartesian=T)
 # mitPM[, mid := paste(x_mit,y_mit,sep="")]
 # mitPM[, .N, by=c("mid")]
 
-mitPM<-mitPM[,c(1,2,5,8,9),with=FALSE]
+#for entire 2009
+#create single unique guid
+mitp <-mitp %>%
+    group_by(guid) %>%
+    summarise_each(funs(mean))
+
+setkey(mitp,guid)
+setkey(pm2009.nasse,guid)
+mitPM <- merge(pm2009.nasse, mitp, all.x = T)
+#13913*365
+head(mitPM)
+
+mitPM<-mitPM[,c(1,2,5,7,8),with=FALSE]
 setnames(mitPM,"bestpred","PM25_pred")
 
-write.csv(mitPM,"/media/NAS/Uni/Projects/P000_TMP_PROJECTS/petros_Marguerite_MIT/final_pred.csv")
+write.csv(mitPM,"/media/NAS/Uni/Projects/P000_TMP_PROJECTS/petros_Marguerite_MIT/final_pred_all2009.csv")
 
 #map
 mitPM[, mid := paste(x_mit,y_mit,sep="")]

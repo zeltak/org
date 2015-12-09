@@ -154,6 +154,9 @@ setnames(ssa,"ssaso2","SO2")
 #for head circumfereance
 
 #for data
+#Example for quadratic effect
+#+ASIRON7_10+I(ASIRON7_10^2)
+
 m1.formula <- as.formula(Avg_Head1_~Avg_ApgarF+ Avg_Pregna+Avg_Educat+JEWS+INCOME+AVERAGE_HH+ BAGRUT+OWNERSHIP+PM2.5) 
 m2.formula <- as.formula(Avg_Head1_~Avg_ApgarF+ Avg_Pregna+Avg_Educat+JEWS+INCOME+AVERAGE_HH+ BAGRUT+OWNERSHIP+NOx) 
 m3.formula <- as.formula(Avg_Head1_~Avg_ApgarF+ Avg_Pregna+Avg_Educat+JEWS+INCOME+AVERAGE_HH+ BAGRUT+OWNERSHIP+SO2) 
@@ -196,7 +199,7 @@ out="/media/NAS/Uni/Projects/P050_Haifa/3.results/report_2015/models_HC.htm")
 #for Birth weight
 
 #for data
-r1.formula <- as.formula(Avg_Weight~Avg_ApgarF+ Avg_Pregna+Avg_Educat+JEWS+INCOME+AVERAGE_HH+ BAGRUT+OWNERSHIP+PM2.5) 
+r1.formula <- as.formula(Avg_Weight~Avg_ApgarF+ Avg_Pregna+Avg_Educat+JEWS+INCOME+AVERAGE_HH+ BAGRUT+OWNERSHIP+PM2.5+dist_roas+dist_mf1+dist_zikuk+I(dist_zikuk*dist_zikuk) 
 r2.formula <- as.formula(Avg_Weight~Avg_ApgarF+ Avg_Pregna+Avg_Educat+JEWS+INCOME+AVERAGE_HH+ BAGRUT+OWNERSHIP+NOx) 
 r3.formula <- as.formula(Avg_Weight~Avg_ApgarF+ Avg_Pregna+Avg_Educat+JEWS+INCOME+AVERAGE_HH+ BAGRUT+OWNERSHIP+SO2) 
 r4.formula <- as.formula(Avg_Weight~Avg_ApgarF+ Avg_Pregna+Avg_Educat+JEWS+INCOME+AVERAGE_HH+ BAGRUT+OWNERSHIP+PM2.5+NOx+SO2) 
