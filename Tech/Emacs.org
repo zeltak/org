@@ -7937,15 +7937,6 @@ Try (org-redisplay-inline-images). Note "re".
 #+END_SRC
 #+RESULTS:
  
-** bugs
-*** files opend are slow- disable line mode
-
-line modes cause org mode to get really slow
- I disable linum for some or all .org files only
- ;;disable linemode on org
- (defun my-org-mode-hook ()
- (linum-mode 0))
- (add-hook 'org-mode-hook 'my-org-mode-hook)
 ** Bugs/fixes
 *** error in mobile-org-push: org-id-add-location: Wrong type argument: hash-table-p
 if you get this error:
@@ -7972,6 +7963,15 @@ this was casued by aggresive saving behivour:
 #+END_SRC
 
 
+*** files opend are slow- disable line mode
+line modes cause org mode to get really slow
+I disable linum for some or all .org files only
+#+BEGIN_SRC emacs-lisp
+;;disable linemode on org
+ (defun my-org-mode-hook ()
+ (linum-mode 0))
+ (add-hook 'org-mode-hook 'my-org-mode-hook)
+#+END_SRC
 *** org mode very slow on large file
 if Org is very slow on big file (even 100k) the casue may linium-mode (show line modes)
 to fix this disable linium mode in org with the following hook
@@ -8457,7 +8457,22 @@ so:
 ("xd" "nix_TD" entry (file+headline "~/org/files/agenda/TODO.org" "TODO")
  "*  %^{Description}" ) 
 #+end_src
-
+** Show number of children under heading
+Whats most similar to what youre searching are called statistics cookies. They're described at the end of this page in the manual. At first meant for lists, but that can also count headlines. Just put [/] at the end of your header, like so :
+#+BEGIN_EXAMPLE
+Main header [/]
+sub-header 1
+sub-header 2
+sub-header 3
+#+END_EXAMPLE
+And press C-c C-c on the cookie to update it (make it update its count). What you do need to add to what you describe to be your use-case is TODO keywords to your headers, because what the cookie will count is how many are done over how many are to do. Therefore I suggest you mark them all as DONE, like so :
+#+BEGIN_EXAMPLE
+Main header [3/3]
+DONE sub-header 1
+DONE sub-header 2
+DONE sub-header 3
+#+END_EXAMPLE
+Then, the counter will show you what you want.
 ** column view
 *** Scope of column definitions
 To define a column format for an entire file, use a line like
@@ -8818,7 +8833,6 @@ The following function prompts for a language (defaulting to the closest one it 
 #+END_SRC
 
 ** completions
-
 Completion
 Emacs would not be Emacs without completion, and Org mode uses it whenever it makes sense. If you prefer an iswitchb- or ido-like interface for some of the completion prompts, you can specify your preference by setting at most one of the variables org-completion-use-iswitchb org-completion-use-ido.
 
@@ -9714,9 +9728,7 @@ slide-orgheadline1 {
 create a custom css file: file:/home/zeltak/org/files/Uni/Courses/css/left.aligned.css
 
 #+BEGIN_EXAMPLE
-.reveal p {
-    text-align: left;
-}
+.reveal p {text-align: left; }
 #+END_EXAMPLE
 
 then call for the file in your org buffer header
@@ -9724,6 +9736,76 @@ then call for the file in your org buffer header
 #+REVEAL_EXTRA_CSS: /home/zeltak/org/files/Uni/Courses/css/left.aligned.css
 #+END_EXAMPLE
 all your slide should be left aligned
+**** change the alignment for the header line
+For specific headers, you have to turn to CSS file and CUSTOM_ID property.
+
+For example, if there is a foo.org with the following contents:
+
+#+BEGIN_EXAMPLE
+#+REVEAL_EXTRA_CSS: local.css
+
+Slide 1
+  :PROPERTIES:
+  :CUSTOM_ID: slide_1
+  :END:
+
+Some text.
+#+END_EXAMPLE
+
+The heading Slide 1 is assigned an ID slide_1 that will be used in local.css. The local.css has the following contents:
+#+BEGIN_EXAMPLE
+#slide_1 {
+    text-align: left;
+}
+#+END_EXAMPLE
+
+that specify left-aligned text for the HTML element whose ID is slide_1.
+
+**** change the alignment of a specific line
+You can use #+ATTR_HTML to declare HTML attribute to specific part of your Org document.
+
+To make one paragraph left-aligned, Use:
+#+BEGIN_EXAMPLE
+#+ATTR_HTML: :style text-align:left.
+#+END_EXAMPLE
+For example
+
+#+BEGIN_EXAMPLE
+Slide 1
+
+This graph is center-aligned.
+
+#+ATTR_HTML: :style text-align:left
+This graph is left-aligned.
+#+END_EXAMPLE
+
+Or, if you have made all text left-aligned by using a CSS then use
+#+BEGIN_EXAMPLE
+#+ATTR_HTML: :style text-align:center 
+#+END_EXAMPLE
+to make some text center-aligned.
+*** add captions to images
+use the caption attribute like
+#+BEGIN_EXAMPLE
+#+DOWNLOADED: /tmp/screenshot.png @ 2015a-12-03 16:21:38
+#+attr_html: :width 500px 
+#+CAPTION: Map of PM2.5 in New-England
+#+END_EXAMPLE
+*** add color to text
+you can add a color to a specific line using
+#+BEGIN_EXAMPLE
+#+ATTR_HTML: :style color:red
+#+END_EXAMPLE
+*** embed webm videos into org-reveal
+use a URL to your local .webm file
+
+the proper URL in your example should be:
+
+#+BEGIN_HTML
+ <video controls>
+   <source src="file:///home/zeltak/ZH_tmp/big-buck-bunny_trailer.webm" type="video/webm">
+ </video>
+#+END_HTML
 
 * EOF settings
 Local variables:

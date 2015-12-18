@@ -1656,8 +1656,7 @@ http://www.hsph.harvard.edu/xlin/software.html
 we can use the additonal random statement to run a daily calibration
 ** brent[2015-12-03 Thu] 
 *** [#D] Check with Brent Coull the possibility of incorporating the predicted temp (from the temp model) into the PM model.
-
-** David and meytar[2015-11-24 Tue]
+** David and meytar[2015-11-2qx4 Tue]
 *** Continue with pan israeli cooperation's
 when will be the next meeting?
 what to discuss?
@@ -1679,7 +1678,24 @@ place of aerosols in the vertical profile.
 use yuval model with local prioritization since the dust properties are very different (suspended dust from roads, different dust storms, biomass fuel)
 *** TODO send David land use terms we can use. 
 *** TODO Brent talk about mixed effects model issue 
+** Jaime [2015-12-15 Tue]
+** Brent [2015-12-18 Fri] 
+Points for Discussion:
 
+(1) Why is there such a difference between the use of date (actual date; date format) and doy (factor of dd/mm) when using a linear model and then a completly different pattern when using a mixed model? (When using a numeric index in model 2.1 instead of date it gives an r^2 of 0.358 and rmspe of 5.67. How does the use of date format affect the model?) 
 
+(2) Is a mixed model approach the best method to use for predicting PM2.5? we see that the contribution of AOD is minor on top of the main date predictor (not so much the case when using doy where aod adds ~ 10%). what are your thoughts on this? is there 
+another approach that will allow us to evaluate the contribution of AOD in the model driven by date.
 
+(3) Since the date clearly has the strongest effect, any other variables we add are marginly contributing to the model. are there alternative modeling approaches we should explore? we were thinking about SVM, PLS and maybe a SVM+random component?  adding spatial auto correlation?
 
+run 4.1 model first to callibrate aod to pm scale
+use predicted 4.1 and rgress vs LU terms 
+
+4.1 take slopes and multiply by aod and add it as a term in svm , also add the random slope
+
+aod* whats that 
+
+spline on aod- fit a gamm on aod
+
+fhat calibrated aod into the svm 

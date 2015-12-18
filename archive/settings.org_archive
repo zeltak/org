@@ -2331,3 +2331,97 @@ link-hint-copy-ignore-types can also be set by the user. However, note that by d
 #+END_SRC 
 
 
+
+* load 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-12-18 Fri 08:45
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages/org ref
+  :ARCHIVE_CATEGORY: settings
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+(add-to-list 'load-path "/home/zeltak/.emacs.g/org-ref/")
+;; make sure you have dash, helm, helm-bibtex, ebib, s, f, hydra and key-chord
+;; in your load-path
+(require 'org-ref)
+;; optional but very useful libraries in org-ref
+(require 'doi-utils)
+(require 'jmax-bibtex)
+(require 'pubmed)
+(require 'arxiv)
+(require 'sci-id)
+#+END_SRC
+
+
+#+BEGIN_SRC emacs-lisp :results none
+(use-package org-ref
+ :ensure t
+ :config
+(require 'doi-utils)
+(require 'jmax-bibtex)
+(require 'pubmed)
+(require 'arxiv)
+(require 'sci-id)
+
+;(org-babel-load-file "/home/zeltak/.emacs.g/extra/org-ref/org-ref.org")
+(setq reftex-default-bibliography '("/home/zeltak/org/files/Uni/papers/kloog.2015.bib"))
+
+;; see org-ref for use of these variables
+(setq org-ref-bibliography-notes "/home/zeltak/org/files/Uni/papers/notes/"
+      org-ref-default-bibliography '("/home/zeltak/org/files/Uni/papers/kloog.2015.bib")
+      org-ref-pdf-directory "/home/zeltak/Sync/Uni/pdf_lib/")
+
+(setq bibtex-autokey-year-length 4
+      bibtex-autokey-name-year-separator "-"
+      bibtex-autokey-year-title-separator "-"
+      bibtex-autokey-titleword-separator "-"
+      bibtex-autokey-titlewords 2
+      bibtex-autokey-titlewords-stretch 1
+      bibtex-autokey-titleword-length 5)
+
+ 
+ )
+#+END_SRC 
+
+
+
+* load 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-12-18 Fri 08:45
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages/org ref
+  :ARCHIVE_CATEGORY: settings
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+(add-to-list 'load-path "/home/zeltak/.emacs.g/org-ref/")
+;; make sure you have dash, helm, helm-bibtex, ebib, s, f, hydra and key-chord
+;; in your load-path
+(require 'org-ref)
+;; optional but very useful libraries in org-ref
+(require 'doi-utils)
+(require 'jmax-bibtex)
+(require 'pubmed)
+(require 'arxiv)
+(require 'sci-id)
+#+END_SRC
+
+* load 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-12-18 Fri 08:58
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages/org ref
+  :ARCHIVE_CATEGORY: settings
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+(add-to-list 'load-path "/home/zeltak/.emacs.g/org-ref/")
+;; make sure you have dash, helm, helm-bibtex, ebib, s, f, hydra and key-chord
+;; in your load-path
+(require 'org-ref)
+;; optional but very useful libraries in org-ref
+(require 'doi-utils)
+(require 'jmax-bibtex)
+(require 'pubmed)
+(require 'arxiv)
+(require 'sci-id)
+#+END_SRC
+

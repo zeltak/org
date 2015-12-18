@@ -4596,7 +4596,6 @@ set $w2 (2)
 
 *** tray area
 i3bar by default provides a system tray area where programs such as NetworkManager, VLC, Pidgin, etc. can place little icons.
-
 You can configure on which output (monitor) the icons should be displayed or you can turn off the functionality entirely.
 
 Syntax:
@@ -4619,11 +4618,14 @@ bar {
 }
 #+END_SRC
 
-$Note$  that you might not have a primary output configured yet. To do so, run:
+$Note$  if you want the tray to move from laptop (mobile mode) to external screens make sure your xrandr scripts have the --primary flag on for the monitor you want the tray to appear 
 
-#+BEGIN_SRC sh :results none
-xrandr --output <output> --primary
-#+END_SRC
+Also “You can use mutliple tray_output directives in your config to specify a list of outputs on which you want the tray to appear. The first available output in that list as defined by the order of the directives will be used for the tray output.” 
+
+#+BEGIN_EXAMPLE
+bar {\ntray_output O1\ntray_output O2\n}
+#+END_EXAMPLE
+
 
 ** xfce
 *** how to get desktop icons on xubuntu
@@ -16226,7 +16228,6 @@ press 'enter' to open the open dialog
  thats it :)
 
 *** google chrome
-
 **** install on ubuntu
 
 to install google chromium
@@ -16462,6 +16463,11 @@ to your shortcut's target. In Windows, just right click the icon and
 choose properties, and add the text here:
  You don't have to limit yourself to ten, of course - you can set the
 number to whatever you want.
+**** chrome://flags 
+neat tricks:
+***** Enable Download Resumption Mac, Windows, Linux, Chrome OS
+Allow downloads that have been interrupted to be continued or restarted, using the Resume context menu item. #enable-download-resumption
+Disable
 
 **** extensions
 
@@ -18388,6 +18394,8 @@ check the pulse output is enabled
   1)setup a directory for mpd cron:
   /home/zeltak/.mpdcron/
   2)add a config file (mpdcron.conf) in that dir including the following:
+
+#+BEGIN_EXAMPLE
   # mpdcron configuration file
   [main]
   # Path to the PID file, by default the PID file is
@@ -18416,6 +18424,8 @@ check the pulse output is enabled
   # Timeout in milliseconds for mpd timeout, 0 for default timeout of
  libmpdclient.
   timeout = 0
+#+END_EXAMPLE
+
   3)add a "hooks" dir under the mpdcron dir
   Hooks are executed depending on the event received from mpd.
   for example: hooks/player: mpdcron calls status and currentsong and
@@ -18423,18 +18433,10 @@ check the pulse output is enabled
   4)under the hooks dir add hook (player for example) and in it add what
  is executed when a player event happens.
   for example :
-  hooks/dump-status.bash
-  will launch the dump-status.bash script when the song changes
-  in my case i want dzen2 to show up so i put this in the player file:
-  #!/bin/sh
-  hooks/dzen music.sh
-  and in the dzen music script i put this:
-  #!/bin/sh
-  echo
- "($MPD SONG TAG TRACK)$MPD SONG TAG TITLE,($MPD SONG TAG GENRE)"
- | dzen2 -l 4 -y 700 -x 0 -fn 'Droid Sans Japanese Bold' -p 2; |
-  this will echo the mpdcron info to dzen
-  5)start with:
+  hooks/schange.sh 
+  will launch the schange.sh script when the song changes
+  
+5)start with:
 
   mpdcron --no-daemon
 
@@ -31730,6 +31732,8 @@ confirmmerge = true
 use something like this
 #+BEGIN_EXAMPLE
 ignore = Name {.git}
+ignore = Path .emacs.d/settings.el
+ignore = Path .emacs.d/.org-id-locations
 #+END_EXAMPLE
 
 you can also ignore specific folders by name yet it will only ignore the top level root folde

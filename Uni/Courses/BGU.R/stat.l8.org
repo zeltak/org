@@ -1,0 +1,102 @@
+# -*- mode: Org; org-download-image-dir: "/home/zeltak/org/attach/bgu/courses/BGU.R/images"; org-download-heading-lvl: nil; -*-
+#+Title:שיטות כמותיות למתקדמים
+#+Author: ד"ר איתי קלוג 
+#+Email: ikloog@bgu.ac.il
+#+REVEAL_TITLE_SLIDE_BACKGROUND: /home/zeltak/org/attach/bgu/courses/BGU.R/images/stat_large.jpg
+
+#+OPTIONS: reveal_center:t reveal_progress:t reveal_history:nil reveal_control:t
+#+OPTIONS: reveal_rolling_links:t reveal_keyboard:t reveal_overview:t num:nil
+#+OPTIONS: reveal_width:1200 reveal_height:800
+#+OPTIONS: toc:nil
+# #+REVEAL: split
+#+REVEAL_MARGIN: 0.1
+#+REVEAL_MIN_SCALE: 0.5
+#+REVEAL_MAX_SCALE: 2.5
+#+REVEAL_TRANS: linear
+#+REVEAL_SPEED: default
+#+REVEAL_THEME: white
+#+REVEAL_HLEVEL: 2
+#+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Org-Reveal Introduction.">
+#+REVEAL_POSTAMBLE: <p> Created by itai Kloog. </p>
+# REVEAL_PLUGINS: (highlight markdown notes)
+#+REVEAL_SLIDE_NUMBER: t
+#+OPTIONS: ^:nil
+#+EXCLUDE_TAGS: noexport
+#+TAGS: noexport(n)
+#+REVEAL_EXTRA_CSS: /home/zeltak/org/files/Uni/Courses/css/left.aligned.css
+
+
+* Week 8
+** ggplot2
+*** Introduction
+:PROPERTIES:
+:CUSTOM_ID: slide_1
+:END:
+
+ggplot2 is a powerful and a flexible R package, implemented by Hadley Wickham, for producing elegant graphics.
+
+#+ATTR_HTML: :style text-aligns:center
+http://ggplot2.org/
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015a-12-03 16:21:38
+#+attr_html: :width 500px 
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-03_16:21:38.png]]
+
+
+
+#+REVEAL: split 
+The concept behind ggplot2 divides plot into three different fundamental parts:
+
+*Plot = data + Aesthetics + Geometry.*
+
+The principal components of every plot can be defined as follow:
+
+data is a data frame
+
+Aesthetics is used to indicate x and y variables. It can also be used to control the color, the size or the shape of points, the height of bars, etc…..
+
+Geometry defines the type of graphics (histogram, box plot, line plot, density plot, dot plot, ….)
+#+REVEAL: split 
+There are two major functions in ggplot2 package: qplot() and ggplot() functions.
+
+qplot() stands for quick plot, which can be used to produce easily simple plots.
+
+ggplot() function is more flexible and robust than qplot for building a plot piece by piece.
+
+#+REVEAL: split 
+
+Install and load ggplot2 package
+
+#+BEGIN_SRC R :session Rorg  :results none
+# Installation
+install.packages('ggplot2')
+
+# Loading
+library(ggplot2)
+#+END_SRC
+#+REVEAL: split 
+Data format and preparation
+
+The data should be a data.frame (columns are variables and rows are observations).
+
+The data set mtcars is used in the examples below:
+
+#+BEGIN_SRC R :session Rorg  :results none
+# Load the data
+data(mtcars)
+df <- mtcars[, c("mpg", "cyl", "wt")]
+head(df)
+##                    mpg cyl    wt
+## Mazda RX4         21.0   6 2.620
+## Mazda RX4 Wag     21.0   6 2.875
+## Datsun 710        22.8   4 2.320
+## Hornet 4 Drive    21.4   6 3.215
+## Hornet Sportabout 18.7   8 3.440
+## Valiant           18.1   6 3.460
+
+#+END_SRC
+#+REVEAL: split 
+
+
+* Sources

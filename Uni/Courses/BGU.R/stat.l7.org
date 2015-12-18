@@ -27,73 +27,6 @@
 
 
 * Week 7
-** ggplot2
-*** Introduction
-ggplot2 is a powerful and a flexible R package, implemented by Hadley Wickham, for producing elegant graphics.
-
-#+ATTR_HTML: :style text-align:center
-http://ggplot2.org/
-
-
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-03 16:21:38
-#+attr_html: :width 500px 
- [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-03_16:21:38.png]]
-
-
-
-#+REVEAL: split 
-The concept behind ggplot2 divides plot into three different fundamental parts:
-
-*Plot = data + Aesthetics + Geometry.*
-
-The principal components of every plot can be defined as follow:
-
-data is a data frame
-
-Aesthetics is used to indicate x and y variables. It can also be used to control the color, the size or the shape of points, the height of bars, etc…..
-
-Geometry defines the type of graphics (histogram, box plot, line plot, density plot, dot plot, ….)
-#+REVEAL: split 
-There are two major functions in ggplot2 package: qplot() and ggplot() functions.
-
-qplot() stands for quick plot, which can be used to produce easily simple plots.
-
-ggplot() function is more flexible and robust than qplot for building a plot piece by piece.
-
-#+REVEAL: split 
-
-Install and load ggplot2 package
-
-#+BEGIN_SRC R :session Rorg  :results none
-# Installation
-install.packages('ggplot2')
-
-# Loading
-library(ggplot2)
-#+END_SRC
-#+REVEAL: split 
-Data format and preparation
-
-The data should be a data.frame (columns are variables and rows are observations).
-
-The data set mtcars is used in the examples below:
-
-#+BEGIN_SRC R :session Rorg  :results none
-# Load the data
-data(mtcars)
-df <- mtcars[, c("mpg", "cyl", "wt")]
-head(df)
-##                    mpg cyl    wt
-## Mazda RX4         21.0   6 2.620
-## Mazda RX4 Wag     21.0   6 2.875
-## Datsun 710        22.8   4 2.320
-## Hornet 4 Drive    21.4   6 3.215
-## Hornet Sportabout 18.7   8 3.440
-## Valiant           18.1   6 3.460
-
-#+END_SRC
-#+REVEAL: split 
-
 ** T-test intro 
 
 The t-statistic was introduced in 1908 by William Sealy Gosset, a chemist working for the Guinness brewery in Dublin, Ireland
@@ -111,22 +44,20 @@ The t-test is one of the most frequently used procedures in statistics
 
 #+REVEAL: split 
 
-#+ATTR_HTML: :class left
-The t-test is used to determine differences between two samples.
-
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-12-03 09:17:34
 #+attr_html: :width 300px
+*one sample t-test*
 
-The one-sample t test used to compare an observed mean with a theoretical mean.
+The one-sample t test (מבחן T למדגם בודד) is used to compare an observed mean with a theoretical mean.
 
 the theoretical mean is usually the population mean (the average for the outcome of some population of interest). 
 
 The basic idea of the test is a comparison of the average of the sample (observed average) and the population (expected average)
 
 #+REVEAL: split 
-*What is independent t-test ?*
+*independent t-test ?*
 
-Independent (or unpaired two sample) t-test is used to compare the means of two unrelated groups of samples.
+Independent (or unpaired two sample) (T לבלתי תלויים) t-test is used to compare the means of two unrelated groups of samples.
 
 As an example, we have a cohort of 100 individuals (50 women and 50 men). The question is to test whether the average weight of women is significantly different from that of men?
 
@@ -134,14 +65,16 @@ In this case, we have two independents groups of samples and unpaired t-test can
 
 #+REVEAL: split 
 
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-03 09:40:11
-#+attr_html: :width 700px
- [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-03_09:40:11.png]]
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-14 08:33:51
+#+attr_html: :width 800px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-14_08:33:51.png]]
 
 #+REVEAL: split 
-*What is paired t-test ?*
 
-Paired Student’s t-test is used to compare the means of two related samples.
+*paired t-test ?*
+
+Paired Student’s t-test (מבחן T למדגמים מזווגים/תלויים) is used to compare the means of two related samples.
 
 That is when you have two values (pair of values) for the same samples.
 
@@ -209,6 +142,14 @@ It’s greater than the significance level alpha = 0.05.
 
 In conclusion, there is no significant difference between the variances of the two sets of data. Therefore, we can use the classic t-test witch assume equality of the two variances.
 #+REVEAL: split 
+*try it*
+
+#+BEGIN_SRC R :session Rorg  :results none
+df<-read.csv("/home/zeltak/org/attach/bgu/courses/BGU.R/data/l7/general_data_file.csv")
+var.test(df$Net.income,df$age)
+#+END_SRC
+
+#+REVEAL: split 
 *What to do when the conditions are not met for t test ?*
 
 The following two-stage procedure is wide accepted:
@@ -221,7 +162,7 @@ If the two samples are normally distributed, but with unequal variances, the Wel
 #+REVEAL: split 
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-12-03 09:52:57
-#+attr_html: :width 600px
+#+attr_html: :width 900px
  [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-03_09:52:57.png]]
 ** t.test : R function to calculate t test
 The R function to use for t test statistics is t.test(). It can be used to calculate the different types of Student t test mentioned above.
@@ -256,6 +197,8 @@ Null hypothesis H0: the mean m = 200.
 #+END_EXAMPLE
 
 #+REVEAL: split 
+
+*lets try it on your computer!* 
 #+BEGIN_SRC R :session Rorg  :results none
 # Weight of the mice
 x<-c(442.7, 380.2, 406.8, 507.7, 615.1, 486.8, 438.7, 390.7, 399.5, 789.9)
@@ -313,6 +256,28 @@ res$conf.int
 #attr(,"conf.level")
 #[1] 0.95
 #+END_SRC
+*** try it!
+An outbreak of Salmonella-related illness was attributed to ice cream produced at a certain factory. Scientists measured the level of Salmonella in 9 randomly sampled
+batches of ice cream. The levels (in MPN/g) were:
+#+BEGIN_EXAMPLE
+0.593 0.142 0.329 0.691 0.231 0.793 0.519 0.392 0.418
+#+END_EXAMPLE
+Is there evidence that the mean level of Salmonella in the ice cream is greater than 0.3 MPN/g (p of 0.1)?
+#+REVEAL: split 
+#+BEGIN_SRC R :session Rorg  :results none
+x = c(0.593, 0.142, 0.329, 0.691, 0.231, 0.793, 0.519, 0.392, 0.418)
+t.test(x, mu=0.3)
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+One Sample t-test
+data: x
+t = 2.2051, df = 8, p-value = 0.02927
+alternative hypothesis: true mean is greater than 0.3
+#+END_EXAMPLE
+
+From the output we see that the p-value = 0.029. Hence, there is moderately strong evidence that the mean Salmonella level in the ice cream is above 0.3 MPN/g.
+
 *** Independent t-test 
 As an example, we have a cohort of 20 individuals (10 women and 10 men).
 
@@ -323,11 +288,11 @@ The number of individuals considered here is obviously low. This is just to illu
 Question : Does the women’s average weight is significantly different from that of men?
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-12-03 10:19:20
-#+attr_html: :width 300px
+#+attr_html: :width 600px
  [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-03_10:19:20.png]]
 #+REVEAL: split 
 Method 1 - The data are saved in two differents numeric vectors (x and y)
-
+*lets try it on your computer!* 
 #+BEGIN_SRC R :session Rorg  :results none
 set.seed(1234)
 # Women's weights
@@ -377,7 +342,7 @@ sample estimates:
               73.21               51.25 
 #+END_EXAMPLE
 
-he two methods give the same results!
+the two methods give the same results!
 #+REVEAL: split 
 t is the Student t-test statistics value (t = 3.17)
 
@@ -399,6 +364,30 @@ By default, the R t.test() function makes the assumption that the variances of t
  Therefore, *Welch t-test* is performed by default. Welch t-test is just an adaptation of t-test, and it is used when the two samples have possibly unequal variances.
 
 The argument “var.equal=TRUE” can be used to indicate to the t.test() function that the two samples have equal variances. However you have to check this assumption before using it.
+*** you try!
+subjects were given a drug (treatment group) and an additional 6 subjects a placebo (control group).
+
+Their reaction time to a stimulus was measured (in ms). 
+We want to perform a two-sample t-test for comparing the means of the treatment and control groups.
+
+#+BEGIN_SRC R :session Rorg  :results none
+Control = c(91, 87, 99, 77, 88, 91)
+Treat = c(101, 110, 103, 93, 99, 104)
+#+END_SRC
+
+#+REVEAL: split 
+#+BEGIN_SRC R :session Rorg  :results none
+t.test(Control,Treat)
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+Welch Two Sample t-test
+data: Control and Treat
+t = -3.4456, df = 9.4797, p-value = 0.006782
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -21.194292  -4.472375
+#+END_EXAMPLE
 *** Paired t-test
 Ten mice received a treatment X for 3 months. The weight of the 10 mice has been determined before and after the treatment.
 
@@ -413,7 +402,7 @@ The question is whether the weight of the mice was significantly changed after t
 In this case, paired t-test can be used as the two sets of the data to compare come from the same mice.
 
 The t-test can be performed as follow :
-
+*try*
 #+BEGIN_SRC R :session Rorg  :results none
 # Weight of the mice before treatment
 x<-c(200.1, 190.9, 192.7, 213, 241.4, 196.9, 172.2, 185.5, 205.2, 193.7)
@@ -423,6 +412,7 @@ res<-t.test(x, y, paired=TRUE)
 res
 #+END_SRC
 
+#+REVEAL: split 
 #+BEGIN_EXAMPLE
 data:  x and y
 t = -20.88, df = 9, p-value = 6.2e-09
@@ -434,7 +424,6 @@ mean of the differences
                  -194.5 
 
 #+END_EXAMPLE
-#+REVEAL: split 
 
 t is the value of t-test statistics (t = -20.88)
 
@@ -445,12 +434,45 @@ p-value is the significance level of the t-test (p-value = 6.2 × 10-9).
 The confidence interval (conf.int) of the mean differences at 95% is also shown (conf.int= [-215.56, -173.42]); 
 
 we have the difference of the means of the two samples (mean diff = -194.49).
+
 #+REVEAL: split 
 The p-value of the t-test is 6.2003 × 10-9, which is less than the significance level alpha = 0.05.
 
 We can then reject null hypothesis and conclude that the average weight of the mice before treatment is significantly different from the average weight after treatment with a p-value = 6.2003 × 10-9.
+*** you try 
+A study was performed to test whether cars get better mileage on premium gas than on regular gas. Each of 10 cars was first filled with either regular or premium gas,
+decided by a coin toss, and the mileage for that tank was recorded. 
+
+The mileage was recorded again for the same cars using the other kind of gasoline. 
+We can use a paired t-test to determine whether cars get significantly better mileage with premium gas.
+#+REVEAL: split 
+Below is the relevant data:
+#+BEGIN_SRC R :session Rorg  :results none
+#regular gas
+reg = c(16, 20, 21, 22, 23, 22, 27, 25, 27, 28)
+#premium gas
+prem = c(19, 22, 24, 24, 25, 25, 26, 26, 28, 32)
+#+END_SRC
+
+#+REVEAL: split 
+#+BEGIN_SRC R :session Rorg  :results none
+t.test(prem,reg,alternative="greater", paired=TRUE)
+#+END_SRC
+
+#+BEGIN_SRC R :session Rorg  :results none
+Paired t-test
+data: prem and reg
+t = 4.4721, df = 9, p-value = 0.000775
+#+END_SRC
+
+alternative hypothesis: true difference in means is greater than 0
+The results show that the t-statistic is equal to 4.47 and the p-value is 0.00075. Since
+the p-value is very low, we reject the null hypothesis. 
+There is strong evidence of a mean increase in gas mileage between regular and premium gasoline.
+
 ** Dates
 *** Basic
+
 Dates are typically entered into R as character strings and then translated into date variables that *are stored numerically*. 
 
 The function *as.Date()* is used to make this translation.
@@ -490,13 +512,6 @@ mod1$day <- as.Date(strptime(mod1$DATE, "%m/%d/%y"))
 available
 #+END_EXAMPLE
 
-*** Extract day of the year
-you can also extract parts of a date and create a variable
-
-#+begin_src r
-mod1$dayofyr <- as.numeric(format(mod1$day, "%j"))
-#+end_src
-
 *** subset by date range
 1. make sure the date field is converted to standard R date
 2. issue the followiing command
@@ -509,12 +524,13 @@ mb4 <-subset(mb3, as.Date(rdate) >= '2003-09-02' & as.Date(rdate) <= '2004-09-04
 #+END_SRC
 *** create a date range/date time series
 **** simple date sequence
+*lets try it on your computer!* 
 #+begin_src R
 bd <- as.Date("2007-05-20")
 ed <- as.Date("2010-06-13")
-seqd <- seq(bd, ed, by="1 day")
+seqd <- seq(bd, ed, by=1)
 #+end_src
-**** to create a date range based on start and end points use`
+to create a date range based on start and end points use
 #+begin_src R
 days_2000<-seq.Date(from = as.Date("2000-01-01"), to = as.Date("2000-12-31"), 1)
 #+end_src
@@ -526,3 +542,35 @@ as.Date("2001-01-01") + 45
 * Sources
 http://www.sthda.com/english/wiki/t-test-analysis-is-it-always-correct-to-compare-means
 http://www.gardenersown.co.uk/education/lectures/r/basics.htm#t_test
+* HW l7
+*** Q1
+The average heart rate among humans is known to be 75 beats per minute, while it is normally distributed. 
+A new study assumes that patients with a given disease have different heart rhythms.
+A random sample of nine patients resulted in the following values for heart rate:
+#+BEGIN_EXAMPLE
+80, 78, 75, 82, 79, 81, 73, 84 , 83
+#+END_EXAMPLE
+Test the claim of the study about different heart rhythms at a significance level of 0.05
+*** Q2
+A Teacher claims that he developed a learning method, which enhances the achievements of students in the second grade in reading comprehension. 
+
+Six students were selected randomly and tested for reading comprehension before and after learning the enhanced method
+
+#+BEGIN_EXAMPLE
+before: 70 80 60 70 60 90
+after: 80 65 85 75 65 95 
+#+END_EXAMPLE
+
+1. Assuming that the variable distribution is normal and that the population variance equal, examine the teachers argument at a significance level of 0.05:
+
+2.In case the grades were from two different classes- the first learning with the enhanced  method and the other by the usual method,
+what will be the conclusion at a significance level of 0.05?
+*** Q3 
+
+Download the data general_data_file.csv from moodle
+
+1.Perform a t-test to check whether there is a significant difference between men and women in their income.
+
+2. Perform a t-test to check whether there is a significant difference between the average viewing hours on Sunday and Wednesday.
+
+3. Is there a difference in the viewing average on Sundays between respondents who watched the advertisement (advert) and respondents who did not watch?
