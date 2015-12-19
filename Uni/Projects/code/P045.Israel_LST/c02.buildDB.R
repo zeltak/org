@@ -21,13 +21,12 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/geomerge_alpha.r")
 fullgrid<-fread("/media/NAS/Uni/Projects/P045_Israel_LST/2.work/gridXY_IL.csv")
 
 #load met
-Temp<-fread("/media/NAS/Uni/Projects/P045_Israel_LST/2.work/final_stations2.csv")
+Temp<-fread("/media/NAS/Uni/Projects/P045_Israel_LST/2.work/all_stations2.csv")
 setnames(Temp,"long ","long")
 Temp<-filter(Temp,stn != "NA")
 Temp[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
 Temp[, c := as.numeric(format(day, "%Y")) ]
 Temp[,c("V1","date","serial number","start"):=NULL]
-Temp[,c("V1"):=NULL]
 Temp<-filter(Temp,c != "NA")
 Temp<-filter(Temp, itm_e != "NA")
 summary(Temp)
@@ -102,9 +101,7 @@ db2003$itm_n<-as.numeric(db2003$itm_n)
 
 #Tempperature
 Temp2003<-filter(Temp,c==2003)
-
-
-
+summary(Temp2003)
 
 #spatio temporal join
 
@@ -119,14 +116,6 @@ closestaodse<- nearestbyday(lu.m ,met.m ,
 setkey(db2003,aodid,day)
 setkey(closestaodse,aodid,day)
 m4 <- merge(db2003, closestaodse[,list(day,Temp.im,aodid)], all.x = T)
-
-
-
-
-
-
-
-
 
 
 
