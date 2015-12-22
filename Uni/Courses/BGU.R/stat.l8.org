@@ -27,76 +27,577 @@
 
 
 * Week 8
-** ggplot2
-*** Introduction
-:PROPERTIES:
-:CUSTOM_ID: slide_1
-:END:
+** subset data
+*** Subsetting variables
 
-ggplot2 is a powerful and a flexible R package, implemented by Hadley Wickham, for producing elegant graphics.
+To manipulate data frames in R we can use the bracket notation to access the indices for the observations and the variables.
 
-#+ATTR_HTML: :style text-aligns:center
-http://ggplot2.org/
+It is easiest to think of the data frame as a rectangle of data where the rows are the observations and the columns are the variables. 
 
+Just like in matrix algebra, the indices for a rectangle of data follow the RxC principle:
 
-#+DOWNLOADED: /tmp/screenshot.png @ 2015a-12-03 16:21:38
-#+attr_html: :width 500px 
- [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-03_16:21:38.png]]
-
-
-
+The first index is for Rows and the second index is for Columns [R, C]. 
 #+REVEAL: split 
-The concept behind ggplot2 divides plot into three different fundamental parts:
+When we only want to subset variables (or columns) we use the second index and leave the first index blank.
 
-*Plot = data + Aesthetics + Geometry.*
+Leaving an index blank indicates that you want to keep all the elements in that dimension.
 
-The principal components of every plot can be defined as follow:
-
-data is a data frame
-
-Aesthetics is used to indicate x and y variables. It can also be used to control the color, the size or the shape of points, the height of bars, etc…..
-
-Geometry defines the type of graphics (histogram, box plot, line plot, density plot, dot plot, ….)
-#+REVEAL: split 
-There are two major functions in ggplot2 package: qplot() and ggplot() functions.
-
-qplot() stands for quick plot, which can be used to produce easily simple plots.
-
-ggplot() function is more flexible and robust than qplot for building a plot piece by piece.
-
-#+REVEAL: split 
-
-Install and load ggplot2 package
+In order to know which variables correspond to which number in the index we use the names function which will list the names of the variables in the order in which they appear in the data frame.
+*** import data and use names
 
 #+BEGIN_SRC R :session Rorg  :results none
-# Installation
-install.packages('ggplot2')
-
-# Loading
-library(ggplot2)
+hsb2.small <- read.csv("http://www.ats.ucla.edu/stat/data/hsb2_small.csv")
+# or download from moodle
 #+END_SRC
-#+REVEAL: split 
-Data format and preparation
-
-The data should be a data.frame (columns are variables and rows are observations).
-
-The data set mtcars is used in the examples below:
 
 #+BEGIN_SRC R :session Rorg  :results none
-# Load the data
-data(mtcars)
-df <- mtcars[, c("mpg", "cyl", "wt")]
-head(df)
-##                    mpg cyl    wt
-## Mazda RX4         21.0   6 2.620
-## Mazda RX4 Wag     21.0   6 2.875
-## Datsun 710        22.8   4 2.320
-## Hornet 4 Drive    21.4   6 3.215
-## Hornet Sportabout 18.7   8 3.440
-## Valiant           18.1   6 3.460
+# using the names function to see names of the variables and which column of
+# data to which they correspond
+ names(hsb2.small)
+ ##  [1] "id"      "female"  "race"    "ses"     "schtyp"  "prog"    "read"   
+ ##  [8] "write"   "math"    "science" "socst"
+ ## 13  95   73    60
+#+END_SRC
+*lets try it on your computer!* 
+
+*** subset columns 
+
+#+BEGIN_SRC R :session Rorg  :results none
+hsb3 <- hsb2.small[, c(1, 7, 8)]
+head(hsb3, n=30)
+ ##     id read write
+ ## 1   70   57    52
+ ## 2  121   68    59
+ ## 3   86   44    33
+ ## 4  141   63    44
+ ## 5  172   47    52
+ ## 6  113   44    52
+ ## 7   50   50    59
+ ## 8   11   34    46
+ ## 9   84   63    57
+ ## 10  48   57    55
+ ## 11  75   60    46
+ ## 12  60   57    65
 
 #+END_SRC
+ *lets try it on your computer!* 
+#+REVEAL: split 
+If the variables we want are in consecutive columns, we can use the *colon* notation rather than list them using the *c function*
+
+In the next example we create the data frame hsb4 containing the first four variables of hsb2.small.
+
+#+BEGIN_SRC R :session Rorg  :results none
+hsb4 <- hsb2.small[, 1:4]
+head(hsb4, n=30)
+ ##     id female race ses
+ ## 1   70      0    4   1
+ ## 2  121      1    4   2
+ ## 3   86      0    4   3
+ ## 4  141      0    4   3
+ ## 5  172      0    4   2
+ ## 6  113      0    4   2
+ ## 7   50      0    3   2
+ ## 8   11      0    1   2
+ ## 9   84      0    4   2
+ ## 10  48      0    3   2
+#+END_SRC
+*lets try it on your computer!* 
+*** Subsetting observations
+
+We can subset observations by also using the bracket notation but now we use the first index and leave the second index blank. This indicates that we want all the variables for specific observations. 
+
+In the first example we create the data frame hsb5, which contains the first 10 observations of hsb2.small.
+
+#+BEGIN_SRC R :session Rorg  :results none
+hsb5 <- hsb2.small[1:10, ]
+head(hsb5, n=30)
+ ##     id female race ses schtyp prog read write math science socst
+ ## 1   70      0    4   1      1    1   57    52   41      47    57
+ ## 2  121      1    4   2      1    3   68    59   53      63    61
+ ## 3   86      0    4   3      1    1   44    33   54      58    31
+ ## 4  141      0    4   3      1    3   63    44   47      53    56
+ ## 5  172      0    4   2      1    2   47    52   57      53    61
+ ## 6  113      0    4   2      1    2   44    52   51      63    61
+ ## 7   50      0    3   2      1    1   50    59   42      53    61
+ ## 8   11      0    1   2      1    2   34    46   45      39    36
+ ## 9   84      0    4   2      1    1   63    57   54      58    51
+ ## 10  48      0    3   2      1    2   57    55   52      50    51
+#+END_SRC
+*lets try it on your computer!* 
 #+REVEAL: split 
 
+We can also subset observations based on logical tests. 
 
+In the following example we create the data frame hsb6, which contains only the observations for which ses=1.
+
+For a logical equality we need to use the double equal sign notation. We also need to refer to the variable, ses in the data frame hsb2.small, which we do using $.
+ 
+#+BEGIN_SRC R :session Rorg  :results none
+hsb6 <- hsb2.small[hsb2.small$ses == 1, ]
+head(hsb6, n=30)
+ ##     id female race ses schtyp prog read write math science socst
+ ## 1   70      0    4   1      1    1   57    52   41      47    57
+ ## 15  38      0    3   1      1    2   45    57   50      31    56
+ ## 16 115      0    4   1      1    1   42    49   43      50    56
+#+END_SRC
+*lets try it on your computer!* 
+#+REVEAL: split 
+
+In the previous example we used a logical test to subset the observations, but we only tested for one variable being equal to a single value. 
+
+We can also subset using a logical test that will test a single variable being equal to the elements in a list, and we do this by using the %in% function.
+
+In the following example we create the data frame hsb7, which contains the observations where id is equal to 11, 12, 20, 48, 86 or 195.
+
+#+BEGIN_SRC R :session Rorg  :results none
+hsb7 <- hsb2.small[hsb2.small$id %in% c(12, 48, 86, 11, 20, 195), ]
+head(hsb7, n=30)
+ ##     id female race ses schtyp prog read write math science socst
+ ## 3   86      0    4   3      1    1   44    33   54      58    31
+ ## 8   11      0    1   2      1    2   34    46   45      39    36
+ ## 10  48      0    3   2      1    2   57    55   52      50    51
+ ## 18 195      0    4   2      2    1   57    57   60      58    56
+ ## 24  20      0    1   3      1    2   60    52   57      61    61
+ ## 25  12      0    1   2      1    3   37    44   45      39    46
+#+END_SRC
+*lets try it on your computer!* 
+
+#+REVEAL: split 
+
+It is also possible to combine logical tests.
+
+In the following example we create the data frame hsb8, which contains only the observations where ses=3 and female=0.
+
+Here to avoid having to type hsb2.small multiple times, we use the with function to let R know that it should look for ses and female inside the hsb2.small data frame.
+
+#+BEGIN_SRC R :session Rorg  :results none
+hsb8 <- hsb2.small[with(hsb2.small, ses == 3 & female == 0), ]
+head(hsb8, n=30)
+ ##     id female race ses schtyp prog read write math science socst
+ ## 3   86      0    4   3      1    1   44    33   54      58    31
+ ## 4  141      0    4   3      1    3   63    44   47      53    56
+ ## 13  95      0    4   3      1    2   73    60   71      61    71
+ ## 14 104      0    4   3      1    2   54    63   57      55    46
+ ## 17  76      0    4   3      1    2   47    52   51      50    56
+ ## 19 114      0    4   3      1    2   68    65   62      55    61
+ ## 24  20      0    1   3      1    2   60    52   57      61    61
+#+END_SRC
+*lets try it on your computer!* 
+
+*** the subset function 
+The subset function with a logical statement will let you subset the data frame by observations.
+
+In the following example the write.50 data frame contains only the observations for which the values of the variable write is greater than 50. 
+
+Note that one convenient feature of the subset function, is R assumes variable names are within the data frame being subset, so there is no need to tell R where to look for write.
+
+#+BEGIN_SRC R :session Rorg  :results none
+write.50 <- subset(hsb2.small, write > 50)
+head(write.50, n=30)
+ ##     id female race ses schtyp prog read write math science socst
+ ## 1   70      0    4   1      1    1   57    52   41      47    57
+ ## 2  121      1    4   2      1    3   68    59   53      63    61
+ ## 5  172      0    4   2      1    2   47    52   57      53    61
+ ## 6  113      0    4   2      1    2   44    52   51      63    61
+ ## 7   50      0    3   2      1    1   50    59   42      53    61
+ ## 9   84      0    4   2      1    1   63    57   54      58    51
+ ## 10  48      0    3   2      1    2   57    55   52      50    51
+#+END_SRC
+*lets try it on your computer!* 
+#+REVEAL: split 
+There is no limit to how many logical statements may be combined to achieve the subsetting that is desired. 
+
+The data frame write.1 contains only the observations for which the values of the variable write is greater than 50 and for which the variable read is greater than 60.
+
+#+BEGIN_SRC R :session Rorg  :results none
+write.1 <- subset(hsb2.small, write > 50 & read > 60)
+head(write.1, n=30)
+ ##     id female race ses schtyp prog read write math science socst
+ ## 2  121      1    4   2      1    3   68    59   53      63    61
+ ## 9   84      0    4   2      1    1   63    57   54      58    51
+ ## 13  95      0    4   3      1    2   73    60   71      61    71
+ ## 19 114      0    4   3      1    2   68    65   62      55    61
+ ## 22 143      0    4   2      1    3   63    63   75      72    66
+#+END_SRC
+*lets try it on your computer!* 
+#+REVEAL: split 
+
+It is possible to subset both rows and columns using the subset function.
+
+The select argument lets you subset variables (columns). 
+
+The data frame write.2 contains only the variables write and read and then only the observations of these two variables where the values of variable write are greater than 50 and the values of variable read are greater than 65.
+
+#+BEGIN_EXAMPLE
+write.2 <- subset(hsb2.small, write > 50 & read > 60, select = c(write, read))
+head(write.2, n=30)
+ ##    write read
+ ## 2     59   68
+ ## 9     57   63
+ ## 13    60   73
+ ## 19    65   68
+ ## 22    63   63
+#+END_EXAMPLE
+*lets try it on your computer!* 
+#+REVEAL: split 
+
+In the data frame write.3 contains only the observations in variables read through science for which the values in the variable science are less than 55.
+
+#+BEGIN_SRC R :session Rorg  :results none
+write.3 <- subset(hsb2.small, science < 55, select = read:science)
+head(write.3, n=30)
+ ##    read write math science
+ ## 1    57    52   41      47
+ ## 4    63    44   47      53
+ ## 5    47    52   57      53
+ ## 7    50    59   42      53
+ ## 8    34    46   45      39
+ ## 10   57    55   52      50
+ ## 11   60    46   51      53
+ ## 15   45    57   50      31
+ ## 16   42    49   43      50
+ ## 17   47    52   51      50
+ ## 20   55    39   57      53
+ ## 25   37    44   45      39
+#+END_SRC
+*lets try it on your computer!* 
+*** Subsetting both variables and observations
+
+We can subset variables and observations by simply combining the two above methods of subsetting.
+
+We accomplish this by subsetting using both indices at the same time. 
+
+In the following example we create the data frame hsb9 in which we keep only the variables id, female, race, ses and read and only the observations where ses=3. 
+
+Note again that because we are not using subset, we have to let R know where to find the variable ses by explicitly pointing to hsb2.small.
+#+REVEAL: split 
+#+BEGIN_SRC R :session Rorg  :results none
+ names(hsb2.small)
+ ##  [1] "id"      "female"  "race"    "ses"     "schtyp"  "prog"    "read"   
+ ##  [8] "write"   "math"    "science" "socst"
+ (hsb9 <- hsb2.small[hsb2.small$ses == 3, c(1:4, 7)])
+ ##     id female race ses read
+ ## 3   86      0    4   3   44
+ ## 4  141      0    4   3   63
+ ## 13  95      0    4   3   73
+ ## 14 104      0    4   3   54
+ ## 17  76      0    4   3   47
+ ## 19 114      0    4   3   68
+ ## 24  20      0    1   3   60
+#+END_SRC
+*lets try it on your computer!*
+** dplyr
+*** using dplyr
+dplyr is a package for data manipulation, written and maintained by Hadley Wickham (a R superstar....)
+
+#+attr_html: :width 400px
+file:/home/zeltak/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-20_08:33:51.png
+
+It provides some great, easy-to-use functions that are very handy when performing exploratory data analysis and manipulation
+
+install dplyr 
+#+BEGIN_SRC R :session Rorg  :results none
+install.packages("dplyr")
+library(dplyr)
+#+END_SRC
+*lets try it on your computer!* 
+
+#+REVEAL: split 
+Dplyr aims to provide a function for each basic verb of data manipulation:
+
+*select()*: selects a subset of variables
+
+*filter()*: selects a subset of observations
+
+*mutate()*: adds new variables
+
+*summarise()*: reduces a group(s) to a smaller number of values (e.g., summary statistics)
+
+*arrange()*: re-orders observations
+
+#+REVEAL: split 
+To explore the basic data manipulation verbs of dplyr, we’ll start with a dataset contains all 336776 flights that departed from New York City in 2013. 
+
+The data comes from the US Bureau of Transportation Statistics
+
+*load it from moodle*
+#+REVEAL: split 
+*Commonalities*
+You will notice that the syntax and function of all these verbs are very similar:
+
+First you start with the verb 
+
+Then the first argument is a data frame.
+
+The subsequent arguments describe what to do with the data frame. 
+
+Notice that you can refer to columns in the data frame directly without using $.
+
+Together these properties make it easy to chain together multiple simple steps to achieve a complex result.
+
+#+BEGIN_SRC R :session Rorg  :results none
+select(flights, year, month, day)
+#+END_SRC
+
+*** glimpse (dplyr str alternative)
+ #+BEGIN_SRC R
+ # dplyr approach: better formatting, and adapts to your screen width
+ glimpse(flights)
+ #+END_SRC
+*lets try it on your computer!* 
+*** Filter rows with filter()
+
+filter() allows you to select a subset of rows in a data frame. 
+
+the first argument is the name of the data frame. The second and subsequent arguments are the expressions that filter the data frame:
+
+For example, we can select all flights on January 1st with:
+
+#+BEGIN_SRC R :session Rorg  :results none
+filter(flights, month == 1, day == 1)
+#> Source: local data frame [842 x 16]
+#> 
+#>     year month   day dep_time dep_delay arr_time arr_delay carrier tailnum
+#>    (int) (int) (int)    (int)     (dbl)    (int)     (dbl)   (chr)   (chr)
+#> 1   2013     1     1      517         2      830        11      UA  N14228
+#> 2   2013     1     1      533         4      850        20      UA  N24211
+#> 3   2013     1     1      542         2      923        33      AA  N619AA
+#> 4   2013     1     1      544        -1     1004       -18      B6  N804JB
+#> ..   ...   ...   ...      ...       ...      ...       ...     ...     ...
+#> Variables not shown: flight (int), origin (chr), dest (chr), air_time
+#>   (dbl), distance (dbl), hour (dbl), minute (dbl)
+#+END_SRC
+*lets try it on your computer!* 
+This is equivalent to the more verbose code in base R:
+#+BEGIN_SRC R :session Rorg  :results none
+flights[flights$month == 1 & flights$day == 1, ]
+#+END_SRC
+
+#+REVEAL: split 
+
+filter() works similarly to subset() except that you can give it any number of filtering conditions, which are joined together with & (not && which is easy to do accidentally!). 
+
+You can also use other boolean operators:
+
+#+BEGIN_SRC R :session Rorg  :results none
+filter(flights, month == 1 | month == 2)
+#+END_SRC
+#+REVEAL: split 
+*filtering out NA (missing) values*:
+
+#+BEGIN_SRC R
+ppb<-filter(pb,!is.na(V4))
+#+END_SRC
+*** select by position (slice)
+To select rows by position, use slice():
+
+#+BEGIN_SRC R :session Rorg  :results none
+slice(flights, 1:10)
+#> Source: local data frame [10 x 16]
+#> 
+#>     year month   day dep_time dep_delay arr_time arr_delay carrier tailnum
+#>    (int) (int) (int)    (int)     (dbl)    (int)     (dbl)   (chr)   (chr)
+#> 1   2013     1     1      517         2      830        11      UA  N14228
+#> 2   2013     1     1      533         4      850        20      UA  N24211
+#> 3   2013     1     1      542         2      923        33      AA  N619AA
+#> 4   2013     1     1      544        -1     1004       -18      B6  N804JB
+#> ..   ...   ...   ...      ...       ...      ...       ...     ...     ...
+#> Variables not shown: flight (int), origin (chr), dest (chr), air_time
+#>   (dbl), distance (dbl), hour (dbl), minute (dbl)
+#+END_SRC
+*lets try it on your computer!*
+*** Arrange rows with arrange()
+
+arrange() works similarly to filter() except that instead of filtering or selecting rows, it reorders them. 
+
+It takes a data frame, and a set of column names to order by. 
+
+If you provide more than one column name, each additional column will be used to break ties in the values of preceding columns:
+
+#+BEGIN_SRC R :session Rorg  :results none
+arrange(flights, year, month, day)
+#> Source: local data frame [336,776 x 16]
+#> 
+#>     year month   day dep_time dep_delay arr_time arr_delay carrier tailnum
+#>    (int) (int) (int)    (int)     (dbl)    (int)     (dbl)   (chr)   (chr)
+#> 1   2013     1     1      517         2      830        11      UA  N14228
+#> 2   2013     1     1      533         4      850        20      UA  N24211
+#> 3   2013     1     1      542         2      923        33      AA  N619AA
+#> 4   2013     1     1      544        -1     1004       -18      B6  N804JB
+#> ..   ...   ...   ...      ...       ...      ...       ...     ...     ...
+#> Variables not shown: flight (int), origin (chr), dest (chr), air_time
+#>   (dbl), distance (dbl), hour (dbl), minute (dbl)
+#+END_SRC
+*lets try it on your computer!* 
+
+#+REVEAL: split 
+Use desc() to order a column in descending order:
+#+BEGIN_SRC R :session Rorg  :results none
+arrange(flights, desc(arr_delay))
+#> Source: local data frame [336,776 x 16]
+#> 
+#>     year month   day dep_time dep_delay arr_time arr_delay carrier tailnum
+#>    (int) (int) (int)    (int)     (dbl)    (int)     (dbl)   (chr)   (chr)
+#> 1   2013     1     9      641      1301     1242      1272      HA  N384HA
+#> 2   2013     6    15     1432      1137     1607      1127      MQ  N504MQ
+#> 3   2013     1    10     1121      1126     1239      1109      MQ  N517MQ
+#> 4   2013     9    20     1139      1014     1457      1007      AA  N338AA
+#> ..   ...   ...   ...      ...       ...      ...       ...     ...     ...
+#> Variables not shown: flight (int), origin (chr), dest (chr), air_time
+#>   (dbl), distance (dbl), hour (dbl), minute (dbl)
+#+END_SRC
+*lets try it on your computer!*
+*** select ()
+Select columns with select()
+
+Often you work with large datasets with many columns but only a few are actually of interest to you. 
+
+select() allows you to rapidly zoom in on a useful subset using operations that usually only work on numeric variable positions:
+#+REVEAL: split 
+#+BEGIN_SRC R :session Rorg  :results none
+# Select columns by name
+select(flights, year, month, day)
+#> Source: local data frame [336,776 x 3]
+#> 
+#>     year month   day
+#>    (int) (int) (int)
+#> 1   2013     1     1
+#> 2   2013     1     1
+#> 3   2013     1     1
+#> 4   2013     1     1
+#> ..   ...   ...   ...
+# Select all columns between year and day (inclusive)
+select(flights, year:day)
+#> Source: local data frame [336,776 x 3]
+#> 
+#>     year month   day
+#>    (int) (int) (int)
+#> 1   2013     1     1
+#> 2   2013     1     1
+#> 3   2013     1     1
+#> 4   2013     1     1
+#> ..   ...   ...   ...
+#+END_SRC
+*lets try it on your computer!* 
+#+REVEAL: split 
+
+#+BEGIN_SRC R :session Rorg  :results none
+# Select all columns except those from year to day (inclusive)
+select(flights, -(year:day))
+#> Source: local data frame [336,776 x 13]
+#> 
+#>    dep_time dep_delay arr_time arr_delay carrier tailnum flight origin
+#>       (int)     (dbl)    (int)     (dbl)   (chr)   (chr)  (int)  (chr)
+#> 1       517         2      830        11      UA  N14228   1545    EWR
+#> 2       533         4      850        20      UA  N24211   1714    LGA
+#> 3       542         2      923        33      AA  N619AA   1141    JFK
+#> 4       544        -1     1004       -18      B6  N804JB    725    JFK
+#> ..      ...       ...      ...       ...     ...     ...    ...    ...
+#> Variables not shown: dest (chr), air_time (dbl), distance (dbl), hour
+#>   (dbl), minute (dbl)
+#+END_SRC
+*lets try it on your computer!* 
+*** Add new columns with mutate()
+Besides selecting sets of existing columns, it’s often useful to add new columns that are functions of existing columns. This is the job of mutate():
+
+#+BEGIN_SRC R :session Rorg  :results none
+mutate(flights,
+  gain = arr_delay - dep_delay,
+  speed = distance / air_time * 60)
+
+#> Source: local data frame [336,776 x 18]
+#> 
+#>     year month   day dep_time dep_delay arr_time arr_delay carrier tailnum
+#>    (int) (int) (int)    (int)     (dbl)    (int)     (dbl)   (chr)   (chr)
+#> 1   2013     1     1      517         2      830        11      UA  N14228
+#> 2   2013     1     1      533         4      850        20      UA  N24211
+#> 3   2013     1     1      542         2      923        33      AA  N619AA
+#> 4   2013     1     1      544        -1     1004       -18      B6  N804JB
+#> ..   ...   ...   ...      ...       ...      ...       ...     ...     ...
+#> Variables not shown: flight (int), origin (chr), dest (chr), air_time
+#>   (dbl), distance (dbl), hour (dbl), minute (dbl), gain (dbl), speed (dbl)
+#+END_SRC
+*lets try it on your computer!* 
+#+REVEAL: split 
+you can also refer to columns that you’ve just created:
+#+BEGIN_SRC R :session Rorg  :results none
+mutate(flights,
+  gain = arr_delay - dep_delay,
+  gain_per_hour = gain / (air_time / 60)
+)
+#> Source: local data frame [336,776 x 18]
+#> 
+#>     year month   day dep_time dep_delay arr_time arr_delay carrier tailnum
+#>    (int) (int) (int)    (int)     (dbl)    (int)     (dbl)   (chr)   (chr)
+#> 1   2013     1     1      517         2      830        11      UA  N14228
+#> 2   2013     1     1      533         4      850        20      UA  N24211
+#> 3   2013     1     1      542         2      923        33      AA  N619AA
+#> 4   2013     1     1      544        -1     1004       -18      B6  N804JB
+#> ..   ...   ...   ...      ...       ...      ...       ...     ...     ...
+#> Variables not shown: flight (int), origin (chr), dest (chr), air_time
+#>   (dbl), distance (dbl), hour (dbl), minute (dbl), gain (dbl),
+#>   gain_per_hour (dbl)
+#+END_SRC
+*lets try it on your computer!* 
+#+REVEAL: split 
+If you only want to keep the new variables, use transmute() or assign to new DF:
+
+#+BEGIN_SRC R :session Rorg  :results none
+transmute(flights,
+  gain = arr_delay - dep_delay,
+  gain_per_hour = gain / (air_time / 60)
+)
+
+#
+DF<- transmute(flights,
+  gain = arr_delay - dep_delay,
+  gain_per_hour = gain / (air_time / 60)
+)
+
+
+
+#> Source: local data frame [336,776 x 2]
+#> 
+#>     gain gain_per_hour
+#>    (dbl)         (dbl)
+#> 1      9      2.378855
+#> 2     16      4.229075
+#> 3     31     11.625000
+#> 4    -17     -5.573770
+#> ..   ...           ...
+#+END_SRC
+*lets try it on your computer!* 
 * Sources
+https://stat545-ubc.github.io/bit001_dplyr-cheatsheet.html
+* HW
+Open the general data file from the last lesson (t-tests: general_data_file.csv)
+
+** t-tests 
+In the last exercise we wanted to know if there is a difference between men and women in their net income. The data we had was only column indicating the sex of the subject.
+
+1.  Using the subset command , make a new data set, one for men and one for women and see if there is a different result in the t- test.  
+
+2.  Create a new data frame "base_data" which contains the variables id, age, sex and marital status.
+
+3.  Create the data frame "random_people", which contains the observations where ID is equal to 11, 12, 22, 48, 76 or 63.
+
+4.  We want to know if people with children see more television on Sundays: Run a t-test between people with children and those without children.
+
+5.In the data set "NO" is company 2 and "COLD" is company 1.@ "NO" cable company wants to know if their customers are watching more advertisements then the competitor's ("COLD") customers? Run a t-test.
+
+6. create a new  data frame "other.company" which contains only the observations in variables hour sun through hours sat for which the values in the variable cable are "cold"(1) and no cable(0)
+
+7. The C.E.O of "NO" company wants a table of customers showing the net income, Marital status, number of kids. The table should only show costumers with more than 10 favorite shows and over the age of 21.  Use the subset function
+
+** Dplyr functions
+
+*** ADD NEW COLUMNS WITH MUTATE()
+Use the filter () to create a new data frame were the net income is higher than 4700 and the age is over 21. 
+Calculate the total watching time on the week days (mon-thu) and the total time on weekend (fri-sun) in a new data frame.
+
+*** SUMMARISE VALUES WITH SUMMARISE()
+The "NO" cable company wants to see if the average watching time on weekends is higher than the "cold" company average. Calculate the average for each company on week days and weekends. 
+ 
+
+
+ 

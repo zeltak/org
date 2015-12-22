@@ -2761,6 +2761,20 @@ emacsclient -c -e '(x-change-window-property "WM_CLASS" "Client_NAME_NEEDED" nil
 #+END_SRC
 
 $Note-you only need to change the Client_NAME_NEEDED part$:
+** EWW
+see also here http://ergoemacs.org/emacs/emacs_eww_web_browser.html
+*** How to open a new URL?
+Just call eww again.
+*** How to open a local HTML file?
+Call eww-open-file.
+*** How to switch to a real browser?
+When in eww, call eww-browse-with-external-browser 【&】.
+*** How to make emacs always use eww?
+Add the following to your emacs init.
+#+BEGIN_EXAMPLE
+;; make emacs always use its own browser for opening URL links
+(setq browse-url-browser-function 'eww-browse-url)
+#+END_EXAMPLE
 
 ** Ess
 *** install ESS through git
@@ -9806,7 +9820,61 @@ the proper URL in your example should be:
    <source src="file:///home/zeltak/ZH_tmp/big-buck-bunny_trailer.webm" type="video/webm">
  </video>
 #+END_HTML
+** import html bookmarks into org
 
+http://rexim.me/firefox-bookmarks-to-org-mode.html
+
+export your bookmarks (use FF for this) into jason
+then use a python script to convert it to org:
+#+BEGIN_SRC python
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import codecs
+import locale
+import sys
+import json
+
+sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.stdout)
+
+def export_bookmarks(bookmarks, fp):
+    # The inner recursive function which does the main work
+    def export_bookmarks_impl(bookmarks, level):
+        # Output the node according to its type and the current level
+        if bookmarks['type'] == 'text/x-moz-place-container':
+            fp.write('%s %s\n' % ('*' * level, bookmarks['title']))
+        elif bookmarks['type'] == 'text/x-moz-place':
+            fp.write('%s - [[%s][%s]]\n' % (' ' * (level - 1),
+                                            bookmarks['uri'],
+                                            bookmarks['title']))
+
+        if bookmarks.has_key('children'):
+            # Due to the nature of org-mode format, it is important to
+            # export not folder nodes first. So they are guaranteed to
+            # be children of the current node.
+            for child in bookmarks['children']:
+                if child['type'] == 'text/x-moz-place':
+                    export_bookmarks_impl(child, level + 1)
+
+            for child in bookmarks['children']:
+                if child['type'] == 'text/x-moz-place-container':
+                    export_bookmarks_impl(child, level + 1)
+
+    # Starting the traversal from level 1
+    export_bookmarks_impl(bookmarks, 1)
+
+if __name__ == '__main__':
+    # Reading JSON from stdin
+    bookmarks = json.load(sys.stdin)
+
+    # Writing org-mode to stdout
+    export_bookmarks(bookmarks, sys.stdout)
+#+END_SRC
+
+then run it in the terminal 
+#+BEGIN_SRC sh
+cat bookmarks.json | python2 bookmarks-to-org.py > bookmarks.org
+#+END_SRC
+you should get an orgmode file
 * EOF settings
 Local variables:
 buffer-read-only: t

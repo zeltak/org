@@ -1,4 +1,5 @@
 #+TITLE: R Guide
+#+OPTIONS: ^:nil
 
 * LEARN
 ** TODO ask allan
@@ -8235,55 +8236,84 @@ $Note$ this may also be done to some extent with native R code
 all.equal(lapply(aodf.2003.tmp.s9.m2,class),lapply(aodf.2004.tmp.s9.m2,class))
 #+END_SRC
 
-** geomerge (nearestbyday)
+** The Geomerge R package
+*** dependencies
+Geomerge relies on the following packages:
+#+BEGIN_SRC R :session Rorg  :results none
+data.table
+FNN
+#+END_SRC
+*** Introduction 
+The Geomerge package is used to join two Datasets both over space and time.
 
-@note-the id variable in the matirx must be character!!!@
+This is in essence a spatio-temporal join (as opposed to the GIS based spatial join) 
+*** Create spatial matrices 
 
-₆In example₆ 
+First one needs to create 2 spatial matrices for both the the target DT and the source (joined) DT.
+ 
+The id variable (such as station id) in the distance matrices must be a character variable on both matrices created 
+ 
+We use the *makepointsmatrix* command (part of the Geomerge package) to create the matrices using the following syntax
+
 #+BEGIN_SRC R
-s2x$GUID<-as.character(s2x$GUID)
-aod.m <- makepointsmatrix(s2x[s2x[,unique(GUID)], list(Long, Lat, GUID), mult = "first"], "Long", "Lat", "GUID")
+DT$id<-as.character(DT$id)
+DT.m <- makepointsmatrix(DT, "X", "Y", "id")
 #+END_SRC
 
-function explained:
+A more complex example:
+#+BEGIN_SRC R
+DT$GUID<-as.character(DT$GUID)
+aod.m <- makepointsmatrix(DT[DT[,unique(GUID)], list(Long, Lat, GUID), mult = "first"], "Long", "Lat", "GUID")
+#+END_SRC
+*** nearestbyday function (the spatio-temporal join)
+the nearestbyday function is used to run the actual spatio-temporal join
+this is the base syntax
 
 #+BEGIN_SRC R
-nearestbyday <- function(matrix_target, matrix_join, dt_target, dt_join, dt_target_varname, dt2_join_varname, 
-                         closestname = "closestmet", varstoget = "avewsp", 
+nearestbyday <- function(matrix_target, matrix_join, 
+                         dt_target, dt_join, 
+                         dt_target_varname, dt2_join_varname, closestname = "closestmet", varstoget = "avewsp",
                          knearest = 5, maxdistance = NA, nearestmean = FALSE){
 #+END_SRC
 
-- knreast: number of nearest points it considers, if or if not they have data. assesment of how near something is , is done by pointmatrix. if you have many points with no data you might end up with no data.
-its the maximum number of points that gets considered.
+where: 
 
+*matrix_target* -the matrix of id and x/y or lat/long for the target DT  
+
+*matrix_join*- the matrix of id and x/y or lat/long for the source (joined) DT 
+
+*dt_target*- the target DT  
+
+*dt_join* - the source (joined) DT  
+
+*dt-target_varname*-  The id variable for the the target DT  
+
+*dt2_join_varname*-  the id variable for the source (joined) DT 
+
+*closestname* =  the string to be given to derived variable- a string prefix (for example "stn"), default to "closestmet"
+
+*varstoget* = ???
+
+*knreast*: number of nearest points it considers, if or if not they have data. assesment of how near something is , is done by pointmatrix. if you have many points with no data you might end up with no data. its the maximum number of points that gets considered.
 the higher the kneareast the bigger the Dataset needs to be- This has RAM/CPU implications
-
 will only consider max number based in max number of monitors/sites in the joining dataset
 
-- maxdistance (optional)- defualts to NA
-
+*maxdistance* (optional)- defualts to NA
 you can add a second restriction where the points that are considered have to be within a max distance (will use units of cords being used- meters, dec degree)
-
 example: if you set knearest if 5 and max dist of 20000 (20km) it will look for 5 closest points up to 20km.
 
-- nearestmean: To calculate the mean (and not just the first point) use nearestmean= TRUE.
-
+*nearestmean*: To calculate the mean (and not just the first point) use nearestmean= TRUE.
 if set to False it will only get knreaset and get closest one available by distance
 
-$Note$  knearest runs before maxdist, the maxdist is an additional screen
-
-- dt-target_varname- the string of the variable name for the units in the target dt
-
-- dt2_join_varname- the string of the variable name for the units in the join dt
-
-- closestname = "closestmet":  the string to be given to derived variable- a string prefix
-- varstoget = "avewsp" : isnt used ..here be dragons?- ignore it for now and just put target variable
+** geomerge extras
+Please note:  knearest runs before maxdist, the maxdist is an additional screen
 
 2nd column (named based on the named in join dataset)-data point closest from unit
 closest-which unit from the join was the closest one (which was used)
 closestknn-which of the closest knn (k nearest) was used
 closestnobs-total number of observations that met the knearst and maxdist criteria--WITH DATA!! if no data was avilable it would ne NA
 closestmean- mean of all the points if nearstmean=True, if False then you dont get it.
+
 
 ** zoo 
 *** fill in/impute missing days from day before 
@@ -10647,7 +10677,17 @@ left_join(df2, df1)
 **** left join by 2 key variables
 #+BEGIN_SRC R
 #+END_SRC
-    
+** rename
+*** rename specific variable 
+#+BEGIN_SRC R :session Rorg  :results none
+rename(iris, petal_length = Petal.Length)
+#+END_SRC
+where petal_length is the new variable name, and Petal.Length is the existing variable name
+*** rename while selecting columns
+#+BEGIN_SRC R :session Rorg  :results none
+mtcars2 <- select( mtcars, disp2 = disp )
+head( mtcars2 )
+#+END_SRC
 ** run models with by statement
 #+BEGIN_SRC R
 #You could do this:

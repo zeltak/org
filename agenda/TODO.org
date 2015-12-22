@@ -6,8 +6,16 @@
 #+LaTeX_CLASS_OPTIONS: [garamond]
 
 * `TODO` 							  :CANCELLED:
-** report
-nox bazan all sig variables R2 n
+** TODO ROFI PASS- ask rasi
+#+BEGIN_SRC sh
+addpass --name "$(echo "" | rofi -dmenu -p "Enter Name > ")" +url "$(xclip -o selection)"
+#+END_SRC
+add the same but ask for pass and user 
+** Bookmark revision
+3 layers of bookmakrs:
+1)quickmarks in vim browser extension for daily bookmarks
+2)MFU bookmarks in toolbars
+3)archived bookmarks in an org file 
 ** org-reveal
 *** justify to the left and not centered
 ** covert word to text for better cross academic search 
@@ -880,22 +888,4 @@ http://stackoverflow.com/questions/7464951/how-to-make-org-protocol-work/3285115
 http://stackoverflow.com/questions/19510984/section-summaries-in-org-mode
 ** https://github.com/alphapapa/org-protocol-capture-html/tree/9ddb2a8e548eb8461acde5a3bc56ccb1414c2173#org-protocol-capture-html
 ** https://github.com/cute-jumper/emacs-firefox-controller
-
-
-#+BEGIN_SRC sh
-addpass --name "$(echo "" | rofi -dmenu -p "Enter Name > ")" +url "$(xclip -o selection)"
-#+END_SRC
-
-#+RESULTS:
-| --name  |          |                              |                                         |                |          |                        |      |           |
-| Using   | database | /home/zeltak/.password-store |                                         |                |          |                        |      |           |
-|         |          |                              |                                         |                |          |                        |      |           |
-|         |          |                              |                                         |                |          |                        |      |           |
-| Storing | file     | rateyourmusic                | in                                      | group          | bookmark |                        |      |           |
-| mkdir:  | created  | directory                    | ‘/home/zeltak/.password-store/bookmark’ |                |          |                        |      |           |
-| Enter   | contents | of                           | bookmark/rateyourmusic                  | and            | press    | Ctrl+D                 | when | finished: |
-|         |          |                              |                                         |                |          |                        |      |           |
-| [master | ae51b75] | Add                          | given                                   | password       | for      | bookmark/rateyourmusic | to   | store.    |
-| 1       | file     | changed,                     | 0                                       | insertions(+), | 0        | deletions(-)           |      |           |
-| create  | mode     | 100644                       | bookmark/rateyourmusic.gpg              |                |          |                        |      |           |
 
