@@ -6,16 +6,155 @@
 #+LaTeX_CLASS_OPTIONS: [garamond]
 
 * `TODO` 							  :CANCELLED:
+** @sync//backup project@
+*** Relevant IP's
+
+| Machine          |             IP | Ports open                                                                       | Comments |
+|------------------+----------------+----------------------------------------------------------------------------------+----------|
+| Linux PC         | 132.72.155.204 | github,                                                                          |          |
+| Synology NAS     | 132.72.152.204 | FTP into machine,github, ssh (22), btsync (UDP/TCP 9999 ,UDP/TCP 8888, UDP 3000) |          |
+| Linux Laptop     | 132.72.154.204 | github                                                                           |          |
+| home qnap        |       10.0.0.2 |                                                                                  |          |
+| hope laptop wifi |      10.0.0.12 |                                                                                  |          |
+
+*** Sync methods     
+**** for all textfile-git
+***** create a central bare repo (or use github)
+****** using github as a central repo
+-create a repo (named zorg) on github
+-cuurently this repo is private
+****** daily workflow for work/lapop
+******* for work
+every morning when i get to work:
+run's the ugs.sh script
+
+file:/home/zeltak/bin/ugs.sh
+
+@do not use laptop during the day to edit@
+all editing should be done on work PC
+
+before leaving work run the same script
+
+file:/home/zeltak/bin/ugs.sh
+
+******* for laptop
+once i get home run this script
+
+file:/home/zeltak/bin/lgs.sh
+
+then before i leave home in the morning run the same script again
+
+file:/home/zeltak/bin/lgs.sh
+
+also at work i connect it to the LAN:
+ip: 132.72.153.174
+
+******* mobile (android phone/tablet)
+******** use pocket git
+https://play.google.com/store/apps/details?id=com.aor.pocketgit&hl=en
+
+********* Pull data 
+I use this for android to pull my whole git repo (org) and have a copy of it on my mobile device
+
+********* TODO you can also git push back changes
+******** Mobile org 
+i used that for agenda notes to have a more accesable way to quick read notes from there
+**** Binary files (images,pdfs etc)-Unison
+I use unison to sync the following folders
+I create a profile called sync under file:/home/zeltak/.unison/sync.prf
+
+this syncs the following folders between workPC (zuni) and laptop (zlap):
+
+file:/~/Sync/
+file:/~/Uni/
+file:/~/org/attach/
+***** Unison sync folder structure
+ I used the following organizing structure:
+****** Scans 
+ This has all my scanned documents organized as follows: 
+  -year
+   -- BGU
+   -- docs
+   -- receipts
+   -- family 
+****** Uni
+   -- CV
+   -- PDF library
+   -- signatures
+****** VT - Personal sensetive docs
+****** attach
+ org mode attached files and pictures 
+
+ $Note$ this needs to be changed yearly in the Emacs config (under org-downlaod section): 
+
+ #+BEGIN_SRC emacs-lisp :results none
+ (setq-default org-download-image-dir "/home/zeltak/org/attach/images_2015")
+ #+END_SRC
+**** browser related
+user chrome/firefox built in sync mechanisms
+**** TODO password store
+using password-store. more info [[id:d57aa1cc-33ce-4081-9811-c6f2782b8eee][password-store]]
+***** structure of pass naming scheme
+for naming:
+#+BEGIN_EXAMPLE
+(SITE).NAME.TYPE.SUBTYPE.gpg
+#+END_EXAMPLE
+
+for folder structure
+
+#+BEGIN_EXAMPLE
+@browser
+software
+hardware
+sites
+#+END_EXAMPLE
+
+I use the following fields in this order
+#+BEGIN_EXAMPLE
+PASS (must be first line)
+user:
+url:
+note:
+#+END_EXAMPLE
+
+***** TODO ROFI PASS- ask rasi
+   #+BEGIN_SRC sh
+   addpass --name "$(echo "" | rofi -dmenu -p "Enter Name > ")" +url "$(xclip -o selection)"
+   #+END_SRC
+   add the same but ask for pass and user 
+   #+BEGIN_SRC sh
+   addpass --name "$(echo "" | rofi -dmenu -p "Enter Name > ")" +user "$(echo "" | rofi -dmenu -p "Enter Username > ")" +url "$(xclip -o selection)"                                                                
+   #+END_SRC
+
+*** Backup 
+**** family photos 
+**** daily backups
+     :PROPERTIES:
+     :ID:       7b98d815-4327-4f65-8c60-dfd9711859bd
+     :END:
+***** Rsync 
+****** TODO UNI (urs.sh)-rsync to push data from laptop to synology NAS
+       :PROPERTIES:
+       :ID:       b35e3749-464e-4465-b927-3b1cf5f1385f
+       :END:
+
+file:/home/zeltak/bin/urs.sh
+
+       #+BEGIN_SRC sh
+rsync -aRPz --delete -e ssh /home/zeltak/dotfiles/  root@132.72.152.204:/volume1/rsync/    
+       #+END_SRC
+
+****** TODO HOME (lrg.sh)-rsync to push data from laptop to QNAP NAS
+       :PROPERTIES:
+       :ID:       d4f672c5-6ced-4670-ae67-4e785f17ea79
+       :END:
+use this script created in ~bin:
+file:/home/zeltak/bin/lrs.sh
+
+**** robust password store /gnupg/ .ssh backup
+
 ** repeater for belkin
 http://vpnpick.com/use-dd-wrt-router-repeater/
-** TODO ROFI PASS- ask rasi
-#+BEGIN_SRC sh
-addpass --name "$(echo "" | rofi -dmenu -p "Enter Name > ")" +url "$(xclip -o selection)"
-#+END_SRC
-add the same but ask for pass and user 
-#+BEGIN_SRC sh
-addpass --name "$(echo "" | rofi -dmenu -p "Enter Name > ")" +user "$(echo "" | rofi -dmenu -p "Enter Username > ")" +url "$(xclip -o selection)"                                                                
-#+END_SRC
 ** TODO orgmode team management
 http://juanreyero.com/article/emacs/org-teams.html
 ** vimperator
@@ -390,120 +529,6 @@ http://www.computerworld.com/article/2921176/business-intelligence/great-r-packa
 http://amsantac.co/blog/en/2015/10/31/qgis-r.html
 http://blog.rstudio.org/2015/09/29/purrr-0-1-0/
 https://github.com/hadley/multidplyr/blob/30f60f7108d1aba3687363a52c7cb20e5bab17e7/vignettes/multidplyr.md
-** @sync//backup project@
-*** Relevant IP's
-
-| Machine          |             IP | Ports open                                                                       | Comments |
-|------------------+----------------+----------------------------------------------------------------------------------+----------|
-| Linux PC         | 132.72.155.204 | github,                                                                          |          |
-| Synology NAS     | 132.72.152.204 | FTP into machine,github, ssh (22), btsync (UDP/TCP 9999 ,UDP/TCP 8888, UDP 3000) |          |
-| Linux Laptop     | 132.72.154.204 | github                                                                           |          |
-| home qnap        |       10.0.0.2 |                                                                                  |          |
-| hope laptop wifi |      10.0.0.12 |                                                                                  |          |
-
-*** Sync methods     
-**** for all textfile-git
-***** create a central bare repo (or use github)
-****** using github as a central repo
--create a repo (named zorg) on github
--cuurently this repo is private
-****** daily workflow for work/lapop
-******* for work
-every morning when i get to work:
-run's the ugs.sh script
-
-file:/home/zeltak/bin/ugs.sh
-
-@do not use laptop during the day to edit@
-all editing should be done on work PC
-
-before leaving work run the same script
-
-file:/home/zeltak/bin/ugs.sh
-
-******* for laptop
-once i get home run this script
-
-file:/home/zeltak/bin/lgs.sh
-
-then before i leave home in the morning run the same script again
-
-file:/home/zeltak/bin/lgs.sh
-
-also at work i connect it to the LAN:
-ip: 132.72.153.174
-
-******* mobile (android phone/tablet)
-******** use pocket git
-https://play.google.com/store/apps/details?id=com.aor.pocketgit&hl=en
-
-********* Pull data 
-I use this for android to pull my whole git repo (org) and have a copy of it on my mobile device
-
-********* TODO you can also git push back changes
-******** Mobile org 
-i used that for agenda notes to have a more accesable way to quick read notes from there
-**** Binary files (images,pdfs etc)-Unison
-I use unison to sync the following folders
-I create a profile called sync under file:/home/zeltak/.unison/sync.prf
-
-this syncs the following folders between workPC (zuni) and laptop (zlap):
-
-file:/~/Sync/
-file:/~/Uni/
-file:/~/org/attach/
-***** Unison sync folder structure
- I used the following organizing structure:
-****** Scans 
- This has all my scanned documents organized as follows: 
-  -year
-   -- BGU
-   -- docs
-   -- receipts
-   -- family 
-****** Uni
-   -- CV
-   -- PDF library
-   -- signatures
-****** VT - Personal sensetive docs
-****** attach
- org mode attached files and pictures 
-
- $Note$ this needs to be changed yearly in the Emacs config (under org-downlaod section): 
-
- #+BEGIN_SRC emacs-lisp :results none
- (setq-default org-download-image-dir "/home/zeltak/org/attach/images_2015")
- #+END_SRC
-**** browser related
-user chrome/firefox built in sync mechanisms
-**** passwords
-using password-store. more info [[id:d57aa1cc-33ce-4081-9811-c6f2782b8eee][password-store]]
-*** Backup 
-**** family photos 
-**** daily backups
-     :PROPERTIES:
-     :ID:       7b98d815-4327-4f65-8c60-dfd9711859bd
-     :END:
-***** Rsync 
-****** TODO UNI (urs.sh)-rsync to push data from laptop to synology NAS
-       :PROPERTIES:
-       :ID:       b35e3749-464e-4465-b927-3b1cf5f1385f
-       :END:
-
-file:/home/zeltak/bin/urs.sh
-
-       #+BEGIN_SRC sh
-rsync -aRPz --delete -e ssh /home/zeltak/dotfiles/  root@132.72.152.204:/volume1/rsync/    
-       #+END_SRC
-
-****** TODO HOME (lrg.sh)-rsync to push data from laptop to QNAP NAS
-       :PROPERTIES:
-       :ID:       d4f672c5-6ced-4670-ae67-4e785f17ea79
-       :END:
-use this script created in ~bin:
-file:/home/zeltak/bin/lrs.sh
-
-**** robust password store /gnupg/ .ssh backup
 ** rofi tmux switch to pane
 write a script that takes an input of all tmux open panes and switches to it
 also crazy idea: foucs Emacs client and switch to a specific buffers
