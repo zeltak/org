@@ -750,7 +750,7 @@ look into svm model with mixed effect and if that doesn't help look into taking 
 *** code
 *** meetings
 *** TD Ratio global project
-**q** TODO slowly start organize data to publishable state	     :meytar:
+**** TODO slowly start organize data to publishable state 	     :meytar:
 *** explore
 **** results
 lower ratio means more pm10
@@ -774,6 +774,91 @@ The hypothesis is that the final graph will look schematically like this:
 **** Read Queue
 **** Paper Summary
 **** Writing Material
+** Roni factor crime project
+*** Database 
+**** resolution summary table
+
+| Best spatial resolution possible | Currently available resolution | Data type                                         | Temporal scale       | Possible extent                     |
+|----------------------------------+--------------------------------+---------------------------------------------------+----------------------+-------------------------------------|
+| 30m                              | 1km                            | land use (open space,built areas etc),elevation   | yearly               | USA wide                            |
+| 30m                              | 1km                            | green space (NDVI)                                | monthly              | USA wide                            |
+| 100m                             | 200m                           | air pollution (local)                             | daily                | any city across North-Eastern USA   |
+| 1km                              | 1km                            | air pollution (area-transported)                  | daily                | any region in North-Eastern USA     |
+| 100m                             | -                              | walkability scores                                | N/A                  | any region across North-Eastern USA |
+| 600m                             | -                              | light at night                                    | daily/monthly/yearly | any region across North-Eastern USA |
+| 1km                              | 1km                            | Air temperaure                                    | daily                | any region across North-Eastern USA |
+| closet monitor available         | closet monitor available       | Meteorology data (humidity, visibility, wind etc) | daily                | USA wide                            |
+| distance from point              | -                              | access to faclities (health,food etc)             | N/A                  | USA wide                            |
+
+**** Datasets we have 
+***** PM2.5 (air pollution)
+Spatio-temporally resolved resolution daily PM (air pollution) is available at different spatial/temporal resolutions.
+
+| spatial resolution | date range | spatial extent                | temporal extent |
+|--------------------+------------+-------------------------------+-----------------|
+| 10km               |  2000-2012 | all eastern USA               | daily           |
+| 1km                |  2000-2014 | all New England and NY and NJ | daily           |
+| 200m               |  2000-2012 | all eastern USA               | 7 year average  |
+| 200m               |  2000-2014 | per city across eastern usa   | daily           |
+|                    |            |                               |                 |
+
+***** Temperature 
+ We currently have 1x1km spatio-temporally resolved resolution for every daily air temperature 1km point across the whole Eastern USA from 2000-2014.
+***** Meteorology (EPA data)
+  We will have other climate data from EPA (ENVIRONMENTAL PROTECTION AGENCY) sites (each section of area will get closest available data from site) such as wind speed, humidity, visibility etc for every point across the USA
+***** green spaces 
+We have NDVI satellite data ("green space") across the whole eastern USA in 1km resolution, We use 1 month time scales since NDVI does not vary dramitccly from day to day.
+we can also calculate up 30m resolution based on new satellite data.
+***** Roads
+   We use ESRI or TIGER road data classified into (classified 'A' roads) and create surfaces to calculate "road density" as a proxy for traffic density. 
+ - ArcGIS Spatial Analyst Line Density tool was used to calculate density of roads per sq km within 1 km for 1 km grid.
+ - Another approach would be to use OSM (open street map data). I have a MA student working on that who could help
+***** Land use 
+we have data on land classification  downloaded from the National Land Cover Database (NLCD)
+
+http://www.mrlc.gov/nlcd06_data.php
+
+several LU classifications are available at a 1km resolution, but can be calculated at a 30m resolution
+
+#+BEGIN_EXAMPLE
+Op Value:21 Developed, Open Space - Includes areas with a mixture of some constructed materials, but mostly vegetation in the form of lawn grasses.  Impervious surfaces account for less than 20 percent of total cover.  These areas most commonly include large-lot single-family housing units, parks, golf courses, and vegetation planted in developed settings for recreation, erosion control, or aesthetic purposes.
+  Ld Value: 22 Developed, Low Intensity -Includes areas with a mixture of constructed materials and vegetation.  Impervious surfaces account for 20-49 percent of total cover.  These areas most commonly include single-family housing units.
+  Md Value: 23 Developed, Medium Intensity - Includes areas with a mixture of constructed materials and vegetation. Impervious surfaces account for 50-79 percent of the total cover.  These areas most commonly include single-family housing units.
+  Hd  Value: 24 Developed, High Intensity - Includes highly developed areas where people reside or work in high numbers. Examples include apartment complexes, row houses and commercial/industrial.  Impervious surfaces account for 80 to100 percent of the total cover.
+  Df Value: 41 Deciduous Forest  - Areas dominated by trees generally greater than 5 meters tall, and greater than 20% of total vegetation cover. More than 75 percent of the tree species shed foliage simultaneously in response to seasonal change.
+  Ev  Value: 42 Evergreen Forest - Areas dominated by trees generally greater than 5 meters tall, and greater than 20% of total vegetation cover. More than 75 percent of the tree species maintain their leaves all year. Canopy is never without green foliage. 
+  Mf Value: 43 Mixed Forest - Areas dominated by trees generally greater than 5 meters tall, and greater than 20% of total vegetation cover. Neither deciduous nor evergreen species are greater than 75 percent of total tree cover.
+  Sh Value: 52 Shrub/Scrub - Areas dominated by shrubs; less than 5 meters tall with shrub canopy typically greater than 20% of total vegetation. This class includes true shrubs, young trees in an early successional stage or trees stunted from environmental conditions.
+  Gr Value: 71 Grassland/Herbaceous - Areas dominated by grammanoid or herbaceous vegetation, generally greater than 80% of total vegetation.  These areas are not subject to intensive management such as tilling, but can be utilized for grazing.
+  Pa  Value: 81 Pasture/Hay  - Areas of grasses, legumes, or grass-legume mixtures planted for livestock grazing or the production of seed or hay crops, typically on a perennial cycle. Pasture/hay vegetation accounts for greater than 20 percent of total vegetation.
+  Cr Value: 82 Cultivated Crops - Areas used for the production of annual crops, such as corn, soybeans, vegetables, tobacco, and cotton, and also perennial woody crops such as orchards and vineyards. Crop vegetation accounts for greater than 20 percent of total vegetation. This class also includes all land being actively tilled.
+#+END_EXAMPLE
+***** pop density
+  We can use ESRI data on population per census/tract to get at population density for each 1km gridcell
+***** SES data
+ I assume you guys will have all this but we can get access to (at a tract/block level) to:
+ - median income
+ - House hold income
+ - Education
+ - Ethnicity 
+ ...and so on (basically all the SES data from the TIGER data sets)
+
+ we can also look into developing measures such as:
+ - socio economic disatvanteges measures
+ - urban classification
+
+**** Datasets we can develop
+***** Light at night
+ We can use both available DMSP NASA satellite data or newly available VIIRS satellite data to get ~600x600m light at night data. this can be downloaded in a daily resolution or monthly/yearly
+
+***** walkabilty
+ We are now working on walkability indexes In israel:
+ http://www.esri.com/news/arcuser/0112/modeling-walkability.html
+
+ we can develop similar indexes if needed for any city in the USA
+***** Access to food, health etc
+ we can scrape on-line data/develop methods to approximate access to healthy food, Health care (both medical and psychiatric) etc for each residence, street. neighborhood, SSA etc
+
 * Future Project Ideas
 ** Model.PM 
 *** Ideas (NEED TO QUEUE BY PRIORITY)

@@ -22,14 +22,13 @@ fullgrid<-fread("/media/NAS/Uni/Projects/P045_Israel_LST/2.work/gridXY_IL.csv")
 
 #load met
 Temp<-fread("/media/NAS/Uni/Projects/P045_Israel_LST/2.work/all_stations2.csv")
-setnames(Temp,"long ","long")
 Temp<-filter(Temp,stn != "NA")
 Temp[, day:=as.Date(strptime(date, "%d/%m/%Y"))]
 Temp[, c := as.numeric(format(day, "%Y")) ]
 Temp[,c("V1","date","serial number","start"):=NULL]
 Temp<-filter(Temp,c != "NA")
 Temp<-filter(Temp, itm_e != "NA")
-summary(Temp)
+#summary(Temp)
 
 
 # try2 <- Temp[is.na(day)]
@@ -84,143 +83,189 @@ setkey(db2003,ndviid,m)
 setkey(fin.ndvi,ndviid,m)
 db2003 <- merge(db2003, fin.ndvi[,list(ndviid,ndvi,m)], all.x = T)
 gc()
-summary(db2003)
+#summary(db2003)
 
 
-#fix ITM data
-db2003$itm_e <- gsub(",", "",db2003$itm_e)
-db2003$itm_e<-as.numeric(db2003$itm_e)
-db2003$itm_n <- gsub(",", "",db2003$itm_n)
-db2003$itm_n<-as.numeric(db2003$itm_n)
+# #fix ITM data
+# db2003$itm_e <- gsub(",", "",db2003$itm_e)
+# db2003$itm_e<-as.numeric(db2003$itm_e)
+# db2003$itm_n <- gsub(",", "",db2003$itm_n)
+# db2003$itm_n<-as.numeric(db2003$itm_n)
 
 
 #################
 # need to subset the datasets to day and night datasets!
 #########
 
-
-#Tempperature
+#Temp
 Temp2003<-filter(Temp,c==2003)
-summary(Temp2003)
+temp2003tc<-select(Temp2003,stn,tempcmean,lat_stn=  lat ,long_stn=  long,day)
+temp2003tc<-na.omit(temp2003tc)
+temp2003tc$stn<-as.character(temp2003tc$stn)
 
 #spatio temporal join
-
 #matrix for temperature 
-met.m <- makepointsmatrix(Temp2003, "itm_e", "itm_n", "stn")
+met.m <- makepointsmatrix(temp2003tc, "long_stn", "lat_stn", "stn")
 setkey(db2003, lstid)
-lu.m <- makepointsmatrix(db2003[db2003[,unique(lstid)], list(itm_e, itm_n, lstid), mult = "first"], "itm_e", "itm_n", "lstid")
+lu.m <- makepointsmatrix(db2003[db2003[,unique(lstid)], list(long_lst, lat_lst, lstid), mult = "first"], "long_lst", "lat_lst", "lstid")
+
+#runthescript
 
 closestaodse<- nearestbyday(lu.m ,met.m , 
-                            db2003, Temp[, list(day,tempcmean,stn)], 
-                            "lstid", "stn", "meanT", "Temp.im", knearest = 5, maxdistance = NA)
-setkey(db2003,aodid,day)
-setkey(closestaodse,aodid,day)
-m4 <- merge(db2003, closestaodse[,list(day,Temp.im,aodid)], all.x = T)
+                            db2003, temp2003tc[, list(day,tempcmean,stn)], 
+                            "lstid", "stn", "meanT", "tempcmean", knearest = 7, maxdistance = 50000)
+
+
+setkey(db2003,lstid,day)
+setkey(closestaodse,lstid,day)
+db2003 <- merge(db2003, closestaodse[,list(day,tempcmean,lstid)], all.x = T)
 
 
 
-#mean Ta calculations
-Ta<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/Ta.rds")
-Ta<-filter(Ta,c==2003)
+
+#rhmean
+Temp2003<-filter(Temp,c==2003)
+temp2003tc<-select(Temp2003,stn,rhmean,lat_stn=  lat ,long_stn=  long,day)
+temp2003tc<-na.omit(temp2003tc)
+temp2003tc$stn<-as.character(temp2003tc$stn)
+
+#spatio temporal join
+#matrix for temperature 
+met.m <- makepointsmatrix(temp2003tc, "long_stn", "lat_stn", "stn")
+setkey(db2003, lstid)
+lu.m <- makepointsmatrix(db2003[db2003[,unique(lstid)], list(long_lst, lat_lst, lstid), mult = "first"], "long_lst", "lat_lst", "lstid")
+
+#runthescript
+
+closestaodse<- nearestbyday(lu.m ,met.m , 
+                            db2003, temp2003tc[, list(day,rhmean,stn)], 
+                            "lstid", "stn", "meanT", "rhmean", knearest = 7, maxdistance = 50000)
+
+
+setkey(db2003,lstid,day)
+setkey(closestaodse,lstid,day)
+db2003 <- merge(db2003, closestaodse[,list(day,rhmean,lstid)], all.x = T)
+
+
+
+#####ADDD WS AND WD
+#####ADDD WS AND WD
+#####ADDD WS AND WD, tmin, tmax
+#####ADDD WS AND WD
+#####ADDD WS AND WD
+#####ADDD WS AND WD
+#####ADDD WS AND WD
+#####ADDD WS AND WD
+#####ADDD WS AND WD
+#####ADDD WS AND WD
+
+
+#Temp
+Temp2003<-filter(Temp,c==2003)
+temp2003tc<-select(Temp2003,stn,tempcmean,lat_stn=  lat ,long_stn=  long,day)
+temp2003tc<-na.omit(temp2003tc)
+temp2003tc$stn<-as.character(temp2003tc$stn)
 
 
 #-------> mean Ta  for mod 2+3
-Ta.m <- makepointsmatrix(Ta, "long_Ta", "lat_Ta", "stn")
+#spatio temporal join
+#matrix for temperature 
+met.m <- makepointsmatrix(temp2003tc, "long_stn", "lat_stn", "stn")
 setkey(db2003, lstid)
-lst.m <- makepointsmatrix(db2003[db2003[,unique(lstid)], list(long_lst, lat_lst, lstid), mult = "first"], "long_lst", "lat_lst", "lstid")
+lu.m <- makepointsmatrix(db2003[db2003[,unique(lstid)], list(long_lst, lat_lst, lstid), mult = "first"], "long_lst", "lat_lst", "lstid")
 
-Taj1<- nearestbyday(lst.m  ,Ta.m , 
-                            db2003, Ta [, list(day,Ta,stn)], 
-                            "lstid", "stn", "closest","Ta",knearest = 10, maxdistance = 60000, nearestmean = T)
+
+closestmta<- nearestbyday(lu.m ,met.m , 
+                            db2003, temp2003tc[, list(day,tempcmean,stn)], 
+                            "lstid", "stn", "stn.near", "tempcmean", knearest = 7, maxdistance = 50000, nearestmean = T)
+
 #join to DB
-setkey(Taj1,lstid,day)
 setkey(db2003,lstid,day)
-db2003 <- merge(db2003,Taj1[,list(day,lstid,closestmean)],all.x = T)
-setnames(db2003,"closestmean","meanTa")
+setkey(closestmta,lstid,day)
+db2003 <- merge(db2003, closestmta[,list(day,stn.nearmean,lstid)], all.x = T)
+setnames(db2003,"stn.nearmean","meanTa")
 gc()
 
-#take out uneeded
+
 #save
 gc()
-saveRDS(db2003,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2003.rds")
+saveRDS(db2003,"/PATH/mod3.AQ.2003.rds")
 gc()
 
-
-# take out missing night LST >>> mod3 night
-# take out missing day LST >>> mod3 night
-
-#create mod 2 file
-db2003.m2 <- db2003[!is.na(lst)]
-#rm m3
-rm(db2003)
-gc()
-#save mod2
-saveRDS(db2003.m2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.rds")
-gc()
-
-#--------->mod1
-#Ta
-#to fix missing days issues resulting in cartesean error
-db2003days <- sort(unique(db2003.m2$day))
-
-#Ta import again
-Ta<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/Ta.rds")
-Ta<-filter(Ta,c==2003)
-Ta10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/Ta10.rds")
-Ta10<-filter(Ta10,c==2003)
-
-########### join lst to Ta
-#create Ta matrix
-Ta.m <- makepointsmatrix(Ta, "long_Ta", "lat_Ta", "stn")
-#create lst terra matrix
-db2003.m2$lstid<-as.character(db2003.m2$lstid)
-setkey(db2003.m2,lstid)
-lst.m <- makepointsmatrix(db2003.m2[db2003.m2[,unique(lstid)], list(long_lst, lat_lst, lstid), mult = "first"], "long_lst", "lat_lst", "lstid")
-
-
-
-#run function
-closestlst <- nearestbyday(Ta.m, lst.m, 
-                           Ta[day %in% db2003days,], db2003.m2, 
-                           "stn", "lstid", "closest", "lst", knearest = 9, maxdistance = 1500)
-
-
-#closestlst[,i.stn :=NULL]
-closestlst[,closestknn :=NULL]
-
-setkey(Ta,stn,day)
-setkey(closestlst,stn,day)
-Ta.m1 <- merge(Ta, closestlst, all.x = T)
-Ta.m1<-Ta.m1[!is.na(lst)]
-
-#save mod 1
-saveRDS(Ta.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.Ta.rds")
-
-########### join lst to Ta10
-#create Ta matrix
-Ta.m <- makepointsmatrix(Ta10, "long_Ta10", "lat_Ta10", "stn")
-#create lst terra matrix
-db2003.m2$lstid<-as.character(db2003.m2$lstid)
-setkey(db2003.m2,lstid)
-lst.m <- makepointsmatrix(db2003.m2[db2003.m2[,unique(lstid)], list(long_lst, lat_lst, lstid), mult = "first"], "long_lst", "lat_lst", "lstid")
-
-#run function
-closestlst <- nearestbyday(Ta.m, lst.m, 
-                           Ta10[day %in% db2003days,], db2003.m2, 
-                           "stn", "lstid", "closest", "lst", knearest = 9, maxdistance = 1500)
-
-
-#closestlst[,i.stn :=NULL]
-closestlst[,closestknn :=NULL]
-
-setkey(Ta10,stn,day)
-setkey(closestlst,stn,day)
-Ta10.m1 <- merge(Ta10, closestlst, all.x = T)
-Ta10.m1<-Ta10.m1[!is.na(lst)]
-
-#save mod 1
-saveRDS(Ta10.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.Ta10.rds")
-
-#cleanup
-keep(fgrid,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
-gc()
+# # take out missing night LST >>> mod3 night
+# # take out missing day LST >>> mod3 night
+# #create mod 2 file
+# db2003.m2 <- db2003[!is.na(lst)]
+# #rm m3
+# rm(db2003)
+# gc()
+# #save mod2
+# saveRDS(db2003.m2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.rds")
+# gc()
+# 
+# #--------->mod1
+# #Ta
+# #to fix missing days issues resulting in cartesean error
+# db2003days <- sort(unique(db2003.m2$day))
+# 
+# #Ta import again
+# Ta<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/Ta.rds")
+# Ta<-filter(Ta,c==2003)
+# Ta10<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/Ta10.rds")
+# Ta10<-filter(Ta10,c==2003)
+# 
+# ########### join lst to Ta
+# #create Ta matrix
+# Ta.m <- makepointsmatrix(Ta, "long_Ta", "lat_Ta", "stn")
+# #create lst terra matrix
+# db2003.m2$lstid<-as.character(db2003.m2$lstid)
+# setkey(db2003.m2,lstid)
+# lst.m <- makepointsmatrix(db2003.m2[db2003.m2[,unique(lstid)], list(long_lst, lat_lst, lstid), mult = "first"], "long_lst", "lat_lst", "lstid")
+# 
+# 
+# 
+# #run function
+# closestlst <- nearestbyday(Ta.m, lst.m, 
+#                            Ta[day %in% db2003days,], db2003.m2, 
+#                            "stn", "lstid", "closest", "lst", knearest = 9, maxdistance = 1500)
+# 
+# 
+# #closestlst[,i.stn :=NULL]
+# closestlst[,closestknn :=NULL]
+# 
+# setkey(Ta,stn,day)
+# setkey(closestlst,stn,day)
+# Ta.m1 <- merge(Ta, closestlst, all.x = T)
+# Ta.m1<-Ta.m1[!is.na(lst)]
+# 
+# #save mod 1
+# saveRDS(Ta.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.Ta.rds")
+# 
+# ########### join lst to Ta10
+# #create Ta matrix
+# Ta.m <- makepointsmatrix(Ta10, "long_Ta10", "lat_Ta10", "stn")
+# #create lst terra matrix
+# db2003.m2$lstid<-as.character(db2003.m2$lstid)
+# setkey(db2003.m2,lstid)
+# lst.m <- makepointsmatrix(db2003.m2[db2003.m2[,unique(lstid)], list(long_lst, lat_lst, lstid), mult = "first"], "long_lst", "lat_lst", "lstid")
+# 
+# #run function
+# closestlst <- nearestbyday(Ta.m, lst.m, 
+#                            Ta10[day %in% db2003days,], db2003.m2, 
+#                            "stn", "lstid", "closest", "lst", knearest = 9, maxdistance = 1500)
+# 
+# 
+# #closestlst[,i.stn :=NULL]
+# closestlst[,closestknn :=NULL]
+# 
+# setkey(Ta10,stn,day)
+# setkey(closestlst,stn,day)
+# Ta10.m1 <- merge(Ta10, closestlst, all.x = T)
+# Ta10.m1<-Ta10.m1[!is.na(lst)]
+# 
+# #save mod 1
+# saveRDS(Ta10.m1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.Ta10.rds")
+# 
+# #cleanup
+# keep(fgrid,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+# gc()

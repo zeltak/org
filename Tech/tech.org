@@ -5694,6 +5694,42 @@ press the 'add entries' button to add mac--IP
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-01-16 13:20:15
 #+attr_html: :width 300px
  [[/home/zeltak/org/attach/images_2015/screenshot_2015-01-16_13:20:15.png]]
+***** current tapouch 7 setup 12.6.2014
+ the model (bezeq) is in the power closet and acts as a dialer with the following setup and using the `10.0.0.X` network subsystem 
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2014-06-12 16:33:15
+ #+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-06-12_16:33:15.png]]
+
+ Interface Description Type Vlan802.1p VlanMuxId	Igmp NAT Firewall IPv4	IPv6 Mld Remove Edit	Action
+ ptm0.2	br_0_1_1	Bridge	N/A	N/A	 Disabled	 Disabled	 Disabled	 Enabled	 Enabled	 Disabled
+
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2014-06-12 18:05:24
+ #+attr_html: :width 300px
+  [[/home/zeltak/org/attach/images_2014/screenshot_2014-06-12_18:05:24.png]]
+
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2014-06-12 18:05:40
+ #+attr_html: :width 300px
+  [[/home/zeltak/org/attach/images_2014/screenshot_2014-06-12_18:05:40.png]]
+
+ press next in all other screens
+
+ in the LAN window enter the following
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2014-06-12 19:00:27
+ #+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-06-12_19:00:27.png]]
+
+ @note- make sure you have DHCP working and define the DNS servers.@
+
+ in the wireless router (dd-wrt) make sure WAN connections and DHCP are Disabled
+
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2014-06-12 21:36:53
+ #+attr_html: :width 300px
+ [[/home/zeltak/org/attach/images_2014/screenshot_2014-06-12_21:36:53.png]]
 **** dd-wrt
 ***** Hardware reset
 
@@ -5833,14 +5869,41 @@ lease information later on and have the host automatically get the new
 information without having to manually release/renew the lease on the
 host.
 
-***** use ddns without WAN connected
-@If your router doesnt have a WAN connection or if it doesn't have a public ip address on WAN then you must use external ip address check@
+***** freedns
+freedns.afraid.org
 
+Go to http://freedns.afraid.org/dynamic/ and login with your normal username and password for the freedns service. Click Direct URL on the domain you would like to be set to your WAN IP address. Copy everything from the right of the ? in the address bar.
+
+Router Settings:
+
+DDNS Service: freedns.afraid.org
+
+User Name: USERNAME
+
+Password: PASSWORD
+
+Host Name: yourdomain.com,What_You_Copied_Before
+
+Force Update Interval 10
+
+@If your router doesnt have a WAN connection@
+1. you must use the "do not use external ip check" to yes
 
 #+DOWNLOADED: /tmp/screenshot.png @ 2014-08-08 12:49:04
-#+attr_html: :width 300px
- [[/home/zeltak/org/attach/images_2014/screenshot_2014-08-08_12:49:04.png]]
+#+attr_html: :width 800px
+ 
+[[/home/zeltak/org/attach/images_2014/screenshot_2014-08-08_12:49:04.png]]
 
+2.make sure you have a local DNS setting in setup filled
+***** Removing the DD-WRT Software
+http://vpnpick.com/install-configure-dd-wrt/
+If at any point you want to revert back to your router’s original software (which is unlikely), it’s not too hard to do.
+The first thing you need to do is locate and download the original firmware for your model of router. They are usually compressed, so you will need to unzip the file before you can proceed.
+Perform another 30/30/30 reset on your router.
+Connect your computer to your router with an Ethernet cable.
+Pull up the web interface by typing the IP address of your router into your web browser.
+Select “reset to default settings,” browse to the file location where you stored the original firmware, and upload it to your router.
+Click the Upgrade button and wait for the process to complete. Please note that each model of router is different so they may require slightly different procedures. As such, you may need to research how to perform this operation on your specific router model.
 ***** port forward
 
 ﻿Port Range Forward
@@ -5910,42 +5973,188 @@ to point to.
  If your devices don't see the changes after they've been made you may
 need to try restarting them since that is often the simplest way to
 clear the DNS cache.
-**** current tapouch 7 setup 12.6.2014
-the model (bezeq) is in the power closet and acts as a dialer with the following setup and using the `10.0.0.X` network subsystem 
+***** Backup CFE
+this is working with dd-wrt post RC5 svn8428 backing up your cfe is easy, all you need to do is to point your browser to:
+#+BEGIN_SRC sh
+http://router_ip/backup/cfe.bin
+#ie
+http://192.168.1.1/backup/cfe.bin
+#+END_SRC
+***** upgrade dd-wrt
+If DD-WRT is already installed on your router, you can simply upgrade to a new version via the web interface or TFTP.
+However, it is highly recommended that you restore the router to defaults using the 30/30/30 reset
+after the 30/30/30 reset you can just upgrade the router through the web interface
+!Never restore old backups from previous versions! 
+Skipping these steps could lead to a bricked device!
+***** current setup dlink 25.12.2015
+****** setup
+WAN Connection Type
+Connection Type
+Optional Settings
+Router Name
+zdlink
+Hostname
+Domain Name
+MTU 
+1500
+STPEnable Disable
+Network Setup
+Router IP
+Local IP Address
+10
+.
+0
+.
+0
+.
+99
+Subnet Mask
+255
+.
+255
+.
+255
+.
+0
+Gateway
+10
+.
+0
+.
+0
+.
+138
+Local DNS
+8
+.
+8
+.
+8
+.
+8
 
-#+DOWNLOADED: /tmp/screenshot.png @ 2014-06-12 16:33:15
-#+attr_html: :width 300px
-[[/home/zeltak/org/attach/images_2014/screenshot_2014-06-12_16:33:15.png]]
+WAN Port
+Assign WAN Port to Switch
 
-Interface Description Type Vlan802.1p VlanMuxId	Igmp NAT Firewall IPv4	IPv6 Mld Remove Edit	Action
-ptm0.2	br_0_1_1	Bridge	N/A	N/A	 Disabled	 Disabled	 Disabled	 Enabled	 Enabled	 Disabled
+Network Address Server Settings (DHCP)
+DHCP Type
+DHCP ServerEnable  Disable
+Start IP Address10.0.0.
+200
+Maximum DHCP Users
+50
+Client Lease Time
+1440
+ min
+Static DNS 1
+8
+.
+8
+.
+8
+.
+8
+Static DNS 2
+4
+.
+4
+.
+4
+.
+4
+Static DNS 3
+0
+.
+0
+.
+0
+.
+0
+WINS
+0
+.
+0
+.
+0
+.
+0
+Use DNSMasq for DHCP
+Use DNSMasq for DNS
+DHCP-Authoritative
+Recursive DNS Resolving
+Forced DNS Redirection
+
+Time Settings
+NTP ClientEnable Disable
+Time Zone
+Server IP/Name
+****** DDNS
+Dynamic Domain Name System (DDNS)
+
+DDNS
+DDNS Service
+Username
+zeltak
+Password
+••••••••
+Unmask
+Hostname
+zeltak.mooo.com,aUx3anhFYU5KZ1d0N2gwckw4TWc6MTE2NTI4ODA=
+Use external ip checkYes No
+
+Options
+Force Update Interval
+10
+(Default: 10 Days, Range: 1 - 60)
+****** wireless
+Wireless Physical Interface wl0 [5 GHz/802.11ac]
+
+Physical Interface wl0 - SSID [zdlink-5g] HWAddr [54:B8:0A:AA:86:9A]
+Wireless Mode
+Wireless Network Mode
+Wireless Network Name (SSID)
+zdlink-5g
+Wireless Channel
+Channel Width
+Wireless SSID BroadcastEnable  Disable
+Optimize Multicast TrafficEnable  Disable 
+Explicit BeamformingEnable  Disable 
+Implicit BeamformingEnable  Disable 
+Network ConfigurationUnbridged  Bridged
+
+Virtual Interfaces
+
+Add
+
+Wireless Physical Interface wl1 [2.4 GHz TurboQAM]
+
+Physical Interface wl1 - SSID [zdlink-2.4g] HWAddr [54:B8:0A:AA:86:98]
+Wireless Mode
+Wireless Network Mode
+Wireless Network Name (SSID)
+zdlink-2.4g
+Wireless Channel
+Channel Width
+Wireless SSID BroadcastEnable  Disable
+Optimize Multicast TrafficEnable  Disable 
+TurboQAM (QAM256) supportEnable  Disable 
+Explicit BeamformingEnable  Disable 
+Implicit BeamformingEnable  Disable 
+Network ConfigurationUnbridged  Bridged
+****** Port Range Forwarding
+
+Forwards
+Application	Start	End	Protocol	IP Address	Enable
+
+transmission
+
+58500
+
+58500
+	
+10.0.0.2
 
 
-#+DOWNLOADED: /tmp/screenshot.png @ 2014-06-12 18:05:24
-#+attr_html: :width 300px
- [[/home/zeltak/org/attach/images_2014/screenshot_2014-06-12_18:05:24.png]]
-
-
-#+DOWNLOADED: /tmp/screenshot.png @ 2014-06-12 18:05:40
-#+attr_html: :width 300px
- [[/home/zeltak/org/attach/images_2014/screenshot_2014-06-12_18:05:40.png]]
-
-press next in all other screens
-
-in the LAN window enter the following
-
-#+DOWNLOADED: /tmp/screenshot.png @ 2014-06-12 19:00:27
-#+attr_html: :width 300px
-[[/home/zeltak/org/attach/images_2014/screenshot_2014-06-12_19:00:27.png]]
-
-@note- make sure you have DHCP working and define the DNS servers.@
-
-in the wireless router (dd-wrt) make sure WAN connections and DHCP are Disabled
-
-
-#+DOWNLOADED: /tmp/screenshot.png @ 2014-06-12 21:36:53
-#+attr_html: :width 300px
-[[/home/zeltak/org/attach/images_2014/screenshot_2014-06-12_21:36:53.png]]
 ** Apple
 **** iphone
 

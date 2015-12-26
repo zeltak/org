@@ -498,8 +498,8 @@ systemctl enable cronie
 ***** pacman 
 
 #+BEGIN_SRC sh
-pacman -S emacs rsync tree ncdus nfs-utils rpcbind terminator r mc  flac lame abiword keepassx dzen2 zip unzip unrar mtpaint krename gmrun aspell aspell-en findutils inkscape python-lxml gcolor2 easytag kdiff3  htop p7zip vlc smb4k screen tmux speedcrunch mlocate vim gvim mpd mpc atool lynx profont fb-client feh keychain picard  gdb mp3gain pacgraph sqliteman grep awk leafpad less lxappearance pavucontrol net-tools sshfs xterm zsh samba xclip lxtask pydf xorg-xkill nmap acpi audacity nmon  powertop ttf-inconsolata sxhkd git zsh firefox chromium ncmpcpp gmpc gcc filezilla gimp jre7-openjdk kdegraphics-okular
-meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  mosh w3m imagemagick graphicsmagick thunar pinta dconf-editor icedtea-web remmina tigervnc  android-tools mediainfo tk
+pacman -S emacs rsync ttf-liberation tree ncdus nfs-utils rpcbind terminator r mc  flac lame abiword keepassx dzen2 zip unzip unrar mtpaint krename gmrun aspell aspell-en findutils inkscape python-lxml gcolor2 easytag kdiff3  htop p7zip vlc smb4k screen tmux speedcrunch mlocate vim gvim mpd mpc atool lynx profont fb-client feh keychain picard  gdb mp3gain pacgraph sqliteman grep awk leafpad less lxappearance pavucontrol net-tools sshfs xterm zsh samba xclip lxtask pydf xorg-xkill nmap acpi audacity nmon  powertop ttf-inconsolata sxhkd git zsh firefox chromium ncmpcpp gmpc gcc filezilla gimp jre7-openjdk kdegraphics-okular
+meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  mosh w3m imagemagick graphicsmagick thunar pinta dconf-editor icedtea-web remmina tigervnc  android-tools mediainfo tk pinta 
 #for R
 gcc-fortan
 # for usb mounting
@@ -38948,7 +38948,10 @@ like:
  # fusermount -u /mnt/sessy
  zeltak example:
  fusermount -u /home/zeltak/sshmounts/
-
+***** mount karif
+#+BEGIN_SRC sh
+sshfs karif:/ /home/zeltak/mounts/n6    
+#+END_SRC
 ***** unmount
 
 To unmount the filesystem:
@@ -39220,7 +39223,13 @@ the connection between destination and source must be alive at all time.
 %Tip you may run a command (e.g. watch, top) on Destination to keep the connection active%
 **** fix ssh session size after connection in screen
 see this:
-[[reconnect%20a%20ssh%20session%20that%20has%20different%20res][reconnect a ssh session that has different res]] 
+[[reconnect%20a%20ssh%20session%20that%20has%20different%20res][reconnect a ssh session that has different res]]
+**** run a command at ssh start
+#+BEGIN_SRC sh
+ssh -t 'command; bash -l'
+#example 
+ssh -t 'htop; bash -l'
+#+END_SRC
 *** vnc
 **** x11vnc
 ***** general x11vnc options

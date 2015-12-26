@@ -6,25 +6,61 @@
 #+LaTeX_CLASS_OPTIONS: [garamond]
 
 * `TODO` 							  :CANCELLED:
+** repeater for belkin
+http://vpnpick.com/use-dd-wrt-router-repeater/
 ** TODO ROFI PASS- ask rasi
 #+BEGIN_SRC sh
 addpass --name "$(echo "" | rofi -dmenu -p "Enter Name > ")" +url "$(xclip -o selection)"
 #+END_SRC
 add the same but ask for pass and user 
+#+BEGIN_SRC sh
+addpass --name "$(echo "" | rofi -dmenu -p "Enter Name > ")" +user "$(echo "" | rofi -dmenu -p "Enter Username > ")" +url "$(xclip -o selection)"                                                                
+#+END_SRC
+** TODO orgmode team management
+http://juanreyero.com/article/emacs/org-teams.html
+** vimperator
+" Google (Fyndiq)
+silent qmark c https://calendar.google.com/calendar/a/fyndiq.se
+silent qmark d https://drive.google.com/a/fyndiq.se/
+silent qmark m https://mail.google.com/mail/a/fyndiq.se
+
+" Google (Private)
+silent qmark M https://mail.google.com/mail/u/niclas.helbro@gmail.com
+silent qmark C https:/calendar.google.com/calendar/render?authuser=niclas.helbro@gmail.com
+silent qmark D https://drive.google.com/drive/u/niclas.helbro@gmail.com
 ** Bookmark revision
 3 layers of bookmakrs:
 1)quickmarks in vim browser extension for daily bookmarks
 2)MFU bookmarks in toolbars
 3)archived bookmarks in an org file 
+** BK+
+ i was wondering if anyway knew if its possible to chain a command after i launch a bookmark in BK+. for example i would love to narrow the section in org (using org-narrow-to-subtre) after the bookmark is launched. any clue how to do that? best – Zeltak 2015-06-12 11:08 UTC
+
+There are a few ways to do that.
+
+    Use the predefined tag ‘bmkp-jump’, as described here.
+    Use a sequence bookmark composed of (1) your ordinary bookmark followed by (2) a function bookmark, as described here.
+
+– DrewAdams
+
+Hi again
+
+i would really like to use bookmark+ to bookmark not by position in a orgmode file but by orgid http://orgmode.org/w/?p=org-mode.git;a=blob_plain;f=lisp/org-id.el;hb=HEAD
+
+is this possible? right now the headers tend to move when editing/adding headers in an orgmode so that the bookmark isnt kept in the right position. is there anyway to do that?
+
+kind regards, Zeltak – 2015-07-15 14:31 UTC
+
+I guess someone who uses OrgMode (I don’t) would need to code that up. But have you tried just bookmarking a header line location? When you bookmark a position, bookmarking keeps track of the immediately surrounding text, to use to relocate the position when the buffer gets modified. Or try bookmarking some text immediately preceding or following a header. Maybe that would be adequate? – DrewAdams
 ** org-reveal
 *** justify to the left and not centered
 ** covert word to text for better cross academic search 
+use pandoc?
 ** mu4e
 *** flag only view 
-** Fix Dunst
 ** elfeed
 org integration -send article to org todo?
-** https://github.com/algernon/elfeed-goodies
+*** https://github.com/algernon/elfeed-goodies
 ** odt exporter
 http://stackoverflow.com/questions/23674057/how-to-set-page-margins-for-odt-export-in-org-mode
 ** asynk 
@@ -742,6 +778,8 @@ track replace like album replace
 ** search text in all orgfiles    
 use maybe helm-do-grep or swish-e or recoll?
 ** sdf
+https://sdfeu.org
+
 Login      : zeltak
 Name       : itai
 YoB        : 1975
@@ -755,6 +793,7 @@ Webmail    : https://sdfeu.org/webmail             (after validation)
 Twitter    : http://twitter.com/sdf_pubnix
 
 ** flexget  
+http://flexget.com/
 ** make a code block read only
    :PROPERTIES:
    :ID:       5e59de3b-e7ec-4a8d-b1a1-b2d6dbf8cd01
@@ -887,5 +926,25 @@ http://stackoverflow.com/questions/7464951/how-to-make-org-protocol-work/3285115
 ** org summary from drwares
 http://stackoverflow.com/questions/19510984/section-summaries-in-org-mode
 ** https://github.com/alphapapa/org-protocol-capture-html/tree/9ddb2a8e548eb8461acde5a3bc56ccb1414c2173#org-protocol-capture-html
+** intersting orgmode configuration
+http://writequit.org/org/#b07ea95e-d7cb-4714-ae83-9bd624e1c19d
 ** https://github.com/cute-jumper/emacs-firefox-controller
+** read BMS and ots
+http://www.bluemilkspecial.com/
+http://www.giantitp.com/comics/oots.html
+http://larptrek.com/larptrek/196-its-been-ten-minutes-lwaxana-needs-to-change-clothes/
 
+** explore input fonts
+http://input.fontbureau.com/
+** Ynet popup blocker
+https://github.com/reek/anti-adblock-killer
+** dired- the runer
+https://github.com/thamer/runner
+** bind maps
+https://github.com/justbur/emacs-bind-map
+** R and Qgis
+http://amsantac.co/blog/en/2015/10/31/qgis-r.html
+** leraning programing
+http://poignant.guide/
+** flip belt
+https://flipbelt.com/flipbelt

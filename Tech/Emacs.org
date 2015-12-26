@@ -5877,146 +5877,6 @@ tips when buliding scripts with org-dp
 
 mnake sure its '1' other wise you will get indents
 
-**** org-ref
-***** clean (org-ref-clean-bibtex-entry)
-You can fix formatting problems by putting your cursor on the bibtex entry, and typing M-x org-ref-clean-bibtex-entry. This will fix the bibtex key to a standard form, align and indent the entry, escape the & so it is legal syntax, prompt you for a year, and show you the non-ascii characters so you can replace them
-
-The key formatting comes from these definitions:
-
-#+BEGIN_SRC latex :results none
-;; variables that control bibtex key format for auto-generation
-;; I want firstauthor-year-title-words
-;; this usually makes a legitimate filename to store pdfs under.
-(setq bibtex-autokey-year-length 4
-      bibtex-autokey-name-year-separator "-"
-      bibtex-autokey-year-title-separator "-"
-      bibtex-autokey-titleword-separator "-"
-      bibtex-autokey-titlewords 2
-      bibtex-autokey-titlewords-stretch 1
-      bibtex-autokey-titleword-length 5)
-#+END_SRC
-
-clean all file:
-
-I suggest you run these first:
-%% (bibtex-validate-globally)   ; checks for duplicate keys
-%% (bibtex-validate)
-
-I also recommend you run bibtex-sort (it is easier to spot duplicates in
-a sorted list).
-
-Then, put this next line at the top of your bibtex file. 
-$Note- The `t` argument to org-ref-clean-bibtex-entry will preserve your existing keys$
-
-#+BEGIN_SRC latex :results none
-% (bibtex-map-entries (lambda (key start end) (org-ref-clean-bibtex-entry t)))
-#+END_SRC
-
-Put your cursor at the end of that line, and type C-x C-e to run the function, and
-wait patiently. It took a few minutes on my 1300 entries, and I had to restart it once on some entry.
-if you have bad Unicode, dup keys etc you will be prompted to input
-remove bad Unicode keys and fix dup keys when prompted
-Note if you want to change title cases in all entries you can use
-
-% (bibtex-map-entries 'jmax-title-case-article)
-% (bibtex-map-entries 'jmax-sentence-case-article)
-
-
-
-***** Using org-ref to keep your bibtex files in order
-Maintaining an accurate, useful bibliography of references is critical for scientific writing. It is also not trivial. While it is easy to download and copy bibliographic entries to your database, these entries are often incomplete, not consistently formatted, and can contain invalid characters. org-ref provides several utility functions to help with this.
-
-****** "cleaning" a bibtex entry
-
-Consider this bibtex entry from http://pubs.acs.org/action/showCitFormats?doi=10.1021%2Fie500588j.
-
-#+BEGIN_SRC bibtex
-
-@article{doi:10.1021/ie500588j,
-author = {Okada, Tomohiko and Ozono, Shoya and Okamoto, Masami and Takeda, Yohei and Minamisawa, Hikari M. and Haeiwa, Tetsuji and Sakai, Toshio and Mishima, Shozi},
-title = {Magnetic Rattle-Type Coreâ€“Shell Particles Containing Iron Compounds with Acid Tolerance by Dense Silica},
-journal = {Industrial & Engineering Chemistry Research},
-volume = {0},
-number = {0},
-pages = {null},
-year = {0},
-doi = {10.1021/ie500588j},
-
-URL = {http://pubs.acs.org/doi/abs/10.1021/ie500588j},
-eprint = {http://pubs.acs.org/doi/pdf/10.1021/ie500588j}
-}
-
-#+END_SRC
-
-On the surface it looks fine, but there are the following issues with it:
-
-1. The bibtex key is hard to remember. I like systematically named keys.
-2. There is a bare & in the journal title, which is not legal in LaTeX.
-3. There is no year entry, even though it is a 2014 entry. The pages, volume, and number are also problematic, but this is an ASAP article and the reference does not have those yet.
-4. It is hard to see, but the dash between core and shell is a non-ascii character, which can cause problems in LaTeX.
-5. The entry is not very nicely aligned or indented.
-
-You can fix these problems by putting your cursor on the bibtex entry, and typing M-x org-ref-clean-bibtex-entry. This will fix the bibtex key to a standard form, align and indent the entry, escape the & so it is legal syntax, prompt you for a year, and show you the non-ascii characters so you can replace them. The resulting, nicely formatted entry is shown below.
-
-#+BEGIN_SRC bibtex
-@article{okada-2014-magnet-rattl,
-  author =	 {Okada, Tomohiko and Ozono, Shoya and Okamoto, Masami
-                  and Takeda, Yohei and Minamisawa, Hikari M. and
-                  Haeiwa, Tetsuji and Sakai, Toshio and Mishima,
-                  Shozi},
-  title =	 {Magnetic Rattle-Type Core-Shell Particles Containing
-                  Iron Compounds with Acid Tolerance by Dense Silica},
-  journal =	 {Industrial \& Engineering Chemistry Research},
-  volume =	 0,
-  pages =	 {null},
-  year =	 2014,
-  doi =		 {10.1021/ie500588j},
-  number =	 0,
-  url =		 {http://pubs.acs.org/doi/abs/10.1021/ie500588j},
-  eprint =	 {http://pubs.acs.org/doi/pdf/10.1021/ie500588j},
-}
-
-
-#+END_SRC
-
-The key formatting comes from these definitions:
-
-#+BEGIN_SRC emacs-lisp
-;; variables that control bibtex key format for auto-generation
-;; I want firstauthor-year-title-words
-;; this usually makes a legitimate filename to store pdfs under.
-(setq bibtex-autokey-year-length 4
-      bibtex-autokey-name-year-separator "-"
-      bibtex-autokey-year-title-separator "-"
-      bibtex-autokey-titleword-separator "-"
-      bibtex-autokey-titlewords 2
-      bibtex-autokey-titlewords-stretch 1
-      bibtex-autokey-titleword-length 5)
-#+END_SRC
-
-You should develop a discipline to clean each entry as you add them, and before you cite them. It is a pain to change the key, and then find and change all the places you used that key before. Now that you have a systematic key, go ahead and download the pdf for the article, and save it in your pdf directory by that key name. Set the variable org-ref-pdf-directory to this directory, and later when you click on citations you will be able to open the pdf easily.
-
-****** Validating your bibliography
-elisp:bibtex-validate will check your bibliography for valid syntax. This is a bibtex command.
-
-file:org-bib.bib
-
-****** Sorting your bibtex file
-It is a good idea to keep your bibtex file sorted. This will facilitate finding duplicate entries, and will make it easier to find things. I usually add entries to the top of the file, and then clean them. Then run the command elisp:bibtex-sort-buffer. This will sort the entries for you. This is also a bibtex command.
-
-file:org-bib.bib
-
-****** Make a full bibliography pdf
-A good way to check your bibliography for duplicates, spelling errors, and invalid formats is to make a pdf containing all the entries. Open your bibtex file, and run elisp:org-ref-build-full-bibliography. If all goes well, you will get a pdf of your bibliography that you can check for accuracy. If there are errors, you will have to fix them until the pdf is generated.
-
-Try it out: file:org-bib.bib
-
-****** Finding bad citation links
-Sometimes you will get bad citation links in your document. Maybe there is no corresponding entry, maybe you typed in the wrong key, maybe you changed the key. Either way, you need to find them and fix them. Run the command elisp:org-ref-find-bad-citations to find them. cite:test
-
-****** Extracting citations entries
-You will often work from your default bibliography for your own work. Eventually you will need to extract the entries cited so you can send them to someone. The command  elisp:org-ref-extract-bibtex-entries will do that for you. If I have cited something cite:calle-vallejo-2010-trend-stabil.
-
 **** mu4e
 ***** org mode integration
 http://www.djcbsoftware.nl/code/mu/mu4e/Creating-org_002dmode-links.html
@@ -6858,6 +6718,30 @@ For more flexibility, mu4e-attachment-dir can also be a user-provided function. 
 You can extract multiple attachments at once by prefixing the extracting command by C-u:
 so 【C-u e】 asks you for a range of attachments to extract (for example, 1 3-6 8). 
 The range "‘a’" is a shortcut for all attachments.
+*** bugs
+**** mu: symbol lookup error: mu: undefined symbol
+#+BEGIN_EXAMPLE
+ince yesterday im getting these weird erros in mu and cant seem to access my inbox. 
+
+the full error is:
+
+[mu4e] mu4e-main-mode [2 times]
+error in process sentinel: mu4e~proc-sentinel: mu server process ended with exit code 127
+error in process sentinel: mu server process ended with exit code 127
+
+in the CLI i get this:
+zeltak@zx1voics dotfiles ↳ mu index                                                      
+mu: symbol lookup error: mu: undefined symbol: _ZN6Xapian16WritableDatabaseC1ERKSsi      
+
+any clue?
+
+#+END_EXAMPLE
+
+solution:
+
+your package manager updated libxapian and you didn't rebuild mu. 
+re-install the mu package
+
 *** installing
 ****  install from git
 Alternatively, if you build from the git repository or use a tarball like the ones that github produces, the instructions are slightly different, and require you to have autotools (Autoconf, Automake, Libtool, and friends) installed:
@@ -9820,6 +9704,155 @@ the proper URL in your example should be:
    <source src="file:///home/zeltak/ZH_tmp/big-buck-bunny_trailer.webm" type="video/webm">
  </video>
 #+END_HTML
+** org-ref
+*** clean (org-ref-clean-bibtex-entry)
+You can fix formatting problems by putting your cursor on the bibtex entry, and typing M-x org-ref-clean-bibtex-entry. This will fix the bibtex key to a standard form, align and indent the entry, escape the & so it is legal syntax, prompt you for a year, and show you the non-ascii characters so you can replace them
+
+The key formatting comes from these definitions:
+
+#+BEGIN_SRC latex :results none
+;; variables that control bibtex key format for auto-generation
+;; I want firstauthor-year-title-words
+;; this usually makes a legitimate filename to store pdfs under.
+(setq bibtex-autokey-year-length 4
+      bibtex-autokey-name-year-separator "-"
+      bibtex-autokey-year-title-separator "-"
+      bibtex-autokey-titleword-separator "-"
+      bibtex-autokey-titlewords 2
+      bibtex-autokey-titlewords-stretch 1
+      bibtex-autokey-titleword-length 5)
+#+END_SRC
+
+clean all file:
+
+I suggest you run these first:
+%% (bibtex-validate-globally)   ; checks for duplicate keys
+%% (bibtex-validate)
+
+I also recommend you run bibtex-sort (it is easier to spot duplicates in
+a sorted list).
+
+Then, put this next line at the top of your bibtex file. 
+$Note- The `t` argument to org-ref-clean-bibtex-entry will preserve your existing keys$
+
+#+BEGIN_SRC latex :results none
+% (bibtex-map-entries (lambda (key start end) (org-ref-clean-bibtex-entry t)))
+#+END_SRC
+
+Put your cursor at the end of that line, and type C-x C-e to run the function, and
+wait patiently. It took a few minutes on my 1300 entries, and I had to restart it once on some entry.
+if you have bad Unicode, dup keys etc you will be prompted to input
+remove bad Unicode keys and fix dup keys when prompted
+Note if you want to change title cases in all entries you can use
+
+% (bibtex-map-entries 'jmax-title-case-article)
+% (bibtex-map-entries 'jmax-sentence-case-article)
+
+
+
+*** Using org-ref to keep your bibtex files in order
+Maintaining an accurate, useful bibliography of references is critical for scientific writing. It is also not trivial. While it is easy to download and copy bibliographic entries to your database, these entries are often incomplete, not consistently formatted, and can contain invalid characters. org-ref provides several utility functions to help with this.
+
+**** "cleaning" a bibtex entry
+
+Consider this bibtex entry from http://pubs.acs.org/action/showCitFormats?doi=10.1021%2Fie500588j.
+
+#+BEGIN_SRC bibtex
+
+@article{doi:10.1021/ie500588j,
+author = {Okada, Tomohiko and Ozono, Shoya and Okamoto, Masami and Takeda, Yohei and Minamisawa, Hikari M. and Haeiwa, Tetsuji and Sakai, Toshio and Mishima, Shozi},
+title = {Magnetic Rattle-Type Coreâ€“Shell Particles Containing Iron Compounds with Acid Tolerance by Dense Silica},
+journal = {Industrial & Engineering Chemistry Research},
+volume = {0},
+number = {0},
+pages = {null},
+year = {0},
+doi = {10.1021/ie500588j},
+
+URL = {http://pubs.acs.org/doi/abs/10.1021/ie500588j},
+eprint = {http://pubs.acs.org/doi/pdf/10.1021/ie500588j}
+}
+
+#+END_SRC
+
+On the surface it looks fine, but there are the following issues with it:
+
+1. The bibtex key is hard to remember. I like systematically named keys.
+2. There is a bare & in the journal title, which is not legal in LaTeX.
+3. There is no year entry, even though it is a 2014 entry. The pages, volume, and number are also problematic, but this is an ASAP article and the reference does not have those yet.
+4. It is hard to see, but the dash between core and shell is a non-ascii character, which can cause problems in LaTeX.
+5. The entry is not very nicely aligned or indented.
+
+You can fix these problems by putting your cursor on the bibtex entry, and typing M-x org-ref-clean-bibtex-entry. This will fix the bibtex key to a standard form, align and indent the entry, escape the & so it is legal syntax, prompt you for a year, and show you the non-ascii characters so you can replace them. The resulting, nicely formatted entry is shown below.
+
+#+BEGIN_SRC bibtex
+@article{okada-2014-magnet-rattl,
+  author =	 {Okada, Tomohiko and Ozono, Shoya and Okamoto, Masami
+                  and Takeda, Yohei and Minamisawa, Hikari M. and
+                  Haeiwa, Tetsuji and Sakai, Toshio and Mishima,
+                  Shozi},
+  title =	 {Magnetic Rattle-Type Core-Shell Particles Containing
+                  Iron Compounds with Acid Tolerance by Dense Silica},
+  journal =	 {Industrial \& Engineering Chemistry Research},
+  volume =	 0,
+  pages =	 {null},
+  year =	 2014,
+  doi =		 {10.1021/ie500588j},
+  number =	 0,
+  url =		 {http://pubs.acs.org/doi/abs/10.1021/ie500588j},
+  eprint =	 {http://pubs.acs.org/doi/pdf/10.1021/ie500588j},
+}
+
+
+#+END_SRC
+
+The key formatting comes from these definitions:
+
+#+BEGIN_SRC emacs-lisp
+;; variables that control bibtex key format for auto-generation
+;; I want firstauthor-year-title-words
+;; this usually makes a legitimate filename to store pdfs under.
+(setq bibtex-autokey-year-length 4
+      bibtex-autokey-name-year-separator "-"
+      bibtex-autokey-year-title-separator "-"
+      bibtex-autokey-titleword-separator "-"
+      bibtex-autokey-titlewords 2
+      bibtex-autokey-titlewords-stretch 1
+      bibtex-autokey-titleword-length 5)
+#+END_SRC
+
+You should develop a discipline to clean each entry as you add them, and before you cite them. It is a pain to change the key, and then find and change all the places you used that key before. Now that you have a systematic key, go ahead and download the pdf for the article, and save it in your pdf directory by that key name. Set the variable org-ref-pdf-directory to this directory, and later when you click on citations you will be able to open the pdf easily.
+
+**** Validating your bibliography
+elisp:bibtex-validate will check your bibliography for valid syntax. This is a bibtex command.
+
+file:org-bib.bib
+
+**** Sorting your bibtex file
+It is a good idea to keep your bibtex file sorted. This will facilitate finding duplicate entries, and will make it easier to find things. I usually add entries to the top of the file, and then clean them. Then run the command elisp:bibtex-sort-buffer. This will sort the entries for you. This is also a bibtex command.
+
+file:org-bib.bib
+
+**** Make a full bibliography pdf
+A good way to check your bibliography for duplicates, spelling errors, and invalid formats is to make a pdf containing all the entries. Open your bibtex file, and run elisp:org-ref-build-full-bibliography. If all goes well, you will get a pdf of your bibliography that you can check for accuracy. If there are errors, you will have to fix them until the pdf is generated.
+
+Try it out: file:org-bib.bib
+
+**** Finding bad citation links
+Sometimes you will get bad citation links in your document. Maybe there is no corresponding entry, maybe you typed in the wrong key, maybe you changed the key. Either way, you need to find them and fix them. Run the command elisp:org-ref-find-bad-citations to find them. cite:test
+
+**** Extracting citations entries
+You will often work from your default bibliography for your own work. Eventually you will need to extract the entries cited so you can send them to someone. The command  elisp:org-ref-extract-bibtex-entries will do that for you. If I have cited something cite:calle-vallejo-2010-trend-stabil.
+*** writing with org-ref
+**** you can add more then 1 bib file with a comma
+also you can define how its sorted
+#+BEGIN_SRC emacs-lisp
+bibliography:/home/zeltak/org/files/Uni/papers/library.2015.bib,/home/zeltak/org/files/Uni/papers/kloog.2015.bib
+;; to define sort type
+bibliographystyle:unsrt  
+#+END_SRC
+
+
 ** import html bookmarks into org
 
 http://rexim.me/firefox-bookmarks-to-org-mode.html
