@@ -2425,3 +2425,86 @@ link-hint-copy-ignore-types can also be set by the user. However, note that by d
 (require 'sci-id)
 #+END_SRC
 
+
+* super-save
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-12-26 Sat 21:16
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages
+  :ARCHIVE_CATEGORY: settings
+  :END:
+https://github.com/bbatsov/super-save
+
+killa hydra 
+#+BEGIN_SRC emacs-lisp :results none
+  ;; (use-package super-save
+  ;;  :ensure t
+  ;;  :config
+  ;; (super-save-initialize)
+  ;;  )
+#+END_SRC 
+
+
+* sunrise leader
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-12-26 Sat 21:38
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages/sunrise-commander/keys
+  :ARCHIVE_CATEGORY: settings
+  :END:
+
+#+BEGIN_SRC emacs-lisp :results none
+
+(defhydra hydra-sunrise-leader  (:color blue :hint nil)
+
+"
+
+_a_:         _b_:         _c_:        _d_:        _e_:           _f_:         _g_:  
+_h_: collapse org tree        _i_: insert text         _j_:       _k_:       _l_:          _m_: helm-mark        _n_: mark position       
+_o_: mark prev   _p_ _q_ _r_ wdired   du_p_licate  _s_:       _t_: term           _u_:       
+_v_:        _w_:        _x_:       _y_: kill ring       _z_: 
+_q_: 
+
+Sunrise:
+【C-c C-d】recent dirs 【C-c C-q】wdired 【M-o】equal panes 【C-enter】open in next pane 
+【N】copy/rename same dir 【s/r】sort/reverse 【X】exe file 【K】clone (cp tree) 【y】calc size
+
+
+"
+
+("a" find-file  )
+("b"  nil  )
+;("c"  company-complete )
+("c"  auto-complete )
+("d"  nil )
+("e"  nil )
+("f"  nil )
+("g"  nil )
+("h"  hide-sublevels )
+("i"  hydra-editing-insert/body )
+("j"  nil )
+("k"  nil )
+("l"  nil )
+("m"  helm-mark-ring )
+("n"  set-mark-command )
+("o"  set-mark-command 4 )
+("p"  duplicate-current-line-or-region )
+("r"  sr-editable-pane )
+("s"  nil )
+("t"  sr-term-cd )
+("T"  sr-term )
+("<f9>"  sr-term-cd-newterm )
+("u"  nil )
+("v"  nil)
+("w"  nil )
+("x"  nil )
+("y"  helm-show-kill-ring )
+("z"  nil )
+("\\"  z/insert-slsh )
+(";"  comment-or-uncomment-region )
+("q"  nil )
+
+)
+#+END_SRC
+
+

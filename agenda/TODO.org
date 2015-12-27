@@ -6,6 +6,8 @@
 #+LaTeX_CLASS_OPTIONS: [garamond]
 
 * `TODO` 							  :CANCELLED:
+** dired revison
+*** keystroke for chmod 
 ** @sync//backup project@
 *** Relevant IP's
 
@@ -119,8 +121,13 @@ note:
 
 ***** TODO ROFI PASS- ask rasi
    #+BEGIN_SRC sh
-   addpass --name "$(echo "" | rofi -dmenu -p "Enter Name > ")" +url "$(xclip -o selection)"
+addpass --name "$(echo "" | rofi -dmenu -p "Enter Name > ")" +url "$(xclip -o selection)"
    #+END_SRC
+or for clip and not selection
+   #+BEGIN_SRC sh
+addpass --name "$(echo "" | rofi -dmenu -p "Enter Name > ")" +url "$(xclip -o clipboard)"
+   #+END_SRC
+
    add the same but ask for pass and user 
    #+BEGIN_SRC sh
    addpass --name "$(echo "" | rofi -dmenu -p "Enter Name > ")" +user "$(echo "" | rofi -dmenu -p "Enter Username > ")" +url "$(xclip -o selection)"                                                                

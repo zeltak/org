@@ -16630,17 +16630,16 @@ enter this in the vimperator rc file:
  map k 8<c-y>
 
 **** quickmarks
-
  go<key> opens a quickmark in the current tab
  gn<key> opens a quickmark in a new tab
- 
- Retrieve a list of your quickmarks
- 
 
-To find what quickmarks you have created with which key,
- give the command :qmarks. This will give a list of all
- quickmarks.
+To find what quickmarks you have created with which key, give the command :qmarks. This will give a list of all quickmarks.
 
+to separate multiple boomarks to launch with one command use the , key ₆In example₆ 
+
+#+BEGIN_EXAMPLE
+silent qmark 7 https://groups.google.com/forum/#!forum/mu-discuss , https://plus.google.com/u/0/ , https://bbs.archlinux.org/viewforum.php?id=27 
+#+END_EXAMPLE 
 ***** Open a group of pages each in it's own tab
 
 Create a quickmark that points to several URLs, seperated with a comma
@@ -16682,7 +16681,6 @@ to move to a specific tab (1,2,3 tec..) issue:
 <c-6> or <c-\^>
 
 **** bookmarks
-
 ***** To bookmark a site in a particular folder
 
  To bookmark a site in a particular folder with the toolbars on
@@ -24904,8 +24902,7 @@ $Note$- not using the yes part will popup a yes request for each entry
 just do the following 
 #+BEGIN_SRC sh
 cd ~/.password-store
-rm -fr .git
-pass git init
+rm -fr .git && pass git init
 #+END_SRC
 *** Rofi-pass
 **** addpass

@@ -2678,6 +2678,11 @@ This example shows you how to make lines containing the words “ERROR:” or �
 The add-hook line will make emacs call “highlite-it” whenever a file is opened. It works by adding the function “highlite-it” to the list in the variable find-file-hook.
 
 find-file is the function that open files. find-file-hook is a variable containing list of functions that will run when find-file is run.
+** ELISP library 
+*** send message to echo area 
+#+BEGIN_SRC emacs-lisp
+(message (propertize "changed mode to executable" 'face 'font-lock-warning-face))
+#+END_SRC
 ** Emacs on MS windows
 *** how to launch emacs in windows (with no command prompt)
 Note that GNU Emacs for Windows comes with two executables to start Emacs:
