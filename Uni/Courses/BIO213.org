@@ -105,12 +105,8 @@ IE for catagorical data
 
 **** intro
 
-the following steps all try to see if a distribuation is normal. if a
-distribution is normal you continue and run the relevant tests (t
-tests,etc..). When the distibution is not normal a different set of
-tests are required (non parametric tests).
- Sometimes when the n is big enough you can treat the variable as normal
-even if it isnt
+the following steps all try to see if a distribuation is normal. if a distribution is normal you continue and run the relevant tests (t tests,etc..). When the distibution is not normal a different set of tests are required (non parametric tests). Sometimes when the n is big enough you can treat the variable as normal even if it isn't
+
  In SAS:
  proc univariate normal plot;
  var birthweight;
@@ -142,13 +138,7 @@ visually to see if there is symmetry.
 
 **** Kurtosis
 
-another way to check normality is look at kurtosis aka the extent of
-outliers (bell shaped curve). again there are tails here so we are
-looking for a zero value to see symetry, positive numbers mean to many
-outliers and negative numbers to few outliers.
- to few means the distribution is boxy with no tails.
- in the example above there is -0.08 which shows its a bit boxy with no
-outliers so it should be fine
+another way to check normality is look at kurtosis aka the extent of outliers (bell shaped curve). again there are tails here so we are looking for a zero value to see symetry, positive numbers mean to many outliers and negative numbers to few outliers. to few means the distribution is boxy with no tails. in the example above there is -0.08 which shows its a bit boxy with no outliers so it should be fine
 
 **** shapiro wilkes test
 
@@ -167,14 +157,11 @@ run* the test
 
 **** intro
 
-when you know you have a normal distribution in the DV (at least) then
-you can continue to choose the type of test based on your variable type
-(binary,catagorical)
-
+when you know you have a normal distribution in the DV (at least) then you can continue to choose the type of test based on your variable type (binary,catagorical)
+ 
 **** binary variables
 
 ***** t-test
-
 To the most simple univariate test-a t-test
  if the distribution is not normal it is common to run a Wilcoxon
 signed-rank test instead of a t-test
@@ -188,8 +175,9 @@ clear difference between the groups.
 
 ***** intro
 
-[[BIO213_files/img/Image_cw6-Y1QXPZE-fjgDuf-SBg_0001.jpg]]h
- when you have a categorical variable (has more then 2 levels) you can
+[[BIO213_files/img/Image_cw6-Y1QXPZE-fjgDuf-SBg_0001.jpg]]
+
+when you have a categorical variable (has more then 2 levels) you can
 either decide to recode it into a binary variable ("Dichotemize" it in
 most cases you *dont*) and then you need to run an *ANOVA*
 

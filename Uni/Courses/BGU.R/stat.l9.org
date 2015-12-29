@@ -28,42 +28,134 @@
 
 * Week 9
 ** dplyr advanced
+*** Chaining
+
+The usual way to perform multiple operations in R is one line at a time
+
+we can write commands in a natural order by using the %>% infix operator (which can be pronounced as “then”)
+
+It is part of dplyr 
+
+Chaining increases readability significantly when there are many commands
+
+#+REVEAL: split 
+#+BEGIN_SRC R :session Rorg  :results none
+#Nested Option:
+    arrange(
+            summarize(
+                filter(data, variable == numeric_value),
+                Total = sum(variable)
+            ),
+        desc(Total)
+    )
+
+
+#Multiple Object Option:
+
+     a <- filter(data, variable == numeric_value)
+     b <- summarise(a, Total = sum(variable))
+     c <- arrange(b, desc(Total))
+
+
+
+#chains
+     data %>%
+            filter(variable == “value”) %>%
+            summarise(Total = sum(variable)) %>%
+            arrange(desc(Total))
+
+#+END_SRC
+
+#+REVEAL: split 
+ #+BEGIN_SRC R
+ # chaining method
+ flights %>%
+     select(UniqueCarrier, DepDelay) %>%
+     filter(DepDelay >60)
+ #+END_SRC
+this will select the DF 'flight'
+then ( %>%) select columns
+then ( %>%) filter deepelay >60 
+*lets try it on your computer!* 
+
 *** Summarise values with summarise()
-summarise()x collapses a data frame to a single row (this is exactly equivalent to 
-plyr::summarise()):
+
+summarise() collapses a data frame to a single row 
 
 in other words summarise = Reduce variables to values
 
 Primarily useful with data that has been grouped by one or more variables
 
-group_by creates the groups that will be operated on
+*group_by* creates the groups that will be operated on
+
 #+REVEAL: split 
+simple example
 
 #+BEGIN_SRC R :session Rorg  :results none
-summarise(flights,
-  delay = mean(dep_delay, na.rm = TRUE))
-#> Source: local data frame [1 x 1]
-#> 
-#>      delay
-#>      (dbl)
-#> 1 12.63907
+flights<-read.csv("/home/zeltak/ZH_tmp/flights.csv")
+output<-flights %>%
+                     summarise(Min = min(arr_time, na.rm=TRUE),
+                     Median = median(arr_time, na.rm=TRUE),
+                     Mean = mean(arr_time, na.rm=TRUE),
+                     Var = var(arr_time, na.rm=TRUE),
+                     SD = sd(arr_time, na.rm=TRUE),
+                     Max = max(arr_time, na.rm=TRUE),
+                     N = n())
+output
 #+END_SRC
-select from DF 'flights'
-
-then group by summary variable 'Dest'
-
-then run the process creating a mean of 'ArrDelay' by 'Dest' into a variable called avg_delay
-
-*lets try it on your computer!*
+*lets try it on your computer!* 
 #+REVEAL: split 
-aggregate XY by station
+#+BEGIN_EXAMPLE
+Min Median     Mean      Var       SD  Max      N
+1   1535 1502.055 284370.6 533.2641 2400 336776
+#+END_EXAMPLE
+#+REVEAL: split 
+by group()
+#+BEGIN_SRC R :session Rorg  :results none
+output<-flights %>%
+group_by(carrier)  %>% 
+                     summarise(Min = min(arr_time, na.rm=TRUE),
+                     Median = median(arr_time, na.rm=TRUE),
+                     Mean = mean(arr_time, na.rm=TRUE),
+                     Var = var(arr_time, na.rm=TRUE),
+                     SD = sd(arr_time, na.rm=TRUE),
+                     Max = max(arr_time, na.rm=TRUE),
+                     N = n())
+output
+#+END_SRC
+*lets try it on your computer!* 
+#+REVEAL: split 
+#+BEGIN_EXAMPLE
+   carrier   Min Median     Mean        Var        SD   Max     N
+    (fctr) (int)  (dbl)    (dbl)      (dbl)     (dbl) (int) (int)
+1       9E     1   1741 1639.030 233182.386 482.88962  2400 18460
+2       AA     1   1539 1521.437 240715.076 490.62723  2400 32729
+3       AS     3   2043 1564.895 349724.142 591.37479  2355   714
+4       B6     1   1425 1405.725 412751.317 642.45725  2400 54635
+5       DL     1   1632 1572.878 255409.765 505.38081  2400 48110
+6       EV     1   1514 1488.134 278349.498 527.58838  2400 54173
+7       F9    28   1927 1672.480 171127.553 413.67566  2355   685
+8       FL     1   1613 1574.040 249112.062 499.11127  2359  3260
+9       HA  1242   1448 1474.225   3914.251  62.56398  1814   342
+10      MQ     1   1626 1550.833 209359.976 457.55871  2400 26397
+11      OO  1402   1941 1913.241  25687.404 160.27290  2213    32
+12      UA     1   1547 1508.717 285016.246 533.86913  2359 58665
+13      US     5   1357 1401.588 211334.298 459.71110  2400 20536
+14      VX     1   1402 1523.320 260481.184 510.37357  2359  5162
+15      WN     1   1436 1443.423 229252.151 478.80283  2400 12275
+16      YV    26   1801 1761.320  68163.456 261.08132  2318   601
+#+END_EXAMPLE
+
+#+REVEAL: split 
+more examples: aggregate XY by station
 
 #+BEGIN_SRC R
 #aggregate station xy
 stnxy<-pm25.m1.c %>%
   group_by(stn) %>%
-  dplyr::summarise(x = mean(x_stn_ITM, na.rm=TRUE),y = mean(y_stn_ITM, na.rm=TRUE) )
+  summarise(x = mean(x_stn_ITM, na.rm=TRUE),y = mean(y_stn_ITM, na.rm=TRUE) )
 #+END_SRC
+
 #+REVEAL: split 
 *count number of obsv per station*
 
@@ -80,26 +172,38 @@ flights %>%
   group_by(Dest,Month) %>%
   summarise(avg_delay = mean(ArrDelay, na.rm=TRUE))
 #+END_SRC
-*** Chaining
-Usual way to perform multiple operations in one line is by nesting
 
-we can write commands in a natural order by using the %>% infix operator (which can be pronounced as “then”)
-
-Chaining increases readability significantly when there are many commands
-
-Operator is automatically imported from the magrittr package
-
-Can be used to replace nesting in R commands outside of dplyr
 #+REVEAL: split 
- #+BEGIN_SRC R
- # chaining method
- flights %>%
-     select(UniqueCarrier, DepDelay) %>%y
-     filter(DepDelay >60)
- #+END_SRC
- this will select the DF 'flight'
- then ( %>%) select columns
- then ( %>%) filter deepelay >60 
+*lets try it on your computer!* 
+#+BEGIN_SRC R :session Rorg  :results none
+output<-flights %>%
+group_by(carrier,origin)  %>% 
+                     summarise(Min = min(arr_time, na.rm=TRUE),
+                     Median = median(arr_time, na.rm=TRUE),
+                     Mean = mean(arr_time, na.rm=TRUE),
+                     Var = var(arr_time, na.rm=TRUE),
+                     SD = sd(arr_time, na.rm=TRUE),
+                     Max = max(arr_time, na.rm=TRUE),
+                     N = n())
+output
+#+END_SRC
+#+REVEAL: split 
+#+BEGIN_EXAMPLE
+   carrier origin   Min Median     Mean      Var       SD   Max     N
+    (fctr) (fctr) (int)  (dbl)    (dbl)    (dbl)    (dbl) (int) (int)
+1       9E    EWR   120 1454.0 1419.816 152276.3 390.2259  2330  1268
+2       9E    JFK     1 1757.0 1667.716 232263.8 481.9376  2400 14651
+3       9E    LGA     1 1517.0 1582.592 247323.0 497.3158  2400  2541
+4       AA    EWR     1 1647.5 1603.355 234568.1 484.3223  2400  3487
+5       AA    JFK     1 1703.0 1550.978 273617.9 523.0850  2400 13783
+6       AA    LGA     1 1459.0 1476.239 207969.7 456.0369  2400 15459
+7       AS    EWR     3 2043.0 1564.895 349724.1 591.3748  2355   714
+8       B6    EWR     1 1415.0 1407.757 310023.4 556.7975  2400  6557
+9       B6    JFK     1 1427.0 1404.394 434240.0 658.9689  2400 42076
+10      B6    LGA     1 1412.0 1412.880 373758.5 611.3579  2400  6002
+..     ...    ...   ...    ...      ...      ...      ...   ...   ...
+> + . + > 
+#+END_EXAMPLE
 
 *** Randomly sample rows with sample_n() and sample_frac()
 You can use 
@@ -108,9 +212,10 @@ You can use
 
 to take a random sample of rows:
 
-use sample_n() for a fixed number and sample_frac() for a fixed fraction.
+use sample_n() for a fixed number
 
-Use replace = TRUE to perform a bootstrap sample. If needed, you can weight the sample with the weight argument.
+use  sample_frac() for a fixed fraction.
+
 #+REVEAL: split 
 #+BEGIN_SRC R :session Rorg  :results none
 sample_n(flights, 10)
@@ -138,7 +243,372 @@ sample_frac(flights, 0.01)
 #> Variables not shown: flight (int), origin (chr), dest (chr), air_time
 #>   (dbl), distance (dbl), hour (dbl), minute (dbl)
 #+END_SRC
+*lets try it on your computer!* 
 
+** correlation
+*** correlations
+Correlation analysis is used to study the relationship between two or more variables.
+
+There are different methods to perform correlation analysis : Pearson, Kendall and Spearman correlation tests.
+
+#+REVEAL: split 
+
+Correlation is very helpful to investigate the dependence between two or more variables. 
+
+As an example we are interested to know whether there is an association between the weights of fathers and son. 
+
+correlation coefficient can be calculated to answer this question.
+
+If there is no relationship between the two variables (father and son weights), the average weight of son should be the same regardless of the weight of the fathers and vice versa.
+
+*** Pearson correlation
+
+The Pearson correlation analysis is the most commonly used method. 
+
+Pearson correlation measures a linear dependence between two variables (x and y). 
+
+It’s also known as a parametric correlation test because it depends to the distribution of the data. 
+
+It is also known as a parametric correlation.
+
+Kendall and Spearman correlations are non-parametric and they are used to perform rank-based correlation analysis. 
+
+*** base syntax
+To get the correlation coefficient you type:
+
+#+BEGIN_SRC R :session Rorg  :results none
+cor( var1, var2, method = "method")
+#+END_SRC
+
+The default method is "pearson" so you may omit this if that is what you want. If you type "kendall" or "spearman" then you will get the appropriate correlation coefficient.
+
+If you specify "spearman" you will get the spearman correlation coefficient
+#+BEGIN_SRC R :session Rorg  :results none
+cor(var1, var2, method = "spearman")
+#+END_SRC
+*** example
+Two variables, x and y, are used in the following examples:
+
+#+BEGIN_SRC R :session Rorg  :results none
+x <- c(44.4, 45.9, 41.9, 53.3, 44.7, 44.1, 50.7, 45.2, 60.1)
+y <- c( 2.6,  3.1,  2.5,  5.0,  3.6,  4.0,  5.2,  2.8,  3.8)
+#+END_SRC
+
+x and y are numeric vectors and they must have the same length.
+
+#+BEGIN_SRC R :session Rorg  :results none
+cor(x,y, method="pearson")
+#[1] 0.5712
+#+END_SRC
+*lets try it on your computer!* 
+
+#+REVEAL: split 
+Correlation method can be pearson, spearman or kendall.
+
+#+BEGIN_SRC R :session Rorg  :results none
+cor(x,y, method="spearman")
+#[1] 0.6
+#+END_SRC
+*lets try it on your computer!* 
+Kendall and Spearman correlation analysis are recommended if the data *do not* come from a bivariate normal distribution.
+
+If your data contain missing values, use the following R code to handle missing values by case-wise deletion :
+
+#+BEGIN_SRC R :session Rorg  :results none
+cor(x, y, use = "complete.obs")
+#+END_SRC
+*** Correlation p-value
+the cor() function returns just the correlation coefficient between x and y.
+
+The cor.test() function can be used to compute the significance level for correlation.
+
+A simplified format is :
+
+#+BEGIN_SRC R :session Rorg  :results none
+# x and y are numeric vectors with the same length
+cor.test(x, y, method=c("pearson", "kendall", "spearman"))
+#+END_SRC
+The value returned by the function is a list containing, among others, the following components :
+
+#+BEGIN_EXAMPLE
+statistic 	the value of the test statistic.
+p.value 	the p-value of the correlation test.
+estimate 	correlation coefficient : “cor” (for pearson), “tau” (for kendall) or “rho” (for spearman)
+#+END_EXAMPLE
+
+
+*** Pearson correlation p-value
+
+The test follows a t distribution with length(x)-2 degrees of freedom if the samples follow independent normal distributions.
+
+#+BEGIN_SRC R :session Rorg  :results none
+res<-cor.test(x,y, method="pearson")
+res
+#+END_SRC
+
+*lets try it on your computer!* 
+
+#+REVEAL: split 
+#+BEGIN_EXAMPLE
+Pearson's product-moment correlation
+
+data:  x and y
+t = 1.841, df = 7, p-value = 0.1082
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.1497  0.8956
+sample estimates:
+   cor 
+0.5712 
+#+END_EXAMPLE
+cor is the correlation coefficient.
+The correlation coefficient between x and y is 0.5712 and the p-value is 0.1082.
+
+*** Kendall correlation
+#+BEGIN_SRC R :session Rorg  :results none
+res<-cor.test(x,y, method="kendall")
+res
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+Kendalls rank correlation tau
+
+data:  x and y
+T = 26, p-value = 0.1194
+alternative hypothesis: true tau is not equal to 0
+sample estimates:
+   tau 
+0.4444 
+#+END_EXAMPLE
+The correlation coefficient (Kendall tau) between x and y are 0.4444 and the p-value is 0.1194.
+
+*** Spearman correlation
+Spearman correlation analysis method is also used to estimate a rank-based measure of the dependence between two variables and it is recommanded if the data do not come from a bivariate normal distribution.
+
+#+BEGIN_SRC R :session Rorg  :results none
+res<-cor.test(x,y, method="spearman")
+res
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+Spearman's rank correlation rho
+data:  x and y
+S = 48, p-value = 0.0968
+alternative hypothesis: true rho is not equal to 0
+sample estimates:
+rho 
+0.6 
+#+END_EXAMPLE
+
+The correlation coefficient (Spearman rho) between x and y are 0.6 and the p-value is 0.0968.
+*lets try it on your computer- try all 3 of them!!* 
+
+*** correlation matrix
+What is a correlation matrix ?
+
+A correlation matrix is used to investigate the dependence between multiple variables at the same time. 
+
+The result is a table containing the correlation coefficients between each variable and the  ohers.
+
+Correlation matrix can be visualized using a correlogram.
+
+If you use a dataset instead of separate variables you will return a matrix of all the pairwize correlation coefficients 
+
+*** Correlation analysis in R
+As you may know, The R function cor() can be used to compute a correlation matrix. A simplified format of the function is :
+
+#+BEGIN_SRC R :session Rorg  :results none
+# x is a matrix or data.frame
+cor(x, method = c("pearson", "kendall", "spearman"))
+#+END_SRC
+
+#+REVEAL: split 
+The argument method indicates the correlation coefficient to be computed. 
+
+The default is pearson correlation coefficient which measures the linear dependence between two variables. 
+
+kendall and spearman correlation methods are non-parametric rank-based correlation test. 
+
+*** Data for correlation analysis
+
+The mtcars data is used in the following examples to compute a correlation matrix.
+
+head(mtcars)
+
+#+BEGIN_SRC R :session Rorg  :results none
+                   mpg cyl disp  hp drat    wt  qsec vs am gear carb
+Mazda RX4         21.0   6  160 110 3.90 2.620 16.46  0  1    4    4
+Mazda RX4 Wag     21.0   6  160 110 3.90 2.875 17.02  0  1    4    4
+Datsun 710        22.8   4  108  93 3.85 2.320 18.61  1  1    4    1
+Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
+Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2
+Valiant           18.1   6  225 105 2.76 3.460 20.22  1  0    3    1
+
+#+END_SRC
+*** Correlation matrix
+
+#+BEGIN_SRC R :session Rorg  :results none
+mcor <- cor(mtcars)
+mcor
+#+END_SRC
+*lets try it on your computer!* 
+#+REVEAL: split 
+#+BEGIN_EXAMPLE
+       mpg   cyl  disp    hp  drat    wt  qsec    vs    am  gear  carb
+mpg   1.00 -0.85 -0.85 -0.78  0.68 -0.87  0.42  0.66  0.60  0.48 -0.55
+cyl  -0.85  1.00  0.90  0.83 -0.70  0.78 -0.59 -0.81 -0.52 -0.49  0.53
+disp -0.85  0.90  1.00  0.79 -0.71  0.89 -0.43 -0.71 -0.59 -0.56  0.39
+hp   -0.78  0.83  0.79  1.00 -0.45  0.66 -0.71 -0.72 -0.24 -0.13  0.75
+drat  0.68 -0.70 -0.71 -0.45  1.00 -0.71  0.09  0.44  0.71  0.70 -0.09
+wt   -0.87  0.78  0.89  0.66 -0.71  1.00 -0.17 -0.55 -0.69 -0.58  0.43
+qsec  0.42 -0.59 -0.43 -0.71  0.09 -0.17  1.00  0.74 -0.23 -0.21 -0.66
+vs    0.66 -0.81 -0.71 -0.72  0.44 -0.55  0.74  1.00  0.17  0.21 -0.57
+am    0.60 -0.52 -0.59 -0.24  0.71 -0.69 -0.23  0.17  1.00  0.79  0.06
+gear  0.48 -0.49 -0.56 -0.13  0.70 -0.58 -0.21  0.21  0.79  1.00  0.27
+carb -0.55  0.53  0.39  0.75 -0.09  0.43 -0.66 -0.57  0.06  0.27  1.00
+
+#+END_EXAMPLE
+In the table above correlations coefficients between the possible pairs of variables are shown.
+
+#+REVEAL: split 
+Note that, if your data contain missing values, use the following R code to handle missing values by case-wise deletion.
+
+#+BEGIN_SRC R :session Rorg  :results none
+cor(mtcars, use = "complete.obs")
+#+END_SRC
+
+*** Correlation significance levels (p-value)
+
+The output of the function cor() is the correlation coefficients between each variable and the others. 
+
+Unfortunately, this function doesn’t display the correlation signicance levels (or p-value). 
+We can  use Hmisc R package to calculate the correlation p-values.
+
+The function rcorr() from Hmisc package can be used to compute the significance levels for pearson and spearman correlations. 
+
+It returns both the correlation coefficients and the p-value of the correlation for all possible pairs of columns in the data table.
+
+#+REVEAL: split 
+
+#+BEGIN_SRC R :session Rorg  :results none
+rcorr(x, type=c("pearson","spearman"))
+#+END_SRC
+
+x should be a matrix. The correlation type can be either pearson or spearman.
+
+Make sure that the Hmisc package (required for the next step) is installed.
+
+#+BEGIN_SRC R :session Rorg  :results none
+# install.packages("Hmisc")
+library(Hmisc)
+rcorr(as.matrix(mtcars[,1:7]))
+#+END_SRC
+*lets try it on your computer!* 
+#+REVEAL: split 
+coef:
+#+BEGIN_EXAMPLE
+       mpg   cyl  disp    hp  drat    wt  qsec
+mpg   1.00 -0.85 -0.85 -0.78  0.68 -0.87  0.42
+cyl  -0.85  1.00  0.90  0.83 -0.70  0.78 -0.59
+disp -0.85  0.90  1.00  0.79 -0.71  0.89 -0.43
+hp   -0.78  0.83  0.79  1.00 -0.45  0.66 -0.71
+drat  0.68 -0.70 -0.71 -0.45  1.00 -0.71  0.09
+wt   -0.87  0.78  0.89  0.66 -0.71  1.00 -0.17
+qsec  0.42 -0.59 -0.43 -0.71  0.09 -0.17  1.00
+n= 32 
+
+#+END_EXAMPLE
+P Value:
+#+BEGIN_EXAMPLE
+     mpg    cyl    disp   hp     drat   wt     qsec  
+mpg         0.0000 0.0000 0.0000 0.0000 0.0000 0.0171
+cyl  0.0000        0.0000 0.0000 0.0000 0.0000 0.0004
+disp 0.0000 0.0000        0.0000 0.0000 0.0000 0.0131
+hp   0.0000 0.0000 0.0000        0.0100 0.0000 0.0000
+drat 0.0000 0.0000 0.0000 0.0100        0.0000 0.6196
+wt   0.0000 0.0000 0.0000 0.0000 0.0000        0.3389
+qsec 0.0171 0.0004 0.0131 0.0000 0.6196 0.3389       
+#+END_EXAMPLE
+
+*** A simple function to format the correlation matrix
+This is a good pertunity to present the use of functions
+
+a function can be writen by the user or found on the Internet at coding sites 
+
+A simple function for formatting a correlation matrix into a table with 4 columns containing:
+    Column 1 : row names (variable 1 for the correlation test)
+    Column 2 : column names (variable 2 for the correlation test)
+    Column 3 : the correlation coefficients
+    Column 4 : the p-values of the correlations
+
+#+REVEAL: split 
+The custom function below can be used :
+#+BEGIN_SRC R :session Rorg  :results none
+# ++++++++++++++++++++++++++++
+# flattenCorrMatrix
+# ++++++++++++++++++++++++++++
+# cormat : matrix of the correlation coefficients
+# pmat : matrix of the correlation p-values
+flattenCorrMatrix <- function(cormat, pmat) {
+  ut <- upper.tri(cormat)
+  data.frame(
+    row = rownames(cormat)[row(cormat)[ut]],
+    column = rownames(cormat)[col(cormat)[ut]],
+    cor  =(cormat)[ut],
+    p = pmat[ut]
+    )
+}
+#+END_SRC
+#+REVEAL: split 
+Example of usage :
+
+#+BEGIN_SRC R :session Rorg  :results none
+library(Hmisc)
+res<-rcorr(as.matrix(mtcars[,1:7]))
+flattenCorrMatrix(res$r, res$P)
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+    row column     cor         p
+1   mpg    cyl -0.8522 6.113e-10
+2   mpg   disp -0.8476 9.380e-10
+3   cyl   disp  0.9020 1.803e-12
+4   mpg     hp -0.7762 1.788e-07
+5   cyl     hp  0.8324 3.478e-09
+6  disp     hp  0.7909 7.143e-08
+7   mpg   drat  0.6812 1.776e-05
+8   cyl   drat -0.6999 8.245e-06
+...
+#+END_EXAMPLE
+
+*** Visualization of the correlation matrix
+
+There are many solutions to visualize a correlation matrix in R software :
+
+    symnum() function
+    corrplot() function to plot a correlogram
+    scatter plots
+    heatmap
+
+#+REVEAL: split 
+The function corrplot() takes the correlation matrix as the first argument. 
+
+#+BEGIN_SRC R :session Rorg  :results none
+d <- data.frame(x1=rnorm(10),
+                 x2=rnorm(10),
+                 x3=rnorm(10))
+M <- cor(d) # get correlations
+M
+#install.packages("corrplot")
+library('corrplot') #package corrplot
+corrplot(M, method = "circle") #plot matrix
+#+END_SRC
+*lets try it on your computer!* 
+#+REVEAL: split 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-28 08:58:53
+#+attr_html: :width 800px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-28_08:58:53.png]]
 ** join data (dplyr)
 *** create 2 "superhero" DF's
 #+BEGIN_SRC R :session Rorg  :results none
@@ -172,6 +642,7 @@ If there are multiple matches between x and y, all combination of the matches ar
 
 #+BEGIN_SRC R :session Rorg  :results none
 (ijsp <- inner_join(superheroes, publishers))
+
 ## Joining by: "publisher"
 ## Source: local data frame [6 x 5]
 ## 
@@ -259,12 +730,10 @@ anti_join(x, y): Return all rows from x where there are not matching values in y
 ## 1 Hellboy      good   male Dark Horse Comics
 #+END_SRC
 #+REVEAL: split 
-
+We keep only Hellboy now (and do not get yr_founded).
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-12-20 12:56:56
 #+attr_html: :width 800px
  [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-20_12:56:56.png]]
-\\
-We keep only Hellboy now (and do not get yr_founded).
 *** full_join(superheroes, publishers)
 full_join(x, y): Return all rows and all columns from both x and y. Where there are not matching values, returns NA for the one missing. This is a mutating join.
 #+BEGIN_SRC R :session Rorg  :results none
@@ -290,77 +759,98 @@ We get all rows of x = superheroes plus a new row from y = publishers, containin
 #+DOWNLOADED: /tmp/screenshot.png @ 2015-12-20 12:58:46
 #+attr_html: :width 800px
  [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-20_12:58:46.png]]
-** ggplot2
-*** Introduction
-:PROPERTIES:
-:CUSTOM_ID: slide_1
-:END:
+* HW
+Open the file "general_data_file" from moodle.
+** Using the "summarise" function:
 
-ggplot2 is a powerful and a flexible R package, implemented by Hadley Wickham, for producing elegant graphics.
+calculate the average watching hours on Sunday.
 
-#+ATTR_HTML: :style text-aligns:center
-http://ggplot2.org/
+ #+BEGIN_SRC R :session Rorg  :results none
+ ###
+ targil=read.csv("/home/zeltak/org/attach/bgu/courses/BGU.R/data/l7/general_data_file.csv")
+ ##library(dlpyr)
+ ##q1
+ names(targil)
+ summarise(targil, avg_sun_time = mean(hour.sun, na.rm = T))
+ #+END_SRC
+** study on TV habits
+A new study wants to know about watching TV habits of mothers and their children. So we need to organize and create the data for the study:
+
+1.Add the new field "total_time" to the general data file.
+
+ #+BEGIN_SRC R :session Rorg  :results none
+ ##new field total-time
+ targil =  mutate(targil, total_time =  hour.sun + hours.fri + hours.sat+ hours.mon +hours.tues+hours.wed+hours.thu)
+ #+END_SRC
 
 
-#+DOWNLOADED: /tmp/screenshot.png @ 2015a-12-03 16:21:38
-#+attr_html: :width 500px 
- [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-03_16:21:38.png]]
+2. Calculate the min, max and sum of the total watching hours for each observation. 
+#+BEGIN_SRC R :session Rorg  :results none
+##min, max, sum of total time.
+ summarise(targil, sum_time = sum(total_time), 
+           min_time = min(total_time),
+           max_time = max(total_time))
+#+END_SRC
 
 
+3. Calculate the min, max, and sum for number of children.
+#+BEGIN_SRC R :session Rorg  :results none
+###calculat the sum min and max for number of kids
+summarise(targil, sum_kids = sum(Children), 
+          min_kids = min(Children),
+          max_kids = max(Children))
+#+END_SRC
 
-#+REVEAL: split 
-The concept behind ggplot2 divides plot into three different fundamental parts:
+3. Open the files kids and kids.grades from moodle. explore the new data.
+#+BEGIN_SRC R :session Rorg  :results none
+### open the data feme of kids data-
+kids = read.csv("D:\\Users\\hilaes\\Downloads\\kids_data_file.csv")
+kids.grades  = read.csv("D:\\Users\\hilaes\\Desktop\\kids.grades.csv")
+head(kids)
+head(kids.grades)
+#+END_SRC
 
-*Plot = data + Aesthetics + Geometry.*
+Add a new field with the average grades for each child.
+#+BEGIN_SRC R :session Rorg  :results none
+##avg.grade
+kids.grades = mutate(kids.grades, avg.grade = ((Hebrew+Math+Geography+English)/4))
+#+END_SRC
 
-The principal components of every plot can be defined as follow:
+** join data 
+ 4. Join the two data frames, call the new data.Frame "all.kids.data"
+#+BEGIN_SRC R :session Rorg  :results none
+all.kids.data =  full_join(kids, kids.grades, by = ("child.id"))
+#+END_SRC
+ 5. Calculate the total watching time for the kids and the mother
+#+BEGIN_SRC R :session Rorg  :results none
+###cal. total watching time
+all.kids.data =  mutate(all.kids.data, child_total_time =  child.hour.sun + child.hours.fri + child.hours.sat+ child.hours.mon +child.hours.tues+child.hours.wed+child.hours.thu, mother_total_time =  hour.sun + hours.fri + hours.sat+ hours.mon +hours.tues+hours.wed+hours.thu)
+#+END_SRC
+ 6. Add to the all.kids.data the Mother total watching time (use join)
+** correlations
+using the built in mtcars data:
 
-data is a data frame
-
-Aesthetics is used to indicate x and y variables. It can also be used to control the color, the size or the shape of points, the height of bars, etc…..
-
-Geometry defines the type of graphics (histogram, box plot, line plot, density plot, dot plot, ….)
-#+REVEAL: split 
-There are two major functions in ggplot2 package: qplot() and ggplot() functions.
-
-qplot() stands for quick plot, which can be used to produce easily simple plots.
-
-ggplot() function is more flexible and robust than qplot for building a plot piece by piece.
-
-#+REVEAL: split 
-
-Install and load ggplot2 package
+1. Calculate the correlation between the car miles per gallon and weight (wt)
 
 #+BEGIN_SRC R :session Rorg  :results none
-# Installation
-install.packages('ggplot2')
-
-# Loading
-library(ggplot2)
+cor.test(mtcars$mpg,mtcars$wt)
 #+END_SRC
-#+REVEAL: split 
-Data format and preparation
 
-The data should be a data.frame (columns are variables and rows are observations).
+2. create a correlation table  for all values in mtcars
+#+BEGIN_SRC R :session Rorg  :results none
+x<-cor(mtcars)
+x
+#+END_SRC
 
-The data set mtcars is used in the examples below:
+3.create a correlation plot for 3 variables: wt,mpg,gear
 
 #+BEGIN_SRC R :session Rorg  :results none
-# Load the data
-data(mtcars)
-df <- mtcars[, c("mpg", "cyl", "wt")]
-head(df)
-##                    mpg cyl    wt
-## Mazda RX4         21.0   6 2.620
-## Mazda RX4 Wag     21.0   6 2.875
-## Datsun 710        22.8   4 2.320
-## Hornet 4 Drive    21.4   6 3.215
-## Hornet Sportabout 18.7   8 3.440
-## Valiant           18.1   6 3.460
-
+#install.packages("corrplot")
+library('corrplot') #package corrplot
+x<-select(mtcars,wt,mpg,gear)
+y<-cor(x)
+corrplot(y,method="circle")
 #+END_SRC
-#+REVEAL: split 
-
 
 * Sources
 http://www.sthda.com/english/wiki/be-awesome-in-ggplot2-a-practical-guide-to-be-highly-effective-r-software-and-data-visualization?utm_content=bufferf4c6a&utm_medium=social&utm_source=plus.google.com&utm_campaign=buffer

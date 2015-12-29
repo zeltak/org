@@ -7,7 +7,22 @@
 
 * `TODO` 							  :CANCELLED:
 ** dired revison
-*** keystroke for chmod 
+*** different action from same bind based on file type (extension)
+** functions to add to Emacs
+#+BEGIN_SRC emacs-lisp
+
+(defun shell-command-on-buffer-file ()
+  "Run a shell command, using the file of current buffer as input.
+Return an error if no buffer file."
+  (interactive)
+  (or (buffer-file-name) (error "There is no file associated with this buffer"))
+  (let* ((my-cmd (read-shell-command "Command to run: "))
+         (cmd-to-run (concat my-cmd " " (buffer-file-name))))
+    (shell-command cmd-to-run)))
+#+END_SRC
+
+
+
 ** @sync//backup project@
 *** Relevant IP's
 
@@ -159,7 +174,7 @@ use this script created in ~bin:
 file:/home/zeltak/bin/lrs.sh
 
 **** robust password store /gnupg/ .ssh backup
-
+** projectile/similar for all org file under ~org
 ** repeater for belkin
 http://vpnpick.com/use-dd-wrt-router-repeater/
 ** TODO orgmode team management

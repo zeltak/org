@@ -9858,61 +9858,66 @@ bibliographystyle:unsrt
 #+END_SRC
 
 
-** import html bookmarks into org
+** orgmode for bookmarks
+*** import html bookmarks into org
 
-http://rexim.me/firefox-bookmarks-to-org-mode.html
+ http://rexim.me/firefox-bookmarks-to-org-mode.html
 
-export your bookmarks (use FF for this) into jason
-then use a python script to convert it to org:
-#+BEGIN_SRC python
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-import codecs
-import locale
-import sys
-import json
+ export your bookmarks (use FF for this) into jason
+ then use a python script to convert it to org:
+ #+BEGIN_SRC python
+ #!/usr/bin/env python
+ # -*- coding: utf-8 -*-
+ import codecs
+ import locale
+ import sys
+ import json
 
-sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.stdout)
+ sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.stdout)
 
-def export_bookmarks(bookmarks, fp):
-    # The inner recursive function which does the main work
-    def export_bookmarks_impl(bookmarks, level):
-        # Output the node according to its type and the current level
-        if bookmarks['type'] == 'text/x-moz-place-container':
-            fp.write('%s %s\n' % ('*' * level, bookmarks['title']))
-        elif bookmarks['type'] == 'text/x-moz-place':
-            fp.write('%s - [[%s][%s]]\n' % (' ' * (level - 1),
-                                            bookmarks['uri'],
-                                            bookmarks['title']))
+ def export_bookmarks(bookmarks, fp):
+     # The inner recursive function which does the main work
+     def export_bookmarks_impl(bookmarks, level):
+         # Output the node according to its type and the current level
+         if bookmarks['type'] == 'text/x-moz-place-container':
+             fp.write('%s %s\n' % ('*' * level, bookmarks['title']))
+         elif bookmarks['type'] == 'text/x-moz-place':
+             fp.write('%s - [[%s][%s]]\n' % (' ' * (level - 1),
+                                             bookmarks['uri'],
+                                             bookmarks['title']))
 
-        if bookmarks.has_key('children'):
-            # Due to the nature of org-mode format, it is important to
-            # export not folder nodes first. So they are guaranteed to
-            # be children of the current node.
-            for child in bookmarks['children']:
-                if child['type'] == 'text/x-moz-place':
-                    export_bookmarks_impl(child, level + 1)
+         if bookmarks.has_key('children'):
+             # Due to the nature of org-mode format, it is important to
+             # export not folder nodes first. So they are guaranteed to
+             # be children of the current node.
+             for child in bookmarks['children']:
+                 if child['type'] == 'text/x-moz-place':
+                     export_bookmarks_impl(child, level + 1)
 
-            for child in bookmarks['children']:
-                if child['type'] == 'text/x-moz-place-container':
-                    export_bookmarks_impl(child, level + 1)
+             for child in bookmarks['children']:
+                 if child['type'] == 'text/x-moz-place-container':
+                     export_bookmarks_impl(child, level + 1)
 
-    # Starting the traversal from level 1
-    export_bookmarks_impl(bookmarks, 1)
+     # Starting the traversal from level 1
+     export_bookmarks_impl(bookmarks, 1)
 
-if __name__ == '__main__':
-    # Reading JSON from stdin
-    bookmarks = json.load(sys.stdin)
+ if __name__ == '__main__':
+     # Reading JSON from stdin
+     bookmarks = json.load(sys.stdin)
 
-    # Writing org-mode to stdout
-    export_bookmarks(bookmarks, sys.stdout)
-#+END_SRC
+     # Writing org-mode to stdout
+     export_bookmarks(bookmarks, sys.stdout)
+ #+END_SRC
 
-then run it in the terminal 
+ then run it in the terminal 
+ #+BEGIN_SRC sh
+ cat bookmarks.json | python2 bookmarks-to-org.py > bookmarks.org
+ #+END_SRC
+ you should get an orgmode file
+*** search for dplicates
 #+BEGIN_SRC sh
-cat bookmarks.json | python2 bookmarks-to-org.py > bookmarks.org
+egrep '(http)' wbookmarks.org|sed "s#^.*\[\[##"|sed 's#\]\].*$##' | sed 's#\]\[.*$##'|sed 's#^.*http#http#' | sed 's# .*$##'|sort|uniq -c|sort -n|grep -v " 1 "
 #+END_SRC
-you should get an orgmode file
 * EOF settings
 Local variables:
 buffer-read-only: t

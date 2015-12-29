@@ -1,0 +1,484 @@
+# -*- mode: Org; org-download-image-dir: "/home/zeltak/org/attach/bgu/courses/BGU.R/images"; org-download-heading-lvl: nil; -*-
+#+Title:שיטות כמותיות למתקדמים
+#+Author: ד"ר איתי קלוג 
+#+Email: ikloog@bgu.ac.il
+#+REVEAL_TITLE_SLIDE_BACKGROUND: /home/zeltak/org/attach/bgu/courses/BGU.R/images/stat_large.jpg
+
+#+OPTIONS: reveal_center:t reveal_progress:t reveal_history:nil reveal_control:t
+#+OPTIONS: reveal_rolling_links:t reveal_keyboard:t reveal_overview:t num:nil
+#+OPTIONS: reveal_width:1200 reveal_height:800
+#+OPTIONS: toc:nil
+# #+REVEAL: split
+#+REVEAL_MARGIN: 0.1
+#+REVEAL_MIN_SCALE: 0.5
+#+REVEAL_MAX_SCALE: 2.5
+#+REVEAL_TRANS: linear
+#+REVEAL_SPEED: default
+#+REVEAL_THEME: white
+#+REVEAL_HLEVEL: 2
+#+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Org-Reveal Introduction.">
+#+REVEAL_POSTAMBLE: <p> Created by itai Kloog. </p>
+# REVEAL_PLUGINS: (highlight markdown notes)
+#+REVEAL_SLIDE_NUMBER: t
+#+OPTIONS: ^:nil
+#+EXCLUDE_TAGS: noexport
+#+TAGS: noexport(n)
+#+REVEAL_EXTRA_CSS: /home/zeltak/org/files/Uni/Courses/css/left.aligned.css
+
+
+* Week 10
+** regression 
+When to Use Regression Analysis?
+
+Regression analysis is used to describe the relationship between:
+
+A single response variable: *Y*  and
+
+One or more predictor variables: X1 , X2 , . . . , Xp
+
+p = 1: Simple Regression (Univariate analysis)
+
+p > 1: Multivariate Regression
+** The Variables
+The dependent/outcome/response variable:
+
+Y *must be* a continuous variable.
+
+the Predictor Variables:
+
+The predictors X1 , . . . , Xp can be continuous, binary or categorical variables.
+** Initial Data Analysis
+
+Does the data look like what we expect?
+
+Prior to any analysis, the data should always be inspected for:
+
+Data-entry errors
+
+Missing values
+
+Outliers
+
+*Test DV/Outcome Normality*
+
+** Test Data Normality
+
+The graphical methods for checking data normality in R still leave much to your own interpretation (QQ plot for example)
+
+There’s much discussion in the statistical world about the meaning of these plots and what can be seen as normal.
+
+If you show any of these plots to ten different statisticians, you can get ten different answers. That’s quite an achievement when you expect a simple yes or no, but statisticians don’t do simple answers.
+
+Probably the most widely used test for normality is the *Shapiro-Wilks* test. 
+#+REVEAL: split 
+
+The function to perform this test, is conveniently called shapiro.test()
+
+#+BEGIN_SRC R :session Rorg  :results none
+shapiro.test(DF2$DependentVAR)
+#Shapiro-Wilks normality test
+#data: beaver2$temp
+#W = 0.9334, p-value = 7.764e-05
+#+END_SRC
+
+#+REVEAL: split 
+This function returns a list object, and the p-value is contained in a element called p.value. 
+
+So, for example, you can extract the p-value simply by using the following code:
+
+#+BEGIN_SRC R :session Rorg  :results none
+result <- shapiro.test(beaver2$temp)
+result$p.value
+#[1] 7.763782e-05
+#+END_SRC
+#+REVEAL: split 
+This p-value tells you what the chances are that the sample comes from a normal distribution.
+
+The lower this value, the smaller the chance. 
+
+Statisticians typically use a value of 0.05 as a cutoff, so when the p-value is lower than 0.05, you can conclude that the sample *isnt* normal
+
+In the preceding example, the p-value is clearly lower than 0.05 — so we can conclude the distribution isn't normal:
+
+We *cant* run a simple linear regression (but can run more complex ones)
+
+
+** choosing regression type
+
+when you know you have a normal distribution in the DV/outcome (at least):
+
+You can continue to choose the type of test based on your variable type (binary,catagorical)
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-29 12:14:40
+#+attr_html: :width 600px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-29_12:14:40.png]]
+
+** Linear regression with a single predictor
+
+Describe the relationship between two variables, say X and Y as a straight line:
+
+that is, Y is modeled as a linear function of X .
+
+The variables:
+
+X : explanatory variable (horizontal axis)
+
+Y : response variable (vertical axis)
+
+After data collection, we have pairs of observations:
+
+(x1 , y1 ), . . . , (xn , yn )
+
+#+REVEAL: split
+ 
+Linear regression with a single predictor
+
+Example: Production Runs (Taken from Sheather, 2009)
+
+Loading the Data:
+#+BEGIN_SRC R :session Rorg  :results none
+production <- read.table("/home/zeltak/ZH_tmp/production.txt",header=TRUE)
+head(production)
+#+END_SRC
+*lets try it on your computer!* 
+
+#+REVEAL: split 
+#+BEGIN_EXAMPLE
+   Case RunTime RunSize
+1     1     195     175
+2     2     215     189
+3     3     243     344
+4     4     162      88
+5     5     185     114
+6     6     231     338
+7     7     234     271
+8     8     166     173
+9     9     253     284
+10   10     196     277
+11   11     220     337
+12   12     168      58
+13   13     207     146
+14   14     225     277
+15   15     169     123
+16   16     215     227
+17   17     147      63
+18   18     230     337
+19   19     208     146
+20   20     172      68
+#+END_EXAMPLE
+#+REVEAL: split 
+Variables:
+
+RunTime (Y): time taken (in minutes) for a production run
+
+RunSize (X): number of items produced in each run
+
+We want to be able to describe the production run time as a linear function of the number of items in the run
+#+REVEAL: split 
+The scatter plot allows one to check if the linear relationship is supported by the data.
+#+BEGIN_SRC R :session Rorg  :results none
+plot ( production$RunTime ~  production$RunSize )
+#+END_SRC
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-28 12:47:40
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-28_12:47:40.png]]
+
+*lets try it on your computer!* 
+#+REVEAL: split 
+check for normality
+
+
+#+BEGIN_SRC R :session Rorg  :results none
+result <- shapiro.test(production$RunTime)
+result$p.value
+#+END_SRC
+*lets try it on your computer!* 
+can we continue with the regression?
+
+#+REVEAL: split 
+Simple linear regression model:
+
+The regression of variable Y on variable X is given by:
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-28 12:48:58
+#+attr_html: :width 600px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-28_12:48:58.png]]
+
+
+- β0 (Intercept): point in which the line intercepts the y -axis;
+
+- β1 (Slope): increase in Y per unit change in X .
+** Estimation of unknown parameters I
+
+We want to find the equation of the line that “best” fits the data.
+
+It means finding b0 and b1 such that the fitted values of yi , given by
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-28 12:50:07
+#+attr_html: :width 400px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-28_12:50:07.png]]
+
+are as “close” as possible to the observed values yi .
+** Residuals
+
+The difference between the observed value yi and the fitted value ŷi is called residual and is given by:
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-28 12:50:46
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-28_12:50:46.png]]
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-28 12:51:02
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-28_12:51:02.png]]
+** Fitting a simple linear regression in R 
+Example: Production Runs
+
+The parameters b0 and b1 are estimated by using the function lm():
+#+BEGIN_SRC R :session Rorg  :results none
+# Fit the regression model using the
+production.lm <- lm ( RunTime ~ RunSize , data =production )
+# Use the function summary () to get some
+summary (production.lm)
+#+END_SRC
+
+#+BEGIN_EXAMPLE
+# Option for dealing with missing data
+na . action = na . exclude
+#+END_EXAMPLE
+
+#+REVEAL: split 
+#+BEGIN_EXAMPLE
++ + + 
+Call:
+lm(formula = RunTime ~ RunSize, data = production)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-28.597 -11.079   3.329   8.302  29.627 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 149.74770    8.32815   17.98 6.00e-13 ***
+RunSize       0.25924    0.03714    6.98 1.61e-06 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 16.25 on 18 degrees of freedom
+Multiple R-squared:  0.7302,	Adjusted R-squared:  0.7152 
+F-statistic: 48.72 on 1 and 18 DF,  p-value: 1.615e-06
+#+END_EXAMPLE
+#+REVEAL: split 
+
+#+BEGIN_SRC R :session Rorg  :results none
+production.lm <- lm ( RunTime ~ RunSize , data =production )
+plot ( production$RunTime ~  production$RunSize )
+abline(production.lm)
+#+END_SRC
+#+REVEAL: split 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-29 13:19:11
+#+attr_html: :width 600px
+
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-29_13:19:11.png]]
+
+#+REVEAL: split 
+Fitted values obtained using the function fitted()
+Residuals obtained using the function resid()
+
+#+BEGIN_SRC R :session Rorg  :results none
+# Create a table with fitted values and residuals
+DF<- data.frame (production , fitted.value = fitted (production.lm) , residual = resid (production.lm) )
+#+END_SRC
+#+REVEAL: split 
+#+BEGIN_EXAMPLE
++ > + . + > DF
+   Case RunTime RunSize fitted.value    residual
+1     1     195     175     195.1152  -0.1152469
+2     2     215     189     198.7447  16.2553496
+3     3     243     344     238.9273   4.0726679
+4     4     162      88     172.5611 -10.5610965
+5     5     185     114     179.3014   5.6985827
+6     6     231     338     237.3719  -6.3718734
+7     7     234     271     220.0026  13.9974148
+8     8     166     173     194.5968 -28.5967607
+9     9     253     284     223.3727  29.6272544
+10   10     196     277     221.5580 -25.5580439
+11   11     220     337     237.1126 -17.1126303
+12   12     168      58     164.7838   3.2161967
+13   13     207     146     187.5972  19.4028033
+14   14     225     277     221.5580   3.4419561
+15   15     169     123     181.6346 -12.6346053
+16   16     215     227     208.5959   6.4041115
+17   17     147      63     166.0800 -19.0800188
+18   18     230     337     237.1126  -7.1126303
+19   19     208     146     187.5972  20.4028033
+20   20     172      68     167.3762   4.6237657
+#+END_EXAMPLE
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-28 12:56:30
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-28_12:56:30.png]]
+** Dummy Variable Regression
+The simple dummy variable regression is used when the predictor variable is not quantitative but categorical and assumes only two
+values.
+
+Loading the Data:
+#+BEGIN_SRC R :session Rorg  :results none
+changeover <- read.table("/home/zeltak/org/attach/bgu/courses/BGU.R/data/l10/changeover_times.txt",header=TRUE)
+head(changeover,n=20)
+changeover$New <- as.factor(changeover$New)
+summary(changeover)
+#+END_SRC
+
+#+REVEAL: split 
+#+BEGIN_EXAMPLE
++      Method Changeover New
+1  Existing         19   0
+2  Existing         24   0
+3  Existing         39   0
+4  Existing         12   0
+5  Existing         29   0
+6  Existing         19   0
+7  Existing         23   0
+8  Existing         22   0
+9  Existing         12   0
+10 Existing         29   0
+11 Existing         22   0
+12 Existing         23   0
+13 Existing         12   0
+14 Existing         40   0
+15 Existing         16   0
+16 Existing          9   0
+17 Existing         20   0
+18 Existing         25   0
+19 Existing         10   0
+20 Existing         13   0
+#+END_EXAMPLE
+
+#+REVEAL: split 
+#+BEGIN_EXAMPLE
+      Method     Changeover         New     
+ Existing:72   Min.   : 5.00   Min.   :0.0  
+ New     :48   1st Qu.:11.00   1st Qu.:0.0  
+               Median :15.00   Median :0.0  
+               Mean   :16.59   Mean   :0.4  
+               3rd Qu.:21.00   3rd Qu.:1.0  
+               Max.   :40.00   Max.   :1.0  
+#+END_EXAMPLE
+
+#+REVEAL: split 
+Variables: 
+
+Method Changeover New
+
+Change-over(Y ): time (in minutes) required to change the line of food
+
+New (X ): 1 for the new method, 0 for the existing method
+
+We want to be able to test whether the change-over time is different for the two  methods.
+#+REVEAL: split 
+plot the data
+#+BEGIN_SRC R :session Rorg  :results none
+plot (changeover$Changeover ~ changeover$New)
+#+END_SRC
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-29 13:24:06
+#+attr_html: :width 500px
+
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-29_13:24:06.png]]
+
+#+REVEAL: split 
+Fitting the linear regression:
+#+BEGIN_SRC R :session Rorg  :results none
+# Fit the linear regression model
+changeover.lm <- lm (Changeover ~ New , data = changeover )
+# Extract the regression results
+summary (changeover.lm)
+#+END_SRC
+#+REVEAL: split 
+#+BEGIN_EXAMPLE
+lm(formula = Changeover ~ New, data = changeover)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-10.861  -5.861  -1.861   4.312  25.312 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)  17.8611     0.8905  20.058   <2e-16 ***
+New1         -3.1736     1.4080  -2.254    0.026 *  
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 7.556 on 118 degrees of freedom
+Multiple R-squared:  0.04128,	Adjusted R-squared:  0.03315 
+F-statistic: 5.081 on 1 and 118 DF,  p-value: 0.02604
+#+END_EXAMPLE
+
+#+REVEAL: split 
+Analysis of the results:
+
+There’s significant evidence of a reduction in the mean change-over time for the new method.
+
+The estimated mean change-over time for the new method
+
+(X = 1) is: ŷ1 = 17.8611 + (−3.1736) ∗ 1 = 14.7 minutes
+
+The estimated mean change-over time for the existing method
+
+(X = 0) is: ŷ0 = 17.8611 + (−3.1736) ∗ 0 = 17.9 minutes
+
+
+** ggplot2
+*** Introduction
+:PROPERTIES:
+:CUSTOM_ID: slide_1
+:END:
+
+ggplot2 is a powerful and a flexible R package, implemented by Hadley Wickham (of dplyr fame..), for producing elegant graphics.
+
+#+ATTR_HTML: :style text-aligns:center
+http://ggplot2.org/
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015a-12-03 16:21:38
+#+attr_html: :width 500px 
+ [[~/org/attach/bgu/courses/BGU.R/images/screenshot_2015-12-03_16:21:38.png]]
+
+*** basics
+
+#+REVEAL: split 
+The concept behind ggplot2 divides plot into three different fundamental parts:
+
+*Plot = data + Aesthetics + Geometry.*
+
+The principal components of every plot can be defined as follow:
+
+data is a data frame
+
+Aesthetics is used to indicate x and y variables. It can also be used to control the color, the size or the shape of points, the height of bars, etc…..
+
+Geometry defines the type of graphics (histogram, box plot, line plot, density plot, dot plot, ….)
+
+*** qplot vs ggplot
+There are two major functions in ggplot2 package: qplot() and ggplot() functions.
+
+qplot() stands for quick plot, which can be used to produce easily simple plots.
+
+ggplot() function is more flexible and robust than qplot for building a plot piece by piece.
+
+*** install
+
+Install and load ggplot2 package
+
+#+BEGIN_SRC R :session Rorg  :results none
+# Installation
+install.packages('ggplot2')
+# Loading
+library(ggplot2)
+#+END_SRC
+
+* HW
+* Sources
