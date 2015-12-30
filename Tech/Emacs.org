@@ -1824,6 +1824,34 @@ The strings used for matching are regular expressions, so are very powerful. For
 % m [kxj] <RET> will mark all files with names containing the letters k, x, or j
 % m [kxj] <RET> will mark all files with names containing the letters k, x, or j
 % m [6-9] <RET> will mark all files with names containing the digits 6,7,8,9
+*** Set Emacs As Default File Manager
+http://www.avilpage.com/2015/09/set-emacs-as-default-file-manager-in.html
+
+write a small bash script , Save this file as emacsfm in ~/bin
+
+#+BEGIN_SRC sh  :results none
+#!/bin/bash
+ #!/usr/bin/bash
+ if [ $# -gt 0 ]; then
+     dirname=$1
+ else
+     dirname=$HOME
+ fi
+ emacsclient -c -eval "(dired \"$dirname\")" > /dev/null
+#+END_SRC
+
+Now you can run emacsfm in terminal which open home dired buffer or you can run emacsfm /foo/bar which will open /foo/bar dired buffer.
+
+Now lets set, emacsfm as default file manager. For that first we need to install exo-utils (exo in arch)
+then run this
+#+BEGIN_SRC sh  :results none
+exo-preferred-applications
+#+END_SRC
+It opens a new window like this.
+
+Go to Utilities -> File manager, select Other and select emacsfm from it.
+
+Now if you go to browser downloads and click on show in folder, it will emacs dired.
 
 ** copy,cut,paste
 
