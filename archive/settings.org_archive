@@ -2508,3 +2508,160 @@ Sunrise:
 #+END_SRC
 
 
+
+* dired-dups
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-12-30 Wed 17:34
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages/dired plugins
+  :ARCHIVE_CATEGORY: settings
+  :END:
+
+#+BEGIN_SRC emacs-lisp :results none
+(use-package dired-dups
+ :ensure t
+ :config
+ 
+ )
+#+END_SRC 
+
+
+
+* TODO make executable
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-12-30 Wed 20:05
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Dired/functions
+  :ARCHIVE_CATEGORY: settings
+  :ARCHIVE_TODO: TODO
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+(defun z/dired-make-exec ()
+  (interactive)
+  (sr-term)
+  (let* ((fmt "chmod +x %s\n")
+         (file (sr-clex-file sr-selected-window))
+         (command (format fmt file)))
+    (if (not (equal sr-terminal-program "eshell"))
+        (term-send-raw-string command)
+      (insert command)
+      (eshell-send-input))))
+#+END_SRC
+
+* TODO mpc add
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-12-30 Wed 20:05
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Dired/functions
+  :ARCHIVE_CATEGORY: settings
+  :ARCHIVE_TODO: TODO
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+(defun z/dired-mpd-add ()
+  (interactive)
+  (sr-term)
+  (let* ((fmt "mpc add file:/ %s\n")
+         (file (sr-clex-file sr-selected-window))
+         (command (format fmt file)))
+    (if (not (equal sr-terminal-program "eshell"))
+        (term-send-raw-string command)
+      (insert command)
+      (eshell-send-input))))
+#+END_SRC
+
+* sshfs qnap
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-12-30 Wed 20:08
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Dired/functions
+  :ARCHIVE_CATEGORY: settings
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+(defun z/dired-ssh-qnap ()
+  (interactive)
+  (sr-term)
+  (let* ((fmt "sshfs -p 12121 admin@10.0.0.2:/share/MD0_DATA/ /home/zeltak/mounts/lraid \n")
+         (file (sr-clex-file sr-selected-window))
+         (command (format fmt file)))
+    (if (not (equal sr-terminal-program "eshell"))
+        (term-send-raw-string command)
+      (insert command)
+      (eshell-send-input))))
+#+END_SRC
+
+
+* lgs
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-12-30 Wed 20:16
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Dired/functions
+  :ARCHIVE_CATEGORY: settings
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+(defun z/dired-backup-lgs ()
+"run laptop git script"
+(interactive)
+(sr-term )
+(insert "~/bin/lgs.sh" )
+(eshell-send-input)
+)
+#+END_SRC
+
+** TODO additional commands
+cuetag.sh {f}  *.flac
+shnsplit -f {F}  -o flac {oF}
+
+
+* TODO diredful
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-12-31 Thu 18:27
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages/`dired plugins`
+  :ARCHIVE_CATEGORY: settings
+  :ARCHIVE_TODO: TODO
+  :END:
+https://github.com/thamer/diredful
+#+BEGIN_SRC emacs-lisp :results none
+(use-package diredful
+ :ensure t
+ :config
+ (diredful-mode 1)
+ )
+#+END_SRC 
+use 
+M-x diredful-add
+
+
+* open in vlc
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2015-12-31 Thu 19:52
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Dired/functions
+  :ARCHIVE_CATEGORY: settings
+  :END:
+#+BEGIN_SRC emacs-lisp  :results none
+(require 'dired-aux)
+(defvar dired-filelist-cmd
+  '(("vlc" "-L")))
+(defun z/dired-start-process (cmd &optional file-list)
+  (interactive
+   (let ((files (dired-get-marked-files
+                 t current-prefix-arg)))
+     (list
+      (dired-read-shell-command "& on %s: "
+                                current-prefix-arg files)
+      files)))
+  (let (list-switch)
+    (start-process
+     cmd nil shell-file-name
+     shell-command-switch
+     (format
+      "nohup 1>/dev/null 2>/dev/null %s \"%s\""
+      (if (and (> (length file-list) 1)
+               (setq list-switch
+                     (cadr (assoc cmd dired-filelist-cmd))))
+          (format "%s %s" cmd list-switch)
+        cmd)
+      (mapconcat #'expand-file-name file-list "\" \"")))))
+
+#+END_SRC

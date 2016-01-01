@@ -5,9 +5,42 @@
 #+STARTUP: overview  inlineimages eval: (org-columns)
 #+LaTeX_CLASS_OPTIONS: [garamond]
 
-* `TODO` 							  :CANCELLED:
+* `TODO`							 
+** better search of org files and org files
+*** projectile?
+** move latest albums to freeze 
+** close window and move to other window, rasie on #Emacs
+investigative C-x 0 as a vilable optiob
+
+hi all, im looking for a way to have a function that closes the current window in a
+split screen situation and move to the other window while if only one window is
+available close that one. any lisp lv.10 wizards care to help?
+
 ** dired revison
 *** different action from same bind based on file type (extension)
+*** toggle sort (time/name/asecnd descend)
+*** customize faces
+If you haven’t known about Emacs 24 Color Theming yet, have a look at this post Color Theming in Emacs 24. This post just lists some useful faces that you can customize for Dired.
+
+For Dired
+
+    dired-directory: Face used for subdirectories.
+    dired-header: Face used for directory headers.
+    dired-mark: Face used for dired marks.
+    dired-flagged: Face used for files flagged for deletion.
+    dired-marked: Face used for marked files.
+    dired-perm-write: Face used to highlight permissions of group- and world-writable files.
+    dired-symlink: Face used for symbolic links.
+
+For Dired+
+
+    diredp-date-time: Face used for date and time in dired buffers.
+    diredp-deletion: Face used for deletion flags (D) in dired buffers.
+    diredp-deletion-file-name: Face used for names of deleted files in dired buffers.
+    diredp-dir-heading: Face used for directory headings in dired buffers.
+    diredp-file-name: Face used for file names (without suffixes) in dired buffers.
+    diredp-file-suffix: Face used for file suffixes in dired buffers (file extension).
+
 ** functions to add to Emacs
 #+BEGIN_SRC emacs-lisp
 
@@ -20,8 +53,45 @@ Return an error if no buffer file."
          (cmd-to-run (concat my-cmd " " (buffer-file-name))))
     (shell-command cmd-to-run)))
 #+END_SRC
+** mu43 org intergartion
+https://groups.google.com/forum/#!topic/mu-discuss/lHmu4dF99rQ
 
+Perhaps you've seen this article about combining mu4e and org-mode:
+  http://pragmaticemacs.com/emacs/master-your-inbox-with-mu4e-and-org-mode/
 
+Current (git) mu4e makes this slightly easier --
+    org-mu4e-link-query-in-headers-mode
+now defaults to t, so there's no need to change it.
+
+Second, there's a new function `org-mu4e-store-and-capture', which
+creates a link to the message-at-point, then calls org-capture. We can
+add some bindings:
+
+--8<---------------cut here---------------start------------->8---
+(define-key mu4e-headers-mode-map (kbd "C-c c") 'org-mu4e-store-and-capture)
+(define-key mu4e-view-mode-map    (kbd "C-c c") 'org-mu4e-store-and-capture)
+--8<---------------cut here---------------end--------------->8---
+
+Now, suppose you have some template set up in `org-capture-templates`,
+e.g.:
+
+--8<---------------cut here---------------start------------->8---
+  ("P" "process-soon" entry (file+headline "todo.org" "Todo")
+    "* TODO %a %?\nDEADLINE: %(org-insert-time-stamp (org-read-date nil t \"+2d\"))")
+--8<---------------cut here---------------end--------------->8---
+
+Ie., take this message, and set a deadline for processing it in two
+days. Now, when on a message, press C-c c P to add processing this
+message to our todo-list. We can then refile the e-mail to one of our
+archive folders (the links don't care what folder the message lives),
+and clean up our inbox.
+
+If anyone has a some interesting capture templates for emails, or some
+other interesting setup for combining mu4e and org-mode, feel free to
+share!
+
+Kind regards,
+Dirk. 
 
 ** @sync//backup project@
 *** Relevant IP's
@@ -218,6 +288,15 @@ I guess someone who uses OrgMode (I don’t) would need to code that up. But hav
 ** covert word to text for better cross academic search 
 use pandoc?
 ** mu4e
+*** TODO email checking methods
+ Now when I check my emails, I do one of the following
+
+    delete if it is rubbish
+    read and delete if it is not something I’ll need to revisit
+    read and archive if it is something I might need to look up again
+    reply and archive if it is something that will take less than a couple of minutes to reply to and I have the time
+    add to todo list and archive if it is something that requires an action or just needs a longer reply than I have time to write
+
 *** flag only view 
 ** elfeed
 org integration -send article to org todo?
@@ -486,7 +565,7 @@ to check buffer for ref issues and a menu of org-ref options
 http://tex.stackexchange.com/questions/18848/workflow-for-managing-references/18855#18855
 **** biber?
 look into how to convert to biber
-**** biblatex 							  :CANCELLED:
+**** biblatex							  :CANCELLED:
 **** bib2bib
 http://www.cse.msu.edu/~cse914/F02/Public/Papers/Bibtex/bibtex2html-doc.htm
 **** cb2Bib
@@ -967,15 +1046,11 @@ So the :results output is the way to go. This works also for the :dir remote cod
 #+BEGIN_SRC R :exports both :results output :session *ssh xxx*
   system( "hostname" )
 #+END_SRC
-** http://blog.binchen.org/posts/emacs-auto-completion-for-non-programmers.html
 ** How to make org-protocol work?
 http://stackoverflow.com/questions/7464951/how-to-make-org-protocol-work/32851154#32851154
-** org summary from drwares
-http://stackoverflow.com/questions/19510984/section-summaries-in-org-mode
 ** https://github.com/alphapapa/org-protocol-capture-html/tree/9ddb2a8e548eb8461acde5a3bc56ccb1414c2173#org-protocol-capture-html
 ** intersting orgmode configuration
 http://writequit.org/org/#b07ea95e-d7cb-4714-ae83-9bd624e1c19d
-** https://github.com/cute-jumper/emacs-firefox-controller
 ** read BMS and ots
 http://www.bluemilkspecial.com/
 http://www.giantitp.com/comics/oots.html
@@ -983,12 +1058,6 @@ http://larptrek.com/larptrek/196-its-been-ten-minutes-lwaxana-needs-to-change-cl
 
 ** explore input fonts
 http://input.fontbureau.com/
-** Ynet popup blocker
-https://github.com/reek/anti-adblock-killer
-** dired- the runer
-https://github.com/thamer/runner
-** bind maps
-https://github.com/justbur/emacs-bind-map
 ** R and Qgis
 http://amsantac.co/blog/en/2015/10/31/qgis-r.html
 ** leraning programing

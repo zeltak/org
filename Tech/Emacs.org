@@ -46,7 +46,11 @@ Tool Bar mode if ARG is omitted or nil.
 #+END_EXAMPLE
 
 so here if its 1 (positive) it works and if -1 (negative) its disabled
+**** window, frames buffer
 
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-12-31 20:20:42
+#+attr_html: :width 700px
+ [[~/Sync/attach/images_2015/screenshot_2015-12-31_20:20:42.png]]
 *** Using Emacs In A Text Terminal
 
 Emacs in a Text Terminal.
@@ -3953,25 +3957,39 @@ If you made a mistake, you can cancel  ?Ctrl+g? (keyboard-quit) and start over.
 
 If you want to use your keyboard macro for future use, you can save it. To save the macro: Call
 
-?M-x name-last-kbd-macro?
+M-x name-last-kbd-macro
 
 and give it a name.
 
 then issue
 
-?M-x insert-kbd-macro?
+M-x insert-kbd-macro
 
 look for the name you just gave and select it.This will insert the lisp code for the named macro at the cursor position.
-₆In example₆ 
-
 
 #+BEGIN_EXAMPLE
 (fset 'z-wrap-line-bash
    [?V f4 ?b ?\M-x right])
 #+END_EXAMPLE
-
 Copy and Paste the code into your emacs init file.
 In any future emacs session, you can call your kmacro by name just like any emacs command. Once you've saved your macro with a name, you can also give it a keyboard shortcut, such as F8.
+
+example 2:
+#+BEGIN_SRC emacs-lisp  :results none
+;macro to convert latex sections to org-mode subheadings
+;;use M-x insert-kbd-macro to add the following line
+(fset 'bjm/sec-to-star
+   [?\C-a ?\C-  ?\C-s ?\{ return ?\C-d ?* ?* ?  ?\C-e backspace ?\C-x])
+;;bind this to a key
+(global-set-key (kbd "C-c b *") 'bjm/sec-to-star)
+
+#+END_SRC
+
+Where the fset line was added by using M-x insert-kbd-macro and then selecting the macro name I just used to save the macro. Finally I bind this to a key for ease of use in the future.
+
+You can use M-x edit-named-kbd-macro to see a nicer view of your macro and tweak it if needed.
+
+Finally, note that macros are not limited to simple editing commands. You can e.g. create, edit and save new files or do other more complex procedures within a macro. 
 
 **** edit a macro while its running
 when your recored a macro press ~c-x q~ while its running to specify a stop in the macro
@@ -4478,9 +4496,9 @@ add this to your .emacs:
 use C-j to jump into dired mode when within ido
 **** Projectile
 https://github.com/bbatsov/projectile
-If you ever forget any of Projectile's keybindings just do a:
-
-C-c p C-h
+If you ever forget any of Projectile's keybindings just do a: 【C-c p C-h】
+***** create a projectile project manually 
+If you want to mark a folder manually as a project just create an empty .projectile file in it. 
 ***** ignore file
 If youd like to instruct Projectile to ignore certain files in a project, when indexing it you can do so in the .projectile file by adding each path to ignore, where the paths all are relative to the root directory and start with a slash. Everything ignored should be preceded with a - sign. Alternatively, not having any prefix at all also means to ignore the directory or file pattern that follows. Here's an example for a typical Rails application:
 
@@ -4517,6 +4535,40 @@ M-x helm-projectile
 or even better - bind it to a keybinding like this:
 
 (global-set-key (kbd "C-c h") 'helm-projectile)
+***** TODO Virtual directory manager
+http://tuhdo.github.io/helm-projectile.html#sec-2
+
+
+Now that you know how to manage your project files with Helm and Projectile, it's time to explore this cool feature that is exclusive to Helm Projectile: Virtual Directory. A virtual directory is just a Dired buffer but with files from different directory location assembled into one buffer.
+
+Purpose: Projectile is excellent for file browsing, and can access files anywhere in project. Dired is excellent because it can be used as a file browser, as well as by being a normal buffer, it can be saved as an entry in Bookmark for future sessions. We can combine get the best of both: a logical list of files from anywhere that can be saved for use in the future.
+
+The following are actions to be used for managing a virtual directory when you are in a helm-projectile-find-file session:
+
+    Create Dired buffer from files (C-c f): creates a virtual Dired buffer that populates marked files into that Dired buffer. If the current buffer is a Dired buffer, invoking helm-projectile-find-file or helm-projectile-find-dir also adds another list that presents all the current entries in current Dired buffer. You can create a totally new virtual Dired buffer from these entries as well.
+
+    Demo (begins when START DEMO appears in minibuffer):
+
+    helm-projectile-new-virtual-dir.gif
+    Add files to Dired buffer (C-c a): when the current buffer is an existing Dired buffer, we can add files/directories from helm-projectile-find-file and helm-projectile-find-dir commands to update the virtual Dired buffer.
+
+    Demo (begins when START DEMO appears in minibuffer):
+
+    helm-projectile-add-files-virtual-dir.gif
+    Remove entry(s) from Dired buffer (C-c d): This command can only be used when the current buffer is a Dired buffer. When the current buffer is a Dired buffer, activating helm-projectile-find-file or helm-projectile-find-dir will add another list that presents all entries in the Dired buffer. We can mark entries, then press C-c d to delete all marked entries from the current Dired buffer.
+
+    Demo (begins when START DEMO appears in minibuffer):
+
+    helm-projectile-delete-files-virtual-dir.gif
+
+    These features are useful when you want to groups related files scattered across different directories in your project. For example, you have a feature called login. The logic for login is in handle/login.rb, the gui for login is in gui/login.rb and some project libraries that login uses in lib/. You want to group these files together for according to any of your logical views as you see fit. You do not need to depend on the fixed layout of physical directory structure, that is the logic of someone else.
+
+Store virtual directories with Bookmark (or Bookmark+)
+
+Using Bookmark (or Bookmark+), you can actually save your virtual Dired buffers and preserve this knowledge for future reference, when you want to quickly review related files to improve or fix bug. You won't have to reconnect related files again, and often it takes quite some time since you could forget many things.
+
+If you haven't learned how to use Bookmark, learn the basics of it with Xah Lee's "Emacs: Using Bookmark Feature" article. I recommend you to install Bookmark+ because it offers much more features. For example, you can write annotations for (C-u a on a bookmark) bookmarks in Org-mode and read the annotation with Org-mode (press a to open the annotation of a bookmark for reading). To learn all about Bookmark+ features, please refer to Bookmark+ documentation.
+
 **** workgroups
 create and save a winodws state (not buffers/session)
 -first issue wg-create-workgroup, give it a name (not sure why this step is needed)
@@ -6817,6 +6869,8 @@ $ sudo apt-get install guile-2.0-dev html2text xdg-utils
 # optional: only needed for msg2pdf and mug (toy gtk+ frontend)
 $ sudo apt-get install libwebkit-dev
 #+END_SRC
+*** offlineimap integration
+if offlineimap gets stuck kill it with htop and let the cron job kick in
 ** wanderlust
 *** setup
 **** init.el
@@ -9422,6 +9476,8 @@ The more straightforward option is to use a proper ellipsis character (the same 
 #+END_SRC
 
 Other interesting characters are ▼, ↴, ⬎, ⤷, and ⋱.
+*** use emojis
+install 
 ** org-google sync 
 *** org-gcal
     :PROPERTIES:

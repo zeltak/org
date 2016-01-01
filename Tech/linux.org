@@ -1113,7 +1113,10 @@ add the package name in the pacman.conf file, ₆In example₆
 #+BEGIN_EXAMPLE
 IgnorePkg = firefox
 #+END_EXAMPLE
-
+***** list all installed packages by size
+#+BEGIN_SRC sh  :results none
+$ pacman -Qi | egrep '^(Name|Installed)' | cut -f2 -d':' | paste - - | column -t | sort -nrk 2 | grep MiB | less 
+#+END_SRC
 **** aur
 ***** prerequisites
 make sure you have sudo and base-devel installed before using AUR
@@ -2161,7 +2164,7 @@ to start it
 ** general
 *** fonts
 
-Most system and distors place the ~/.fonts
+Most system and distros place the ~/.fonts
  the best way is to manually add .ttf fonts (simple copy) to the
 ~/.fonts folder and then issue
 
@@ -29306,6 +29309,16 @@ rexeg command to delete line starting with "ns":
  \^ns.$
  To delete empty lines:
  \^\s$
+*** pandoc
+**** batch convert 
+
+You can apply any command across the files in a directory tree using find:
+
+#+BEGIN_SRC sh  :results none
+find . -name \*.docx -type f -exec pandoc -o {}.org {} \;
+#+END_SRC
+would run pandoc on all files with a .md suffix, creating a file with a .md.txt suffix. (You will need a wrapper script if you want to get a .txt suffix without the .md, or do ugly things with subshell invocations.) {} in any word from -exec to the terminating \; will be replaced by the filename.
+
 * Admin
 ** General Guides
 *** A-Z Index of the Linux BASH
