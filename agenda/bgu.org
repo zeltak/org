@@ -41,7 +41,7 @@ in R- gbm analylis- check model with only highest variables.
 4.data fusion
 5.composition
 ** omer
-*** TODO talk to omer about spatial auto correlatios in the regression
+*** talk to omer about spatial auto correlatios in the regression
 ** alex stien
 facult may pay 10 manot, need to tell her to apply for that milga
 ** Lara
@@ -117,11 +117,8 @@ you get the bonus in salary for this in Oct/Janurary/April/July
 -talk to shiran English site and my access
 -also explore editing the site
 ** TODO rahcel- ask about lab services like tal, how do I open this
-** TODO check bank account if I got back money for haifa GEO society conference
 ** TODO close all budget 01.03.2016
    DEADLINE: <2016-02-28 Sun>
-** TODO  check bgu return for rest of italy- talk to miriam ben gal
- <2015-10-08 Thu 09:36>
 ** TODO explore the use of SSD swap for R RAM demands
 ** TODO look at info online for AOD in mexico city and which location was it in. was it in rama or unam :meytar:
 ** TODO generate 200m predictions for 2009, the greater boston area [2015-10-14 Wed]
@@ -138,7 +135,6 @@ predict(object = model, newdata = towns)
 
 האובייקט model בדוגמה הנ"ל, מהמחלקה gstat, מכיל את כל המידע הנחוץ לביצוע חיזוי או cross-validation בשיטה שנבחרה (IDW) עם נתוני הכיול הרלוונטיים. בחירת השיטה, דרך אגב, מתבצעת אוטומטית עפ"י סט הארגומנטים של הפונקציה (אתה יכול לראות את זה בשקף 20 של המצגת המצורפת). הסט הנ"ל קובע שהמודל יהיה IDW, עם סט שונה של ארגומנטים ייבחר kriging וכו'. רצוי שהקואורדינטות יהיו ב-projection ולא קווי אורך ורוחב כי עובדים עם מרחקים, אבל באזור קטן כמו ישראל זה לא כל כך משנה. מצ"ב קוד עם דוגמה שאפשר לשחזר.
 ** TODO add a refrecnce to targil 9 planners, when importing lowland add before the projection from prj file in the state share dir 
-** TODO [#B] channel funds from seed to "shonot" takziv
 ** TODO Return for 9500 Data layer
 -Talk to rachel and then RA about billing the haifa grant
 -also check about geocoding buy if not succesful
@@ -146,10 +142,6 @@ predict(object = model, newdata = towns)
 http://www.hsph.harvard.edu/xlin/software.html
 ** TODO send natalia to ask for link to lan images 100m
 look at multi spectral lan data
-** TODO buy new router
-https://paste.xinu.at/GxLIT/
-make sure its compatible with dd-wrt
-http://www.linksys.com/us/p/P-WRT1900ACS/
 * Department/faculty duties
 ** TODO arrange co operations with other geography departments internationally
 *** proposed departments:
@@ -223,106 +215,7 @@ Below are tables for both the new BA and MA GIT programs as we discussed I our p
 - every MA student that will submit to a international journal will get 1750 NIS (within the 2 offical MA years)
 - among students that got the paper published within the 2 years there will be a comitee which will award the best paper another 1750 NIS
 * Travel 
-*** italy trip
-**** budget
-
- | name   | expense |   total |
- | Eshel  | 74*8    |     592 |
- | Flight |         |  396.56 |
- | Hotel  |         |  679.45 |
- | travel |         |     180 |
- | total  |         | 1848.01 |
- |        |         |         |
- #+TBLFM: @6$3=vsum(@2..@5)
-
-archive only after extra ~ 500 are returned
-*** portugal trip
-**** budget
- dates:  24.9- 30.9
- | name         | expense |   total |
- | Eshel        | 75*7    |     525 |
- | Flight       |         |     895 |
- | Hotel        |         |  573.99 |
- | travel       |         |     180 |
- | Registration |         |     573 |
- |--------------+---------+---------|
- | total  $     |         | 2746.99 |
- #+TBLFM: @7$3=(@2$2..@2$6)::@8$3=@2$2..@2$6
-#+TBLFM@: 
-*** NYC-Mexico 2015
-**** Expenses
- dates of travel:  15.9- 25.9
-
- | name                    |          local total | USD total (currency as of 9/27) |
- |-------------------------+----------------------+---------------------------------|
- | Israel                  |         1 NIS=  3.96 |                                 |
- |-------------------------+----------------------+---------------------------------|
- | Taxi Lehavim to Airport |                  400 |                           101.5 |
- | Fuel costs back         |                  170 |                           42.95 |
- |-------------------------+----------------------+---------------------------------|
- | NYC                     |                      |                                 |
- |-------------------------+----------------------+---------------------------------|
- |-------------------------+----------------------+---------------------------------|
- | food steam house        |                36.31 |                           36.31 |
- | Taxi JFK- Manhatan      |                64.14 |                           64.14 |
- | la pain quotditian      |                29.56 |                           29.56 |
- | absolute bagles         |                20.08 |                           20.08 |
- | 2nd ave deli            |                30.65 |                           30.65 |
- | Taxi nyc-jfk            |                64.42 |                           64.42 |
- | The bao                 |                43.33 |                           43.33 |
- | NYC metro               |                    7 |                               7 |
- | nyc metro               |                    5 |                               5 |
- | nyc metro               |                  5.4 |                             5.4 |
- | nyc metro               |                   10 |                              10 |
- | russ and daughters      |                21.16 |                           21.16 |
- | black bagel             |                 7.36 |                            7.36 |
- | rail                    |                 9.50 |                            9.50 |
- | shake shack jfk         |                13.45 |                           13.45 |
- | breakfast               |                    4 |                               4 |
- | JFK dinner              |                28.13 |                           28.13 |
- | JFK lunch               |                 5.55 |                            5.55 |
- |-------------------------+----------------------+---------------------------------|
- |-------------------------+----------------------+---------------------------------|
- | Mexico                  | $1 USD= 16.97  pesos |                                 |
- |-------------------------+----------------------+---------------------------------|
- |-------------------------+----------------------+---------------------------------|
- | Hotel las quintas       |                 3229 |                          194.19 |
- | hotel mexico city       |                 1820 |                          106.69 |
- | FOREIGN TRANSACTION FEE |                      |                            7.13 |
- | Airline charge          |                  236 |                           14.19 |
- | cafe azul               |               602.50 |                           35.50 |
- | rest bonito             |               730.25 |                           43.92 |
- | maison kayser           |               396.00 |                           23.21 |
- |                         |                      |                                 |
- |-------------------------+----------------------+---------------------------------|
- | in USD                  |                      |                          974.32 |
- |                         |                      |                                 |
- #+TBLFM: @33$3=vsum(@3..@32)
-**** TODO [#A] get back from BGU
-| daily | num days | total |
-|-------+----------+-------|
-|    75 |       10 |   750 |
-|       |          |       |
-|-------+----------+-------|
-#+TBLFM: $3=750
-*** ISEE 2015 Holland trip
-**** budget
- dates:  30.10 -- 4.11
- | name         |     expense |   total |
- | Eshel        |    75*5+125 |     500 |
- | Flight       |      532.54 |  532.54 |
- | Hotel        |             |     689 |
- | travel       | 18.70+15.85 |   34.55 |
- | Registration |             |     134 |
- | total        |             |         |
- | in $$        |             | 1890.09 |
- |--------------+-------------+---------|
- |              |             |         |
-
-**** received from Uni polaim on 27.10.2015
-$975
-*** TODO check with racel, meital takzivanit
-** Tenure proccess
+* Tenure proccess
 **** letter of recommendations from non related people 
  dani felsinstien
  mike brauer?
@@ -334,35 +227,6 @@ $975
  The function of each author of an article should be indicated by means of the addition of a letter in superscript (or in parentheses) after the name, as follows: Principal Investigator PI, student S, post-doctoral fellow PD, co-researcher C, technician/laboratory assistant T. More than one author may serve in a particular category, including Principal Investigator in multi-disciplinary works.
 * meetings
 * promotion
-** TODO BORIS
-send dani CV
-tell him about my promotion process
-Tell him about the fact that BGU are really strict and picky thesedays and that only a over the top excellent letter will suffice 
-ask if he feels comfortable in writing such a letter, if not then no problem don't feel obliged 
-** TODO [#A] Compile a list to boris of all full proffesors in geog departments.
-פרופ' נח גליל, דיקן הפקולטה להנדסה אזרחית בטכניון
-
-*** list of full professor's 
-**** haifa
-פרופסור חיים קותיאל
-פרופ' אמציה פלד
-פרופ' ראסם חמאיסי
-פרופ' יואל מנספלד  (not sure hes full professor)
-**** TAU
-פרופ' יצחק שנל
-פרופ' יצחק בננסון
-**** HUJI
-רוני אלנבלום, פרופ
-אילן סלומון 
-ערן פייטלסון
-דני פלזנשטיין, פרופ'
-עמוס פרומקין
-ריכב (בוני) רובין
-פרופ' ערן רזין
-פרופ' נעם שובל
-**** Bar Ilan
-וינשטיין ישי (not sure hes full professor)
-פרופ'	ברנר שלמה (סטיב)
 * mount sinai
   :PROPERTIES:
   :ID:       479df69d-ee92-42bb-aa2d-1f85bec40d70

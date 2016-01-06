@@ -29317,6 +29317,14 @@ You can apply any command across the files in a directory tree using find:
 #+BEGIN_SRC sh  :results none
 find . -name \*.docx -type f -exec pandoc -o {}.org {} \;
 #+END_SRC
+
+or for all files in the folder
+
+#+BEGIN_SRC sh  :results none
+find . -name \* -type f -exec pandoc -o {}.org {} \;
+#+END_SRC
+
+
 would run pandoc on all files with a .md suffix, creating a file with a .md.txt suffix. (You will need a wrapper script if you want to get a .txt suffix without the .md, or do ugly things with subshell invocations.) {} in any word from -exec to the terminating \; will be replaced by the filename.
 
 * Admin

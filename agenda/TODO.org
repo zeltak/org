@@ -7,7 +7,12 @@
 
 * `TODO`							 
 ** better search of org files and org files
+   :PROPERTIES:
+   :ID:       9c49a294-2116-42c2-afd7-99b2bb2cc590
+   :END:
 *** projectile?
+** picard import music
+** quick navigate inside helm (use bookmearks in helm)
 ** move latest albums to freeze 
 ** close window and move to other window, rasie on #Emacs
 investigative C-x 0 as a vilable optiob
@@ -286,7 +291,15 @@ I guess someone who uses OrgMode (I don’t) would need to code that up. But hav
 ** org-reveal
 *** justify to the left and not centered
 ** covert word to text for better cross academic search 
-use pandoc?
+*** for pdf files
+we use the ◀pdftotext▶ (part of poppler-utils) function to convert the file to a txt file
+then simply issue
+#+BEGIN_SRC sh  :results none
+pdftotext /home/lori/Documents/Sample.pdf /home/lori/Documents/Sample.txt
+#+END_SRC
+then follow up with pandoc
+*** doc files 
+load them to libreoffice and convert manually to docx
 ** mu4e
 *** TODO email checking methods
  Now when I check my emails, I do one of the following
