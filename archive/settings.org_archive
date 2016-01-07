@@ -2665,3 +2665,14 @@ M-x diredful-add
       (mapconcat #'expand-file-name file-list "\" \"")))))
 
 #+END_SRC
+
+* copy from one dired dir to the next dired dir shown in a split window
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-07 Thu 10:48
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Dired/main options
+  :ARCHIVE_CATEGORY: settings
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+(setq dired-dwim-target t)
+#+END_SRC

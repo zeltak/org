@@ -2693,6 +2693,18 @@ online)
  sudo apt-get install -y tmux=2.0-1~ppa1~t
  #+END_SRC
  now if you do tmux -V it should show tmux 2.0 which is a good version for tmux plugins
+*** fix language and date settings in Ubuntu family
+open a file in text editor: /etc/default/locale.
+
+In this file, you will find numerous LC_ environment variable set, so they are defined every time a new shell is started, including your desktop session. Here, for example, I have a Hebrew example, with he_IL encoding instead of en_US.
+
+Profile with locale settings
+To resolve the problem, simply changed <lang>.UTF-8 to en_US.UTF-8 or any other language encoding of your choice. Then, save the file, log out and log back into your session. And Bob's your uncle. 
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-01-06 14:04:23
+#+attr_html: :width 300px
+ [[~/Sync/attach/images_2015/screenshot_2016-01-06_14:04:23.png]]
 ** Debian
 *** Fresh install
 **** teamviwer
@@ -30199,7 +30211,7 @@ choose NFS as backup destination
 enter destination IP
 ₆In example₆ 132.72.152.204
 enter full nfs path
-.₆In example₆ on my work debian machine: /volume1/ZUraid/
+.₆In example₆ on my work debian machine: /volume1/ZUraid/ !you may have to enter this twice!
 
 proceed as normally you would 
 **** bad blocks erros
@@ -32213,6 +32225,31 @@ use the pwgen command ₆In example₆
 #+BEGIN_SRC sh
 pwgen 8
 #+END_SRC
+*** How to make a file or a folder undeletable in linux
+
+Here is an easy way to make a file or a folder undeletable even by root user in Ubuntu.
+Making a folder undeletable
+
+To make a folder undeletable run:
+
+sudo chattr +i -R foldername
+
+After that you can't delete, rename or do anything with this folder.
+But if you don't need this folder anymore or you've got to apply some changes to it run:
+
+sudo chattr -i -R foldername
+
+Making a file undeletable
+
+To make a file undeletable run:
+
+sudo chattr +i filename
+
+To be able to change or delete the file run:
+
+sudo chattr -i filename
+
+
 ** bash
 *** shortcuts
 

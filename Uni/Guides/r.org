@@ -8806,7 +8806,11 @@ p2008 <- p2008[long_aod > -74 & long_aod < -69 & lat_aod < 44 & lat_aod > 41, ]
 x <- data.table(a = 1:3, b = 3:1, c = runif(3))
 setcolorder(x, c("c", "b", "a"))
 #+end_src
-*** rbind in data.table
+***  
+    :PROPERTIES:
+    :ID:       34e7181a-bebb-4fe9-ae37-162d2c86edaa
+    :END:
+rbind in data.table
 #+begin_src R
 require(data.table)
 DT.1 <- data.table(x = letters[1:5], y = 6:10)
@@ -10676,6 +10680,26 @@ left_join(df2, df1)
 **** left join by 2 key variables
 #+BEGIN_SRC R
 #+END_SRC
+*** dply multi join by 2 or more variables, also different names
+
+#+BEGIN_SRC R :session Rorg  :results none
+library(dplyr)
+
+d1 <- data_frame(
+  x = letters[1:3],
+  y = LETTERS[1:3],
+  a = rnorm(3)
+  )
+
+d2 <- data_frame(
+  x2 = letters[3:1],
+  y2 = LETTERS[3:1],
+  b = rnorm(3)
+  )
+
+d3<-left_join(d1, d2, by = c("x" = "x2", "y" = "y2"))
+#+END_SRC
+
 ** rename
 *** rename specific variable 
 #+BEGIN_SRC R :session Rorg  :results none

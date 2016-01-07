@@ -6,6 +6,16 @@
 #+LaTeX_CLASS_OPTIONS: [garamond]
 
 * `TODO`							 
+** covert word to text for better cross academic search 
+*** for pdf files
+we use the ◀pdftotext▶ (part of poppler-utils) function to convert the file to a txt file
+then simply issue
+#+BEGIN_SRC sh  :results none
+pdftotext /home/lori/Documents/Sample.pdf /home/lori/Documents/Sample.txt
+#+END_SRC
+then follow up with pandoc
+*** doc files 
+load them to libreoffice and convert manually to docx
 ** better search of org files and org files
    :PROPERTIES:
    :ID:       9c49a294-2116-42c2-afd7-99b2bb2cc590
@@ -290,16 +300,6 @@ kind regards, Zeltak – 2015-07-15 14:31 UTC
 I guess someone who uses OrgMode (I don’t) would need to code that up. But have you tried just bookmarking a header line location? When you bookmark a position, bookmarking keeps track of the immediately surrounding text, to use to relocate the position when the buffer gets modified. Or try bookmarking some text immediately preceding or following a header. Maybe that would be adequate? – DrewAdams
 ** org-reveal
 *** justify to the left and not centered
-** covert word to text for better cross academic search 
-*** for pdf files
-we use the ◀pdftotext▶ (part of poppler-utils) function to convert the file to a txt file
-then simply issue
-#+BEGIN_SRC sh  :results none
-pdftotext /home/lori/Documents/Sample.pdf /home/lori/Documents/Sample.txt
-#+END_SRC
-then follow up with pandoc
-*** doc files 
-load them to libreoffice and convert manually to docx
 ** mu4e
 *** TODO email checking methods
  Now when I check my emails, I do one of the following
