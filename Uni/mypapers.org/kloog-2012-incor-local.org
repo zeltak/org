@@ -1,0 +1,883 @@
+Article pubs.acs.org/est
+
+Incorporating Local Land Use Regression And Satellite Aerosol Optical
+Depth In A Hybrid Model Of Spatiotemporal PM2.5 Exposures In The
+Mid-Atlantic States Itai Kloog,†,* Francesco Nordio,† Brent A. Coull,‡
+and Joel Schwartz† †
+
+Department of Environmental HealthExposure, Epidemiology and Risk
+Program, Harvard School of Public Health, Landmark Center 401 Park Drive
+West, Boston, Massachusetts 02215, United States ‡ Department of
+Biostatistics, Harvard School of Public Health, Boston, Massachusetts
+02215, United States ABSTRACT: Satellite-derived aerosol optical depth
+(AOD) measurements have the potential to provide spatiotemporally
+resolved predictions of both long and short-term exposures, but previous
+studies have generally shown moderate predictive power and lacked
+detailed high spatio- temporal resolution predictions across large
+domains. We aimed at extending our previous work by validating our model
+in another region with diﬀerent geographical and metrological
+characteristics, and incorporating ﬁne scale land use regression and
+nonrandom missingness to better predict PM2.5 concentrations for days
+with or without satellite AOD measures. We start by calibrating AOD data
+for 2000−2008 across the Mid-Atlantic. We used mixed models regressing
+PM 2.5 measurements against day-speciﬁc random intercepts, and ﬁxed and
+random AOD and temperature slopes. We used inverse probability weighting
+to account for nonrandom missingness of AOD, nested regions within days
+to capture spatial variation in the daily calibration, and introduced a
+penalization method that reduces the dimensionality of the large number
+of spatial and temporal predictors without selecting diﬀerent predictors
+in diﬀerent locations. We then take advantage of the association between
+grid-cell speciﬁc AOD values and PM2.5 monitoring data, together with
+associations between AOD values in neighboring grid cells to develop
+grid cell predictions when AOD is missing. Finally to get local
+predictions (at the resolution of 50 m), we regressed the residuals from
+the predictions for each monitor from these previous steps against the
+local land use variables speciﬁc for each monitor. “Out-of-sample”
+10-fold cross-validation was used to quantify the accuracy of our
+predictions at each step. For all days without AOD values, model
+performance was excellent (mean “out-ofsample” R2 = 0.81, year-to-year
+variation 0.79−0.84). Upon removal of outliers in the PM2.5 monitoring
+data, the results of the cross validation procedure was even better
+(overall mean ”out of sample” R2 of 0.85). Further, cross validation
+results revealed no bias in the predicted concentrations (Slope of
+observed vs predicted = 0.97−1.01). Our model allows one to reliably
+assess shortterm and long-term human exposures in order to investigate
+both the acute and eﬀects of ambient particles, respectively. error, and
+likely biases the eﬀect estimates downward.14 In addition, a key
+limitation is that they are unable to produce estimates in locations
+without monitors nearby, and people who live in more densely populated
+areas are unlikely to be representative of those who do not. Land use
+(LU) regression exposure models are commonly used in health studies, yet
+since the LU terms are generally not time varying, their temporal
+resolution tends to be limited, and based on the spatial resolution of
+the available PM 2.5 monitoring network.15−18 Land use terms capture
+traﬃc and point sources, but spatial smoothing is required to capture
+variation in secondary aerosols. In addition the coeﬃcients of the land
+use terms are determined by land patterns around ambient monitoring
+stations, whose locations may be nonrepresentative of LU in general in
+the U.S. These same
+
+1. INTRODUCTION Fine Particulate Matter (PM) is a complex mixture of
+   particles primarily composed of sulfate (SO4), nitrates
+   (NO3),ammonium (NH4), elemental carbon (EC), organic compounds (OC),
+   and various metals.1 PM originates from a variety of stationary and
+   mobile sources and may be directly emitted (primary emissions) or
+   formed in the atmosphere by transformation of gaseous emissions
+   (secondary emissions). Multiple studies have demonstrated the
+   association between both short- and long-term exposures to PM2.5
+   (particulate matter that is 2.5 μm or smaller in diameter) and
+   adverse health eﬀects. Multiple health eﬀects have been shown
+   including asthma,2,3 cardiovascular problems,4,5 respiratory
+   infections,4,6 mortality7−9 and lower birth weights.10−13 This
+   adverse association has been demonstrated for a wide range of
+   concentration levels in various regions of the world, yet an
+   important limitation of most previous studies is that they all rely
+   upon a limited number of PM2.5 monitoring sites placed within the
+   study area. Because these sites do not measure individual-speciﬁc
+   exposure, this approach introduces exposure © 2012 American Chemical
+   Society
+
+Received: Revised: Accepted: Published: 11913
+
+July 3, 2012 September 24, 2012 September 26, 2012 September 26, 2012
+dx.doi.org/10.1021/es302673e | Environ. Sci. Technol. 2012, 46,
+11913−11921
+
+Environmental Science & Technology
+
+Article
+
+2. MATERIAL AND METHODS 2.1. Study Domain. The spatial domain of our
+   study included the Mid-Atlantic region in the U.S. comprising the
+   states of Delaware, Maryland, New Jersey, Pennsylvania, Washington
+   DC, Virginia, New York, and West Virginia (Figure 1). They cover an
+   area of 495 486 km2 and have a
+
+locations drive the spatial smoothing of LU. Hence extrapolation of
+predictions from these models to other areas involves error and may
+yield biased estimates of exposure. A further limitation of LU models is
+that they do not provide predictions for acute (short-term exposure)
+studies. Satellite data in general and particularly satellite derived
+aerosol optical depth (AOD) data provides another important tool for
+monitoring aerosols due to its large spatial coverage and reliable
+repeated physical measurements, particularly for areas and exposure
+scenarios where surface PM2.5 monitors are not available.19−22 We have
+recently published a novel hybrid method to predict daily temporally and
+spatially resolved PM2.5 across New England for the years 2000−2008.22
+These predictions, which are based on land use regression plus a daily
+calibration of PM2.5 ground measurements and MODIS (moderate resolution
+imaging spectroradiometer) satellite AOD, allow for the prediction of
+daily PM2.5 concentration levels at the resolution of a 10 × 10 km
+spatial grid. Model performance was excellent, even for days having no
+AOD data. 10-fold out-of-sample cross validation yielded a mean
+“out-ofsample” R2 of 0.81. By averaging our estimated daily exposures at
+each location we can generated long-term exposures. This enabled us to
+generate both the short-term and long-term eﬀects of ambient particles,
+respectively. We have used those estimates to assess the association of
+PM2.5 with both hospital admissions in New England and birth weight for
+all births in Massachusetts. Although our model performance was
+excellent, it is important to validate it in another region with
+diﬀerent geographical and meteorological characteristics. In addition,
+there is room for further methodological improvements in our model. For
+example, AOD data availability is much greater in the summer periods
+compared to the winter period. This is mostly due to heavily clouded
+days or snow cover in winter periods which results in missing AOD data.
+This nonrandom missingness of AOD readings could cause selection bias,
+which could in turn negatively aﬀect predictive performance.. Also,
+treating large areas, such as the Mid-Atlantic region of the United
+States, as one region can add additional bias since there may be
+geographic variations in the daily calibration between PM2.5 and AOD.
+Finally, land use regressions typically start with a large number of
+land use terms, and choose a subset by methods that risk overﬁtting and
+result in diﬀerent variable choices in diﬀerent models. In addition,
+space time interactions are rarely accommodated. Thus in this paper we
+extend our previous work in NewEngland by upgrading and validating our
+model using the MidAtlantic area in the eastern part of the U.S.
+Speciﬁcally, we developed and validated models to predict daily PM2.5 at
+a 10 × 10 km resolution and at local addresses across the Mid-Atlantic
+region for the years 2000−2008. We updated the model by adding inverse
+probability weights to account for missing days when AOD cannot be
+included in the primary analysis due to its missingness. We divided the
+Mid-Atlantic area into 7 regions based on the geography of the region
+and incorporate nested day-speciﬁc calibration of the AOD- PM2.5
+relation by region. Additionally we developed an approach that allows us
+to include all land use and meteorological variables and their
+interactions, with appropriate shrinkage back to their mean eﬀect by
+category (e.g., land use, temporal, and interaction).
+
+Figure 1. Map of the study area showing the full AOD grid, the regions
+and all PM2.5 monitor station across the Mid-Atlantic.
+
+population of 57 303 316.23 The Mid-Atlantic States include some of the
+largest metropolitan areas in the U.S. including, among others,
+Baltimore, Washington, Philadelphia, New York, Newark, and Pittsburgh.
+2.2. AOD Data. The Moderate Resolution Imaging Spectroradiometer (MODIS)
+sits aboard the Earth Observing System (EOS) satellites.24,25 The Terra
+and Aqua satellites were launched in December 18, 1999 and in May
+fourth, 2002 respectively. The satellites are polar-orbiting satellites
+and operate at an altitude of approximately 700 km. Their sensors scan
+the swath of 2330 km (cross-track) by 10 km (along-track at nadir). For
+Terra, the local equatorial crossing time is approximately 10:30 a.m.
+while for Aqua it is 13:30 p.m. Both satellites perform measurements in
+the visible to thermal infrared spectrum region. One of the fundamental
+aerosol products from MODIS is spectral AOD (also known as aerosol
+optical thickness-AOT). MODIS level 2 ﬁles are produced daily, and
+represent the ﬁrst level of MODIS aerosol retrieval. Bands 1 through 7
+are devised to study aerosols, and a number of other bands help with
+cloud rejection and other screening procedures. The aerosol algorithm
+relies on calibrated, geolocated reﬂectance Level 1B data.25 More
+details about MODIS satellite data have been reported.26,27 Daily data
+are freely available online through the NASA Web site.28 For the
+analysis presented here daily MODIS level 2 ﬁles from the Terra
+satellite for the years 2000− 2008 were used at the spatial resolution
+of 10 × 10 km at nadir. MODIS AOD pixel centroids constantly shift daily
+between orbits, thus we created a ﬁxed 10 × 10 km grid. Daily values of
+AOD were assigned to the grid cell where the AOD retrieval's centroid
+was located. Aqua satellite data was not used since it was only launched
+late 2002. Although there are other satellites that measure AOD, the
+MODIS satellite was used since it is the most validated (using AERONET),
+accessible and accurate data set available today.29 2.3. Monitoring
+Data. Data for daily PM2.5 mass concentrations across the Mid-Atlantic
+region (see Figure 1) 11914
+
+dx.doi.org/10.1021/es302673e | Environ. Sci. Technol. 2012, 46,
+11913−11921
+
+Environmental Science & Technology
+
+Article
+
+In our prediction models we accommodate the two most common data types
+in health studies: small area (census areas, postal code areas etc.)
+geocoded data (SAGD) and residencespeciﬁc latitude and longitude
+geocoded data (RGD). When using SAGD we use only our grid cell model (at
+a 10 × 10 km spatial resolution) while when RGD are available, we use a
+local land use regression component. To estimate PM2.5 concentrations in
+each grid cell on each day we run the prediction process in four stages.
+We ﬁrst summarize the stages here before presenting the regression model
+used at each stage. The Stage 1 model calibrates the AOD grid-level
+observations to the PM2.5 monitoring data collected within 10 km of an
+AOD reading by regressing PM2.5 monitoring data on AOD values and other
+predictors. Because the relationship between AOD and PM2.5 varies day to
+day (due to diﬀerences in mixing height, relative humidity, particle
+composition, vertical proﬁles, etc), this calibration is performed on a
+daily basis. Further, because the mid-Atlantic area of the U.S. is
+relatively large and this PM-AOD relationship can vary spatially, we
+partitioned mid-Atlantic study area is divided into seven regions and
+assumed this calibration additionally varied by region. In Stage 2 we
+predict PM2.5 concentrations in grid cells without monitors but with
+available AOD measurements using the Stage 1 ﬁt. This is achieved by
+simply applying the estimated prediction equation obtained from the
+model ﬁt in Stage 1 to these additional AOD values. In Stage 3, to
+estimate PM2.5 concentrations in cells where no AOD data is missing, we
+ﬁt a model that uses predicted levels of PM2.5 from Stage 2 and spatial
+associations among PM2.5 levels on a given day to estimate daily PM2.5
+in cells not having AOD on a given day. These ﬁrst three steps are
+applied to the data at the 10 × 10 km grid cell level. To calculate the
+local PM2.5 concentrations in studies using RGD, we take the residuals
+of the Stage 3 model at each monitoring site and regress them against
+local (50 m buﬀer) LU terms at each monitor. The ﬁtted values from this
+local regression stage are then added back to the grid-level predictions
+obtained in Stage 3 to produce residence-level predictions. 2.6.1. Stage
+1. The base model (Stage 1) consists of a mixed model that regresses
+PM2.5 monitoring data on grid-level AOD values, temperature, and other
+land-use regression terms. To perform this PM2.5-AOD calibration on a
+day-speciﬁc and region-speciﬁc basis, the coeﬃcients in this model were
+assumed to be random eﬀects, meaning these terms vary across the
+population of days and regions according to some random distribution.
+These day-region terms are nested, such that a coeﬃcient for a given
+region-day combination varies randomly around an overall coeﬃcient
+speciﬁc to that day, which itself varies across the entire population of
+days in which AOD is available. This structure is assumed for the
+intercepts, AOD slopes, and temperature slopes in the model. In
+addition, a moderately large number of additional spatial, temporal
+(daily), and spatiotemporal predictors are included as predictors in the
+PM2.5 model. Because use of many predictors can lead to overﬁtting and
+lack of precision of the resulting estimates, we allow the eﬀect of each
+variable to be unique but shrink groups of these eﬀects back to a common
+mean, which represents a form of regularization, or penalization, of the
+resulting coeﬃcients that can stabilize estimation and avoid overﬁtting.
+We group these coeﬃcients into the spatial terms, the temporal terms,
+and the spatiotemporal terms, and shrink each set of coeﬃcients back
+toward a mean for each of these three groups of variables. The shrinkage
+is accomplished by
+
+for the years 2000−2008 were obtained from the U.S. Environmental
+Protection Agency (EPA) Air Quality System (AQS) database as well as the
+IMPROVE (Interagency Monitoring of Protected Visual Environments)
+network. IMPROVE monitor sites are located in national parks and
+wilderness areas while EPA monitoring sites are located across the
+Mid-Atlantic including urban areas such as New York city, Washington,
+DC, Baltimore, etc. There were 161 monitors with unique locations
+operating in the Mid-Atlantic during the study period. The Mean PM2.5
+across the Mid-Atlantic during the study period was 13.59 μg/m3 with a
+standard deviation of 8.52 μg/m3 and a 10.10 μg/m3 interquartile range
+(IQR). 2.4. Spatial Predictors of PM2.5. The available spatial
+predictors for our model were percent of open space, population density,
+elevation, traﬃc density, PM2.5 point emissions and area-source PM2.5
+emissions. 2.4.1. Percent of Open Spaces. Percent of open spaces data
+were obtained through the 2001 national land cover data (NLCD)
+multiresolution land characteristics consortium (MRLC).30 Data were
+obtained as raster ﬁles with 30 m cell size. Percent of open space
+included all areas such as parks, forestry, golf courses, and vegetation
+planted in developed settings for recreation, erosion control, or
+aesthetic purposes. 2.4.2. Elevation. Elevation data were obtained
+through the national elevation data set (NED).31 NED is distributed by
+the U.S. Geological Survey (USGS) and provides seamless raster elevation
+data of the conterminous United States. The NED is released in
+geographic coordinates at a resolution of 1 arc sec. 2.4.3. Traﬃc
+Density. Road data were obtained through the U.S. census 2000
+topologically integrated geographic encoding and referencing system
+(TIGER)32. We calculated the total A1 road length (class 1 roads that
+are hard surface highways including Interstate and U.S. numbered
+highways, primary State routes, and all controlled access highways)
+across the MidAtlantic. The A1 roads were intersected with the 10 × 10
+grid cell and the resulting attribute tables contained the density of
+all A1 road segment lengths in the 10 km grid. 2.4.4. PM 2.5 Point
+Emissions. PM2.5 point emissions were obtained through the 2005 U.S.
+Environmental Protetion Agency (USEPA) National Emissions Inventory
+(NEI) facility emissions report.33 Because the distributions of point
+source emissions were highly right-skewed, the emission values were log
+transformed. Locations reporting zero emissions within the appropriate
+grid were assigned a value of one-half of the minimum value among all
+monitoring locations. 2.4.5. Area-Source PM2.5 Emissions. Area-source
+PM2.5 emissions data were obtained through the 2005 USEPA-NEI tiered
+emissions reports,33 which provide estimates of total area-source
+emissions of PM2.5 by county and year. Intersecting source emission
+areas for each 10 × 10 km grid were weight averaged and similarly
+log-transformed. 2.5. Temporal Predictors of PM2.5. 2.5.1. Meteorologic
+Data. All meteorological variables used in the analysis (temperature,
+wind speed, visibility and relative humidity) were obtained through the
+national climatic data center (NCDC).34 Only continuous operating
+stations with daily data running from 2000 to 2008 were used (26
+stations). Grid cells were matched to the closest weather station for
+meteorological variables. 2.6. Statistical Methods. All modeling was
+done using the R statistical software version 2.15.0 and SAS
+(Statistical Analysis System) version 9.3. 11915
+
+dx.doi.org/10.1021/es302673e | Environ. Sci. Technol. 2012, 46,
+11913−11921
+
+Environmental Science & Technology
+
+Article
+
+treating the coeﬃcient of each variable as a random slope, and shrinking
+coeﬃcient back to the group-speciﬁc mean. We standardize each of these
+variables to have standard deviation 1. Therefore, this mean coeﬃcient,
+represented in the model as a ﬁxed eﬀect, represents the mean eﬀect on
+PM2.5, averaged across the variables in that group of covariates. In the
+ﬁnal model we leave only the random slopes for the spatiotemporal terms
+since the separate spatial and temporal terms have a relatively small
+number of covariates and were not statistically signiﬁcant. However, we
+present the full model here for cases in which more predictors are
+candidates for inclusion in the model. Taken all together, the ﬁrst
+stage of the model can be written as follows:
+
+where (p) is the probability of AOD availability on each day in each
+grid cell in each year. We then use the inverse probability weights in
+the above mixed model. There were no observations which had a
+disproportionate inﬂuence in the yearly models.
+
+⎛1⎞ IPW = ⎜ ⎟ ⎝ p̂ ⎠ The Stage 1 model was ﬁt to data from each year
+(2000− 2008) separately. To validate the ﬁrst stage of our model, the
+data set was repeatedly randomly divided into 90% and 10% splits.
+Predictions for the held-out 10% of the data were made from the model ﬁt
+of the remaining 90% of the data. This “out of sample” process was
+repeated ten times and cross-validated (CV) R2 values were computed. To
+check for bias we regressed the measured PM2.5 values against the
+predicted values in each held out site on each day. Overall temporal R2
+was calculated by regressing Delta PM against Delta predicted where:
+Delta PM is the diﬀerence between the observed PM2.5 at a given site on
+a given day and the annual mean PM2.5 at that location, and Delta
+predicted is deﬁned similarly for the predicted values generated from
+the model. Overall spatial R2 was calculated by regressing the annual
+mean PM2.5 at a given site against the annual mean predicted PM2.5 at
+that location. We also tested the model performance (CV) for a test year
+(2001) without including AOD (only MET and LU variables were regressed
+against PM2.5 with a random intercept by date and a random slope for
+temperature) and by using a traditional kriging method. 2.6.2. Stage 2.
+The next stage (Stage 2), uses the ﬁt of the Stage 1 model to predict a
+PM2.5 concentration for each day and grid at which we have an observed
+AOD value. This resulted in yearly data sets with PM2.5 prediction for
+all dayAOD cell available combinations yet still no predictions in
+daycell combinations with missing AOD data. 2.6.3. Stage 3. In Stage 3
+of the model, we estimated daily PM2.5 concentration levels for all grid
+cells in the study domain for days when AOD data were unavailable. Using
+the PM2.5 predictions obtained from the ﬁrst stage of the model as the
+response, we ﬁt a model containing a smooth function of latitude and
+longitude (of the grid cell centroid) and a random intercept for each
+cell. This is similar to universal kriging, extended to include the mean
+of the PM2.5 monitors on that day (the average PM2.5 concentrations
+measured at all the available PM2.5 monitors in the region on each day)
+and random cell-speciﬁc slope. To allow for temporal variations in the
+spatial correlation, a separate spatial surface was ﬁt for each
+two-month period of each year. Using this method provides additional
+information about the concentration in the missing grid cells that
+simple kriging would not. Speciﬁcally this stage (Stage 3) ﬁts the
+following semiparametric regression model:
+
+PMij = (α + u j +gj(reg)) + (β1 + vj + hj(reg))AODij 3
+
+-  (β2 + k j)Temperatureij +
+
+∑ γ1mX1mi m=1
+
+6
+
+-  
+
+18
+
+∑ γ2mX 2mj + ∑ γ3mX3mij + εij m=1
+
+m=1
+
+(u jvjk j) ∼ N[(000), Σ] (gj(reg), hj(reg)) ∼ N[(00), Σ REG]
+(γ11,...γ1,3) ∼ N[γ1, σ 21] (γ21,...γ2,6) ∼ N[γ2 , σ 2 2]
+
+(γ31,...γ3,18) ∼ N[γ2 , σ 2 3]
+
+where PMij is the measured PM2.5 concentration at a spatial site i on a
+day j; α and uj are the ﬁxed and random day-speciﬁc intercepts,
+respectively, AODij is the AOD value in the grid cell corresponding to
+site i on a day j; β1 and vj are the ﬁxed and random day-speciﬁc slopes,
+respectively. Temperatureij is the temperature value in the grid the
+cell corresponding to site i on a day j (β2 and kj are the ﬁxed and
+random slopes for temperature). X1mi is the value of the mth spatial
+predictor at site i, X2mj is the value of the mth temporal predictor on
+day j, and X1mij is the value of the mth spatial-temporal predictor at
+site i on day j. gj(reg) and hj(reg) are the daily random intercepts and
+AOD slopes speciﬁc to each study area region. Here, we assume Σ is a 3 ×
+3 diagonal matrix with diagonal elements σ2u, σ2v, σ2k, and ΣREG is a 2
+× 2 diagonal matrix with diagonal elements σ2g, σ2h. Second, to
+accommodate the fact that daily AOD data missingness is not random, the
+ﬁrst-stage model incorporated inverse probability weighting (IPW) to
+potentially avoid bias in the regression coeﬃcient estimates and thus in
+the resulting predictions. This approach eﬀectively up-weights dates and
+grid cells which are under-represented due to a large degree of missing
+data. To obtain the weights that account for the nonrandom missingness
+in AOD values, we ﬁt the following model for the probability (p) of
+observing an AOD value in cell i on day j, ﬁt separately from the Stage
+1 model:
+
+PredPMij = (α + u i) + (β1 + v)MPM i j + Smooth (X, Y)k(j) + εij
+
+(u jvj) ∼ [(00), Ωβ]
+
+where PredPMij is the predicted PM2.5 concentration at a spatial site i
+on a day j from the second stage model; MPMj is the mean PM in the
+relevant region on a day j; α and ui are the ﬁxed and grid-cell speciﬁc
+random intercepts, respectively; β1 and vi are the ﬁxed and grid-cell
+speciﬁc random slopes, respectively. The smooth X,Y is a thin plate
+spline ﬁt to the
+
+⎛ p̂ ⎞ ln⎜ ⎟ = β0 + β1elevation i + β2 sea line pressureij ⎝ 1 − p̂ ⎠ +
+β3temperatureij + month 11916
+
+dx.doi.org/10.1021/es302673e | Environ. Sci. Technol. 2012, 46,
+11913−11921
+
+Environmental Science & Technology
+
+Article
+
+Figure 2. Scatter map of the AOD-PM relationship before and after the
+calibration.
+
+Table 1. Prediction Accuracy: Ten-Fold Cross Validated R2 for PM2.5
+Stage 1 Predictions (Calibration Stage for 2000-2008) yearly data set
+
+CV R2
+
+2000 2001 2002 2003 2004 2005 2006 2007 2008 mean 2000−2008
+
+0.83 0.81 0.79 0.86 0.81 0.78 0.84 0.82 0.76 0.81
+
+intercepta 0.23 0.42 0.52 −0.15 0.19 −0.11 0.26 0.06 0.01
+
+± ± ± ± ± ± ± ± ±
+
+0.10 0.09 0.11 0.10 0.10 0.12 0.09 0.09 0.11
+
+slopea 0.98 0.97 0.97 1.01 0.99 1.01 0.98 1.00 1.00
+
+± ± ± ± ± ± ± ± ±
+
+CV R2
+
+0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01 0.01
+
+spatial
+
+0.73 0.69 0.77 0.74 0.70 0.69 0.76 0.82 0.74 0.74
+
+CV R2
+
+temporal
+
+0.84 0.82 0.79 0.87 0.82 0.80 0.85 0.82 0.76 0.82
+
+RMSPEb 1.57 1.35 1.30 1.50 1.50 1.70 1.22 1.08 1.20 1.38
+
+μg/m3 μg/m3 μg/m3 μg/m3 μg/m3 μg/m3 μg/m3 μg/m3 μg/m3 μg/m3
+
+Presented as parameter estimate ± SE from linear regression of held-out
+observations versus predictions. bRoot of the mean squared prediction
+errors. a
+
+residuals, and εij is the error. In contrast to Stage 1, where land use
+terms were grid cell averages, for this model land use terms were all
+computed for a 50 m radius about the monitor, to capture local eﬀects.
+The models used cubic penalized splines within a mixed model framework,
+as implemented in the GAMM function in R. We used the default amount of
+smoothing for each nonlinear term in the model. We calculated prediction
+errors for the spatial components in each stage (to be comparable to all
+previous available model which do not have daily measurements) by
+subtracting retained observations from the model predictions. We
+estimated the model prediction precision by taking the square root of
+the mean squared prediction errors (RMSPE).35
+
+latitude and longitude, k(j) denotes the two-month period in which day j
+falls (that is, a separate spatial smooth was ﬁt for each two-month
+period). To estimate the goodness of ﬁt, we dropped “all observations”
+at a particular site each time (ten times and taking out 10% of speciﬁc
+monitors). Then the cross validation was performed against PM2.5
+stations that were left out altogether from the analysis. This “out of
+sample” process was repeated ten times and CV R2 values were computed.
+2.6.4. Stage 4. Finally, for cases in which health outcomes are resolved
+to the speciﬁc longitude and latitude for a given study subject
+residence, we ﬁt a local PM stage (Stage 4) that takes the residuals
+constructed by taking the diﬀerence between a given monitored PM2.5
+concentration and the 10 × 10 km grid prediction from Stage 3 for the
+grid in which that monitor is located, and regresses these residuals on
+location-speciﬁc predictors of pollution. Speciﬁcally, we ﬁt the
+following model
+
+3. RESULTS Figure 2 presents a scatter plot of the AOD-PM2.5
+   relationship before (Figure 2a) and after (Figure 2b) the Stage 1
+   calibration showing the signiﬁcant ﬁt improvement gained by
+   calibrating with our Stage 1 model. Table 1 presents the results from
+   the Stage 1 analysis. The yearly models all presented very good
+   out-of-sample predictive performance for each year and the entire
+   study period, with a mean out of sample R2 of 0.81 (year to year
+   variation 0.76− 0.86), and as expected a highly signiﬁcant
+   association between PM2.5 and the main explanatory variable-AOD
+   (Table 1). In addition the Stage 1 results revealed that adding the
+   IPW in the model greatly reduced the bias in our cross validation
+   results (Slope of observed vs predicted = 0.97−1.01).
+
+residPMij = f1 (traffic densityi, population density) i + f2
+(elevationi) + f3 (percent urba) + f 4(distance to A1 roadi) + +f5
+(distance to point emissions j) + εij
+
+where ResidPMij is the residual at a spatial monitor site i on day j; f1
+denotes a penalized spline for an interaction between traﬃc density and
+population density;, f 2 − f5 denote (potentially nonlinear) eﬀects of
+elevation, percent urbanicity, distance to A1 road, and distance to
+point emissions, respectively, on these 11917
+
+dx.doi.org/10.1021/es302673e | Environ. Sci. Technol. 2012, 46,
+11913−11921
+
+Environmental Science & Technology
+
+Article
+
+The spatial and temporal out of sample results also presented very good
+ﬁts to the held out data (Table 1): For the temporal model the mean out
+of sample R2 was 0.82 (year to year variation 0.76−0.87) and for the
+spatial model the mean out of sample R2 was 0.74 (year to year variation
+0.69−0.82). The results for the 2001 test models excluding AOD, showed
+that using standard LU regression models (LU+MET) results in much lower
+CV predictive power (R2 = 0.67 compared to 0.81 in our AOD models).
+Using traditional Kriging methods our predictive R2 was even lower
+(0.53). These results indicate that by using the AOD measurements we can
+improve our model ﬁt quite signiﬁcantly. The results of the 2001 test
+model without the weights revealed an R2 of 0.79 which is almost 2% less
+than the model with the weights. Also the bias increases a bit without
+the weights (slope of 0.96 vs 0.97 with the weights). The Stage 3 models
+are presented in Table 2. All models performed well with a mean out of
+sample R2 of 0.81 (year to Table 2. Prediction Accuracy: Ten-Folds Cross
+Validated R2 for Stage 3 PM2.5 Predictions (Final Prediction Model
+Including Locations Without AOD for 2000−2008)
+
+a
+
+yearly data set
+
+CV R2
+
+2000 2001 2002 2003 2004 2005 2006 2007 2008 mean 2000−2008
+
+0.79 0.83 0.85 0.82 0.80 0.80 0.83 0.83 0.78 0.81
+
+CV R2
+
+CV R2 spatial
+
+temporal
+
+0.76 0.80 0.72 0.80 0.75 0.83 0.80 0.80 0.80 0.78
+
+0.79 0.83 0.85 0.82 0.81 0.80 0.84 0.83 0.78 0.82
+
+Figure 3. Mean PM2.5 concentrations in each 10 × 10 km grid during the
+entire modeling period (2000−2008) predicted by the AOD models.
+
+Metropolitan area while ﬁgure 4b presents the city of New York.
+
+RMSPEa 1.31 1.22 1.17 1.05 1.14 1.13 1.04 0.88 0.88 1.09
+
+μg/m3 μg/m3 μg/m3 μg/m3 μg/m3 μg/m3 μg/m3 μg/m3 μg/m3 μg/m3
+
+4. DISCUSSION In this paper we examined the relationship between PM2.5
+   ground measurements and MODIS AOD data in the Mid Atlantic during the
+   period 2000−2008. This study is an extension of our previous study22
+   which we wanted to validate in a diﬀerent region with diﬀerent
+   geographic and climatic characteristics. In addition, in the new
+   model we introduce some signiﬁcant methodological improvements in a
+   few key areas. First, by adding IPW into the ﬁrst stage calibration,
+   we addressed the issue of selection bias. To account for the varying
+   region characteristics (since the Mid-Atlantic area is a very large
+   area) we divided the Mid-Atlantic into seven regions and incorporate
+   them as nested regions within days in the model. This allowed us to
+   better address the diﬀerent spatial-temporal individual
+   characteristics of each separate region and resulted in better
+   predictive performance. Also importantly, we improved on how the
+   diﬀerent LU and MET (Meteorologic) variables were treated in the
+   model by developing aggregate LU and MET variables (and all their
+   interactions) combining all available LU/MET variables which allow us
+   to include all available spatial and temporal predictors, and shrink
+   them back toward their respective aggregates, instead of stepwise
+   approaches. This helped eliminate the problems of only choosing a
+   subset of available LU/MET terms (often decided subjectively by
+   diﬀerent researchers) and also helped improve prediction performance.
+   It is important to emphasize that the predictions of our models
+   perform signiﬁcantly better than other prediction models which
+   assumed that the relationship between PM2.5 and MODIS AOD data
+   remains constant over time and much better than models using LU
+   regression alone.16,36−38 The use of daily measurements of AOD (as
+   opposed to other models) allows better assessment of space-time
+   interactions than models that only have spatially resolved time
+   invariant LU terms, since we have actual daily spatial measurements
+   that can show diﬀerences in short-term particle concentrations
+   between grid cells. This allows us to use the model to make
+   predictions for studies of the acute eﬀects (short-term) of air
+   pollution as well
+
+Root of the mean squared prediction errors .
+
+year variation 0.78−0.85), which is relatively high considering that
+these were days with neither ground PM data nor satellite AOD data in
+the grid cells being predicted. Again the spatial and temporal out of
+sample results were very good (Table 3): For the temporal model the mean
+out of sample R2 was 0.83 (year to year variation 0.79−0.85) and for the
+spatial model the mean out of sample was 0.73 (year to year variation
+0.68− 0.77). Both the Stage 1 and Stage 3 models yielded very small
+predictions errors (RMSPE, root of the mean squared prediction errors):
+1.09 and 1.38 μg/m3 respectively, indicating a strong model performance.
+Figure 3 shows the spatial pattern of predicted PM2.5 concentrations
+from the AOD models, averaged over the entire study period. Mean
+predicted PM2.5 concentrations range from 6.48 to 20.80 μg/m3 showing a
+good range of variability for our model. As expected, predicted PM2.5
+concentrations are higher in urban areas such as New York, etc. compared
+to rural areas such as in upper New York. Increased concentrations along
+major interstate highways are also clear. By incorporating the local
+stage (Stage 4) we see an increase of 1.9% across all years in mean
+prediction performance (R2) of the model (compared to the without the
+local PM stage). Figure 4 shows the diﬀerence of the estimated local
+pollution (Stage 4) from the average PM2.5 concentrations at a very ﬁne
+resolution (200 × 200m). Figure 4a presents the Baltimore 11918
+
+dx.doi.org/10.1021/es302673e | Environ. Sci. Technol. 2012, 46,
+11913−11921
+
+Environmental Science & Technology
+
+Article
+
+Figure 4. Diﬀerence of the estimated local pollution from the average
+overall annual PM2.5 concentrations at a very ﬁne resolution (200 × 200
+m). Panel a presents the Baltimore Metropolitan area, whereas Panel b
+presents the city of New York.
+
+than a selective sample from urban locations as commonly done in current
+epidemiological studies. Studies looking into the association between PM
+2.5 and mortality, reduced birth weight etc. thus could greatly beneﬁt
+from our models for both chronic and acute eﬀects. The main limitation
+of the present study is the relatively coarse spatial resolution of 10 ×
+10 km obtained through the MODIS satellite. However, as satellite remote
+sensing evolves, higher spatial resolution data, for example, 1 × 1 km,
+should become available which will further reduce exposure error. We
+address this limitation somewhat by using our fourth stage model (the
+local PM step for RGD) where we generate local predictions at individual
+addresses. Another limitation is the lack of data on the composition of
+AOD particles. Future analysis may allow us to develop exposure
+estimation for speciﬁc PM components and other pollutants. In summary,
+we have clearly demonstrated how AOD can be used reliably to predict
+daily PM2.5 mass concentrations in the Mid-Atlantic area, validating our
+previous model in another area. We have also shown how our model
+improves further by adding methodological improvements, allowing us to
+address some of the shortcoming of the ﬁrst iteration of the model.
+Importantly, our model allows us to assess short-term and longterm human
+exposures in order to investigate both the acute and eﬀects of ambient
+particles, respectively.
+
+as chronic (long-term) eﬀects, as well as for studies that attempt to
+capture both eﬀects. Multiple studies in recent years have presented
+models predicting PM2.5 including some that have established
+quantitative relationships between satellite-derived AOD and
+PM2.5.35,39−41 However, all these previous models present either
+moderate predictive power, or lack detailed high spatial and temporal
+resolution predictions across large domains. For example, Yanosky and
+colleagues35 developed PM2.5 models which included smooth spatial and
+regression terms of GIS and meteorological predictors. The predictive
+performance was good (CV R2 0.77−0.69) and their model only generates
+monthly predictions. Our model in comparison generates daily predictions
+with a higher predicative performance (CV R2 0.79−0.84). It is important
+to note that we noticed a small group of outliers in our data with
+extremely high PM2.5 values corresponding to days with low AOD values.
+Upon close investigation of these outliers we found that they were are
+all centered around the major Mid-Atlantic Highway (the I-95) where the
+relatively coarse 10 × 10 km grid cell for AOD cannot always capture
+highly polluted days around the highway. The results of the cross
+validation results without these outliers are much better (overall mean
+out of sample R2 of 0.85 vs 0.82 with the outliers). On most days, our
+model performs well in these locations, and we speculate these outlier
+days are due to a low level inversion, which our model does not capture.
+We will try to address this in the future by obtaining and incorporating
+the height of the boundary layer data into our models. Our model could
+be applied in various disciplines, particularly in epidemiology. Our
+PM2.5 exposure model allows us to gain spatial resolution in the acute
+eﬀects and an assessment of long-term eﬀects in the entire population,
+rather
+
+■
+
+AUTHOR INFORMATION
+
+Corresponding Author
+
+*E-mail: ekloog@hsph.harvard.edu. Notes
+
+The authors declare no competing ﬁnancial interest. 11919
+
+dx.doi.org/10.1021/es302673e | Environ. Sci. Technol. 2012, 46,
+11913−11921
+
+Environmental Science & Technology
+
+■
+
+Article
+
+17) Gryparis, A.; Paciorek, C. J.; Zeka, A.; Schwartz, J.; Coull, B. A.
+    Measurement error caused by spatial misalignment in environmental
+    epidemiology. Biostatistics 2009, 10, 258−74.
+18) Yanosky, J. D.; Paciorek, C. J.; Suh, H. H. Predicting chronic fine
+    and coarse particulate exposures using spatiotemporal models for the
+    Northeastern and Midwestern United States. Environ Health Perspect
+    2009, 117, 522−9.
+19) Engel-Cox, J. A.; Holloman, C. H.; Coutant, B. W.; Hoff, R. M.
+    Qualitative and quantitative evaluation of MODIS satellite sensor
+    data for regional and urban scale air quality. Atmos. Environ. 2004,
+    38, 2495−2509.
+20) Gupta, P.; Christopher, S. A.; Wang, J.; Gehrig, R.; Lee, Y. C.;
+    Kumar, N. Satellite remote sensing of particulate matter and air
+    quality assessment over global cities. Atmos. Environ. 2006, 40,
+    5880−5892.
+21) Koelemeijer, R. B. A.; Homan, C. D.; Matthijsen, J. Comparison of
+    spatial and temporal variations of aerosol optical thickness and
+    particulate matter over Europe. Atmos. Environ. 2006, 40, 5304−5315.
+22) Kloog, I.; Koutrakis, P.; Coull, B. A.; Lee, H. J.; Schwartz, J.
+    Assessing temporally and spatially resolved PM2.5 exposures for
+    epidemiological studies using satellite aerosol optical depth
+    measurements. Atmos. Environ. 2011, 45, 6267−6275.
+23) USCB United States Census Bureau of 2010. http://www.
+    census.gov/geo/www/tiger/index.html.
+24) King, M. D.; Kaufman, J. Remote sensing of cloud, aerosol, and water
+    vapor properties from the moderate resolution imaging spectrometer
+    (MODIS). IEEE Trans. Geosci. Remote Sens. 1992, 30.
+25) Salomonson, V. V.; Barnes, W. L.; Maymon, P. W.; Montgomery, H. E.;
+    Ostrow, H. MODIS-Advanced facility instrument for studies of the
+    earth as a system. IEEE Trans. Geosci. Remote Sens. 1989, 27,
+    145−153.
+26) Levy, R.; Remer, L.; Mattoo, S.; Vermote, E.; Kaufman, Y.
+    Second-generation operational algorithm: Retrieval of aerosol
+    properties over land from inversion of moderate resolution imaging
+    spectroradiometer spectral reflectance. J. Geophys. Res 2007, 112,
+    D.
+27) Remer, L. A.; Kaufman, Y. J.; Tanré, D.; Mattoo, S.; Chu, D. A.;
+    Martins, J. V.; Li, R.-R.; Ichoku, C.; Levy, R. C.; Kleidman, R. G.;
+    Eck, T. F.; Vermote, E.; Holben, B. N. The MODIS aerosol algorithm,
+    products, and validation. J. Atmos. Sci. 2005, 62, 947−973.
+28) NASA MODIS- Moderate Resolution Imaging Spectroradiometer 2012.
+29) Remer, L. A.; Kaufman, Y. J.; Tanré, D.; Mattoo, S.; Chu, D. A.;
+    Martins, J. V.; Li, R.-R.; Ichoku, C.; Levy, R. C.; Kleidman, R. G.;
+    Eck, T. F.; Vermote, E.; Holben, B. N. The MODIS aerosol algorithm,
+    products, and validation. J. Atmos. Sci. 2005, 62, 947−973.
+30) Homer, C.; Huang, C.; Yang, L.; Wylie, B.; Coan, M. Development of a
+    2001 national landcover database for the United States. Photogramm.
+    Eng. Remote Sens. 2004, 70, 829−840.
+31) Maune, D. Digital Elevation Model Technologies and Applications: The
+    DEM Users Manual; American Society for Photogrammetry and Remote
+    Sensing: Maune, DF, 2007.
+32) TIGER Topologically Integrated Geographic Encoding and Referencing
+    system, 2006.
+33) National Emissions Inventory; U.S. Environmental Protection Agency:
+    Washington, DC, 2010.
+34) NCDC The national climatic data center data inventories 2010.
+35) Briggs, D. J.; de Hoogh, C.; Gulliver, J.; Wills, J.; Elliott, P.;
+    Kingham, S.; Smallbone, K. A regression-based method for mapping
+    traffic-related air pollution: Application and testing in four
+    contrasting urban environments. Sci. Total Environ. 2000, 253,
+    151−67.
+36) Gryparis, A.; Paciorek, C. J.; Zeka, A.; Schwartz, J.; Coull, B. A.
+    Measurement error caused by spatial misalignment in environmental
+    epidemiology. Biostatistics 2009, 10, 258−74.
+37) Ryan, P. H.; Lemasters, G. K.; Levin, L.; Burkle, J.; Biswas, P.;
+    Hu, S.; Grinshpun, S.; Reponen, T. A land-use regression model for
+    estimating microenvironmental diesel exposure given multiple
+    addresses from birth through childhood. Sci. Total Environ. 2008,
+    404, 139−47.
+
+ACKNOWLEDGMENTS Supported by the Harvard Environmental Protection Agency
+(EPA) Center Grant USEPA grant RD 83479801 and NIEHS ES-000002. We also
+thank Dr. William L Ridgway, Science Systems and Applications, Inc.
+Climate and Radiation Branch, Code 613.2, NASA Goddard Space Flight
+Center, Greenbelt, MD 20771 and Steven J Melly, department of
+environmental health, Harvard school of public health, Harvard
+University.
+
+■
+
+REFERENCES
+
+1)  Seinfeld, J. H.; Pandis, S. N. Atmospheric Chemistry and Physics:
+    From Air Pollution to Climate Change; Wiley-Interscience, 1998.
+2)  Sheppard, L.; Levy, D.; Norris, G.; Larson, T. V.; Koenig, J. Q.
+    Effects of ambient air pollution on nonelderly asthma hospital
+    admissions in Seattle, Washington, 1987−1994. Epidemiology 1999,
+    23−30.
+3)  Schwartz, J.; Slater, D.; Larson, T. V.; Pierson, W. E.; Koenig, J.
+    Q. Particulate air pollution and hospital emergency room visits for
+    asthma in Seattle. Am. J. Respir. Crit.l Care Med. 1993, 147,
+    826−831.
+4)  Kloog, I.; Coull, B. A.; Zanobetti, A.; Koutrakis, P.; Schwartz, J.
+    D. Acute and chronic effects of particles on hospital admissions in
+    newEngland. PloS one 2012, 7, e34664.
+5)  Wellenius, G. A.; Bateson, T. F.; Mittleman, M. A.; Schwartz, J.
+    Particulate air pollution and the rate of hospitalization for
+    congestive heart failure among medicare beneficiaries in Pittsburgh,
+    Pennsylvania. Am J Epidemiol 2005, 161, 1030−6.
+6)  Zanobetti, A.; Franklin, M.; Koutrakis, P.; Schwartz, J. Fine
+    particulate air pollution and its components in association with
+    causespecific emergency admissions. Environ Health 2009, 8, 58.
+7)  Dockery, D.; Pope, C.; Xu, X.; Spengler, J.; Ware, J.; Fay, M.;
+    Ferris, B.; Speizer, F. An association between air pollution and
+    mortality in six US cities. N. Engl. J. Med. 1993, 329, 1753−1759.
+8)  Franklin, M.; Zeka, A.; Schwartz, J. Association between PM2. 5 and
+    all-cause and specific-cause mortality in 27 US communities. J.
+    Exposure Sci. Environ. Epidemiol. 2006, 17, 279−287.
+9)  Pope, C., III; Burnett, R.; Thun, M.; Calle, E.; Krewski, D.; Ito,
+    K.; Thurston, G. Lung cancer, cardiopulmonary mortality, and
+    longterm exposure to fine particulate air pollution. JAMA, J. Am.
+    Med. Assoc. 2002, 287, 1132−1141.
+10) Bonzini, M.; Carugno, M.; Grillo, P.; Mensi, C.; Bertazzi, P. A.;
+    Pesatori, A. C. Impact of ambient air pollution on birth outcomes:
+    Systematic review of the current evidences. La Medicina del lavoro
+    2010, 101, 341.
+11) Morello-Frosch, R.; Jesdale, B. M.; Sadd, J. L.; Pastor, M.; et al.
+    Ambient air pollution exposure and full-term birth weight in
+    California. Environ. Health 2010, 9, 44−44.
+12) Kloog, I.; Melly, S. J.; Ridgway, W. L.; Coull, B. A.; Schwartz, J.
+    D. Using New Satellite Based Exposure Methods to Study the
+    Association Between Pregnancy PM 2.5 Exposure, Premature Birth And
+    Birth Weight In Massachusetts. Environ. Health 2012.
+13) Ritz, B.; Yu, F.; Chapa, G.; Fruin, S. Effect of air pollution on
+    preterm birth among children born in Southern California between
+    1989 and 1993. Epidemiology 2000, 11, 502.
+14) Zeger, S. L.; Thomas, D.; Dominici, F.; Samet, J. M.; Schwartz, J.;
+    Dockery, D.; Cohen, A. Exposure measurement error in time-series
+    studies of air pollution: Concepts and consequences. Environ Health
+    Perspect 2000, 108, 419−26.
+15) Ross, Z.; English, P. B.; Scalf, R.; Gunier, R.; Smorodinsky, S.;
+    Wall, S.; Jerrett, M. Nitrogen dioxide prediction in Southern
+    California using land use regression modeling: Potential for
+    environmental health analyses. J. Exposure Sci. Environ. Epidemiol.
+    2006, 16, 106−14.
+16) Aguilera, I.; Sunyer, J.; Fernández-Patier, R.; Hoek, G.;
+    AguirreAlfaro, A.; Meliefste, K.; Bomboi-Mingarro, M. T.;
+    Nieuwenhuijsen, M. J.; Herce-Garraleta, D.; Brunekreef, B.
+    Estimation of outdoor NOx, NO2, and BTEX exposure in a cohort of
+    pregnant women using land use regression modeling. Environ. Sci.
+    Technol. 2007, 42, 815−821. 11920
+
+dx.doi.org/10.1021/es302673e | Environ. Sci. Technol. 2012, 46,
+11913−11921
+
+Environmental Science & Technology
+
+Article
+
+38) Yanosky, J. D.; Paciorek, C. J.; Suh, H. H. Predicting chronic fine
+    and coarse particulate exposures using spatio-temporal models for
+    the northeastern and midwestern US. Environ. Health Perspect. 2008.
+39) Yanosky, J. D.; Paciorek, C. J.; Schwartz, J.; Laden, F.; Puett, R.;
+    Suh, H. H. Spatio-temporal modeling of chronic PM10 exposure for the
+    Nurses' Health Study. Atmos. Environ. 2008, 42, 4047−4062.
+40) Liu, Y.; Paciorek, C. J.; Koutrakis, P. Estimating regional spatial
+    and temporal variability of PM2.5 concentrations using satellite
+    data, meteorology, and land use information. Environ Health Perspect
+    2009, 117, 886−892.
+41) Lee, H. J.; Liu, Y.; Coull, B. A.; Schwartz, J.; Koutrakis, P. A
+    novel calibration approach of MODIS AOD data to predict PM2.5
+    concentrations. Atmos. Chem. Phys 2011, 11, 7991−8002.
+
+11921
+
+dx.doi.org/10.1021/es302673e | Environ. Sci. Technol. 2012, 46,
+11913−11921
+
+

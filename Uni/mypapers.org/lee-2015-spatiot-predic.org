@@ -1,0 +1,767 @@
+Journal of Exposure Science and Environmental Epidemiology (2015), 1--8
+© 2015 Nature America, Inc. All rights reserved 1559-0631/15
+
+www.nature.com/jes
+
+ORIGINAL ARTICLE
+
+Spatiotemporal prediction of ﬁne particulate matter using
+high-resolution satellite images in the Southeastern US 2003--2011 Mihye
+Lee1, Itai Kloog2, Alexandra Chudnovsky3, Alexei Lyapustin4, Yujie
+Wang5, Steven Melly6, Brent Coull7, Petros Koutrakis1 and Joel Schwartz1
+Numerous studies have demonstrated that ﬁne particulate matter (PM2.5,
+particles smaller than 2.5 μm in aerodynamic diameter) is associated
+with adverse health outcomes. The use of ground monitoring stations of
+PM2.5 to assess personal exposure, however, induces measurement error.
+Land-use regression provides spatially resolved predictions but land-use
+terms do not vary temporally. Meanwhile, the advent of
+satellite-retrieved aerosol optical depth (AOD) products have made
+possible to predict the spatial and temporal patterns of PM2.5
+exposures. In this paper, we used AOD data with other PM2.5 variables,
+such as meteorological variables, land-use regression, and spatial
+smoothing to predict daily concentrations of PM2.5 at a 1-km2 resolution
+of the Southeastern United States including the seven states of Georgia,
+North Carolina, South Carolina, Alabama, Tennessee, Mississippi, and
+Florida for the years from 2003 to 2011. We divided the study area into
+three regions and applied separate mixed-effect models to calibrate AOD
+using ground PM2.5 measurements and other spatiotemporal predictors.
+Using 10-fold cross-validation, we obtained out of sample R2 values of
+0.77, 0.81, and 0.70 with the square root of the mean squared prediction
+errors of 2.89, 2.51, and 2.82 μg/m3 for regions 1, 2, and 3,
+respectively. The slopes of the relationships between predicted PM2.5
+and held out measurements were approximately 1 indicating no bias
+between the observed and modeled PM2.5 concentrations. Predictions can
+be used in epidemiological studies investigating the effects of both
+acute and chronic exposures to PM2.5. Our model results will also extend
+the existing studies on PM2.5 which have mostly focused on urban areas
+because of the paucity of monitors in rural areas. Journal of Exposure
+Science and Environmental Epidemiology advance online publication, 17
+June 2015; doi:10.1038/jes.2015.41 Keywords: empirical/statistical
+models; exposure modeling; particulate matter; personal exposure
+
+INTRODUCTION Since the Six Cities study,1 which showed a strong linear
+relationship between PM2.5 and mortality between cities that differed by
+pollution level, a body of literature has reported effects of PM2.5 on
+mortality and morbidity.2--4 In many of those studies, the PM2.5
+exposures were assessed by using concentration data obtained at a
+central monitoring site located in a jurisdiction or within a speciﬁed
+distance. However, this approach introduces information bias, and thus
+leads to attenuation of the magnitude of effects of air pollution or
+increases the variance of estimate.5--7 Many studies have attempted to
+address this issue and to produce PM2.5 concentrations for locations
+distant from the monitors.8--10 This includes predicting PM2.5 levels
+using regression models based on geographic covariates such as land-use
+regressions or geostatistical interpolation methods such as
+Kriging.8,11,12 However, predictions from a land-use regression are
+limited to longterm exposures for chronic health effects studies, since
+the geographic covariates are mostly not time varying.13 Moreover, if
+the amount of pollution due to a geographic predictor, for example,
+trafﬁc density, changes over time because of control
+
+technology, this is not easily incorporated into land-use regression.
+Geostatistical methods also have limitations because of the low density
+of monitoring stations, rendering the results unreliable especially in
+rural areas. Meanwhile, the aerosol optical depth (AOD) values from the
+Moderate-Resolution Imaging Spectroradiometer (MODIS) satellite provide
+daily measurements for the entire earth. AOD is a measure of particles
+in a column of air and is related to PM2.5.14 With the advent of a new
+processing algorithm called Multi-Angle Implementation of Atmospheric
+Correction (MAIAC),15 the spatial resolution of AOD has further improved
+from 10 × 10 km2 to 1 × 1 km2. Since the relationship between the AOD
+measurement and PM2.5 is affected by various factors such as the optical
+properties of particulates, mixing height, and humidity, which vary
+daily, we used a mixed-effect model with daily random slopes for daily
+calibration rather than a general regression. This provides better
+predictive performance than other studies using the satellite imagery
+for the PM2.5 prediction without daily calibration.16 In this paper, we
+used AOD satellite data and predictors such as meteorological variables,
+land-use regression, and spatial
+
+1 Exposure, Epidemiology, and Risk Program, Department of Environmental
+Health, Harvard School of Public Health, Boston, Massachusetts, USA;
+2Department of Geography and Environmental Development, Ben-Gurion
+University of the Negev, Beer Sheva, Israel; 3Department of Geography
+and Human Environment, Tel-Aviv University, Israel; 4GEST/ UMBC, NASA
+Goddard Space Flight Center, Baltimore, Maryland, USA; 5University of
+Maryland Baltimore County, Baltimore, Maryland, USA; 6Department of
+Epidemiology and Biostatistics, Drexel University School of Public
+Health, Philadelphia, Pensylvania, USA and 7Department of Biostatistics,
+Harvard School of Public Health, Boston, Massachusetts, USA.
+Correspondence: Dr. Mihye Lee, Exposure, Epidemiology and Risk Program,
+Department of Environmental Health, Harvard School of Public Health,
+Boston, MA, USA. Tel.: 617 998 1027. Fax: 617 384 8745. E-mail:
+mil724@mail.harvard.edu Received 8 January 2015; revised 8 April 2015;
+accepted 27 April 2015
+
+PM2.5 prediction using 1- km satellite data Lee et al
+
+2 smoothing to predict the daily concentration of PM2.5 at a 1-km2
+resolution across the Southeastern United States, including seven states
+of Georgia, North Carolina, South Carolina, Alabama, Tennessee,
+Mississippi, and Florida for the years 2003 to 2011.
+
+calculated for each 1-km grid cell. For the location of geographical
+predictors such as roads, major buildings, ports, airports, and water
+bodies, spatial data from ESRI Data & Maps 2004 were used (ArcGIS and
+ArcMap by Esri, Copyright Esri).
+
+DATA Ground Particulate Matter Measurements We obtained PM2.5 mass
+concentration data from Federal Reference Method monitors operated by
+the US Environmental Protection Agency (EPA) and monitors with a teﬂon
+ﬁlter in the Interagency Monitoring of Protected Visual Environments
+program for a total of 257 monitoring sites.
+
+METHODS Date Preparation
+
+Aerosol Optical Depth Data The MAIAC data were obtained from the
+National Aeronautics and Space Administration (NASA) at the resolution
+of 1 km2. AOD data were delivered by tiles, which is the unit of spatial
+domain of MODIS image with an area of 10 × 10° at the equator. Our study
+used tiles h00v03, h01v02, h01v03, h01v04, h02v02, and h02v03. The data
+include the latitude and longitude in the WGS84 coordinate system, the
+corresponding AOD values, and a quality ﬂag. We deleted AOD values
+higher than 1.5 likely reﬂecting cloud contamination and AOD values over
+water bodies since the water reﬂects light and affects the reliability
+of AOD readings. The AOD value which was the closest in distance within
+a 1- km buffer was assigned to each PM2.5 measurement. To compare the
+new MAIAC data at a 1- km2 resolution with the existing data at a 10-
+km2 resolution, we decided to use the existing AOD data that we had
+retained. For the years 2000 − 2010, MODIS level 2 ﬁles from the Earth
+Observing System Terra satellite were used to extract AOD values at a 10
+km × 10 -km resolution. Meteorological Data We downloaded weather data
+from the National Climatic Data Center (NCDC, 2010) website. Weather
+variables include temperature, relative humidity, wind speed,
+visibility, and sea level pressure in the form of the daily mean. A
+total of 144 weather stations were used and we assigned the weather
+readings based on the closest distance on a speciﬁc data. Normalized
+Difference Vegetation Index NASA provides normalized difference
+vegetation index (NDVI) data from the MODIS sensor. We aggregated NDVI
+measurements to a 1- km grid and a 1 month average. Speciﬁcally we used
+the Terra satellite product ID of MOD13A3. Height of Planetary Boundary
+Layer We obtained the daily height of planetary boundary layer (PBL)
+from the National Oceanic and Atmospheric Administration (NOAA)
+Reanalysis Data. The pixel resolution of PBL data was 32 × 32 km on a
+daily basis. To represent the daily PBL height, the 24-h mean was used.
+Land Use Variables Emissions of PM2.5, PM10, and NOx from point sources
+and county area level emissions, were downloaded from National Emission
+Inventory (NEI) data for 2005 from the website of the environmental
+protection agency (EPA 2005 NEI). To produce the percentage of urbanism
+for each satellite grid cell at 1-km2 resolution, we used the national
+land cover database for 2011 (NLCD 2011) data at 30-m resolution.17 We
+reclassiﬁed land cover codes 22 (developed, low intensity), 23
+(developed, medium intensity), and 24 (developed, high intensity) to 1
+as an urban cell and assigned 0 for the rest of codes. The mean of
+binary vales was Journal of Exposure Science and Environmental
+Epidemiology (2015), 1 -- 8
+
+For each day, we assigned the closest AOD readings within a 1-km buffer
+of PM monitors. We conﬁned our analysis to PM2.5 o 80 μg/m3 to eliminate
+inﬂuential outliers (25 observations among the total of 260,476 PM2.5
+measurements for 9 years). We also restricted our analysis to cells
+greater or equal in population to 10, since the Southeastern US includes
+less populated areas. AOD values 40.5 which corresponded to PM2.5 o10
+μg/m3 were removed because it is likely they are because of cloud
+contamination. Data with AOD o0.15 and PM2.5425 μg/m3 were removed
+because we decided it is likely on those days that low PBL moved
+particles closer to ground level, deteriorating the relationship between
+AOD and ground-level PM2.5 measurements. The aim of our model lies in
+high-performance predication, not associational inference between the
+exposure and outcome such as in the epidemiological studies. Hence, our
+strategy was to eliminate observations with high residuals over 10 μg/m3
+as too likely to distort our predictions for most observations, and to
+choose a model based on maximizing cross-validated (CV) R2. AOD values
+are not missing at random (for example there are more missing in the
+winter) which can distort the predictions. Thus, we used inverse
+probability weighting to account for this selection bias. Finally, the
+calibration between AOD and PM2.5 can vary spatially, and daily. The
+daily variation is because of changes in particle size distribution,
+color, and vertical proﬁle, and we address this by daily calibration and
+by using PBL data in the model using mixed-effect models with the random
+intercept and slopes for day. To account for spatial differences in
+these daily slopes, we nested them within subregions, and to account for
+more permanent differences between locations, we included land-use terms
+in our model. Speciﬁcally, we ﬁtted the following model:       E
+PM2:5ij ¼ β0 þ b0j þ b0jk þ β1 þ b1j þ b2jk AODij 7 15 X X   þ β2 þ
+b2j tempij þ β1m X 1mij þ β2n X 2ni m¼1
+
+þ β25 AOD ´ PBL;
+
+n¼1
+
+ð1Þ
+
+where PM2:5ij is the PM2.5 measurements at the monitoring site i on day
+j. β0 is the intercept for the ﬁxed effect (the population intercept)
+and b0j is the overall random intercept which varies by day. b0jk is the
+random intercept for day nested in each subregion. Similarly, β1 is the
+slope for the ﬁxed effect of AOD, b1i is the overall slope for the
+random effect of AOD for the day, and b2jk is the random slope for each
+day nested in each subregion. AOD is the AOD measurement that is used
+for the monitoring site i within 1 km of the site on day j. β2 and b2j
+represent the slopes for the ﬁxed effect and the random effect of
+temperature, respectively. temp is the temperature that is measured by
+the closest weather monitor to the site i on day j. β1m is the slopes
+for the ﬁxed effect of spatiotemporal variables. X1mij is the matrix of
+mth spatiotemporal covariates on the site i and day j other than
+temperature and consists of seven variables: dew point temperature; sea
+level pressure; visibility; wind speed; absolute humidity; NDVI in the
+corresponding month; and PBL. β2n is the slopes for the ﬁxed effect of
+spatial variables. X2ni is the matrix of 15 spatial covariates for the
+ith site which includes the percent urbanicity, elevation, the density
+of major roads, population within 10 km diameter, PM2.5 emissions at
+county level, PM2.5 emissions from point sources, PM10 emission from
+point sources, NOx emission from point sources, canopy surface in 2001,
+distance to the closest A1 roads, distance to the closest airport,
+distance to the closest port, distance to the closest railroad, distance
+to a closest road, and distance to a major building. Observations with
+residuals over 10 μg/m3 were revisited and we determined their validity
+by comparing PM2.5 readings from the surrounding monitors and the
+previous day and the next day. If we determined them to be erroneous, we
+assigned the readings from the closest monitoring station within 15 km.
+
+Model Because of the vast study area, a single model was not able to
+achieve the best performance in prediction. The Southeastern US consists
+of various areas with different topography, climate (tropical in
+Florida), and © 2015 Nature America, Inc.
+
+PM2.5 prediction using 1- km satellite data Lee et al
+
+3
+
+Figure 1.
+
+Study area and the locations of PM2.5 monitoring stations.
+
+geographic features such as swamps and forests. Therefore, we decided to
+split the study area into three regions and to ﬁt separate models for
+each region and implement nested random coefﬁcients for subregions
+within each region (Figure 1). Region 1 consist of Tennessee,
+Mississippi, Alabama, and Georgia. Region 2 covers North Carolina, South
+Carolina, and Georgia. Lastly, region 3 covers Florida, Mississippi,
+Alabama, Georgia, and South Carolina. AOD measurement cannot be made
+because of various factors such as cloud or snow cover. We hypothesized
+that the cloud formation and snow cover is affected by weather
+conditions including temperature, wind speed, sea level pressure,
+elevation, and the season. Therefore, to adjust the nonrandom
+missingness of AOD, we modeled inverse probability weights (IPW) and
+applied them to the ﬁrst stage models. Speciﬁcally, we ﬁtted the
+following logistic model for the missingness of AOD measurements:
+EðlogitðpÞÞ ¼ β0 þ β1 tempij þ β2 WSij þ β3 SLPij þ β4 elevi þ β5 monj ;
+
+ð2Þ
+
+where temp is temperature of cell i on day j, WSij is wind speed of cell
+i on day j, SLPij is the sea level pressure of cell i on day j, elev is
+the elevation of cell i, and mon is the corresponding month that day j
+falls in. Using the probability of the outcome (missing or not), we
+computed the inverse probability as, 1p. Next, we normalized IPW values
+by dividing them by their mean. These were applied to the subsequent
+models as a weight. Each of the models corresponding to the three
+regions was evaluated using a 10-fold cross-validation to avoid
+overﬁtting. We adopted a different approach in cross-validation which
+other similar studies performed recordbased cross-validation. We
+conducted site-based cross-validation since we believed that
+cross-validation by monitoring stations was more appropriate, so that it
+assesses the capabilities of the models to predict spatial variability.
+Firstly, we made a randomly ordered list of monitoring stations in each
+region. The station list then was split into 10 subsets. In turn, 90% of
+the monitoring stations were used to ﬁt the model and 10 % of stations
+were used to test the model performance. This cross-validation were
+conducted for 10 times for each region. The site-based 10-fold
+crossvalidated R2 was used for ﬁnalizing the models rather than modeled
+R2 as well as for assessing the model performance and for avoiding
+overﬁtting. As a result, we ended up the following models based on the
+highest R2 from the 10-fold cross-validation.
+
+© 2015 Nature America, Inc.
+
+In region 1, we ﬁtted the following model for each year with the IPW: 
+     E PM2:5ij ¼ β0 þ b0j þ b0jk þ β1 þ b1j þ b1jk AODij þ β2
+tempij þ β3 dewpij þ β4 slpij þ β5 wdspij þ β6 visibij þ β7 ahij þ β8
+NDVI þ β9 elevi þ β10 pblij þ β11 urbi þ β12 emissioni þ β13 PM10i þ β14
+NOXi ;
+
+ð3Þ
+
+where PM2:5ij is the PM2.5 measurements at the monitoring site i on day
+j. β0 denotes the ﬁxed effect intercept term (population intercept) and
+b0j is the random effect intercept varies randomly from one day to
+another. b0jk is the random intercept for day nested in each subregion.
+Similarly, β1 is the slope for the ﬁxed effect of AOD, b1i is the slope
+for the random effect of AOD for each day, and b2jk is the random slope
+for each day nested in each subregion. AOD is the AOD measurement that
+is used for the monitoring site i within 1 km of the site on day j. temp
+is the temperature that is measured by the closest weather monitor to
+the site i on day j. dewp is the dew point that is measured by the
+closest weather monitor to the site i on day j. slp is the sea level
+pressure in millibars that is measured by the closest weather monitor to
+the site i on day j. wdsp is the wind speed in knots that is measured by
+the closest weather monitor to the site i on day j. visib is the
+visibility in miles that is measured by the closest weather monitor to
+the site i on day j. elev is the elevation of the site i. pbl is the
+height of the planetary boundary layer at the site i on day j. urb is
+the percentage of urbaness at the site i. emission is the annual
+emission of PM2.5 in ton from the closest point source such as an
+industrial factory. PM10 is the annual emission of PM10 in ton from the
+closest point source such as an industrial factory. NOX is the annual
+emission of NOX in ton from the closest point source such as an
+industrial factory. In region 2, we ﬁtted the following model for each
+year with the IPW:       E PM2:5ij ¼ β0 þ b0j þ b0jk þ β1 þ b1j þ
+b1jk AODij þ β2 tempij þ β3 dewpij þ β4 slpij þ β5 wdspij þ β6 visibij þ
+β7 ahij þ β8 NDVI þ β9 elevi þ β10 pblij þ β11 urbi þ β12 emission:
+
+ð4Þ
+
+Journal of Exposure Science and Environmental Epidemiology (2015), 1 --
+8
+
+PM2.5 prediction using 1- km satellite data Lee et al
+
+4 For the third region, we ﬁtted the following model for each year with
+the IPW:       E PM2:5ij ¼ β0 þ b0j þ b0jk þ β1 þ b1j þ b1jk AODij
+þ β2 tempij þ β3 dewpij þ β4 slpij þ β5 wdspij þ β6 visibij þ β7 ahij :
+
+in the second stage. Speciﬁcally, we applied the following model with
+the IPW.     PredPM2:5ij ¼ β0 þ b0j þ b0jk þ sðlati ; longi Þ
+
+ð5Þ
+
+þ ðβ1 þ b1ik ÞMPMij þ β2 bimonij þ β3 pblij
+
+2
+
+Besides the overall R from the 10-fold cross-validation, we estimated a
+spatial R2 by regressing the annual mean of observed PM2.5 against that
+of predicted one for each site. To assess the precision of the
+predictions, root mean squared prediction error (RMSPE) was generated by
+taking the square root of the mean of squared prediction residuals. A
+temporal R2 was calculated by regressing the difference between the
+actual PM2.5 measurement on a speciﬁc day and the annual mean for each
+site against the equivalent for the predicted values from the model.
+Once we ﬁnalized the calibration models by three regions as above, we
+predicted PM2.5 levels based on the coefﬁcients for AOD values and other
+temporal and spatial variables. For the areas and days with AOD missing,
+we interpolated those cells using the surrounding cells that had AOD
+values and thus had predictions
+
+Table 1. Year 2003 2004 2005 2006 2007 2008 2009 2010 2011
+
+Figure 2.
+
+þ β4 ahgm 3ij þ β5 elevij þ β6 mpm ´ bimonij þ β7 mpm ´ pblij ;
+
+ð6Þ
+
+where PredPMij is the predicted PM2.5 level at a grid cell i on a day j
+in stage 2. lati and longi are the latitude and longitude coordinates of
+the cell i, respectively; and s() is a smooth function of thin plate
+splines. MPMij is the mean PM2.5 measured at monitoring stations within
+a 100-km buffer for the cell i on day j. Since the purpose of the
+analysis of the 10-km data is to compare the performance of two data, we
+conducted the ﬁrst stage model only. During the modeling, we applied
+same procedures as above with the same model with same variables,
+calibration, and IPW to make a fair comparison. As for software, MATLAB
+2014b was used to extract the AOD readings from the raw satellite image
+in the HDF format and ArcGIS Desktop 10.2.2 was used along with python
+scripting for data preparation. Models were implemented by using the R
+3.02 and SAS 9.3 (Statistical Analysis System).
+
+Descriptive statistics of PM2.5 (μg/m3) and MAIAC AOD Mean PM (SD) 12.2
+12.6 13.1 12.6 12.4 10.8 9.4 10.2 9.8
+
+(6.5) (6.6) (7.3) (6.6) (7.5) (5.6) (4.6) (4.9) (5.3)
+
+Mean AOD (SD) 0.18 0.18 0.20 0.20 0.21 0.18 0.17 0.17 0.20
+
+(0.18) (0.17) (0.19) (0.19) (0.21) (0.16) (0.15) (0.15) (0.18)
+
+RESULTS A total of 257 monitoring stations were used for the study.
+Figure 1 shows the study area and the locations of PM2.5 monitors. The
+study area with the thick boundary line covers most of the seven states
+except for the small area of Western Mississippi due to the lack of the
+total spatial domain consisting of AOD tiles. The numbers from 1 to 3 in
+big bold font indicate the study area region. Region 1 mainly consists
+of the states of Tennessee, and the upper part of Mississippi, Alabama,
+and Georgia, and contains 61 monitoring stations (0.0003 monitor/km2).
+Region 2 includes most of North Carolina, and major parts of South
+Carolina, and
+
+Spatial distribution of PM2.5 concentrations between 2003 and 2011.
+
+Journal of Exposure Science and Environmental Epidemiology (2015), 1 --
+8
+
+© 2015 Nature America, Inc.
+
+PM2.5 prediction using 1- km satellite data Lee et al
+
+5 Table 2.
+
+2
+
+Result of site-based 10-fold cross-validation from stage 1 model using
+1-km data
+
+Year
+
+Region
+
+R2 (CV)
+
+Slope (CV)
+
+RMSPE (μg/m3)
+
+Spatial R2
+
+Temporal R2
+
+Spatial RMSPE
+
+2003
+
+1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3
+
+0.72 0.83 0.75 0.79 0.80 0.74 0.83 0.80 0.75 0.80 0.84 0.74 0.79 0.85
+0.70 0.78 0.78 0.69 0.76 0.78 0.66 0.65 0.80 0.66 0.79 0.78 0.63 0.77
+0.81 0.70
+
+0.93 0.98 1.01 0.97 0.99 0.99 0.99 0.97 0.99 0.98 0.99 1.00 0.98 0.99
+1.02 0.99 0.98 1.00 0.98 0.99 1.02 0.95 0.99 1.00 0.98 0.98 0.99 0.97
+0.99 1.00
+
+3.51 2.67 2.62 2.92 2.77 2.83 3.23 3.12 3.10 2.99 2.70 2.69 3.19 2.54
+3.29 2.71 2.48 2.74 2.30 2.05 2.60 2.80 2.09 2.51 2.40 2.21 2.97 2.89
+2.51 2.82
+
+0.50 0.59 0.81 0.94 0.52 0.77 0.86 0.81 0.73 0.53 0.70 0.67 0.67 0.59
+0.77 0.74 0.60 0.85 0.81 0.81 0.80 0.33 0.46 0.69 0.80 0.55 0.75 0.69
+0.63 0.76
+
+0.78 0.84 0.74 0.80 0.81 0.74 0.84 0.81 0.75 0.83 0.85 0.75 0.82 0.86
+0.69 0.80 0.79 0.65 0.78 0.79 0.64 0.71 0.81 0.66 0.80 0.79 0.61 0.80
+0.82 0.69
+
+1.86 1.03 0.93 1.07 0.79 0.86 1.12 0.93 1.19 1.26 0.86 1.15 1.34 0.84
+1.25 0.99 0.79 0.99 0.83 0.78 0.87 1.33 0.68 1.11 0.86 0.69 0.98 1.18
+0.82 1.04
+
+2004 2005 2006 2007 2008 2009 2010 2011 Mean
+
+Georgia with 88 monitors. Region 2 is most densely populated by PM
+monitoring stations (0.00038 monitor/km2). Region 3 covers the most
+southern part, including Florida and the southern part of Mississippi,
+Alabama, Georgia, and South Carolina. Although region 3 has the largest
+number of monitors of 108, due to its vast area, the spatial
+distribution of PM monitoring stations is most scattered among the three
+regions (0.00026 monitor/km2). Table 1 shows the descriptive statistics
+for PM2.5 measurements from monitoring stations and AOD measurements by
+MAIAC algorithm in the Southeastern US by year from 2003 to 2011. The
+annual average of PM2.5 has steadily decreased from 12.2 in 2003 to 9.8
+μg/m3 in 2011. The SD has also decreased from 6.5 to 5.3 μg/m3. The mean
+AOD readings were on the order of 0.20 (dimensionless) over 9 years.
+Figure 2 shows the spatial distribution of PM2.5 concentrations in the
+study area, represented by the average PM2.5 levels by monitors during
+the study period (2003--2011). Monitoring stations in big cities such as
+Atlanta, Nashville, Charlotte, and Birmingham recorded the highest
+average PM2.5 level. Monitors at intersections of major highways also
+showed the high level of PM2.5. Among the seven study states, Florida
+showed the lowest PM2.5 level. Our model showed a highly signiﬁcant
+association between PM2.5 and AOD after controlling for other covariates
+and spatiotemporal predictors. Table 2 presents results from the stage 1
+model where the calibration of AOD and other spatiotemporal predictors
+were done by each year and region. The R2 numbers are from the 10-fold
+cross-validation based on the sampling of monitors not observations
+regardless of monitors. The predictive power of the models differed by
+region. Region 2 showed the highest overall R2 of 0.81 with the
+year-to-year variation ranging from 0.78 in 2008 to 0.85 in 2007. Region
+3 showed the lowest © 2015 Nature America, Inc.
+
+Table 3.
+
+R2 from stage 3 model
+
+Year
+
+Region
+
+R2 Pred2
+
+R2 PM25
+
+2003
+
+1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3
+
+0.83 0.86 0.61 0.83 0.84 0.64 0.83 0.84 0.65 0.86 0.87 0.59 0.83 0.84
+0.62 0.83 0.82 0.65 0.81 0.80 0.61 0.75 0.81 0.60 0.85 0.81 0.61 0.82
+0.83 0.62
+
+0.90 0.91 0.85 0.88 0.90 0.85 0.91 0.90 0.87 0.89 0.91 0.86 0.90 0.91
+0.88 0.87 0.88 0.90 0.86 0.86 0.83 0.83 0.89 0.85 0.89 0.88 0.87 0.88
+0.89 0.86
+
+2004 2005 2006 2007 2008 2009 2010 2011 Mean
+
+Journal of Exposure Science and Environmental Epidemiology (2015), 1 --
+8
+
+PM2.5 prediction using 1- km satellite data Lee et al
+
+6
+
+Figure 3.
+
+Predicted PM2.5 level in 2003.
+
+Figure 4.
+
+Residual map.
+
+Journal of Exposure Science and Environmental Epidemiology (2015), 1 --
+8
+
+© 2015 Nature America, Inc.
+
+PM2.5 prediction using 1- km satellite data Lee et al
+
+performance with an average cross-validated R2 of 0.70 (minimum of 0.63
+occurred in 2011 and maximum of 0.75 occurred in 2003 and 2005). For
+region 1, an average cross-validated R2 was 0.77 and ranged from 0.65 in
+2010 to 0.83 in 2005. The slopes between the observed PM2.5 versus the
+modeled PM2.5 were close to 1 for all the regions, suggesting a good
+agreement between the model results and actual measurements and the thus
+low bias. Region 2 exhibited the lowest average RMSPE of 2.51 μg/m3,
+followed by region 3 with 2.82 μg/m3 and region 1 with 2.87 μg/m3. The
+RMSPE for the spatial component was much lower at 0.82 μg/m3 in region
+2. In general, the models performed better temporally than spatially.
+The temporal R2 values were higher than the spatial ones except for
+region 3. For the temporal result, the mean R2 was 0.80, 0.82, and 0.69
+for regions 1, 2, and 3, respectively. For the spatial model the mean R2
+was 0.69, 0.63, and 0.76 by region order. The output prediction model
+based on the third model gave very similar results (Table 3). The third
+column represents the R2 for the prediction from stage 2 (prediction for
+the gird cells and days that AOD readings were available) and the last
+column illustrates those for the comparison with actual PM2.5
+observations. The ﬁnal prediction showed high predictive power, from
+0.89 (region 2) to 0.86 (region 3). To graphically represent the
+predictions, Figure 3 displays the prediction results in the form of
+annual average in 2003 where reveals higher PM2.5 levels for highways
+and the main cities. The spatial pattern of predictions matches well
+with the one of the
+
+Table 4.
+
+7 measured PM2.5 represented in Figure 2. There was no systematic
+spatial patterns of residuals during the study period (Figure 4).
+Compared with the existing AOD data at a 10 × 10 -km resolution, the
+MAIAC data at a 1 × 1- km resolution showed the better performance
+(Table 4). Only except for slight decrease in the mean of 10-fold
+cross-validated R2 for Region 1 from 0.78 to 0.77, the MAIAC data showed
+the higher R2 values. Especially, the performance in Region 3
+drastically improved from 0.62 to 0.70. The new data also had lower
+errors than the existing one. RMSPE values have decreased from 3.27 to
+2.89 μg/m3 for Region 1, from 2.90 to 2.51 μg/m3 for Region 2, and from
+3.64 to 2.82 μg/m3 for Region 3. Other indicators such as Spatial R2 and
+temporal R2 have also improved when using the 1- km AOD data. DISCUSSION
+In this paper, we predicted PM2.5 levels across the Southeastern US at a
+1-km resolution using the MODIS satellite imagery derived by the newly
+developed algorithm MAIAC. Compared to the AOD data at a 10- km
+resolution, the MAIAC data at a 1-km resolution showed the better
+performance. Furthermore, higher resolution enabled the more precise
+exposure assessment for PM2.5 at a ﬁner scale such as the street-level
+address. These results will enable epidemiological studies to evaluate
+the association between PM2.5 and its health effects with reduced
+measurement error in exposure. We also anticipate study areas may extend
+to rural areas in the Southeastern US, which were formerly restricted to
+urban areas because of the distance to
+
+Result of site-based 10-fold cross-validation from stage 1 model using
+10-km2 data
+
+Year
+
+Region
+
+R2 (CV)
+
+Slope (CV)
+
+RMSPE (μg/m3)
+
+Spatial R2
+
+Temporal R2
+
+Spatial RMSPE
+
+2000 2000 2000 2001 2001 2001 2002 2002 2002 2003 2003 2003 2004 2004
+2004 2005 2005 2005 2006 2006 2006 2007 2007 2007 2008 2008 2008 2009
+2009 2009 2010 2010 2010
+
+1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3 1 2 3
+
+0.84 0.80 0.72 0.78 0.79 0.65 0.79 0.77 0.63 0.77 0.84 0.60 0.75 0.78
+0.69 0.82 0.81 0.68 0.79 0.82 0.62 0.77 0.82 0.59 0.77 0.77 0.58 0.77
+0.75 0.49 0.70 0.75 0.55 0.78 0.79 0.62
+
+0.99 0.98 1.00 0.98 0.99 0.98 0.97 0.99 0.96 0.99 0.99 0.96 0.97 0.99
+0.97 0.98 0.99 0.99 1.00 0.99 0.97 0.97 0.99 0.98 0.98 0.98 0.96 0.99
+0.99 1.00 0.99 1.00 0.99 0.98 0.99 0.98
+
+3.76 3.40 4.09 3.68 3.18 3.74 3.60 3.14 3.72 3.30 2.79 3.56 3.30 3.15
+3.60 3.59 3.20 3.90 3.36 3.03 3.45 3.71 2.88 4.31 2.79 2.60 3.36 2.33
+2.15 3.25 2.57 2.38 3.02 3.27 2.90 3.64
+
+0.64 0.54 0.64 0.43 0.52 0.57 0.62 0.36 0.58 0.25 0.30 0.52 0.36 0.47
+0.63 0.38 0.58 0.62 0.60 0.46 0.55 0.64 0.66 0.57 0.46 0.61 0.59 0.63
+0.78 0.64 0.20 0.53 0.68 0.47 0.53 0.60
+
+0.85 0.82 0.74 0.80 0.80 0.69 0.80 0.79 0.63 0.79 0.86 0.61 0.77 0.79
+0.71 0.84 0.83 0.71 0.80 0.83 0.64 0.78 0.83 0.59 0.79 0.78 0.57 0.78
+0.77 0.48 0.73 0.76 0.54 0.79 0.81 0.63
+
+1.09 1.42 1.73 1.55 1.14 1.59 1.15 1.14 1.40 1.29 1.03 1.54 1.25 0.93
+1.40 1.33 1.06 1.69 1.13 1.08 1.60 1.22 0.73 1.67 0.99 0.86 1.42 0.80
+0.76 1.34 0.96 0.77 1.38 1.16 0.99 1.52
+
+Mean
+
+© 2015 Nature America, Inc.
+
+Journal of Exposure Science and Environmental Epidemiology (2015), 1 --
+8
+
+PM2.5 prediction using 1- km satellite data Lee et al
+
+8 monitoring stations. Considering that PM2.5 measurements are not
+always daily, our model interpolates the temporal break using the daily
+satellite imagery and a smoothing technique as well as spatial
+predictions. This approach enables epidemiological studies to examine
+both acute and chronic effects. Model performance varied by region.
+Region 2 mainly covering North Carolina revealed the highest performance
+(0.81) and region 3, covering the most southern part, such as Florida,
+had the lowest performance (0.70). One possible explanation is that the
+spatial density of monitoring stations affects model. Region 2 has the
+most abundant monitoring stations compared with its area, whereas region
+3 lacks monitoring stations for its extensive area. This appeared to
+affect the results by providing fewer pairs to ﬁt the model. Another
+explanation may be that region 2 is relatively more urbanized compared
+with region 3 with more land-use factors which could be taken into
+account. This suggestion parallels with our experience during the
+analysis that the calibration model based on the highest R2 for region 2
+has more land-use variables than that for region 3. Lastly, the quality
+of AOD from the MODIS instrument and the MAIAC algorithm should be
+considered. Visual analysis (data not present) by AOD swath revealed
+that the performance of AOD differed by tile of satellite imagery. Tile
+h01v02 that covers North Carolina showed the best performance, whereas
+tiles around Alabama (h00v03 and h01v03) showed the poorest performance.
+To improve model performance, other AOD products from other algorithms
+such as AOD data from Deep Blue algorithm18 at 10-km resolution can be
+incorporated which is used for bright surfaces. More studies are needed
+to determine which factors play a role in the prediction of PM2.5 using
+satellite imagery and to further improve the performance. Compared with
+the existing studies on the similar area,19--21 our study shows higher
+R2 and less errors. After predicting PM2.5 levels at a 10-km resolution
+for the similar area for the year 2003,21 Hu et al.19 examined the
+feasibility of the 1- km resolution MAIAC AOD data by comparing with the
+10-km data. In their study, the performance of the MAIAC AOD data was
+comparable with the existing MODIS data but showed slightly lower
+performance. Our study demonstrated the MAIAC AOD can outperform the
+existing 10-km data by using various approaches on the top of the
+advantage of the higher resolution. The study resulted in an R2 of 0.64
+and RMSPE of 3.93 μg/m3 for the MAIAC data in stage 1. In our model, the
+lowest R2 in 2003 was 0.72 with a RMSPE 3.51 μg/m3. Recently, they
+expanded their study period for the same area20 from a single year of
+2003 to the multiple years from 2001 to 2010. Our study area covers vast
+additional areas in the Southeastern US by adding Florida, Mississippi,
+and the complete parts of other states. Adopting different approaches
+than their study, our study shows higher R2 values and lower RMSPE. The
+total mean of 10-fold cross-validated R2 was 0.76 compared with the
+existing study 0.72 and that of RMSPE from our study was 2.74 compared
+with 3.72 μg/m3. Considering that our study area includes the most
+southern area such as Florida which showed the lowest performance with a
+big difference and we applied sitebased cross-validation rather than
+observation-based crossvalidation which produces higher R2, the actual
+improvement is expected to be bigger. In conclusion, we have
+demonstrated that the use of satellite imagery and other land-use
+variables with a mixed-effect model produces reliable predictions of
+daily PM2.5 for the large area of the Southeastern United States. By
+incorporating land-use terms and spatial smoothing, our models perform
+much better than previous studies. Therefore, our model results can be
+used in various epidemiological studies investigating the effects of
+PM2.5 allowing one to assess both acute and chronic exposures with the
+implication of a new application. Our model results will extend the
+existing studies on PM2.5 mainly targeted only for urban areas tied
+Journal of Exposure Science and Environmental Epidemiology (2015), 1 --
+8
+
+to the lack of monitors into new areas which used not to be studied such
+as rural areas. CONFLICT OF INTEREST The authors declare no conﬂict of
+interest.
+
+REFERENCES 1 Dockery DW, Pope CA, Xu X, Spengler JD, Ware JH, Fay ME et
+al. An association between air pollution and mortality in six U.S.
+cities. N Engl J Med 1993; 329: 1753--1759. 2 Pope CA 3rd. Epidemiology
+of ﬁne particulate air pollution and human health: biologic mechanisms
+and who's at risk? Environ Health Perspect 2000; 108: 713--723. 3 Pope
+CA 3rd, Burnett RT, Thun MJ, Calle EE, Krewski D, Ito K et al. Lung
+cancer, cardiopulmonary mortality, and long-term exposure to ﬁne
+particulate air pollution. JAMA 2002; 287: 1132--1141. 4 Barnett AG,
+Williams GM, Schwartz J, Best TL, Neller AH, Petroeschevsky AL et al.
+The effects of air pollution on hospitalizations for cardiovascular
+disease in elderly people in Australian and New Zealand cities. Environ
+Health Perspect 2006; 114: 1018--1023. 5 Rhomberg LR, Chandalia JK, Long
+CM, Goodman JE. Measurement error in environmental epidemiology and the
+shape of exposure-response curves. Crit Rev Toxicol 2011; 41: 651--671.
+6 Armstrong BG. Effect of measurement error on epidemiological studies
+of environmental and occupational exposures. Occup Environ Med 1998; 55:
+651--656. 7 Goldman GT, Mulholland JA, Russell AG, Strickland MJ, Klein
+M, Waller LA et al. Impact of exposure measurement error in air
+pollution epidemiology: effect of error type in time-series studies.
+Environ Health 2011; 10: 61. 8 Ryan PH, LeMasters GK. A review of
+land-use regression models for characterizing intraurban air pollution
+exposure. Inhal Toxicol 2007; 19: 127--133. 9 de Hoogh K, Wang M, Adam
+M, Badaloni C, Beelen R, Birk M et al. Development of land use
+regression models for particle composition in twenty study areas in
+Europe. Environ Sci Technol 2013; 47: 5778--5786. 10 Beckerman BS,
+Jerrett M, Martin RV, van Donkelaar A, Ross Z, Burnett RT. Application
+of the deletion/substitution/addition algorithm to selecting land use
+regression models for interpolating air pollution measurements in
+California. Atmos Environ 2013; 77: 172--177. 11 Wang R, Henderson SB,
+Sbihi H, Allen RW, Brauer M. Temporal stability of land use regression
+models for trafﬁc-related air pollution. Atmos Environ 2013; 64:
+312--319. 12 Whitworth KW, Symanski E, Lai D, Coker AL. Kriged and
+modeled ambient air levels of benzene in an urban environment: an
+exposure assessment study. Environ Health 2011; 10: 21. 13 Kloog I,
+Koutrakis P, Coull BA, Lee HJ, Schwartz J. Assessing temporally and
+spatially resolved PM2.5 exposures for epidemiological studies using
+satellite aerosol optical depth measurements. Atmos Environ 2011; 45:
+6267--6275. 14 Alston EJ, Sokolik IN, Kalashnikova OV. Characterization
+of atmospheric aerosol in the US Southeast from ground- and space-based
+measurements over the past decade. Atmos Meas Tech 2012; 5: 1667--1682.
+15 Lyapustin A, Wang Y, Laszlo I, Kahn R, Korkin S, Remer R et al.
+Multiangle implementation of atmospheric correction (MAIAC): 2. Aerosol
+algorithm. J Geophys Res 2011; 116: D03211. 16 Lee HJ, Liu Y, Coull BA,
+Schwartz J, Koutrakis P. A novel calibration approach of MODIS AOD data
+to predict PM$_2.5$ concentrations. Atmos Chem Phys 2011; 11:
+7991--8002. 17 Jin S, Yang L, Danielson P, Homer C, Fry J, Xian G. A
+comprehensive change detection method for updating the National Land
+Cover Database to circa 2011. Remote Sens Environ 2013; 132: 159--175.
+18 Li X, Xia X, Wang S, Mao J, Liu Y. Validation of MODIS and deep blue
+aerosol optical depth retrievals in an arid/semi-arid region of
+northwest China. Particuology 2012; 10: 132--139. 19 Hu X, Waller LA,
+Lyapustin A, Wang Y, Al-Hamdan MZ, Crosson WL et al. Estimating
+ground-level PM2.5 concentrations in the Southeastern United States
+using MAIAC AOD retrievals and a two-stage model. Remote Sens Environ
+2014; 140: 220--232. 20 Hu X, Waller LA, Lyapustin A, Wang Y, Liu Y.
+10-year spatial and temporal trends of PM$_2.5$ concentrations in the
+southeastern US estimated using high-resolution satellite data. Atmos
+Chem Phys 2014; 14: 6301--6314. 21 Hu X, Waller LA, Al-Hamdan MZ,
+Crosson WL, Estes MG Jr, Estes SM et al. Estimating ground-level PM2.5
+concentrations in the southeastern U.S. using geographically weighted
+regression. Environ Res 2013; 121: 1--10.
+
+© 2015 Nature America, Inc.
+
+

@@ -1,0 +1,929 @@
+Computers, Environment and Urban Systems 33 (2009) 55--63
+
+Contents lists available at ScienceDirect
+
+Computers, Environment and Urban Systems journal homepage:
+www.elsevier.com/locate/compenvurbsys
+
+Using kernel density function as an urban analysis tool: Investigating
+the association between nightlight exposure and the incidence of breast
+cancer in Haifa, Israel Itai Kloog a, Abraham Haim b, Boris A. Portnov
+a,* a b
+
+Department of Natural Resources and Environmental Management, University
+of Haifa, Mount Carmel 31905, Haifa, Israel Department of Biology,
+University of Haifa-Oranim, Kiryat Tivon, 36006, Israel
+
+a r t i c l e
+
+i n f o
+
+Article history: Received 18 March 2008 Received in revised form 9
+August 2008 Accepted 15 September 2008
+
+Keywords: Kernel density function Light-at-night Breast cancer GIS
+
+a b s t r a c t The kernel density (KD) function estimates the intensity
+of events across a surface by calculating the overall number of cases
+situated within a given search radius from a target point. To form a
+continuous surface from individual observations, the KD technique does
+not require the presence of a parameter's value in a given location
+(e.g., the incidence rate of a disease). This feature of KD smoothing is
+especially beneﬁcial for empirical studies in which individual
+observations are represented by geographic coordinates only and have no
+other attributes, required by more commonly used smoothing techniques,
+such as spline and kriging. In the present study, we illustrate the use
+of KD technique for a study of association between the geographical
+distributions of breast cancer cases and exposure to artiﬁcial
+illumination during nighttime (light-at-night or LAN) in the city of
+Haifa, Israel. Ó 2008 Elsevier Ltd. All rights reserved.
+
+1. Introduction According to recent epidemiological literature,
+   excessive exposure to artiﬁcial illumination during nighttime
+   (light-at-night or LAN) increases the risk of hormonal cancers
+   (Davis, Mirick, & Stevens, 2001; Kerenyi, Pandula, & Feuer, 1990;
+   Kliukiene, Tynes, & Andersen, 2001; Pauley, 2004; Schernhammer et
+   al., 2001; Stevens, 1987, 2005; Verkasalo, Pukkala, Stevens, Ojamo, &
+   Rudanko, 1999). The mechanism of this relationship is believed to be
+   as follows: The secretion of the melatonin (MLT) hormone, which has
+   strong inhibiting (oncostatic) effects on cancer cells, occurs mainly
+   during nighttime (Blask et al., 2005). The exposure to LAN changes
+   the natural photoperiod regime and thus reduces MLT secretion (Lewy,
+   Wehr, Goodwin, Newsome, & Markey, 1980). The reduced MLT secretion
+   weakens the human immune system and thus elevates the risk of
+   developing malignant diseases, such as breast and prostate cancers
+   (Stevens, 2005). However, studies on health-related effects of LAN
+   carried out to date are yet largely fragmented and have been focused
+   mainly on laboratory research and surveys of nightshift workers
+   (Blask, Lemus-Wilson, & Wilson, 1992; Davis & Mirick, 2006; Davis et
+   al., 2001; Haim, Shanas, & Gilboa, 2002; Hansen, 2001; Schernhammer,
+   Kroenke, Laden, & Hankinson, 2006; Schernhammer et al.,
+
+-  Corresponding author. E-mail address: portnov@nrem.haifa.ac.il (B.A.
+   Portnov). 0198-9715/$ - see front matter Ó 2008 Elsevier Ltd. All
+   rights reserved. doi:10.1016/j.compenvurbsys.2008.09.006
+
+2001). These studies deal with relatively small populations and thus
+lack generality (Pekkanen & Pearce, 2001). The present paper attempts to
+investigate the association between the geographical distributions of
+breast cancer cases and nightlight exposure in the city of Haifa,
+Israel, using the spatial analysis technique known as ‘kernel density'
+(KD) function or ‘kernel smoothing' (McCoy & Johnston, 2001). A key
+feature of kernel smoothing is that it makes it possible to use point
+data that have only x, y coordinates and no other attributes (e.g.,
+disease prevalence rates), required by more commonly used smoothing
+techniques, such as spline and kriging. This feature of KD smoothing is
+especially beneﬁcial for empirical studies, in which observations are
+represented by two-dimensional points featuring home addresses of
+individual patients. Although the use of KD smoothing is not novel in
+empirical studies, its use has been mostly limited to visualization
+tasks, such as disease mapping and the detection of disease clusters
+(Berke, 2005; Hu, Liebens, & Rao, 2008; Rushton, Peleg, Banerjee, Smith,
+& West, 2004). The main objective of the present study is to illustrate
+the use of the KD technique for a study of association between the
+geographical distribution of disease cases and the spatial distribution
+of a potential health risk factor, using data on the residential
+locations of 1079 breast cancer patients in the city of Haifa, Israel.
+The underlying assumption of the present study is as follows: Given the
+above outlined linkages between LAN exposure and cancer incidence,
+residents of neighborhoods, exposed to high
+
+56
+
+I. Kloog et al. / Computers, Environment and Urban Systems 33 (2009)
+55--63
+
+LAN intensities, should exhibit, ceteris paribus, elevated rates of
+hormone-dependent cancers. The rest of the paper is organized as
+follows. It starts with a brief discussion of problems associated with
+the empirical analysis of population health data, such as ecological
+bias and information loss due to aggregation. In the following section,
+the technique of kernel smoothing is introduced and its use in empirical
+studies is discussed. The KD technique is then used to investigate the
+relationship between the geographic distribution of breast cancer
+patients living in the city of Haifa and their LAN exposure estimates.
+Different technical aspects of KD analysis are discussed and
+recommendations for future research are formulated.
+
+2. The problem of ecological bias in health-related studies A major
+   problem faced by most epidemiological studies is that they rely on
+   aggregated data and frequently make use of coarse geographical units,
+   deﬁned for purposes other than health investigations (Elliott,
+   Cuzick, English, & Stern, 1992; Elliott & Wartenberg, 2004; Nuckols,
+   Ward, & Jarup, 2004). The assumption behind this ‘aggregate' approach
+   is that the estimated average exposure in a particular region may
+   serve as a reasonable surrogate for the actual exposure of
+   individuals. This assumption can lead to an assessment error known as
+   the ‘ecological fallacy' or ‘ecological bias' (Elliott et al., 1992;
+   Greenland & Morgenstern, 1989; Portnov, Dubnov, & Barchana, 2007;
+   Selvin, 1958). Since individual exposure levels cannot accurately be
+   inferred from aggregated data, such an approach may lead to
+   insensitive estimates of individual exposure as a result (Elliott &
+   Wartenberg, 2004; Elliott et al., 1992; Greenland & Morgenstern,
+   1989; Nuckols et al., 2004; Rothman, 1993). In addition, even when
+   individual-level health data are accessible, there is a difﬁculty to
+   match them with socio-economic variables which are usually aggregated
+   into census-designated statistical areas, and are rarely available
+   for individuals (Elliott & Wartenberg, 2004; Elliott et al., 1992;
+   Nuckols et al., 2004). Ecological bias due to aggregation (commonly
+   referred to as the information loss due to areal aggregation) may
+   distort the effect estimates (Gotway & Young, 2002; Greenland &
+   Morgenstern, 1989), adding to other sources of ecological errors such
+   as ‘confounding' and ‘effect modiﬁcation' (Greenland & Morgenstern,
+   1989; Morgenstern & Thomas, 1993). The problem of information loss
+   due to data aggregation is especially acute when observations are
+   represented by simple point data (Gelfand, Zhu, & Carlin, 2001). If
+   these ‘raw' data are aggregated into geographic units of different
+   shape and size, different conclusions which may be drawn for
+   different levels of aggregation are known as the modiﬁable areal unit
+   problem or MAUP (Gehlke & Biehl, 1934; Openshaw, 1984; Openshaw &
+   Taylor, 1979). In fact, the MAUP implies two separate, but
+   interrelated issues pertinent to spatial data analysis. The ﬁrst one
+   is the ‘scale problem', where the same set of areal data is
+   aggregated into several sets of larger areal units, with each
+   combination leading to different inferences. This problem is also
+   known as the change of units of support problem or CUSP. This problem
+   is concerned with inferences about the values of the variable at
+   points or areal blocks being different from those at which they were
+   originally observed (Gelfand et al., 2001). The second aspect of the
+   MAUP is the ‘zoning problem', which occurs if a given set of areal
+   units is recombined into zones that are of the same size but located
+   differently, thus resulting in the variation of data values and,
+   consequently, different conclusions about the directions and strength
+   of relationship between research variables (Openshaw & Taylor, 1979).
+   In the present study, we attempt to ‘bypass' the information-loss
+   problems by using the technique of KD smoothing, which helps to
+
+preserve the original number of observations without a need either to
+aggregate or average them (McCoy & Johnston, 2001). 3. The use of KD
+estimates in empirical studies Kernel density (KD) estimation is a data
+smoothing technique which transforms a sample of observations, recorded
+as geographically referenced point data, into a continuous surface,
+indicating the intensity of individual observation over space (Bailey &
+Gatrell, 1995). Points lying near the center of a search area are
+weighted more heavily than those lying near the edge (McCoy & Johnston,
+2001). The kernel weights events within its ‘sphere of inﬂuence'
+according to their distance from the point at which the intensity being
+estimated (Gatrell, Bailey, Diggle, & Rowlingson, 1996). The general
+form of the KD function is as follows:
+
+\^kðsÞ ¼
+
+  n X 1 ðs  si Þ ; k 2 i¼1
+
+s
+
+s
+
+where \^ kðsÞ is the estimate of the intensity of the spatial point
+pattern measurement at location s; si is the observed ith event, k
+represents the kernel weighting function and s is the bandwidth (Borruso
+& Schoier, 2004). When applied to a study of point patterns, KD
+smoothing provides considerable advantages compared to other techniques,
+such as simple mapping of point patterns or ‘quadrat count' analysis. In
+particular, it makes it possible to estimate the intensity of a point
+pattern and to represent it by means of a smoothed continuous surface,
+thus helping to highlight the presence of clusters or regularities in
+the parameter's distribution (Gatrell et al., 1996). The KD technique
+has been used in several empirical studies. Thus, Portnov, Dubnov, and
+Barchana (2008) used this technique to investigate the relationship
+between SO2 pollution and lung cancer incidence. The results obtained by
+KD smoothing were contrasted with the results obtained by areal
+aggregation techniques. The analysis showed that the areal density of
+lung cancer patients in the study area appeared to increase by some
+0.45% for each percent rise in air pollution levels. This result was in
+disagreement with the results of previous studies which were based on
+relatively large geographical units (i.e., towns and small statistical
+areas) and assigned average exposure levels to all individuals residing
+in each unit. As argued, exposure metrics based on KD estimates are more
+sensitive to individual exposure levels than zonal approaches used in
+previous investigations. Hu et al. (2008) examined the association
+between stroke mortality, air pollution, income and access to open areas
+in northwest Florida. The researchers used air pollution density
+surfaces, which were calculated from point source polluters located in
+the counties neighboring the study area, to derive surrogate air
+pollution exposures. In addition, a kernel density surface was
+calculated using the trafﬁc count data with a smooth, curved surface
+ﬁtted over each road segment. Using the kernel density maps, the
+researchers found that the high risk of stroke mortality appeared to be
+higher in low income neighborhoods, and in neighborhoods with high air
+pollution levels and insufﬁcient green space. Rushton et al. (2004) used
+spatial analysis tools to identify areas with high rates of late-stage
+colorectal cancer. The rates were calculated using kernel density maps.
+The spatial smoothing of individual-level data was performed using the
+‘sliding window' method. As the researchers concluded, the spatial
+smoothing produced more accurate estimates than the rates computed from
+small census area data. Berke (2005) used the exploratory relative risk
+mapping for identifying unknown spatially varying risk factors. The risk
+mapping was performed using both the KD smoothing and by kriging the
+Bayesian smoothed regional risks from tract count data.
+
+I. Kloog et al. / Computers, Environment and Urban Systems 33 (2009)
+55--63
+
+57
+
+Fig. 1. Location of homes of breast cancer patients in the city of Haifa
+juxtaposed over LAN intensity map.
+
+4. Research method 4.1. Haifa as a case study The City of Haifa, which
+   forms the study area, is located in the northern part of Israel and
+   hosts about 260,000 residents, of whom around 1100 persons were
+   diagnosed with breast cancer (BC) in 1998--2001. The average latency
+   period of BC is estimated as 10-- 15 years prior to the diagnosis
+   date (Ozonoff et al., 2005). Therefore, only the patients who lived
+   in the study area for at least 10 years prior to the diagnosis (1079
+   patients) were included in the analysis. The data on BC morbidity
+   were obtained from the Israel National Cancer Registry (INCR, 2004),
+   the population-based national cancer registry established in 1960 and
+   covering the entire country. Since 1982, reporting to the registry
+   has been mandatory for all medical facilities (i.e., medical
+   institutions and pathology laboratories, both public and private). In
+   accordance with the law, INCR retrieves each cancer patient personal
+   data from the central population registry, including the place of
+   birth, immigration date, current and historical place of residence
+   (street address including house number), ethnicity and gender (INCR,
+   2004). The locations of homes of individual BC patients were mapped
+   using the ArcGIS 9TM software. 4.2. LAN data The data on the
+   nighttime illumination in the city neighborhoods were obtained from
+   the municipality of Haifa's engineering department. The database
+   contained the location and light
+
+power (W) of all existing light posts, located within the city's limits
+(approximately 9000 entries). Using the Spatial Analyst module of the
+ArcGIS 9TM (Minami & ESRI, 2000), we transformed these data into a
+continuous KD surface, reﬂecting the intensity of outdoor nighttime
+illumination in the entire study area (see Fig. 1).1 4.3. Exposure
+classiﬁcation In the ﬁrst phase of the analysis, the KD surface of BC
+patients was calculated using the ArcGISTM Spatial Analyst module (McCoy
+& Johnston, 2001).2 The calculation was based on the layer of homes of
+individual breast cancer patients (see small black dots in Fig. 1) and
+resulted in obtaining a continuous surface, which individual cells (50 
+50 m) represent the estimated number of BC patients per km2 of
+surrounding area, i.e., the density of cancer patients whose homes are
+located within a predeﬁned 500-m search radius around each cell (Fig. 2)
+(see Section 4.4 for more details).
+
+1 Outdoor nighttime illumination is only one source of potential LAN
+exposure. Other sources include indoor illumination and LAN exposure in
+enclosed public spaces and at work place. The addition of these
+potential confounders requires individual-level surveys, based on a
+representative sample of BC patients and control population groups.
+However, such surveys are beyond the scope of the present study, which
+is based on population-level data. This limitation of the study is
+further discussed in Section 6. 2 Although there are other software
+solutions for performing KD analysis, such as e.g., CrimeStat (Levine,
+2007) and SatScan (Kulldorff, 2007), the spatial analyst module of the
+ArcGIS9TM software was found to be sufﬁcient for our speciﬁc needs.
+
+58
+
+I. Kloog et al. / Computers, Environment and Urban Systems 33 (2009)
+55--63
+
+Fig. 2. Kernel density of breast cancer patients (the average number of
+breast cancer patients per km2).
+
+By overlapping this surface with the location of homes of individual
+patients (see Fig. 1), the values of BC patients' density were estimated
+for all locations in which individual BC patients reside (around 1100
+locations). To this end, the ‘spatial join' tool of ArcGISTM was used
+(Minami & ESRI, 2000). In a similar manner the outdoor LAN intensity was
+calculated for BC patients' home locations, by obtaining LAN values for
+BC patients' home locations from the kernel surface of LAN (see Section
+4.2 on LAN data).
+
+search radius (i.e., 500, 750 and 1000 m) were introduced in the
+multivariate analysis consequently, with the 500-m radius kernel
+providing the highest R2 and generality (measured by the model's
+F-statistic). For brevity's sake, in the following discussion, only the
+results for the best performing search radius (i.e., 500 m) are
+reported.
+
+4.4. Kernel density calculation
+
+Descriptive statistics of the research variables are presented in
+Appendix 1. These variables include: light intensity (W per km2);
+elevation above the sea level (m); SO2 pollution (lg/m3, annual
+average); building density (buildings per km2); residential density
+(ground ﬂoor area in m2 of ﬂoor area per km2 of ground area), and
+population density (residents per km2). The density of BC cancer
+patients around a point of space may be high simply because the area is
+densely populated. To account for population density patterns, the data
+on the residential location of each person living in the study area
+(both BC patients and all other residents of the study area) are
+required. However, only building layers and aggregate population
+estimates for small census areas were available for the analysis.
+Therefore, we used three different approaches for estimating residential
+density patterns. First, we used the geographic layer of residential
+buildings and calculated their kernel density (that is, the number of
+buildings per km2). Although the use of buildings' centroids for the
+construction of residential density surface is the simplest and most
+straightforward solution, it has a serious drawback. In particular this
+method
+
+The size of bandwidth chosen for the KD estimation determines the degree
+of smoothing produced. It is often useful to examine several density
+plots of the same samples, all smoothed by different amounts, in order
+to gain greater insight into the data (Farewell, 1999). There are
+varying guidelines for choosing a KD bandwidth, apart from visual
+inspection. Some researchers have argued that the bandwidth must not
+exceed the ﬁnest resolution desired, while others prefer to base the KD
+bandwidth upon nearest neighbor distances (Levine, 2007). Some
+researchers have argued for a particular size of the kernel bandwidth,
+which would produce a smoother kernel (Farewell 1999) or a more rough
+kernel (Silverman, 1986). Yet there appears to be no consensus as to how
+the bandwidth size should be chosen (Levine, 2007). In the present
+analysis we decided that the KD bandwidth should not be smaller than two
+average housing blocks, that is, 500 m. Two additional search radii
+(with one block increment) -- 750 and 1000 m -- were also tested in the
+analysis. Due to a multicollinearity concern, the KD estimates obtained
+for each
+
+4.5. Control variables
+
+I. Kloog et al. / Computers, Environment and Urban Systems 33 (2009)
+55--63
+
+does not differentiate between buildings of different sizes, such as,
+e.g., small single-family houses vs. large multi-family structures. As a
+result, it overestimates population densities for neighborhoods with
+small detached houses and underestimates them for neighborhoods with
+large residential complexes (i.e., multi-family houses). At least in
+part, this problem can be corrected by taking into account the ﬂoor area
+of individual residential structures. Therefore, as the second
+alternative, we constructed the KD surface by adjusting the location of
+individual buildings by each building's ground ﬂoor area (m2). However,
+such an approach provides only a partial solution, because it does not
+take into account either the differences in the number of ﬂoors in
+individual buildings or the number of residents per unit of ﬂoor area
+(that is, housing density). Therefore, as the third alternative we
+constructed a continuous surface of population density using data on
+average residential densities (i.e., number of persons per km2)
+available for individual city neighborhoods. Although this approach may
+hide ﬁne intraneighborhood variations of population density patterns, it
+may nevertheless be more accurate than the previous two, which make sole
+use of building size and location and do not take into account either
+number of ﬂoors or number of residents in each house.
+
+59
+
+The epidemiological literature is rather inconclusive as to whether air
+pollution has an effect on BC incidence (Brody et al., 2007). However,
+in order not to rule out from the outset that such a possibility may
+exist, we used SO2 air pollution estimates at the locations of BC
+patients' homes as an additional explanatory variable. Air pollution
+data were obtained from 20 air quality monitoring stations that measure
+and report halfhour mean concentration levels of SO2 in the study area.
+These data were interpolated into a continuous surface of SO2 air
+pollution estimates using the inverse distance weighted (IDW)
+interpolation method and then individual SO2 estimates were calculated
+for the locations of homes of BC patients, by ‘joining' the surface of
+SO2 pollution with the locations of homes of BC patients. As in the
+previous phases of the analysis, the ‘spatial join' tool of ArcGISTM
+software was used to this end (Minami & ESRI, 2000). An additional
+explanatory variable used in the analysis was the elevation of homes of
+BC patients above the sea level. The elevation variable is of particular
+importance in the local context. High elevation provides better views of
+open spaces, sea and of other landscape features. Therefore, in Haifa,
+high elevations of dwellings above the sea level are closely associated
+with more expensive housing and, generally, with a high socio-economic
+status of local residents (Portnov et al., 2006). In the absence of
+welfare data on
+
+Fig. 3. Local Moran's I values showing signiﬁcant clustering of the
+residuals.
+
+60
+
+I. Kloog et al. / Computers, Environment and Urban Systems 33 (2009)
+55--63
+
+individual BC patients, this variable was used as a proxy for their
+welfare levels. 4.6. Statistical analysis To identify and measure the
+signiﬁcance of factors inﬂuencing the density of BC patients in the
+study area, several multivariate statistical techniques were used.
+First, we started with the following OLS model:
+
+lnðBCÞ ¼ b0 þ
+
+4 X
+
+bi F i þ e;
+
+i¼1
+
+where BC is the kernel density of BC patients in a given location; b0,
+bi are regression coefﬁcients; Fi are the explanatory variables, and e
+is a random error term. Although during the analysis, other functional
+forms (that is double-linear and double-log models) were also tested,
+the above log-linear model was found to be best performing. During the
+analysis multicollinearity and normality were tested and their results
+were found satisfactory. The residuals from the OLS model were tested by
+two tests: cluster and outlier analysis (Local Moran's I), and Moran's I
+global autocollinearity test (Anselin, 1999). The local Moran's I test
+showed signiﬁcant clustering of the residuals (see Fig. 3), while the
+global Moran's I indicated that autocollinearity of residuals was highly
+signiﬁcant (I = 0.14; Z = 32.43, P < 0.001). These results necessitated
+the use of spatial lag (SL) models in order to improve the robustness of
+regression estimates. The SL models were performed using the
+SPlus-SpatialStatsTM software.
+
+5. Results Table 1 shows the factors affecting the areal density of BC
+   patients. The ﬁrst three models are OLS models, which differ by a way
+   in which the density variable is calculated -- number of resi-
+
+dential buildings per km2 (Model 1), ﬂoor area of buildings per km2
+(Model 2) or density of residents per km2 (Model 3). The other three
+models are spatial lag (SL) models estimated respectively by three
+different methods -- conditional auto-regression (Model 4), simultaneous
+auto-regression (Model 5) and moving average (Model 6). (In all three SL
+models, the density variable is represented by density of residents,
+which appears to be best performing). The models appear to provide a
+reasonably good ﬁt (R2 = 0.609-- 0.701) and high degree of generality (F
+= 413.889--623.802, P < 0.01). In all models, LAN variable appears to be
+positively associated with kernel density of BC patients (P < 0.01).
+Concurrently, the BC density is negatively associated with ‘elevation'
+(P < 0.01), implying that the density of BC patients, appears to be
+lower in higher income neighborhoods. In four out of six models
+(excluding Models 1 and 2), the density of BC patients is positively
+associated with housing/population density (t > 9.0; P < 0.001). The SO2
+variable appears to be statistically signiﬁcant at a 0.05 signiﬁcance
+level in three (out of six) models (Models 1, 2 and 5 P < 0.05) and is
+statistically insigniﬁcant in the rest (Models 3--4 and 6).
+Characteristically, among all six models tested in the ﬁrst run of the
+analysis, the two types of SL modes (simultaneous auto-regression and
+moving average) appear to provide the best ﬁt, as indicated by
+relatively small standard errors of the estimate (SEE = 0.237 (Model 5)
+vs. SEE = 0.316 (Model 3)). Although in the analysis, the
+multicollinearity of research variables was tested and found within
+tolerable limits (Tol. > 0.4), even this relatively low level of
+multicollinearity may bias regression estimates. Therefore, we used the
+stepwise multiple regression (SMR) method, to include only statistically
+signiﬁcant variables in the resulting model (see Table 2; Model 7). As
+this model shows, three variables -- LAN, elevation and density --
+emerged as statistically signiﬁcant. All of them exhibit expected signs.
+In particular, the density of BC patients increases with LAN intensity
+(b = 1.506; t = 14.8; P < 0.001), population density (b = 0.058; t =
+18.1; P < 0.001) and drop with elevation of houses
+
+Table 1 Factors affecting the areal density of breast cancer patients.
+Methods: ordinary least squares -- OLS (Models 1--3) and spatial lag
+(SL) regression.f Variable
+
+Model 1
+
+Light intensity (LAN) S02 Elevation Density (Constant) Number of obs. R2
+R2 adjusted F SEEd Rhoe
+
+c
+
+Model 2
+
+Model 3
+
+Model 4
+
+Model 5
+
+Model 6
+
+Tolerance
+
+Ba
+
+tb
+
+Ba
+
+tb
+
+Ba
+
+tb
+
+Ba
+
+tb
+
+Ba
+
+tb
+
+Ba
+
+tb
+
+2.996 0.021 1.433 0.234 3.049
+
+33.653** 2.042* 12.773* 5.434* 39.162**
+
+2.582 0.052 1.149 0.452 2.726
+
+23.732* 4.875* 9.958* 1.832 34.348*
+
+1.439 0.006 0.314 0.059 2.834
+
+14.962* 0.636 2.955* 18.235* 49.926*
+
+1.439 0.005 0.313 0.058 2.833
+
+14.961* 0.636 2.954* 18.235* 49.925*
+
+1.764 0.039 0.342 0.047 2.944
+
+18.952* 2.894* 2.636* 14.652* 33.411**
+
+1.619 0.005 0.627 0.019 3.011
+
+16.267* 0.340 4.422* 9.379* 30.941*
+
+1079 0.619 0.617 430.582** 0.358 --
+
+1079 0.609 0.608 413.889** 0.362 --
+
+1079 0.701 0.700 623.802** 0.316 --
+
+1079 -- -- -- 0.316 0.000
+
+1079 -- -- -- 0.237 0.022
+
+Model 1: OLS; density measure -- number of residential buildings per
+km2. Model 2: OLS; density measure -- ground ﬂoor area of residential
+buildings in m2. Model 3: OLS; density measure -- number of residents
+per km2. Model 4: Spatial lag (SL) model; covariance type -- conditional
+auto-regression (CAR); density measure -- number of residents per km2.
+Model 5: Spatial lag (SL) model; covariance type -- simultaneous
+auto-regression (SAR); density measure -- number of residents per km2.
+Model 6: Spatial lag (SL) model; covariance type -- moving average (MA);
+density measure -- number of residents per km2. a Regression coefﬁcient.
+b t-statistic. c Number of valid observations list-wise. d Standard
+error of the estimate. e Spatial lag coefﬁcient. f Original values of
+the dependent variable are logarithmically transformed as follows:
+BC\_density = LN(BC\_density). * 0.05 signiﬁcance level. ** 0.01
+signiﬁcance level.
+
+1079 -- -- -- 0.241 0.060
+
+0.436 0.853 0.783 0.357 --
+
+61
+
+I. Kloog et al. / Computers, Environment and Urban Systems 33 (2009)
+55--63 Table 2 Alternative models of the factors affecting the kernel
+density of Breast cancer patients. Variable
+
+Model 7 a
+
+B LAN S02 Elevation Density Neighborhood dummied (79) (Constant) Number
+of obs.c R2 R2 adjusted F
+
+1.506 -- 0.290 0.058 --
+
+Model 8 t
+
+b
+
+2
+
+R change **
+
+14.825 -- 2.613* 18.060* --
+
+**
+
+0.065 -- 0.002* 0.616* -- 1079
+
+0.683 0.682 770.482**
+
+Tolerance
+
+Ba
+
+tb
+
+0.438 -- 0.792 0.393 --
+
+0.005 0.077 0.003 --
+
+8.405** 0.938 2.053* --
+
+3.654
+
+6.948* 1079 0.534 0.496 14.100*
+
+Model 7: Method -- stepwise regression; original values of the dependent
+variable are logarithmically transformed as follows: BC = LN(BC), where
+kernel density of BC patients (per km2). Model 8: Method -- OLS; density
+measure -- number of residents per km2; values of the dependent variable
+are calculated as follows: BC\_density = LN(BC  103 /P\_density), where
+BC\_density = the relative density of BC patients; BC = kernel density
+of BC patients (per km2), and P\_density = number of residents per km2.
+a Regression coefﬁcient. b t-statistic. c Number of valid observations
+list-wise. * 0.05 signiﬁcance level. ** 0.01 signiﬁcance level.
+
+(b = 0.259; t = 2.613; P < 0.01). In this model, the relative
+contribution of individual predictors can be estimated by the R2 change.
+Thus, the ‘density' variable contributes most to explaining the variance
+of the dependent variable (R2-change = 0.616), followed by LAN
+(R2-change = 0.065) and ‘elevation' (R2-change = 0.002). An alternative
+way of representing BC incidence in a given point of space is to divide
+the density of BC patients by the overall density of population in the
+same location. The resulting measure is essentially similar to the
+disease incidence rate commonly used in empirical epidemiological
+studies, in which the incidence rate of a disease is calculated by
+dividing the number of people affected by the total number of people at
+risk (Bray, McCarron, & Parkin, 2004; Parkin, Bray, & Devesa, 2001;
+Parkin, Bray, Ferlay, & Pisani, 2001). The measure calculated in such a
+way was used in the regression rerun (Model 8; Table 2). We also added
+neighborhood ‘dummies' to this model, i.e., dichotomous variables, which
+take on value 1, if a person resides in a given residential neighborhood
+and 0 otherwise (for the sake of brevity, regression estimates for
+individual neighborhoods' dummies are not reported in the following
+analysis). As in previous regression runs, the LAN variable emerged as
+positively associated with BC rates (t = 8.405; P < 0.01), so did
+elevation (t = 2.053; P < 0.01), while the SO2 variable was found
+statistically insigniﬁcant (P > 0.5).
+
+6. Conclusion In empirical urban research, individual observations are
+   often represented by simple point data, which lack any other
+   attributes, except for geographic coordinates. To estimate the
+   prevalence rate of such events, the researcher needs to normalize the
+   overall number of cases recorded in a chosen territorial unit (e.g.,
+   statistical area or air pollution zone) by its overall population.
+   Although, technically, this task is relatively simple, such areal
+   aggregation of data is likely to lead to a potential loss of
+   information and a possibility of erroneous estimates it entails
+   (Elliott & Wartenberg 2004; Elliott et al., 1992; Greenland &
+   Morgenstern, 1989; Nuckols et al., 2004). In the present study, we
+   attempt to address this informationloss problem by using the
+   analytical technique known as the
+
+‘kernel smoothing' or ‘kernel density' (KD) function (Bailey & Gatrell,
+1995; Borruso & Schoier, 2004; Gatrell et al., 1996; McCoy & Johnston,
+2001). The KD technique does not require the presence of a parameter's
+value in a given location (e.g., prevalence rate), which is essential
+for more common smoothing techniques, such as spline and kriging.
+Although the use of KD smoothing is not novel in empirical studies, its
+use has been mostly limited to visualization tasks, such as disease
+mapping and the detection of disease clusters (Berke, 2005; Hu et al.,
+2008; Rushton et al., 2004). However, as the present study demonstrates,
+the application of this analytical technique may surpass this simple
+visualization-oriented use and thus become a useful analytical tool for
+environmental epidemiological research, looking into possible
+associations between environmental risk factors and their health
+outcomes. To illustrate this possible use of KD estimates, the present
+study looked into the association between the geographical distributions
+of breast cancer (BC) cases and nightlight exposure in the city of
+Haifa, Israel, using a variety of statistical tools ranging from
+ordinary least squares (OLS) to spatial lag (SL) regressions. As the
+study shows, the breast cancer incidence and LAN appear to be
+signiﬁcantly associated (P < 0.01), controlled for population densities,
+SO2 air pollution and indicator of local welfare levels. The link
+between LAN exposure and breast cancer rates found in this study thus
+adds further evidence to previous studies concerning the relation
+between LAN and breast cancer (Anisimov, 2006; Kloog, Haim, Stevens,
+Barchana, & Portnov, 2008; Pauley, 2004; Stevens et al., 2007; Verkasalo
+et al., 1999) and provides additional evidence of coherence (for an
+inference of causality), as described by Hill (1965). The proposed
+technique of analysis is relatively simple. In the ﬁrst step, point
+locations (i.e., home addresses of individual patients) are transformed
+into a continuous KD surface. Next, KD values are calculated for the
+location of individual patients' homes, using the ‘spatial join' tool of
+GIS software. The values obtained thereby are then used as the dependent
+variable in a multivariate analysis. In a similar manner, the values of
+predictors are estimated (e.g., population densities, air pollution,
+etc.). That is, continuous KD surfaces are formed for each of these
+factors, and, then, the factors' values are estimated for the home
+locations of individual
+
+62
+
+I. Kloog et al. / Computers, Environment and Urban Systems 33 (2009)
+55--63
+
+patients. By way of this procedure, the initial number of observations
+remains unchanged, whereas zonal technique, more commonly used in
+empirical studies, reduce the number of observations dramatically by
+summing up individual observations for predeﬁned areal units (such as
+statistical areas or census zones). To the best of our knowledge, the
+present analysis is the ﬁrst study which investigates the relationship
+between LAN exposure and BC incidence within urban areas, whereas most
+previous studies were limited to laboratory research and surveys of
+nightshift workers (Blask et al., 1992; Davis & Mirick, 2006; Davis et
+al., 2001; Haim et al., 2002; Hansen, 2001; Schernhammer et al., 2001,
+2006). It is to be noted, however, that the study has several
+limitations associated with its population-level design. In particular,
+it carries no information on potential confounders, such as ethnicity,
+smoking habits, diet and alcohol consumption. The addition of these
+potential confounders requires individual-level surveys, based on a
+representative sample of BC patients and control population groups,
+which may form the main thrust of follow-up studies. In addition, it
+should be noted that outdoor illumination is only one source of
+potential nighttime LAN exposure. Other sources include indoor
+illumination and LAN exposure in enclosed public spaces, public
+transportation and LAN exposure at work place. At least in part, this
+problem is countered here by the fact that most women are at home during
+night, since the proportional share of nighttime workers is relatively
+small, not surpassing 8--16%, by different estimates (McOrmond, 2004;
+USCB, 2006). Moreover, in Israel, especially during long and hot
+summers, most people sleep with open windows and curtains, so as to
+improve cross-ventilation, thus increasing their exposure to outdoor
+LAN. There are various studies showing that even low or short exposure
+to LAN can decrease MLT production drastically (Pauley, 2004). Finally,
+we suggest that the proposed technique may be applicable to a wide range
+of empirical studies in which individual observations are represented by
+simple point data (such as trafﬁc accidents, crime occurrences and ﬁres)
+and may be considered as an alternative to zonal approaches based on
+data aggregation and calculation rates, which lead to a reduction in the
+number of observation points, thus elevating the probability of
+ecological bias. Acknowledgements The authors are grateful to Dr. Micha
+Barchana, Head of the Israel National Cancer Registry, for providing
+breast cancer data.
+
+Our gratitude is also due to three anonymous reviewers for their
+numerous helpful remarks and suggestions. References Anisimov, V. N.
+(2006). Light pollution, reproductive function and cancer risk.
+Neuroendocrinology Letters, 27(1--2), 35--52. Anselin, L. (1999).
+Spatial econometrics. Dallas: Bruton Center School of Social Sciences,
+University of Texas. Bailey, T. C., & Gatrell, A. C. (1995). Interactive
+spatial data analysis. London: Longman. Berke, O. (2005). Exploratory
+spatial relative risk mapping. Preventive Veterinary Medicine, 71(3--4),
+173--182. Blask, D. E., Brainard, G. C., Dauchy, R. T., Haniﬁn, J. P.,
+Davidson, L. K., Krause, J. A., et al. (2005). Melatonin-depleted blood
+from premenopausal women exposed to light at night stimulates growth of
+human breast cancer xenografts in nude rats. Cancer Research, 65(23),
+11174--11184. Blask, D. E., Lemus-Wilson, A. M., & Wilson, S. T. (1992).
+Breast cancer: A model system for studying the neuroendocrine role of
+pineal melatonin in oncology. Biochemical Society Transactions, 20(2),
+309--311. Borruso, G., & Schoier, G. (2004). Density analysis on large
+geographical databases. Search for an index of centrality of services at
+urban scale. In Computational Science and Its Applications -- ICCSA 2004
+(Vol. 3044/2004). Berlin/Heidelberg: Springer. Bray, F., McCarron, P., &
+Parkin, D. M. (2004). The changing global patterns of female breast
+cancer incidence and mortality. Breast Cancer Research, 6(6), 229--239.
+Brody, J. G., Moysich, K. B., Humblet, O., Attﬁeld, K. R., Beehler, G.
+P., & Rudel, R. A. (2007). Environmental pollutants and breast cancer:
+Epidemiologic studies. Cancer, 109(S12), 2667--2711. Davis, S., &
+Mirick, D. K. (2006). Circadian disruption, shift work and the risk of
+cancer: a summary of the evidence and studies in Seattle. Cancer Causes
+Control, 17(4), 539--545. Davis, S., Mirick, D. K., & Stevens, R. G.
+(2001). Night shift work, light at night, and risk of breast cancer.
+Journal of the National Cancer Institute, 93(20), 1557--1562. Elliott,
+P., Cuzick, J., English, D., & Stern, R. (1992). Geographical and
+environmental epidemiology. Methods for small area studies. Oxford:
+Oxford University Press. Elliott, P., & Wartenberg, D. (2004). Spatial
+epidemiology: Current approaches and future challenges. Environmental
+Health Perspectives, 12(9), 998--1006. Farewell, D. (1999). Specifying
+the bandwidth function for the kernel density estimator. Available from:
+<http://www.mrc-bsu.cam.ac.uk/bugs/ documentation/coda03/node44.html>.
+Gatrell, A. C., Bailey, T. C., Diggle, P. J., & Rowlingson, B. S.
+(1996). Spatial point pattern analysis and its application in
+geographical epidemiology. Transactions of the Institute of British
+Geographers, 21(1), 256--274. Gehlke, C., & Biehl, K. (1934). Certain
+effects of grouping upon the size of the correlation coefﬁcient in
+census tract material. Journal of the American Statistical Association,
+(29), 169--170. Gelfand, A., Zhu, L., & Carlin, B. P. (2001). On the
+change of support problem for spatio-temporal data. Biostatistics, 2,
+31--45. Gotway, C., & Young, L. J. (2002). Combining incompatible
+spatial data. Journal of the American Statistical Association, 97(48),
+632--647. Greenland, S., & Morgenstern, H. (1989). Ecological bias,
+confounding, and effect modiﬁcation. International Journal of
+Epidemiology, 18(1), 269--274. Haim, A., Shanas, U., & Gilboa, A.
+(2002). Responses to photoperiod manipulations of social voles (Microtus
+Socialis): Food and energy consumption. Israel Journal of Zoology, 48,
+170--171. Hansen, J. (2001). Increased breast cancer risk among women
+who work predominantly at night. Epidemiology, 12(1), 74--77.
+
+Appendix 1 Descriptive statistics of the research variables.a Variable
+
+Unit
+
+Minimum
+
+Maximum
+
+Mean
+
+Std. deviation
+
+Dependent variables Areal density of breast cancer cases Relative
+density of BC patients
+
+Patients per km2 Patients per km2/residents per km2
+
+3.00 1.79
+
+147.00 6.52
+
+52.91 3.91
+
+32.06 0.39
+
+Explanatory variables Light intensity Elevation above the sea level SO2
+pollution Building density Residential density Population density
+
+W per km2 m lg/m3 (annual average) Buildings per km2 Ground ﬂoor area
+(m2) of buildings per km2 Residents per km2
+
+0 5 4 0 0 500
+
+768 425 10 1940 34,0000 28500
+
+321.47 133.54 6.50 649.19 148574.61 10042.63
+
+153.29 104.19 1.17 326.30 68290.19 5056.04
+
+a
+
+Total number of cases -- 1079.
+
+I. Kloog et al. / Computers, Environment and Urban Systems 33 (2009)
+55--63 Hill, A. B. (1965). The environment and disease: Association or
+causation? Proceedings of the Royal Society of Medicine, 58, 295--300.
+Hu, Z., Liebens, J., & Rao, K. R. (2008). Linking stroke mortality with
+air pollution, income, and greenness in northwest Florida: An ecological
+geographical study. International Journal of Health Geographics, 7, 20.
+INCR (2004). Geographical mapping of breast cancer in Israel:
+1984--1999. <http:// www.health.gov.il> Accessed 2004. Kerenyi, N. A.,
+Pandula, E., & Feuer, G. (1990). Why the incidence of cancer is
+increasing: The role of ‘light pollution'. Medical Hypotheses, 33(2),
+75--78. Kliukiene, J., Tynes, T., & Andersen, A. (2001). Risk of breast
+cancer among Norwegian women with visual impairment. British Journal of
+Cancer, 84(3), 397--399. Kloog, I., Haim, A., Stevens, R. G., Barchana,
+M., & Portnov, B. A. (2008). Light at night co-distributes with incident
+breast but not lung cancer in the female population of Israel.
+Chronobiology International, 25(1), 65--81. Kulldorff, M. (2007).
+Satstan 7.0.3. [[http://www.satscan.org/]] Retrieved, Accessed 2007.
+Levine, N. (2007). CrimeStat: A spatial statistics program for the
+analysis of crime incident locations. Washington, DC: National Institute
+of Justice. Lewy, A. J., Wehr, T. A., Goodwin, F. K., Newsome, D. A., &
+Markey, S. P. (1980). Light suppresses melatonin secretion in humans.
+Science, 210(4475), 1267--1269. McCoy, J., & Johnston, K. (2001). Using
+ArcGIS Spatial Analyst. Redlands: ESRI. McOrmond, T. (2004). Changes in
+working trends over the past decade. Labour Market Trends. Minami, M., &
+ESRI (2000). Using ArcMap: GIS. Redlands California: ESRI. Morgenstern,
+H., & Thomas, D. (1993). Principles of study design in environmental
+epidemiology. Environmental Health Perspectives, 101(Suppl. 4), 23--38.
+Nuckols, J. R., Ward, M. H., & Jarup, L. (2004). Using geographic
+information systems for exposure assessment in environmental
+epidemiology studies. Environmental Health Perspectives, 112(9),
+1007--1015. Openshaw, S. (1984). The modiﬁable areal unit problem.
+Norwich: GeoBooks. Openshaw, S., & Taylor, P. (1979). A million or so
+correlation coefﬁcients: three experiments on the modiﬁable areal unit
+problem. In Statistical applications in the spatial sciences (pp.
+127--144). London: Pion. Ozonoff, A., Webster, T., et al. (2005).
+Cluster detection methods applied to the upper cape cod cancer data.
+Environmental Health, 4, 19. Parkin, D. M., Bray, F. I., & Devesa, S. S.
+(2001). Cancer burden in the year 2000. The global picture. European
+Journal of Cancer, 37(Suppl. 8), S4--66. Parkin, D. M., Bray, F.,
+Ferlay, J., & Pisani, P. (2001). Estimating the world cancer burden:
+Globocan 2000. International Journal of Cancer, 94(2), 153--156. Pauley,
+S. M. (2004). Lighting for the human circadian clock: Recent research
+indicates that lighting has become a public health issue. Medical
+Hypotheses, 63(4), 588--596.
+
+63
+
+Pekkanen, J., & Pearce, N. (2001). Environmental epidemiology:
+Challenges and opportunities. Environmental Health Perspectives, 109(1),
+1--5. Portnov, B. A., Dubnov, J., & Barchana, M. (2007). On ecological
+fallacy, assessment errors stemming from misguided variable selection,
+and the effect of aggregation on the outcome of epidemiological study.
+Journal of Exposure Science and Environmental Epidemiology, 17(1), 106--
+121. Portnov, B. A., Dubnov, J., & Barchana, M. (2008). Studying the
+association between air-pollution and lung cancer incidence in a large
+metropolitan area using a kernel density function. Socio-Economic
+Planning Sciences, doi:10.1016/ j.seps.2008.09.001. Portnov, B. A.,
+Odish, Y., et al. (2006). Factors affecting housing modiﬁcations and
+housing pricing: A case study of four residential neighborhoods in
+Haifa, Israel. Journal of Real Estate Research, 27(4), 371--407.
+Rothman, K. J. (1993). Methodologic frontiers in environmental
+epidemiology. Environmental Health Perspectives, 101(Suppl. 4), 19--21.
+Rushton, G., Peleg, I., Banerjee, A., Smith, G., & West, M. (2004).
+Analyzing geographic patterns of disease incidence. Rates of late-stage
+colorectal cancer in Iowa. Journal of Medical Systems, 28(3), 223--236.
+Schernhammer, E. S., Kroenke, C. H., Laden, F., & Hankinson, S. E.
+(2006). Night work and risk of breast cancer. Epidemiology, 17(1),
+108--111. Schernhammer, E. S., Laden, F., Speizer, F. E., Willett, W.
+C., Hunter, D. J., Kawachi, I., et al. (2001). Rotating night shifts and
+risk of breast cancer in women participating in the nurses' health
+study. Journal of the National Cancer Institute, 93(20), 1563--1568.
+Selvin, H. C. (1958). Durkheim's ‘suicide' and problems of empirical
+research. American Journal of Sociology, 63, 607--619. Silverman, B. W.
+(1986). Density estimation for statistics and data analysis. New York:
+Chapman and Hall. Stevens, R. G. (1987). Electric power use and breast
+cancer: A hypothesis. American Journal of Epidemiology, 125(4),
+556--561. Stevens, R. G. (2005). Circadian disruption and breast cancer:
+From melatonin to clock genes. Epidemiology, 16(2), 254--258. Stevens,
+R. G., Blask, D. E., Brainard, G. C., Hansen, J., Lockley, S. W.,
+Provencio, I., et al. (2007). Meeting report: The role of environmental
+lighting and circadian disruption in cancer and other diseases.
+Environmental Health Perspectives, 115(9), 1357--1362. USCB (2006).
+Labor force employment earnings. [[http://www.census.gov/]] Accessed
+2006. Verkasalo, P. K., Pukkala, E., Stevens, R. G., Ojamo, M., &
+Rudanko, S. L. (1999). Inverse association between breast cancer
+incidence and degree of visual impairment in Finland. British Journal of
+Cancer, 80(9), 1459-- 1460.
+
+

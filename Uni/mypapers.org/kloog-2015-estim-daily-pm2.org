@@ -1,0 +1,860 @@
+Atmospheric Environment 122 (2015) 409e416
+
+Contents lists available at ScienceDirect
+
+Atmospheric Environment journal homepage:
+www.elsevier.com/locate/atmosenv
+
+Estimating daily PM2.5 and PM10 across the complex geo-climate region of
+Israel using MAIAC satellite-based AOD data Itai Kloog a, *, Meytar
+Sorek-Hamer a, b, Alexei Lyapustin c, Brent Coull d, Yujie Wang e, Allan
+C. Just f, Joel Schwartz f, David M. Broday b a
+
+Department of Geography and Environmental Development, Ben-Gurion
+University of the Negev, Beer Sheva, Israel Civil and Environmental
+Engineering, Technion, Haifa, Israel NASA GSFC, Code 613, Greenbelt, MD,
+USA d Department of Biostatistics, Harvard T.H. Chan School of Public
+Health, Boston, MA, USA e University of Maryland Baltimore County,
+Baltimore, MD, USA f Department of Environmental Health, Harvard T.H.
+Chan School of Public Health, Boston, MA, USA b c
+
+h i g h l i g h t s  We estimated daily PM2.5 and PM10 using Novel
+MAIAC satellite-based AOD data.  Our Models performed very well with
+ﬁts of 0.79 and 0.72 for PM10 and PM2.5, respectively.  Our results
+revealed very little bias (Slope of predictions versus withheld
+observations ¼ 0.99).  Our model enables reconstruction of long/short
+term resolved exposure to PM2.5 and PM10 in Israel.
+
+a r t i c l e i n f o
+
+a b s t r a c t
+
+Article history: Received 13 April 2015 Received in revised form 1
+October 2015 Accepted 2 October 2015 Available online 8 October 2015
+
+Estimates of exposure to PM2.5 are often derived from geographic
+characteristics based on land-use regression or from a limited number of
+ﬁxed ground monitors. Remote sensing advances have integrated these
+approaches with satellite-based measures of aerosol optical depth (AOD),
+which is spatially and temporally resolved, allowing greater coverage
+for PM2.5 estimations. Israel is situated in a complex geo-climatic
+region with contrasting geographic and weather patterns, including both
+dark and bright surfaces within a relatively small area. Our goal was to
+examine the use of MODIS-based MAIAC data in Israel, and to explore the
+reliability of predicted PM2.5 and PM10 at a high spatiotemporal
+resolution. We applied a three stage process, including a daily
+calibration method based on a mixed effects model, to predict ground
+PM2.5 and PM10 over Israel. We later constructed daily predictions
+across Israel for 2003 e2013 using spatial and temporal smoothing, to
+estimate AOD when satellite data were missing. Good model performance
+was achieved, with out-of-sample cross validation R2 values of 0.79 and
+0.72 for PM10 and PM2.5, respectively. Model predictions had little
+bias, with cross-validated slopes (predicted vs. observed) of 0.99 for
+both the PM2.5 and PM10 models. To our knowledge, this is the ﬁrst study
+that utilizes high resolution 1 km MAIAC AOD retrievals for PM
+prediction while accounting for geo-climate complexities, such as
+experienced in Israel. This novel model allowed the reconstruction of
+long- and short-term spatially resolved exposure to PM2.5 and PM10 in
+Israel, which could be used in the future for epidemiological studies. ©
+2015 Elsevier Ltd. All rights reserved.
+
+Keywords: Air pollution Aerosol optical depth (AOD) Epidemiology PM10
+PM2.5 Exposure error High particulate levels MAIAC
+
+1. Introduction Satellite data have been frequently used in recent years
+   to
+
+-  Corresponding author. E-mail address: ikloog@bgu.ac.il (I. Kloog).
+   http://dx.doi.org/10.1016/j.atmosenv.2015.10.004 1352-2310/© 2015
+   Elsevier Ltd. All rights reserved.
+
+predict both coarse and ﬁne particulate matter (PM) (Emili et al., 2010;
+Chang et al., 2014; Chudnovsky et al., 2014; Hoff and Christopher, 2009;
+Kloog et al., 2014a; Lee et al., 2011; SorekHamer et al., 2015). Aerosol
+Optical Depth (AOD) from the Moderate Resolution Imaging
+Spectroradiometer (MODIS) is a commonly used satellite product for
+predicting PM concentrations as it
+
+410
+
+I. Kloog et al. / Atmospheric Environment 122 (2015) 409e416
+
+measures light extinction at given wavelengths due to scattering and
+absorption along the measured atmospheric column. AOD has been used
+globally over areas with different characteristics showing a range of
+results, e.g. Northeast USA (Kloog et al., 2011, 2012) - a relatively
+dark and vegetated area; Lombardy, Italy (Nordio et al., 2013); and
+Israel e a Mediterranean region characterized by a high percentage of
+bright surfaces, e.g. desert (SorekHamer et al., 2015). In particular,
+Israel experiences a complex geo-climatic variation, with different
+geographic and weather patterns within a relatively small area, e.g.
+desert conditions in the south, snowcapped mountains in the north,
+coastal environment, densely populated metropolitan areas, vegetated
+regions, and large differences in height above the sea level that range
+from 417 m to 1204 m (Erell et al., 2003; Kaﬂe and Bruins, 2009). The
+coastal region holds a large part of the population along with pollution
+sources. The latter, combined with varying meteorological conditions,
+affects the region air quality (Levy et al., 2008). Dust, transported to
+the region from the Sahara desert and the Arabian peninsula during the
+winter and the transition seasons contributes signiﬁcantly to the total
+PM load in Israel (Ganor et al., 2009; SorekHamer et al., 2013a).
+Similarly, transboundary transport of anthropogenic sulphates and
+nitrates from southern and eastern Europe is a main source of PM2.5
+loading (Asaf et al. 2008). In Israel, the PM2.5/PM10 ratio demonstrates
+clearly that the PM2.5e10 fraction dominates the ambient particulate
+matter in days affected by dust, with ratios of about 0.3. In contrast,
+in days not affected by dust this ratio equals ~0.5 (Sorek-Hamer et al.,
+2013a), which is nevertheless smaller that ratios that are observed in
+the Eastern US or Europe, 0.7e0.8. The Israeli PM2.5 monitoring network
+is distributed very heterogeneously. To overcome the relatively sparse
+surface monitoring network available in Israel, Sorek-Hamer et al.
+(2015) have used AOD products from MODIS with a fairly coarse spatial
+resolution (10 km) to estimate PM across Israel. Both the Dark Target
+(DT) and the Deep Blue (DB) algorithms for AOD retrieval were used to
+predict ground PM2.5 using mixed effects models. The best PM2.5
+prediction was obtained using the AODDB product, presenting a R2 of
+0.45. Using the AODDB product signiﬁcantly increased the spatiotemporal
+availability of the AOD over the Israeli bright surface area and
+improved PM2.5 prediction relative to using the more common AODDT
+retrievals. The varying daily relationship between MODIS based AOD and
+ground PM2.5 have been shown in many studies (Kloog et al., 2014a;
+Chudnovsky et al. 2013; Lee et al., 2011). This daily varying
+relationship can be attributed to differences in particle composition,
+daily variability of the planetary boundary layer (PBL) structure and
+height, and changing relative humidity and the aerosol vertical
+concentration proﬁle. A single calibration slope between PM2.5 and AOD
+is not well suited for capturing these daily changing relationships. We
+thus make use of a mixed model approach which allows for the regression
+intercepts and slopes to vary daily to control for this inherent
+day-to-day variability in the AOD-PM2.5 relationship caused by
+time-varying parameters. Mixed model regressions are powerful tools that
+incorporate both spatial and temporal predictors as well as day-speciﬁc
+random-effects. The mixed model approach was used successfully in
+different geoclimatic regions. Previous studies that used the recently
+developed Multi Angle Implementation of Atmospheric Correction (MAIAC)
+retrieval algorithm (1 km spatial resolution) revealed improved PM
+predictions and large spatiotemporal availability (Kloog et al., 2011;
+Lee et al., 2011; Chudnovsky et al., 2013, 2014; Nordio et al., 2013).
+Similar results were obtained also when using MODIS/ MAIAC retrievals
+within different regression models (Chang et al., 2014; Hu et al.,
+2014). Nonetheless, although MAIAC AOD was
+
+successfully used for estimating PM2.5 concentrations in North America,
+it has rarely been tested for estimating PM10 concentrations nor in more
+complex geographic and climatic regions as Israel (e.g. Emili et al.,
+2011). In this study we examined the use of the highly spatiotemporal
+resolved MAIAC data in Israel, a complex area with diverse topography
+and climate conditions, exploring its PM2.5 and PM10 predictions
+reliability. We applied all the three stages of the daily calibration
+method, based on a mixed effects model, to predict ground PM2.5 and PM10
+over Israel. To our knowledge, this is the ﬁrst study that utilizes
+MAIAC data for PM prediction while accounting for geo-climatic
+complexity such as experienced in Israel.
+
+2. Material and methods 2.1. Study domain The study region included the
+   entire state of Israel (Fig. 1) apart from its most southern region,
+   where population is very scarce and monitoring data is unavailable.
+   Since our model is aimed for use in environmental epidemiology we
+   choose to limit already computationally intensive model runs to
+   populated regions in Israel. Israel is located along the eastern
+   Mediterranean coast, between 29.5 and 33.5 N. Climatically, Israel
+   is situated in the subtropical drylands and is characterized by a hot
+   and dry summer and a single rain season (NovembereMarch). In spite of
+   its small area (~420 km
+
+Fig. 1. Map of the study area showing all PM2.5 and PM10 monitoring
+stations across the study area.
+
+I. Kloog et al. / Atmospheric Environment 122 (2015) 409e416
+
+411
+
+from north to south and a maximum width of ~110 km), it experiences
+sharp climatic and geographic gradients, both in the northsouth and the
+eastewest directions. Hence, the study region includes very diverse
+geographic and climatic regions, including large rural areas, large
+forested regions, water bodies, mountains and the Mediterranean coastal
+plains.
+
+2.2. Satellite data One of the main MODIS aerosol products is spectral
+AOD. This level 2 MODIS product is available daily across the entire
+globe. The product has been utilized in many studies, mainly using the
+“Dark Target” (DT) MODIS algorithm over land that provides a 10 km
+resolution AOD (Kloog et al. 2011; Levy et al. 2007; Remer et al. 2005).
+Recent studies evaluated the Deep Blue algorithm and found that it
+performs better over bright surfaces both with respect to retrievals
+availability as well as for PM2.5 and PM10 estimation (Sayer et al.
+2013, 2014; Sorek-hamer et al. 2015). MAIAC, developed by Lyapustin and
+colleagues, is a new processing algorithm that provides a high 1 km
+resolution AOD product (Lyapustin et al. 2011a,b). The MAIAC algorithm
+begins with gridding the data to a ﬁxed 1 km grid and accumulating of up
+to 16 days of measurements. The algorithm uses a time series analysis
+and processes groups of pixels to derive the surface bidirectional
+reﬂectance distribution function (BRDF) and aerosol parameters over both
+dark vegetated surfaces and bright surfaces, without the assumptions
+typically used by the current MODIS operational processing algorithms.
+The spatio-temporal analysis also helps MAIAC's cloud mask in augmenting
+traditional pixellevel cloud detection techniques. MAIAC's high
+resolution, which is important in many applications such as air
+pollution studies, may bring new information about aerosol sources and,
+potentially, their strength. Validation against AOT obtained at Aerosol
+Robotic Network (AERONET) stations in several U.S. West Coast sites
+showed that the MAIAC and MODIS algorithms have very similar accuracy
+over dark and vegetated surfaces but that MAIAC shows, in general,
+better accuracy over brighter surfaces as a result of its spectral
+retrieval of the regression coefﬁcients and the explicit BRDF
+characterization (Lyapustin et al. 2011b). Due to its generic nature and
+developed angular correction, MAIAC can retrieve AOD over bright
+deserts, as demonstrated for the Solar Village AERONET site in Saudi
+Arabia (Lyapustin et al. 2011b). This ability of MAIAC is crucial in
+areas such as Israel, where large regions are characterized as desert.
+In this work we used MAIAC AOD over Israel based on MODIS Aqua L1B data
+for the years 2003e2013 (generated on 01/10/2014). The correlation
+between MAIAC (Aqua) AOD and AERONET AOD has been locally evaluated with
+data from the Nes Ziona AERONET station located in the central-southern
+part of the country, in an urban area (long:34.78917, lat:31.92250). The
+data from both AOD sources are for the years 2003e2013. The Pearson
+correlation (r ¼ 0.85) was calculated with hourly MAIAC and AERONET AOD
+data (http://aeronet.gsfc.nasa.gov/ new\_web/aerosols.html), relative to
+the Aqua overpass time, from the closest grid cell (long:34.792,
+lat:31.926) (Fig. 2). The raw MAIAC data went through additional
+screening. We applied thresholds based on MAIAC guidelines which use
+quality assurance (QA) ﬂags and uncertainty values (UN) to then exclude
+pixels with erroneous AOD values. The QA and UN data allows us to better
+ﬁlter out pixels that are cloud contaminated, have issues with surface
+brightness, snow etc. The mean retrieval per pixel across the study area
+for all years was 2682. The ﬁrst quartile (Q1) had 2513 observations
+while the third quartile (Q3) had 2984 observations.
+
+Fig. 2. Correlation between MAIAC (Aqua) AOD and hourly AERONET AOD,
+relative to the Aqua overpass time, from the Nes Ziona station. Both AOD
+datasets are for the period 2003e2013. There are only 1470 days (~36%)
+with both available AOD sources at the Aqua overpass time, while 25 of
+them observe AOD above 0.5.
+
+2.3. Ground monitoring data Israel's PM ground monitor network is
+distributed heterogeneously mainly around four urban areas in the
+coastal plain: Tel Aviv, Jerusalem, Haifa, and Ashdod (Fig. 1). Daily
+PM2.5 and PM10 concentrations across Israel for the years 2003e2013 were
+obtained from the Technion Center of Excellence in Exposure Science and
+Environmental Health (TCEEH) air pollution monitoring database (TAPMD).
+Monitoring in Israel is conducted by different local Municipalities
+Associations for the Environment (MAE) and regulated by the Ministry of
+Environmental Protection (MoEP). The measurements are performed using
+TEOM™ continuous monitoring instruments that are operated and maintained
+according to the US-EPA guidelines, with a typical accuracy of ±5% (EPA,
+2013). Since data in some stations were not collected continuously
+throughout the study period, we only used monitors with at least 20%
+yearly data availability. Overall, we used data from 45 PM2.5 monitoring
+stations and 41 PM10 monitoring stations with unique locations, which
+operated during the study period. 2.4. Spatial and temporal predictors
+of PM2.5 Because the relationship between PM2.5 and AOD depends on the
+optical properties, size distribution, and vertical proﬁle of the
+aerosol, which change daily and vary spatially, we ﬁt a calibration
+regression that incorporates predictors of these properties. Since
+available covariates do not capture all of these attributes, we allowed
+the calibration coefﬁcients to vary on a daily and regionally basis, as
+described below. Spatial and temporal covariates were generated using
+Qgis ver. 2.6 (Qgis, 2014), ArcMap ver. 10.2 (ESRI, 2014) and R
+statistical software ver. 3.12 (R, 2014). The spatial predictors used in
+this work are: population density, elevation, trafﬁc density, distance
+from major roads, distance from the shoreline and the percent of open
+space. These variables were chosen because they can serve as surrogates
+for emissions of particles with different optical properties.
+Speciﬁcally: 2.4.1. Population density Population density data were
+obtained from the Israeli Central Bureau of Statistics (ICBS, 2014). We
+calculated the weightaveraged population for each 1 km grid cell based
+on the tracts intersecting these grid cells.
+
+412
+
+I. Kloog et al. / Atmospheric Environment 122 (2015) 409e416
+
+2.4.2. Elevation Elevation data were obtained from the ASTER global
+digital elevation model (GDEM) data (ASTER, 2014). ASTER GDEM coverage
+spans from 83 north latitude to 83 south, encompassing 99 percent of
+Earth's landmass. The spatial resolution is 30 m. Since there are
+elevation contrasts across the entire country we used elevation as a
+spatial predictor. 2.4.3. Trafﬁc density Road data were obtained from
+the Israel Survey Bureau mapping service (MAPI) and included all the
+roads across Israel, from one lane to the country major roads (MAPI,
+2013). We calculated the total road density using the line density tool,
+which is part of the ArcGIS spatial analyst toolbox. It calculates the
+magnitude (density) per unit area (1 km) of polyline features (all the
+roads) that pass within 1 km radius around each 1 km cell centroid
+throughout the study area. The road density was then intersected with
+the 1 km grids resulting in an attribute table containing the road
+density in each 1 km grid cell. 2.4.4. Distance from major
+roads/shoreline We calculated distances from the centroids of our grid
+to both the Israel shoreline and major roads across Israel using Qgis.
+These distances (in meters) were attributed to each centroid across the
+study area. 2.4.5. Percent of open space We used the ICBS land use
+dataset to calculated the percentage of open space in each 1 km grid
+cell across the study area (ICBS, 2007). The percent of open space
+included all the following areas: large-lot single-family housing units,
+parks, forestry, and vegetated areas used for recreation, soil erosion
+control, or esthetic purposes. The temporal predictors used in this work
+are: 2.4.6. Meteorological data All meteorological variables used in the
+analysis were obtained through the TAPMD. Grid cells were matched to the
+closest weather station with available meteorological variables (24 h
+means). We used the following daily mean meteorological variables: air
+temperature, relative humidity and rainfall. 2.4.7. Dust event
+classiﬁcation In order to capture the presence of dust events in the
+region, all observations throughout the study period were classiﬁed as
+affected by dust (dust ﬂag ¼ 1) or as not affected by dust (dust ﬂag ¼
+0). The daily dust ﬂag was assigned according to an extended scheme of
+Sorek Hamer et al. (2013a).
+
+2.5. Statistical methods All modeling was done using the R statistical
+software version 3.12 (R, 2014) and SAS version 9.3 (SAS, 2013). Our aim
+was to generate spatio-temporally resolved daily PM10 and PM2.5
+predictions in each 1 km grid cell for the entire 2003e2013 period. For
+this, we developed a series of processes (Fig. 3). First, calibration of
+the gridded AOD data was performed against PM10 and PM2.5 monitoring
+data that were collected within 1 km of the AOD value. The calibration
+stage adjusted for all the spatiotemporal predictors similar to classic
+land use regressions (LUR). Second, using this model daily PM10 and
+PM2.5 concentrations were calculated in grid cells with AOD data but
+without available monitoring data. Third, daily PM10 and PM2.5 in grid
+cells with no AOD data for that day were estimated, taking into account
+the region-speciﬁc association between grid-cell AOD and PM levels as
+well as the association between PM10 and PM2.5 levels in any given grid
+with that in neighboring grid cells. Missing MAIAC AOD data are not
+random, possible reasons for the missing AOD retrievals that may be
+associated with ground level PM include dust storms, snow, and heavy
+cloud coverage. Thus, in the calibration process we incorporated inverse
+probability weighting (IPW) to potentially avoid bias in the regression
+coefﬁcient estimates, and thus in the resulting predictions. The IPW
+approach up-weights observed grid cell-day combinations with covariate
+patterns that are more often missing AOD data. To obtain these weights,
+we ﬁtted the following logistic regression model for the probability (p)
+of observing an AOD value in cell i on day j for each year:
+
+ ln
+
+b p b 1p
+
+2.4.9. PBL Daily mixing height of the planetary boundary layer (PBL)
+were obtained from modeled data of the National Center for Scientiﬁc
+Research (CNRS) at a 50 km spatial resolution (CNRS, 2013). PBL can vary
+with the wind speed and can inﬂuence the concentration and the pollutant
+vertical proﬁle (Oke, 1987).
+
+¼b0 þb1 Elevationi þb2 PBLij þb3 Temperatureij
+
+1) 
+
+þ Month  IPW ¼
+
+1 b p
+
+ (2)
+
+where (p) is the probability for availability of AOD in each day in each
+grid cell in each year. It should be noted that there were no IPW
+observations which had a disproportionate inﬂuence in the yearly models.
+Since the daily PM-AOD calibration factors can vary spatially across the
+complex Israeli area, we divided Israel into 5 regions based on
+geography and climate (Herut et al. 2000). The day-speciﬁc intercept and
+AOD random effects in the model are nested within the geographical
+regions of the study. The mixed model calibration process was performed
+using the lme4 package in R (Bates et al. 2014):
+
+PMij ¼ ða þ uj þgjðregÞ Þ þ ðb1 þvj þ hjðregÞ Þ AODij þ
+
+2.4.8. NDVI We used the publicly available monthly MODIS NDVI
+(Normalized Difference Vegetation Index) product (MOD13A3) at 1 km
+spatial resolution. The monthly resolution was chosen under the
+assumption that NDVI values do not change considerably within a month
+period except for the periods of spring green-up and fall senescence.
+
+
+
+6 X
+
+g1m X1mi þ
+
+m¼1
+
+6 X
+
+g2m X2mj þ εij
+
+3) 
+
+m¼1
+
+ ðuj vj kj Þ  N½ð0; 0 Þ; s ðgjðregÞ ; hjðregÞ Þ  N½ð0; 0Þ; sreg 
+where PMij is the measured PM10 or PM2.5 concentration at spatial site i
+on day j; a and uj are the ﬁxed and random (day-speciﬁc) intercepts,
+respectively, AODij is the AOD value in the grid cell corresponding to
+site i on day j; b1 and vj are the ﬁxed and dayspeciﬁc random slopes,
+respectively. X1mi is the value of the m-th spatial predictor at site i
+(i.e. population density, percent of open space, distance to main roads,
+elevation, and trafﬁc density). X2mj is the value of the m-th temporal
+predictor on day j (i.e. PBL height,
+
+I. Kloog et al. / Atmospheric Environment 122 (2015) 409e416
+
+413
+
+Fig. 3. Flowchart illustrating the model steps for obtaining a complete
+cover of PM2.5 prediction over the study area.
+
+NDVI, temperature, relative humidity and dust classiﬁcation). The terms
+gj(reg) and hj(reg) are the daily random intercepts and AOD slopes
+speciﬁc to each study area region, nested within the overall random
+effects uj and vj. We assume that s is a 3 x 3 diagonal matrix with
+diagonal elements s2 u , s2 v , s2 k , and sreg is a 2 x 2 diagonal
+matrix with diagonal elements s2 g , s2 h . In the second stage, the
+above model is used to predict PM10 and PM2.5 in each day and grid cell
+for which MAIAC AOD is available. In the third stage, we used the
+AOD-PMx e relationships to estimate daily PM10 or PM2.5 in all the grid
+cells across Israel, i.e. even in those where MAIAC AOD data were
+missing. This was achieved by ﬁtting a generalized additive mixed model
+(GAMM; Wood, 2006) with a thin plate spline (Wood, 2003), which is a
+smooth function of latitude and longitude (using the grid cell
+centroids) and a random intercept. Moreover, we created discrete 30 km
+buffers around each AOD cell and calculated the daily mean PM10 and
+PM2.5 from the stations in the 30 km buffer around each grid cell, as a
+predictor of PM10 and PM2.5 on that day in that grid cell. To allow for
+temporal variations in the spatial correlation, we ﬁtted a separate
+spatial surface for each bi-monthly period in each year. Using this
+method provides additional information about the concentrations in the
+missing grid cells that classic interpolation does not provide.
+Speciﬁcally, we ﬁtted the following semiparametric regression model:
+
+PredPMij ¼ ða þ ui Þ þ ðb1 þvi Þ MPMij þ sðXi ; Yi ÞkðjÞ þεij ;
+
+4) 
+
+First, we used a mixed model to estimate the region and day speciﬁc
+slopes. Hence, the only parameters we are estimating are the covariances
+of the random effects, S and SREG. Second we validated our models using
+ten-folds out-of-sample cross validation (CV) techniques (Chudnovsky et
+al. 2014; Kloog et al. 2014b). We randomly divide our data into 90%
+training and 10% evaluation datasets ten independent times, using for
+the evaluation the model that has been ﬁtted for the training set. Only
+terms that increased the CV R2 were kept in the model. To test our
+results for bias we regressed the measured PM value for a given site and
+day against the corresponding predicted value from the 90% sample that
+excluded that monitor. Model prediction accuracy is estimated by
+calculating the square root of the mean squared prediction errors
+(RMSPE). In addition, we calculated a spatial RMSPE using a model that
+contained only the spatial components, to make it more comparable to the
+commonly used monthly/yearly LUR models (Eeftens et al. 2012a, 2012b;
+Yanosky et al. 2008). As a sensitivity analysis, we also tested whether
+our models were improved, by using the local spatial and temporal
+predictors, as compared to a simple AOD calibration model in which AOD
+is regressed only against PM2.5. Thus, in addition to our main model, we
+also report ﬁts for an AOD-only model, a Land use and Met model, an AOD
+and land use model, and an AOD and temporal predictors model. Finally,
+we explored the model performance for the cold season (winter months)
+and warm season (summer months) separately.
+
+ðui vi Þ  ½ð0; 0Þ; Ub 
+
+3. Results
+
+where PredPMij is the predicted PM10 or PM2.5 concentration at a grid
+cell i on a day j based on the calibrated model (predicted PM at
+available AOD points); MPMij is the mean PM in the relevant 30 km buffer
+for site i on a day j; a and ui are the ﬁxed and grid-cell speciﬁc
+random intercepts, respectively; b1 and vi are the ﬁxed and random
+slopes, respectively. Xi,and Yi are the longitude and latitude of the
+centroid of grid cell i, respectively, and s(Xi,Yi)k(j) is a smooth
+function of the location (modeled by thin plate splines) speciﬁc to the
+bi-monthly period k(j) in which day j falls (that is, a separate spatial
+smooth was ﬁtted for each bi-monthly period). Running a calibration
+model with a large number of parameters runs the risk of over ﬁtting. We
+used two approaches to avoid this.
+
+Table 1 presents descriptive statistics on the PM10 and PM2.5 ground
+monitoring data. The mean PM across Israel from all the monitoring
+stations during the entire study period (2003e2013) was 23.13 and 53.05
+mg/m3 for PM2.5 and PM10, respectively. Table 2 presents the overall
+spatial and temporal model ﬁts (R2) for 2003e2013 for all the
+sensitivity analyses. Model ﬁts were better using the full model
+following the calibration process, improving the prediction accuracy
+both temporally and spatially (temporal R2 of 0.84 and spatial R2 of
+0.89). Table 3 summarizes the results from the calibration stage
+(process 1) for both the PM2.5 and PM10 models. The models presented
+relatively high cross-validated (CV) ﬁts across the challenging study
+area for both PM2.5 and PM10. For
+
+414
+
+I. Kloog et al. / Atmospheric Environment 122 (2015) 409e416
+
+Table 1 Descriptive statistics of the PM10 and PM2.5 records across the
+study area in the years of 2003e2013. Station
+
+Mean
+
+Min
+
+Max
+
+Median
+
+SD
+
+IQR
+
+Q1
+
+Q3
+
+Days of data available (all stations)
+
+PM10 (mg/m3) PM2.5 (mg/m3)
+
+53.05 23.13
+
+0.01 0.01
+
+3222.73 1676.01
+
+38.62 19.46
+
+65.76 25.27
+
+25.40 11.87
+
+28.60 14.33
+
+54.00 26.20
+
+72,778 94,094
+
+Note: Q1 and Q3 are quartiles.
+
+4. Discussion
+
+Table 2 Coefﬁcient of determination (R2) of the various models developed
+in this study for predicting PM2.5. Model
+
+Overall R2
+
+Spatial R2
+
+Temporal R2
+
+LU þ MET AOD AOD þ MET AOD þ LU AOD þ MET þ LU
+
+0.75 0.77 0.77 0.77 0.84
+
+0.61 0.76 0.74 0.77 0.89
+
+0.76 0.78 0.77 0.70 0.84
+
+To our knowledge, this is the ﬁrst study that uses high resolution daily
+PM2.5 and PM10 models in Israel. We developed and validated models to
+predict daily PM2.5 and PM10 concentrations at a 1 km resolution across
+Israel, allowing us to better estimate long-term daily PM exposure both
+at urban and rural areas. A good model performance has been shown across
+the extremely challenging geo-climatic characteristics of Israel,
+incorporating many different climatic zones (e.g. coastal, mountain,
+urban, desert) in a relatively small area (~20,000 km2). The models
+developed in this study perform signiﬁcantly better than any other model
+available to-date for Israel (Table 3). Several other regions with
+complex conditions have been studied previously in relation to using
+satellite aerosol products for PM prediction, in particular the San
+Joaquin Valley (SJV), central California, which experiences similar
+geo-climate conditions as in Israel apart from major dust outbreaks.
+Yet, these previous studies estimated hourly/daily PM concentrations in
+SJV based on MODIS AOD (10 km) (Rosen et al. 2006; Sorek-Hamer et al.
+2013b; Strawa et al. 2013). In particular, Rosen et al. demonstrated an
+improved simple linear agreement between hourly PM2.5 concentrations at
+two monitoring sites and MODIS AOD at a 5 km resolution relative to the
+standard operational MODIS 10 km AOD product (R2 ¼ 0.59 and R2 ¼ 0.05,
+respectively). In China, another area with intricate characterization, a
+geographic weighted regression (GWR) model has been recently used (Song
+et al. 2014), showing a reasonable and representative spatial pattern of
+regional variability of PM2.5, similar to that from ground measurements.
+Although the GWR model offers promise for accurate large scale PM2.5
+monitoring, Song and colleagues recommend further research on the
+integration of more model predictors (e.g. land use, season) and the use
+of higher satellite spatial resolution. Our results show that PM10
+calibrated better with MAIAC compared to PM2.5. This could be due to (a)
+the daily PM concentrations in Israel show a major coarse fraction
+(PM2.5e10), with mineral dust and sea salt the major sources of
+naturally occurring coarse-mode aerosols (Levin et al. 2005). The
+contribution of the coarse mode is evident from the ratio of PM2.5 to
+PM10 concentrations in stations that monitor both PM fractions. The
+annual average ratio is about 50%, and during dust storms it decreases
+to 30% (Ganor et al. 2010; Sorek-Hamer et al. 2013b). These ratios are
+much smaller than those evident in north Europe and USA, i.e. in regions
+for which most of the AOD-PM studies have been performed to date. (b)
+There are many more PM10 monitoring stations than PM2.5 monitoring
+stations in Israel (and they also started to
+
+PM10, the model presents a mean CV R2 of 0.79 and a CV slope of almost
+one (slope of observed vs. predicted of 0.99), suggesting little bias of
+the PM10 model. The models also perform well when looking at the spatial
+and temporal components: for the temporal model the CV R2 was 0.79 and
+for the spatial model the CV R2 was 0.76. The CV RMSPE of the
+calibration was 25.10 mg/m3 while the spatial RMSPE (which is a RMSPE
+similar to traditional LUR RMSPE) was 0.78 mg/m3. This is considerably
+less than the observed variability in PM10 concentrations across Israel,
+which ranged in the study period from 1 mg/m3 to 3222 mg/m3 (mean of
+53.05 mg/m3). The ﬁnal model also performed well, with a mean R2 of 0.82
+e a rather high value considering that the model predicted
+concentrations even when satellite AOD data were unavailable. For PM2.5
+the model presented a mean CV R2 of 0.72 and a CV slope of, again,
+almost one (slope of observed vs. predicted of 0.99), showing little
+bias of the CV models. The CV R2 of the temporal model was 0.71 and the
+CV R2 of the spatial model was 0.84. The CV RMSPE of the calibration was
+8.53 mg/m3 while the spatial RMSPE was 1.31 mg/m3 (PM2.5 ranged from 1
+mg/m3 to 793 mg/m3). The performance of the ﬁnal model was, again, very
+good, with a mean R2 of 0.81. The season-speciﬁc models revealed that
+the model performed slightly better during the summer period: for PM10
+the CV R2 was 0.82 and 0.73 for the summer and winter, respectively,
+whereas for PM2.5 the CV R2 was 0.72 and 0.64 for the summer and winter,
+respectively. Fig. 4 shows the spatial pattern of the predicted PM2.5
+and PM10, averaged over the entire study period. Mean predicted PM2.5
+concentrations range between 16.63 mg/m3 and 30.60 mg/m3. Mean predicted
+PM10 concentrations range between 43.50 mg/m3 and 71.27 mg/m3. Table 4
+demonstrates the differences between the mean measured and predicted
+PM2.5 concentrations in three main metropolitan areas- Haifa, Tel-Aviv,
+and Jerusalem.
+
+Table 3 Cross -validated (CV) PM2.5 and PM10 model performances of the
+calibrated models (using the training datasets) for the entire study
+period of 2003e2013. Model PM10 PM2.5 c PM10 c PM2.5 a b c
+
+R2 0.79 0.72 0.69 0.45
+
+Intercepta 0.11 ± 0.25 0.24 ± 0.12
+
+Slopea 0.99 ± 0.01 0.99 ± 0.01
+
+Spatial R2 0.76 0.84
+
+Presented as parameter estimate ± SE from a linear regression of
+observations versus predictions. Root of the mean squared prediction
+error. Sorek-Hamer et al. (2015).
+
+Temporal R2
+
+RMSPEb
+
+Spatial RMSPEb
+
+0.79 0.71
+
+25.10 mg/m 8.53 mg/m3 27.92 mg/m3 12.06 mg/m3 3
+
+0.78 mg/m3 1.31 mg/m3
+
+I. Kloog et al. / Atmospheric Environment 122 (2015) 409e416
+
+415
+
+Fig. 4. AOD-based predictions of the 2003e2013 mean PM2.5 and PM10
+concentrations in each 1  1 km grid cell across Israel.
+
+Table 4 Comparing the measured mean PM2.5 concentrations to the
+predicted PM2.5 concentrations in the Tel-Aviv, Jerusalem, and Haifa
+areas for the whole study period (2003e2013). Tel-Aviv Mean measured
+PM2.5 Mean predicted PM2.5
+
+Haifa
+
+23.38 mg/m 21.80 mg/m3 3
+
+19.36 mg/m 18.8 mg/m3
+
+Jerusalem 3
+
+23.71 mg/m3 22.58 mg/m3
+
+report earlier), which may affect the model performance. (c) Finally,
+the TEOM™ monitoring devices used for PM2.5 and PM10 monitoring in
+Israel require conditioning of the aerosol before the measurement takes
+place. This conditioning may affect the particulate content of adsorbed
+semi volatile compounds, VOCs, which are normally found in larger
+amounts in the ﬁne fraction (Long et al. 2005). This may lead to
+underestimation of the true PM concentrations, especially for PM2.5,
+which may explain why we got better agreement for PM10. Our model can be
+used in various disciplines for estimating PM, and may be particularly
+useful for environmental epidemiology studies. Robust and validated air
+pollution exposure data are missing in Israel and our PM2.5 and PM10
+predictions could allow studying both acute and chronic effects in the
+entire population, rather than in a small sample as commonly done in
+current epidemiological studies. However, there are several limitations
+to our models that should be noted. First, although our 1 km resolution
+predictions are the
+
+ﬁnest resolution of AOD data available from MODIS/MAIAC, it may still
+not capture the effects of the very local sources, such as busy highways
+(which scale is much smaller than 1 km). Another limitation is the lack
+of data on the composition of the PM estimates. Future analyses may
+allow us to develop models to estimate exposure to speciﬁc PM
+components. Moreover, because our model uses satellite measurements, it
+cannot forecast future concentrations. Thus, the beneﬁt for
+environmental policy may be primarily through understanding past and
+current exposure patterns, quantifying the impacts of previous
+interventions, and for studying PMrelated acute and chronic health
+effects. Future improvement of this model may beneﬁt from further
+developments of the MAIAC algorithm and combine other AOD measures from
+the two MODIS sensors on Aqua and Terra satellites. In summary, this is
+the ﬁrst study that utilizes MAIAC AOD for PM2.5 and PM10 prediction
+while controlling for the geo-climatic complexities of Israel. The new
+model allowed us to reconstruct spatially resolved long-term daily
+average concentrations of PM2.5 and PM10 in Israel.
+
+Acknowledgments We would like to thank the Environment and Health Fund,
+Israel, for supporting M.S.H with a doctoral fellowship. The authors
+would also like to thank Rakefet Shafran-Natan and Ilan Levy for their
+help with data collection.
+
+416
+
+I. Kloog et al. / Atmospheric Environment 122 (2015) 409e416
+
+References Asaf, D., Pedersen, D., Peleg, M., Matveev, V., Luria, M.,
+2008. Evaluation of background levels of air pollutants over Israel.
+Atmos. Environ. 42, 8453e8463. ASTER, 2014. ASTER Global Digital
+Elevation Map. Bates, D., Maechler, M., Bolker, B., Walker, S., 2014.
+lme4: Linear Mixed-effects Models Using Eigen and S4. Chang, H.H., Hu,
+X., Liu, Y., 2014. Calibrating MODIS aerosol optical depth for
+predicting daily PM2.5 concentrations via statistical downscaling. J.
+Expo. Sci. Environ. Epidemiol. 24, 398e404. Chudnovsky, A., Tang, C.,
+Lyapustin, A., Wang, Y., Schwartz, J., Koutrakis, P., 2013. A critical
+assessment of high-resolution aerosol optical depth retrievals for ﬁne
+particulate matter predictions. Atmos. Chem. Phys. 13, 10907e10917.
+Chudnovsky, A.A., Koutrakis, P., Kloog, I., Melly, S., Nordio, F.,
+Lyapustin, A., et al., 2014. Fine particulate matter predictions using
+high resolution aerosol optical depth (AOD) retrievals. Atmos. Environ.
+89, 189e198. CNRS, 2013. Modeled Planetary Boundary Layer Data. Eeftens,
+M., Beelen, R., de, Hoogh K., Bellander, T., Cesaroni, G., Cirach, M.,
+et al., 2012a. Development of land use regression models for PM2.5,
+PM2.5 absorbance, PM10 and PMcoarse in 20 European study areas; results
+of the ESCAPE project. Environ. Sci. Technol. 46, 11195e11205.
+http://dx.doi.org/10.1021/es301948k. Eeftens, M., Tsai, M.-Y., Ampe, C.,
+Anwander, B., Beelen, R., Bellander, T., et al., 2012b. Spatial
+variation of PM2.5, PM10, PM2.5 absorbance and PMcoarse concentrations
+between and within 20 European study areas and the relationship with NO2
+results of the ESCAPE project. Atmos. Environ. 62, 303e317.
+http://dx.doi.org/ 10.1016/j.atmosenv.2012.08.038. Emili, E., Lyapustin,
+A., Wang, Y., Popp, C., Korkin, S., Zebisch, M., Wunderle, S., Petitta,
+M., 2011. High spatial resolution aerosol retrieval with MAIAC:
+application to mountain regions. J. Geophys. Res. 116, D23211. Emili,
+E., Popp, C., Petitta, M., Rifﬂer, M., Wunderle, S., Zebisch, M., 2010.
+PM10 remote sensing from geostationary SEVIRI and polar-orbiting MODIS
+sensors over the complex terrain of the European Alpine region. Remote
+Sens. Environ. 114 (11), 2485e2499. EPA, 2013. Quality Assurance
+Handbook for Air Pollution Measurement Systems Volume II Ambient Air
+Quality Monitoring Program. EPA-454/B-13-003. Erell, E., Portnov, B.A.,
+Etzion, Y., 2003. Mapping the potential for climate-conscious design of
+buildings. Build. Environ. 38, 271e281. ESRI, 2014. ArcGIS. Ganor, E.,
+Stupp, A., Alpert, P., 2009. A method to determine the effect of mineral
+dust aerosols on air quality. Atmos. Environ. 43, 5463e5468. Ganor, E.,
+Stupp, A., Osetinsky, I., Alpert, P., 2010. Synoptic classiﬁcation of
+lower troposphere proﬁles for dust days. J. Geophys. Res. 115
+http://dx.doi.org/ 10.1029/2009jd012638. Herut, B., Starinsky, A., Katz,
+A., Rosenfeld, D., 2000. Relationship between the acidity and chemical
+composition of rainwater and climatological conditions along a
+transition zone between large deserts and Mediterranean climate. Isr.
+Atmos. Environ. 34, 1281. Hoff, R.M., Christopher, S.A., 2009. Remote
+sensing of particulate pollution from space: have we reached the
+promised land? J. Air Waste Manag. Assoc. 59, 645e675. Hu, X., Waller,
+L.A., Lyapustin, A., Wang, Y., Al-Hamdan, M.Z., Crosson, W.L., et al.,
+2014. Estimating ground-level PM2.5 concentrations in the Southeastern
+United States using MAIAC AOD retrievals and a two-stage model. Remote
+Sens. Environ. 140, 220e232.
+http://dx.doi.org/10.1016/j.rse.2013.08.032. ICBS, 2007. Israel Central
+Bureau of Statistics Land Use Dataset. ICBS, 2014. Population, by
+District, Sub-district and Religion. Kaﬂe, H.K., Bruins, H.J., 2009.
+Climatic trends in Israel 1970e2002: warmer and increasing aridity
+inland. Clim. Chang. 96, 63e77. Kloog, I., Chudnovsky, A.A., Just, A.C.,
+Nordio, F., Koutrakis, P., Coull, B.A., et al., 2014a. A new hybrid
+spatio-temporal model for estimating daily multi-year PM2.5
+concentrations across Northeastern USA using high resolution aerosol
+optical depth data. Atmos. Environ. 95, 581e590. Kloog, I., Koutrakis,
+P., Coull, B.A., Lee, H.J., Schwartz, J., 2011. Assessing temporally and
+spatially resolved PM2.5 exposures for epidemiological studies using
+satellite aerosol optical depth measurements. Atmos. Environ. 45,
+6267e6275. http://dx.doi.org/10.1016/j.atmosenv.2011.08.066. Kloog, I.,
+Nordio, F., Coull, B.A., Schwartz, J., 2012. Incorporating local land
+use regression and satellite aerosol optical depth in a hybrid model of
+spatiotemporal PM2.5 exposures in the Mid-Atlantic states. Environ. Sci.
+Technol. 46, 11913e11921. Kloog, I., Nordio, F., Coull, B.A., Schwartz,
+J., 2014b. Predicting spatiotemporal mean air temperature using MODIS
+satellite surface temperature measurements across the Northeastern USA.
+Remote Sens. Environ. 150, 132e139.
+
+Lee, H.J., Liu, Y., Coull, B.A., Schwartz, J., Koutrakis, P., 2011. A
+novel calibration approach of MODIS AOD data to predict PM2.5
+concentrations. Atmos. Chem. Phys. 11, 7991e8002. Levin, Z., Teller, A.,
+Ganor, E., Yin, Y., 2005. On the interactions of mineral dust, seasalt
+particles, and clouds: a measurement and modeling study from the
+Mediterranean Israeli dust experiment campaign. J. Geophys. Res. Atmos.
+1984e2012, 110. Levy, I., Dayan, U., Mahrer, Y., 2008. A ﬁve-year study
+of coastal recirculation and its effect on air pollutants over the East
+Mediterranean region. J. Geophys. Res. Atmos. 1984e2012, 113. Levy, R.,
+Remer, L., Mattoo, S., Vermote, E., Kaufman, Y., 2007. Second-generation
+operational algorithm: retrieval of aerosol properties over land from
+inversion of moderate resolution imaging spectroradiometer spectral
+reﬂectance. J. Geophys. Res. 112 (De13211)
+http://dx.doi.org/10.1029/2006JD007811. Long, R.W., Eatough, N.L.,
+Eatough, D.J., Meyer, M.B., Wilson, W.E., 2005. Continuous determination
+of ﬁne particulate matter mass in the Salt Lake City environmental
+monitoring project: a comparison of real-time and conventional TEOM
+monitor results. J. Air Waste Manag. Assoc. 55, 1782e1796.
+http://dx.doi.org/ 10.1080/10473289.2005.10464776. Lyapustin, A.,
+Martonchik, J., Wang, Y., Laszlo, I., Korkin, S., 2011a. Multiangle
+implementation of atmospheric correction (MAIAC): 1. Radiative transfer
+basis and look-up tables. J. Geophys. Res. Atmos. 116. Lyapustin, A.,
+Wang, Y., Laszlo, I., Kahn, R., Korkin, S., Remer, L., et al., 2011b.
+Multiangle implementation of atmospheric correction (MAIAC): 2. Aerosol
+algorithm. J. Geophys. Res. Atmos. 116. MAPI, 2013. Survey of Israel
+Road Dataset. Nordio, F., Kloog, I., Coull, B.A., Chudnovsky, A.,
+Grillo, P., Bertazzi, P.A., et al., 2013. Estimating spatio-temporal
+resolved PM10 aerosol mass concentrations using MODIS satellite data and
+land use regression over Lombardy, Italy. Atmos. Environ. 74, 227e236.
+http://dx.doi.org/10.1016/j.atmosenv.2013.03.043. Oke, T.R., 1987.
+Boundary Layer Climates. Psychology Press. Qgis, 2014. QGIS Geographic
+Information System. Open Source Geospatial Foundation. R, 2014. R: a
+Language and Environment for Statistical Computing. R Foundation for
+Statistical Computing, Vienna, Austria. Remer, L.A., Kaufman, Y.J.,
+Tanr, D., Mattoo, S., Chu, D.A., Martins, J.V., et al., 2005. The MODIS
+aerosol algorithm, products, and validation. J. Atmos. Sci. 62, 947e973.
+http://dx.doi.org/10.1175/JAS3385.1. Rosen, R., Chu, A., Szykman, J.J.,
+DeYoung, R., Al-Saadi, J., Kaduwela, A., et al., 2006. Application of
+satellite data for three-dimensional monitoring of PM2.5 formation and
+transport in San Joaquin Valley, California. SPIE Opt. Photonics. 6299,
+629904e629904. SAS, 2013. proglangSAS/STAT Software, Version 9.1. SAS
+Institute, Cary, NC. Sayer, A.M., Hsu, N.C., Bettenhausen, C., Jeong,
+M.-J., 2013. Validation and uncertainty estimates for MODIS collection 6
+“Deep Blue” aerosol data. J. Geophys. Res. Atmos. 118, 7864e7872.
+http://dx.doi.org/10.1002/jgrd.50600. Sayer, A.M., Munchak, L.A., Hsu,
+N.C., Levy, R.C., Bettenhausen, C., Jeong, M.-J., 2014. MODIS collection
+6 aerosol products: comparison between Aqua's e-Deep Blue, dark target,
+and “merged” data sets, and usage recommendations. J. Geophys. Res.
+Atmos. 119, 13,965e13,989. http://dx.doi.org/10.1002/2014jd022453. Song,
+W., Jia, H., Huang, J., Zhang, Y., 2014. A satellite-based
+geographically weighted regression model for regional PM2.5 estimation
+over the Pearl River delta region in China. Remote Sens. Environ. 154,
+1e7. Sorek-Hamer, M., Cohen, A., Levy, R., Ziv, B., Broday, D., 2013a.
+Classiﬁcation of dust days by satellite remotely sensed aerosol
+products. Int. J. Remote Sens. 34, 2672e2688. Sorek-Hamer, M., Strawa,
+A., Chatﬁeld, R., Esswein, R., Cohen, A., Broday, D., 2013b. Improved
+retrieval of PM2.5 from satellite data products using non-linear
+methods. Environ. Pollut. 182, 417e423. Sorek-Hamer, M., Kloog, I.,
+Koutrakis, P., Strawa, A.W., Chatﬁeld, R., Cohen, A., Ridgway, W.L.,
+Broday, D., 2015. Assessment of PM2.5 concentrations over bright
+surfaces using MODIS satellite observations. Remote Sens. Environ. 163,
+180e185. Strawa, A., Chatﬁeld, R., Legg, M., Scarnato, B., Esswein, R.,
+2013. Improving retrievals of regional ﬁne particulate matter
+concentrations from moderate resolution imaging spectroradiometer
+(MODIS) and ozone monitoring instrument (OMI) multisatellite
+observations. J. Air Waste Manag. Assoc. 63, 1434e1446. Wood, S., 2006.
+Generalized Additive Models: an Introduction with R. Chapman and
+Hall/CRC. Wood, S.N., 2003. Thin-plate regression splines. J. R. Stat.
+Soc. (B) 65, 95e114. Yanosky, J.D., Paciorek, C.J., Schwartz, J., Laden,
+F., Puett, R., Suh, H.H., 2008. Spatiotemporal modeling of chronic PM10
+exposure for the Nurses' health Study. Atmos. Environ. 42, 4047e4062.
+
+

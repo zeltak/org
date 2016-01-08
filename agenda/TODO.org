@@ -6,21 +6,79 @@
 #+LaTeX_CLASS_OPTIONS: [garamond]
 
 * `TODO`							 
-** covert word to text for better cross academic search 
-*** for pdf files
-we use the ◀pdftotext▶ (part of poppler-utils) function to convert the file to a txt file
-then simply issue
-#+BEGIN_SRC sh  :results none
-pdftotext /home/lori/Documents/Sample.pdf /home/lori/Documents/Sample.txt
-#+END_SRC
-then follow up with pandoc
-*** doc files 
-load them to libreoffice and convert manually to docx
 ** better search of org files and org files
    :PROPERTIES:
    :ID:       9c49a294-2116-42c2-afd7-99b2bb2cc590
    :END:
 *** projectile?
+** explore dired root
+Yes, just type /sudo:root@localhost/... when C-x C-f asks you for file name. This will open a trampified dired where dired-do-chown and other dired commands work just fine.
+
+(Note that you can press TAB after /sudo:, and minibuffer completion will insert the @localhost boilerplate.)
+
+http://tuhdo.github.io/helm-intro.html#sec-7
+
+
+
+No key binding. We should give it one:
+
+(global-set-key (kbd "C-x b") 'helm-mini)
+
+To enable fuzzy matching, add the following settings:
+
+(setq helm-buffers-fuzzy-matching t
+      helm-recentf-fuzzy-match    t)
+
+helm-mini comprises of multiple sources:
+
+    Current opening buffers, under the header Buffers.
+    Recently opened files, under the header Recentf.
+    Allow you to create a new buffer by pressing RET, under the header Create Buffer.
+
+You can move back and forth between the groups by using <left> and <right> arrow keys. Or you can just scroll down/up with C-v and M-v.
+
+You can filter out buffers by major mode using the pattern *<major-mode>. For example, *dired narrows to only Dired buffers. You can also filter out buffers that belong to a major mode by adding ! to the pattern. For example, *!dired select all buffers that are not in Dired mode.
+
+You can also select buffers in a specific directory by using the pattern /directory. For example, /.emacs.d/ narrows to buffers that are only inside .emacs.d. Add ! before the pattern for reverse version. For example, !/.emacs.d/ narrows to buffers not in .emacs.d.
+
+You can even use helm-mini to narrow to buffers that contains a regexp in their contents, by appending @ before the search pattern. For example, you can select buffers that only contain the string "test": @test. If you want to see the locations of the string in the buffers, mark all the buffer with M-a and C-s while in helm-mini session, to switch to helm-moccur. You can mark buffers to search by C-SPC. When you switch to helm-moccur, matches that are in selected buffers are displayed. You can also perform occur only on the current buffer with prefix argument: C-u C-s; this is useful when you already marked buffers but don't want to unmark just to view only in a buffer. However, in general, you won't need C-u C-s.
+
+Meaning of colors and prefixes for buffers:
+
+    Remote buffers are prefixed with '@'.
+    Red => Buffer have its file modified on disk by an external process.
+    Indianred2 => Buffer exists but its file have been deleted.
+    Orange => Buffer is modified and its file not saved to disk.
+    Italic => A non-file buffer.
+
+Some Emacs themes change the colors. You should check the corresponding colour in your color themes.
+
+Example:
+
+    If I enter in pattern prompt: *lisp ^helm @moc, Helm will narrow down the list by selecting only buffers that are in lisp mode, start by helm and match "moc" in their contents.
+    If I want to specify more than one major-mode, separate them with ,, e.g *!lisp,!sh,!fun will list all buffers but the ones in lisp-mode, sh-mode and fundamental-mode.
+    If I enter in pattern prompt: *lisp ^helm moc. Notice there is no @ this time helm will look for lisp mode buffers starting by "helm" and have "moc" in their name.
+    If I enter in pattern prompt: *!lisp !helm Helm will narrow down to buffers that are not in "lisp" mode and that do not match "helm".
+    If I enter in pattern prompt: /helm/ w3 Helm will narrow down buffers that are in any "helm" sub-directory and matching w3.
+
+    helm-mini is like an interactive version of ibuffer.
+** dired buffer cleanup
+http://emacs.stackexchange.com/questions/13552/how-to-make-dired-mode-copy-and-move-all-marked-file-in-all-dired-buffer-includi
+
+    diredp-toggle-find-file-reuse-dir does not prevent you from opening multiple Dired buffers for different directories (e.g. subdirs). It should be irrelevant here, but you might want to describe just what you are doing, step by step.
+
+    With multiple Dired buffers open, you can mark files (and subdirs) in any of them. with Dired+ (which you are apparently using), you can use M-+ C in a parent directory's Dired buffer to copy all of the files that are marked in that buffer and all of the files that are marked in any of its marked subdirs, with this rule applying recursively.
+
+    As an alternative to #2, you can of course also include subdirs in the same Dired buffer, using i. Then act on (e.g. C to copy) all files marked in the buffer.
+
+Your problem of losing marks happens because you are using RET or C-x C-f to move to another directory. Use C-x d instead, and you do not lose the previous Dired buffer. Or just use C-M-S-r to toggle diredp-toggle-find-file-reuse-dir and turn off reusing temporarily.
+
+FWIW, I don't tell Dired+ to automatically reuse Dired buffers when I hit RET. Instead, I use C-x C-v whenever I want to change to a different directory and I don't care to save the current Dired buffer. My fingers decide whether to keep or toss the current Dired buffer when I visit another one: RET to keep, C-x C-v to toss. (And I don't worry about having lots of buffers, in general.)
+
+IOW, this comes under the heading of "If it hurts, don't do it." If you purposely kill a Dired buffer, which is what "reusing" means here, then, well, the buffer no longer exists. If it no longer exists then its markings etc. are gone too.
+
+In sum, reuse when you want, and don't reuse when you want. Both behaviors are available at all times. If you start marking things, then think before you use RET to change directories - use C-x d or C-x 4 d instead. It's probably just a question of habit. And don't forget that you have i too.
+** open shell in right split window
 ** picard import music
 ** quick navigate inside helm (use bookmearks in helm)
 ** move latest albums to freeze 

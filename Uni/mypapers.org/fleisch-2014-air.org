@@ -1,0 +1,590 @@
+* Air Pollution Exposure and Gestational Diabetes Mellitus in the
+Massachusetts Registry of Vital Records
+
+Abby F. Fleisch,^{1} Itai Kloog, ^{3} Heike Luttmann-Gibson,^{2} Diane
+R. Gold, ^{2} Emily Oken,^{4,5} and Joel D. Schwartz^{2}
+
+^{1}Division of Endocrinology, Boston Children's Hospital, Boston,
+Massachusetts, USA; ^{2}Department of Environmental Health, Harvard
+School of Public Health, Boston, Massachusetts, USA; ^{3}Department of
+Geography and Environmental Development, Ben-Gurion University of the
+Negev, Beer Sheva, Israel; ^{4}Obesity Prevention Program, Department of
+Population Medicine, Harvard Medical School and Harvard Pilgrim Health
+Care Institute, Boston, Massachusetts, USA; ^{5}Department of Nutrition,
+Harvard School of Public Health, Boston, Massachusetts, USA
+
+*Address correspondence to* Abby F. Fleisch, Division of Endocrinology,
+Boston Children's Hospital, 300 Longwood Ave., Boston, MA 02115 USA.
+Telephone: 617-355-7476. Fax: 617-730-0194. E-mail:
+[[mailto:abby.fleisch@childrens.harvard.edu][abby.fleisch@childrens.harvard.edu]]
+
+*Running title:* Air Pollution and Gestational Diabetes Mellitus
+
+*Funding:* The authors have received support from the National
+Institutes of Health (K24 HD069408, K12 DK094721-02, K23ES024803), the
+Harvard School of Public Health, and the Harvard Pilgrim Health Care
+Institute.
+
+*Competing financial interests:* The authors have no competing
+interests.
+
+*Acknowledgements:* We thank Kevin Foster, Steven Melly, Milton
+Kottelchuck, and Joseph Antonelli for helpful discussions.
+
+*ABSTRACT*
+
+*Background:* Air pollution exposure has been linked to type 2 diabetes
+mellitus, but the extent to which it is associated with gestational
+diabetes mellitus (GDM) is less clear.
+
+*Methods:* We used the Massachusetts Registry of Vital Records to study
+women pregnant from 2003-2008 without pre-existing diabetes. We used
+spatiotemporal satellite based models to estimate 1^{st} and 2^{nd}
+trimester PM_{2.5} exposure and geographic information systems to
+estimate neighborhood traffic density based on residential address at
+the time of delivery. We obtained GDM status (assessed clinically in
+Massachusetts from 24-28 weeks gestation) from birth records. We
+performed logistic regression analyses adjusted for sociodemographic
+covariates on the full cohort and after stratification by maternal age
+and smoking habits.
+
+*Results:* Of 159,373 women, 5,381 (3.4%) had GDM. Exposures ranged from
+3.1-17.1 ug/3 for PM_{2.5} over the 1^{st} trimester, 1.3-19.3 μg/m^{3}
+for PM_{2.5} over the 2^{nd} trimester, and 0-37,306 vehicles/day x km
+road within 100 m for neighborhood traffic density. None of the
+exposures were associated with GDM in the full cohort [e.g. 0.99 times
+the odds of GDM (95% CI: 0.95, 1.03) for each interquartile range (IQR)
+increment in 2^{nd} trimester PM_{2.5}] or after stratification by
+maternal smoking habits. When the cohort was stratified by maternal age,
+women less than 20 years of age had 1.36 times the odds of GDM (95% CI:
+1.08, 1.70) for each IQR increment in PM_{2.5} exposure during the
+2^{nd} trimester.
+
+*Conclusions:* Greater exposure to residential PM_{2.5} exposure during
+the 2^{nd} trimester was associated with GDM in young women in
+Massachusetts.\\
+*INTRODUCTION*
+
+Up to 18% of pregnancies worldwide are complicated by gestational
+diabetes mellitus (GDM) ([[#_ENREF_1][Sacks et al. 2012]]). GDM
+increases risk of adverse perinatal outcomes such as fetal hypoglycemia
+and increased fetal growth and additionally primes infants and mothers
+for adverse cardiometabolic health later in life ([[#_ENREF_2][Buchanan
+and Xiang 2005]]). Maternal characteristics such as obesity, older age,
+and family history of type 2 diabetes mellitus are known to increase
+risk of GDM, but they do not explain all of the variability in
+prevalence ([[#_ENREF_3][Gobl et al. 2012]]), suggesting a role for
+environmental factors. Identification of remediable environmental
+triggers is critical to target at-risk women and provide opportunities
+for prevention.
+
+Air pollution is one environmental exposure that may predispose pregnant
+women to GDM. Gaseous and particulate air pollutants with an aerodynamic
+diameter less than 2.5 μm (PM_{2.5}) are emitted from automobiles and
+power plants and readily inhaled. PM_{2.5} exposure increases insulin
+resistance in rodents ([[#_ENREF_4][Sun et al. 2009]]; [[#_ENREF_5][Xu
+et al. 2011]]) through endothelial dysfunction, inflammation, and
+oxidative stress ([[#_ENREF_6][Rajagopalan and Brook 2012]]). Consistent
+with the rodent findings, a robust epidemiologic literature has shown an
+association between higher air pollution exposure and increased risk of
+type 2 diabetes mellitus ([[#_ENREF_7][Eze et al. 2015]]).
+
+However, epidemiologic studies of prenatal air pollution exposure and
+abnormal glucose tolerance in pregnancy are conflicting with most
+([[#_ENREF_8][Fleisch et al. 2014]]; [[#_ENREF_9][Malmqvist et al.
+2013]]; [[#_ENREF_10][Hu et al. 2015]]; [[#_ENREF_11][Robledo et al.
+2015]]) but not all ([[#_ENREF_12][van den Hooven et al. 2009]]) showing
+an association. Two of the prior studies were limited by use of birth
+cohorts with relatively small sample sizes and few cases of GDM
+([[#_ENREF_8][Fleisch et al. 2014]]; [[#_ENREF_12][van den Hooven et al.
+2009]]) and another did not include individual-level socioeconomic
+status covariate data ([[#_ENREF_9][Malmqvist et al. 2013]]).
+
+In the present analysis, our objective was to use the Massachusetts
+Registry of Vital Records to evaluate the extent to which 1^{st} and
+2^{nd} trimester residential exposure to PM_{2.5} and neighborhood
+traffic density were associated with GDM in a large cohort of pregnant
+women. We hypothesized that prenatal air pollution exposure would be
+associated with GDM.
+
+*METHODS*
+
+*** Study population and design
+
+We obtained data on registered live births in Massachusetts from January
+1, 2003 through December 31, 2008 and latitude and longitude of each
+residential address at the time of delivery from the Massachusetts
+Registry of Vital Records and Statistics
+([[http://www.mass.gov/eohhs%20/gov/departments/dph/programs/admin/dmoa/vitals/][http://www.mass.gov/eohhs
+/gov/departments/dph/programs/admin/dmoa/vitals/]]). We obtained data
+only for births associated with a geocoded Massachusetts residential
+address. Our daily PM_{2.5} exposure estimates were available as of
+January 1, 2003, so we only included mothers in this analysis whose last
+menstrual period (LMP) occurred on or after January 1, 2003, which
+enabled us to create the early pregnancy PM_{2.5} exposure estimates
+detailed below. Of the 362,148 women who met these inclusion criteria,
+we excluded 201,004 with prior pregnancies to ascertain only independent
+observations in our analysis, as the Massachusetts Registry of Vital
+Records provides a unique ID for each birth rather than each woman. We
+further restricted our analysis to mothers who delivered at greater than
+28 weeks gestation and thus had opportunity for GDM screening and who
+did not have a prior history of diabetes. Our final sample included
+159,373 women (Table 1). The study was approved by the Massachusetts
+Department of Public Health and the Institutional Review Boards of the
+Harvard TH Chan School of Public Health and Boston Children's Hospital.
+
+*** Exposure assessment
+
+We used each woman's residential address at the time of delivery to
+create estimates of daily spatiotemporal PM_{2.5} exposure throughout
+the pregnancy. We used a hybrid satellite based novel spatio-temporal
+resolved model developed by our group (Kloog et al. 2014) . This hybrid
+model incorporates aerosol optical depth data from the MODIS Satellite
+and classic land use regression techniques which generates daily
+PM_{2.5} exposure at the resolution of a 1x1km spatial grid across the
+New England region. excellent(R^{2} =). More in depth information on the
+model can be found at (Kloog et al. 2014). To create residential
+exposure estimates, each residential address was linked to the grid in
+which it was located.
+
+To obtain 1^{st} trimester exposure estimates, we averaged daily
+exposures from the date of the LMP to the 13^{th} week of gestation. To
+obtain 2^{nd} trimester exposure estimates, we averaged daily exposures
+from the 13^{th} to the 25^{th} week of gestation. To create these time
+windows, we used the birth certificate clinical estimate of gestational
+age rather than the estimate calculated based on reported LMP because
+the former has been shown to be a more accurate predictor of gestational
+age in birth registries (Callaghan and Dietz 2010), and its use is
+recommended by the American College of Obstetrics and Gynecology for
+public health research studies (Committee on Obstetric Practice et al.
+2014).
+
+While our daily estimates of PM_{2.5} were temporally and spatially
+resolved, estimates of neighborhood traffic density were only spatially
+resolved. We used the 2002 road inventory from the Massachusetts
+Executive Office of Transportation to estimate traffic density. We
+calculated neighborhood traffic density by multiplying the annual
+average daily traffic (vehicles/day) by length of road (km) within 100 m
+of the participants' residential address at the time of birth.
+
+*** Outcome assessment
+
+Routine clinical screening for GDM is recommended for pregnant women in
+Massachusetts at the end of the second trimester of gestation (24-28
+weeks). If serum glucose one hour after a non-fasting 50g oral glucose
+challenge test (GCT) is ≥ 140 mg/dL, women are referred for a 3-hour
+fasting 100-g oral glucose tolerance test (OGTT). As per American
+Diabetes Association (ADA) criteria, pregnant women are classified as
+having GDM if they have ≥ 2 of the following abnormal values on the
+OGTT: blood glucose > 95 mg/dL at baseline, > 180 mg/dL at 1 hour, > 155
+mg/dL at 2 hours, or > 140 mg/dL at 3 hours ([[#_ENREF_16][American
+Diabetes Association 2008]]). For this analysis, we obtained maternal
+GDM designation from the birth records.
+
+*** Assessment of covariates
+
+We also retrieved data on other maternal characteristics (age,
+race/ethnicity, education, smoking status, prenatal insurance,
+Kotelchuck prenatal care index) as well as infant sex and date of birth
+directly from the birth records. We used data from the 2000 United
+States Census ([[#_ENREF_17][United States Census Bureau 2000]]) to
+calculate median annual household income, percent open space, and
+percent owner occupied home for the census tract associated with each
+residential address at the time of birth.
+
+*** Statistical analysis
+
+We used logistic regression analyses to evaluate the associations of
+PM_{2.5} exposure and traffic density with GDM. We considered each
+exposure (1^{st} trimester PM_{2.5}, 2^{nd} trimester PM_{2.5}, and
+traffic density) in separate models. We first modeled exposures in
+quartiles to assess for potential non-linearity of exposure-outcome
+relationships. Without clear evidence of non-linearity, we also modeled
+exposures as a continuous measure and expressed associations per
+interquartile range (IQR) increase in exposure. We fit unadjusted
+models, followed by full multivariable models for each of the exposures.
+We included the following covariates: maternal age (< 20 years, 20-35
+years, ≥ 35 years), race/ethnicity (white, black, Asian/Pacific
+Islander, Hispanic, other), education (less than high school, high
+school, some college, bachelor degree, postgraduate degree), smoking
+habits [never, former, current low (<10 cigarettes/day), current high
+(>10 cigarettes per day)], and prenatal insurance (public versus
+private); census tract median household income (continuous), percent
+open space (continuous), and median value of owner occupied housing
+(continuous); season of birth [continuous sine and cosine of date as in
+([[#_ENREF_18][Schwartz et al. 1991]])]; and date of birth (continuous).
+Additional adjustment for infant sex and Kotelchuck prenatal care index
+([[#_ENREF_19][Kotelchuck 1994]]) did not change associations; thus,
+these variables were not included in the final models. We also examined
+unadjusted and covariate-adjusted associations between PM_{2.5} and GDM
+within strata of maternal age (< 20 years, 20-35 years, ≥ 35 years) and
+smoking habits [never, former, current low (<10 cigarettes/day), current
+high (>10 cigarettes per day)]. In covariate-adjusted analyses within
+strata of maternal age, we adjusted for maternal age as a continuous
+variable.
+
+We also performed several sensitivity analyses. First, we restricted the
+sample only to women who delivered singleton infants (n=144,928) for
+consistency with prior studies that demonstrated an association between
+air pollution and GDM ([[#_ENREF_8][Fleisch et al. 2014]];
+[[#_ENREF_9][Malmqvist et al. 2013]]; [[#_ENREF_10][Hu et al. 2015]];
+[[#_ENREF_11][Robledo et al. 2015]]). Next, as age appeared to be a
+strong negative confounder in this population with older women living in
+less polluted areas but having a substantially increased risk of GDM
+(Table 1), we represented age as a quadratic term (age, age^{2},
+age^{3}) rather than a categorical term in the multivariable model to
+confirm complete adjustment for this covariate. Finally, to further
+investigate the association we identified between second trimester
+PM_{2.5} exposure and GDM in the youngest mothers, we compared the
+exposures and sociodemographics of young mothers with versus without
+GDM. We also examined the association between PM_{2.5} and GDM within
+more granular strata of maternal age (< 20 years, 20-25 years, 25-30
+years, 30-35 years, ≥ 35 years). All analyses were conducted using SAS
+Version 9.4 (SAS Institute Inc, Cary, NC).
+
+*RESULTS*
+
+/*Population characteristics*/
+
+Of the 159,373 women in the study population, 5,381 (3.4%) had GDM. Mean
+(SD) maternal age at delivery was 28.4 (6.3) years. 70% of women were
+white, 31% had public prenatal insurance, and 85% were nonsmokers (Table
+1).
+
+Mean (SD, range) PM_{2.5} exposure was 10.4 µg/m^{3} (1.7, 3.1-17.1) for
+the 1^{st} trimester and 10.4 µg/m^{3} (1.7, 1.3-19.3) for the 2^{nd}
+trimester. For context, the Environmental Protection Agency (EPA)
+threshold for annual PM_{2.5} exposure was 15 µg/m^{3} during the years
+of the study. Neighborhood traffic density mean (SD, range) was 1,317
+(2,026, 0-37,306) vehicles/day x km of road within 100 m of residential
+address. Exposures were weakly correlated (spearman correlation
+coefficient -0.1-0.2) (Table 2).
+
+Mothers with higher residential PM_{2.5} exposure during the 2^{nd}
+trimester were more likely to be younger, less educated, and nonsmokers.
+They were also more likely to have public prenatal insurance and live in
+a census tract with a lower median household income, less open space,
+and higher median value of owner-occupied housing (Table 1). Women with
+GDM (vs. those without) were more likely to be Asian/Pacific Islander.
+They were also more likely to be older and have private prenatal
+insurance but live in a census tract with lower median household income,
+less open space, and lower median value of owner-occupied housing (Table
+1).
+
+/*Primary analyses*/
+
+In covariate-adjusted models, residential PM_{2.5} exposure during the
+1^{st} and 2^{nd} trimesters and neighborhood traffic density were not
+associated with increased odds of GDM. Odds of GDM for women in the
+highest (Q4) (vs. lowest (Q1)) quartile of exposure was 1.00 (95% CI:
+0.96, 1.05) for 1^{st} trimester PM_{2.5} exposure, 0.99 (95% CI: 0.91,
+1.08) for 2^{nd} trimester PM_{2.5} exposure, and 1.03 (95% CI: 0.95,
+1.12) for neighborhood traffic density. Results of unadjusted models
+were similar [e.g. odds of GDM for Q4 vs. Q1 was 0.92 (95% CI: 0.85,
+1.00) for 1^{st} trimester PM_{2.5}, 0.98 (95% CI: 0.90, 1.05) for
+2^{nd} trimester PM_{2.5}, and 1.01 (95% CI: 0.93, 1.09) for traffic
+density]. When we represented PM_{2.5} and traffic density exposures as
+continuous variables (per IQR), relationships with GDM remained null
+(Table 3).
+
+/*Stratified analyses*/
+
+When we examined the association between air pollution exposure and GDM
+within strata of maternal age, there was an association between 2^{nd}
+trimester residential PM_{2.5} exposure and GDM in mothers who were less
+than 20 years of age at the time of delivery (Table 4). Within this
+group of women, those who lived at a residence in the highest versus
+lowest quartile of PM_{2.5} exposure during the 2^{nd} trimester had
+1.97 (95% CI: 1.17, 3.32) times the odds of developing GDM. Within this
+stratum, odds of GDM was consistently higher in Q2, Q3, and Q4 versus Q1
+of 2^{nd} trimester PM_{2.5} exposure, and for each IQR increment in
+exposure, odds of GDM increased by 1.36 times (95% CI: 1.08, 1.70). In
+mothers greater than 35 years of age at the time of delivery, those in
+the highest versus lowest quartile of PM_{2.5} exposure during the
+1^{st} trimester had 1.18 (95% CI: 1.00, 1.39) times the odds of
+developing GDM, although Q2, Q3, and Q4 versus Q1 odds ratios did not
+increase monotonically, and, in fact, the Q3 versus Q1 comparison was
+close to 1. There were no other associations between prenatal pollution
+and GDM within the age strata (Table 4). Residential PM_{2.5} exposure
+and traffic density were not associated with GDM within strata of
+maternal smoking habits (data not shown).
+
+/*Secondary analyses*/
+
+When we restricted the sample to women with singleton pregnancies and
+when we represented age as a quadratic rather than a categorical term,
+results were unchanged (data not shown). When we compared young mothers
+with versus without GDM, sociodemographics were generally similar
+between the groups, although those with GDM were less likely to smoke,
+more likely to have attended some college, and more likely to live in
+census tracts with somewhat lower median household income, less open
+space, and lower median value of owner-occupied housing. Young mothers
+with versus without GDM had higher residential PM_{2.5} exposure during
+the 2^{nd} trimester, but lower neighborhood traffic density (Table S1).
+When we examined the association between air pollution and GDM within
+more granular strata of maternal age, the odds of GDM per IQR increment
+of 2^{nd} trimester PM_{2.5} exposure monotonically increased as
+maternal age decreased, although confidence intervals did not cross the
+null within any stratum except for the youngest mothers (Table S2).
+
+*DISCUSSION*
+
+In our analysis of Massachusetts birth registry data from 2003-2008,
+pregnant women with high residential PM_{2.5} exposure during the 1^{st}
+or 2^{nd} trimester or high neighborhood traffic density had the same
+odds of developing GDM as women with lower exposures. When we examined
+this association within strata of maternal age, the youngest mothers (<
+20 years of age) had increased odds of GDM when exposed to higher
+residential PM_{2.5} during the 2^{nd} trimester.
+
+Our findings are consistent with prior population-based studies that
+have shown an association between GDM and prenatal exposure to NO_{x} or
+ozone ([[#_ENREF_9][Malmqvist et al. 2013]]; [[#_ENREF_10][Hu et al.
+2015]]; [[#_ENREF_11][Robledo et al. 2015]]) but found weaker or no
+associations with exposure to PM_{2.5} ([[#_ENREF_8][Fleisch et al.
+2014]]; [[#_ENREF_10][Hu et al. 2015]]; [[#_ENREF_11][Robledo et al.
+2015]]) or traffic density ([[#_ENREF_8][Fleisch et al. 2014]];
+[[#_ENREF_9][Malmqvist et al. 2013]]; [[#_ENREF_12][van den Hooven et
+al. 2009]]). The lack of a consistent association between PM_{2.5}
+exposure and insulin resistance during pregnancy is in contrast to a
+growing body of epidemiologic literature showing an association between
+PM_{2.5} and type 2 diabetes mellitus ([[#_ENREF_7][Eze et al. 2015]])
+and rodent studies confirming an association between PM_{2.5} and
+insulin resistance in non-pregnant adults ([[#_ENREF_4][Sun et al.
+2009]]; [[#_ENREF_20][Xu et al. 2010]]). PM_{2.5} is primarily thought
+to lead to insulin resistance through oxidative damage, endothelial
+dysfunction, and inflammation ([[#_ENREF_4][Sun et al. 2009]];
+[[#_ENREF_21][Rao et al. 2015]]), whereas the specific mechanisms of
+NO_{x} and ozone-induced insulin resistance are not as well-understood.
+In one rodent study, ozone-induced insulin resistance was associated
+with neuronal activation and sympathetic stimulation ([[#_ENREF_22][Bass
+et al. 2013]]) but not with the increase in circulating inflammatory
+cytokines that has been observed following PM_{2.5} exposure
+([[#_ENREF_4][Sun et al. 2009]]; [[#_ENREF_20][Xu et al. 2010]]).
+Pregnant women may be more vulnerable to NO_{x} or ozone-specific
+mechanisms, and the role of each of these pollutants and mechanisms of
+action in relation to GDM should be studied in pregnant rodent models.
+Tobacco smoke, which contains high levels of PM_{2.5}
+([[#_ENREF_23][Invernizzi et al. 2004]]), has also been associated with
+type 2 diabetes mellitus ([[#_ENREF_24][Willi et al. 2007]]) but not GDM
+([[#_ENREF_25][Wendland et al. 2008]]).
+
+Although prenatal residential PM_{2.5} exposure and traffic density were
+not associated with GDM in analyses of our complete study population, we
+found higher 2^{nd} trimester PM_{2.5} to be associated with GDM in the
+subset of women less than 20 years of age at the time of delivery (odds
+ratio = 1.97; 95% CI: 1.17, 3.32, for highest vs. lowest quartile of
+exposure). Maternal age is such a strong risk factor for GDM
+([[#_ENREF_26][Galtier 2010]]) that predisposed older mothers may go on
+to develop GDM regardless of air pollution exposure, whereas PM_{2.5}
+may be a more important risk factor in younger mothers. Second trimester
+exposures are biologically relevant, as GDM is a pathologic exacerbation
+of a physiologic increase in insulin resistance that occurs specifically
+during the 2^{nd} trimester of pregnancy ([[#_ENREF_27][Butte 2000]]).
+The magnitude of our finding is similar to that of other well-known risk
+factors for GDM. For example, in a meta-analysis, overweight (vs. normal
+weight) mothers had 1.83 (95% CI: 1.58, 2.12) times the odds of
+developing GDM, and those who were obese had 3.52 (95% CI: 3.24, 3.84)
+times the odds ([[#_ENREF_28][Torloni et al. 2009]]).
+
+We considered alternative explanations for our finding of an association
+between PM_{2.5} exposure and GDM in the youngest mothers. The
+possibility that stratification could have reduced negative confounding
+by age is less likely because PM_{2.5} was not associated with GDM in
+the other age strata, and the association in the full cohort was null
+even when we included age as a quadratic term. Our inability to account
+for pre-pregnancy BMI could have confounded the association in the
+youngest mothers, but in a prior analysis of >170,000 pregnant women,
+the association between BMI and GDM did not vary by maternal age
+([[#_ENREF_29][Makgoba et al. 2012]]). Another possible explanation is
+differential composition of residential PM_{2.5} exposure by maternal
+age (e.g. higher traffic-related and/or ultrafine particle component of
+PM_{2.5} most prevalent in the lower SES neighborhoods of the youngest
+mothers and also most closely related to GDM). However, there was no
+association between traffic density and GDM in our complete study
+population, and we found lower rather than higher neighborhood traffic
+density in the subset of young women with versus without GDM. It is
+possible that our finding of an association between PM_{2.5} and GDM in
+the youngest mothers may also reflect random chance, particularly given
+the relatively small number of cases of GDM (n=179) in the youngest age
+stratum. However, the fact that the odds of GDM monotonically increased
+as maternal age decreased when we examined the association between
+2^{nd} trimester PM_{2.5} exposure and GDM within more granular strata
+of maternal age is somewhat reassuring against this possibility. Our
+findings require replication in other populations of young, pregnant
+women.
+
+Use of data from the Massachusetts Registry of Vital Records is a unique
+strength of our study. It contains pregnancy data on all Massachusetts
+residents, includes a large number of cases of GDM, and is free from the
+selection bias typical of cohort studies. Also, our PM_{2.5} model which
+leveraged satellite aerosol optical depth data, calculated estimates at
+a tight resolution, and had a high mean out-of-sample /R/^{2} is a
+particular strength.
+
+Potential exposure and outcome misclassification are limitations of the
+present study which may have biased results toward the null. We did not
+have information on time-activity patterns or residential moves during
+pregnancy which could have improved the accuracy of exposure estimates.
+Outcome misclassification could have occurred as a result of
+underreporting of GDM on the birth certificate (specificity >98% and
+sensitivity 46-83% when compared to medical records)
+([[#_ENREF_30][Devlin et al. 2009]]) or because women with undiagnosed
+type 2 diabetes mellitus may have inappropriately been included in the
+GDM group. In addition, based on limited information available in the
+birth registry, we were unable to account for every factor that might be
+related to pollution exposure and GDM risk, such as physical activity,
+family history of GDM, and maternal pre-pregnancy BMI.
+
+Additional rodent studies are needed to elucidate the extent to which
+individual criteria pollutants such as PM_{2.5}, NO_{x}, SO_{2}, black
+carbon, and ozone, and mixtures of pollutants, are causally linked to
+development of GDM and to further investigate mechanisms of action.
+Large population based studies with information on multiple criteria
+pollutants and covariates are also needed, particularly in young cohorts
+with otherwise low risk of GDM.
+
+*CONCLUSION*
+
+Young women may be at increased risk for GDM when exposed to higher
+residential PM_{2.5} during the 2^{nd} trimester of pregnancy. We
+otherwise found no evidence of an association between 1^{st} or 2^{nd}
+trimester residential PM_{2.5} exposure or neighborhood traffic density
+and GDM in pregnant women in Massachusetts with modest levels of air
+pollution exposure.
+
+*References*
+
+Sacks DA, Hadden DR, Maresh M, Deerochanawong C, Dyer AR, Metzger BE, et
+al. 2012. Frequency of gestational diabetes mellitus at collaborating
+centers based on IADPSG consensus panel-recommended criteria: the
+Hyperglycemia and Adverse Pregnancy Outcome (HAPO) Study. Diabetes care
+35(3): 526-528.
+
+Buchanan TA, Xiang AH. 2005. Gestational diabetes mellitus. The Journal
+of clinical investigation 115(3): 485-491.
+
+Gobl CS, Bozkurt L, Rivic P, Schernthaner G, Weitgasser R, Pacini G, et
+al. 2012. A two-step screening algorithm including fasting plasma
+glucose measurement and a risk estimation model is an accurate strategy
+for detecting gestational diabetes mellitus. Diabetologia 55(12):
+3173-3181.
+
+Sun Q, Yue P, Deiuliis JA, Lumeng CN, Kampfrath T, Mikolaj MB, et al.
+2009. Ambient air pollution exaggerates adipose inflammation and insulin
+resistance in a mouse model of diet-induced obesity. Circulation 119(4):
+538-546.
+
+Xu X, Liu C, Xu Z, Tzan K, Zhong M, Wang A, et al. 2011. Long-term
+exposure to ambient fine particulate pollution induces insulin
+resistance and mitochondrial alteration in adipose tissue. Toxicological
+sciences : an official journal of the Society of Toxicology 124(1):
+88-98.
+
+Rajagopalan S, Brook RD. 2012. Air pollution and type 2 diabetes:
+mechanistic insights. Diabetes 61(12): 3037-3045.
+
+Eze IC, Hemkens LG, Bucher HC, Hoffmann B, Schindler C, Kunzli N, et al.
+2015. Association between ambient air pollution and diabetes mellitus in
+Europe and North America: systematic review and meta-analysis.
+Environmental health perspectives 123(5): 381-389.
+
+Fleisch AF, Gold DR, Rifas-Shiman SL, Koutrakis P, Schwartz JD, Kloog I,
+et al. 2014. Air pollution exposure and abnormal glucose tolerance
+during pregnancy: the project Viva cohort. Environmental health
+perspectives 122(4): 378-383.
+
+Malmqvist E, Jakobsson K, Tinnerberg H, Rignell-Hydbom A, Rylander L.
+2013. Gestational diabetes and preeclampsia in association with air
+pollution at levels below current air quality guidelines. Environmental
+health perspectives 121(4): 488-493.
+
+Hu H, Ha S, Henderson BH, Warner TD, Roth J, Kan H, et al. 2015.
+Association of Atmospheric Particulate Matter and Ozone with Gestational
+Diabetes Mellitus. Environmental health perspectives.
+
+Robledo CA, Mendola P, Yeung E, Mannisto T, Sundaram R, Liu D, et al.
+2015. Preconception and early pregnancy air pollution exposures and risk
+of gestational diabetes mellitus. Environmental research 137: 316-322.
+
+van den Hooven EH, Jaddoe VW, de Kluizenaar Y, Hofman A, Mackenbach JP,
+Steegers EA, et al. 2009. Residential traffic exposure and
+pregnancy-related outcomes: a prospective birth cohort study.
+Environmental health : a global access science source 8: 59.
+
+Kloog I, Chudnovsky A, Just A, Nordio F, Koutrakis P, Coull B, et al.
+2014. A new hybrid spatio-temporal model for estimating daily multi-year
+PM2.5 concentrations across northeastern USA using high resolution
+aerosol optical depth data. Atmospheric Environment(95): 581-590.
+
+Callaghan WM, Dietz PM. 2010. Differences in birth weight for
+gestational age distributions according to the measures used to assign
+gestational age. American journal of epidemiology 171(7): 826-836.
+
+Committee on Obstetric Practice, American Institute of Ultrasound in
+Medicine, Society for Maternal-Fetal Medicine. 2014. Committee opinion
+no 611: method for estimating due date. Obstetrics and gynecology
+124(4): 863-866.
+
+American Diabetes Association. 2008. Standards of medical care in
+diabetes--2008. Diabetes care 31 Suppl 1: S12-54.
+
+United States Census Bureau. 2000. US Census 2000: Summary File 3.
+Available: [[http://www.census.gov/census2000/sumfile3.html]] [Accessed
+18 May 2015].
+
+Schwartz J, Spix C, Wichmann HE, Malin E. 1991. Air pollution and acute
+respiratory illness in five German communities. Environmental research
+56(1): 1-14.
+
+Kotelchuck M. 1994. An evaluation of the Kessner Adequacy of Prenatal
+Care Index and a proposed Adequacy of Prenatal Care Utilization Index.
+American journal of public health 84(9): 1414-1420.
+
+Xu X, Yavar Z, Verdin M, Ying Z, Mihai G, Kampfrath T, et al. 2010.
+Effect of early particulate air pollution exposure on obesity in mice:
+role of p47phox. Arteriosclerosis, thrombosis, and vascular biology
+30(12): 2518-2527.
+
+Rao X, Montresor-Lopez J, Puett R, Rajagopalan S, Brook RD. 2015.
+Ambient air pollution: an emerging risk factor for diabetes mellitus.
+Current diabetes reports 15(6): 603.
+
+Bass V, Gordon CJ, Jarema KA, MacPhail RC, Cascio WE, Phillips PM, et
+al. 2013. Ozone induces glucose intolerance and systemic metabolic
+effects in young and aged Brown Norway rats. Toxicology and applied
+pharmacology 273(3): 551-560.
+
+Invernizzi G, Ruprecht A, Mazza R, Rossetti E, Sasco A, Nardini S, et
+al. 2004. Particulate matter from tobacco versus diesel car exhaust: an
+educational perspective. Tobacco control 13(3): 219-221.
+
+Willi C, Bodenmann P, Ghali WA, Faris PD, Cornuz J. 2007. Active smoking
+and the risk of type 2 diabetes: a systematic review and meta-analysis.
+Jama 298(22): 2654-2664.
+
+Wendland EM, Pinto ME, Duncan BB, Belizan JM, Schmidt MI. 2008.
+Cigarette smoking and risk of gestational diabetes: a systematic review
+of observational studies. BMC pregnancy and childbirth 8: 53.
+
+Galtier F. 2010. Definition, epidemiology, risk factors. Diabetes &
+metabolism 36(6 Pt 2): 628-651.
+
+Butte NF. 2000. Carbohydrate and lipid metabolism in pregnancy: normal
+compared with gestational diabetes mellitus. The American journal of
+clinical nutrition 71(5 Suppl): 1256S-1261S.
+
+Torloni MR, Betran AP, Horta BL, Nakamura MU, Atallah AN, Moron AF, et
+al. 2009. Prepregnancy BMI and the risk of gestational diabetes: a
+systematic review of the literature with meta-analysis. Obesity reviews
+: an official journal of the International Association for the Study of
+Obesity 10(2): 194-203.
+
+Makgoba M, Savvidou MD, Steer PJ. 2012. An analysis of the
+interrelationship between maternal age, body mass index and racial
+origin in the development of gestational diabetes mellitus. BJOG : an
+international journal of obstetrics and gynaecology 119(3): 276-282.
+
+Devlin HM, Desai J, Walaszek A. 2009. Reviewing performance of birth
+certificate and hospital discharge data to identify births complicated
+by maternal diabetes. Maternal and child health journal 13(5): 660-666.

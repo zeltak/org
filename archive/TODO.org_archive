@@ -3129,3 +3129,30 @@ https://github.com/reek/anti-adblock-killer
   :ARCHIVE_CATEGORY: TODO
   :END:
 https://github.com/thamer/runner
+
+* covert word to text for better cross academic search 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-08 Fri 13:23
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`
+  :ARCHIVE_CATEGORY: TODO
+  :END:
+** for pdf files
+we use the ◀pdftotext▶ (part of poppler-utils) function to convert the file to a txt file
+then simply issue
+#+BEGIN_SRC sh  :results none
+pdftotext /home/lori/Documents/Sample.pdf /home/lori/Documents/Sample.txt
+#+END_SRC
+then follow up with pandoc
+** doc files 
+load them to libreoffice and convert manually to docx
+#+BEGIN_SRC sh  :results none
+libreoffice --headless --convert-to docx /PATH/FILE.doc
+#+END_SRC
+
+#+END_SRC
+** finalize by converting to org
+#+BEGIN_SRC sh  :results none
+find . -name \* -type f -exec pandoc -o {}.org {} \;  
+#+END_SRC
+

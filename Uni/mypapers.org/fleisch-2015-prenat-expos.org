@@ -1,0 +1,972 @@
+*Prenatal Exposure to Traffic Pollution: Associations with Reduced Fetal
+Growth and Rapid Infant Weight Gain*
+
+Abby F. Fleisch^{1}, Sheryl L. Rifas-Shiman^{2}, Petros Koutrakis^{3},
+Joel Schwartz^{3}, Itai Kloog^{3,4}, Steven Melly^{3}, Brent Coull^{5},
+Antonella Zanobetti^{3}, Matthew W. Gillman^{2,6}, Diane R. Gold^{3,7},
+Emily Oken^{2}
+
+*Affliliations*
+
+^{1}Division of Endocrinology, Boston Children's Hospital, Boston, MA,
+USA
+
+^{2}Obesity Prevention Program, Department of Population Medicine,
+Harvard Medical School and Harvard Pilgrim Health Care Institute,
+Boston, MA, USA
+
+^{3}Department of Environmental Health, Harvard School of Public Health,
+Boston, MA, USA
+
+^{4}Department of Geography and Environmental Development, Ben-Gurion
+University of the Negev, Beer Sheva, Israel
+
+^{5}Department of Biostatistics, Harvard School of Public Health,
+Boston, MA, USA
+
+^{6}Department of Nutrition, Harvard School of Public Health, Boston,
+MA, USA
+
+^{7}Channing Laboratory, Brigham and Women's Hospital, Boston, MA, USA
+
+*Corresponding author:*
+
+Abby F. Fleisch, MD, MPH
+
+Department of Endocrinology, Boston Children's Hospital
+
+300 Longwood Ave
+
+Boston, MA 02115
+
+[[mailto:abby.fleisch@childrens.harvard.edu][abby.fleisch@childrens.harvard.edu]]
+
+Phone: 617-355-7476, FAX: 617-730-0194
+
+*Running title:* Traffic pollution and early growth
+
+*Key words:* Air pollution, birth weight, BC, fetal growth, infant
+weight gain, obesity
+
+*Competing financial interests declaration:*
+
+The authors have no competing interests.
+
+*Funding *
+
+The authors have received support from the National Institutes of Health
+(K24 HD069408, R01HD 034568, P30 DK092924, P03ES000002, P01 ES009825,
+K12 DK094721-02); the Environmental Protection Agency (RD83479801), the
+Agency for Healthcare Research and Quality (T32 HS000063), the Harvard
+School of Public Health, and the Harvard Pilgrim Health Care Institute.
+
+*Manuscript word count:* 3,309
+
+*\\
+ABSTRACT (250 word limit)*
+
+*Background:* Prenatal air pollution exposure inhibits fetal growth, but
+implications for postnatal growth are unknown.\\
+*Methods:* We assessed weights and lengths of Project Viva infants at
+birth and 6 months. We estimated trimester-specific residential black
+carbon (BC) and particulate matter (PM_{2.5}) using spatiotemporal
+models. We measured traffic density and roadway proximity at late
+pregnancy address using geographic information systems. We performed
+linear and logistic regression adjusted for sociodemographics.
+
+*Results:* Mean (SD, n) birth weight-for-gestational age z-score (fetal
+growth) was 0.17 (0.97, n=2,114), 0-6 month weight-for-age gain 0.27
+z-units (1.11, n=1,172), and 0-6 month weight-for-length (WFL) gain 0.23
+z-units (1.11, n=689); 17% were obese (WFL />/ 95^{th} %ile) at 6
+months. In adjusted analyses, we observed lower fetal growth among
+infants in the highest (vs. lowest) quartile of (1) residential BC
+exposure during each trimester [e.g. third trimester BC (-0.16 units;
+95% CI: -0.28, -0.05)] and (2) traffic density in late pregnancy (-0.14
+units; 95% CI: -0.25, -0.03). Infants in the highest (vs. lowest)
+quartile of traffic density had more rapid 0-6 month weight-for-age gain
+(0.14 units; 95% CI: -0.01, 0.29) and higher odds of obesity (vs. WFL
+<85^{th}%ile) at 6 months (1.79; 95% CI: 1.10, 2.89) after adjustment
+for fetal growth and gestational age at birth. Infant obesity was also
+associated with third trimester BC exposure (Q4 vs. Q1 OR 1.60; 95% CI:
+0.98, 2.61). Associations were attenuated for PM_{2.5} exposures.
+
+*Conclusions:* Infants exposed prenatally to higher traffic-related
+pollution may exhibit postnatal obesity in addition to reduced fetal
+growth.
+
+*\\
+*
+
+*INTRODUCTION*
+
+Traffic-related air pollution has been associated with reduced fetal
+growth in multiple prior studies, including
+meta-analyses.[[#_ENREF_1][^{1}]]^{,} [[#_ENREF_2][^{2}]][[#_ENREF_3][]]
+The smallest airborne particles, with an aerodynamic diameter of less
+than 2.5 μm (PM_{2.5}), readily enter alveoli and are most closely
+linked to health effects.[[#_ENREF_3][^{3}]] Mechanistically, air
+pollution, which has been associated with elevated systemic inflammatory
+markers in non-pregnant[[#_ENREF_4][^{4}]] and
+pregnant[[#_ENREF_5][^{5}]] adults, may induce placental inflammation,
+and thereby inhibit nutrient transfer from mother to fetus.
+
+In addition to clinical relevance in the immediate neonatal
+period,[[#_ENREF_6][^{6}]] reduced fetal growth may act synergistically
+with greater weight gain during infancy to promote cardiovascular
+disease risk later in life.[[#_ENREF_7][^{7}]]^{,} [[#_ENREF_8][^{8}]]
+However, whether infants exposed to prenatal air pollution are at
+increased risk for rapid postnatal weight gain in addition to reduced
+fetal growth has not been evaluated. Prenatal exposure to tobacco
+smoke,[[#_ENREF_9][^{9}]] another source of particulate matter, and
+polycyclic aromatic hydrocarbons[[#_ENREF_10][^{10}]] (a combustion
+byproduct of fossil fuel and biomass burning) have been associated with
+increased odds of obesity in early childhood in population-based
+studies. In rodent models, adult mice developed visceral adipocyte
+hypertrophy and increased central adiposity following long-term exposure
+to fine particulate matter.[[#_ENREF_11][^{11}]]
+
+In the present analysis of a large cohort of women and their offspring
+residing in the greater Boston area, our primary objective was to
+evaluate the extent to which trimester-specific prenatal exposures to
+PM_{2.5} and black carbon (BC) (a traffic-related component of PM_{2.5})
+were associated with fetal growth at birth and to evaluate the extent to
+which trimester-specific prenatal and 0-6 month postnatal exposures to
+PM_{2.5} and BC were associated with weight gain from 0- 6 months of age
+and obesity at 6 months of age. Secondary objectives were to estimate
+associations with additional measures of exposure to traffic-related air
+pollution, including neighborhood traffic density and home roadway
+proximity. We hypothesized that prenatal air pollution exposure may be
+associated with both reduced fetal growth and increased postnatal weight
+gain.
+
+*METHODS*
+
+*Study population and design*
+
+Study subjects were participants in Project Viva, a prospective
+observational cohort study of prenatal exposures, pregnancy outcomes,
+and offspring health. Details of recruitment procedures and study
+protocol have been previously published.[[#_ENREF_12][^{12}]] Of 2,128
+Project Viva participants with a live singleton offspring, 2,115 had
+data available for at least one exposure and one outcome studied. We
+included a subset in each analysis based primarily on the number with
+outcome data available. Mothers of infants with (vs. without) a 6 month
+follow-up visit (n=1,175) were more likely to have a lower pre-pregnancy
+BMI and lower first trimester BC exposure and to be white, older,
+educated, higher income, and non-smokers. Infants of these mothers had
+higher birth weight-for-gestational age z-score and longer gestation
+(Supplemental table, S1). Of infants who attended a 6 month follow-up
+visit, weight and length were measured in 1,172; 689 also had a measure
+of length at birth. Research measures of newborn length were missing
+primarily in infants who were born prematurely or overnight or on
+weekends. Infants with (vs. without) a newborn length had a lower birth
+weight-for-gestational age z-score and gestational age (data not shown).
+
+Participants provided their residential address at enrollment and
+updated it at study visits that occurred at the end of the second
+trimester, soon after birth, and at 6 months postpartum. We included
+mother/infant pairs who lived at an address in our catchment area for at
+least 75% of each exposure time period in analyses of air pollution
+exposures.
+
+Mothers provided written informed consent at enrollment and for their
+infants after birth, and Institutional Review Boards of the
+participating sites approved the study.
+
+*Air pollution exposures*
+
+We estimated daily black carbon (BC) exposure at each residential
+address using a validated spatiotemporal land-use regression
+model.[[#_ENREF_13][^{13}]] We modeled daily PM_{2.5} exposure at each
+residence using aerosol optical depth (AOD) data.[[#_ENREF_14][^{14}]]
+These models accounted for moves during pregnancy and postnatally. To
+obtain exposures during specific time windows, we averaged daily
+exposure estimates as follows: from the date of the last menstrual
+period (LMP) to the 93^{rd} day after LMP for first trimester, from the
+94^{th} day after LMP to the 187^{th} day after LMP for second
+trimester, from the 188^{th} day after LMP to the day before birth for
+third trimester, and from the date of birth to the 182^{nd} day after
+birth for 0-6 month postnatal exposures.
+
+While BC and PM_{2.5} exposure estimates were modeled on a daily basis,
+neighborhood traffic density [average daily traffic (vehicles/day) x
+length of road (km) within 100 m] and home roadway proximity (distance
+to Census Feature Class Code A1 or A2 roads) were based on annual
+estimates at a given residential address. We used the 2002 road
+inventory from Massachusetts Executive Office of Transportation to
+estimate traffic density and 2005 ESRI Street Map^{TM} North America
+ArcGIS 10 Data and Maps to estimate roadway proximity at the residential
+address participants provided at the time of delivery; thus, these
+estimates most directly reflected late pregnancy exposures. However, as
+only 10% of women moved during pregnancy and 5% from 0-6 months
+postpartum, we were unable to differentiate residential traffic density
+and roadway proximity during early pregnancy vs. late pregnancy vs.
+postnatally.
+
+*Assessment of fetal and postnatal growth*
+
+We obtained infant birth weight in grams from the hospital medical
+record. We calculated length of gestation in days by subtracting the
+date of the LMP from the date of delivery. If gestational age according
+to the second trimester ultrasound differed from that according to the
+LMP by more than 10 days, we used the ultrasound result to determine
+gestational length. We determined birth weight-for-gestational age and
+sex z-score from a US national reference.[[#_ENREF_15][^{15}]] We chose
+birth weight-for-gestational age z-score as opposed to clinical
+categories (small- vs. appropriate- vs. large-for-gestational age) to
+maximize power. Also, it did not require assumption of a linear
+relationship between gestational age and birth weight, which would be
+necessary if gestational age was added as a covariate into a model
+predicting birth weight.[[#_ENREF_15][^{15}]]
+
+Trained research assistants weighed infants at 6 months with a digital
+scale (Seca Model 881; Seca Corporation, Hamburg, Germany) and measured
+length at birth and 6 months with a Shorr measuring board (Shorr
+Productions, Olney, Maryland). We calculated age- and sex-specific
+weight-for-length z-score (WFL-z) and age- and sex-specific
+weight-for-age z-score (WFA-z) from the Centers for Disease Control and
+Prevention (CDC) 2000 growth chart data.[[#_ENREF_16][^{16}]] WFL-z was
+more likely to represent adiposity,[[#_ENREF_17][^{17}]] but sample
+sizes were larger for WFA-z . For the obesity outcome, we calculated
+age- and sex-specific WFL percentile.[[#_ENREF_16][^{16}]] We defined
+obesity as ≥95^{th} percentile and normal weight as < 85^{th}
+percentile.
+
+*Assessment of covariates*
+
+Using a combination of interviews and questionnaires, we collected
+information on mothers' age at study enrollment (9.9 weeks gestation),
+race/ethnicity, education, household income, smoking habits, date of
+LMP, and infants' birthdate. We calculated mothers' pre-pregnancy BMI
+from self-reported height and weight. We calculated total gestational
+weight gain as the difference between self-reported pre-pregnancy weight
+and the last weight recorded before delivery. At the end of the second
+trimester (median 28.1 weeks), women underwent a two-tiered (50 g
+non-fasting followed by 100 g fasting if abnormal) glucose screening
+test, which we grouped into 4 categories of glucose tolerance, as
+previously described.[[#_ENREF_18][^{18}]]
+
+*Statistical analyses*
+
+We used linear regression to evaluate associations of air pollution
+exposures with birth weight-for-gestational age z-score and with change
+in WFL-z and WFA-z from 0- 6 months. We used logistic regression to
+evaluate the associations of air pollution exposures with obesity (WFL ≥
+95^{th} percentile) versus normal weight (WFL <85^{th} percentile) at 6
+months.
+
+We considered each of the exposures (trimester-specific prenatal BC and
+PM_{2.5}, 0-6 month postnatal BC and PM_{2.5}, and traffic density in
+late pregnancy) in quartiles. We /a priori/ categorized proximity to
+major roadway as />/ 200 m, 100 to < 200 m, 50 to /</ 100 m, and <50 m
+for consistency with previous studies using ≥ 200m as a reference
+group.[[#_ENREF_18][^{18}]] We first fit unadjusted models. Next we
+created a full multivariate model for each of the exposures and outcomes
+which included as covariates characteristics know to be associated with
+infant size and growth, namely household income (> $70,000 or /</
+$70,000), paternal BMI (continuous), maternal pre-pregnancy BMI
+(continuous), race/ethnicity (white, black, Asian, Hispanic, other),
+education (with or without college degree), pregnancy weight gain
+(continuous), smoking habits (smoked during pregnancy, formerly smoked,
+never smoked), and abnormal glucose tolerance (four
+categories[[#_ENREF_18][^{18}]]). We considered but did not include
+variables for maternal age, maternal height, infant sex, breastfeeding
+duration, season, and long-term time trend, as these were not
+confounders of the exposure-outcome relationships (i.e. the estimate for
+the primary exposure changed by <10%) or did not significantly change
+the results. Finally, we also conducted an analysis to examine the
+extent to which air pollution exposures were associated with the
+phenotype of low fetal growth and rapid infant weight gain in the same
+individual. To do this, we created a multi-level outcome of normal fetal
+growth/normal 0-6 month WFL-z (reference) vs. low fetal growth/normal
+0-6 month WFL-z vs. normal fetal growth/rapid 0-6 month WFL-z vs. low
+fetal growth/rapid 0-6 month WFL-z (outcome of interest). We defined low
+vs. normal fetal growth as Q1 vs. Q2-4 and normal vs. rapid 0-6 month
+WFL-z as Q4 vs. Q1-3.
+
+As is common in large epidemiologic analyses, many participants were
+missing data on one or more covariates. We used chained equations to
+multiply impute missing values, generated 50 imputed datasets, and
+combined multivariable modeling results (Proc MI ANALYZE) in SAS version
+9.3 (SAS Institute, Cary NC).[[#_ENREF_19][^{19}]]
+
+*RESULTS*
+
+Mean (SD) maternal age was 31.8 (5.2) years, pre-pregnancy BMI was 24.9
+(5.6) kg/m^{2}, and total gestational weight gain was 15.5 (5.7) kg. 67%
+of women were white, and 65% were college graduates. Mean (SD) infant
+birth weight-for-gestational age z-score was 0.17 (0.97) units, change
+in WFL-z from 0- 6 months of age was 0.23 (1.11) units, change in WFA-z
+from 0- 6 months of age was 0.27 (1.11) units, and 17% were obese at 6
+months of age (Table 2).
+
+Third trimester mean (SD, range) BC concentration was 0.7 µg/m^{3} (0.2,
+0.1-1.6) which was typical for urban US (range 0.2-1.9 µg/m^{3} from
+2005-2007). Third trimester mean (SD, range) PM_{2.5} concentration was
+11.7 µg/m^{3} (1.6, 7.5-16.8). For context, the Environmental Protection
+Agency standard for annual PM_{2.5} exposure was 15 µg/m^{3} at the time
+and was lowered to 12 µg/m^{3} in December, 2012. Mean (SD, range)
+neighborhood traffic density in late pregnancy was 1,492 (2,093,
+0-30,860) vehicles/day x km of road within 100 m of residential address
+(Table 1). 1,853 (87.7%) of subjects lived />/ 200 m from a major
+roadway, and 73 (3.5%) lived < 50 m from a major roadway in late
+pregnancy. Mothers who lived at addresses with lower BC exposure were
+somewhat older, more highly educated, had higher household income, and
+were more likely to be white and nonsmokers (Table 2).
+
+Among infants exposed to the highest (vs. lowest) quartile of BC during
+the third trimester, we observed lower fetal growth in unadjusted (birth
+weight-for-gestational age z-score of -0.31; 95% CI: -0.43, -0.19) and
+covariate-adjusted (-0.16; 95% CI: -0.28, -0.05) models. We observed
+similar associations in covariate-adjusted models of fetal growth when
+we considered infants with mothers exposed to the highest (vs. lowest)
+quartile of BC in the first and second trimesters and exposed to the
+highest (vs. lowest) quartile of neighborhood traffic density in late
+pregnancy. Infants with mothers who lived < 50 m (vs. ≥ 200 m) from a
+major roadway in late pregnancy also had lower fetal growth (-0.30
+units; 95% CI: -0.51, -0.08) in covariate-adjusted models (Table 3).
+
+Infants in the highest (vs. lowest) quartile of traffic density in late
+pregnancy had increased WFA gain from 0-6 months of age in models that
+were unadjusted (WFA-z change 0.30; 95% CI: 0.12, 0.48) and
+covariate-adjusted (0.22; 95% CI: 0.04, 0.40). Estimates were attenuated
+slightly when models were additionally adjusted for fetal growth and
+gestational age (0.14; 95% CI: -0.01, 0.29), which are potentially on
+the pathway between prenatal air pollution exposure and infant weight
+gain. Fully-adjusted estimates were similar but CIs were wider and
+included the null for the WFL-z outcome (0.17; 95% CI: -0.06, 0.41),
+likely because of the substantially smaller sample size given the
+limited number of infants with birth length assessed. Roadway proximity
+and BC exposure generally appeared associated with increased WFA-z and
+WFL-z from 0-6 months of age, although all confidence intervals included
+the null. For BC, third trimester exposures were most strongly
+associated with infant weight gain. For example, when considering the
+extent to which the highest (vs. lowest) quartile of exposure was
+associated with the WFL-z outcome, third trimester BC exposure was
+associated with a 0.15 unit (95% CI: -0.10, 0.39) increase vs. -0.01
+(95% CI: -0.26, 0.23) for first trimester and 0.06 (95% CI: -0.18, 0.30)
+for 0-6 month postnatal exposure (Table 3).
+
+Infants in the highest (vs. lowest) quartile of traffic density in late
+pregnancy also had increased odds of obesity at 6 months in unadjusted
+(1.63; 95% CI: 1.03, 2.57), covariate-adjusted (1.70; 95% CI: 1.05,
+2.73), and fetal growth and gestational age-adjusted (1.79; 95% CI:
+1.10, 2.89) models. In fully-adjusted models, odds of obesity at 6
+months of age was 1.60 (95% CI: 0.98, 2.61) times higher for infants in
+the highest (vs. lowest) quartile of third trimester BC exposure and
+1.50 (95% CI: 0.94, 2.40) times higher for infants in the highest (vs.
+lowest) quartile of 0-6 month postnatal BC exposure. Odds of obesity
+were similar for associations with distance to roadway and were
+decreased for associations with first and second trimester BC exposure,
+all with confidence intervals that included the null (Table 3).
+
+An infant's odds of having both low fetal growth and rapid 0-6 month WFL
+gain as compared to having normal fetal growth and normal 0-6 month WFL
+gain was increased for infants in the highest vs. lowest quartile of
+traffic density (OR 2.62; 95% CI: 1.00, 6.86) and third trimester BC
+exposure (OR 2.06; 95% CI: 0.85, 4.98) in covariate-adjusted models.
+
+When we considered exposure to trimester-specific and postnatal
+PM_{2.5}, PM_{2.5} also appeared associated with lower fetal growth and
+higher postnatal weight gain and obesity, but the strength of the
+associations was attenuated and all confidence intervals included the
+null (Supplemental Table, S2).
+
+*DISCUSSION*
+
+Our analysis of data from a large, prospective cohort confirmed an
+association between prenatal exposure to traffic-related pollution and
+reduced fetal growth. Independent of its effect on fetal growth, higher
+neighborhood traffic density was also associated with higher odds of
+obesity at 6 months.
+
+Our finding of an association between higher prenatal air pollution and
+reduced fetal growth is consistent with prior studies, including recent
+meta-analyses, one which reported pooled effect estimates based on 62
+studies[[#_ENREF_1][^{1}]] and another which reported a combined effect
+estimate using data from 14 centers in 9 countries [International
+Collaboration on Air Pollution and Pregnancy Outcomes
+(ICAPPO)].[[#_ENREF_2][^{2}]] The majority of prior studies used
+administrative birth record data which is often limited by the inability
+to consider individual-level sociodemographic characteristics that could
+confound the association between air pollution exposure and pregnancy
+outcomes.[[#_ENREF_1][^{1}]] In our study, we were able to take into
+account well-specified sociodemographic information obtained by
+in-person interview and questionnaire. Yet, we still demonstrated fairly
+large associations between prenatal BC and traffic density exposures and
+early growth. For example, infants in the highest (vs. lowest) quartile
+of third trimester BC exposure had an adjusted mean 0.16 units lower
+(95% CI: -0.28, -0.05) birth weight-for-gestational age z-score. For an
+infant born at 40 weeks gestation at the 50^{th} percentile for birth
+weight, this difference would translate to a birth weight that would be
+7 percentiles (95% CI: 2,11) or 66 g (95% CI: 21, 120)
+lower.[[#_ENREF_15][^{15}]] While this difference is smaller than the
+175-200g decrease in birth weight associated with maternal
+smoking,[[#_ENREF_20][^{20}]] it is larger than the 20-40g decrease in
+birth weight typically associated with a 20 µg/m^{3} increase in PM_{10}
+or PM_{2.5}.[[#_ENREF_1][^{1}]]^{,} [[#_ENREF_2][^{2}]] Our larger
+effect estimates may reflect more precise exposure estimates as a result
+of using a well-specified spatiotemporal land use regression BC model.
+48 of 62 prior studies of air pollution and fetal growth reviewed by
+Stieb, et al, measured exposures at a centrally-located
+monitor.[[#_ENREF_1][^{1}]]
+
+Despite the fact that most prior studies of air pollution and fetal
+growth have focused on PM_{2.5}, we demonstrated stronger associations
+with traffic density and distance to roadway, both proxies for
+traffic-related pollution, and with BC, a traffic-related constituent of
+PM_{2.5}, than with PM_{2.5} itself. Our findings are consistent with a
+study of birth weight in full term infants in Atlanta, Georgia which
+demonstrated a stronger association with exposure to BC versus PM_{2.5}
+during the 3^{rd} trimester [-7.1g (95% CI: -13.9, -0.3) vs. -4.3g (95%
+CI: -9.8, 1.2) per interquartile range increase in
+pollutant].[[#_ENREF_21][^{21}]] However, women in Vancouver, British
+Columbia, had similar odds of having a small-for-gestational age infant
+[1.01 (95% CI: 0.99, 1.03) vs. 1.02 (95% CI: 1.00, 1.03) per
+interquartile range increase in pollutant] when considering prenatal
+exposure to BC versus PM_{2.5}.[[#_ENREF_22][^{22}]] Also, a more
+pronounced BC effect as compared to PM_{2.5} has not been observed for
+other outcomes such as all-cause or cardiorespiratory
+mortality.[[#_ENREF_23][^{23}]] Our findings could reflect the fact that
+we used a land use regression model exactly matched to a subject's
+residential address to estimate BC exposure, whereas we used an aerosol
+optical depth model to estimate PM_{2.5} exposure in 10 x 10 km blocks.
+Also, sample sizes were smaller for analyses of PM_{2.5} exposure which
+may have limited our power to see an association. Additional studies are
+needed to determine whether BC and other traffic-related pollutants may
+be more strongly associated with fetal growth than air pollution from
+other sources.
+
+In the present study, we considered PM_{2.5} and BC exposure during each
+trimester separately, and associations between higher air pollution
+exposure and reduced fetal growth were similar across the trimesters.
+This is likely at least partially due to strong correlations between
+trimester-specific exposures in our cohort. Prior studies of air
+pollu­tion and birth weight have similarly attempted to identify
+gestational windows of vulnerability with conflicting results (e.g.
+first,[[#_ENREF_24][^{24}]]^{,} [[#_ENREF_25][^{25}]]
+second,[[#_ENREF_26][^{26}]]^{,} [[#_ENREF_27][^{27}]] and
+third[[#_ENREF_21][^{21}]]^{,} [[#_ENREF_25][^{25}]]^{,}
+[[#_ENREF_27][^{27}]] trimesters identified as vulnerable windows).
+Consistent with our finding, the recent ICAPPO combined effects
+meta-analysis found a slightly increased and comparable relative risk of
+term low birth weight in each of the trimesters.[[#_ENREF_2][^{2}]]
+Identifying gestational windows of vulnerability would inform policy
+measures related to air pollution exposure during pregnancy but will
+continue to be limited by correlations between exposures.
+
+Mechanistically, air pollution may impact fetal growth by causing
+placental inflammation and impaired function. In rodent models, greater
+exposure to traffic-related air pollution during pregnancy was
+associated with increased placental pro-inflammatory
+cytokines[[#_ENREF_28][^{28}]] and altered functional
+morphology.[[#_ENREF_29][^{29}]] In a study of pregnant women, greater
+PM_{10} and NO_{2} exposure during the 2 months prior to delivery was
+associated with lower placental weight as well as higher antiangiogenic
+and lower angiogenic factors in cord blood.[[#_ENREF_30][^{30}]]
+
+While its relationship with restricted fetal growth has been fairly
+well-established, the extent to which prenatal air pollution exposure
+may impact growth during childhood is unclear. In the present study,
+higher neighborhood traffic density at a mother's residential address in
+late pregnancy was associated with increased odds that her child would
+be obese at 6 months of age. This association was independent of effects
+of traffic on fetal growth. We were unable to elucidate the extent to
+which the association between traffic density and infant obesity was
+driven by traffic exposure prenatally vs. in early life. This was
+because we measured neighborhood traffic density from a 2002 road
+inventory, so it varied by residential address but did not vary over
+time and because mothers in our cohort moved relatively infrequently.
+
+Our BC and PM_{2.5} models, however, were able to measure daily
+residential exposures, which enabled unique trimester-specific and 0-6
+month postnatal exposure estimates. Prenatal and early life BC exposures
+appeared to be associated with postnatal weight gain from 0-6 months of
+age and obesity at 6 months of age. Effect estimates were consistently
+highest for third trimester exposures, suggesting that late pregnancy,
+when the majority of fetal growth occurs,[[#_ENREF_31][^{31}]] may
+indeed be a vulnerable window for exposure as compared to early
+pregnancy or postnatally. However, confidence intervals included the
+null in all adjusted models. The sample size for all postnatal growth
+models was substantially smaller (by about half) compared to the fetal
+growth models, and it is possible that associations, especially for
+third trimester BC exposure, would have reached significance with a
+larger sample size. As was the case for fetal growth, the association
+between BC and other direct measures of traffic (traffic density and
+distance to roadway) with infant weight gain was generally stronger than
+for PM_{2.5}.
+
+Our results are in line with other human population-based studies that
+have demonstrated an association between prenatal exposure to tobacco
+smoke, a source of particulate matter, and offspring weight
+gain[[#_ENREF_9][^{9}]]^{,} [[#_ENREF_32][^{32}]] and between prenatal
+exposure to polycyclic aromatic hydrocarbon, another air pollutant, and
+obesity at 5 years of age.[[#_ENREF_10][^{10}]] Mechanistically, air
+pollution may induce obesity by causing adipose tissue inflammation and
+hypertrophy. In adult rats, exposure to air pollution increased visceral
+adipocyte hypertrophy by altering the pro-inflammatory to
+anti-inflammatory ratio in adipose tissue
+macrophages.[[#_ENREF_11][^{11}]] Air pollution-induced
+neuroinflammation may also lead to obesity through brain remodeling and
+altered satiety signals. Among mice fed a high fat diet, those exposed
+to diesel exhaust prenatally had greater brain microglial activation and
+body weight as compared to unexposed mice.[[#_ENREF_33][^{33}]] Future
+studies will be necessary to confirm an association between prenatal
+traffic-related pollution and infant weight gain/obesity, further
+evaluate windows of vulnerability, and elucidate mechanistic
+underpinnings.
+
+There is growing evidence that antenatal stressors (e.g. poor maternal
+nutrition) associated with reduced fetal growth may predispose offspring
+to glucose intolerance and obesity later in
+life.[[#_ENREF_34][^{34}]]^{,} [[#_ENREF_35][^{35}]] In addition, rapid
+infant weight gain has been associated with increased risk for later
+life obesity[[#_ENREF_36][^{36}]]^{,} [[#_ENREF_37][^{37}]] and other
+cardiovascular disease risk factors, such as increased central
+adiposity[[#_ENREF_38][^{38}]] and elevated blood
+pressure.[[#_ENREF_7][^{7}]]^{,} [[#_ENREF_38][^{38}]] A history of
+reduced fetal growth in conjunction with rapid infant weight gain may
+further exacerbate cardiometabolic disease risk. For example, in a
+rodent model of IUGR, rats fed a low protein diet in infancy had
+improved insulin sensitivity as compared to those fed a normal protein
+diet,[[#_ENREF_8][^{8}]] and in our cohort, infants in the lowest
+quartile of fetal growth and highest quartile of WFL z-score at 6 months
+of age had the highest blood pressures at 3 years of
+age.[[#_ENREF_7][^{7}]] Thus, the extent to which air pollution exposure
+may be associated with the phenotype of reduced fetal growth and rapid
+infant weight gain in the same individual has important health
+implications. In the present study, infants in the lowest quartile of
+fetal growth and highest quartile of WFL gain from 0-6 months of age had
+higher prenatal exposure to traffic-related pollution than infants
+without restricted fetal growth or rapid postnatal weight gain. Further
+studies in this cohort and others will help to elucidate whether this
+translates to an adverse cardiometabolic profile later in life.
+
+Strengths of our study included use of a large, prospective cohort with
+several measures of air pollution exposure and inclusion of multiple
+potential confounding variables. Our well-specified spatiotemporal BC
+land use regression model and our use of a birth weight-for-gestational
+age z-score outcome were particular strengths. Limitations of the study
+included lack of information on mother's time-activity patterns which
+may have reduced the accuracy of the air pollution models and biased
+results toward the null.[[#_ENREF_39][^{39}]] Also, generalizability may
+be limited as mothers in our cohort were generally well educated and
+mostly white, although the proportions of racial/ethnic minorities in
+Project Viva were higher than in Massachusetts as a whole, according to
+the 2000 census.[[#_ENREF_40][^{40}]]
+
+*CONCLUSION*
+
+Third trimester BC exposure and neighborhood traffic density in late
+pregnancy predicted reduced fetal growth in Boston-area infants.
+Neighborhood traffic density was also associated with greater obesity in
+infancy. Additional studies are necessary to determine the extent to
+which this pattern may contribute to future cardiovascular disease risk.
+
+*\\
+*
+
+*ACKNOWLEDGEMENTS*
+
+We thank Wei Perng, PhD, for helpful input regarding statistical
+modeling.
+
+*REFERENCES*
+
+*1.* Stieb DM, Chen L, Eshoul M, Judek S. Ambient air pollution, birth
+weight and preterm birth: a systematic review and meta-analysis.
+/Environ Res./ Aug 2012;117:100-111.
+
+*2.* Dadvand P, Parker J, Bell ML, et al. Maternal exposure to
+particulate air pollution and term birth weight: a multi-country
+evaluation of effect and heterogeneity. /Environ Health Perspect./ Mar
+2013;121(3):267-373.
+
+*3.* Anderson JO, Thundiyil JG, Stolbach A. Clearing the air: a review
+of the effects of particulate matter air pollution on human health. /J
+Med Toxicol./ Jun 2012;8(2):166-175.
+
+*4.* Alexeeff SE, Coull BA, Gryparis A, et al. Medium-term exposure to
+traffic-related air pollution and markers of inflammation and
+endothelial function. /Environ Health Perspect./ Apr
+2011;119(4):481-486.
+
+*5.* Lee PC, Talbott EO, Roberts JM, Catov JM, Sharma RK, Ritz B.
+Particulate air pollution exposure and C-reactive protein during early
+pregnancy. /Epidemiology./ Jul 2011;22(4):524-531.
+
+*6.* Pallotto EK, Kilbride HW. Perinatal outcome and later implications
+of intrauterine growth restriction. /Clin Obstet Gynecol./ Jun
+2006;49(2):257-269.
+
+*7.* Belfort MB, Rifas-Shiman SL, Rich-Edwards J, Kleinman KP, Gillman
+MW. Size at birth, infant growth, and blood pressure at three years of
+age. /J Pediatr./ Dec 2007;151(6):670-674.
+
+*8.* Lim K, Armitage JA, Stefanidis A, Oldfield BJ, Black MJ. IUGR in
+the absence of postnatal "catch-up" growth leads to improved whole body
+insulin sensitivity in rat offspring. /Pediatr Res./ Oct
+2011;70(4):339-344.
+
+*9.* Oken E, Huh SY, Taveras EM, Rich-Edwards JW, Gillman MW.
+Associations of maternal prenatal smoking with child adiposity and blood
+pressure. /Obes Res./ Nov 2005;13(11):2021-2028.
+
+*10.* Rundle A, Hoepner L, Hassoun A, et al. Association of childhood
+obesity with maternal exposure to ambient air polycyclic aromatic
+hydrocarbons during pregnancy. /Am J Epidemiol./ Jun 1
+2012;175(11):1163-1172.
+
+*11.* Sun Q, Yue P, Deiuliis JA, et al. Ambient air pollution
+exaggerates adipose inflammation and insulin resistance in a mouse model
+of diet-induced obesity. /Circulation./ Feb 3 2009;119(4):538-546.
+
+*12.* Gillman MW, Rich-Edwards JW, Rifas-Shiman SL, Lieberman ES,
+Kleinman KP, Lipshultz SE. Maternal age and other predictors of newborn
+blood pressure. /J Pediatr./ Feb 2004;144(2):240-245.
+
+*13.* Gryparis A, Coull B, Schwartz J, Suh H. Semiparametric latent
+variable regression models for spatio-teomporal modeling of mobile
+source particles in the greater Boston area /Journal of the Royal
+Statistical Scoiety: Series C (Applied Statistics)/ 2007;56(2):183-209.
+
+*14.* Kloog I, Koutrakis P, Coull B, Joo Lee H, Schwartz J. Assessing
+temporally and spatially resolved PM2.5 exposures for epidemiological
+studies using satellite aerosol optical depth measurements .
+/Atmospheric Environment./ 2011;45:6267-6275.
+
+*15.* Oken E, Kleinman KP, Rich-Edwards J, Gillman MW. A nearly
+continuous measure of birth weight for gestational age using a United
+States national reference. /BMC Pediatr./ Jul 8 2003;3:6.
+
+*16.* National Center for Health Statistics. 2000 CDC growth charts:
+United States. /Available at:/
+[[http://www.cdc.gov/nccdphp/dnpa/growthcharts/sas.htm][/www.cdc.gov/nccdphp/dnpa/growthcharts/sas.htm/]]/./
+Last accessed: March 8, 2014.
+
+*17.* Benn RT. Some mathematical properties of weight-for-height indices
+used as measures of adiposity. /Br J Prev Soc Med./ Feb
+1971;25(1):42-50.
+
+*18.* Fleisch AF, Gold DR, Rifas-Shiman SL, et al. Air Pollution
+Exposure and Abnormal Glucose Tolerance during Pregnancy: The Project
+Viva Cohort. /Environ Health Perspect./ Feb 7 2014.
+
+*19.* Rubin DB. /Multiple imputation for nonresponse in surveys/.
+Hoboken, N.J. ;: Wiley-Interscience; 2004.
+
+*20.* Lumley J. Stopping smoking. /Br J Obstet Gynaecol./ Apr
+1987;94(4):289-292.
+
+*21.* Darrow LA, Klein M, Strickland MJ, Mulholland JA, Tolbert PE.
+Ambient air pollution and birth weight in full-term infants in Atlanta,
+1994-2004. /Environ Health Perspect./ May 2011;119(5):731-737.
+
+*22.* Brauer M, Lencar C, Tamburic L, Koehoorn M, Demers P, Karr C. A
+cohort study of traffic-related air pollution impacts on birth outcomes.
+/Environ Health Perspect./ May 2008;116(5):680-686.
+
+*23.* Hoek G, Krishnan RM, Beelen R, et al. Long-term air pollution
+exposure and cardio- respiratory mortality: a review. /Environ Health./
+May 28 2013;12(1):43.
+
+*24.* Liu S, Krewski D, Shi Y, Chen Y, Burnett RT. Association between
+gaseous ambient air pollutants and adverse pregnancy outcomes in
+Vancouver, Canada. /Environ Health Perspect./ Nov
+2003;111(14):1773-1778.
+
+*25.* Rich DQ, Demissie K, Lu SE, Kamat L, Wartenberg D, Rhoads GG.
+Ambient air pollutant concentrations during pregnancy and the risk of
+fetal growth restriction. /J Epidemiol Community Health./ Jun
+2009;63(6):488-496.
+
+*26.* Lee BE, Ha EH, Park HS, et al. Exposure to air pollution during
+different gestational phases contributes to risks of low birth weight.
+/Hum Reprod./ Mar 2003;18(3):638-643.
+
+*27.* Mannes T, Jalaludin B, Morgan G, Lincoln D, Sheppeard V, Corbett
+S. Impact of ambient air pollution on birth weight in Sydney, Australia.
+/Occup Environ Med./ Aug 2005;62(8):524-530.
+
+*28.* Auten RL, Gilmour MI, Krantz QT, Potts EN, Mason SN, Foster WM.
+Maternal diesel inhalation increases airway hyperreactivity in
+ozone-exposed offspring. /Am J Respir Cell Mol Biol./ Apr
+2012;46(4):454-460.
+
+*29.* Veras MM, Damaceno-Rodrigues NR, Caldini EG, et al. Particulate
+urban air pollution affects the functional morphology of mouse placenta.
+/Biol Reprod./ Sep 2008;79(3):578-584.
+
+*30.* van den Hooven EH, Pierik FH, de Kluizenaar Y, et al. Air
+pollution exposure and markers of placental growth and function: the
+generation R study. /Environ Health Perspect./ Dec
+2012;120(12):1753-1759.
+
+*31.* Cunningham FG, Williams JW. /Williams obstetrics/. 23rd ed. New
+York: McGraw-Hill Medical; 2010.
+
+*32.* Oken E, Levitan EB, Gillman MW. Maternal smoking during pregnancy
+and child overweight: systematic review and meta-analysis. /Int J Obes
+(Lond)./ Feb 2008;32(2):201-210.
+
+*33.* Bolton JL, Smith SH, Huff NC, et al. Prenatal air pollution
+exposure induces neuroinflammation and predisposes offspring to weight
+gain in adulthood in a sex-specific manner. /FASEB J./ Nov
+2012;26(11):4743-4754.
+
+*34.* Gold DR. Do rapid infant growth and childhood asthma have common
+developmental origins? /J Allergy Clin Immunol./ Jun
+2013;131(6):1537-1538.
+
+*35.* Roseboom T, de Rooij S, Painter R. The Dutch famine and its
+long-term consequences for adult health. /Early Hum Dev./ Aug
+2006;82(8):485-491.
+
+*36.* Baird J, Fisher D, Lucas P, Kleijnen J, Roberts H, Law C. Being
+big or growing fast: systematic review of size and growth in infancy and
+later obesity. /BMJ./ Oct 22 2005;331(7522):929.
+
+*37.* Taveras EM, Rifas-Shiman SL, Belfort MB, Kleinman KP, Oken E,
+Gillman MW. Weight status in the first 6 months of life and obesity at 3
+years of age. /Pediatrics./ Apr 2009;123(4):1177-1183.
+
+*38.* Skilton MR, Marks GB, Ayer JG, et al. Weight gain in infancy and
+vascular risk factors in later childhood. /Pediatrics./ Jun
+2013;131(6):e1821-1828.
+
+*39.* Nethery E, Leckie SE, Teschke K, Brauer M. From measures to
+models: an evaluation of air pollution exposure assessment for
+epidemiological studies of pregnant women. /Occup Environ Med./ Sep
+2008;65(9):579-586.
+
+*40.* United States Census Bureau. American Factfinder. Available:
+[[http://factfinder2.census.gov/faces/nav/jsf/pages/index.xhtml]]. 2000.
+Last accessed: March 8, 2014
+
+*\\
+*
+
+*Table 1.* Project Viva participant air pollution exposures.
+Distributions and Spearman correlation coefficients.
+
+|                                     | Distributions                      |
+|-------------------------------------+------------------------------------+----------------------------------+---------------------------+----------------------------+--------------------+--------------------+--------------------+---------------------------+------------------+------------------|
+|                                     | /*\_\_\_\_BC\_(µg/m^{3})\_*\_\_/   | */\_\_PM_{2.5}\_(µg/m^{3})\_/*   | */Traffic density^{b}/*   | */Roadway distance/*^{c}   |
+| *Exposure*                          | 1^{st} trimester                   | 2^{nd} trimester                 | 3^{rd} trimester          | 0-6 month postnatal^{a}    | 1^{st} trimester   | 2^{nd} trimester   | 3^{rd} trimester   | 0-6 month postnatal^{a}   | Late pregnancy   | Late pregnancy   |
+| *N*                                 | 2,091                              | 2,085                            | 2,084                     | 1,160                      | 1,375              | 1,595              | 1,839              | 1,138                     | 2,099            | 2,112            |
+| *Mean (SD) *                        | 0.8 (0.3)                          | 0.7(0.2)                         | 0.7 (0.2)                 | 0.7 (0.2)                  | 12.0 (1.6)         | 11.9 (1.4)         | 11.7 (1.6)         | 12.0 (0.8)                | 1,492 (2,093)    | 1,726 (1,891)    |
+| *Minimum*                           | 0.1                                | 0.1                              | 0.1                       | 0.1                        | 8.4                | 8.5                | 7.5                | 9.2                       | 0                | 1                |
+| *Maximum*                           | 4.1                                | 1.7                              | 1.6                       | 1.7                        | 16.1               | 15.9               | 16.8               | 14.0                      | 30,860           | 12,941           |
+| Spearman correlation coefficients   |
+|                                     | /*\_\_\_\_BC\_(µg/m^{3})\_*\_\_/   | */\_\_PM_{2.5}\_(µg/m^{3})\_/*   | */Traffic density^{b}/*   | */Roadway distance/*^{c}   |
+| *Exposure*                          | 1^{st} trimester                   | 2^{nd} trimester                 | 3^{rd} trimester          | 0-6 month postnatal^{a}    | 1^{st} trimester   | 2^{nd} trimester   | 3^{rd} trimester   | 0-6 month postnatal^{a}   | Late pregnancy   | Late pregnancy   |
+| *BC*                                |                                    |                                  |                           |                            |                    |                    |                    |                           |                  |                  |
+| 1^{st} trimester                    | 1                                  |                                  |                           |                            |                    |                    |                    |                           |                  |                  |
+| 2^{nd} trimester                    | 0.75                               | 1                                |                           |                            |                    |                    |                    |                           |                  |                  |
+| 3^{rd} trimester                    | 0.52                               | 0.67                             | 1                         |                            |                    |                    |                    |                           |                  |                  |
+| 0-6 month postnatal^{a}             | 0.80                               | 0.62                             | 0.66                      | 1                          |                    |                    |                    |                           |                  |                  |
+| *PM_{2.5}*                          |                                    |                                  |                           |                            |                    |                    |                    |                           |                  |                  |
+| 1^{st} trimester                    | 0.36                               | 0.58                             | 0.21                      | 0.26                       | 1                  |                    |                    |                           |                  |                  |
+| 2^{nd} trimester                    | 0.15                               | 0.39                             | 0.04                      | 0.21                       | -0.22              | 1                  |                    |                           |                  |                  |
+| 3^{rd} trimester                    | 0.13                               | 0.40                             | 0.39                      | 0.15                       | 0.56               | -0.29              | 1                  |                           |                  |                  |
+| 0-6 month postnatal^{a}             | 0.21                               | 0.17                             | 0.31                      | 0.39                       | -0.04              | 0.08               | 0.16               | 1                         |                  |                  |
+| *Traffic density *                  |                                    |                                  |                           |                            |                    |                    |                    |                           |                  |                  |
+| Late pregnancy                      | 0.48                               | 0.48                             | 0.52                      | 0.59                       | 0.17               | 0.17               | 0.14               | 0.24                      | 1                |                  |
+| *Distance to roadway *              |                                    |                                  |                           |                            |                    |                    |                    |                           |                  |                  |
+| Late pregnancy                      | -0.33                              | -0.32                            | -0.34                     | -0.37                      | -0.12              | -0.12              | -0.11              | -0.26                     | -0.37            | 1                |
+
+*Vehicles/day x km of road within 100 m of residential address
+
+†Meters to nearest major roadway based on residential address
+
+‡Of 1,175 subjects with a 6 month outcome measure
+
+| *Table 2.* Characteristics of 2,115 Project Viva mother-child pairs overall and by 3^{rd} trimester BC exposure.                                                                                             |                               |
+|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------+-----------------------------------------------------------------------+---------------+---------------------------------+---------------+---------------+---------------|
+|                                                                                                                                                                                                              | *--------No imputation----*   | *-----------------------Imputed covariates------------------------*   |
+|                                                                                                                                                                                                              |                               |                                                                       |               | *3rd trimester BC (µg/m^{3})*   |
+|                                                                                                                                                                                                              |                               |                                                                       | *Total*       | *Quartile 1*                    | *Q 2*         | *Q 3*         | *Q4*          |
+|                                                                                                                                                                                                              |                               |                                                                       |               |                                 |               |               |               |
+|                                                                                                                                                                                                              |                               |                                                                       | 0.69 (0.24)   | 0.40 (0.09)                     | 0.60 (0.04)   | 0.76 (0.05)   | 1.01 (0.15)   |
+|                                                                                                                                                                                                              | *N*                           | *Mean (SD) or %*                                                      | *Mean or %*   |
+| *Maternal age at enrollment (years)*                                                                                                                                                                         | 2,115                         | 31.8 (5.2)                                                            | 31.8 (5.2)    | 32.8                            | 32.3          | 31.4          | 30.8          |
+| *Prepregnancy BMI (kg/m^{2})*                                                                                                                                                                                | 2,100                         | 24.9 (5.6)                                                            | 24.9 (5.6)    | 24.6                            | 24.9          | 24.6          | 25.4          |
+| *Pregnancy weight gain (kg)*                                                                                                                                                                                 | 2,055                         | 15.5 (5.7)                                                            | 15.5 (5.7)    | 16.2                            | 15.3          | 15.1          | 15.5          |
+| *College graduate (%)*                                                                                                                                                                                       | 2,091                         | 64.5                                                                  | 64.5          | 75.9                            | 66.3          | 63            | 53.1          |
+| *Household income >$70,000/year (%)*                                                                                                                                                                         | 1,863                         | 61.2                                                                  | 57.8          | 76                              | 63.8          | 49.2          | 42.9          |
+| *Race/ethnicity (%)*                                                                                                                                                                                         | 2,091                         |                                                                       |               |                                 |               |               |               |
+| White                                                                                                                                                                                                        |                               | 66.6                                                                  | 66.5          | 87                              | 70.9          | 58.5          | 49.6          |
+| Black                                                                                                                                                                                                        |                               | 16.5                                                                  | 16.5          | 5                               | 14.2          | 22.4          | 24.6          |
+| Hispanic                                                                                                                                                                                                     |                               | 7.3                                                                   | 7.3           | 2.3                             | 6.7           | 6.7           | 13.1          |
+| Asian                                                                                                                                                                                                        |                               | 5.7                                                                   | 5.8           | 4.3                             | 6             | 6.7           | 6.2           |
+| Other                                                                                                                                                                                                        |                               | 3.9                                                                   | 4.0           | 1.4                             | 2.1           | 5.7           | 6.5           |
+| *Smoking habits (%)*                                                                                                                                                                                         | 2,094                         |                                                                       |               |                                 |               |               |               |
+| Never                                                                                                                                                                                                        |                               | 68.3                                                                  | 68.3          | 66.9                            | 67.9          | 69.7          | 68.6          |
+| Former                                                                                                                                                                                                       |                               | 19.0                                                                  | 19.0          | 23.7                            | 19            | 17.6          | 16.4          |
+| During pregnancy                                                                                                                                                                                             |                               | 12.7                                                                  | 12.7          | 9.4                             | 13.2          | 12.7          | 15            |
+| *Glucose tolerance (%)*                                                                                                                                                                                      | 2,115                         |                                                                       |               |                                 |               |               |               |
+| Normal                                                                                                                                                                                                       |                               | 82.6                                                                  | 82.5          | 81.5                            | 81.4          | 85            | 81.8          |
+| Failed GCT, normal OGTT                                                                                                                                                                                      |                               | 8.6                                                                   | 8.6           | 11.1                            | 8.5           | 6.7           | 8.2           |
+| IGT                                                                                                                                                                                                          |                               | 3.1                                                                   | 3.1           | 2.7                             | 3             | 3.3           | 3.6           |
+| GDM                                                                                                                                                                                                          |                               | 5.7                                                                   | 5.8           | 4.7                             | 7.1           | 5             | 6.4           |
+| *Paternal BMI*                                                                                                                                                                                               | 2,000                         | 26.4 (4.1)                                                            | 26.4 (4.1)    | 26.6                            | 26.3          | 26.4          | 26.3          |
+| *Infant gestational age (weeks)*                                                                                                                                                                             | 2,115                         | 39.4 (1.9)                                                            | 39.4 (1.9)    | 39.5                            | 39.4          | 39.5          | 39.5          |
+| *Birth weight for gestational age z-score*                                                                                                                                                                   | 2,114                         | 0.17 (0.97)                                                           |               | 0.31                            | 0.19          | 0.19          | 0.00          |
+| *Change in WFL-z 0-6 months*                                                                                                                                                                                 | 689                           | 0.23 (1.11)                                                           |               | 0.15                            | 0.24          | 0.19          | 0.33          |
+| *Change in WFA-z 0-6 months*                                                                                                                                                                                 | 1,172                         | 0.27 (1.11)                                                           |               | 0.18                            | 0.27          | 0.23          | 0.39          |
+| *Obesity at 6 months (%)*                                                                                                                                                                                    | 1,153                         | 16.7                                                                  |               | 14.8                            | 14.2          | 19.2          | 19.4          |
+| Abbreviations: GCT: Glucose tolerance test; OGTT: Oral glucose tolerance test; WFL-z: weight-for-length z-score; WFA-z: weight-for-age z-score; obesity (WFL ≥95^{th} percentile vs. < 85^{th} percentile)   |
+
+*\\
+Table 3.* Adjusted associations of air pollution exposure with birth
+weight for gestational age z-score (fetal growth), change in
+weight-for-length z-score from 0-6 months, change in weight-for-age
+z-score from 0-6 months, and obesity at 6 months
+
+| *Estimate (95% CI) of fetal growth^{a}*                                       |
+|-------------------------------------------------------------------------------+---------+-------------------+-----------------------+-----------------------+------------------------|
+| *Exposure*                                                                    | *N*     | *Quartile 1*      | *Quartile 2*          | *Quartile 3*          | *Quartile 4*           |
+|                                                                               |         |                   |                       |                       |                        |
+|                                                                               |         | *(lowest)*        |                       |                       | *(highest)*            |
+| 1^{st} trimester BC                                                           | 2,090   | 0.0 (Reference)   | -0.07 (-0.18, 0.04)   | -0.11 (-0.22, 0.00)   | -0.15 (-0.27,-0.03)    |
+| 2^{nd} trimester BC                                                           | 2,084   | 0.0 (Reference)   | -0.03 (-0.14, 0.09)   | -0.06 (-0.17, 0.05)   | -0.14 (-0.26, -0.03)   |
+| 3^{rd} trimester BC                                                           | 2,083   | 0.0 (Reference)   | -0.03 (-0.14, 0.09)   | 0.03 (-0.08, 0.15)    | -0.16 (-0.28,-0.05)    |
+| Late pregnancy traffic density                                                | 2,098   | 0.0 (Reference)   | -0.05 (-0.16, 0.06)   | -0.07 (-0.18, 0.04)   | -0.14 (-0.25,-0.03)    |
+| *Exposure*                                                                    |         | *≥ 200m*          | *≥100m, <200m*        | *≥50m, <100m*         | *<50m*                 |
+| Late pregnancy roadway proximity                                              | 2,111   | 0.0 (Reference)   | 0.09 (-0.08, 0.26)    | -0.09 (-0.33, 0.14)   | -0.30 (-0.51, 0.08)    |
+| *Change in weight-for-length z-score birth to 6 months of age (95% CI)^{b}*   |
+| *Exposure*                                                                    | *N*     | *Quartile 1*      | *Quartile 2*          | *Quartile 3*          | *Quartile 4*           |
+|                                                                               |         |                   |                       |                       |                        |
+|                                                                               |         | *(lowest)*        |                       |                       | *(highest)*            |
+| 1^{st} trimester BC                                                           | 684     | 0.0 (Reference)   | 0.18 (-0.05, 0.40)    | 0.01 (-0.22, 0.24)    | -0.01 (-0.26, 0.23)    |
+| 2^{nd} trimester BC                                                           | 682     | 0.0 (Reference)   | -0.14 (-0.37, 0.09)   | -0.04 (-0.27, 0.20)   | 0.00 (-0.25, 0.25)     |
+| 3^{rd} trimester BC                                                           | 684     | 0.0 (Reference)   | 0.07 (-0.16, 0.30)    | 0.07 (-0.17, 0.30)    | 0.15 (-0.10, 0.39)     |
+| 0-6 month postnatal BC                                                        | 682     | 0.0 (Reference)   | 0.04 (-0.19, 0.27)    | 0.00 (-0.24, 0.24)    | 0.06 (-0.18, 0.30)     |
+| Late pregnancy traffic density                                                | 687     | 0.0 (Reference)   | 0.24 (0.01, 0.47)     | 0.20 (-0.04, 0.43)    | 0.17 (-0.06, 0.41)     |
+| *Exposure*                                                                    |         | *≥200m*           | *≥100m, <200m*        | *≥50m, <100m*         | *<50m*                 |
+| Late pregnancy roadway proximity                                              | 688     | 0.0 (Reference)   | 0.00 (-0.33, 0.33)    | 0.15 (-0.34, 0.64)    | 0.16 (-0.32, 0.64)     |
+| *Change in weight-for-age z-score birth to 6 months of age (95% CI)^{b}*      |
+| *Exposure*                                                                    | *N*     | *Quartile 1*      | *Quartile 2*          | *Quartile 3*          | *Quartile 4*           |
+|                                                                               |         |                   |                       |                       |                        |
+|                                                                               |         | *(lowest)*        |                       |                       | *(highest)*            |
+| 1^{st} trimester BC                                                           | 1,161   | 0.0 (Reference)   | -0.03 (-0.18, 0.11)   | -0.06 (-0.20, 0.09)   | -0.01 (-0.16, 0.14)    |
+| 2^{nd} trimester BC                                                           | 1,159   | 0.0 (Reference)   | -0.11 (-0.25, 0.04)   | -0.04 (-0.18, 0.11)   | 0.03 (-0.12, 0.18)     |
+| 3^{rd} trimester BC                                                           | 1,162   | 0.0 (Reference)   | 0.05 (-0.10, 0.19)    | -0.01 (-0.16, 0.14)   | 0.05 (-0.10, 0.20)     |
+| 0-6 month postnatal BC                                                        | 1,157   | 0.0 (Reference)   | -0.04 (-0.18, 0.10)   | -0.03 (-0.18, 0.12)   | -0.03 (-0.18, 0.12)    |
+| Late pregnancy traffic density                                                | 1,167   | 0.0 (Reference)   | 0.14 (-0.00, 0.29)    | 0.01 (-0.14, 0.16)    | 0.14 (-0.01, 0.29)     |
+| *Exposure*                                                                    |         | *≥200m*           | *≥100m, <200m*        | *≥50m, <100m*         | *<50m*                 |
+| Late pregnancy roadway proximity                                              | 1,171   | 0.0 (Reference)   | 0.08 (-0.14, 0.29)    | 0.30 (0.01, 0.59)     | 0.03 (-0.26, 0.32)     |
+| *Odds Ratio (95% CI) for obesity vs. normal weight at 6 months of age^{b}*    |
+| *Exposure*                                                                    | *N*     | *Quartile 1*      | *Quartile 2*          | *Quartile 3*          | *Quartile 4*           |
+|                                                                               |         |                   |                       |                       |                        |
+|                                                                               |         | *(lowest)*        |                       |                       | *(highest)*            |
+| 1^{st} trimester BC                                                           | 1,142   | 1.0 (Reference)   | 0.96 (0.60, 1.53)     | 1.07 (0.66, 1.74)     | 1.33 (0.83, 2.15)      |
+| 2^{nd} trimester BC                                                           | 1,140   | 1.0 (Reference)   | 0.86 (0.54, 1.37)     | 0.89 (0.56, 1.41)     | 1.01 (0.63, 1.62)      |
+| 3^{rd} trimester BC                                                           | 1,143   | 1.0 (Reference)   | 1.13 (0.69, 1.84)     | 1.64 (1.02, 2.64)     | 1.60 (0.98, 2.61)      |
+| 0-6 month postnatal BC                                                        | 1,139   | 1.0 (Reference)   | 0.77 (0.47, 1.24)     | 0.99 (0.61, 1.59)     | 1.50 (0.94, 2.40)      |
+| Late pregnancy traffic density                                                | 1,148   | 1.0 (Reference)   | 1.67 (1.03, 2.68)     | 1.11 (0.67, 1.83)     | 1.79 (1.10, 2.89)      |
+| *Exposure*                                                                    |         | *≥200m*           | *≥100m, <200m*        | *≥50m, <100m*         | *<50m*                 |
+| Late pregnancy roadway proximity                                              | 1,152   | 1.0 (Reference)   | 0.92 (0.43, 1.97)     | 0.69 (0.23, 2.07)     | 1.71 (0.75, 3.90)      |
+
+^{a}Adjusted for household income, paternal BMI, and maternal education,
+race/ethnicity, prepregnancy BMI, gestational weight gain, gestational
+diabetes, and smoking habits
+
+^{b}Adjusted for above and infant birth weight-for-gestational age
+z-score and gestational age
+
+*Figure 1.* Adjusted associations of air pollution exposure with birth
+weight for gestational age z-score (fetal growth) and with adds of
+obesity at 6 months of age.
+
+[[media/image1.emf]]
+
+*Supplemental Material, Table S1*. Non-imputed characteristics of
+participants with and without a 6 month follow-up visit.
+
+|                                              | *6 month follow-up visit*   |                           |
+|----------------------------------------------+-----------------------------+---------------------------+---------------+--------------------+----------|
+|                                              | */\_\_\_\_With\_\_\_\_/*    | */\_\_\_Without\_\_\_/*   | */p-value/*   |
+| * *                                          | *N*                         | *Mean (SD) or %*          | *N*           | *Mean (SD) or %*   |          |
+| *Maternal age at enrollment (years)*         | 1,175                       | 32.4 *(*4.9)              | 940           | 31.1 *(*5.5)       | <0.001   |
+| *Prepregnancy BMI (kg/m^{2})*                | 1,169                       | 24.6 *(*5.2)              | 931           | 25.3 *(*6.0)       | 0.01     |
+| *Gestational weight gain (kg)*               | 1,148                       | 15.5 *(*5.5)              | 907           | 15.6 *(*5.9)       | 0.82     |
+| *College graduate, %*                        | 1,173                       | 70.9                      | 918           | 56.4               | <0.001   |
+| *Household income greater than $70,000, %*   | 1,086                       | 64.8                      | 777           | 56.1               | <0.001   |
+| *Race/ethnicity, %*                          | 1,173                       |                           | 918           |                    | <0.001   |
+| White                                        |                             | 72.5                      |               | 59.0               |          |
+| Black                                        |                             | 12.3                      |               | 21.9               |          |
+| Asian                                        |                             | 5.3                       |               | 6.3                |          |
+| Hispanic                                     |                             | 6.0                       |               | 8.9                |          |
+| Other                                        |                             | 4.0                       |               | 3.8                |          |
+| *Smoking habits, %*                          | 1,169                       |                           | 925           |                    | <0.001   |
+| Never                                        |                             | 69.7                      |               | 66.6               |          |
+| Former                                       |                             | 20.5                      |               | 17.0               |          |
+| During pregnancy                             |                             | 9.8                       |               | 16.4               |          |
+| *Glucose tolerance, %*                       | 1,156                       |                           | 900           |                    | 0.36     |
+| GDM                                          |                             | 5.0                       |               | 6.6                |          |
+| IGT                                          |                             | 3.2                       |               | 3.0                |          |
+| Failed GCT/normal OGTT                       |                             | 8.1                       |               | 9.2                |          |
+| Normal                                       |                             | 83.7                      |               | 81.2               |          |
+| *Paternal BMI (kg/m^{2})*                    | 1,130                       | 26.4 (4.1)                | 870           | 26.5 (4.1)         | 0.54     |
+| *Infant gestational age*                     | 1,175                       | 39.5 *(*1.8)              | 940           | 39.3 *(*2.1)       | 0.006    |
+| *Birthweight for-gestational-age z-score*    | 1,174                       | 0.2 *(*1.0)               | 940           | 0.1 *(*1.0)        | 0.04     |
+| *1^{st} trimester BC (μg/m^{3})*             | 1,164                       | 0.7 *(*0.2)               | 927           | 0.8 *(*0.3)        | 0.01     |
+| *2^{nd} trimester BC (μg/m^{3})*             | 1,162                       | 0.7 (0.2)                 | 923           | 0.7 (0.3)          | 0.17     |
+| *3^{rd} trimester BC (μg/m^{3})*             | 1,165                       | 0.7 *(*0.2)               | 919           | 0.7 *(*0.2)        | 0.43     |
+| *1^{st} trimester PM_{2.5} (μg/m^{3})*       | 824                         | 12.0 (1.6)                | 551           | 11.9 (1.5)         | 0.14     |
+| *2^{nd} trimester PM_{2.5} (μg/m^{3})*       | 929                         | 11.9 (1.4)                | 666           | 11.8 (1.4)         | 0.08     |
+| *3^{rd} trimester PM_{2.5} (μg/m^{3})*       | 1,042                       | 11.8 (1.6)                | 797           | 11.7 (1.6)         | 0.15     |
+| *Late pregnancy traffic density^{a}*         | 1,170                       | 1,475 *(*1,975)           | 929           | 1,514 *(*2,233)    | 0.67     |
+| *Late pregnancy roadway proximity, %*        | 1,174                       |                           | 938           |                    | 0.74     |
+| ≥ 200 m                                      |                             | 87.7                      |               | 87.9               |          |
+| ≥ 100 m and < 200 m                          |                             | 6.0                       |               | 6.0                |          |
+| ≥ 50 m and < 100 m                           |                             | 3.2                       |               | 2.5                |          |
+| < 50 m                                       |                             | 3.2                       |               | 3.7                |          |
+
+^{a}Vehicles/day x km of road within 100 m of residential address
+
+*Supplemental Material, Table S2.* Adjusted associations of PM_{2.5}
+exposure with birth weight for gestational age z-score (fetal growth),
+change in weight-for-length from 0-6 months, change in weight-for-age
+z-score from 0- 6 months, and obesity at 6 months
+
+| *Estimate (95% CI) of fetal growth^{a}*                                       |
+|-------------------------------------------------------------------------------+--------+-------------------+-----------------------+-----------------------+-----------------------|
+| *Exposure*                                                                    | *N*    | *Quartile 1*      | *Quartile 2*          | *Quartile 3*          | *Quartile 4*          |
+|                                                                               |        |                   |                       |                       |                       |
+|                                                                               |        | *(lowest)*        |                       |                       | *(highest)*           |
+| 1^{st} trimester PM_{2.5}                                                     | 1374   | 0.0 (Reference)   | 0.04 (-0.07, 0.15)    | -0.06 (-0.17, 0.05)   | -0.08 (-0.19, 0.03)   |
+| 2^{nd} trimester PM_{2.5}                                                     | 1594   | 0.0 (Reference)   | 0.00 (-0.11, 0.11)    | 0.03 (-0.08, 0.14)    | -0.08 (-0.19, 0.03)   |
+| 3^{rd} trimester PM_{2.5}                                                     | 1838   | 0.0 (Reference)   | 0.00 (-0.10, 0.11)    | 0.05 (-0.06, 0.16)    | -0.05 (-0.16, 0.06)   |
+| *Change in weight-for-length z-score birth to 6 months of age (95% CI)^{b}*   |
+| *Exposure*                                                                    | *N*    | *Quartile 1*      | *Quartile 2*          | *Quartile 3*          | *Quartile 4*          |
+|                                                                               |        |                   |                       |                       |                       |
+|                                                                               |        | *(lowest)*        |                       |                       | *(highest)*           |
+| 1^{st} trimester PM_{2.5}                                                     | 507    | 0.0 (Reference)   | -0.05 (-0.29, 0.19)   | 0.12 (-0.11, 0.34)    | 0.15 (-0.07, 0.37)    |
+| 2^{nd} trimester PM_{2.5}                                                     | 522    | 0.0 (Reference)   | 0.11 (-0.13, 0.34)    | 0.09 (-0.13, 0.31)    | 0.06 (-0.16, 0.28)    |
+| 3^{rd} trimester PM_{2.5}                                                     | 617    | 0.0 (Reference)   | 0.17 (-0.06, 0.40)    | 0.22 (-0.01, 0.44)    | 0.17 (-0.06, 0.39)    |
+| 0-6 month postnatal PM_{2.5}                                                  | 673    | 0.0 (Reference)   | 0.15 (-0.08, 0.38)    | 0.21 (-0.02, 0.44)    | 0.22 (-0.02, 0.46)    |
+| *Change in weight-for-age z-score birth to 6 months of age (95% CI)^{b}*      |
+| *Exposure*                                                                    | *N*    | *Quartile 1*      | *Quartile 2*          | *Quartile 3*          | *Quartile 4*          |
+|                                                                               |        |                   |                       |                       |                       |
+|                                                                               |        | *(lowest)*        |                       |                       | *(highest)*           |
+| 1^{st} trimester PM_{2.5}                                                     | 821    | 0.0 (Reference)   | -0.08 (-0.23, 0.07)   | 0.06 (-0.08, 0.21)    | -0.02 (-0.16, 0.12)   |
+| 2^{nd} trimester PM_{2.5}                                                     | 926    | 0.0 (Reference)   | -0.08 (-0.22, 0.06)   | -0.03 (-0.18, 0.11)   | -0.04 (-0.18, 0.10)   |
+| 3^{rd} trimester PM_{2.5}                                                     | 1039   | 0.0 (Reference)   | 0.04 (-0.10, 0.19)    | 0.03 (-0.12, 0.17)    | 0.05 (-0.09, 0.18)    |
+| 0-6 month postnatal PM_{2.5}                                                  | 1135   | 0.0 (Reference)   | 0.11 (-0.03, 0.26)    | 0.11 (-0.04, 0.26)    | 0.02 (-0.13, 0.16)    |
+| *Odds Ratio (95% CI) for obesity vs. normal weight at 6 months of age^{b}*    |
+| *Exposure*                                                                    | *N*    | *Quartile 1*      | *Quartile 2*          | *Quartile 3*          | *Quartile 4*          |
+|                                                                               |        |                   |                       |                       |                       |
+|                                                                               |        | *(lowest)*        |                       |                       | *(highest)*           |
+| 1^{st} trimester PM_{2.5}                                                     | 819    | 1.0 (Reference)   | 0.67 (0.41, 1.08)     | 0.79 (0.49, 1.26)     | 1.09 (0.70, 1.69)     |
+| 2^{nd} trimester PM_{2.5}                                                     | 923    | 1.0 (Reference)   | 0.84 (0.54, 1.32)     | 0.83 (0.53, 1.30)     | 0.73 (0.46, 1.17)     |
+| 3^{rd} trimester PM_{2.5}                                                     | 1030   | 1.0 (Reference)   | 0.95 (0.59, 1.50)     | 1.23 (0.79, 1.93)     | 1.13 (0.72, 1.76)     |
+| 0-6 month postnatal PM_{2.5}                                                  | 1122   | 1.0 (Reference)   | 0.95 (0.60, 1.51)     | 1.00 (0.63, 1.60)     | 1.18 (0.74, 1.86)     |
+
+^{a}Adjusted for household income, paternal BMI, and maternal education,
+race/ethnicity, prepregnancy BMI, gestational weight gain, gestational
+diabetes, and smoking habits
+
+^{b}Adjusted for above and birth weight-for-gestational age z-score and
+gestational age

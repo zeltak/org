@@ -1,0 +1,2248 @@
+*/Using high resolution satellite aerosol optical depth to estimate /*
+
+*/daily PM_{2.5} geographical distribution in Mexico City/*
+
+*Allan C. Just^{1}, Robert O. Wright^{2}, Joel Schwartz^{1}, Brent
+Coull^{3}, Andrea Baccarelli^{1}, Martha María Tellez-Rojo^{4}, Emily
+Moody^{5}, Yujie Wang^{6,7}, Alexei Lyapustin^{6}, Itai Kloog^{8}*
+
+^{1} Department of Environmental Health, Harvard T.H. Chan School of
+Public Health, Boston, MA, USA
+
+^{2} Department of Preventive Medicine, Icahn School of Medicine at Mt
+Sinai, New York, NY, USA
+
+^{3} Department of Biostatistics, Harvard T.H. Chan School of Public
+Health, Boston, MA, USA
+
+^{4} National Institute of Public Health, Cuernavaca, Morelos, Mexico
+
+^{5} Department of Internal Medicine-Pediatrics, University of Minnesota
+Medical Center, Minneapolis, MN, USA
+
+^{6} GEST / UMBC, NASA Goddard Space Flight Center, Baltimore, MD, USA
+
+^{7} University of Maryland Baltimore County, Baltimore, MD, USA
+
+^{8} Department of Geography and Environmental Development, Ben-Gurion
+University of the Negev, Israel
+
+Address correspondence to: Dr. Allan Just, Department of Environmental
+Health - Exposure, Epidemiology and Risk Program, Harvard T.H. Chan
+School of Public Health, Landmark Center 401 Park Drive West, Boston MA
+USA 02215; [[mailto:acjust@hsph.harvard.edu][acjust@hsph.harvard.edu]]
+
+*Keywords:* Air pollution, Aerosol Optical Depth (AOD), Epidemiology,
+PM_{2.5}, urban air pollution, MAIAC
+
+*Abstract:*
+
+*Background:* Air pollution from fine particulate matter (PM_{2.5}) is
+associated with multiple adverse health effects. Estimates of PM_{2.5}
+exposure for use in epidemiologic studies are often derived from
+geographic characteristics using land-use regression or from assigning
+values from a small number of fixed site monitors. Recent advances have
+integrated these approaches with satellite-based measures of aerosol
+optical depth (AOD), collected daily, which are both spatially and
+temporally resolved. This approach allows for reconstruction of past
+PM_{2.5} estimates at the locations of existing research studies. Mexico
+City differs from other regions that have used satellite-based PM_{2.5}
+models in several ways: it has bright land surfaces, a distinctive
+climatological cycle that differs from more northern latitudes (United
+States and Europe), and an elevated semi-enclosed air basin with a
+unique planetary boundary layer dynamic.
+
+*Objectives:* our goal was to present an expansion of this satellite
+methodology which is also the first application in a region with
+PM_{2.5} (mean daily concentration of 25.3μg/m^{3}) above those in most
+US and European urban areas.
+
+*Methods:* Using a novel measurement of AOD generated with 1km
+resolution from the MODIS instrument, we constructed daily predictions
+across the greater Mexico City area for 2004-2012. We calibrated the
+association of AOD to PM_{2.5} daily using the municipal monitoring
+network, local land use, estimates and meteorological features.
+Predictions used spatial and temporal smoothing to estimate AOD when
+satellite data were missing.
+
+*Results:* Our model performed well, resulting in an out-of-sample cross
+validation R^{2} of 0.72. Cross-validated RMSPE of the model was
+5.83.Our Predictions had little to no bias with cross-validated slopes
+(predicted vs observed) of 1.01 ± 0.008 s.e and 1.07 ± 0.004 s.e,
+respectively, in the calibration and full coverage stages.
+
+*Conclusions:* This novel model allows us to reconstruct long- and
+short-term spatially resolved exposure to PM_{2.5} for epidemiological
+studies in highly polluted urban areas.
+
+*1.Introduction*
+
+Mexico City is a megacity, with a population of more than 22 million.
+Air pollution is a major public health threat in Mexico. The Mexican
+National Institute of Statistics and Geography estimates that the total
+cost of atmospheric contamination was 3.4% of national GDP in 2012\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(1). Effective quantitation of the health impacts of air pollution for
+epidemiologic studies and policy analysis requires measurements that go
+beyond the relatively sparse air monitoring network.
+
+Mexico City is a very unique city that lies in an elevated basin 2240 m
+above sea level. The basin is surrounded on three sides by mountain
+ridges, but with a broad opening to the north and a narrower gap to the
+south-southwest. There are over 40,000 industries and >5.5 million
+vehicles passing through the city daily. The high altitude and tropical
+insolation contribute to the formation of secondary particulate matter
+(PM). Air quality is generally worse in the winter, when rain is less
+common and thermal inversions are more frequent\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(2,3). These characteristics make modeling air pollution in Mexico City
+extremely challenging.
+
+Until recent years, epidemiologic studies on the health effects of
+PM_{2.5} have typically used relatively crude exposure estimates (such
+as central ground monitors), assigning these measurements to populations
+within a specified distance of the monitor\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(4,5) . These exposure assignment methods have been used in studies of
+the health impacts of air pollution in Mexico City\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(6--8). This crude exposure assignment can introduce exposure error and
+most likely biases the effect estimates downward due to spatial
+misalignment\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(9). To address this exposure misclassification, various tools have been
+developed over the past few years\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(10--13) . A commonly used approach is land use regression (LUR), which
+uses geographic covariates to expand in situ measurements of PM_{2.5}
+concentrations to large areas. Yet since these geographic covariates are
+mostly not time varying, the temporal resolution of LUR models are
+limited and these are used mainly to assess chronic health effects.\\
+ Recent improvements of LUR address some of its inherent limitations\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(14--16). Some of these approaches use newly available satellite data to
+greatly expand the temporal variability as well as spatial coverage of
+LUR. Satellite-based aerosol optical depth (AOD) is a physical
+measurement collected daily that can be used to estimate air quality and
+pollution. AOD is a measure of the extinction of electromagnetic
+radiation at a given wavelength due to the presence of aerosols in the
+atmospheric column. Chang and colleagues\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(17) have used new statistical downscaling and data fusion techniques to
+predict PM_{2.5} concentrations at spatial point locations in the
+southeastern United States during the period 2003--2005 using MODIS
+(Moderate Resolution Imaging Spectroradiometer) satellite data. Their
+model performed relatively well in cross-validated predictions
+(R^{2}=0.78 and a root mean-squared error (RMSE) of 3.61 mg/m^{3}).
+Chudnovsky and colleagues\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(18) used one year of observations from the newly developed Multi-Angle
+Implementation of Atmospheric Correction (MAIAC) algorithm based on
+MODIS. They used AOD data at 1 km spatial resolution to generate daily
+PM_{2.5} estimates for co-located AOD and PM_{2.5} sites. The model
+predictive performance spatially was similar to that estimated by Chang
+et al. (spatial R^{2}= 0.79). More recently, our group\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(19) has used high resolution MAIAC data to develop models to predict
+daily PM_{2.5} at a 1x1km resolution across the entire northeastern USA
+for the years 2003-2011 which allowed us to better differentiate daily
+and long term exposure between urban, suburban, and rural areas. Our
+model performance was excellent (cross-validated predictions
+R^{2}=0.88). In addition, our results revealed very little bias (slope
+of predictions versus withheld observations = 0.99), which suggests that
+residual error in estimates from this approach will be non-differential.
+
+Although demonstrated successfully in the northeastern USA, it remains
+uncertain how well the hybrid-satellite approach would perform in areas
+which are significantly different from the northeastern USA in
+geography, climate, and PM characteristics. In addition, Mexico City is
+characterized with very bright surfaces which are a challenge for remote
+sensing A number of geographic features distinguish the Mexico City
+metropolitan area (MCMA) from other areas in which hybrid models have
+been generated, particularly in the northeastern USA. These include the
+meteorological patterns and seasonality, the semi-enclosed basin
+confining regional pollution, the higher elevation and consequent less
+efficient motor vehicle combustion, and the brightness of the land
+surfaces which impacts the satellite AOD measure. The goal of this paper
+was to use the new MAIAC AOD satellite data to estimate PM_{2.5} in the
+MCMA adapting and extending the previous hybrid-model approach to
+account for the unique challenges of the Mexico City region.
+
+*2.Methods*
+
+/*2.1 AOD Data*/
+
+Daily MAIAC spectral AOD was derived from MODIS-based satellite data.
+The new MAIAC algorithm provides a higher 1km resolution AOD product and
+thus the generated AOD data was used above the Mexico City area for all
+years in our analysis. The MAIAC data is based on collection 6 MODIS
+Aqua L1B data for the years 2004-2014 which passes overhead in the early
+afternoon and data were generated 10-15-2014. More in depth description
+of the MAIAC product, details on the novel algorithm and processing can
+be found in previous published papers\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(20,21). Because AOD values may be spurious at cloud edges, AOD data
+were filtered to exclude values with adjacent cloud or high uncertainty
+flags, and with a moving window variance in the top 2.5th percentile.
+
+/*2.2 Monitoring data*/
+
+Data for daily PM_{2.5} mass concentrations across Mexico City for the
+study period (January 2nd 2004 to May 20, 2014) were downloaded from the
+RAMA network of the atmospheric monitoring system of Mexico City\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(22). Daily PM_{2.5} concentrations were calculated as the mean of the
+hourly measures (≥18 available) collected on tapered element oscillating
+microbalance (TEOM) devices. The SIMAT also provided monitor locations
+and meteorologic network data including temperature and wind
+speed/direction. Three monitors in atypical locations with incomplete
+temporal coverage were excluded leaving a total of 12 monitors. Data
+from Christmas and New Years were outlying high values, potentially
+associated with the use of fireworks. These two dates make up 18 out of
+the 20 highest monitor-day observations in the dataset and were excluded
+from model calibration.
+
+/*2.3 Spatial and Temporal Predictors of PM_{2.5}*/
+
+The multi-step regression modeling approach included AOD, classic land
+use predictors and temporal predictors. Spatial covariates were
+generated using ArcMap version 10.2\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(22). All spatial data were projected into UTM zone 14N. We used the
+following spatial predictors:
+
+/Elevation:/ Elevation data were added through a satellite-based digital
+elevation model from the ASTER GDEM V2 (30 m resolution) and aggregated
+to the mean elevation within each 1 km grid cell covering the entire
+study area\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(23). There are sharp elevation contrasts across Mexico City and thus it
+is an important spatial predictor (generally higher elevations are
+associated with lower PM levels as well as lower air temperature). The
+study area was restricted to the contiguous Mexico City valley area of
+grid cells with elevation less than 3000 meters to avoid making
+predictions in the uninhabited outlying mountains to the south west and
+east of the city.
+
+/Roadway Density:/ Roadway data were obtained from OpenStreetMap
+(downloaded July 31, 2013; openstreetmap.org). Total road density was
+calculated using the line density tool which is part of the ArcGIS
+spatial analyst toolbox. This calculates the total polyline distance of
+all roads per square kilometer around the centroids of the satellite AOD
+cells across the study area.
+
+We used the following temporal predictors:
+
+/Meteorological data/: Temperature and wind speed/direction were
+obtained through the atmospheric monitoring network of Mexico City
+(SIMAT). Grid cells were matched to the closest weather station with
+available daily means for these variables (>18 hourly measures).
+
+/PBL:/ Hourly planetary boundary layer (mixing height) measures between
+6:00 and 18:00 from a fixed site within the city were provided by the
+Secretaría del Medio Ambiente\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(24) and included in the model as the mean of the morning measures. The
+height of the boundary layer may vary with wind speed , influencing the
+concentration and vertical profile of pollutants. The boundary layer not
+only controls transport and location of pollutants and aerosols but also
+their concentrations would be different in variable boundary layer
+structures\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(25).
+
+/Daily precipitation/: Daily precipitation measures (in mm) were entered
+as a daily citywide mean obtained through Sistema de Aguas de la Ciudad
+de México\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(26).
+
+/Population at risk estimates:/ Demographic data were obtained from the
+2010 Mexican National Census\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(27). We calculated the weight-averaged population for each 1km grid
+cell centroid based on the census statistical areas (AGEBs) intersecting
+these grid cells.
+
+/*2.4 Statistical Methods*/
+
+All modeling was done using the R statistical software version 3.1.2\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(28). In the Mexico City area there are large day-to-day differences in
+mean PM_{2.5} concentration, PBL, temperature, and precipitation. These
+daily differences create a varying spatial relationship between AOD and
+PM_{2.5} for every single day and thus we chose to use a mixed effects
+model as we have done in some of our previous studies\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(19,29,30). We incorporate spatial and temporal predictors and
+day-specific random-effects to take into account these temporal
+variations in the PM_{2.5}--AOD relationship. To generate the daily 1km
+PM_{2.5} predictions in each grid cell for the entire period, we
+developed an analytic process as follows:
+
+The first stage calibrates the AOD grid-level observations to the
+PM_{2.5} monitoring data using all monitor-day observations with the
+closest available AOD value within 1.1km during the study period, while
+adjusting for spatial and temporal covariates. Specifically, we fit the
+following model*:*
+
+#+BEGIN_QUOTE
+  PM_{ij} = (α + u_{j}) + (β1 + v_{j}) AOD_{ij} + β2 Temperature_{ij} +
+  β3 Mean AM PBL_{j} + β4 √Precipitation_{j} + β5 log(Elevation)_{i} +
+  β6 Roadway density_{i} + εij
+
+  (uj vj) ~ [(o o), Σ ]
+#+END_QUOTE
+
+Where: PM_{ij} denotes the measured PM_{2.5} concentration at a spatial
+site i on a day j; α and u_{j} are the fixed and random daily
+intercepts, respectively, AOD_{ij} is the AOD value in the grid cell
+corresponding to site i on day j; β1 and v_{j} are the fixed and random
+slopes, respectively. Temperature_{ij}, is the value in the grid cells
+corresponding to site i on a day j (β2 and κj are the fixed and random
+slopes for temperature). Elevation_{i} and Roadway density_{i} are the
+transformed means in grid cells corresponding to site i. Mean AM PBL_{j}
+and Precipitation_{j} are the values on date j. Finally, Σ is an
+unstructured variance-covariance matrix for the random effects.
+
+Following this process we predicted daily PM_{2.5} concentrations in
+grid cells /without/ monitors but /with/ available AOD measurements
+using the Stage 1 model coefficients. This resulted in PM_{2.5}
+prediction for all day-grid cell combinations with available satellite
+based AOD.
+
+In the second stage, in order to predict daily PM_{2.5} in grid cells
+with no AOD on that day across the study area, we make use of the
+city-wide association between grid-cell AOD and PM_{2.5} levels, and the
+association between PM_{2.5} level in a given grid with that in
+neighboring grid cells. We fit a generalized additive model with a
+smooth function of latitude and longitude (using the grid cell
+centroids). To allow for temporal variations in the spatial correlation,
+we fit a separate spatial surface for each two-month period across the
+study time period. Specifically, we fit the following model*:*
+
+PredPM_{ij} = α + β_{1} MPM_{j} + s(X_{i},Y_{i}) _{k(j)} + ε_{ij},
+
+where Pred/PM/_{ij} is the predicted PM_{2.5} concentration at a grid
+cell i on a day /j/ from the first stage fit; /MPM_{j }/is the mean PM
+across all monitors in MCMA on a day /j/; /α/ is the intercept, /β_{1}/
+is the slope for the daily mean. The smooth /X/_{i}/,Y/_{i} are the
+longitude and latitude, respectively, of the centroid of grid cell i,
+and s(X_{i},Y_{i}) _{k(j)} is a tensor product smooth function of
+location specific to the two-month period k(/j/) in which day j falls
+(that is, the tensor-product term had an interaction to fit a separate
+spatial smooth for each of the 63 two-month periods).
+
+Model performance was assessed using monitor-level leave-one-out
+cross-validation. Each monitor was withheld and predictions were
+aggregated from refitting the model 12 times. To test our results for
+bias, we regressed the measured PM_{2.5} concentration for a given
+monitor and day against the corresponding predicted value generated
+without the use of that monitor. We estimated the model prediction
+precision by taking the square root of the mean squared prediction
+errors (RMSPE).
+
+*3. Results*
+
+There were 12 PM_{2.5} monitors with unique locations operating across
+the city during the study period. The mean daily PM_{2.5} across the
+city during the study period was 25.3 μg/m^{3} with a standard deviation
+of 10.3 μg/m^{3} and an interquartile range (IQR) of 17.79-31.49
+μg/m^{3}.
+
+Table 1 summarizes the the results from the calibration (stage 1) and
+full coverage (stage 2) models. The model presented high cross-validated
+fits across the entire study period, with a mean cross-validated R^{2}
+of 0.72, and as expected a highly significant association between
+PM_{2.5} and the main explanatory variable AOD (Beta=13.76, t=14.4)
+(Table 1). The cross-validated RMSPE of calibration fits was 5.54 which
+is considerably less than the observed variability in PM_{2.5}
+concentrations in the MCMA.
+
+[[media/image1.png]]
+
+/Figure 1: Map of the study area showing the AOD grid boundaries, the
+location of the city wide PM_{2.5} monitor stations and the elevation
+contours./
+
+The full coverage model also performed very well with a mean cross
+validated R^{2} of 0.72, which is relatively high considering that this
+model does not require satellite AOD to have been collected at the
+day-location of the prediction and the closest ground measurement was
+withheld for testing. The cross-validated RMSPE of the full coverage
+model 5.83 which was only slightly larger than the calibration stage.
+Predictions had little to no bias with cross-validated slopes (predicted
+vs observed) of 1.01 ± 0.008 s.e and 1.07 ± 0.004 s.e, respectively, in
+the calibration and full coverage stages.
+
+Figure 2 presents the ground level PM2.5 and our cross-validated
+predictions from the full coverage model for a representative monitor,
+“CAM”, located in the middle of the city, for the year 2012. As can be
+seen in the figure there is an excellent agreement between the ground
+level PM_{2.5} and our cross-validated predictions.
+
+[[media/image2.png]]Figure 2: Observations and cross-validated
+predictions from the full coverage model for a representative monitor,
+CAM, in the year 2012. Connected blue points are the daily observations
+and red points are the daily predictions. Smoothed curves are loess
+regression lines for observed (solid) and predicted (dashed).
+
+Figure 3 shows the spatial pattern of our predicted PM_{2.5} averaged
+over the entire study period. Mean predicted PM_{2.5} concentrations
+range from 10.03 μg/m^{3} to 27.05 μg/m3 showing a good range of
+variability for our model even in the long term average of the daily
+predictions. By superimposing the fine scale predictions on 2010 census
+units (AGEBs), we generate an estimate of the population at risk over
+this study period (Figure 4).
+
+#+BEGIN_QUOTE
+  [[media/image3.png]]
+#+END_QUOTE
+
+Figure 3: The overall mean PM_{2.5} predictions for all years
+(2004-2014) across the entire study area
+
+#+BEGIN_QUOTE
+  [[media/image4.png]]
+#+END_QUOTE
+
+Figure 4: Population PM_{2.5} exposure estimates for 2004-2014 shown as
+density plot. While there is a small population with lower estimated
+long term PM_{2.5} concentrations, 50% of the population in this greater
+Mexico City area is exposed to at least 24.1 ug/m^{3} mean daily
+PM_{2.5}.
+
+*4.Discussion*
+
+We present, to our knowledge, the first high spatially and temporally
+resolved PM_{2.5} exposure model for the Mexico City Metropolitan Area
+for a decadal period from 2004-2014. Using satellite measures, we
+developed and validated models to predict daily PM_{2.5} at a 1*1 km
+resolution across the large megacity region of the MCMA for the years
+2004-2014, allowing us to differentiate daily and long-term intra city
+exposure. We have shown excellent model performance in a region that is
+challenging to model given the unique geographical and climatological
+characteristics of the MCMA. Our model suggested the use of planetary
+boundary layer and precipitation data as important predictors in this
+complex area and additional preprocessing of MAIAC datasets over regions
+with bright surfaces. The resulting daily predictions on a 1*1 km grid
+offer exposure metrics for acute and chronic health outcome studies in
+this understudied but highly exposed megacity. Given the large
+population at risk (9 millions with more than 24.1 ug/m^{3} average
+2004-2014), this daily exposure model will have great impact in studying
+acute and chronic associations of air pollution with consequent
+morbidity and mortality in the MCMA.
+
+Relative to previously available exposure modeling approaches in the
+MCMA\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+(6), our model allows estimates even in areas within the city that are
+not adjacent to the sparse air monitoring network and prospective
+measurements going back a decade for existing epidemiologic datasets.
+Thus, this model is well suited for use in epidemiologic studies
+including cohorts
+
+Our model is subject to several limitations, some of which apply to all
+indirect exposure estimation methods. First, this model relies on a
+relatively small network of ground monitors and this limits the ability
+to consider how spatial covariates modify the association of AOD and
+ground level PM_{2.5}. Although we add in satellite measures of AOD, the
+satellite measures reflects particles in the entire air column and these
+data need to be calibrated against the ground concentrations before use
+in predictions. Although our 1km resolution predictions are the finest
+resolution of AOD data that have been produced with more than 5000 daily
+predictions over this urban region, and has 100x the areal density of
+the more commonly used 10*10 km approach, it may not capture the effects
+of very local effects such as residing directly next to a trafficed
+roadway. Future models may incorporate these very local effects in a
+third-stage LUR, as was recently applied in the Northeastern United
+States (Kloog 2014). Similarly, this model may not capture aberrant
+pollution events such as the fireworks associated with PM_{2.5} spikes
+on Christmas and New Years. The inclusion of additional co-pollutants
+may better parameterize the model and how source emissions patterns
+alter the AOD-PM association. Because our model uses physical
+measurements from the satellite, it cannot be used to forecast future
+exposure levels and thus the benefit for environmental policy may be
+primarily through understanding past and current patterns of exposure,
+quantifying the impacts of previous interventions, and epidemiologic
+studies of acute and chronic health effects. Ideal exposure assessment
+for epidemiologic health studies would entail continuous personal
+exposure monitoring. However, this monitoring is not logistically
+feasible for large populations and can only be collected prospectively.
+The use of a prediction model as we present here is also dependent on
+accurate residential history and geocoding but will not capture exposure
+events that happen exclusively indoors (e.g. cooking) or in other
+microenvironments (e.g. inside vehicles). However, the open architechure
+and low prevalence of air conditioning in Mexico City means that outdoor
+air pollution easily mixes with indoor air and our model is a reasonable
+estimate of pollution exposure in the home minus these additional
+sources.
+
+Future iterations of this model may benefit from further developments of
+the MAIAC algorithm to derive AOD over brighter surfaces and combine
+these AOD measures from the Aqua satellite with measures from the second
+MODIS instrument on NASA's Terra satellite. In addition, it may be
+possible to expand this approach to other regions of Mexico,
+particularly in the larger Megalopolis (the region including the MCMA
+and surrounding states) utilizing additional municipal ground monitoring
+networks.
+
+*5. Acknowledgments*
+
+We thank the staff of the INSP and the INE for assisting in collecting
+geospatial datasets. Grant support came from NIEHS Grant K99 ES023450
+(ACJ)
+
+*6. References*
+
+1. INEGI. CUENTAS ECONÓMICAS Y ECOLÓGICAS DE MÉXICO [Internet]. 2012.
+Available from:
+http://www.inegi.org.mx/inegi/contenidos/espanol/prensa/Boletines/Boletin/Comunicados/Especiales/2014/febrero/comunica48.pdf
+
+2. Molina LT, Madronich S, Gaffney J, Apel E, Foy B de, Fast J, et al.
+An overview of the MILAGRO 2006 Campaign: Mexico City emissions and
+their transport and transformation. Atmospheric Chemistry and Physics.
+Copernicus GmbH; 2010;10(18):8697--8760.
+
+3. De Foy B, Caetano E, Magana V, Zitácuaro A, Cárdenas B, Retama A, et
+al. Mexico City basin wind circulation during the MCMA-2003 field
+campaign. Atmospheric Chemistry & Physics [Internet]. 2005;5:2267--2288.
+Available from: http://adsabs.harvard.edu/abs/2005ACP.....5.2267D
+http://www.atmos-chem-phys.net/5/2267/2005/acp-5-2267-2005.pdf
+
+4. Laden F, Schwartz J, Speizer FE, Dockery DW. Reduction in fine
+particulate air pollution and mortality: extended follow-up of the
+Harvard Six Cities study. American journal of respiratory and critical
+care medicine. Am Thoracic Soc; 2006;173(6):667--672.
+
+5. Ebelt ST, Wilson WE, Brauer M. Exposure to ambient and nonambient
+components of particulate matter: a comparison of health effects.
+Epidemiology. LWW; 2005;16(3):396--405.
+
+6. Romieu I, Meneses F, Ruiz S, Sienra JJ, Huerta J, White MC, et al.
+Effects of air pollution on the respiratory health of asthmatic children
+living in Mexico City. American journal of respiratory and critical care
+medicine. Am Thoracic Soc; 1996;154(2):300--307.
+
+7. Escamilla-Nunez M-C, Barraza-Villarreal A, Hernandez-Cadena L,
+Moreno-Macias H, Ramirez-Aguilar M, Sienra-Monge J-J, et al.
+Traffic-related air pollution and respiratory symptoms among asthmatic
+children, resident in Mexico City: the EVA cohort study. Respiratory
+research [Internet]. 2008 Jan;9:74. Available from:
+http://www.pubmedcentral.nih.gov/articlerender.fcgi?artid=2613139&tool=pmcentrez&rendertype=abstract
+
+8. Calderon-Garciduenas L, Kulesza RJ, Doty RL, D'Angiulli A,
+Torres-Jardon R. Megacities air pollution problems: Mexico City
+Metropolitan Area critical issues on the central nervous system
+pediatric impact. Environmental Research [Internet]. 2015
+Feb;137:157--169. Available from:
+http://www.sciencedirect.com/science/article/pii/S0013935114004630
+
+9. Zeger SL, Thomas D, Dominici F, Samet JM, Schwartz J, Dockery D, et
+al. Exposure measurement error in time-series studies of air pollution:
+concepts and consequences. Environ Health Perspect [Internet].
+2000;108(5):419--26. Available from:
+http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Retrieve&db=PubMed&dopt=Citation&list\_uids=10811568
+
+10. Vienneau D, De Hoogh K, Beelen R, Fischer P, Hoek G, Briggs D.
+Comparison of land-use regression models between Great Britain and the
+Netherlands. Atmospheric Environment [Internet].
+2010;44(5):688������696. Available from:
+http://www.sciencedirect.com/science/article/pii/S1352231009009601
+
+11. Hoek G, Beelen R, Hoogh K de, Vienneau D, Gulliver J, Fischer P, et
+al. A review of land-use regression models to assess spatial variation
+of outdoor air pollution. Atmospheric Environment [Internet]. 2008
+Oct;42(33):7561--7578. Available from:
+http://www.sciencedirect.com/science/article/pii/S1352231008005748
+
+12. Gryparis A, Paciorek CJ, Zeka A, Schwartz J, Coull BA. Measurement
+error caused by spatial misalignment in environmental epidemiology.
+Biostatistics (Oxford, England) [Internet]. 2009 Apr;10(2):258--274.
+Available from: http://www.ncbi.nlm.nih.gov/pubmed/18927119
+
+13. Beckerman BS, Jerrett M, Serre M, Martin RV, Lee S-J, Donkelaar A
+van, et al. A hybrid approach to estimating national scale
+spatiotemporal variability of PM2. 5 in the contiguous United States.
+Environmental science & technology [Internet]. ACS Publications;
+2013;47(13):7233--7241. Available from:
+http://pubs.acs.org/doi/abs/10.1021/es400039u
+
+14. Sampson PD, Richards M, Szpiro AA, Bergen S, Sheppard L, Larson TV,
+et al. A Regionalized National Universal Kriging Model using Partial
+Least Squares Regression for Estimating Annual PM< sub> 2.5</sub>
+Concentrations in Epidemiology. Atmospheric Environment [Internet].
+2013; Available from:
+http://www.sciencedirect.com/science/article/pii/S1352231013002604
+
+15. Liu Y, Paciorek CJ, Koutrakis P. Estimating Regional Spatial and
+Temporal Variability of PM2.5 Concentrations Using Satellite Data,
+Meteorology, and Land Use Information. Environ Health Perspect.
+2009;117:886--892.
+
+16. Bergen S, Sheppard L, Sampson PD, Kim S-Y, Richards M, Vedal S, et
+al. A national prediction model for PM2. 5 component exposures and
+measurement error--corrected health effect inference. Environmental
+health perspectives. National Institute of Environmental Health Science;
+2013;121(9):1017.
+
+17. Chang HH, Hu X, Liu Y. Calibrating MODIS aerosol optical depth for
+predicting daily PM2. 5 concentrations via statistical downscaling.
+Journal of Exposure Science and Environmental Epidemiology [Internet].
+2013; Available from:
+http://www.nature.com/jes/journal/vaop/ncurrent/full/jes201390a.html
+
+18. Chudnovsky AA, Koutrakis P, Kloog I, Melly S, Nordio F, Lyapustin A,
+et al. Fine particulate matter predictions using high resolution aerosol
+optical depth (AOD) retrievals. Atmospheric Environment [Internet]. 2014
+Feb; Available from:
+http://www.sciencedirect.com/science/article/pii/S1352231014001150
+
+19. Kloog I, Chudnovsky AA, Just AC, Nordio F, Koutrakis P, Coull BA, et
+al. A New Hybrid Spatio-Temporal Model For Estimating Daily Multi-Year
+PM< sub> 2.5</sub> Concentrations Across Northeastern USA Using High
+Resolution Aerosol Optical Depth Data. Atmospheric Environment.
+Elsevier; 2014 Jul;
+
+20. Lyapustin A, Wang Y, Laszlo I, Kahn R, Korkin S, Remer L, et al.
+Multiangle implementation of atmospheric correction (MAIAC): 2. Aerosol
+algorithm. Journal of Geophysical Research: Atmospheres (1984������2012)
+[Internet]. 2011;116(D3). Available from:
+http://www.agu.org/journals/jd/jd1103/2010JD014986/
+
+21. Lyapustin A, Martonchik J, Wang Y, Laszlo I, Korkin S. Multiangle
+implementation of atmospheric correction (MAIAC): 1. Radiative transfer
+basis and look-up tables. Journal of Geophysical Research: Atmospheres
+(1984������2012) [Internet]. 2011;116(D3). Available from:
+http://onlinelibrary.wiley.com/doi/10.1029/2010JD014985/full
+
+22. ESRI. ArcGIS. Redlands, California: ESRI; 2014.
+
+23. ASTER. ASTER Global Digital Elevation Map. NASA- Jet Propulsion
+Labratory; 2014.
+
+24. SMA. Secretaría del Medio Ambiente [Internet]. Secretaría del Medio
+Ambiente; 2014. Available from: http://www.semarnat.gob.mx/
+
+25. Oke TR. Boundary layer climates. Psychology Press; 1987.
+
+26. SACMEX. Subdirección de Macromedición y Control de Redes. GOBIERNO
+DEL DISTRITO FEDERAL.Sistema de Aguas de la Ciudad de México; 2014.
+
+27. INEGI. CUENTAS ECONÓMICAS Y ECOLÓGICAS DE MÉXICO [Internet]. 2012.
+Available from:
+http://www.inegi.org.mx/inegi/contenidos/espanol/prensa/Boletines/Boletin/Comunicados/Especiales/2014/febrero/comunica48.pdf
+
+28. R. R: A Language and Environment for Statistical Computing
+[Internet]. Vienna, Austria: R Foundation for Statistical Computing;
+2014. Available from: http://www.R-project.org/
+
+29. Kloog I, Koutrakis P, Coull BA, Lee HJ, Schwartz J. Assessing
+temporally and spatially resolved PM2.5 exposures for epidemiological
+studies using satellite aerosol optical depth measurements. Atmospheric
+Environment [Internet]. 2011 Aug;45(35):6267--6275. Available from:
+http://www.sciencedirect.com/science/article/pii/S1352231011009125
+
+30. Kloog I, Nordio F, Coull BA, Schwartz J. Incorporating local land
+use regression and satellite aerosol optical depth in a hybrid model of
+spatiotemporal PM2. 5 exposures in the Mid-Atlantic states.
+Environmental science & technology [Internet]. 2012
+Sep;46(21):11913--11921. Available from:
+http://pubs.acs.org/doi/abs/10.1021/es302673e

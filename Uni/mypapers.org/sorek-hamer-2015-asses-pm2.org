@@ -1,0 +1,714 @@
+Remote Sensing of Environment 163 (2015) 180--185
+
+Contents lists available at ScienceDirect
+
+Remote Sensing of Environment journal homepage:
+www.elsevier.com/locate/rse
+
+Assessment of PM2.5 concentrations over bright surfaces using MODIS
+satellite observations Meytar Sorek-Hamer a, Itai Kloog b, Petros
+Koutrakis c, Anthony W. Strawa d, Robert Chatﬁeld d, Ayala Cohen e,
+William L. Ridgway f, David M. Broday a,⁎ a
+
+Civil and Environmental Engineering, Haifa, Israel Department of
+Geography and Environmental Development, Ben-Gurion University, Beer
+Sheva, Israel Department of Environmental Health, Harvard School of
+Public Health, Boston, MA, USA d NASA Ames Research Center, Moffett
+Field, CA, USA e Industrial and Management Engineering, Technion, Haifa,
+Israel f Science Systems and Applications, Inc., 10210 Greenbelt Road,
+Suite 600, Lanham, MD 20771, USA b c
+
+a r t i c l e
+
+i n f o
+
+Article history: Received 6 January 2015 Received in revised form 10
+March 2015 Accepted 13 March 2015 Available online 3 April 2015
+Keywords: Dark Target Deep Blue Aerosol optical depth (AOD) MODIS PM2.5
+Mixed effects models
+
+a b s t r a c t Exposure to particles with an aerodynamic diameter
+smaller than 2.5 μm (PM2.5) adversely impacts human health. In many
+geographical regions where ground PM2.5 monitoring is spatially sparse
+and unsuitable for environmental health inference, satellite remote
+sensing can potentially be used for estimating human exposure to PM2.5.
+However, retrieval of the aerosol optical depth (AOD) using the Dark
+Target (DT) algorithm is uncertain in many regions worldwide (e.g.
+western USA, the Middle East and central Asia) due to low
+signal-to-noise ratio as a result of high surface reﬂectivity in the
+spectral bands used by the algorithm. In this study we use the Deep Blue
+(DB) algorithm as well as a combined DB-DT algorithm for AOD retrievals.
+The AOD products are used to predict ground PM2.5 using mixed effects
+models and the daily calibration approach. Models for the two study
+areas (Israel and San Joaquin Valley, Central California) were developed
+independently and then compared to each other. Using the AODDB within a
+mixed effects model considerably improved PM2.5 prediction in high
+reﬂectance regions, revealing in both study areas enhanced model
+performance (in terms of both R2 and the root mean square prediction
+error), signiﬁcant increase in the spatiotemporal availability of the
+AOD product, and improved PM2.5 prediction relative to using AODDT
+retrievals. © 2015 Elsevier Inc. All rights reserved.
+
+1. Introduction Exposure to particles with an aerodynamic diameter
+   smaller than 2.5 μm (PM2.5) is commonly known to be associated with
+   various health outcomes (Dominici, Peng, & Bell, 2006; Franklin,
+   Zeka, & Schwartz, 2007; Kloog, Ridgway, Koutrakis, Coull, & Schwartz,
+   2013; Schwartz, Dockery, & Neas, 1996; Zanobetti, Franklin,
+   Koutrakis, & Schwartz, 2009). Typically, exposure to PM2.5 in such
+   epidemiological studies is assessed using measurements from air
+   quality monitoring stations. However, in many geographical areas
+   ground PM2.5 monitoring networks are sparse and non-ideally deployed
+   for environmental health studies. Satellite remote sensing can be
+   used to assess PM2.5 in areas where surface monitoring is sparse or
+   not available (Engel-Cox, Holloman, Coutant, & Hoff, 2004; Gupta &
+   Christopher, 2008; Gupta et al., 2006; Koelemeijer, Homan, &
+   Matthijsen, 2006; van Donkelaar et al., 2010). A common satellite
+   product for predicting PM2.5 concentrations is the aerosol optical
+   depth (AOD). AOD measures light extinction ⁎ Corresponding author at:
+   Civil and Environmental Engineering, Technion, Haifa, Israel. Tel.:
+   +972 4 829 3468; fax: +972 4 822 8898. E-mail address:
+   dbroday@tx.technion.ac.il (D.M. Broday).
+
+http://dx.doi.org/10.1016/j.rse.2015.03.014 0034-4257/© 2015 Elsevier
+Inc. All rights reserved.
+
+at given wavelengths due to scattering and absorption along the measured
+atmospheric column. The Moderate Resolution Imaging Spectroradiometer
+(MODIS) land AOD products are calculated by two operational algorithms:
+the Dark Target (DT) algorithm and the Deep Blue (DB) algorithm. The DT
+algorithm uses as an input MODIS level 1 data (L1B), including the
+integrated spectral reﬂectance of 7 bands in the 470--2110 nm range as
+well as the geo-location, and processes them by a set of rules to
+retrieve the AOD (Levy, Remer, Tanré́, Mattoo, & Kaufman, 2009). However,
+it is well recognized that due to algorithmic limitations retrievals of
+AOD above dark surfaces (ocean, rainforest, etc.) are considerably more
+reliable than retrievals over bright and highly reﬂective surfaces, such
+as deserts, urban areas, snow, and coastal regions (Martin, 2008). To
+overcome this limitation, the DB algorithm processes spectral data
+mainly from the blue (412--470 nm) spectral channels (Hsu et al., 2006,
+2013; Hsu, Tsay, King, & Herman, 2006), since bright surfaces show high
+reﬂectivity in the red bands of the visible and the near infrared
+spectrum and low reﬂectivity in the blue spectral region. The DB
+algorithm has been found to outperform the DT algorithm over bright
+surfaces and to retrieve more accurate AOD values (Hsu et al., 2006,
+2013; Sayer, Hsu, Bettenhausen, & Jeong, 2013).
+
+M. Sorek-Hamer et al. / Remote Sensing of Environment 163 (2015)
+180--185
+
+Many studies have examined relationships between the total atmospheric
+column AOD DT and surface PM 2.5 measurements (e.g. Chudnovsky, Lee,
+Kostinski, Kotlov, & Koutrakis, 2012; Hoff & Christopher, 2009), usually
+using linear regressions to link the AOD DT and PM 2.5 mass
+concentrations (Engel-Cox et al., 2004; Wang & Christopher, 2003). To
+improve the AOD--PM2.5 relationship, recent studies used multivariate
+regression models, accounting for local meteorological parameters, such
+as the boundary layer height and relative humidity (Liu, Paciorek, &
+Koutrakis, 2009), land use information (Kloog, Nordio, Coull, &
+Schwartz, 2012), and other co-measured satellite-borne products (Gupta
+et al., 2006; Koelemeijer et al., 2006; Liu, Franklin, Kahn, &
+Koutrakis, 2005, 2007; Liu, Sarnat, Kilaru, Jacob, & Koutrakis, 2005;
+Sorek-Hamer et al., 2013a; Strawa, Chatﬁeld, Legg, Scarnato, & Esswein,
+2013). Since many time-varying parameters, such as local meteorological
+variables (temperature, RH), the vertical PM2.5 concentration proﬁle,
+and the particle optical and other thermo-physical properties affect the
+AOD--PM2.5 relationship, it is reasonable to expect that it will vary on
+a daily basis (Lee, Liu, Coull, Schwartz, & Koutrakis, 2011). To account
+for this variability and improve PM2.5 prediction, Lee et al. (2011)
+suggested to use a mixed effects regression model, which enables
+calibration of the model for time varying variables (“daily
+calibration”). This approach has been extended by analyzing the residual
+errors (Kloog, Koutrakis, Coull, Lee, & Schwartz, 2011) and by
+accounting for missing satellite retrievals (Kloog et al., 2012) and for
+regression coefﬁcients that are spatially and temporally correlated
+(Chang, Hu, & Liu, 2013; Hu et al., 2013). In this work we apply the
+daily calibration method for predicting ground PM2.5 , using MODIS AOD
+data over Israel and San Joaquin
+
+181
+
+Valley (SJV), Central California, as the main predictor variable. Since
+both regions are characterized by bright surfaces, we explored the
+beneﬁts of using AODDB retrievals as well as the combined AODDB-DT
+product from the recently released collection 6 (C06). To our best
+knowledge, this is the ﬁrst study that utilizes AODDB and the combined
+AODDB-DT product within a mixed effects model for PM2.5 prediction. 2.
+Methods 2.1. Study area Israel is located in the East Mediterranean,
+near the Sinai and Saudi Arabia deserts, and is characterized by a
+semi-arid climate. The local PM2.5 monitoring network is distributed
+heterogeneously over the country, mostly around the major populated
+areas (Fig. 1a). Using univariate linear regressions to explore the
+relationships between daily PM2.5 concentrations and collocated
+satellite-borne AOD observations, poor coefﬁcient of determination were
+obtained (R2 = 0.2). SJV is located southeast of San Francisco, between
+the Coastal Mountain range to the west and the Sierra Nevada range to
+the east (Fig. 1b). It is an important agricultural area that is
+characterized by a Mediterranean climate similar to Israel, and by
+fairly poor air quality. For example, PM2.5 levels in SJV exceeded the
+EPA standard (35 μg/m3) in 14% of the days during the study period (e.g.
+in over 350 days during 2005--2008). Previous studies in SJV, which used
+univariate linear regressions and accounted only for satellite AOD,
+reported poor correlations with both daily and hourly PM2.5 measurements
+(Engel-Cox et al., 2004; Zhang, Hoff, & Engel-Cox, 2009).
+
+Fig. 1. Study areas: (a) Israel, and (b) San Joaquin Valley, CA.
+
+182
+
+M. Sorek-Hamer et al. / Remote Sensing of Environment 163 (2015)
+180--185
+
+2.2. Data 2.2.1. Ground level monitoring In Israel, daily average PM 2.5
+concentrations for 12 years (2002--2013) were obtained by averaging
+quality assured halfhourly PM 2.5 concentrations obtained from the
+Technion Center of Excellence in Exposure Science and Environmental
+Health (TCEEH) air pollution monitoring database (TAPMD). Air quality
+monitoring in Israel is conducted by different agencies: governmental,
+municipal, and the Israel Electric Company and the Israel Airport
+Authority, and regulated by the Ministry for Environmental Protection
+(MoEP). The measurement is performed using TEOM continuous monitoring
+instruments, operated and maintained according to the US-EPA guidelines.
+The typical measurement error is ± 1 μg/m3 (Yuval & Broday, 2006). In
+SJV, PM2.5 measurements from 2005 to 2008 were obtained from stations
+operated by the California Air Resources Board (CARB). We used six air
+quality monitoring (AQM) stations that are distributed across the SJV
+study area. Daily PM2.5 concentrations measured by the ﬁlter-based
+Federal Reference Method (FRM) were obtained using the online “Real-Time
+Query Tool” (RTQT; http://www.arb.ca.gov/aqmis2/ aqdselect.php). As with
+any measurement method, the gravimetric based FRM has some inherent
+limitations that may cause sampling errors (Code of Federal Regulations
+--- Protection of Environment, 2012).
+
+2.2.2. Satellite observations Satellite data used in this study were
+collected by the MODIS platform aboard NASA's EOS-Aqua satellite. Aqua
+was launched into a sun-synchronous orbit on May 4, 2002, and observes
+both study areas between 13:00 and 14:00 local sun time (Levy et al.,
+2009). MODIS products were used due to their high availability, the
+MODIS effective cloud mask algorithm and its almost daily global
+coverage. MODIS pixels collocated with ground PM2.5 stations were used
+with a nadir spatial resolution of 10 × 10 km. The MODIS data products
+used were the collection 6 (C06) Level II aerosol products: Dark Target
+AOD over land at 550 nm (hereafter AODDT), Deep Blue AOD over land at
+550 nm (hereafter AODDB), and the combined DB and DT AOD product over
+land at 550 nm (hereafter AODDB-DT). All the satellite data were
+characterized by the highest recommended quality assurance ﬂags (QA N 1
+for DB products and QA = 3 for DT products, Sayer et al. (2013) and Levy
+et al. (2013), respectively). The development of the merged C06 AODDB-DT
+aerosol product was motivated by the desire to obtain data with better
+spatial coverage than could be obtained using any of the individual
+algorithms (i.e. DT, DB) alone (Sayer et al., 2014). Namely, whereas
+there are areas in which AOD may be retrieved by both the DB and the DT
+algorithms (e.g. Fig. 2), the DT algorithm essentially excludes most of
+the bright desert surfaces (Levy, Remer, & Dubovik, 2007; Levy et al.,
+2013). Whereas this was not relevant for model calibration, since the PM
+
+Fig. 2. Spatial pattern of (a) Deep Blue (DB) and (b) Dark Target (DT)
+retrieved annual mean AOD over Israel in 2013.
+
+M. Sorek-Hamer et al. / Remote Sensing of Environment 163 (2015)
+180--185
+
+183
+
+monitoring stations are situated in areas covered by both algorithms
+(Fig. 2), it is important when applying the calibrated model for PM2.5
+prediction in all the grid cells with AOD data. The monthly NDVI product
+(MYD13C2; Huete, Didan, van Leeuwen, Miura, & Glenn, 2011) is used
+within the C06 algorithm for deciding which algorithm will be used to
+retrieve the AOD in each grid cell, thus producing the combined AODDB-DT
+product. Speciﬁcally, when NDVI N 0.3 the DT product is used, when NDVI
+b 0.2 the DB product is used, and when 0.2 b NDVI b 0.3 the routine
+considers the quality ﬂags such that the AOD product with the higher QA
+ﬂag is reported. If both products have the same QA ﬂag with high
+conﬁdence, the reported AODDB-DT is the average of the two AOD products
+(AODDT and AODDB). If neither has high conﬁdence QA ﬂag the AODDB-DT
+remains undeﬁned (Levy et al., 2013).
+
+Table 1 Statistics, coefﬁcient of determination for linear regression
+and availability of PM2.5 and collocated satellite data in Israel during
+the study period (2002--2013).
+
+2.3. Statistical methodology
+
+linear ﬁts (i.e. low coefﬁcients of determination) between daily PM2.5
+concentrations and the different AOD products were obtained in both
+regions (Tables 1 and 2). Table 3 depicts the mean coefﬁcient of
+determination (measured vs. predicted PM2.5 concentrations) as well as
+the RMSPE and NRMSPE of the different mixed effects models applied in
+Israel and SJV. As seen, the models performed better in SJV than in
+Israel. This could result from numerous differences between the two
+regions, including the PBL structure, PM vertical distribution and
+composition and surface reﬂectivity, and may also be partly explained by
+the distinct PM monitoring methods used in the two regions (see the
+Methods section). As both study areas are characterized by high albedo
+and since the AODDB product has been developed to enable improved PM2.5
+retrievals over bright surfaces, we examined the use of AODDB instead of
+AODDT as the main model variable. The high availability of AODDB
+(especially in Israel, Tables 1) clearly supported this approach.
+Indeed, using AODDB revealed consistent improved model performance over
+the baseline models in both SJV and Israel (R2 of 0.69 and 0.45 in SJV
+and Israel, respectively, and smaller prediction errors; Table 3). These
+results indicate the important differences between the DT and DB AOD
+retrieval algorithms for PM2.5 estimation in regions that are
+characterized by higher albedo. Speciﬁcally, the improved performance of
+the AODDB-based PM2.5 prediction model in Israel resulted from (a) an
+additional PM2.5 station whose data could not be used when AODDT was the
+key model variable due to its limited spatial availability, and (b) 225
+more days for which AODDB was available beyond the number of days for
+which AODDT was available (Table 1). It is noteworthy that only in 1804
+days both AODDB and AODDT were available in colocation with at least one
+PM2.5 monitoring station. AOD availability limitations suggested that it
+may be advantageous to use a combined AOD product, thus increasing the
+number of days in which AOD is available. For example, Fig. 2 shows the
+year 2013 annual mean AOD at each 10 × 10 km grid cell over Israel. The
+map clearly illustrates that AODDT is available over the more vegetated
+northern part of Israel whereas AODDB is available also over the arid
+and desert southern part of Israel, which is characterized by much
+higher surface reﬂectance. Nonetheless, in both study areas using the
+combined C06 AODDB-DT product did not increase signiﬁcantly the number
+of observations that could be used for building the models
+
+We applied the daily-calibration model approach, allowing the AOD--PM2.5
+relationship to vary on a daily basis yet assuming that on any given day
+the relationship does not vary spatially within each of the study
+domains (Israel and SJV). This was achieved by pooling estimates for the
+daily slope using a mixed effects model (Eq. (1)). The ﬁxed effects
+represent the average relationship between AOD and PM2.5 during the
+study period across all the monitoring stations in each region. The
+random effects represent the daily variability of the regional
+AOD--PM2.5 relationship. PM 2:5 i; j ¼ α 0 þ α 1 AODi; j þ β1; j AODi; j
+þ β2; j þ β3;i þ εi; j ;
+
+ð1Þ
+
+where PM2:5i; j is the daily average PM2.5 concentration at the i-th
+monitoring station on the j-th day (with j being the day of the year)
+and AODi,j is the AOD value on that day in the grid cell that contains
+this station, i.e. is collocated with the ground PM measurements
+(Sorek-Hamer et al., 2013a). The parameters α0 (intercept) and α1
+(slope) correspond to the ﬁxed effect whereas β1,j (slope) and β2,j
+(intercept) correspond to the random effects of the AOD and to the date,
+respectively. A site-speciﬁc bias may arise since the AOD values
+correspond to an average over a 10 × 10 km grid whereas the PM2.5
+concentrations are locally measured and may not represent the entire
+grid cell (e.g. due to occasional wind or intermittent local sources).
+To control for such a potential bias, a random effect site intercept at
+station i, β3,i, has been included in the model (Lee et al., 2011). To
+evaluate the model we used a ten-fold out-of-sample cross validation
+scheme. Namely, the dataset was randomly divided into a training dataset
+(90%), used to parameterize the model, and a test dataset (10%), used to
+evaluate the calibrated model. This process was repeated 100 times for
+each model, thus enabling to estimate the uncertainty of the model
+parameters. All these steps were performed using R V3.1.1 ‘lme4' package
+(Bates & Maechler, 2010). The baseline regional models used AODDT as the
+model variables (Eq. (1)). The advantages of using DB retrievals over
+the study areas were explored using AODDB or AODDB-DT as model
+variables. To assess the performance of the different models we compared
+the average PM2.5 model predictions (in the test runs) to observations,
+examining several error measures: the coefﬁcient of determination (R2),
+the root mean squared predicted error (RMSPE), and the normalized RMSPE
+(NRMSPE). 3. Results In Israel, 2033 days (4091 observations) during the
+study period had both PM2.5 and collocated AOD records available in the
+study period, with considerable higher availability (both number of days
+and number of observations) of AODDB than AODDT (Table 1). In SJV, on
+the other hand, there was no signiﬁcant difference between the number of
+collocated observations (N) and days (D) in which either AODDB or AODDT
+observations were available (Table 2). Moreover, rather poor
+
+Variable
+
+Min
+
+5%
+
+95%
+
+Max
+
+Mean
+
+R2 with PM2.5 (N/Da)
+
+AODDT AODDB AODDB-DT PM2.5 PM10
+
+−0.03 0.03 −0.03 0.00 0.00
+
+0.10 0.05 0.08 9.85 21.25
+
+0.69 0.46 0.64 45.05 122.72
+
+4.00 2.09 4.00 315.90 1031.46
+
+0.31 0.19 0.29 23.17 53.45
+
+0.21 (3981/1806) 0.13 (4882/2031) 0.19 (4901/2033) -- --
+
+a N = number of satellite observations collocated with available PM2.5
+monitoring data. D = number of days in which satellite observations
+collocated with PM2.5 monitoring data were available.
+
+Table 2 Statistics, coefﬁcient of determination for linear regression
+and availability of PM2.5 and of collocated satellite data in SJV during
+the study period (2005--2008). Variable
+
+Min
+
+5%
+
+95%
+
+Max
+
+Mean
+
+R2 with PM2.5 (N/Da)
+
+AODDT AODDB AODDB-DT PM2.5
+
+−0.05 0.01 −0.05 1.33
+
+0 0.03 0 5.27
+
+0.48 0.3 0.48 57.4
+
+0.95 0.62 0.95 103.00
+
+0.15 0.15 0.16 21.28
+
+0.03 (2117/448) 0.13 (2112/448) 0.03 (2117/448) --
+
+a N = number of satellite observations collocated with available PM2.5
+monitoring data. D = number of days in which satellite observations
+collocated with PM2.5 monitoring data were available.
+
+184
+
+M. Sorek-Hamer et al. / Remote Sensing of Environment 163 (2015)
+180--185
+
+Table 3 Performance of the mixed effects models for PM2.5 prediction
+(average ± SD of 1000 evaluation runs for each model, each based on
+randomly selected 10% of the data). Model
+
+PM2.5 ~ (AODDT, date, site) PM2.5 ~ (AODDB, date, site) PM2.5 ~
+(AODDB-DT, date, site)
+
+Israel
+
+SJV
+
+R2
+
+RMSPE (μg/m3)
+
+NRMSPE (−)
+
+R2
+
+RMSPE (μg/m3)
+
+NRMSPE (−)
+
+0.40 ± 0.04 0.45 ± 0.05 0.42 ± 0.04
+
+12.43 ± 0.77 12.06 ± 0.73 12.26 ± 0.67
+
+0.53 ± 0.03 0.52 ± 0.03 0.53 ± 0.03
+
+0.62 ± 0.07 0.69 ± 0.07 0.63 ± 0.07
+
+10.07 ± 1.4 9.09 ± 1.2 9.7 ± 1.2
+
+0.48 ± 0.05 0.44 ± 0.05 0.47 ± 0.05
+
+beyond that available when using the AOD DB (Tables 1 and 2). Moreover,
+in both study areas using the combined AODDB-DT product as a predictor
+variable did not outperform the models that used the AODDB product as a
+predictor variable. Namely, the AODDB captured more variability and
+enabled better PM2.5 prediction. 4. Discussion In general, our results
+support previous ﬁndings showing that accounting for daily AOD--PM2.5
+variation of the regression coefﬁcients improves PM2.5 estimation
+(Chudnovsky et al., 2012; Hu et al., 2014; Kloog et al., 2012, 2013).
+Yet, this is the ﬁrst study that used both the AODDB and the combined
+C06 AODDB-DT products as variables within the mixed effects model for
+predicting PM2.5. Using either of these variables increased the number
+of available observations considerably and improved the performance of
+the models. Using the AODDB product as a model variable resulted in the
+highest R2 and the lowest errors in both study areas (Table 3), in
+agreement with Sayer et al. (2014). Yet, surprisingly and in contrast to
+simplistic conclusions that could be drawn from Fig. 2, the C06 AODDB-DT
+product in both Israel and SJV is dominated by AODDT. Namely, in Israel
+the C06 AODDB-DT product consisted of 20% AODDB observations, 74% AODDT
+observations, and the remaining 6% were the averages of AODDT and AODDB
+observations of equal quality. The corresponding values for SJV were
+12%, 85%, and 3%, respectively. The latter probably explains the similar
+performance of the models that used the AODDT and the AODDB-DT products
+(Table 3). To further examine this result, we manually built a combined
+AODDB-DT product. Two alternatives for producing this variable were
+tested: (a) using all the available AODDB records and ﬁlling in missing
+time points with AODDT if data are available, or (b) using all the
+available AODDT records and ﬁlling in missing time points with AODDB if
+data are available. Whereas these schemes provided distinct datasets,
+predicted PM2.5 concentrations were similar with no signiﬁcant advantage
+to either scheme. The results of the models that used this manually
+combined product were identical to those reported in Table 3 (e.g. for
+Israel the R2 was 0.42 ± 0.04, the RMSPE was 12.25 ± 0.78 μg/m3, and the
+NRMSPE was 0.53 ± 0.03). The semi-arid climate that Israel experience is
+characterized by excess dust that results from dust storms as well as
+from resuspension of settled dust. Furthermore, currently there are more
+PM10 monitoring stations than PM2.5 monitoring stations in Israel.
+Hence, it was possible to study also the AOD--PM10 relationships in
+Israel, using a relatively large set of collocated measurements. Using
+Eq. (1), we examined the possibility to predict daily PM10
+concentrations using the different AOD products as model variables. In
+general, the models for PM10 prediction performed much better than those
+for PM2.5 prediction (e.g., R2 of 0.40 and 0.68 for prediction of PM2.5
+and PM10, respectively, using AODDT as the predictor variable; Table 4).
+Using AODDB or the combined AODDB-DT product for predicting PM10
+improved slightly the R2 relative to the baseline model. Consistent with
+the results obtained when predicting PM2.5, PM10 prediction using the
+AODDB product is somewhat better than when using the combined AODDB-DT
+product (Table 4). Interestingly, the C06 AODDB-DT product used for PM10
+prediction consisted of a larger fraction (35%) of AODDB observations
+and a smaller fraction (50%) of AODDT observations than the AODDB-DT
+product used for predicting the PM2.5 concentrations.
+
+The results reported in this study are better than those reported
+previously using the MARS (Multivariate Adaptive Regression Splines)
+model (Sorek-Hamer et al., 2013a). To further compare the performance of
+the two modeling approaches, we re-ran the MARS model using different
+combinations of AOD products and day-of-the year (DOY) or its smoothed
+spline representation (SDOY), which were previously found by us to
+better MARS performance in SJV (Sorek-Hamer et al., 2013a). The MARS
+runs revealed inferior average performance relative to the mixed effects
+models (Table 5). Moreover, the better performance of the MARS models in
+SJV than in Israel is consistent with the results of the mixed effects
+models (Table 3) and may possibly result from the larger variation of
+the AOD--PM2.5 relationships in Israel (Tables 1 and 2). Furthermore,
+although the combined AODDB-DT product increased the data availability
+and improved the results of the mixed effects model in comparison to
+using AODDT (Table 3), it did not have a similar consistent effect when
+used as a variable of the MARS model. Judging by the scrutiny reported
+in this work, using AODDB as the predictor variable in mixed effects
+models to predict PM2.5 (and PM10) in areas characterized by highly
+reﬂecting surfaces, like Israel and SJV, is superior to any other model
+or AOD product. Nonetheless, to enable the use of such a model for
+assessing exposure to PM2.5 or PM10, as part of an environmental health
+study, requires to (a) expand model prediction to areas where AOD is
+missing (e.g. due to clouds and poor SNR), thus obtaining complete
+spatial coverage of PM prediction; (b) improve the spatial resolution of
+the AOD product and increase the predicted spatial variation of PM
+concentrations, thus accounting for exposure variability among
+individuals; and (c) improve the estimation and increase the explained
+variability (R2), thus reducing exposure uncertainty and
+misclassiﬁcation. 5. Conclusions This study examines the use of mixed
+effect models for studying relationships between satellite-borne aerosol
+products and ground PM2.5 observations in areas that are characterized
+by bright surfaces. It used the recently released MODIS collection 6
+(Sayer et al., 2013, 2014), which is characterized by improved AOD
+retrieval (hence availability) over such areas. In particular, to the
+best of our knowledge this is the ﬁrst study to use the AODDB and the
+combined AODDB-DT products as predictors within such a model. Use of
+AODDB as a mixed effects model variable was found to signiﬁcantly
+improve the ability to predict daily average PM2.5 concentrations in
+both Israel and SJV, with much better model results than obtained using
+linear regressions or MARS. In contrast to previous work that showed
+improved model performance when using the AODDB and AODDT products
+together
+
+Table 4 Performance of the mixed effects models for PM10 prediction in
+Israel (average ± SD of 1000 evaluation runs for each model, each based
+on randomly selected 10% of the data). Model
+
+N
+
+R2
+
+RMSPE (μg/m3)
+
+NRMSPE (−)
+
+PM10 ~ (AODDT, date, site) PM10 ~ (AODDB, date, site) PM10 ~ (AODDB-DT,
+date, site)
+
+6336 9429 9439
+
+0.68 ± 0.02 0.69 ± 0.02 0.69 ± 0.02
+
+31.97 ± 1.83 27.92 ± 1.37 28.2 ± 1.27
+
+0.57 ± 0.03 0.52 ± 0.02 0.53 ± 0.02
+
+M. Sorek-Hamer et al. / Remote Sensing of Environment 163 (2015)
+180--185 Table 5 Performance of the MARS models (average of ten
+evaluation runs for each model based on randomly selected 10% of the
+data). Model
+
+PM2.5 ~ (AODDT, DOY) PM2.5 ~ (AODDT, sDOY) PM2.5 ~ (AODDB, DOY) PM2.5 ~
+(AODDB, sDOY) PM2.5 ~ (AODDB-DT, DOY) PM2.5 ~ (AODDB-DT, sDOY)
+
+Israel
+
+SJV
+
+RMSPE (μg/m3)
+
+R2 (max)
+
+RMSPE (μg/m3)
+
+R2 (max)
+
+13.74 13.37 15.13 15.63 14.04 13.89
+
+0.27 (0.4) 0.28 (0.41) 0.24 (0.36) 0.16 (0.34) 0.25 (0.42) 0.25 (0.39)
+
+11.09 11.01 10.60 10.20 11.04 10.83
+
+0.55 (0.73) 0.56 (0.73) 0.60 (0.77) 0.62 (0.76) 0.55 (0.74) 0.58 (0.78)
+
+(Sorek-Hamer et al., 2013a; Sorek-Hamer, Cohen, Levy, Ziv, & Broday,
+2013b; Strawa et al., 2013), using the combined C06 AODDB-DT product
+resulted in inferior performance than when accounting only for the AODDB
+product. This result was consistent across both study areas and for
+predicting both PM2.5 and PM10 concentrations. Hence, the use of
+satellite aerosol products to improve our capability to estimate ﬁne and
+coarse PM concentrations over large areas in arid regions while
+observing the PM spatiotemporal variability has a great potential for
+air quality management, environmental surveillance, and estimation of
+exposure metrics that can be used in environmental health studies.
+Acknowledgments M.S.H. would like to thank the Environment and Health
+Fund, Israel, for supporting her studies with a doctoral fellowship, and
+NASA AMES Research Center, CA, USA for hosting her in summer 2012. The
+research was done at the Technion Center of Excellence in Exposure
+Science and Environmental Health (TCEEH). The authors thank the
+reviewers for their valuable comments. References Bates, D., & Maechler,
+M. (2010). lme4: Linear mixed-effects models using S4 classes. R package
+version 0.999375-35 (http://CRAN.Rproject.org/package = lme4). Chang,
+H.H., Hu, X., & Liu, Y. (2013). Calibrating MODIS aerosol optical depth
+for predicting daily PM2.5 concentrations via statistical downscaling.
+Journal of Exposure Science & Environmental Epidemiology, 24, 398--404.
+Chudnovsky, A.A., Lee, H.J., Kostinski, A., Kotlov, T., & Koutrakis, P.
+(2012). Prediction of daily ﬁne particulate matter concentrations using
+aerosol optical depth retrievals from the Geostationary Operational
+Environmental Satellite (GOES). Journal of the Air & Waste Management
+Association, 62(9), 1022--1031. Code of Federal Regulations ---
+Protection of Environment (2012). 40 CFR part 50, appendix L ---
+Reference method for the determination of ﬁne particulate matter as
+PM2.5 in the atmosphere. Dominici, F., Peng, R.D., & Bell, M.L. (2006).
+Fine particulate air pollution and hospital admission for cardiovascular
+and respiratory diseases. JAMA, 295(10), 1127--1134. Engel-Cox, J.A.,
+Holloman, C.H., Coutant, B.W., & Hoff, R.M. (2004). Qualitative and
+quantitative evaluation of MODIS satellite sensor data for regional and
+urban scale air quality. Atmospheric Environment, 38, 2495--2509.
+Franklin, M., Zeka, A., & Schwartz, J. (2007). Association between PM2.5
+and all-cause and speciﬁc cause mortality in 27 US communities. Journal
+of Exposure Science & Environmental Epidemiology, 17, 279--287. Gupta,
+P., & Christopher, S. (2008). Seven year particulate matter air quality
+assessment from surface and satellite measurements. Atmospheric
+Chemistry and Physics Discussions, 8, 327--365. Gupta, P., Christopher,
+S.A., Wang, J., Gehrig, R., Lee, Y., & Kumar, N. (2006). Satellite
+remote sensing of particulate matter and air quality assessment over
+global cities. Atmospheric Environment, 40, 5880--5892. Hoff, R.M., &
+Christopher, S.A. (2009). Remote sensing of particulate pollution from
+space: Have we reached the promised land? Journal of the Air & Waste
+Management Association, 59, 645--675. Hsu, N.C., Jeong, M. -J.,
+Bettenhausen, C., Sayer, A.M., Hansell, R., Seftor, C.S., et al. (2013).
+Enhanced Deep Blue aerosol retrieval algorithm: The second generation.
+Journal of Geophysical Research, [Atmospheres], 118, 9296--9315. Hsu,
+N.C., Tsay, S., King, M.D., & Herman, J.R. (2006). Deep Blue retrievals
+of Asian aerosol properties during ACE-Asia. IEEE Transactions on
+Geoscience and Remote Sensing, 44, 3180--3195. Hu, X., Waller, L.A.,
+Al-Hamdan, M.Z., Crosson, W.L., Estes, M.G., Jr., Estes, S.M., et al.
+(2013). Estimating ground-level PM2.5 concentrations in the southeastern
+U.S. using geographically weighted regression. Environmental Research,
+121, 1--10.
+
+185
+
+Hu, X., Waller, L.A., Lyapustin, A., Wang, Y., Al-Hamdan, M.Z., Crosson,
+W.L., et al. (2014). Estimating ground-level PM2.5 concentrations in the
+Southeastern United States using MAIAC AOD retrievals and a two-stage
+model. Remote Sensing of Environment, 140, 220--232. Huete, A., Didan,
+K., van Leeuwen, W., Miura, T., & Glenn, E. (2011). MODIS vegetation
+indices. Land Remote Sensing and Global Environmental Change, 1, 579
+(7\_26). Kloog, I., Koutrakis, P., Coull, B.A., Lee, H.J., & Schwartz,
+J. (2011). Assessing temporally and spatially resolved PM2.5 exposures
+for epidemiological studies using satellite aerosol optical depth
+measurements. Atmospheric Environment, 45(35), 6267--6275. Kloog, I.,
+Nordio, F., Coull, B.A., & Schwartz, J. (2012). Incorporating local land
+use regression and satellite aerosol optical depth in a hybrid model of
+spatiotemporal PM2.5 exposures in the mid-Atlantic states. Environmental
+Science and Technology, 46(21), 11913--11921. Kloog, I., Ridgway, B.,
+Koutrakis, P., Coull, B.A., & Schwartz, J.D. (2013). Long- and
+short-term exposure to PM2.5 and mortality. Epidemiology, 24, 555--561.
+Koelemeijer, R.B.A., Homan, C.D., & Matthijsen, J. (2006). Comparison of
+spatial and temporal variations of aerosol optical thickness and
+particulate matter over Europe. Atmospheric Environment, 40(27),
+5304--5315. Lee, H.J., Liu, Y., Coull, B.A., Schwartz, J., & Koutrakis,
+P. (2011). A novel calibration approach of MODIS AOD data to predict
+PM2.5 concentrations. Atmospheric Chemistry and Physics, 11, 7991--8002.
+Levy, R.C., Mattoo, S., Munchak, L.A., Remer, L.A., Sayer, A.M., & Hsu,
+N.C. (2013). The Collection 6 MODIS aerosol products over land and
+ocean. Atmospheric Measurement Techniques, 6, 2989--3034. Levy, R.C.,
+Remer, L.A., & Dubovik, O. (2007). Global aerosol optical properties and
+application to moderate resolution imaging spectroradiometer aerosol
+retrieval over land. Journal of Geophysical Research --- Atmospheres,
+112, D13210. Levy, R.C., Remer, L.A., Tanré́ , D., Mattoo, S., & Kaufman,
+Y.J. (2009). Algorithm for remote sensing of tropospheric aerosol over
+dark targets from MODIS: Collections 005 and 051, revision 2.
+http://modis-atmos.gsfc.nasa.gov/\_docs/ ATBD\_MOD04\_C005\_rev2.pdf
+Liu, Y., Franklin, M., Kahn, R., & Koutrakis, P. (2007). Using aerosol
+optical thickness to predict ground-level PM2.5 concentrations in the
+St. Louis area: A comparison between MISR and MODIS. Remote Sensing of
+Environment, 107, 33--44. Liu, Y., Paciorek, C.J., & Koutrakis, P.
+(2009). Estimating regional spatial and temporal variability of PM2.5
+concentrations using satellite data, meteorology, and land use
+information. Environmental Health Perspectives, 117(6), 886--892. Liu,
+Y., Sarnat, J.A., Kilaru, V., Jacob, D.J., & Koutrakis, P. (2005).
+Estimating ground-level PM2.5 in the eastern United States using
+satellite remote sensing. Environmental Science and Technology, 39,
+3269--3278. Martin, R.V. (2008). Satellite remote sensing of surface air
+quality. Atmospheric Environment, 42, 7823--7843. Sayer, A.M., Hsu,
+N.C., Bettenhausen, C., & Jeong, M. -J. (2013). Validation and
+uncertainty estimates for MODIS Collection 6 Deep Blue aerosol data.
+Journal of Geophysical Research --- Atmospheres, 118, 7864--7872. Sayer,
+A.M., Munchak, L.A., Hsu, N.C., Levy, R.C., Bettenhausen, C., & Jeong,
+M.J. (2014). MODIS Collection 6 aerosol products: Comparison between
+Aqua's Deep Blue, Dark Target, and merged datasets, and usage
+recommendations. Journal of Geophysical Research --- Atmospheres, 119.
+http://dx.doi.org/10.1002/2014JD022453. Schwartz, J., Dockery, D.W., &
+Neas, L.M. (1996). Is daily mortality associated speciﬁcally with ﬁne
+particles? Journal of the Air & Waste Management Association, 46(10),
+927--939. Sorek-Hamer, M., Cohen, A., Levy, R.C., Ziv, B., & Broday,
+D.M. (2013a). Classiﬁcation of dust days by satellite remotely sensed
+aerosol products. International Journal of Remote Sensing, 34(8),
+2672--2688. Sorek-Hamer, M., Strawa, A.W., Chatﬁeld, R.B., Esswein, R.,
+Cohen, A., & Broday, D.M. (2013b). Improved retrieval of PM2.5 from
+satellite data products using non-linear methods. Environmental
+Pollution, 182, 417--423. Strawa, A.W., Chatﬁeld, R.B., Legg, M.,
+Scarnato, B., & Esswein, R. (2013). Improving retrievals of regional ﬁne
+particulate matter concentrations from moderate resolution imaging
+spectroradiometer (MODIS) and ozone monitoring instrument (OMI)
+multisatellite observations. Journal of the Air & Waste Management
+Association, 63(12), 1434--1446. van Donkelaar, A., Martin, R.V.,
+Brauer, M., Kahn, R., Levy, R.C., Verduzco, C., et al. (2010). Global
+estimates of ambient ﬁne particulate matter concentrations from
+satellitebased aerosol optical depth: Development and application.
+Environmental Health Perspectives, 118, 847--855. Wang, J., &
+Christopher, S.A. (2003). Intercomparison between satellite-derived
+aerosol optical thickness and PM2.5 mass: Implications for air quality
+studies. Geophysical Research Letters, 2095, 30(21).
+http://dx.doi.org/10.1029/2003GL018174. Yuval, & Broday, D.M. (2006).
+High-resolution spatial patterns of long-term mean concentrations of air
+pollutants in Haifa Bay area. Atmospheric Environment, 40, 3653--3664.
+Zanobetti, A., Franklin, M., Koutrakis, P., & Schwartz, J. (2009). Fine
+particulate air pollution and its components in association with
+cause-speciﬁc emergency admissions. Environmental Health, 8(1, article
+58). Zhang, H., Hoff, R.M., & Engel-Cox, J.A. (2009). The relation
+between moderate resolution imaging spectroradiometer (MODIS) aerosol
+optical depth and PM2.5 over the United States: A geographical
+comparison by U.S. Environmental Protection Agency regions. Journal of
+the Air & Waste Management Association, 59, 1358--1369.
+
+

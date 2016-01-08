@@ -1,0 +1,685 @@
+ORIGINAL ARTICLE
+
+Long- and Short-Term Exposure to PM2.5 and Mortality Using Novel
+Exposure Models Itai Kloog,a Bill Ridgway,b Petros Koutrakis,a Brent A.
+Coull,c and Joel D. Schwartza
+
+Background: Many studies have reported associations between ambient
+particulate matter (PM) and adverse health effects, focused on either
+short-term (acute) or long-term (chronic) PM exposures. For chronic
+effects, the studied cohorts have rarely been representative of the
+population. We present a novel exposure model combining satellite
+aerosol optical depth and land-use data to investigate both the long-
+and short-term effects of PM2.5 exposures on population mortality in
+Massachusetts, United States, for the years 2000--2008. Methods: All
+deaths were geocoded. We performed two separate analyses: a time-series
+analysis (for short-term exposure) where counts in each geographic grid
+cell were regressed against cell-specific short-term PM2.5 exposure,
+temperature, socioeconomic data, lung cancer rates (as a surrogate for
+smoking), and a spline of time (to control for season and trends). In
+addition, for long-term exposure, we performed a relative incidence
+analysis using two long-term exposure metrics: regional 10 × 10 km PM2.5
+predictions and local deviations from the cell average based on land use
+within 50 m of the residence. We tested whether these predicted the
+proportion of deaths from PM-related causes (cardiovascular and
+respiratory diseases). Results: For short-term exposure, we found that
+for every 10-µg/m3 increase in PM 2.5 exposure there was a 2.8% increase
+in PM-related mortality (95% confidence interval [CI] = 2.0--3.5). For
+the long-term exposure at the grid cell level, we found an odds ratio
+(OR) for every 10-µg/m3 increase in long-term PM2.5 exposure of 1.6 (CI
+= 1.5--1.8) for particle-related diseases. Local PM2.5 had an OR of 1.4
+(CI = 1.3-- 1.5), which was independent of and additive to the grid cell
+effect. Conclusions: We have developed a novel PM2.5 exposure model
+based on remote sensing data to assess both short- and long-term human
+exposures. Our approach allows us to gain spatial resolution in acute
+effects and an assessment of long-term effects in the entire population
+rather than a selective sample from urban locations. (Epidemiology
+2013;24: 555--561)
+
+Submitted 29 May 2012; accepted 8 January 2013; posted 14 May 2013. From
+the aDepartment of Environmental Health - Exposure, Epidemiology and
+Risk Program, Harvard School of Public Health, Boston, MA; b Science
+Systems and Applications, Inc, Lanham, MD; and cDepartment of
+Biostatistics, Harvard School of Public Health, Boston, MA. Supported by
+The Harvard Environmental Protection Agency Center Grant RD83479801, NIH
+grant ES012044, and the Environment and Health Fund Israel.
+Correspondence: Itai Kloog, Department of Environmental Health -
+Exposure, Epidemiology and Risk Program, Harvard School of Public
+Health, Landmark Center 401 Park Dr. West, Boston, MA 02215. E-mail:
+ekloog@hsph.harvard.edu. Copyright © 2013 by Lippincott Williams &
+Wilkins ISSN: 1044-3983/13/2404-0555 DOI: 10.1097/EDE.0b013e318294beaa
+
+Epidemiology  •  Volume 24, Number 4, July 2013
+
+M
+
+ultiple studies in the United States and worldwide have shown
+associations between exposure to ambient particulate matter (PM) and
+adverse health effects.1--6 These adverse health effects include
+asthma,7 cardiovascular problems,3,8--12 respiratory infections,13--17
+lung cancer, and mortality.18--22 Previous studies have generally
+focused on either longterm (chronic) PM exposure23--26 or short-term
+(acute) PM exposure.15,27,28 In addition, studies of acute effects
+typically depend on PM2.5 monitors within their study domain. Because
+PM2.5 concentrations vary spatially within the study domain, this
+introduces exposure error and likely produces a combination of downward
+bias in the effect estimates and wider confidence intervals (CIs) due to
+a mixture of classical and Berkson error.29 The relative magnitude of
+the two effects is not yet clear. The lack of spatially resolved daily
+PM2.5 concentration data restricts most studies to areas surrounding
+monitoring sites, mostly in cities, which may not be representative of
+the population as a whole. Such studies have used mostly citylevel
+contrasts, although more recent studies have incorporated estimates from
+land-use regression. For example, cohort studies with few exceptions
+(eg, the Six City Study) rely upon convenience samples that are not
+representative of the population either in demographic or geographic
+characteristics, raising questions about generalizability and the
+possibility of selection bias. Suburban, exurban, rural, and semirural
+populations are particularly under-represented. Similarly, in many
+studies, minorities and people with lower educational attainment are
+under-represented. In addition, although land-use regression can produce
+estimates of exposure at participants addresses, the lack of monitoring
+in rural areas to calibrate these models has led to the exclusion of
+participants in such locations even when in the cohort.24 Various
+studies have tried to address this issue. There are some
+population-based chronic-exposure studies that have assessed within-city
+exposure and mortality. Naess et al30 looked at chronic exposure to NO2,
+PM10, and PM2.5 in 470 neighborhoods and all-cause and cause-speciﬁc
+mortality in Oslo, Norway. Exposures were consistently associated with
+all causes of death in both age groups for men and women. The
+associations were particularly strong for chronic obstructive pulmonary
+disease, which appeared linear whereas cardiovascular causes and lung
+cancer seemed to have threshold effects. Gan et al31 looked at specific
+traffic-related www.epidem.com  |  555
+
+Kloog et al
+
+air pollutants associated with coronary heart disease (CHD) morbidity
+and mortality in Metropolitan Vancouver. This population-based cohort
+study included a 5-year exposure period and a 4-year follow-up period.
+Individual exposures to traffic-related air pollutants including black
+carbon, PM2.5, NO2, and nitric oxide were estimated at residences of the
+subjects using land-use regression models. An interquartile range
+elevation in the average concentration of black carbon was associated
+with a 6% increase in CHD mortality (95% CI = 3--9%) after adjusting for
+age, sex, preexisting comorbidity, neighborhood socioeconomic status,
+and copollutants (PM2.5 and NO2). Few studies on the long-term effect of
+exposure have looked at broader populations. Crouse et al32 looked at
+the risk of cardiovascular mortality in relation to long-term exposure
+and PM2.5 in Canada. They assigned estimates of exposure to ambient
+PM2.5 derived from satellite observations to a cohort of 2.1 million
+Canadian adults. They used both standard Cox proportional survival
+models and nested, spatial random-effects survival models. For the Cox
+models, they showed hazard ratios (HRs) of 1.15 (95% CI = 1.13--1.16)
+from nonaccidental causes and 1.31 (95% CI = 1.27--1.35) from ischemic
+heart disease for each 10-μg/m3 increase in concentrations of PM2.5.
+Using spatial random-effects models controlling for the same variables,
+they showed HRs of 1.10 (95% CI = 1.05--1.15) and 1.30 (95% CI =
+1.18--1.43), respectively. Other studies have used new methodological
+approaches in air pollution studies regarding short- and long-term
+exposure. Künzli33 presents several key approaches in studies of ambient
+air pollution. He discusses among other issues how cross-city
+longitudinal data are needed to estimate both shortand long-term
+effects, and how time-series studies have previously neglected the
+long-term component. They also show the importance of disentangling the
+contributions of different time domains of air pollution exposure.
+Künzli shows that by considering the geography of susceptibility and
+exposure, and by using more sophisticated approaches to acknowledge the
+“geographies of time,” studies on the total health effects of ambient
+air pollution could be considerably improved. Burnett and colleagues34
+showed that results from time-series studies are equivalent to estimates
+obtained from a dynamic population in which each person's mortality risk
+can be summarized as the daily number of deaths. The authors showed that
+the association between temporal variation in the environmental
+covariates and the survival experience of members of the dynamic
+population can be estimated by regressing the daily number of deaths on
+the daily value of the environmental covariates, as is done in
+time-series mortality studies. We recently presented a novel method of
+assessing temporally and spatially resolved PM2.5 exposures for
+epidemiological studies using satellite aerosol optical depth
+measurements, which makes it possible to predict daily PM2.5
+concentration levels at a 10 × 10 km spatial resolution.35 In this
+previous work, we examined the relationship between PM2.5 ground
+measurements and Moderate Resolution Imaging 556  |  www.epidem.com
+
+Epidemiology  •  Volume 24, Number 4, July 2013
+
+Spectroradiometer Satellite--derived aerosol optical depth measurements
+in New England during the period of 2000-- 2008. Using multistage
+prediction models, we initially performed day-specific calibrations of
+the satellite using ground PM2.5 measurements from all monitoring sites
+in New England and incorporating land-use regression and meteorologic
+variables. This use of daily calibration allows us to get considerably
+better predictive power, and hence lower exposure error. Later, spatial
+smoothing was used to predict PM2.5 concentrations for grid cell-day
+combinations when satellite measures are not available. Because our
+models produced daily PM2.5 predictions, not monthly or yearly, this
+allowed us to estimate the health effects of both short-term and
+long-term exposures. In addition, the availability of satellite
+measurements in every grid cell improved spatial predictions, compared
+with landuse regression models calibrated with monitors in a limited
+number of locations. Finally, we incorporated land-use regression as a
+final component, which estimates the difference between neighborhood
+level (grid cell) values and addressspecific PM2.5 based on land-use
+terms within 50 m of the residential address, allowing us to estimate
+long-term exposure at an address-specific level. In this follow-up
+article, we use our model predictions to study the association between
+both long- and short-term PM2.5 exposure and mortality in the entire
+population of Massachusetts during the period 2000--2008.
+
+METHODS Study Domain The study was conducted in Massachusetts (Figure).
+To avoid boundary effects, some PM2.5 data from neighboring states were
+included in the analysis.
+
+Exposure Data Data for both short- and long-term PM2.5 exposures for the
+years 2000--2008 were assessed using recently developed prediction
+models.35 The Massachusetts exposure dataset encompasses daily PM2.5
+predictions at a resolution of 10 × 10 km. In addition, we predicted
+365-day moving averages of grid-cell PM2.5 to look at chronic effects
+and local deviations from the grid-cell predictions (from land-use
+regression) on a 50 × 50 m spatial resolution across the state (Figure)
+during the entire study period. Because the Boston metropolitan area
+within the Route 128 comprises 15 cells, this allows us to resolve
+exposure within the city. The local land-use component allows further
+resolution to the address level, but only for long-term exposure. For
+more detailed information on the prediction model please refer to Kloog
+et al.35 We then generated daily and long-term PM2.5 exposure to each
+decedent based on their address. Our generated predictions have multiple
+advantages over other approaches commonly used in other health studies
+such as inverse distance weighting, kriging, etc. First, the smooth
+function of latitude and longitude is effectively © 2013 Lippincott
+Williams & Wilkins
+
+Epidemiology  •  Volume 24, Number 4, July 2013
+
+Mortality and Long- and Short-Term Exposure to PM2.5
+
+FIGURE.  Map of the study area showing the dithered residential location
+of a subset of mortality cases over a sample PM2.5 (µg/m3) 10 × 10 km
+pollution grid for a sample day (01/07/2001).
+
+a weighting scheme, with some important differences. The weights do not
+have to be isotropic, they can have a functional form be other than
+inverse distance squared, and they can vary every 2 months (unlike
+distance-based weights, which are fixed). To this we add the additional
+information provided by the daily satellite measurement near the
+residence and the local land-use regression results. There are many US
+cities with only one monitor close to the city. In such cases, inverse
+distance weighting would be of no practical use, whereas our methods
+would produce exposure contrasts across the various cities' 10 × 10 km
+grid, as well as the local land-use regression.
+
+Mortality Data Individual georeferenced mortality records were obtained
+from the Massachusetts Department of Public Health for all available
+years (2000--2008). The dataset included 468,570 deaths. Our model can
+include locations both proximate and far from ambient monitoring
+stations. We defined “near” as within 20 km of an ambient monitor. The
+near areas contain 80% of the population, with the rest in the “far”
+areas (more than 20 km from an ambient monitor). Public health records
+included residential location, place of death, age, sex, date of death,
+ethnicity, education, and primary cause of death. From these data, we
+constructed daily death counts for each 10 × 10 km grid cell for our
+time-series analysis; long-term exposure was assigned based on
+residential address.
+
+Mortality Covariates Temperature Data As in other PM mortality studies,
+temperature was used as a covariate.36,37 Temperature data were obtained
+from the national climatic data center.38 Only continuously operating
+stations with daily data from 2000 to 2008 were used. Grid cells were
+matched to the closest weather station.
+
+Socioeconomic Data Socioeconomic variables for the tract level were
+obtained from the 2000 US census with data on social, © 2013 Lippincott
+Williams & Wilkins
+
+economic, and housing characteristics.39 Socioeconomic variables at the
+census-tract level included percent minorities, age, education, and
+income. In addition we used individual socioeconomic variables from the
+Massachusetts Department of Public Health mortality records (race,
+education, and sex).
+
+Smoking Surrogate As a surrogate for cell-specific smoking experience,
+we used the long-term average lung cancer mortality rate in each cell as
+a control variable. Lung cancer data were obtained through the
+Massachusetts Department of Public Health.
+
+Statistical Methods Geocoded mortality data were matched with our
+exposure estimates. Because the mortality datasets did not include
+changes of residence, we had to assume when looking at long-term
+exposure that the decedents had lived at their current address for
+several years. This introduces some exposure misclassification. However,
+we think the misclassification is relatively minor. The average age of
+decedents in our study population was 75 years, and in the northeast
+United States, people above the age of 75 have limited mobility (only 2%
+of the population changed residence during 2009--2010).40 We assessed
+the acute effects of exposure to PM2.5 by assigning to decedents the
+grid exposure (on the day of death and preceding 3 days) corresponding
+to their residence for deaths outside of hospital. Deaths in hospital
+may have occurred outside the grid cell of residence, and so for those
+deaths, we assigned the mean predicted PM2.5 concentration in all grid
+cells within 30 km of the residence, again for the day of death and up
+to 3 preceding days. Most time-series studies have reported the
+strongest acute associations with mean PM2.5 for the current and
+previous day, rather than same day exposure41 or longer lags. We
+therefore took current and previous day exposures as our primary
+analysis. As a sensitivity analysis, we also examined PM2.5 exposure 2
+days before death (lag2) and PM2.5 exposure 3 days before death (lag3).
+Specifically, we modeled the mortality rate λit in the ith cell on the
+tth day as follows: www.epidem.com  |  557
+
+Epidemiology  •  Volume 24, Number 4, July 2013
+
+Kloog et al
+
+log( λit ) = α + λi + β1 PM it + λ (t ) + temporal covariates where λi =
+δ + spatial covariates + ei
+
+Characteristic
+
+where PMit is the daily PM2.5 concentration in cell i, λ(t) is a smooth
+function of time, temporal covariates are temperature and day of the
+week, spatial covariates are socioeconomic factors and a surrogate for
+long-term smoking history, and ei is the remaining unexplained
+difference in mortality rate between cell i and other cells (treated as
+a mean zero normal random effect with variance estimated from the data).
+This model expands the usual time-series analysis by including spatial
+covariates and random intercepts for small areas. The specific
+covariates we used were a linear and quadratic term for temperature with
+the same moving average as PM2.5, age, percent minorities, median
+income, percent of people without high school education, and lung cancer
+rate as a surrogate for long-term smoking history. λ(t) was estimated
+with a natural cubic spline with 45 degrees of freedom (5 df per year).
+We used an interaction term between in-hospital death and short-term
+exposure, to test whether location modified the association. Long-term
+exposure was analyzed through a relative incidence analysis. We defined
+particle-related deaths as those from cardiovascular and respiratory
+diseases and contrasted those with mortality unrelated to air pollution
+(accidental death, cancer [except lung cancer], homicide, etc.).
+Specifically we fit the following model:
+
+(
+
+)
+
+Logit ( PrMortij = 1| X ) = α + u j + β1 PM it + β2 PMLi + β3i X 3i +
+β4i X 41 + ...
+
+(u ) ~ N [0,σ j
+
+u
+
+2
+
+]
+
+where Mortij is the response (particle-related or nonrelated death) for
+the ith subject in grid j, α and uj are the fixed and random
+(grid-specific) intercepts, respectively, PMit is 365day moving average
+ending on day t, PMLi is the local (50 m) deviation of PM2.5 from the
+long-term grid-cell average, X3i, etc. denote the set of covariates of
+interest used in the model, and σu2 is the variance of the random
+effects. We also looked at various interactions of interest, including
+interactions between near and far areas and both short-term and
+long-term exposure as well as interactions between low and high
+education groups (based on individual college education) and long-term
+PM2.5 exposure. We considered whether effect estimates differed between
+the two main cause-specific mortality rates by performing a logistic
+analysis of cardiovascular and respiratory mortality.
+
+RESULTS Of the 468,570 deaths included in our analyses, 46% were men,
+94% were white, and 20% had higher than a high 558  |  www.epidem.com
+
+TABLE 1.  Descriptive Statistics: Deaths in Eastern Massachusetts,
+2000--2008 No. (%)
+
+Sex  Men  Women Race  White  Black  Other Education (years)  0--12  >12
+Age (mean years)
+
+216,717 (46) 251,852 (54) 438,402 (94) 17,479 (4) 12,689 (3) 372,848
+(80) 95,722 (20) 75.0
+
+school education. The average age at death was 75 years (Table 1).
+Table 2 summarizes of the exposure and temperature variables used in the
+analysis. Various lags were tested in the time-series analysis, with the
+strongest based on the mean of lag01. The results for lag01 are
+presented as commonly reported in many previous studies.14,24 For
+every10-µg/ m3 increase in short-term PM2.5 exposure, there was a 2.8%
+increase in mortality (95% CI = 2.0--3.5). There was also a significant
+interaction between short-term pollution and near and far locations (P <
+0.001). For every10-µg/m3 increase in short-term PM2.5 exposure in the
+“far” group, there was a 1.4% increase in mortality (95% CI =
+0.8--2.0%). For every10-µg/ m3 increase in short-term PM2.5 exposure in
+the “near” group, there was a 4.5% increase in mortality (95% CI =
+2.6--6.5%). Table 3 presents the odds ratios (ORs) for cardiovascular
+and respiratory mortality for a 10-µg/m3 increase in long-term grid-cell
+PM2.5 exposure for the full datasets and various interactions. The OR
+was 1.6 (CI = 1.5--1.8) for cardiovascular and respiratory mortality
+relative to deaths from other causes. Local PM2.5 had an OR of 1.4 (CI =
+1.3--1.5) in the same model. Because local PM2.5 was constructed as the
+addressspecific deviation from the grid-cell average, these effects are
+independent and additive. There was a significant interaction between
+education group and long-term pollution (P<0.001). The OR for the high
+education group (college education) was 1.4 (CI = 1.2--1.6), whereas for
+the remainder the OR was TABLE 2.  Descriptive Statistics for PM2.5
+Exposure and Temperature for 2,495 Days with Available Data,
+Massachusetts, 2000--2008
+
+Acute PM (µg/m3) Chronic PM (µg/m3) Temperature (°C)
+
+Mean
+
+Median
+
+Standard Deviation
+
+Range
+
+Q1
+
+Q3
+
+ 9.8  9.9 45.6
+
+ 8.7 10.0 46.9
+
+ 4.5  1.2 19.0
+
+ 93.7  24.1 110.3
+
+ 6.6  9.1 31.2
+
+11.9 10.7 62.1
+
+© 2013 Lippincott Williams & Wilkins
+
+Epidemiology  •  Volume 24, Number 4, July 2013
+
+TABLE 3.  ORs for Cardiovascular Disease and Respiratory Mortality for
+Every10 µg/m3 Increase in Long-Term PM2.5 Exposure PM2.5 Exposure Type
+
+Odds Ratio (95% CI)
+
+All mortality cases long-term PM2.5 All mortality cases local PM2.5
+Urban areas Rural areas High education Low education
+
+1.6 (1.5--1.8) 1.4 (1.3--1.5) 1.7 (1.5--1.9) 1.3 (1.1--1.6) 1.4
+(1.2--1.6) 1.9 (1.60--2.1)
+
+1.9 (CI = 1.6--2.1). There was also a significant interaction between
+long-term pollution and near and far groups (P < 0.001). The OR for
+subjects living more than 20 km from a monitor was 1.3 (CI = 1.1--1.6),
+whereas for those living closer, the OR was 1.7 (CI = 1.5--1.9). The OR
+for nonwhites (OR 2.9, CI = 1.9--4.5) was higher than for whites (OR
+1.6, CI = 1.4--1.7). The logistic regression comparing cardiovascular
+and respiratory mortality showed no appreciable differences both for the
+regional PM2.5 and local PM2.5 exposure. Similarly, there were no
+important risk differences between people who died in the hospital and
+those who died at home.
+
+DISCUSSION The main feature of this study is the use of novel hybrid
+prediction models that examine short- and long-term exposure
+associations with mortality, and include the entire population of the
+state. Unlike traditional land-use regressions, this model produces
+daily predictions. This model also performs better in regions far from
+monitors because the satellite data provide exposure data. In addition,
+these models can 1) control for small area socioeconomic status
+variables in time-series analysis and look for effect modification by
+the same variables; 2) test whether the PM2.5 slope is different in
+people residing far from monitors; 3) assess chronic effects of
+particles using the entire population, again including people distant
+from monitors; 4) estimate effects of local traffic--derived particles
+independent of regional particles; and 5) reduce exposure error and
+hence downward bias in slopes, and upward bias in CIs. Key findings
+include differences in the slopes of acute and chronic PM2.5 between
+locations closer or more distant from monitoring stations, interactions
+of chronic exposure with race and socioeconomic status (with less
+advantaged groups having stronger associations), and an additional
+effect of traffic particles generated near the address of the decedents.
+The Six City Study42,43 found that a 1-year period for chronic exposure
+captured essentially the entire effect. Hence our use of a 1-year
+average should be sufficient to capture the longterm effect of PM2.5
+exposure. It is instructive to compare these results with results of
+previous time-series and cohort studies. Zanobetti and © 2013 Lippincott
+Williams & Wilkins
+
+Mortality and Long- and Short-Term Exposure to PM2.5
+
+colleagues studied the acute effect of fine and coarse particulate air
+pollution on mortality in a national analysis of 112 cities.44 For
+cities similar to cities in our study (the northeast area, grouped as
+cities with warm summer-continental), a 10-µg/m3 increase in PM2.5 was
+associated with a 1.19% increase (95% CI = 0.73--1.64) in total
+mortality. A key difference is that they assigned the same daily
+exposure to all people in each city, whereas we were able to assign
+different exposures to people on a relatively small grid. Another key
+difference is that they analyzed only cities, whereas we could analyze
+an entire state. Our study finds larger and more precise effect-size
+estimates despite analyzing fewer deaths, possibly due to reduced
+exposure error. Berkson measurement error for exposure would be expected
+to bias standard errors upward, but not bias effect sizes down, whereas
+classical exposure error would do the opposite. If exposure error was a
+mixture of these two types, reduced exposure error could produce results
+such as we observed. This does not preclude other explanations. Miller
+et al45 reported a relative risk of 1.76 for cardiovascular deaths per
+10 μg/m3 using within-city exposure, and Puett and colleagues24 used
+exposure from a land-use regression analysis to estimate a hazard ratio
+of 1.26 for all-cause mortality (95% CI = 1.02‒1.54) with each 10-µg/m3
+increase in annual PM2.5 exposure. These estimates are similar to ours
+and higher than in older studies that did not have geographically
+resolved exposure. That suggests the exposure error in cohort studies is
+predominantly classical. The similarly larger estimate in our study
+supports this conclusion, and also extends the results to suburban and
+rural residents. Furthermore, our use of satellite exposure data allowed
+a much larger sample size, with more deaths than in the American Cancer
+Society (ACS) study, the Nurses' Health Study, and the Six City Study
+combined. We confirm the results of the ACS study that people with less
+education have greater susceptibility to particles, although the
+association in the college educated is still substantial, and with a
+relatively narrow CI. Although covariate control is a limitation of this
+analysis, the use of fine-scale geographically resolved exposure is a
+clear advantage over studies such as the first reports from ACS study,
+which used metropolitan areas often encompassing multiple counties, and
+often with only one monitor available to assign exposure. A reanalysis
+of the data by Willis et al,46 restricted to people who live closer to
+the monitor, reported a doubling of the estimate slope per unit
+exposure, suggesting substantial downward bias by classical measurement
+error. These results plus the similarity between our estimates and other
+estimates based on geographically resolved exposure24,47 provides some
+assurance about the generalizability of those estimates. As noted above,
+we see smaller effects in locations more than 20 km from monitors, which
+generally have lower population density. This may reflect different
+composition (more traffic particles in the more densely populated
+regions), although further analysis is needed to confirm this.
+Consistent www.epidem.com  |  559
+
+Epidemiology  •  Volume 24, Number 4, July 2013
+
+Kloog et al
+
+with this, we found that deviations from grid-cell-average PM2.5
+predicted by land-use terms within 50 m of residence had additional
+predictive power for mortality. This also suggests that traffic
+particles are more toxic. A key difference between our analysis and the
+ACS or Nurses Health study is that they oversampled the highly educated,
+undersampled minorities. In general, cohort studies of the long-term
+effects of PM2.5 have been nonrepresentative. Our finding of a
+substantially stronger associations in nonwhites and the less educated
+raises an important environmental justice concern. Another major
+limitation of the present study is the spatial resolution of 10 × 10 km.
+We compensate for this in our analysis of chronic effects by using a
+land-use regression to compute a local PM variable. Better resolution of
+the satellite data would clearly be beneficial and should become
+available. As satellite remote sensing evolves, higher spatial
+resolution data (eg, 3 × 3 km and 1 × 1 km) will further reduce exposure
+error. Our mortality datasets did not include changes in residence,
+which will introduce some exposure misclassification into our study. In
+conclusion, our novel prediction models, making use of satellite data on
+air pollution, perform well in assessing short-term and long-term
+effects of PM2.5 exposure. This enables us to examine entire
+populations, including exurban and rural locations, with better spatial
+resolution and tighter CIs for the time-series estimates. The larger
+effect-size estimates seen in recent cohort studies (using
+geographically resolved chronic exposures) are supported in this
+analysis for a whole population. This modeling approach presents new
+opportunities to study the effects of both short- and long-term particle
+exposures on human health.
+
+ACKNOWLEDGMENT We thank Steven J. Melly, Department of Environmental
+Health, Harvard School of Public Health, Harvard University. REFERENCES
+1. Atkinson RW, Anderson HR, Sunyer J, et al. Acute effects of
+particulate air pollution on respiratory admissions: results from APHEA
+2 project. Air Pollution and Health: a European Approach. Am J Respir
+Crit Care Med. 2001;164(10 Pt 1):1860--1866. 2. Gold DR, Litonjua A,
+Schwartz J, et al. Ambient pollution and heart rate variability.
+Circulation. 2000;101:1267--1273. 3. Le Tertre A, Medina S, Samoli E, et
+al. Short-term effects of particulate air pollution on cardiovascular
+diseases in eight European cities. J Epidemiol Community Health.
+2002;56:773--779. 4. Salvi S, Blomberg A, Rudell B, et al. Acute
+inflammatory responses in the airways and peripheral blood after
+short-term exposure to diesel exhaust in healthy human volunteers. Am J
+Respir Crit Care Med. 1999;159: 702--709. 5. Schwartz J. Air pollution
+and hospital admissions for the elderly in Detroit, Michigan. Am J
+Respir Crit Care Med. 1994;150:648--655. 6. Schwartz J. Air pollution
+and blood markers of cardiovascular risk. Environ Health Perspect.
+2001;109(suppl 3):405--409. 7. Lin S, Munsie JP, Hwang SA, Fitzgerald E,
+Cayo MR. Childhood asthma hospitalization and residential exposure to
+state route traffic. Environ Res. 2002;88:73--81.
+
+560  |  www.epidem.com
+
+#+BEGIN_EXAMPLE
+     8.  Barnett AG, Williams GM, Schwartz J, et al. The effects of air pollution on
+#+END_EXAMPLE
+
+hospitalizations for cardiovascular disease in elderly people in
+Australian and New Zealand cities. Environ Health Perspect.
+2006;114:1018--1023. 9. Wellenius GA, Bateson TF, Mittleman MA, Schwartz
+J. Particulate air pollution and the rate of hospitalization for
+congestive heart failure among medicare beneficiaries in Pittsburgh,
+Pennsylvania. Am J Epidemiol. 2005;161:1030--1036. 10. Peters A,
+Fröhlich M, Döring A, et al. Particulate air pollution is associated
+with an acute phase response in men; results from the MONICAAugsburg
+Study. Eur Heart J. 2001;22:1198--1204. 11. Zanobetti A, Schwartz J,
+Dockery DW. Airborne particles are a risk factor for hospital admissions
+for heart and lung disease. Environ Health Perspect.
+2000;108:1071--1077. 12. Schwartz J, Morris R. Air pollution and
+hospital admissions for cardiovascular disease in Detroit, Michigan. Am
+J Epidemiol. 1995;142: 23--35. 13. Baccarelli A. Breathe deeply into
+your genes!: genetic variants and air pollution effects. Am J Respir
+Crit Care Med. 2009;179:431--432. 14. Zanobetti A, Franklin M, Koutrakis
+P, Schwartz J. Fine particulate air pollution and its components in
+association with cause-specific emergency admissions. Environ Health.
+2009;8:58. 15. Dominici F, Peng RD, Bell ML, et al. Fine particulate air
+pollution and hospital admission for cardiovascular and respiratory
+diseases. JAMA. 2006;295:1127--1134. 16. Sunyer J, Basagaña X.
+Particles, and not gases, are associated with the risk of death in
+patients with chronic obstructive pulmonary disease. Int J Epidemiol.
+2001;30:1138--1140. 17. Schwartz J. Air pollution and hospital
+admissions for respiratory disease. Epidemiology. 1996;7:20--28. 18.
+Dockery D, Pope C, Xu X, et al. An association between air pollution and
+mortality in six US cities. N Engl J Med. 1993;329:1753--1759. 19.
+Franklin M, Zeka A, Schwartz J. Association between PM2. 5 and allcause
+and specific-cause mortality in 27 US communities. J Expo Sci Environ
+Epidemiol. 2006;17:279--287. 20. Pope CA 3rd, Burnett RT, Thun MJ, et
+al. Lung cancer, cardiopulmonary mortality, and long-term exposure to
+fine particulate air pollution. JAMA. 2002;287:1132--1141. 21. Schwartz
+J. Air pollution and daily mortality: a review and meta analysis.
+Environ Res. 1994;64:36--52. 22. Laden F, Schwartz J, Speizer FE,
+Dockery DW. Reduction in fine particulate air pollution and mortality:
+extended follow-up of the Harvard Six Cities study. Am J Respir Crit
+Care Med. 2006;173:667--672. 23. Hart J, Garshick E, Dockery D, Smith T,
+Ryan L, Laden F. Long-term ambient multi-pollutant exposures and
+mortality. Am J Respir Crit Care Med. 2011;183:73--78. 24. Puett RC,
+Hart JE, Yanosky JD, et al. Chronic fine and coarse particulate
+exposure, mortality, and coronary heart disease in the Nurses' Health
+Study. Environ Health Perspect. 2009;117:1697--1701. 25. Schwartz J.
+Harvesting and long term exposure effects in the relation between air
+pollution and mortality. Am J Epidemiol. 2000;151:440--448. 26. Jerrett
+M, Burnett RT, Ma R, et al. Spatial analysis of air pollution and
+mortality in Los Angeles. Epidemiology. 2005;16:727--736. 27.
+Katsouyanni K, Touloumi G, Spix C, et al. Short-term effects of ambient
+sulphur dioxide and particulate matter on mortality in 12 European
+cities: results from time series data from the APHEA project. Air
+Pollution and Health: a European Approach. BMJ. 1997;314:1658--1663. 28.
+Schwartz J, Dockery DW. Particulate air pollution and daily mortality in
+Steubenville, Ohio. Am J Epidemiol. 1992;135:12--19; discussion 20. 29.
+Zeger SL, Thomas D, Dominici F, et al. Exposure measurement error in
+time-series studies of air pollution: concepts and consequences. Environ
+Health Perspect. 2000;108:419--426. 30. Naess Ø, Nafstad P, Aamodt G,
+Claussen B, Rosland P. Relation between concentration of air pollution
+and cause-specific mortality: four-year exposures to nitrogen dioxide
+and particulate matter pollutants in 470 neighborhoods in Oslo, Norway.
+Am J Epidemiol. 2007;165:435--443. 31. Gan WQ, Koehoorn M, Davies HW,
+Demers PA, Tamburic L, Brauer M. Long-term exposure to traffic-related
+air pollution and the risk of coronary heart disease hospitalization and
+mortality. Environ Health Perspect. 2011;119:501--507. Available at:
+http://www.ncbi.nlm.nih.gov/pmc/articles/PMC3080932/ Accessed 10 October
+2012. 32. Crouse DL, Peters PA, van Donkelaar A, et al. Risk of
+nonaccidental and cardiovascular mortality in relation to long-term
+exposure to low concen-
+
+© 2013 Lippincott Williams & Wilkins
+
+Epidemiology  •  Volume 24, Number 4, July 2013
+
+trations of fine particulate matter: a Canadian National-Level Cohort
+Study. Environ Health Perspect. 2012;120:708--714. Available at:
+http://www. ncbi.nlm.nih.gov/pmc/articles/PMC3346774/ Accessed 10
+October 2012. 33. Künzli N. Unifying susceptibility, exposure, and time:
+discussion of unifying analytic approaches and future directions. J
+Toxicol Environ Health A. 2005;68:1263--1271. Available at:
+http://www.tandfonline.com/doi/ abs/10.1080/15287390590936102 Accessed
+10 November 2012. 34. Burnett RT, Dewanji A, Dominici F, Goldberg MS,
+Cohen A, Krewski D. On the relationship between time-series studies,
+dynamic population studies, and estimating loss of life due to
+short-term exposure to environmental risks. Environ Health Perspect.
+2003;111:1170--1174. Copyright © 2003 The National Institute of
+Environmental Health Sciences (NIEHS). Available at:
+http://www.jstor.org/stable/3435505 Accessed 10 October 2012. 35. Kloog
+I, Koutrakis P, Coull BA, Lee HJ, Schwartz J. Assessing temporally and
+spatially resolved PM2. 5exposures for epidemiological studies using
+satellite aerosol optical depth measurements. Atmos Environ.
+2011;45:6267--6275. 36. Schwartz J. Is the association of airborne
+particles with daily deaths confounded by gaseous air pollutants? An
+approach to control by matching. Environ Health Perspect.
+2004;112:557--561. 37. Schwartz J. The effects of particulate air
+pollution on daily deaths: a multicity case crossover analysis. Occup
+Environ Med. 2004;61:956--961. 38. National Climatic Data Center. The
+National Climatic Data Center
+
+Data Inventories. Asheville, NC: NOAA National Climatic Data Center
+(NCDC); 2010.
+
+© 2013 Lippincott Williams & Wilkins
+
+Mortality and Long- and Short-Term Exposure to PM2.5
+
+#+BEGIN_EXAMPLE
+    39.  Census US. U.S. Census of Population and Housing. Washington, DC:
+#+END_EXAMPLE
+
+U.S. Dept. of Commerce; 2000. 40. Census US. Current Population Survey,
+2010 Annual Social and Economic Supplement. Government Printing Office;
+2011. 41. Schwartz J, Dockery DW, Neas LM. Is daily mortality associated
+specifically with fine particles? J Air Waste Manag Assoc.
+1996;46:927--939. 42. Lepeule J, Laden F, Dockery D, Schwartz J. Chronic
+exposure to fine particles and mortality: an extended follow-up of the
+Harvard Six Cities study from 1974 to 2009. Environ Health Perspect.
+2012;120:965--970. 43. Schwartz J, Coull B, Laden F, Ryan L. The effect
+of dose and timing of dose on the association between airborne particles
+and survival. Environ Health Perspect. 2008;116:64--69. 44. Zanobetti A,
+Schwartz J. The effect of fine and coarse particulate air pollution on
+mortality: a national analysis. Environ Health Perspect.
+2009;117:898--903. 45. Miller KA, Siscovick DS, Sheppard L, et al.
+Long-term exposure to air pollution and incidence of cardiovascular
+events in women. N Engl J Med. 2007;356:447--458. 46. Willis A, Jerrett
+M, Burnett RT, Krewski D. The association between sulfate air pollution
+and mortality at the county scale: an exploration of the impact of scale
+on a long-term exposure study. J Toxicol Environ Health A.
+2003;66:1605--1624. 47. Miller KA, Siscovick DS, Sheppard L, et al.
+Long-term exposure to air pollution and incidence of cardiovascular
+events in women. N Engl J Med. 2007;356:447--458.
+
+www.epidem.com  |  561
+
+

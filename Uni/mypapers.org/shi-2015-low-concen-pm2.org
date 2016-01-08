@@ -1,0 +1,964 @@
+ehp
+
+http://www.ehponline.org
+
+ENVIRONMENTAL HEALTH PERSPECTIVES
+
+Low-Concentration PM2.5 and Mortality: Estimating Acute and Chronic
+Effects in a Population-Based Study Liuhua Shi, Antonella Zanobetti,
+Itai Kloog, Brent A. Coull, Petros Koutrakis, Steven J. Melly, and Joel
+D. Schwartz http://dx.doi.org/10.1289/ehp.1409111 Received: 22 August
+2014 Accepted: 13 May 2015 Advance Publication: 3 June 2015
+
+This article will be available in a 508-conformant form upon final
+publication. If you require a 508-conformant version before then, please
+contact ehp508@niehs.nih.gov. Our staff will work with you to assess and
+meet your accessibility needs within 3 working days.
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+Low-Concentration PM2.5 and Mortality: Estimating Acute and Chronic
+Effects in a Population-Based Study Liuhua Shi1, Antonella Zanobetti1,
+Itai Kloog1,2, Brent A. Coull3, Petros Koutrakis1, Steven J. Melly1, and
+Joel D. Schwartz1
+
+1
+
+Department of Environmental Health, Harvard T.H. Chan School of Public
+Health, Boston,
+
+Massachusetts, USA; 2Department of Geography and Environmental
+Development, Ben-Gurion University of the Negev, Beer Sheva, Israel;
+3Department of Biostatistics, Harvard T.H. Chan School of Public Health,
+Boston, Massachusetts, USA
+
+Address correspondence to Liuhua Shi, Department of Environmental
+Health, Harvard T.H. Chan School of Public Health, Landmark Center, 401
+Park Drive, Boston, MA 02215 USA. Telephone: 339-221-8486. E-mail:
+lis678@mail.harvard.edu Short title: Low-concentration PM2.5 and
+mortality Acknowledgments: This study was funded by NIEHS ES000002, and
+by EPA grant RD83479801. The authors thank Pengfei Liu and Yan Wang for
+fruitful discussions. Disclaimer: If captured, the Administrator of EPA
+will deny all knowledge of our existence. Competing financial interests:
+The authors have no competing financial interests.
+
+1
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+Abstract Background: Both short- and long-term exposures to fine
+particulate matter (PM2.5) are associated with mortality. However,
+whether the associations exist below the new EPA standards (12 µg/m3 of
+annual average PM2.5, 35 µg/m3 daily) is unclear. In addition, it is not
+clear whether results of previous time series studies (fit in larger
+cities) and cohort studies (fit in convenience samples) are
+generalizable to the general population. Objectives: To estimate the
+effects of low-concentration PM2.5 on mortality. Methods: High
+resolution (1 × 1 km) daily PM2.5 predictions, derived from satellite
+aerosol optical depth retrievals, were employed. Poisson regressions
+were applied to the Medicare population (age>=65) in New England to
+simultaneously estimate the acute and chronic effects, with mutual
+adjustment for short- and long-term exposure, as well as area-based
+confounders. Models were also restricted to annual concentrations below
+10 µg/m3 or daily concentrations below 30 µg/m3. Results: PM2.5 was
+associated with increased mortality. In the cohort, 2.14% (95% CI: 1.38,
+2.89%) and 7.52% (95% CI: 1.95, 13.40%) increases were estimated for
+each 10 µg/m3 increase in short- (2 day) and long-term (1 year)
+exposures, respectively. The associations still held for analyses
+restricted to low-concentration PM2.5 exposures. The corresponding
+estimates were 2.14% (95% CI: 1.34, 2.95%) and 9.28% (95% CI: 0.76,
+18.52%). Penalized spline models of long-term exposure indicated a
+higher slope for mortality in association with exposures above versus
+below 6 µg/m3. In contrast, the association between short-term exposure
+and mortality appeared to be linear across the entire exposure
+distribution.
+
+2
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+Conclusions: Using a mutually adjusted model, we estimated significant
+acute and chronic effects of PM2.5 exposures below current EPA
+standards. These findings suggest that improving air quality below
+current standards may benefit public health.
+
+3
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+Introduction Many studies have found association between fine
+particulate matter (PM with aerodynamic diameter < 2.5 µm [PM2.5]) and
+increased mortality (Dockery et al. 1993; Schwartz 1994; Pope III et al.
+2002; Franklin et al. 2007; Zanobetti and Schwartz 2009). Biological
+evidence has been established for plausible mechanisms between PM2.5 and
+mortality, such as increased risk of ventricular arrhythmia and
+thrombotic processes, increased system inflammation and oxidative
+stress, increased blood pressure, decreased plaque stability, and lower
+lung function, among others (Downs et al. 2007; Gauderman et al. 2004;
+Suwa et al. 2002; Brook et al. 2009; Gurgueira et al. 2002; Yue et al.
+2007). Based on evidence from epidemiological and toxicological studies
+(Chen and Nadziejko 2005; Furuyama et al. 2006; Ohtoshi et al. 1998),
+National Ambient Air Quality Standards (NAAQS) were implemented for fine
+particulate matter. For example, U.S. Environmental Protection Agency
+(EPA) revised the fine particle NAAQS in the years of 1997, 2006, and
+2012, in order to protect public health (EPA 1997; EPA 2006; EPA 2013).
+Further changes in the standards require additional studies to elucidate
+whether health effects occur at levels below current annual and daily
+EPA NAAQS of 12 and 35 µg/m3, respectively. The Clean Air Act requires
+EPA to review national air quality standards every five years to
+determine whether they should be retained or revised (United States Code
+Title 42, Chapter 85), thus whether the relationship continues below the
+current standards is of great interest and importance. Previous studies
+have generally focused on either long-term (Hart et al. 2011; Puett et
+al. 2009; Schwartz 2000; Jerrett et al. 2005) or short-term (Schwartz
+and Dockery 1992; Katsouyanni et al. 1997; Dominici et al. 2006; Samoli
+et al. 2008) exposures across the entire range of PM2.5 concentration.
+In the case of time series analyses of short-term exposures, the
+
+4
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+need to ensure the relevance of the monitoring data and sufficient
+population for power has limited analyses to larger cities, and hence
+exurbs, smaller cities, and rural areas are not generally represented in
+the literature. This may compromise the generalizability of the results.
+In addition, there is spatial variability in PM2.5 concentrations within
+cities that time series studies generally have not taken into account,
+introducing exposure measurement error (Lepeule et al. 2012; Laden et
+al. 2006). Chronic effects studies began using comparisons across cities
+of mortality experiences of a cohort living in various communities and
+the monitored air pollutant concentrations in those communities (Dockery
+et al. 1993; Pope et al. 1995). Again, these suffered from exposure
+error due to failure to capture within city spatial variability in
+exposure. Since the geographic exposure gradient is the exposure
+contrast in these studies, the failure to capture within city contrasts
+leads to classical measurement error, with expected downward bias.
+Studies with e.g., land use regression estimates of exposure have
+generally reported larger effect sizes (Puett et al. 2009; Miller et al.
+2007). Previous cohort studies have not controlled for the acute effects
+of particles when estimating chronic effects, raising the question of
+whether there are independent chronic effects that represent more than
+the cumulative effects of acute responses. In general, existing study
+cohorts are not representative of the population. For example, the
+American Cancer Society (ACS) cohort has higher education than the US
+population as a whole (Stellman and Garfinkel 1986). Hence, there have
+been few population-based cohort studies conducted until recently (Kloog
+et al. 2013). Several time series studies examined the
+concentration-response relationship between PM2.5 and mortality below
+concentrations of 100 µg/m3. They generally report linear concentration-
+
+5
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+response (Samoli et al. 2008; Schwartz and Zanobetti 2000). However,
+there have been few studies focusing on exposures below the current
+daily EPA standard of 35 µg/m3. More studies have examined the shape of
+the concentration-response curve for long-term exposure versus
+short-term exposure, but they have mostly not covered population based
+cohorts, or included very low exposures (Schwartz et al. 2008; Crouse et
+al. 2012). We recently presented a new hybrid method of assessing
+temporally- and spatially-resolved PM2.5 exposure for epidemiological
+studies by incorporating 1 × 1 km resolution satelliteretrieved Aerosol
+optical Depth (AOD) measurements, combined with traditional land use
+terms, meteorological variables and their interactions (Kloog et al.
+2014a). This approach allows for predicting daily PM2.5 concentrations
+at a 1 × 1 km spatial resolution throughout the New England area. We
+also validated our models performance in rural areas: Ten-fold
+crossvalidation of our model in rural areas (using the IMPROVE stations)
+resulted in a CV R2 of 0.92. Further details have been published (Kloog
+et al. 2014a). The present study aims to simultaneously estimate acute
+and chronic health effects of PM2.5, in a population-based Medicare
+cohort (age > 65) encompassing the New England region. It uses high
+spatial resolution exposure estimates based on satellite measurements
+that are available across the region and not just in limited locations.
+To make this study relevant to future assessments of current EPA
+standards, we repeated the analysis after restricting the data to
+longterm exposures (365-day moving average) below 10 µg/m3, and repeated
+the time series analysis of short-term exposures after restricting data
+to two day average exposures below 30 µg/m3.
+
+6
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+Methods Study domain: The spatial domain of our study included the New
+England area, comprising the states of Connecticut, Maine,
+Massachusetts, New Hampshire, Rhode Island and Vermont (Figure 1A).
+Exposure data: Novel models for predicting daily PM2.5 were previously
+reported incorporating AOD and land use data for the New England region
+(Kloog et al. 2011). Previous papers have shown that using actual
+physical measurements in our prediction models improves predictive
+accuracy over comparable land use or spatial smoothing models (Kloog et
+al. 2011). With AOD retrieved by Multi-Angle Implementation of
+Atmospheric Correction (MAIAC) algorithm, a similar approach was applied
+for estimating daily PM2.5 exposures in New England at a spatial
+resolution of 1 × 1 km (Kloog et al. 2014a). In this study, the same
+PM2.5 exposure predictions were employed. In brief, we calibrated the
+AOD-PM2.5 relationship on each day during the study period (2003-2008)
+using data from grid cells with both ground PM2.5 monitors and AOD
+measurements (stage 1), and used inverse probability weighting to
+address selection bias due to non-random missingness patterns in the AOD
+measurements. We then used the AOD-PM2.5 relationship to predict PM2.5
+concentrations for grid cells that lacked monitors but had available AOD
+measurement data (stage 2). Finally, we used a generalized additive
+mixed model (GAMM) with spatial smoothing and a random intercept for
+each 1 × 1 km grid cell to impute data for grid cell/days when AOD
+measurements were not available (stage 3). The performance of the
+estimated PM2.5 was validated by ten-fold cross-validation. High
+out-of-sample R2 (R2=0.89, year to year variation 0.88 - 0.90 for the
+years 2003-2008) was found for days with available AOD data. Excellent
+performance held even in cells/days with no available AOD (R2=0.89, year
+
+7
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+to year variation 0.87 - 0.91 for the years 2003-2008). The 1 km model
+has better spatial (0.87) and temporal (0.87) out of sample R2 than the
+previous 10 km model (0.78 and 0.84 respectively). Details of the PM2.5
+prediction models are found in Kloog et al (Kloog et al. 2014a). Figure
+1A shows an example of mean PM2.5 concentrations in 2004 at a 1 × 1 km
+spatial resolution across New England. By averaging our estimated daily
+exposures at each location we generated long-term exposures. Figure 1B
+(a subset of the study area) shows that spatial variability exists even
+for daily data, and is not identical to the long-term pattern shown in
+Figure 1A. That is, there is space-time variation in the PM2.5 exposure
+captured in this analysis, but not in previous time series analyses.
+Because the deaths were coded at the ZIP code level, both long- and
+short-term predictions were matched to ZIP codes by linking the ZIP code
+centroid to nearest PM2.5 grid, using ArcGIS (ESRI, Redlines, CA) and
+SAS (SAS Institute, Cary, NC). Traditionally, studies of the acute air
+pollution effects have controlled for temperature using values taken
+from the nearest airport. This approach is not feasible for the entire
+region, since too many residences are distant from airports. In
+addition, there is spatio-temporal variation in temperature as well. We
+have used similar models of satellite data to fit models for temperature
+in New England on a 1 km temperature data estimated from surface
+temperature measured by satellites (Kloog et al. 2014b). To our
+knowledge, such fine control for temperature has not previously been
+used in air pollution epidemiology. Mortality data: Individual mortality
+records were obtained from the US Medicare program for all residents
+aged 65 and older for all available years during 2003-2008 (CMS). The
+MEDICARE cohort was used because of availability of ZIP code of
+residence data, whereas
+
+8
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+National Center for Health Statistics mortality data is only available
+on a county level. Additionally, prior studies found that elderly people
+are more susceptible to the effects of particulate matter (Pope 3rd
+2000). The Medicare beneficiary denominator file from the Centers for
+Medicare and Medicaid services (CMS) lists all beneficiaries enrolled in
+the Medicare feefor-service (FFS), and contains information on
+beneficiaries' eligibility and enrollment in Medicare, and the date of
+death (CMS). The Medicare Provider Analysis and Review (MEDPAR)
+inpatient data includes information on age, gender, race, ZIP code of
+residence, and one record for each hospital admission (CMS). Daily
+mortality was first aggregated by ZIP code, and then matched with the
+corresponding PM2.5 exposure. We summarized the mortality data by ZIP
+code and day because that is the finest resolution of address we can
+obtain. Since the mortality datasets did not include changes of
+residence, we had to assume that the subjects lived at their current
+address over the study period. Covariates: We used daily 1 km
+temperature data estimated from surface temperature measured by
+satellites (Kloog et al. 2014b). All socio-economic variables were
+obtained through the U.S. Census Bureau 2000 Census Summary File 3,
+which includes social, economic, and housing characteristics [United
+States Census Bureau (USCB) 2000]. ZIP code tabulation area level
+socio-economic variables, including race, education, and median
+household income, were used. In addition, county-level percent of people
+who currently smoke every day from the CDC Behavioral Risk Factor
+Surveillance survey for the entire country was adjusted as well (CDC
+2013). Dummy variables were used to control for day of the week.
+Statistical Models: Conventionally, the acute effects of air pollution
+are estimated by Poisson log-linear models and the chronic effects are
+estimated by Cox proportional hazard models (Laden et al. 2006; Kloog et
+al. 2013). Laird and Oliver pointed out the equivalence of
+
+9
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+the likelihood of a proportional hazard model with piecewise constant
+hazard for each year of follow-up and a Poisson regression with a dummy
+variable for each year of follow-up (Laird and Olivier 1981). We have
+taken advantage of this to generalize from dummy variables for each year
+to a spline of time to represent the baseline hazard, and to aggregate
+subjects into counts per person time at risk and obtained a mixed
+Poisson regression model (Kloog et al. 2012). This approach allows one
+to model the rate of death as a function of both long- and short-term
+exposures simultaneously. By doing so, we achieve the equivalence of a
+separate time series analysis for each ZIP code, greatly reducing the
+exposure error in that part of the model, while simultaneously
+conducting a survival analysis on the participants, and also are able to
+estimate the independent effects of both exposures. Most time series
+studies have reported stronger associations with acute exposures when
+exposures are defined as mean PM2.5 on the day of death and the previous
+day (lag01), compared with mean PM2.5 on the current day only, or for
+exposures with longer lags (Schwartz et al. 1996; Schwartz 2004). We
+used the lag01 average for our main analysis, but performed a
+sensitivity analysis on that choice. Long-term exposure was calculated
+as the 365-day moving average ending on date of death so that our
+results were comparable with previous studies (Lepeule et al. 2012;
+Schwartz et al. 2008). Short-term exposure was defined as the difference
+between the 2day average and the long-term average, ensuring the acute
+and chronic effects are independent. We subtracted the long-term average
+from the short-term to avoid collinearity issues, and to ensure that
+differences between ZIP codes in PM2.5 at a given time do not contribute
+to the shortterm effect estimate. Hence, the short-term effect cannot be
+confounded by variables that differ across ZIP codes.
+
+10
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+Specifically, we fit a Poisson survival analysis with a logarithmic link
+function and a log (population) offset term and modeled the expected
+daily death counts (µit) in the ith ZIP code on the tth day as follows:
+log(µit) = λi + β1 PMit + β2 ∆PMit + λ(t) + temporal covariates +
+spatial covariates + offset
+
+[1]
+
+Where λi is a random intercept for each ZIP code, PMit is the 365-day
+moving average ending on day t in ZIP code i, ∆PMit is the deviation of
+the 2-day average from its long-term average (PMit) in ZIP code i, λ(t)
+is a smooth function of time, temporal covariates are temperature and
+day of the week, spatial covariates are socio-economic factors defined
+at ZIP code level (percent of people without high school education,
+percent of white people, median household income) and smoking data at
+the county level. Additionally, a Quasipoisson model was used to control
+for possible overdispersion (Ver Hoef and Boveng 2007). λ(t) was
+estimated with a natural cubic spline with 5 degrees of freedom (df) per
+year, to control for time and season trends. The specific temporal and
+spatial covariates we used were: a natural cubic spline for temperature
+with 3 df in total; a categorical variable for day of the week; linear
+variables for percent of people without high school education, percent
+of white people, median household income, and percent of people who
+currently smoke every day. The number of deaths per ZIP code area over
+the study period (2003-2008) averaged 319 with a standard deviation of
+430. Since the outcome is counts, we cannot adjust for age and sex as in
+a Cox model. Instead we adjust for variables that vary by ZIP code. The
+analyses were also repeated without mutual adjustment for short- and
+long-term PM2.5. We modeled the association between all-cause mortality
+and PM2.5 at low doses in which the person-time at risk in each year of
+follow-up in each ZIP code was used as the offsets. We also
+
+11
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+conducted effect modification by population size, by choosing the median
+(4,628) of ZIP code level total population as the cutoff between urban
+and rural areas. Estimating the effects of low-level PM2.5: For full
+cohort analyses with 10,938,852 personyears of follow-up, all observed
+deaths were used. To estimate effects at low levels of exposure we
+carried out restricted analyses; we conducted one analysis restricted to
+annual exposures below 10 µg/m3, below the current annual PM2.5 NAAQS of
+12 µg/m3; and another restricted to observations with short-term
+exposure below 30 µg/m, below the current daily PM2.5 NAAQS of 35 µg/m3.
+After these exclusions, the chronic analyses were restricted to 268,050
+deaths out of 551,024 deaths in total, and the acute analyses to 422,637
+deaths. Assessing the dose-response relationship: For both the acute and
+chronic analyses, we fit penalized regression splines in the restricted
+analyses to estimate the shape of the dose-response below current EPA
+standards. The degrees of freedom of the penalized splines for PM2.5 was
+estimated by generalized cross validation (GCV). Results Table 1
+presents a summary of the predicted exposures for both the short-and
+long-term PM2.5 exposure across all grid cells in the study area. Table
+2 presents the estimated percent change in all-cause mortality with 95%
+CIs for a 10 µg/m3 increase for both short- and long-term PM2.5 in the
+restricted and full cohort. For the restricted population, we found an
+estimated 9.28% increase in mortality (95% CI: 0.76, 18.52%) for every
+10 µg/m3 increase in long-term PM2.5 exposure. For every 10 µg/m3
+increase in shortterm PM2.5 exposure, a 2.14% increase in mortality (95%
+CI: 1.34, 2.95%) was observed. For long-term exposure, the effect
+estimates were smaller when higher pollution days were included
+
+12
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+(7.52%; 95% CI: 1.95, 13.40%), suggesting larger slopes between
+low-concentration long-term PM2.5 and mortality. Without mutual
+adjustment, lower estimates were found for both acute and chronic
+effects, compared to those with mutual adjustment. In full cohort
+analyses, 2.08% (95% CI: 1.32, 2.84%) and 6.46% (95% CI: 0.93, 12.30%)
+increase in mortality was found for each 10 µg/m3 increase in short- and
+long-term PM2.5, respectively. In restricted analyses, the corresponding
+effect estimates were 2.07% (95% CI: 1.27, 2.89%) and 7.16% (95% CI:
+-1.23, 16.27%), respectively. Our results were robust to the choice of
+lag period for acute exposure. We analyzed other averaging periods
+(Figure 2): for example, lag0 (day of death exposure) and lag04 (a
+moving average of day of death exposure and previous 4-day exposure).
+For the acute effects, we found a significant but smaller association
+for lag0 PM2.5 (1.71%; 95% CI: 1.09, 2.34%) or lag04 PM2.5 (1.76%; 95%
+CI: 0.72, 2.81%) compared to lag01 analysis. The lag period used for
+short-term exposure did not affect estimates of chronic effects. For
+example, estimated increases in mortality with a 10 µg/m3 increase in
+long-term PM2.5 were 7.35% (95% CI: 1.79, 13.21%) and 7.25% (95% CI:
+1.69, 13.12%) when short-term PM2.5 was classified using lag0 or lag04,
+respectively. We also examined effect modification by population size.
+In the full cohort, a significant interaction for chronic effects was
+found (p < 0.01), with a higher effect of 12.56% (95% CI: 5.71, 19.85%)
+in urban areas compared to 3.21% (95% CI: -2.92, 9.72%) in rural areas.
+Such a significant interaction, however, was not observed in the
+restricted analysis (p = 0.16). Estimates were 14.27% (95% CI: 3.19,
+26.53%) and 5.48% (95% CI: -4.21, 16.16%) in urban and rural areas,
+respectively. For the short-term exposure, population size did not
+modify the acute effects neither in full cohort nor in restricted
+analyses (p = 0.74 and 0.46, respectively).
+
+13
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+In our penalized spline model for long-term exposure below the cutoff of
+10 µg/m3 (Figure 3a), we found a non-linear relationship between
+long-term PM2.5 and mortality. The association was linear with evidence
+of a lower slope below 6 µg/m3. However a large confidence interval was
+observed; hence we could not be confident whether the slope of the
+dose-response curve for long-term exposures below 6 µg/m3 changed. When
+examining the shape of the dose-response for chronic effects, both a
+linear term for short-term exposure (the difference) and a penalized
+spline for long-term average exposure were included in the model,
+resulting in a penalized spline with a df of 1.71. In contrast, we only
+included the 2-day average in the penalized spline model of acute
+effects, to provide a more interpretable dose-response relationship
+(Figure 3b). Results of this analysis indicated a linear association
+across the exposure distribution, but we could not be certain about the
+shape of slope for acute effects below 3 µg/m3. Discussion Applying the
+predicted daily PM2.5 with 1 km spatial resolution from our novel hybrid
+models, we observed that both short- and long-term PM2.5 exposure were
+significantly associated with all-cause mortality among residents aged
+65 and above in New England, even when restricted to ZIP codes and times
+with annual exposures below 10 µg/m3 or with daily exposure below 30
+µg/m3. Hence the association of particle exposure with mortality exists
+for concentrations below current US, WHO (10 µg/m3 of annual average
+PM2.5, 25 µg/m3 daily) or EU (25 µg/m3 of annual average PM2.5)
+standards (WHO; EU). Notably, this analysis includes all areas in New
+England and all Medicare enrollees aged 65 and above, and provides
+chronic effect estimates that are independent of acute effects. Based on
+a penalized spline model, the positive dose-response relationship
+between chronic exposure and mortality appears to be linear for PM2.5
+concentrations down to 6 µg/m3, with a positive (though weaker and less
+precise) dose-
+
+14
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+response slope continuing below this level. This lack of power is likely
+due to the small population exposed in the areas with annual PM2.5 below
+6 µg/m3, which were quite rural. For the acute effect, we found a 2.14%
+(95% CI: 1.38 to 2.89%) increase in all-cause mortality per 10 µg/m3
+increment in PM2.5 for the full cohort of our study, which is higher
+than the effect size of most studies using city averages from monitors.
+For instance, in a US national study by Zanobetti and Schwartz
+(Zanobetti and Schwartz 2009), the effect size was found to be 0.98%
+(95% CI: 0.75, 1.22%). Similar results have also been found in a review
+study, where researchers have demonstrated the overall summary estimate
+was 1.04% (95% CI: 0.52, 1.56%) per 10 µg/m3 increment in PM2.5
+(Atkinson et al. 2014). Most previous studies had exposure data with
+lower spatial resolution (citywide average, not ZIP code), which
+introduces exposure measurement error and likely results in downward
+bias in estimates; these results (for the acute effect) are consistent
+with such a phenomena. Our restricted study estimated a 2.14% (95% CI:
+1.34, 2.95%) increase in all-cause mortality per 10 µg/m3 increment in
+PM2.5, close to the effect size of the full cohort study, possibly
+because the sample size of the restricted study for acute effect is
+close to that of the full cohort. That is, the EPA daily standard (35
+µg/m3) was almost never exceeded in this study. In addition, lower
+effect estimates for short-term exposure were observed with mutual
+adjustment for both full cohort and restricted analyses. This finding
+has important implications for the interpretation of previous studies
+without such mutual adjustment. For the chronic effect, the effect
+estimate in our full cohort study is consistent with previous studies
+with comparable sample sizes (Lepeule et al. 2012; Laden et al. 2006;
+Hoek et al. 2013). For example, ACS study comprised of 500,000 adults
+from 51 US cities, reported a 6% (95% CI: 2, 11%) increase in all-cause
+mortality for 10 µg/m3 increment in PM2.5 (Pope III et al. 2002). A
+study of 13.2 million elderly Medicare recipients across the east USA
+found a 6.8% (95% CI:
+
+15
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+4.9, 8.7%) increase in all-cause mortality for 10 µg/m3 increment in
+PM2.5 (Zeger et al. 2008). When we restricted our analysis to annual
+concentrations below 10 µg/m3, a larger slope of 9.28% (95% CI: 0.76,
+18.52%) increase per 10 µg/m3 was observed. Our findings suggest a
+steeper slope at low concentrations among those aged 65 years and older.
+This may also reflect particle composition. The sources and composition
+of the particles may differ on lower pollution days from that seen on
+high pollution days, which are probably more impacted by secondary
+aerosols. Compared to the full cohort, the effect estimate of the
+restricted analysis was closer to the estimates in the published
+literature reporting higher slopes, such as the ESCAPE study, the Six
+City study and Women's Health Initiative study (Beelen et al. 2014;
+Puett et al. 2008). Lower effect estimates were also observed for
+chronic effect without mutual adjustment. To the best of our knowledge,
+this study is the first of its kind restricting the exposure and
+exploring the dose-response relationship between PM2.5 and mortality
+below the current EPA standards (12 µg/m3 of annual average PM2.5, 35
+µg/m3 daily). Moreover, the use of the MEDICARE cohort means we are
+studying the entire population of Medicare enrollees over 65, and not a
+convenience sample. In addition, temperature was also controlled on the
+1 × 1 km fine geographic scale. The acute and chronic effects for
+analyses restricted to low exposure of PM2.5 are similar or even higher
+compared to those of the full cohort analyses. These results indicate
+that the adverse health effects of PM2.5 are at least retained, if not
+strengthened, at low levels of exposure. However, the findings from the
+penalized spline model do not support a stronger association at the
+lowest range of PM2.5 concentrations. This finding provides
+epidemiological evidence for the reevaluation of EPA guidelines and
+standards, though more evidence are needed to confirm the association
+below 6 µg/m3.
+
+16
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+The Poisson survival analysis applied in this study provides new
+opportunities in assessing acute and chronic effects simultaneously. As
+shown in our analysis, the chronic effect estimate was much larger than
+the acute effect estimate, after controlling for the acute estimate,
+indicating there was chronic effect of PM2.5, which cannot be solely
+explained by the short-term exposure. Another key component of this
+study is that the application of high spatial- (1 × 1 km) and temporal-
+(daily) resolution of PM2.5 concentrations to some extents reduced
+exposure error. The out-of-sample R2 is higher than that for the
+predictions with 10 × 10 km spatial resolution. A potential limitation
+is the limited availability of individual level confounders, such as
+smoking status, which could bias the health effect estimates. We were
+able to control for ZIP code level education, median income, race and
+county level smoking data. However, a study by Brochu et al. reported
+that census tract level socioeconomic indicators were uncorrelated with
+PM2.5 on the subregional and local scale, providing some assurance that
+confounding by SES may not be much of an issue (Brochu et al. 2011).
+These results suggest that those variables may not confound the
+association, but the inability to control for them remains an issue.
+Another limitation is that we did not examine other pollutants such as
+O3 or NO2 due to lack of data at the same spatial level as PM2.5. In
+conclusion, the acute and chronic effects of low-concentration PM2.5
+were examined for Medicare population using a comprehensive exposure
+dataset from a satellite-based prediction model. Our findings show that
+both short- and long-term exposure to PM2.5 were associated with
+all-cause mortality, even for exposure levels not exceeding the newly
+revised EPA standards, suggesting that adverse health effects occur at
+low levels of fine particles. The policy implication is that improving
+the air quality below the current EPA standards can still yield health
+benefit.
+
+17
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+References Atkinson R, Kang S, Anderson H, Mills I, Walton H. 2014.
+Epidemiological time series studies of pm2. 5 and daily mortality and
+hospital admissions: A systematic review and metaanalysis. Thorax:
+thoraxjnl-2013-204492. Beelen R, Raaschou-Nielsen O, Stafoggia M,
+Andersen ZJ, Weinmayr G, Hoffmann B, et al. 2014. Effects of long-term
+exposure to air pollution on natural-cause mortality: An analysis of 22
+european cohorts within the multicentre ESCAPE project. Lancet
+383:785-795. Brochu PJ, Yanosky JD, Paciorek CJ, Schwartz J, Chen JT,
+Herrick RF, et al. 2011. Particulate air pollution and socioeconomic
+position in rural and urban areas of the northeastern united states. Am
+J Public Health 101 (Suppl 1):S224-S230. Brook RD, Urch B, Dvonch JT,
+Bard RL, Speck M, Keeler G, et al. 2009. Insights into the mechanisms
+and mediators of the effects of air pollution exposure on blood pressure
+and vascular function in healthy humans. Hypertension 54:659-667. CDC
+(Centers for Disease Control and Prevention). 2013. Behavioral risk
+factor surveillance system. Available:
+http://www.cdc.gov/brfss/annual\_data/annual\_2013.html [assessed 15
+November 2013]. Chen LC, Nadziejko C. 2005. Effects of subchronic
+exposures to concentrated ambient particles (caps) in mice: V. Caps
+exacerbate aortic plaque development in hyperlipidemic mice. Inhal
+toxicol 17:217-224. CMS (Centers for Medicare & Medicaid Services).
+Medicare Program. Available:
+http://www.cms.gov/Medicare/Medicare-General-Information/MedicareGenInfo/index.html
+[assessed 15 November2013]. CMS (Centers for Medicare & Medicaid
+Services). Denominator File. Available:
+http://www.cms.gov/Research-Statistics-Data-and-Systems/Files-forOrder/IdentifiableDataFiles/DenominatorFile.html
+[assessed 15 November2013]. CMS (Centers for Medicare and Medicaid
+Services). Medicare Provider Analysis and Review (MEDPAR) File.
+Available:
+http://www.cms.gov/Research-Statistics-Data-andSystems/Files-for-Order/IdentifiableDataFiles/MedicareProviderAnalysisandReviewFile.html
+[assessed 15 November2013]. United States Code Title 42, Chapter 85. Air
+pollution prevention and control. Available:
+https://www.law.cornell.edu/uscode/text/42 [accessed 9 December 2013]
+
+18
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+Crouse DL, Peters PA, van Donkelaar A, Goldberg MS, Villeneuve PJ, Brion
+O, et al. 2012. Risk of nonaccidental and cardiovascular mortality in
+relation to long-term exposure to low concentrations of fine particulate
+matter: A canadian national-level cohort study. Environ Health Persp
+120:708-714. Dockery DW, Pope CA, Xu X, Spengler JD, Ware JH, Fay ME, et
+al. 1993. An association between air pollution and mortality in six us
+cities. New Engl J Med 329:1753-1759. Dominici F, Peng RD, Bell ML, Pham
+L, McDermott A, Zeger SL, et al. 2006. Fine particulate air pollution
+and hospital admission for cardiovascular and respiratory diseases. Jama
+295:1127-1134. EPA (Environmental Protection Agency). 1997. 40 CFR part
+50 (National Ambient Air Quality Standards for Particulate Matter; Final
+Rules). Available:
+http://www.epa.gov/ttn/oarpg/t1/fr\_notices/pmnaaqs.pdf [accessed 18
+July 1997] EPA (Environmental Protection Agency). 2006. 40 CFR part 50
+(National Ambient Air Quality Standards for Particulate Matter; Final
+Rules).Available:
+http://www.epa.gov/fdsys/pkg/FR2006-10-17/pdf/06-8477.pdf [accessed 17
+October 2006] EPA (Environmental Protection Agency). 2013. 40 CFR parts
+50, 51, 52 et al. (National Ambient Air Quality Standards for
+Particulate Matter; Final Rules). Available:
+http://www.epa.gov/fdsys/pkg/FR-2013-01-15/pdf/2012-30946.pdf [accessed
+15 January 2013] EU (European Union). Air Quality Standards. Available:
+http://ec.europa.eu/environment/air/quality/standards.htm [assessed 15
+November2013]. Franklin M, Zeka A, Schwartz J. 2007. Association between
+pm2. 5 and all-cause and specificcause mortality in 27 us communities. J
+Expo Sci Env Epid 17:279-287. Furuyama A, Hirano S, Koike E, Kobayashi
+T. 2006. Induction of oxidative stress and inhibition of plasminogen
+activator inhibitor-1 production in endothelial cells following exposure
+to organic extracts of diesel exhaust particles and urban fine
+particles. Arch Toxicol 80:154162. Gauderman WJ, Avol E, Gilliland F,
+Vora H, Thomas D, Berhane K, et al. 2004. The effect of air pollution on
+lung development from 10 to 18 years of age. New Engl J Med
+351:10571067.
+
+19
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+Gurgueira SA, Lawrence J, Coull B, Murthy GK, González-Flecha B. 2002.
+Rapid increases in the steady-state concentration of reactive oxygen
+species in the lungs and heart after particulate air pollution
+inhalation. Environ Health Persp 110:749-755. Hoek G, Krishnan RM,
+Beelen R, Peters A, Ostro B, Brunekreef B, et al. 2013. Long-term air
+pollution exposure and cardio-respiratory mortality: A review. Environ
+Health 12:1-16. Katsouyanni K, Touloumi G, Spix C, Schwartz J, Balducci
+F, Medina S, et al. 1997. Short-term effects of ambient sulphur dioxide
+and particulate matter on mortality in 12 european cities: Results from
+time series data from the aphea project. Air pollution and health: A
+european approach. BMJ: Brit Med J 314:1658-1663. Kloog I, Koutrakis P,
+Coull BA, Lee HJ, Schwartz J. 2011. Assessing temporally and spatially
+resolved pm< sub> 2.5 exposures for epidemiological studies using
+satellite aerosol optical depth measurements. Atmos Environ
+45:6267-6275. Kloog I, Coull BA, Zanobetti A, Koutrakis P, Schwartz JD.
+2012. Acute and chronic effects of particles on hospital admissions in
+new-england. PLoS ONE 7:e34664. Kloog I, Ridgway B, Koutrakis P, Coull
+BA, Schwartz JD. 2013. Long-and short-term exposure to pm2. 5 and
+mortality: Using novel exposure models. Epidemiology 24:555-561. Kloog
+I, Chudnovsky A, C. JA, Francesco N, Koutrakis P, Coull B, et al. 2014a.
+A new hybrid spatio-temporal model for estimating daily multi-year pm2.5
+concentrations across northeastern USA using high resolution aerosol
+optical depth data. Atmos Environ 95: 581590. Kloog I, Nordio F, Coull
+BA, Schwartz J. 2014b. Predicting spatiotemporal mean air temperature
+using modis satellite surface temperature measurements across the
+northeastern USA. Remote Sens Environ 150:132-139. Laden F, Schwartz J,
+Speizer FE, Dockery DW. 2006. Reduction in fine particulate air
+pollution and mortality. Am J Resp Crit Care 173:667-672. Laird N,
+Olivier D. 1981. Covariance analysis of censored survival data using
+log-linear analysis techniques. J Am Stat Assoc 76:231-240. Lepeule J,
+Laden F, Dockery D, Schwartz J. 2012. Chronic exposure to fine particles
+and mortality: An extended follow-up of the harvard six cities study
+from 1974 to 2009. Environ Health Persp 120:965-970.
+
+20
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+Miller KA, Siscovick DS, Sheppard L, Shepherd K, Sullivan JH, Anderson
+GL, et al. 2007. Long-term exposure to air pollution and incidence of
+cardiovascular events in women. New Engl J Med 356:447-458. Pope 3rd C.
+2000. Epidemiology of fine particulate air pollution and human health:
+Biologic mechanisms and who's at risk? Environ Health Persp 108:713-723.
+Pope CA, Thun MJ, Namboodiri MM, Dockery DW, Evans JS, Speizer FE, et
+al. 1995. Particulate air pollution as a predictor of mortality in a
+prospective study of u.S. Adults. Am J Resp Crit Care 151:669-674. Pope
+III CA, Burnett RT, Thun MJ, Calle EE, Krewski D, Ito K, et al. 2002.
+Lung cancer, cardiopulmonary mortality, and long-term exposure to fine
+particulate air pollution. Jama 287:1132-1141. Puett RC, Schwartz J,
+Hart JE, Yanosky JD, Speizer FE, Suh H, et al. 2008. Chronic particulate
+exposure, mortality, and coronary heart disease in the nurses' health
+study. Am J Epidemiol 168:1161-1168. Puett RC, Hart JE, Yanosky JD,
+Paciorek C, Schwartz J, Suh H, et al. 2009. Chronic fine and coarse
+particulate exposure, mortality, and coronary heart disease in the
+nurses' health study. Environ Health Persp 117:1697-1702. Samoli E, Peng
+R, Ramsay T, Pipikou M, Touloumi G, Dominici F, et al. 2008. Acute
+effects of ambient particulate matter on mortality in europe and north
+america: Results from the aphena study. Environ Health Persp
+116:1480-1486. Schwartz J, Dockery DW, Neas LM. 1996. Is daily mortality
+associated specifically with fine particles? J Air Waste Manage
+46:927-939. Schwartz J. 2000. Harvesting and long term exposure effects
+in the relation between air pollution and mortality. Am J Epidemiol
+151:440-448. Schwartz J, Zanobetti A. 2000. Using meta-smoothing to
+estimate dose-response trends across multiple studies, with application
+to air pollution and daily death. Epidemiology 11:666-672. Schwartz J.
+2004. Is the association of airborne particles with daily deaths
+confounded by gaseous air pollutants? An approach to control by
+matching. Environ Health Persp 112:557561.
+
+21
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+Schwartz J, Coull B, Laden F, Ryan L. 2008. The effect of dose and
+timing of dose on the association between airborne particles and
+survival. Environmental Health Perspectives: 6469. Stellman SD,
+Garfinkel L. 1986. Smoking habits and tar levels in a new American
+Cancer Society prospective study of 1.2 million men and women. Journal
+of the National Cancer Institute 76(6): 1057-1063. Suwa T, Hogg JC,
+Quinlan KB, Ohgami A, Vincent R, van Eeden SF. 2002. Particulate air
+pollution induces progression of atherosclerosis. J Am Coll Cardiol
+39:935-942. USCB (United States Census Bureau). 2000. Summary File 3 (SF
+3). Available: http://www.census.gov/census2000/sumfile3.html [assessed
+15 November2013]. Ver Hoef JM, Boveng PL. 2007. Quasi-Poisson vs.
+negative binomial regression: how should we model overdispersed count
+data? Ecology 88(11): 2766-2772. WHO (World Health Organization).
+Ambient (outdoor) air quality and health. Available:
+http://www.who.int/mediacentre/factsheets/fs313/en/ [assessed 15
+November2013]. Yue W, Schneider A, Stölzel M, Rückerl R, Cyrys J, Pan X,
+et al. 2007. Ambient source-specific particles are associated with
+prolonged repolarization and increased levels of inflammation in male
+coronary artery disease patients. Mutat Res-Fund Mol M 621:50-60.
+Zanobetti A, Schwartz J. 2009. The effect of fine and coarse particulate
+air pollution on mortality: A national analysis. Environ Health Persp
+117:898-903. Zeger SL, Dominici F, McDermott A, Samet JM. 2008.
+Mortality in the medicare population and chronic exposure to fine
+particulate air pollution in urban centers (2000--2005). Environ Health
+Persp 116:1614-1619.
+
+ 
+
+ 
+
+22
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+Table 1. Descriptive Statistics for PM2.5 exposure and temperature in
+New England, 2003-2008. Covariate Lag01 PM2.5 (µg/m3 ) 1-year PM2.5
+(µg/m3 ) Temperature (˚C)
+
+Mean 8.21
+
+SD 5.10
+
+Min 0.00
+
+Median Max 7.10 53.98
+
+Range 53.98
+
+Q1 4.60
+
+Q3 10.65
+
+IQR 6.05
+
+8.12
+
+2.28
+
+0.08
+
+8.15
+
+20.22
+
+20.14
+
+6.22
+
+10.00
+
+3.78
+
+9.24
+
+6.50
+
+-36.79
+
+9.81
+
+41.51
+
+78.30
+
+4.90
+
+14.39
+
+9.49
+
+23
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+Table 2. Percent increase in mortality (95% CI) for a 10 µg/m3 increase
+for both short-term and long-term PM2.5 . PM2.5 exposure With mutual
+adjustment Short term PM2.5 Long term PM2.5 Without mutual adjustment
+Short term PM2.5 Long term PM2.5 a
+
+Model
+
+Percent increase
+
+p-value
+
+Low daily exposurea Full cohort Low chronic exposureb Full cohort
+
+2.14 ± 0.81 2.14 ± 0.75 9.28 ± 8.88 7.52 ± 5.73
+
+<.001 <.001 0.032 0.007
+
+Low daily exposurea Full cohort Low chronic exposureb Full cohort
+
+2.07 ± 0.80 2.08 ± 0.76 7.16 ± 8.75 6.46 ± 5.69
+
+<.001 <.001 0.109 0.026
+
+The analysis was restricted only to person time with daily PM2.5 less
+than 30 µg/m3 (422,637 deaths).
+
+b
+
+The analysis was restricted only to person time with chronic PM2.5 less
+than 10 µg/m3 (268,050 deaths).
+
+The full cohort analysis had 551,024 deaths.
+
+24
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+Figure Legends Figure 1. A. Mean PM2.5 concentrations in 2004 at a high
+resolution (1 × 1 km) across New England predicted by the AOD models. B.
+Predicted PM2.5 concentrations at a 1 × 1 km grid for November 15, 2003.
+Figure 2. Percent change in mortality per 10 µg/m3 increase in
+short-term PM2.5 with different lags with mutual adjustment. Error bars
+indicate the 95% CIs. Figure 3. The dose-response relationship between
+long-term PM2.5 and mortality at low doses with mutual adjustment (a)
+and the dose-response relationship between short-term PM2.5 and
+mortality at low doses without mutual adjustment (b). Shaded areas
+indicate the 95% CIs.
+
+25
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+Figure 1A.
+
+26
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+Figure 1B.
+
+27
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+Figure 2.
+
+Percent Change in Mortality
+
+2.5 2.0 1.5 1.0 0.5 0.0
+
+lag0
+
+lag1
+
+lag2
+
+lag3
+
+lag4
+
+lag01 lag02 lag03 lag04
+
+PM 2.5 Lags
+
+28
+
+Environ Health Perspect DOI: 10.1289/ehp.1409111 Advance Publication:
+Not Copyedited
+
+Figure 3. 25 ( )
+
+Percent Change in Mortality
+
+20 15 10 5 0 -5 -10 -15 0
+
+2
+
+4
+
+6
+
+8
+
+10
+
+3
+
+365-day moving average PM2.5 (µg/m )
+
+14 ( )
+
+Percent Change in Mortality
+
+12 10 8 6 4 2 0 -2 0
+
+5
+
+10
+
+15
+
+20
+
+25
+
+30
+
+Lag01 PM2.5 (µg/m3)
+
+29
+
+

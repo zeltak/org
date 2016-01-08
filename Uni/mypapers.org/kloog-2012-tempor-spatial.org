@@ -1,0 +1,769 @@
+Science of the Total Environment 432 (2012) 85--92
+
+Contents lists available at SciVerse ScienceDirect
+
+Science of the Total Environment journal homepage:
+www.elsevier.com/locate/scitotenv
+
+Temporal and spatial assessments of minimum air temperature using
+satellite surface temperature measurements in Massachusetts, USA Itai
+Kloog ⁎, Alexandra Chudnovsky, Petros Koutrakis, Joel Schwartz
+Department of Environmental Health --- Exposure, Epidemiology and Risk
+Program, Harvard School of Public Health, Landmark Center 401 Park Dr
+West, Boston, MA, 02215, USA
+
+a r t i c l e
+
+i n f o
+
+Article history: Received 29 March 2012 Received in revised form 29 May
+2012 Accepted 30 May 2012 Available online 20 June 2012 Keywords: Air
+temperature Surface temperature MODIS Epidemiology Exposure error
+
+a b s t r a c t Although meteorological stations provide accurate air
+temperature observations, their spatial coverage is limited and thus
+often insufﬁcient for epidemiological studies. Satellite data expand
+spatial coverage, enhancing our ability to estimate near surface air
+temperature (Ta). However, the derivation of Ta from surface temperature
+(Ts) measured by satellites is far from being straightforward. In this
+study, we present a novel approach that incorporates land use
+regression, meteorological variables and spatial smoothing to ﬁrst
+calibrate between Ts and Ta on a daily basis and then predict Ta for
+days when satellite Ts data were not available. We applied mixed
+regression models with daily random slopes to calibrate Moderate
+Resolution Imaging Spectroradiometer (MODIS) Ts data with monitored Ta
+measurements for 2003. Then, we used a generalized additive mixed model
+with spatial smoothing to estimate Ta in days with missing Ts.
+Out-of-sample tenfold cross-validation was used to quantify the accuracy
+of our predictions. Our model performance was excellent for both days
+with available Ts and days without Ts observations (mean out-of-sample
+R2 = 0.946 and R2 = 0.941 respectively). Furthermore, based on the high
+quality predictions we investigated the spatial patterns of Ta within
+the study domain as they relate to urban vs. non-urban land uses. © 2012
+Elsevier B.V. All rights reserved.
+
+1. Introduction Air temperature measurements are of great importance for
+   epidemiological studies. Recently, it has been shown that variation
+   in ambient minimum air temperature is correlated with human morbidity
+   and mortality, especially for cardiovascular diseases (Basu et al.,
+   2008; Medina-Ramón et al., 2006; Zanobetti and Schwartz, 2008).
+   Furthermore, minimum temperature is considered a better predictor of
+   excess mortality compared to mean or maximum temperature (Saez et
+   al., 1995; Zanobetti and Schwartz, 2008). In addition, near-surface
+   air temperature (Ta) and relative humidity are the most relevant
+   variables to disease vector monitoring and the prediction of disease
+   incidences. In the thermal infrared region of spectra, satellite
+   sensors measure top of the atmosphere radiances, from which surface
+   brightness temperatures are derived using Planck's Law (Dash et al.,
+   2002). In order to compute land surface temperature (Ts), these
+   brightness temperatures are further corrected for: (1) atmospheric
+   effects, including absorption, upward emission, and downward
+   irradiance reﬂected from the surface (Franc and Cracknell, 1994); and
+   (2) spectral emissivity, aiming to account for the roughness
+   properties of the land surface, the amount
+
+Abbreviations: Ts, Surface temperature; Ta, Air temperature; MODIS,
+Moderate Resolution Imaging Spectroradiometer; MA, Massachusetts. ⁎
+Corresponding author at: Department of Environmental Health ---
+Exposure, Epidemiology and Risk Program, Harvard School of Public
+Health, Landmark Center 401 Park Dr West, Boston, MA, 02215, USA. E-mail
+address: ekloog@hsph.harvard.edu (I. Kloog). 0048-9697/$ -- see front
+matter © 2012 Elsevier B.V. All rights reserved.
+doi:10.1016/j.scitotenv.2012.05.095
+
+and nature of vegetation cover, and the thermal properties and moisture
+content of the soil (Friedl, 2002). Whereas Ta measurements provide spot
+data of a selected point or route, remotely sensed Ts data have been
+widely used to retrieve a spatially continuous view of the land Ts. In
+this regard, the ability to cover large areas simultaneously on a
+repeated basis is a signiﬁcant advantage of satellite observations over
+conventional climatic methods. Although the genesis and temporal
+dynamics of surface and air temperatures have dissimilarities, they are
+nevertheless related (Oke, 1995; Voogt and Oke, 1997). Ts modulates the
+air temperature of the lower layer of urban atmosphere, and is a key
+factor in determining surface radiation and energy exchange and human
+comfort in the cities (Voogt and Oke, 1998). In addition, the physical
+properties of various types of urban surfaces, their albedo, thermal
+properties, street geometry, trafﬁc loads, and anthropogenic activities
+are important factors that determine Ts in the urban environments
+(Chudnovsky et al., 2004). However, the derivation of near surface Ta
+from satellite information is not straightforward due to the
+dissimilarity in the genesis and temporal dynamics of both variables.
+Several studies have shown correlations between Ta and Ts when thermal
+data were obtained from a distance of 3 m (Stoll and Brazel, 1992) or
+acquired by air-borne sensors at high spatial resolutions (Saaroni et
+al., 2000; Yang et al., 1994). Recently, several studies correlated
+between daytime Ts satellite observations and Ta at ground
+meteorological stations across non-urban areas. For example, Fu et al.
+(2011) applied linear regression to estimate air temperature of an
+alpine meadow on the Northern Tibetan Plateau. They estimated at
+
+86
+
+I. Kloog et al. / Science of the Total Environment 432 (2012) 85--92
+
+heights of 1.5--2.1 m by using Moderate Resolution Imaging
+Spectroradiometer (MODIS) data, showing that Ts data were accurate
+enough to estimate daily minimum and nighttime mean Ta using linear
+regression (R2 > 0.55, p b 0.01). Vancutsem et al. (2010) explored the
+possibility of retrieving high-resolution Ta data from the MODIS
+nighttime surface temperature over different ecosystems in Africa (with
+Ts--Ta) centered at 0 °C, a mean absolute error (MAE) = 1.73 °C and a
+standard deviation = 2.4 °C. Another approach to estimate air
+temperature is based on the correlation between Ts and spectral
+satellite-derived Normalized Difference Vegetation Index (NDVI), denoted
+in the literature often as the Temperature-Vegetation Index (TVX)
+(Goward et al., 1994; Prihodko and Goward, 1997). In contrast, in the
+urban environment, since 1989 most papers have reported a qualitative
+description of thermal patterns. This includes the spatial distribution
+and magnitude of Urban Heat Islands across the city as well as simple
+correlations between Ts and land-use and land-cover types (Voogt and
+Oke, 2003). Importantly, as highlighted in the recent review by Weng
+(2009), a precise transfer function between Ts and the near ground Ta is
+not yet available although energy balance models try to provide this
+capability. For example, thermal remote sensing coupling with urban
+climate models of the atmosphere is applied to the study of urban
+surface energy models (Friedl, 2002; Voogt and Oke, 2003). Generally,
+correlations of surface temperature with air temperature are superior at
+night (Dousset, 1989) when microscale advection is reduced. During day
+hours, due to the inﬂuence of the direct solar illumination, additional
+factors are apparent leading to a more complex interaction between Ta
+and Ts: satellite--sun geometry, surface geometry, sky view factor,
+thermal properties of the underlined surfaces and weather conditions. In
+this paper we hypothesized that the Ts--Ta relationship varies daily;
+therefore, in order to use available cloud-free Ts data, it is necessary
+to calibrate on a daily basis using ground Ta measurements. The
+underlying assumption is that the effect of time-varying parameters
+(e.g., surface reﬂectance, soil moisture, land use and land cover
+
+Ground weather stations Massachusetts A1 highways Full MODIS Surface
+Temp Grid
+
+0 15 30
+
+characteristics, vapor pressure gradients, the vegetation--soil
+interaction and surface winds) that inﬂuence the Ts--Ta relationship can
+be taken into account by using daily available calibrations.
+Furthermore, we present a novel approach that incorporates land use
+regression, meteorological variables and spatial smoothing to predict Ta
+for grid cells when satellite Ts measures are not available. We pursue
+the use of night time satellite data for estimating daily minimum
+temperatures. Finally, based on our model we examined the spatial
+pattern of Ta behavior for 2003 in the study domain. 2. Methods 2.1.
+Study domain The spatial domain of our study included the state of
+Massachusetts (MA), USA (Fig. 1). The state of MA is located on the
+northeastern coast of US and has an area of 27,340 km2. MA has a
+population of 6,349,097 according to the 2000 census (USCB, 2000).
+Approximately two thirds of the state's population lives in Greater
+Boston, most of which is either urban or suburban. MA had an average
+annual air temperature of 9.26 °C during 2003 (NCDC, 2010). Importantly,
+there are signiﬁcant climatic differences between its eastern and
+western sections. Speciﬁcally, MA has cold winters and moderately warm
+summers. The mountainous regions in the west (the Berkshires) have both
+the coldest winters and the coolest summers. MA has diverse land use and
+land types including many urban areas, rural hill towns, forests, small
+farms, rivers, lakes, mountainous regions and an eastern sea shoreline.
+2.2. Surface temperature and emissivity data The satellite data used in
+this study, are the land surface temperatures (Ts) at a 1 km spatial
+resolution derived from the Moderate Resolution Imaging
+Spectroradiometer (MODIS) sensors on board the Terra satellite. We used
+Terra nighttime Land Surface Temperature
+
+N
+
+60 Kilometers
+
+Fig. 1. Map of the study area showing the full surface temperature grid
+and all air temperature monitor station across Massachusetts.
+
+I. Kloog et al. / Science of the Total Environment 432 (2012) 85--92
+
+and Emissivity (MOD11\_L2) product (Wan, 2006, 2008; Wan et al., 2002).
+The MODIS Ts is derived from two thermal infrared band channels, i.e.,
+31 (10.78--11.28 μm) and 32 (11.77--12.27 μm) using the split-window
+algorithm (Wan, 2008) which corrects for atmospheric effects and
+emissivity using a look-up table based on global land surface emissivity
+in the TIR region (Thermal Infra-Red, MODIS channels 31--32 or
+10,000--12,500 nm) (Snyder et al., 1998). Emissivity is an additional
+parameter that inﬂuences the Ts measurements. First, it causes a
+reduction of surface-emitted radiance. In addition, the anisotropy of
+reﬂectivity and emissivity may reduce or increase the total radiance
+from the surface (Prata, 1994). Emissivity is a function of wavelength,
+and is not only controlled by water content, chemical composition,
+structure, and roughness (Snyder et al., 1998), but it can vary
+signiﬁcantly with plant species, areal density, and growth (Snyder et
+al., 1998). Surface emissivity values are available in MOD11\_L2 product
+in MODIS bands 31 and 32 and they are assigned based on land cover types
+(Wan, 2006). The MODIS derived radiometric temperature corrected for
+atmospheric transmission was further corrected with spectral emissivity
+to account for the kinetic temperature of the object based on the
+following (Eq. 1) (Jensen, 2009): Tkin ¼ Trad =EmmisivityðλÞ
+
+1=4
+
+ð1Þ
+
+where Tkin is related to the true kinetic temperature (and further
+denoted here as Ts) and Trad is the radiant temperature of an object
+recorded by a remote sensor. The nighttime Ts generally presents good
+correlations with ground measurements across most of the sites in the
+USA, with absolute biases less than 0.8 °C and RMSEs less than 1.7 °C
+(Wan, 2008). Importantly, the errors in the MOD11\_L2 product weakly
+depend on the sensor view zenith angle and are independent of surface
+air temperature, humidity, wind speed, and soil moisture (Wang et al.,
+2008). A serious limitation of the thermal satellite remote sensing
+techniques is the requirement for clear skies in order to derive
+accurate readings of Ts making cloud cover. To that end we identiﬁed
+clear sky observations using the current best available cloud mask
+algorithm ﬂagged in the MODIS data (Ackerman et al., 1998). More details
+about MODIS Ts data can be found in previous papers by Wan (Wan, 2008;
+Wang et al., 2008). To assure that ground Ta measurements represent the
+Ts at the time of satellite overpass (10:30 pm local time), we
+correlated between Ta minimal during a day, and Ts from Terra. We did
+not collect Ts from the Aqua platform. 2.3. Meteorological data Daily
+data for Ta and wind speed across MA for 2003 were obtained from four
+different sources: The National Climatic Data Center (NCDC), US
+Environmental Protection Agency (EPA), WeatherBug Professional (WB), and
+Weather Underground Inc. (WU). NCDC and EPA are government agencies and
+have been collecting meteorological data close to a century now, while
+the latter two (WB and WU) have been established after 2000. WB is a
+commercial provider of weather information services, while WU is a
+network of personal weather stations. All of the above sources have been
+used in multiple studies in the past few years (Rosenzweig et al., 2006;
+Von Klot et al., 2008, 2009; Wellenius et al., 2006). To validate the WU
+and WB stations compared to the more traditional NCDC and EPA sources we
+have matched each of the WB and WU stations to the closest NCDC weather
+service station within 10 km, and computed the correlations. The average
+correlation (R 2) was 0.960, suggesting that the use of WB and WU
+stations is unlikely to be imprecise (see Fig. 2). We obtained mean,
+minimum and maximum daily temperatures from the NCDC, EPA, WB and WU
+from January to December 2003 and removed outliers and extreme values
+suggestive of coding or
+
+87
+
+R2=0.960
+
+Fig. 2. A scatter plot of the correlation between the weather
+underground/weatherbug stations and NCDC stations.
+
+measurement errors (extreme temperature values that do not naturally
+occur due to measurement error such as reported temperature values of
+over 50 °C or below −40 °C). There were 164 daily monitors operating
+across MA during the study period (see Fig. 1). Since there was no
+hourly temperature reading available for all stations, we choose minimum
+Ta as the closest indicator for nighttime temperature. We used wind
+speed data from only three available sources: NCDC, EPA and WU and thus
+used ordinary kriging to interpolate the missing data for each 1 × 1 km
+grid cell. 2.4. Spatial predictors of air temperature Initially we
+tested the daily correlation between Ta and Ts. In addition, to improve
+the prediction ability of the ﬁnal constructed model other potential
+predictors we expected, a priori, to have a physical inﬂuence on Ta were
+considered for inclusion in the model (trafﬁc density etc.). All the
+potential predictors were initially included in the model. The only
+variable that was removed was trafﬁc density, which was much less
+plausible than impervious surfaces, etc. in the ﬁrst place, and this was
+because it was not signiﬁcant in the model. The following variables were
+statistically signiﬁcant and thus were used in our ﬁnal models:
+emissivity, percent of impervious surfaces, elevation and NDVI. 2.4.1.
+Percent of impervious surfaces These data were obtained through the 2001
+national land cover data (NLCD) Multi-Resolution Land Characteristics
+Consortium (MRLC) (Homer et al., 2004). Data were obtained as raster
+ﬁles with 30 m cell size. Percent of impervious surfaces included all
+sub categories for developed areas. 2.4.2. Elevation These data were
+obtained through the National Elevation Dataset (NED) (Maune, 2007). NED
+is distributed by the U.S. Geological Survey (USGS) and provides
+seamless raster elevation data of the conterminous United States. NED is
+distributed in geographic coordinates at a resolution of 1 arc sec. MA
+has notable elevation differences between its eastern and western parts.
+Therefore, elevation was used as a spatial predictor since generally the
+higher the elevation the lower the air temperature.
+
+88
+
+I. Kloog et al. / Science of the Total Environment 432 (2012) 85--92
+
+2.4.3. NDVI Satellite-derived Normalized Difference Vegetation Index
+(NDVI) data have been shown to be a temporal indicator of the vegetation
+growth rate, its onset, end, peak and duration of vegetation greenness,
+and also the periodicity of the photosynthetic activity (Reed et al.,
+1994; Yang et al., 1994). The rationale for using two wavelengths to
+calculate NDVI is the sensitivity of leaf pigments to red light
+(RED‐wavelengths centered at 660 nm) and high reﬂectance of leaf
+structure at nearinfrared (NIR‐wavelengths ranging from 700 to 1100 nm)
+(Jensen, 2007; Tucker, 1979) (Eq. 2):     NIR RED NIR RED NDVI ¼ ρ
+−ρ = ρ þρ :
+
+ð2Þ
+
+We used monthly vegetation index products (MOD13A3) at a 1 km spatial
+resolution because NDVI remains relatively constant during each month.
+2.5. Statistical methods To estimate Ta in each grid cell on each day we
+ﬁrst calibrated the Ts measurements for each day using grid cells for
+which both Ta measurements and Ts values were available (stage 1). This
+stage 1 model was then used to predict Ta in grid cells without Ta
+measurements but with available Ts measurements (stage 2). Since Ts
+values are often missing due to cloud cover or retrieval errors, the
+stage 2 model failed to provide predictions for many grid cell--day
+combinations. To estimate Ta when no Ts data are available we ﬁt a third
+model that takes advantage of the association of grid cell Ts values
+with Ta monitoring located elsewhere and the association with Ts values
+in neighboring grid cells (stage 3). Importantly, since daily Ta for the
+whole of MA varies considerably between different geographical regions,
+MA was divided into three regions: eastern MA, central MA and west MA.
+The daily mean Ta was calculated for each region. First a mixed model
+regression with day-speciﬁc random intercepts and Ts slopes was
+performed (stage 1). At each day we estimate a separate slope in the
+relationship between Ta and Ts that captures its temporal variability.
+Speciﬁcally we ﬁtted the model (Eq. 3):     Taij ¼ α þ uj þ β1 þ vj
+Tsij þ β2 Wind Speedij þ β3 Elevationi   þβ4 NDVIik þ β5 Impervious
+surfacesi þ εij uj vj e½ðooÞ; Σ
+
+ð3Þ
+
+where: Taij is the measured Ta at a spatial site i on a day j; α and uj
+are the ﬁxed and random (site speciﬁc) intercepts, respectively, Tsij is
+the Ts value in the grid cell corresponding to site i on a day j; β1 and
+vj are the ﬁxed and random slopes, respectively. Wind Speedij, and
+NDVIik are the values in the grid cells corresponding to site i on a day
+j (or month k for NDVI). Elevationi and Impervious surfacesi are the
+means in grid cells corresponding to site i. Finally, Σ is an
+unstructured variance--covariance matrix for the random effects and εij
+is the error term at site i on a day j. To validate our model, the
+dataset was repeatedly randomly divided into 90% and 10% splits.
+Predictions for the held-out 10% of the data were made from the model ﬁt
+of the remaining 90% of the data. The process was repeated ten times and
+cross-validated R2 values were computed. To test for bias we regressed
+the measured Ta values against the predicted values in each site on each
+day. Temporal R2 was calculated by regressing delta Ta against delta
+predicted where: delta Ta is the difference between the actual Ta in
+place i at time t and the annual mean Ta at that location, and delta
+predicted is deﬁned similarly for the predicted values generated from
+the model. Spatial R2 was calculated by regressing the annual mean Ta
+against the mean predicted Ta at place i. In the next stage (stage 2),
+we used the same stage 1 model to predict Ta in grid cells where Ts data
+is available but Ta monitoring data is not. Finally in stage 3, we
+estimated the daily Ta for all grid cells in the study domain for days
+when Ts data were unavailable using stage 2 data. To capture the ability
+of neighboring cells to ﬁll in the cells with
+
+missing Ts values, we regressed the predicted Ta in each cell on each
+day against the mean of the Ta measurements on that day in each region
+(the average Ta measured at all the available Ta measurements on each
+day) and a smooth function of latitude and longitude, with random
+cellspeciﬁc intercepts and slopes. To allow for temporal variations in
+the spatial correlation, a separate spatial surface (a thin plate
+spline) was ﬁt for each two-month period. In contrast to the ﬁrst stage,
+the third stage model includes a cell speciﬁc random slope and intercept
+that captures the spatial variability for each cell relative to the
+average in that region (Eq. 4): PredTaij ¼ ðα þ ui Þ þ ðβ1 þ vi ÞmTajr þ
+SmoothðX; YÞkðjÞ þ Bimon   h i þεij uj vi e ðo oÞ; Ωβ
+
+ð4Þ
+
+where: PredTaij is the predicted Ta at a spatial site i on a day j from
+the ﬁrst prediction model; mTajr is the mean Ta across the speciﬁc
+region on a day j; α and ui are the ﬁxed and random intercepts,
+respectively; β1 and vi are the ﬁxed and random slopes, respectively.
+The smoothing of X,Y is a thin plate spline ﬁt of the latitude and
+longitude, which is similar to kriging, but it allows greater spatial
+anisotropy, k(j) denotes the two-month period in which day j falls (that
+is, a separate spatial smooth was ﬁt for each two-month period), and
+Bimon (bi-monthly period) is an indicator for each two month period.
+Using this ﬁnal model, we again performed cross-validation to estimate
+the goodness of ﬁt. We also tested how the performance of our models
+compared to using traditional spatial smoothing of monitored values
+(kriging). All modeling was done in R statistical software version
+2.12.2. 3. Results The upper panel of Fig. 3 presents a scatter plot of
+the Ta--Ts relationship before the stage 1 calibration whereas the
+relationship between the predicted out of sample Ta vs the actual Ta is
+shown in the lower panel of Fig. 3. These results show how by using the
+daily calibration approach we can improve the ﬁt from a R 2 of 0.848 to
+a R 2 of 0.949 (P b 0.001). Fig. 4 presents the daily distribution of
+random slopes of Ts in 2003. It also shows the difference of the day
+speciﬁc slopes from the average slope. As can be seen the relationship
+between Ta and Ts varies daily which is why the stage 1 calibration
+model is necessary. The ﬁrst stage models all revealed very high
+out-of-sample ﬁts with a mean out of sample R 2 of 0.949 (P b 0.001),
+and as expected a highly signiﬁcant association between Ta and the main
+explanatory variable---Ts (Table 1). The spatial and temporal out of
+sample results also presented very high ﬁts (Table 1). For the spatial
+model the mean out-of-sample R 2 was 0.960 and for the temporal model
+the mean out-of-sample R 2 was 0.800 (P b 0.001). We found no bias in
+our cross validation results (slope of observed vs. predicted = 1.00).
+Stage 3 models also performed well with a mean out-of-sample R 2 of
+0.947 (P b 0.001), which is extremely high considering that these were
+days with neither ground Ta data nor satellite Ts data in the grid cells
+being predicted. Fig. 5 shows the spatial pattern of predicted Ta values
+from the Ts models, averaged over the entire study period. Mean
+predicted minimum Ta values for 2003 ranged from 0.5 to 5.8 °C.
+Generally urban areas appear warmer than the surrounding areas. To
+explore these differences we analyzed Ta from eight different
+representative sites covering an area of 4×4 km2 (highlighted in Fig. 5
+by rectangles). The results are shown in Fig. 6. As it can be seen in
+Fig. 6, there are temperature changes between the rural open and the
+built-up areas. There is a noticeable change between urban area yearly
+mean Ta (e.g. point 2 predicted Ta = 5.2 °C) and vegetative open space
+areas (e.g. point 6-predicted Ta = 2.3 °C). In addition, sampled
+suburban areas located near main
+
+I. Kloog et al. / Science of the Total Environment 432 (2012) 85--92
+
+89
+
+Air Temperature
+
+Density
+
+A
+
+Daily Surface Temperature (Ts) Slopes
+
+R2=0.846
+
+Fig. 4. A density plot exhibiting the daily variation of surface
+temperature slopes by time for 2003.
+
+Surface Temperature
+
+Air Temperature
+
+B
+
+R2=0.940 Predicted Temperature Fig. 3. A scatter plot of the air
+temperature--surface temperature relationship before (A) and after (B)
+the daily 2003 calibrations.
+
+roads exhibited higher temperature of 0.4--0.5 °C compared to the inner
+part. Also there is a great variability in standard deviation (SD) among
+all sampled areas suggesting the local inﬂuence of different wind
+patterns and urban canyon geometry on the measured Ta. The kriging model
+resulted as expected in a much lower R2 compared to the R2 of our
+combined model (0.30 versus 0.95 respectively). 4. Discussion In this
+paper we assessed Ta across MA during the year 2003 based on MODIS Ts
+data. There are several important key features differentiating our study
+from previous studies (Fu et al., 2011; Saaroni et al., 2000; Vancutsem
+et al., 2010; Yang et al., 1994). First and foremost, the use of daily
+Ts--Ta calibrations allows a better assessment of space--time
+interactions than models that include only spatially resolved time
+invariant land use terms. Indeed, this daily calibration
+
+approach exhibits the differences in short-term temperature values
+between grid cells. Most importantly, our model predicts temperature
+values for days when satellite Ts is unavailable (extensive cloud
+coverage, snow etc.). For example, in epidemiology such data could be
+used to assess the acute effects (short-term) of temperature (heat
+waves, cold spells), and chronic effects (long-term) of temperature, or
+combines the acute and chronic effects. As shown in our analysis, Ts can
+be reliably used to predict Ta if modeled appropriately. Although
+Vancutsem et al. (2010) found relatively good correlation between night
+Ts and minimum Ta for vegetative and non-urban land cover types, six
+stations exhibited higher variability between measured and predicted
+values. This was explained by the following factors: (i) site location
+near the sea or lake; (ii) directional effects due to the angular
+anisotropy of emissivity; and (iii) temperature variability in
+mountainous areas (e.g., difference of spatial scales, point vs. areal
+average). Moreover, the differences were also related to location and
+seasonal changes. Because different variables can inﬂuence the Ts--Ta
+relationship we applied a mixed effects model approach. The underlying
+assumption was that the effect of time-varying parameters inﬂuencing the
+Ts--Ta relationship (e.g., relative humidity, surface properties, land
+cover type, location) can be taken into account using daily
+calibrations. In this regard, to the best of our knowledge our models
+are the ﬁrst to cover both vast urban and rural areas across MA, USA
+with high prediction accuracy for all sites. Our predicted mean values
+across MA for the year 2003 are in a good agreement with the recorded
+annual mean minimum temperatures. For example, in central Boston the
+annual mean difference between measured (NCDC, 2010) and predicted Ta
+was 0.2 °C (5.4°-- 5.6 °C respectively). In the semi-rural area of
+Fitchburg, MA there was a slightly higher difference of 0.6 °C
+(3.8°--3.2 °C respectively). Since our model could be used in studies on
+the acute effects of temperature Table 1 Prediction accuracy---cross
+validated R2 for all Ta prediction models for 2003. R2 Overall R2
+Spatial R2 Temporal R2 Gamm R2 ⁎ Indicates a 0.1 signiﬁcance level. ⁎⁎
+Indicates a 0.05 signiﬁcance level. ⁎⁎⁎ Indicates a 0.01 signiﬁcance
+level.
+
+0.949⁎⁎⁎ 0.960⁎⁎⁎ 0.800⁎⁎⁎ 0.947⁎⁎⁎
+
+90
+
+I. Kloog et al. / Science of the Total Environment 432 (2012) 85--92
+
+predicted air temperature (C) Massachusetts A1 highways Annual mean
+minimum
+
+0.50 - 1.89 1.89 - 2.61 2.61 - 3.27 3.27- 3.77 3.77 - 4.17 4.17 - 4.54
+4.54 - 5.05 5.05 - 5.81 Massachusetts state border Selected locations
+
+Fig. 5. Mean air temperature in each 10 × 10 km grid during 2003
+predicted by the surface temperature models.
+
+we sampled the same points for a representative day in the summer
+(12.08.2003). In central Boston the daily difference between measured
+and predicted Ta was 0.54 °C (21.85°--21.24 °C respectively). In the
+semi-rural area of Fitchburg, MA there was a slightly higher difference
+of 0.15 °C (19.85°--19.70 °C respectively). There is a 2 °C difference
+between urban and sub urban areas. We ran a cluster analysis and found a
+signiﬁcant clustering (Pb 0.001) around metropolitan areas (Boston,
+Worcester) and around coastal areas which is to be expected. Urban areas
+tend to show higher
+
+temperature values compared to rural areas due to well-known factors
+such as the urban heat island (UHI) (Kim, 1992) etc. Areas closer to the
+shoreline also tend to exhibit warmer temperatures compared to inland
+areas since shoreline areas are kept warmer by the water's effect on the
+air (Pieri et al., 2011). Based on our model results, the accuracy of
+estimating Ta was independent of the other covariates (NDVI, wind speed
+etc.). However, all covariates were found to be signiﬁcant (n= 5305,
+Akaike information criterion---AIC = 30566.86, P b 0.001) and therefore
+were included in our
+
+6
+
+0.8 0.7
+
+5
+
+Temperature, °C
+
+0.5 3
+
+0.4 0.3
+
+2
+
+Standard Deviation, °C
+
+0.6 4
+
+0.2 1 0.1 0
+
+0 1
+
+2
+
+3
+
+4
+
+5
+
+6
+
+Urban Boston
+
+Urban core
+
+Suburb
+
+Suburb, close to
+
+Suburb
+
+Open Vegetative
+
+Boston
+
+the main road
+
+7 Urban Worcester
+
+8 Suburb, close to the main road
+
+Fig. 6. Selected 4 × 4 km representative regions exploring differences
+in predicted annual mean air temperature between regions. The box
+represents the predicted air temperature while the whisks represent the
+standard deviation.
+
+I. Kloog et al. / Science of the Total Environment 432 (2012) 85--92
+
+ﬁnal model. Our results (as shown in Fig. 5) present high variability in
+SD values. This can be explained by air temperature spatial variability
+at the micro-scale level within selected locations (e.g. within points
+1--8). In this regard, ground meteorological stations are unable to
+capture this variability, which is needed for epidemiological studies.
+However, the ability to estimate this variability is also available
+through the use of urbanized surface energy balance models that are used
+within the suite of weather forecasting models (Barry and Chorley, 2003;
+Friedl, 2002; Voogt and Oke, 2003). Furthermore, urban and densely
+populated areas exhibit a lower SD than the open rural and vegetation.
+It is important to stress out that our prediction models were designed
+to use only night MODIS Ts for several key reasons. First, health effect
+studies examining the association between hot days and mortality suggest
+that the main predictor is minimum temperature. This is because people
+are more susceptible to the stress posed on the respiratory and
+circulatory systems when there is no sufﬁcient nighttime cooling (Saez
+et al., 1995; Zanobetti and Schwartz, 2008). Furthermore, during
+nighttime, the Earth surface behaves almost as an isothermal and
+homogeneous surface. In contrast, during daytime there is a signiﬁcant
+directional anisotropy effect which is due to differences in sun
+illumination vs. satellite viewing geometry, and different shading
+effects within pixels, giving rise to temperature differences as much as
+20 °C (Wan and Dozier, 1996). To the best of our knowledge, all previous
+epidemiological research studying the association between temperature
+and health effect have all used one central meteorological station to
+assign temperature exposure (Halonen et al., 2010; McMichael et al.,
+2008; O'Neill et al., 2003). This introduces exposure error, and likely
+biases the effect estimates downward (Zeger et al., 2000). In this
+regard, predicting nighttime temperature exposures with ﬁne spatial and
+temporal resolutions will be critical for improving the accuracy in
+future epidemiological studies. In addition these models could be useful
+in other ﬁelds such as in urban planning, where development of
+adaptation strategies is necessary. Although the minimum Ta may be
+expected near dawn (in most but not all cases), we are correlating Ts
+which overpasses at 10:30 pm local time with Ta at a different time. The
+empirical question is whether the use of daily calibration, which
+captures day to day differences in the association between Ts at one
+time and Ta several hours later, is sufﬁcient to provide good predictive
+power. The answer is yes. Our out of sample R2 is very high. Had the
+predictive power been poor, we may have needed to revisit that choice,
+but in the event it was very good, and so we continued to predict the
+temperature that seemed most relevant for health studies. There are a
+few limitations of the present study that need to be pointed out. For
+one since we use daily calibrations in this model, this requires a large
+amount of daily Ta stations which are not always available in other
+areas. This model would not be transferable in areas without sufﬁcient
+Ta monitors. However there is nothing special about New England
+regarding the number of NCDC or WB/WU stations, and this information is
+available all over the US, as well as in Europe. In addition, MODIS
+satellite data only go back to March 2000 and thus historical
+observations are not possible. The spatial resolution of 1 × 1 km is not
+as high as that of the multispectral sensors (e.g., Landsat 60 m and
+ASTER 90 m). However, these sensors have poor temporal resolutions which
+are roughly every 2 weeks. Finally, our approach should be used to
+assess daytime temperatures using daytime Ts. Although only the Terra
+satellite was used in this analysis, we do plan on incorporating the
+Aqua satellite in future studies and extending the model to a wider
+geographic area, and more years.
+
+5. Conclusion In summary, we have clearly demonstrated how Ts can be
+   used reliably to predict daily Ta even in non-retrieval days. These
+   results could be used in various studies such as health effect
+   studies, urban climate and urban planning studies etc.
+
+91
+
+Acknowledgments This research was supported by a post-doctoral
+fellowship from the Environment Health Fund (EHF), Jerusalem, Israel.
+This study was funded by the Harvard EPA PM Center (R-832416), Harvard
+Clean Air Research Center (CLARC) (R-83479801). The authors also thank
+Steven J Melly, Department of Environmental Health, Harvard School of
+Public Health, Harvard University, and Richard Lowden from
+weatherunderground.com and weatherbug.com.
+
+References Ackerman SA, Strabala KI, Menzel WP, Frey RA, Moeller CC,
+Gumley LE. Discriminating clear sky from clouds with MODIS. J Geophys
+Res 1998;103:32,141--57. Barry RG, Chorley RJ. Atmosphere, weather, and
+climate. Psychology Press; 2003. Basu R, Feng WY, Ostro BD.
+Characterizing temperature and mortality in nine California counties.
+Epidemiology 2008;19:138. Chudnovsky A, Ben-Dor E, Saaroni H. Diurnal
+thermal behavior of selected urban objects using remote sensing
+measurements. Energy Build 2004;36:1063--74. Dash P, Göttsche FM, Olesen
+FS, Fischer H. Land surface temperature and emissivity estimation from
+passive sensor data: theory and practice-current trends. Int J Remote
+Sens 2002;23:2563--94. Dousset B. AVHRR-derived cloudiness and surface
+temperature patterns over the Los Angeles area and their relationship to
+land use. In: Proc. IGARSS, Vancouver, Canada; 1989. p. 2132--7. Franc
+G, Cracknell A. Retrieval of land and sea surface temperature using
+NOAA-11 AVHRR· data in north-eastern Brazil. Int J Remote Sens
+1994;15:1695--712. Friedl M. Forward and inverse modeling of land
+surface energy balance using surface temperature measurements. Remote
+Sens Environ 2002;79:344--54. Fu G, Shen Z, Zhang X, Shi P, Zhang Y, Wu
+J. Estimating air temperature of an alpine meadow on the Northern
+Tibetan Plateau using MODIS land surface temperature. Acta Ecol Sin
+2011;31:8-13. Goward SN, Waring RH, Dye DG, Yang J. Ecological remote
+sensing at OTTER: satellite macroscale observations. Ecol Appl
+1994;4:322--43. Halonen JI, Zanobetti A, Sparrow D, Vokonas PS, Schwartz
+J. Associations between outdoor temperature and markers of inﬂammation:
+a cohort study. Environ Health 2010;9:42. Homer C, Huang C, Yang L,
+Wylie B, Coan M. Development of a 2001 national landcover database for
+the United States. Photogramm Eng Remote Sens 2004;70:829--40. Jensen
+JR. Remote sensing of the environment: an earth resource perspective.
+NJ, Prentice Hall: Upper Saddle River; 2007. Jensen JR. Remote sensing
+of the environment. Pearson Education India; 2009. Kim H. Urban heat
+island. Int J Remote Sens 1992;13:2319--36. Maune D. Digital elevation
+model technologies and applications: the DEM users manual. Maune, DF:
+American Society for Photogrammetry and Remote Sensing; 2007. McMichael
+AJ, Wilkinson P, Kovats RS, Pattenden S, Hajat S, Armstrong B, et al.
+International study of temperature, heat and urban mortality: the
+‘ISOTHURM' project. Int J Epidemiol 2008;37:1121. Medina-Ramón M,
+Zanobetti A, Cavanagh DP, Schwartz J. Extreme temperatures and
+mortality: assessing effect modiﬁcation by personal characteristics and
+speciﬁc cause of death in a multi-city case-only analysis. Environ
+Health Perspect 2006;114:1331. NCDC. The national climatic data center
+data inventories; 2010. O'Neill MS, Zanobetti A, Schwartz J. Modiﬁers of
+the temperature and mortality association in seven US cities. Am J
+Epidemiol 2003;157:1074. Oke T. The heat island of the urban boundary
+layer: characteristics, causes and effects. Kluwer Academic; 1995. Pieri
+S, Zargli A, Tzouvadakis I. Design principles for the development of
+coastal tourist settlements. IEEE 2011:156--61. Prata AJ. Land surface
+temperatures derived from the advanced very high resolution radiometer
+and the along-track scanning radiometer 2. Experimental results and
+validation of AVHRR algorithms. J Geophys Res 1994;99:13,025--58.
+Prihodko L, Goward SN. Estimation of air temperature from remotely
+sensed surface observations* 1. Remote Sens Environ 1997;60:335--46.
+Reed BC, Brown JF, VanderZee D, Loveland TR, Merchant JW, Ohlen DO.
+Measuring phenological variability from satellite imagery. J Veg Sci
+1994;5:703--14. Rosenzweig C, Solecki WD, Slosberg R. Mitigating New
+York City's heat island with urban forestry, living roofs, and light
+surfaces. A report to the New York State Energy Research and Development
+Authority; 2006. Saaroni H, Ben-Dor E, Bitan A, Potchter O. Spatial
+distribution and microscale characteristics of the urban heat island in
+Tel-Aviv, Israel. Landsc Urban Plan 2000;48:1-18. Saez M, Sunyer J,
+Castellsague J, MURILLO C, Anto JM. Relationship between weather
+temperature and mortality: a time series analysis approach in Barcelona.
+Int J Epidemiol 1995;24:576. Snyder WC, Wan Z, Zhang Y, Feng YZ.
+Classiﬁcation-based emissivity for land surface temperature measurement
+from space. Int J Remote Sens 1998;19:2753--74. Stoll M, Brazel A.
+Surface--air temperature relationships in the urban environment of
+Phoenix, Arizona. Phys Geogr 1992;13:160--79. Tucker CJ. Red and
+photographic infrared linear combinations for monitoring vegetation.
+Remote Sens Environ 1979;8:127--50. USCB. United States Census Bureau of
+2000. US Census Bureau; 2000.
+
+92
+
+I. Kloog et al. / Science of the Total Environment 432 (2012) 85--92
+
+Vancutsem C, Ceccato P, Dinku T, Connor SJ. Evaluation of MODIS land
+surface temperature data to estimate air temperature in different
+ecosystems over Africa. Remote Sens Environ 2010;114:449--65. Von Klot
+S, Melly S, Coull B, Dutton J, Schwartz J. Daily temperature at
+residence vs central measurements in eastern Massachusetts. Epidemiology
+2008;19:S210. Von Klot S, Paciorek C, Melly S, Coull B, Dutton J,
+Schwartz J. Association of temperature at residence vs central site
+temperature with mortality in eastern Massachusetts--- a case crossover
+analysis. Epidemiology 2009;20:S75. Voogt J, Oke T. Complete urban
+surface temperatures. J Appl Meteorol 1997;36: 1117--32. Voogt J, Oke T.
+Effects of urban surface geometry on remotely-sensed surface
+temperature. Int J Remote Sens 1998;19:895--920. Voogt J, Oke T. Thermal
+remote sensing of urban climates. Remote Sens Environ 2003;86:370--84.
+Wan Z. MODIS land surface temperature products users' guide. Institute
+for Computational Earth System Science (ICESS), University of
+California, Santa Barbara; 2006. Wan Z. New reﬁnements and validation of
+the MODIS land-surface temperature/emissivity products. Remote Sens
+Environ 2008;112:59--74. Wan Z, Dozier J. A generalized split-window
+algorithm for retrieving land-surface temperature from space. IEEE Trans
+Geosci Remote Sens 1996;34:892--905.
+
+Wan Z, Zhang Y, Zhang Q, Li Z. Validation of the land-surface
+temperature products retrieved from Terra Moderate Resolution Imaging
+Spectroradiometer data. Remote Sens Environ 2002;83:163--80. Wang W,
+Liang S, Meyers T. Validating MODIS land surface temperature products
+using long-term nighttime ground measurements. Remote Sens Environ
+2008;112: 623--35. Wellenius GA, Schwartz J, Mittleman MA. Particulate
+air pollution and hospital admissions for congestive heart failure in
+seven United States cities. Am J Cardiol 2006;97:404--8. Weng Q. Thermal
+infrared remote sensing for urban climate and environmental studies:
+methods, applications, and trends. ISPRS J Photogramm Remote Sens
+2009;64: 335--44. Yang X, Li C, Zhang Z. A remote sensing method for
+studying urban heat island. Proceedings of the ﬁrst international
+airborne remote sensing conference and exhibition held in Strasbourg,
+France; 1994. p. 261--71. Zanobetti A, Schwartz J. Temperature and
+mortality in nine US cities. Epidemiology 2008;19:563. Zeger SL, Thomas
+D, Dominici F, Samet JM, Schwartz J, Dockery D, et al. Exposure
+measurement error in time-series studies of air pollution: concepts and
+consequences. Environ Health Perspect 2000;108:419--26.
+
+

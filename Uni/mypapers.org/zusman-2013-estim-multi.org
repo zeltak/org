@@ -1,0 +1,905 @@
+Atmospheric Environment 81 (2013) 633e641
+
+Contents lists available at ScienceDirect
+
+Atmospheric Environment journal homepage:
+www.elsevier.com/locate/atmosenv
+
+Estimating multi-annual PM2.5 air pollution levels using sVOC soil
+tests: Ashkelon South, Israel as a case study Marina Zusman a, *, Josefa
+Ben Asher b, Itai Kloog c, Boris A. Portnov a a Department of Natural
+Resources & Environmental Management, Faculty of Management, University
+of Haifa, 199 Aba-Hushi Avenue, Mount Carmel, Haifa 3498838, Israel b
+Israeli Institute of Energy & Environment, Haim Levanon str. 26, P.O.
+Box 17081, Tel Aviv, Israel c Department of Geography and Environmental
+Development, Ben-Gurion University of the Negev, P.O. Box 653,
+Beer-Sheva 84105, Israel
+
+h i g h l i g h t s  Due to high maintenance costs PM monitoring is
+often geographically sparse.  The study explores indirect ways of PM
+assessment using soil tests.  Semi-volatile organic compounds (sVOCs)
+emitted as aerosols often spread with PM.  SVOCs levels in soils indeed
+revealed a strong association with PM averages.
+
+a r t i c l e i n f o
+
+a b s t r a c t
+
+Article history: Received 15 June 2013 Received in revised form 21
+September 2013 Accepted 23 September 2013
+
+Background and aims: In most developed countries, air pollution is
+monitored by stationary networks of air quality monitoring stations
+(AQMS). Due to high installation and maintenance costs, the number of
+such stations (especially those measuring particulate matter (PM) is
+often insufﬁcient, placing limitations on the geographic coverage of air
+pollution monitoring and the accuracy of exposure assessment studies
+based on AQMS data. Semi-volatile organic compounds (sVOCs) often spread
+with PM and contribute to the PM composition when emitted into the
+atmosphere. As a result, sVOC concentrations in soil can help, as we
+hypothesize, to estimate average levels of PM air pollution in
+geographic areas in which PM monitoring by AQMS is sparse or
+unavailable. Methods: Soil samples taken around the Ashkelon-South
+industrial area in Israel were tested for the presence of sVOCs
+compounds using a standard EPA 8270C protocol. PM pollution data
+obtained from local AQMSs were then mutually compared with sVOC soil
+contamination levels observed in the same locations, using spatial
+interpolation methods and multivariate statistical analysis tools.
+Results: PM levels in the atmosphere, estimated using sVOC soil
+concentrations, and adjusted for several locational attributes and
+average levels of other commonly monitored air pollutants, revealed a
+reasonably strong association with PM2.5 averages actually recorded by
+AQMS, helping to explain 86e88% of the observed PM variation (R2-Adj. ¼
+0.859e0.879), depending on the model type. Conclusions: The study
+conﬁrms feasibility of obtaining reasonably accurate PM air pollution
+estimates using sVOC soil testing. While the costs of establishment and
+maintenance of a dense network of AQMS may be prohibitive, the proposed
+approach may help to obtain reasonably accurate PM air pollution
+estimates for geographic areas in which PM monitoring by AQMS is sparse
+or unavailable. Ó 2013 Elsevier Ltd. All rights reserved.
+
+Keywords: Particulate matter (PM) Semi-volatile organic compound (sVOC)
+Air quality monitoring station (AQMS) Geographic information systems
+(GIS) Soil contamination
+
+1. Introduction
+
+-  Corresponding author. Department of Natural Resources & Environmental
+   Management, Faculty of Management, University of Haifa, Mount Carmel,
+   Haifa 3498838, Israel. Tel.: þ972 4 828 8532; fax: þ972 4 824 9971.
+   E-mail addresses: zusman.marina@gmail.com, mzik@campus.haifa.ac.il
+   (M. Zusman). 1352-2310/$ e see front matter Ó 2013 Elsevier Ltd. All
+   rights reserved. http://dx.doi.org/10.1016/j.atmosenv.2013.09.053
+
+Many countries across the globe are stepping up efforts to develop and
+maintain air quality monitoring station (AQMS) networks, in order to
+trace changes in air pollution levels (Larssen et al., 1999). Apart from
+relatively large maintenance costs required for calibrating and
+repairing AQMS equipment, measuring different pollutants requires
+different ﬁlters and equipment, some
+
+634
+
+M. Zusman et al. / Atmospheric Environment 81 (2013) 633e641
+
+of which have to be replaced periodically (Chow and Watson, 1998). Thus,
+according to Israeli Industry Portal's (IIP, 2009) estimates, the costs
+of establishing each monitoring station can reach, on the average, up to
+US$100,000, in addition to the maintenance costs of some US$24,000 per
+annum. The geographic distribution of AQMSs may also become an issue
+because many AQMSs are located near main pollution sources and do not
+provide full coverage of all geographic areas (IMEP, 2012; Larssen et
+al., 1999). There are several “indirect” methods helping to estimate
+pollution by particulate matter (PM) in geographic areas unmonitored by
+AQMSs. These methods include statistical modeling based on satellite
+images of aerosol optical thickness (AOT), atmospheric dispersion models
+(ADMs), and land-use regressions (Chen et al., 2008; Cimorelli et al.,
+2005; Gupta et al., 2006; Johnson et al., 2010; Kloog et al., 2012;
+Kusmierczyk-Michulec, 2010). In this paper we propose and test an
+alternative approach for generating PM estimates for AQMS unmonitored
+areas, based on semi-volatile organic compounds (sVOCs) soil samples.
+Although sVOCs, originating from petrochemical industries and incomplete
+fuel combustion are emitted into the atmosphere as gases (Rudel and
+Perovich, 2009), they convert into aerosol by oxidative processes, by
+adhering to sooth or water droplets, and can reach areas relatively
+remote from their emission sources by traveling with particulates,
+originated from the same pollution source or brought from other places
+by wind. As a result, concentration of sVOCs in soils (especially
+outside the immediate vicinity of stationary industrial pollution
+sources and thoroughfare roads) may become a proxy for long-term PM air
+pollution. The main goal of the present study is to explore the
+relationship between accumulated sVOC soil contamination and average
+levels of air pollution by particulate matter of 2.5 microns in
+aerodynamic diameter or less (PM2.5), in an attempt to determine whether
+the multi-annual average PM air pollution levels can reasonably
+accurately be predicted by the presence of sVOCs in soil detected in the
+same geographic areas. 2. Background studies As noted previously, in the
+absence of a geographically comprehensive AQMS coverage, air quality
+estimates for unmonitored areas (especially in respect to PM) can be
+estimated using geo-statistical modeling, based on satellite images (see
+inter alia, Gupta et al., 2006; Kloog et al., 2012). According to this
+method, maps of predicted PM pollution are created based on
+satellitederived aerosol optical thickness (AOT) measurements (NASA,
+2013). It should be noted, however, that the accuracy of AOT estimates
+depends on aerosol mass concentration, mass extinction efﬁciency,
+hygroscopic growth factor, effective aerosol scale height and other
+factors which may affect the accuracy of the estimates (Gupta et al.,
+2006; Kusmierczyk-Michulec, 2010). Atmospheric dispersion models
+(ADMs), such as AERMOD are another method for estimation of PM levels
+over AQMS unmonitored areas. These models are based on Gaussian and
+bi-Gaussian approaches and help to predict the dispersion of air
+pollutants emitted into the lowest part of the atmosphere from
+stationary and mobile air pollution sources (Cimorelli et al., 2005).
+Threedimensional air quality prediction is also implemented in the
+Community Multi-scale Air Quality (CMAQ) model, which is based on a grid
+tool designed to predict concentrations of photochemical oxidants,
+particulate matter, acidic compounds and nutrient deposition (Byun and
+Schere, 2006). However, these models require multi-level, high
+resolution input data, which may not always be available, and
+occasionally result in insufﬁciently accurate estimates (Chen et al.,
+2008).
+
+Land-use regressions (LURs) are another frequently used empirical
+technique for predicting PM concentrations in AQMS unmonitored areas.
+These regressions take into account various geographic and land-use
+variables, such as trafﬁc intensity, land-use patterns, proximity to
+main roads, sea shore, industrial zones, etc. (Johnson et al., 2010).
+However, for their calibration, LURs require accurate monitoring data
+for a large number of sites, and often unable to differentiate between
+speciﬁc emission sources (Johnson et al., 2010). Several studies also
+examined soil sampling in the “air-soil” systems, where there exists a
+constant exchange of chemicals between air and soils, by dry and wet
+deposition and volatilization from soils (Cousins et al., 1999; He and
+Balasubramanian, 2009; Rudel and Perovich, 2009). Thus, Carvacho et al.
+(2004) examined the potential of soil to emit fugitive dust in the PM10
+(particulate matter of 10 microns in aerodynamic diameter or less) and
+PM2.5 size range. The authors of this study optimized the chamber
+operating parameters by testing the procedure on 44 soils spanning
+across a range of soil textures and established a repeatable method that
+provides an index of PM10 or PM2.5 dust found to be highly correlated
+with the soil texture. In a separate study, Hagen (2004) measured
+breakage fractions of saltation-size aggregates to suspension-size and
+the fractions of PM10 and PM2.5 generated by the breakage process for a
+range of soils in order to improve PM10 predictions of in erosion
+models. For this purpose, soil samples from 9 locations were collected,
+air-dried and analyzed in laboratory conditions, showing that relative
+breakage fractions of PM10 increased with calcium carbonate content, but
+less so with organic matter. In another recent study, Poggio et al.
+(2009) examined the diffusion of metal contamination in relationship to
+soil properties. In the framework of this study, 25 soil samples were
+taken in agricultural sites and 31 samples e in residential areas.
+According to the results of this research, high correlation was found
+between metals, organic matter and clay content. The regression analysis
+conﬁrmed a possibility of getting estimates of human bioaccessible
+concentrations from pseudototal concentrations, taking into account soil
+parameters. To the best of our knowledge, however, no attempts have been
+made so far to determine the strength of association between soil sVOC
+content and PM concentrations in the same geographic areas, such as that
+is discussed in the subsections below. 3. Materials and methods 3.1.
+Study area The Ashkelon-South industrial area is located south of the
+City of Ashkelon on the Mediterranean seashore and covers the area of
+some 28 (7  4) km2. It hosts several industrial facilities, including
+the Rutenberg power plant,1 several major oil storage tanks (linked to
+the Eilat-Ashkelon petroleum pipeline), and the Ashkelon seawater
+desalination plant, one of the largest in the world (Tenne, 2010).
+Several residential neighborhoods are located in the radius of 3 km from
+the industrial zone, hosting about 40,000 residents. The climate of the
+area is hot and humid during the summer and rainy during the winter.
+Desert dust is always present in the atmosphere due to frequent heat
+waves accompanied by blowing dust from North Africa and Sahara, which
+are most frequent in spring, summer and autumn (Israelevich et al.,
+2003).
+
+1 The coal-ﬁred Rutenberg power plant has two active smokestacks, one of
+which emits dry gases (SO2 and NOx), and another e the Plant Flue Gas
+Desulfurization device, e which uses a vaporization process to reduce
+the amount of SO2 emitted into the atmosphere.
+
+M. Zusman et al. / Atmospheric Environment 81 (2013) 633e641
+
+635
+
+Fig. 1. Map of the study area showing the location of air quality
+monitoring stations (AQMS) and soil sample sites.
+
+In addition to desert dust, main sources of PM in the region are local
+industries (especially the Rutenberg power plant), as well as motor
+vehicles travelling on major roads and highways branching out from the
+City in Ashkelon into different directions (Fig. 1). According to local
+air quality monitoring data, about 15e20 ug m3 of PM2.5 are attributed
+to naturally occurring dust. The rest of 5e 10 ug m3 are attributed to
+anthropogenic sources, mainly fuel combustion (IMEP, 2012). 3.2. Air
+quality monitoring data Although Israel has a relatively dense AQMS
+network (Larssen et al., 1999), most existing stations (107) monitor
+concentrations of NOx, and SO2, while fewer of them monitor particulate
+matter e PM10 and PM2.5 (27 and 20 stations, respectively), e which
+often complicates exposure assessment studies (Portnov et al., 2009).2 A
+total of 13 AQMSs (out of 107 stations established countrywide) are
+located in the City of Ashkelon and nearby localities. Most of these
+stations (10) are operated by the Association of Towns for Environmental
+Protection, and 3 of them e Kiryat Menachem, Luzit and Bat Hadar e are
+maintained by the Israel Electric Corporation (IMEP, 2012). Nine
+stations monitor the
+
+2 According to Larssen et al. (1999), the density of AQMSs in Israel is
+approximately one station per 200 km2, as compared to one station per
+660 km2 in Germany and one station per 400 km2 in France.
+
+concentration of particulate matter e ﬁve stations for PM2.5 and four
+for PM10 (see Fig. 1). 24-h average concentrations of PM10 and PM2.5 for
+the present analysis were obtained for the three-year period (2010e2012)
+from the Ministry of the Environmental Protection, for each AQMS located
+in the study area separately (IMEP, 2012). 3.3. Soil contamination data
+Soil contamination data for the present analysis were generated in the
+framework of the research project, entitled: Health Effects of Exposure
+to Fuel Contamination: Cancer Morbidity in Haifa Bay Area and Ashkelon
+South, sponsored by the Petroleum and Energy Infrastructures Ltd. (PEI,
+2012). In the framework of this project, soil samples were collected by
+the LDD Advanced Technologies Inc. in the Summer-Fall of 2012 and
+analyzed by the Aminolab Ltd. laboratory specializing in chemical
+analysis for environmental studies (Aminolab, 2012; LDD, 2012). For the
+purpose of soil sampling, the entire study area was divided into 48
+equal quadrats (see Fig. 1), from which soil samples (one in each
+quadrat) were taken. The sampling followed the SOP 2012 Soil Sampling
+procedure and the EPA standards operating procedure document (US EPA,
+2012). Each step of soil sampling has been recorded and its place and
+environment was photographed, as required by the EPA soil sampling
+guidelines (US EPA, 2012). In cases in which there was no access to
+planned sampling points (due to e.g., the presence of
+
+636
+
+M. Zusman et al. / Atmospheric Environment 81 (2013) 633e641
+
+paved surfaces, etc.), the soil sampling was conducted as close as
+possible to the originally planned point, within up to 500-m radius,
+except for one sample that was relocated from the private industrial
+area due to restricted access. All 48 sample points were located using a
+global positioning system (GPS) device. The laboratory analysis of the
+soil samples for sVOCs was performed in compliance with the EPA 8270C
+method, using a gas chromatography/mass spectrometer (GCeMS) instrument.
+The preparation of the samples was based on the EPA 3550B method (US
+EPA, 2012) and on a semi-quantitative scan for organic materials and was
+performed using a GCeMS instrument alongside with the Wiley 7 library,
+containing 350,000 spectrums. The chromatographic peaks were identiﬁed
+by comparing the mass spectrum to reference spectra registered in the
+library. 3.4. Data mapping and interpolation Soil data mapping and
+analysis was performed in several steps. First, in order to generate a
+continuous surface of sVOC contamination (that is, a surface of
+observations covering both measured soil contamination spots and
+locations between discrete soil test sites), sVOC contamination levels
+revealed in the test sites in detectable quantities (see Table S-1 of
+the Supplement materials section) were interpolated using the kriging
+interpolation method.3 As with other spatial interpolation models,
+kriging provides approximations which may be biased if the number of
+actual observations is small. Yet, in contrast to other techniques (such
+as e.g., IDW and splining), kriging interpolation uses not only the
+values observed in neighboring locations, but also takes into account
+the statistical correlation between these points, thus helping to
+provide reasonably accurate predictions for unmeasured locations (ESRI,
+2012; Portnov and Zusman, 2012; Portnov et al., 2012). In our analysis
+we used ordinary kriging method (which assumes a constant, unknown mean)
+based on a spherical semivariogram model (ESRI, 2012). At the second
+step, a continuous PM air pollution surface was generated using records
+of individual AQMSs located in the study area (see Fig. 1). Since not
+all the stations located in the study area measure PM2.5 levels (see
+Subsection 3.2), for four stations, PM2.5 levels were estimated from
+PM10 measurements, using a conversion approach similar to that used in
+the framework of the European Air Pollution and Health project (Medina
+et al., 2009). In particular, PM2.5ePM10 conversion coefﬁcients were
+ﬁrst calculated using 24-h PM2.5 and PM10 averages from existing
+monitoring stations across the country. Since the values of the
+estimated coefﬁcients appeared to differ across the regions (see the
+Supplement materials section e Table S-2), the value of 0.45 observed in
+the South (in which the study area is located) was adopted for
+conversion. 3.5. Data linking Since multivariable regression analysis
+cannot directly be applied to continuous surfaces, PM air pollution and
+sVOCs soil contamination maps (see Subsection 3.4) were converted into
+discrete point data. For this purpose, 1000 randomly distributed
+“reference” points were generated according to the methodological
+approach, suggested in Zusman et al. (2012). In particular, after the
+
+3 As with other interpolation techniques (e.g., IDW, splines, etc.),
+kriging accuracy is limited by the number of points available and areas
+without sources (also known as “sinks”). In the initial phases of the
+analysis, we compared kriging results to those obtained by other
+interpolation techniques, and opted for kriging as best performing [The
+results of comparison between different interpolation methods are not
+reported in the manuscript for brevity's sake and can be obtained from
+the authors upon request].
+
+layer of reference points was generated using Hawth's Analysis Tool in
+ArcGIS10.xÔ (ESRI, 2012) (see the Supplement materials section e Fig.
+S-1), the reference points were linked to the PM2.5 and sVOCs contours,
+with each reference point received the value from the contour being
+closest to that particular point (for more detail on this procedure, see
+Zusman et al., 2012). The calculation was performed in ArcGIS10.xÔ using
+the “spatial join” tool that joins geographic layers (maps) based on
+their spatial location (ESRI, 2012). The values obtained thereby were
+then used as the dependent or independent variables in the multivariate
+analysis. In a similar manner, the continuous surfaces of SO2 and NOx
+average pollution levels were linked to the same reference points (that
+is, ﬁrst by constructing SO2 and NOx pollution surfaces, converting them
+into contours and then by joining the contours with the reference
+points). Lastly, distances from the industrial zone, main roads and the
+sea were calculated for the same reference points, in order to be used
+as additional explanatory variables in the multivariable analysis (see
+Subsection 3.7 for more detail). 3.6. Statistical analysis The
+association between sVOC soil contaminants and PM2.5 levels measured by
+AQMS in different parts of the study area (see Subsection 3.5), was ﬁrst
+analyzed using univariate tests. The goal of these tests was to ﬁnd
+which speciﬁc soil contaminants are positively and signiﬁcantly
+associated with PM2.5 levels. Next, multivariate regression analysis was
+run to identify the strength of association between soil contaminants
+and observed PM2.5 levels, controlled for several location attributes
+and the average levels of other air pollutants. Factor analysis was then
+performed to examine whether some soil contaminants tend to form
+autonomous groups characterized by common pattern of relationships and
+then substitute the original (potentially collinear) variables by
+“orthogonal” factors, thus helping to improve the robustness of
+regression estimates (Rencher, 2002). The analyses were performed using
+the SPSS 19Ô software. 3.7. Research variables 24-h PM2.5 averages for
+the period of 2010e2012, either obtained from the existed monitoring
+stations or converted from PM10 measurements (see Subsection 3.4), were
+used in the present study as the dependent variable. Concurrently, in
+addition to soil concentrations of different sVOCs (see Subsection 3.3),
+the following control variables were covered by the analysis: distance
+to the main roads (m.), distance to the sea shore (m.), distance to the
+industrial zone (m.) and average concentration levels of two commonly
+measured gaseous air pollutants e NOx (ppb) and SO2 (ppb). Emissions
+from motor vehicles may contribute to PM levels due to road dust and
+combustion-related particles from diesel and gasoline combustion by
+motor vehicles (US EPA, 1999). Several studies reported a contribution
+of trafﬁc vehicles to PM aerosol formation (Chan et al., 1999; Chen et
+al., 2008). Industrial facilities are also primary contributors to PM
+pollution, especially when such facilities are not in full compliance
+with effective pollution standards (Chow and Watson, 2002). Therefore,
+proximity to the nearest major road and proximity to the industrial zone
+were added as explanatory variables for observed PM levels. There is
+also a body of evidence that sea winds may transfer emissions and
+contaminants affecting human health (Busby, 2004). Moreover sea salt may
+also contribute to particulate pollution (Chan et al., 1999; US EPA,
+1999). For that reason we included distance to the sea shore as an
+additional control variable. Furthermore, gaseous air pollutants, such
+as NOx and SO2, may also play a role in PM formation. Thus, according to
+several
+
+M. Zusman et al. / Atmospheric Environment 81 (2013) 633e641 Table 1
+The association between PM2.5 levels (24-h averages in 2010e2012, mg
+m3) and different soil contaminants (Method e multiple regression
+analysis; soil contamination variables only). Explanatory variable
+
+Model 1 B (t)
+
+B (t)
+
+Constant Octacosane (A27)b Butyl citrate (A14)b Octadecanoic acid (A3)b
+
+13.216 (52.619*) 131.597 (31.215*)
+
+10.574 (37.788*) 88.983 (19.207*)
+
+5.906 (9.270*) 65.393 (12.219*)
+
+e
+
+120.490 (15.831**)
+
+144.361 (18.175**)
+
+e
+
+e
+
+100.547 (8.100**)
+
+R2 Adjusted R2 F SEEc N of obs. (reference points)d
+
+0.494 0.494 974.369** 2.740 1000
+
+0.596 0.595 734.337** 2.450 1000
+
+0.621 0.619 543.151** 2.375 1000
+
+a
+
+Model 2
+
+Model 3
+
+a
+
+B (t)a
+
+Models 1-3: Soil contaminants as predictors only. * Indicates a
+two-tailed 0.05 signiﬁcance level; ** Indicates a two-tailed 0.01
+signiﬁcance level. a Regression coefﬁcient and t-statistic (in the
+parentheses). b Soil contaminants (see Table S-1). c Standard error of
+the estimate. d Randomly generated reference points e see Subsection
+3.5.
+
+previous studies (cf. e.g., Liao, et al., 2009; US EPA, 1999), most of
+the PM2.5 mass in urban and non-urban areas is a combination (due to
+gas-to-particle conversion) of the sulfur dioxide (SO2) to sulfate
+and/or NOx to nitrate which are both primary and secondary aerosols.
+Therefore, we included three-year average 24-h measurements of SO2 and
+NOx (during 2010e2012) as additional predictors for PM levels, expecting
+that the inclusion of these variables will show a better ﬁt of the model
+controlling for other than PM2.5 air pollutants [See Table S-1 of the
+Supplementary materials section].
+
+637
+
+4. Results 4.1. Univariate analysis As Table S-3 in the Supplementary
+   materials section shows, out of eight identiﬁed soil contaminants,
+   PM2.5 levels appear to be positively and signiﬁcantly associated with
+   Hexadecanoic acid, Octadecanoic acid, Eicosane, Butyl citrate,
+   Octadecane, Hexatriacontane, and Octacosane (R > 0.3; p < 0.01). Most
+   of these compounds (except for Butyl citrate) belong to long
+   aliphatic chains being typical to diesel, lubricating oils and fuel
+   oils. These straight chain aliphatic compounds may be generated by
+   accidental spills, as exhaust gases from vehicles or result from not
+   complete combustion of fuel in the power plant. Their association
+   with PM levels is consistent with the processes involved in the
+   exchange of sVOCs across the air-soil interface revealed by previous
+   studies (see inter alia Cousins et al. 1999). As Table S-3 also
+   shows, a positive association is also found between PM2.5 levels and
+   distances to the seashore and the industry (p < 0.01), indicating
+   PM2.5 levels tend to increase in line with increasing distance from
+   the seashore and the industrial area (which is located on the
+   seashore). This association might be due to chemical transformation
+   (i.e., gas-to-particle mass transfer) or due to transport of
+   particles by the wind. 4.2. Multivariate analysis Tables 1 and 2
+   report factors affecting average PM2.5 levels. Models 1e3, reported
+   in Table 1, include only soil contaminants as explanatory variables
+   for PM levels, while Model 4 in Table 2 covers both soil contaminants
+   and additional location attributes, such as distances to the sea
+   shore, roads proximity and proximity to the industrial zone. Gaseous
+   pollutants e SO2 and NOx e are added as additional explanatory
+   variables to Model 5, while non-linearity is taken into account in
+   Model 6 (Table 2). As Table 1 shows, several soil contaminants, such
+   as Octacosane, Butyl citrate and Octadecanoic acid, emerged as
+   statistically
+
+Table 2 The association between PM2.5 levels (24-h averages in
+2010e2012, mg m3) and different soil contaminants adjusted for several
+location attributes and average levels of other air pollutants (Method e
+multiple regression analysis; soil contamination levels and location
+attributes represented by linear and quadratic terms). Explanatory
+variable
+
+Model 4
+
+Model 5
+
+Model 6
+
+B (t)a
+
+B (t)a
+
+B (t)a
+
+Constant Octacosane (A27)b Octacosane (A27)\^2 Butyl citrate (A14)b
+Octadecanoic acid (A3)b Octadecanoic acid (A3)^{2 D\_sea D\_sea}2
+D\_roads D\_industry D\_industry\^2 Average\_SO2 Average\_NOx
+
+4.135 (6.36*) 127.668 (14.809*) e 161.522 (12.826*) 124.558 (10.011*) e
+6.961E-04 (8.763*) e 0.001 (4.281*) 3.061E-04 (3.319**) e e e
+
+687.769 (24.739*) 85.975 (2.516*) e 153.287 (14.818*) 153.774
+(16.374*) e 0.003 (20.524*) e 0.001 (3.115*) 0.001 (14.673*) e 3.593
+(2.764*) 60.837 (26.168**)
+
+736.538 (20.666*) 40.896 (2.966*) 14.038 (0.070) 120.974 (12.776*)
+650.856 (7.533*) 5438.583 (6.426*) 0.005 (29.504*) 3.925E-7
+(16.407*) 0.002 (9.764*) 0.002 (12.324*) 5.664E-7 (19.666*) 29.653
+(14.528*) 57.091 (18.929*)
+
+R2 Adjusted R2 F SEEc N of obs. (reference points)d
+
+0.679 0.677 350.586** 2.187 1000
+
+0.822 0.820 570.365** 1.633 1000
+
+0.879 0.878 598.128** 1.347 1000
+
+Model 4: Distances to the sea (m), main roads (m) and the industrial
+zone (m) added. Model 5: Average levels of SO2 and NOx (ppb) added.
+Model 6: Soil contaminants (quadratic terms), distances to the sea (m)
+(quadratic term), and to the industrial zone (m) (quadratic term) added.
+* Indicates a two-tailed 0.05 signiﬁcance level; ** Indicates a
+two-tailed 0.01 signiﬁcance level. a Regression coefﬁcient and
+t-statistic (in the parentheses). b Soil contaminants (see Table S-1). c
+Standard error of the estimate. d Randomly generated reference points e
+see Subsection 3.5.
+
+638
+
+M. Zusman et al. / Atmospheric Environment 81 (2013) 633e641
+
+Table 3 Factor analysis of the soil contaminants found in the study area
+in detectable quantities. Soil contaminant
+
+Factor 1
+
+Factor 2
+
+Eicosane (A4) Dimethylphenylmethanol (A87) Butyl citrate (A14)
+Octadecane (A17) Octacosane (A27) Hexatriacontane (A24) Hexadecanoic
+acid (A2) Octadecanoic acid (A3)
+
+0.903 0.864 0.856 0.824 0.778 0.441 e e
+
+e e e e 0.517 e 0.950 0.944
+
+% of Variance Cumulative % Cronbach's Alpha
+
+47.722 47.722 1.053
+
+28.345 76.067
+
+signiﬁcant and exhibit positive signs of regression coefﬁcients, helping
+to explain about 62% of the observed variance of the average PM2.5
+levels (R2 ¼ 0.621, Model 3, Table 1), with Octacosane alone explaining
+about 49% of the observed PM variance (Model 1, Table 1). After
+additional location explanatory variables (such as, distances to the
+seashore, road proximity and proximity to the industrial zone), the
+explained variance increases even further (R2adjusted ¼ 0.677; see Model
+4, Table 2), while soil contamination components remain statistically
+signiﬁcant and positively associated with PM2.5 pollution (p < 0.01).
+Controlling for other air pollutants (SO2 and NOx), does not change the
+association between levels of PM and soil contaminants substantially,
+with sVOC variables remaining statistically signiﬁcant and positive
+(Octacosane: t ¼ 2.516, Butyl citrate: t ¼ 14.818, and Octadecanoic
+acid: t ¼ 16.374; p < 0.01), while R2-adjusted increased from 0.677
+(Model 4) to 0.820 (Model 5). The model further improves if quadratic
+terms are added (R2 ¼ 0.822; Model 5 vs. R2 ¼ 0.879; Model 6). The model
+coefﬁcients and ﬁts also remain relatively stable when the analysis is
+run separately for separate years under study (see the Supplementary
+materials section e
+
+Models 1e3, Table S-4). The Standard Error of the Estimate (SEE)
+declines gradually when additional explanatory factors and quadratic
+terms are added (e.g., SEE ¼ 2.740 in Model 1 vs. SEE ¼ 1.347 in Models
+6), thus indicating an improvement in the accuracy of the regression
+estimates. 4.2.1. Factor analysis The results of the factor analysis of
+the sVOC components are reported in Table 3. As the table shows, two
+factors are identiﬁed, helping to explain 47.7% and 28.3% of the input
+variables' variance, respectively. The ﬁrst factor correlates
+signiﬁcantly with Eicosane, Dimethylphenylmethanol, Butyl citrate,
+Octadecane, Octacosane and Hexatriacontane (jrj ¼ 0.441e0.903), while
+the second factor e with Hexadecanoic acid and Octadecanoic acid (r ¼
+0.950 and r ¼ 0.944, respectively). It has been hypothesized that air
+soil exchange is the key process that controls the level of many sVOCs
+present in soil and air simultaneously. This process depends on several
+factors. One of them is soil/air fugacity quotient (Cousins and Jones,
+1998) which depends strongly on boiling points of the compounds. The six
+soil contaminants associated with PM2.5 levels can thus be grouped in
+two distinct blocks: Hexadecanoic and Octadecanoic acids (boiling points
+of 351  C and 383  C respectively) and others more volatile compounds,
+with boiling points in the range of 200e300  C. Regression models
+incorporating these two factors, instead of original variables, are
+reported in Table 4 (see Models 7e9). When adjusted to incorporate
+distances to the industrial zone, main roads, and the sea and average
+pollution levels of SO2 and NOx, the model exhibit a relatively high
+degree of generality and reasonably good ﬁt (F ¼ 542.794; P < 0.01; Adj.
+R2 ¼ 0.792; Table 4, Model 9). Furthermore, when quadratic terms of
+distances to the sea and industrial zone are added, the model's ﬁt and
+generality further improve (Model 10: F ¼ 676.221; P < 0.01; R2-Adj. ¼
+0.859; Table 4). Characteristically, both factors identiﬁed by the
+factor analysis show statistically signiﬁcant and positive associations
+with average PM2.5 levels (p < 0.01), albeit the model based on the
+extracted factors (Models 7e10) shows somewhat lower ﬁt than the models
+
+Table 4 The association between PM2.5 levels (24-h average
+concentrations in 2010e2012, mg m3) and different soil contaminants
+based on factor analysis and adjusted for several location attributes
+and average levels of other air pollutants (Method e multiple regression
+analysis; dependent variable e PM2.5 levels; location attributes are
+represented by linear and quadratic terms). Explanatory variable
+
+Model 7
+
+Model 8
+
+Model 9
+
+Model 10
+
+B (t)a
+
+B (t)a
+
+B (t)a
+
+B (t)a
+
+Constant Factor 1b Factor 2b D\_roads D\_sea D\_sea^{2 D\_industry
+D\_industry}2 Average\_SO2 Average\_NOx
+
+20.575 (229.855*) 2.390 (26.686*) 1.055 (11.775) e e e e e e e
+
+23.860 (50.760*) 2.769 (11.222*) 2.208 (15.480*) 0.004 (11.594*)
+8.969E-04 (9.408*) e 3.023E-04 (2.939*) e e e
+
+772.062 (24.955*) 2.756 (13.594*) 2.489 (22.616*) 3.017E-04 (1.228)
+0.003 (21.939*) e 0.001 (10.176*) e 7.320 (5.228*) 70.620 (27.357**)
+
+926.365 (30.691*) 2.402 (12.544*) 1.398 (13.386*) 0.001 (5.231*) 0.004
+(28.016*) 2.088E-07 (9.119*) 0.002 (11.254*) 5.687E-07 (21.481*)
+24.339 (12.909*) 77.218 (30.330*)
+
+R2 Adjusted R2 F N of obs. (refer. points)c
+
+0.460 0.459 425.382** 1000
+
+0.577 0.574 270.680** 1000
+
+0.793 0.792 542.794** 1000
+
+0.860 0.859 676.221** 1000
+
+Model 7: Factors only. Model 8: Distances to main roads (m), the sea (m)
+and the industrial zone (m) added. Model 9: Average levels of SO2 (ppb)
+and NOx (ppb) added. Model 10: Quadratic terms of distances to the sea
+(m) and to the industrial zone (m) added. * Indicates a two-tailed 0.05
+signiﬁcance level; ** Indicates a two-tailed 0.01 signiﬁcance level. a
+Regression coefﬁcient and t-statistic (in the parentheses). b Factors
+are based on the Factor Analysis (see Table 3); Factor 1 consists of
+soil contaminants: A4, A14, A17, A24, A27, A87 (see Table S-1) and
+Factor 2 is associated with soil contaminants A2, A3 (see Table S-1). c
+Randomly generated reference points e see Subsection 3.5.
+
+M. Zusman et al. / Atmospheric Environment 81 (2013) 633e641
+
+639
+
+Fig. 2. Average PM2.5 levels interpolated using AQMS records (A) and
+estimated from different prediction models (BeD) [see Section 4]. A e
+Multi-annual average pollution levels (mg m3) estimated from AQMSs'
+measurements for years 2010e2012; B e PM2.5 values predicted from the
+basic “soil test” model (Model 3, Table 1: R2 ¼ 0.621; SEE ¼ 2.375); C e
+PM2.5 values predicted from the “soil test” model adjusted for several
+location attributes and average levels of other air pollutants (Model 5,
+Table 2: R2 ¼ 0.822; SEE ¼ 1.633); D e PM2.5 values predicted from the
+soil test model adjusted for location attributes and average levels of
+other air pollutants and incorporating linear and quadratic terms (see
+Model 6, Table 2: R2 ¼ 0.879; SEE ¼ 1.347). Note: Small dots in BeD
+indicate locations of soil sample sites.
+
+based on the original variables (cf., e.g., R2-adj. ¼ 0.859 in Models
+10, Table 4 vs. R2-adj. ¼ 0.878 in Models 6, Table 2). This difference
+can be attributed to the fact that the extracted factors explain about
+76% of the original variables' variance (Table 3). As Fig. 2 also shows,
+PM2.5 air pollution patterns estimated by the prediction models (Fig.
+2BeD) are also essentially similar to those obtained from the AQMS
+records (Fig. 2A), thus indicating that the models' estimates are
+essentially accurate. 5. Discussion Due to a limited number of AQMSs
+that monitor PM levels (especially for PM2.5), it is often difﬁcult to
+estimate precise levels of air pollution for geographic areas where no
+AQMSs are located (Peled et al., 2001). There are several indirect
+methods used by scientists to deal with such an issue, including
+satellite-derived AOT measurements, atmospheric dispersion modeling, 3-D
+air quality modeling or land use regressions. These approaches require
+high resolution input data (e.g., land-use, geographic or meteorological
+variables, emissions and etc.) which are not always available for
+researchers. The present study explores an additional possibility of
+obtaining PM assessments for unmonitored areas, by exploring the
+relationship between soil contamination by sVOCs and multi-annual
+averages of PM2.5 air pollution (obtained from existing AQMSs) and
+accounting for several location attributes and average levels of other
+air pollutants. Justiﬁcation for this approach is that there is a
+constant exchange of chemical elements between air and soils. The
+deposition of particles that come from industrial combustion by air
+
+and their ability to stay for a long time in soil may thus potentially
+be a chemical marker for air pollution. The results of our study conﬁrms
+a possibility of obtaining reasonably accurate estimates of PM air
+pollution averages by using sVOC soil sampling, controlled for land use
+patterns and observed levels of other commonly measured air pollutants,
+such as NOx and SO2. The researcher may naturally prefer to use the most
+accurate prediction models possible. In the present case study, the best
+models predicting PM2.5 multi-annual air pollution levels were obtained
+by incorporating sVOC soil measurements, measured levels of other air
+pollutants, land use attributes and quadratic distance terms (see e.g.,
+Model 6 in Table 2 in which R2 ¼ 0.879). However, it should be realized
+that in case studies to be carried out elsewhere not all of these
+variables may be available. Therefore, we would recommend to use the
+most accurate models possible (including the whole set of predictors
+used in the present analysis), while opting for less accurate models
+(e.g., without other pollutants), only if required data for a speciﬁc
+study area are not available, thus taking into consideration that more
+“compact” models may result in less accurate estimates. The results of
+the present study generally correspond to ﬁndings from other studies
+which conﬁrm the link between concentration of particles in the
+atmosphere and semi-volatile organic compounds in soil (Bozlaker et al.,
+2008; Cousins et al., 1999). Still, such a link remains poorly
+investigated and characterized. The results from our study showed a
+correlation between particulate matters in the air and three speciﬁc
+semi-volatile organic soil contaminants.
+
+640
+
+M. Zusman et al. / Atmospheric Environment 81 (2013) 633e641
+
+In particular, Octacosane, which showed the strongest correlation with
+ﬁne particles (as compared to other soil compounds), is associated with
+aliphatic hydrocarbons and may come from incomplete fuel combustion.
+This compound may stay in soil for a long period of time. The main
+sources of this compound are emissions from the coal-ﬁred power plant
+and exhausts from diesel-powered vehicles. Octadecanoic acid or Stearic
+acid, also revealed by the study as positively associated with PM
+pollution, are saturated fatty acids that may come from microbial
+decomposition of sVOCs originating from fuel, and brought over distances
+with particulate matter and wind. Further studies might, however, be
+needed to explore the relationships between PM and speciﬁc sVOCs and to
+investigate particular sources of the latters' emission. Several
+limitations of the study need to be mentioned. The main weakness of
+present study was lack of PM2.5 measurements for all AQMSs located in
+study area for a direct comparison with sVOCs. We tried to overcome this
+drawback by converting PM10 measurements using a PM2.5ePM10 conversion
+factor calculated based on regional measurements. However, the
+conversion method is less preferable than direct measurements and the
+validity of this approach thus needs to be veriﬁed in further studies.
+As well known, AQMS networks have two main functions: ﬁrst, to record
+air pollution events over time; and, second, to monitor the distribution
+of air pollutants over space. The PM estimation method we proposed and
+test in this study can be of help with the latter monitoring task, by
+helping to predict multi-annual PM pollution levels in geographic areas
+unmonitored or sparsely monitored by AQMS. In future studies, it will
+thus by desirable to investigate a possibility whether the proposed
+method can help to predict accumulated air pollution events, such as
+accumulated air pollution events used by e.g., Dubnov et al. (2007). The
+temporal variability of such events which might differ due to variant
+chemical or physical processes and should thus be taken into account in
+future studies. Another limitation of the present research is that fact
+that the samples have been taken only once, with the season in which
+study sampling was conducted may also play a role, which is not
+accounting in the current study. Follow up studies should thus be
+conducted analyzing the prediction ability of PM levels in the air by
+sVOCs in soil using a larger number of soil samples, as well as to
+verify whether there is temporal stability in soil contamination over
+time. 6. Conclusions As the present study conﬁrms, average PM air
+pollution levels can reasonably accurately be estimated by using data on
+sVOC concentrations in soils. While existing AQMSs monitor a limited
+number of pollutants and costs of their maintenances are relatively
+large, the proposed innovative approach indicates that PM pollution
+levels can be predicted, with a reasonable accuracy, by models based on
+sVOCs soil samples. As a result the proposed estimation approach can
+become a useful tool for PM assessment in geographic areas in which the
+networks of stationary AQMS are sparse or unavailable. To the best of
+our knowledge, there have been no other systematic attempts to assess
+the relation between PM pollution levels in the atmosphere (measured by
+AQMSs) and sVOCs in soils accumulated by emissions from stationary
+sources and fuel combustion by motor vehicles. However, further studies
+should be conducted analyzing the association between PM levels in the
+air and sVOCs in soil using larger numbers of soil samples and repeated
+soil contamination measurements, to verify the consistency of our
+ﬁndings. Acknowledgments The ﬁrst author would like to thank the
+Environment and Health Fund (Jerusalem, Israel) for Doctoral Fellowship
+support. The
+
+authors are also grateful to two anonymous reviewers for their numerous
+helpful comments and suggestions. The authors' gratitude is also due to
+the Petroleum and Energy Infrastructures Ltd. for their ﬁnancial support
+of soil sampling and laboratory analysis, and to Mr. Ori Zvikelsky and
+Mr. Shay Morag of the LDD Advanced Technologies Ltd. for performing soil
+sampling and interpretation of the laboratory analysis results. Appendix
+A. Supplementary data Supplementary data related to this article can be
+found at http:// dx.doi.org/10.1016/j.atmosenv.2013.09.053. References
+Aminolab Ltd, 2012. Aminolab: Proﬁle. Available from:
+http://www.aminolab.net (accessed on March 2013). Bozlaker, A.,
+Muezzinoglu, A., Odabasi, M., 2008. Atmospheric concentrations, dry
+deposition and airesoil exchange of polycyclic aromatic hydrocarbons
+(PAHs) in an industrial region in Turkey. J. Hazard Mater. 153 (3),
+1093e1102. Busby, C., 2004 Jan. Nuclear Pollution, Childhood Leukaemia,
+Retinoblastoma and Brain Tumours in Gwynedd and Anglesey Wards Near the
+Menai Straits, North Wales 2000e2003. Aberystwyth: Green Audit (Bangor
+Report for HTV). Byun, D.W., Schere, K.L., 2006. Review of the governing
+equations, computational algorithms, and other components of the
+Models-3 Community Multiscale Air Quality (CMAQ) modeling system. Appl.
+Mech. Rev. 59, 51e77. Carvacho, O.F., Ashbaugh, L.L., Brown, M.S.,
+Flocchini, R.G., 2004. Measurement of PM2.5 emission potential from soil
+using the UC Davis resuspension test chamber. Geomorphology 59 (1),
+75e80. Chan, Y.C., Simpson, R.W., Mctainsh, G.H., Vowles, P.D., Cohen,
+D.D., Bailey, G.M., 1999. Source apportionment of PM2.5 and PM10
+aerosols in Brisbane (Australia) by receptor modelling. Atmos. Environ.
+33 (19), 3251e3268. Chen, H., Bai, S., Eisinger, D., Niemeier, D.,
+Claggett, M., 2008. Modeling Uncertainties and Near-road PM2.5: a
+Comparison of CALINE4, CAL3QHC and AERMOD. Department of Civil and
+Environmental Engineering, University of California-Davis, Davis, CA,
+USA, pp. 23e37. Chow, J.C., Watson, J.G., 2002. Review of PM2.5 and PM10
+apportionment for fossil fuel combustion and other sources by the
+chemical mass balance receptor model. Energy Fuels 16 (2), 222e260.
+Chow, J.C., Watson, J.G., 1998. Guideline on Speciated Particulate
+Monitoring (Report Prepared for the US Environmental Protection Agency,
+Research Triangle Park, NC, by Desert Research Institute, Reno, NV).
+Cimorelli, A.J., Perry, S.G., Venkatram, A., Weil, J.C., Paine, R.J.,
+Wilson, R.B., Lee, R.F., Peters, W.D., Brode, R.W., 2005. AERMOD: a
+dispersion model for industrial source applications. J. Appl. Meteorol.
+44 (5), 682e693. Cousins, I.T., Beck, A.J., Jones, K.C., 1999. A review
+of the processes involved in the exchange of semi-volatile organic
+compounds (sVOC) across the airesoil interface. Sci. Total Environ. 228
+(1), 5e24. Cousins, I.T., Jones, K.C., 1998. Airesoil exchange of
+semi-volatile organic compounds (SOCs) in the UK. Environ. Pollut. 102
+(1), 105e118. Dubnov, J., Barchana, M., Rishpon, S., Leventhal, A.,
+Segal, I., Carel, R., Portnov, B.A., 2007. Estimating the effect of air
+pollution from a coal-ﬁred power station on the development of
+children's pulmonary function. Environ. Res. 103 (1), 87e98. ESRI, 2012.
+ArcGIS Desktop Help 9.3. Available from: http://webhelp.esri.com
+(accessed on March 2013). Gupta, P., Christopher, S.A., Wang, J.,
+Gehrig, R., Lee, Y.C., Kumar, N., 2006. Satellite remote sensing of
+particulate matter and air quality assessment over global cities. Atmos.
+Environ. 40 (30), 5880e5892. Hagen, L.J., 2004. Fine particulates (PM10
+and PM2.5) generated by breakage of mobile aggregates during simulated
+wind erosion. Trans. ASAE 47 (1), 107e112. He, J., Balasubramanian, R.,
+2009. A study of gas/particle partitioning of sVOCs in the tropical
+atmosphere of Southeast Asia. Atmos. Environ. 43 (29), 4375e4383.
+Israelevich, P.L., Ganor, E., Levin, Z., Joseph, J.H., 2003. Annual
+variations of physical properties of desert dust over Israel. J.
+Geophys. Res 108 (D13), 4381e4390. Israeli Industry Portal (IIP), 2009.
+Clean Air Act and Its Implications for the Industry. Available from:
+http://www.metal.co.il (accessed on April 2013). Israel Ministry of
+Environmental Protection, 2012. Air Quality Monitoring. Available from:
+http://www.environment.gov.il (accessed on January 2012). Johnson, M.,
+Isakov, V., Touma, J.S., Mukerjee, S., Özkaynak, H., 2010. Evaluation of
+land-use regression models used to predict air quality concentrations in
+an urban area. Atmos. Environ. 44 (30), 3660e3668. Kloog, I., Melly,
+S.J., Ridgway, W.L., Coull, B.A., Schwartz, J., 2012. Using new
+satellite based exposure methods to study the association between
+pregnancy PM2.5 exposure, premature birth and birth weight in
+Massachu-setts. Environ. Health 11 (1), 40. Kusmierczyk-Michulec, J.,
+2010. Optical measurements of atmospheric aerosols in air quality
+monitoring. Air Qual. Models Appl., 153e172. Larssen, S., Sluyter, R.,
+Helmis, C., 1999. Criteria for EUROAIRNET: the EEA Air Quality
+Monitoring and Information Network. Technical Report No 12/1999.
+European Environment Agency.
+
+M. Zusman et al. / Atmospheric Environment 81 (2013) 633e641 LDD
+Technologies Ltd., 2012. LDD Technologies: Proﬁle. Available from:
+http:// www.lddtech.com (accessed on March 2013). Liao, K.J., Tagaris,
+E., Manomaiphiboon, K., Wang, C., Woo, J.H., Amar, P., He, S., Russell,
+A.G., 2009. Quantiﬁcation of the impact of climate uncertainty on
+regional air quality. Atmos. Chem. Phys. 9, 865e878. Medina, S., Le
+Tertre, A., Saklad, M., 2009. The APHEIS project: air pollution and
+healthda European information system. Air Qual. Atmos. Health 2 (4),
+185e198. National Aeronautics and Space Administration, 2013. NASA
+Scientists Use Satellites to Distinguish Human Pollution from Other
+Atmospheric Particles. Available from: http://earthobservatory.nasa.gov
+(accessed on April 2013). Petroleum and Energy Infrastructures Ltd.
+(PEI), 2012. Company Proﬁle. Available from: http://www.pei.co.il
+(accessed on April 2013). Peled, R., Bibi, H., Pope III, C.A., Nir, P.,
+Shiachi, R., Scharff, S., 2001. Differences in lung function among
+school children in communities in Israel. Arch. Environ. Health 56 (1),
+89e95. Poggio, L., Vrs caj, B., Schulin, R., Hepperle, E., Ajmone
+Marsan, F., 2009. Metals pollution and human bioaccessibility of
+topsoils in Grugliasco (Italy). Environ. Pollut. 157 (2), 680e689.
+Portnov, B.A., Zusman, M., December 2012. Spatial data analysis using
+kernel density tools. In: Wang, J. (Ed.), Encyclopedia of Business
+Analytics and Optimization, ﬁrst ed. IGI Global. (in press).
+
+641
+
+Portnov, B.A., Reiser, B., Karkabi, K., Cohen-Kastel, O., Dubnov, J.,
+2012. High prevalence of childhood asthma in Northern Israel is linked
+to air pollution by particulate matter: evidence from GIS analysis and
+Bayesian model averaging. Int. J. Environ. Health Res. 22 (3), 249e269.
+Portnov, B.A., Dubnov, J., Barchana, M., 2009. Studying the association
+between airpollution and lung cancer incidence in a large metropolitan
+area using a kernel density function. Socio-econ. Plan. Sci. 43,
+141e150. Rencher, A.C., 2002. Methods of Multivariate Analysis, second
+ed. John Wiley & Sons, Inc., New York, NY, USA. Rudel, R.A., Perovich,
+L.J., 2009. Endocrine disrupting chemicals in indoor and outdoor air.
+Atmos. Environ. 43 (1), 170e181. Tenne, A., 2010. Sea Water Desalination
+in Israel: Planning, Coping with Difﬁculties, and Economic Aspects of
+Long-term Risks. Israel Water authority, Ministry of Infrastructure
+Publication, Tel Aviv. U.S. Environmental Protection Agency, 2012. Test
+Methods. Available from: http:// www.epa.gov (accessed on January 2012).
+U.S. Environmental Protection Agency, 1999. Particulate Matter (PM2.5)
+Speciation Guidance e Final Draft (Technical Report). Zusman, M.,
+Dubnov, J., Barchana, M., Portnov, B.A., 2012. Residential proximity to
+petroleum storage tanks and associated cancer risks: double kernel
+density approach vs. zonal estimates. Sci. Total Environ. 441, 265e276.
+
+

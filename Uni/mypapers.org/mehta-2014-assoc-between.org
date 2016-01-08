@@ -1,0 +1,953 @@
+Associations between Changes in City and Address Specific Temperature
+and QT Interval - The VA Normative Aging Study Amar J. Mehta1*, Itai
+Kloog1,2, Antonella Zanobetti1, Brent A. Coull3, David Sparrow4,5,6,
+Pantel Vokonas4,6, Joel Schwartz1,5 1 Exposure, Epidemiology and Risk
+Program, Department of Environmental Health, Harvard School of Public
+Health, Boston, Massachusetts, United States of America, 2 The
+Department of Geography and Environmental Development, Ben-Gurion
+University of the Negev, Beer Sheva, Israel, 3 Department of
+Biostatistics, Harvard School of Public Health, Boston, Massachusetts,
+United States of America, 4 The VA Normative Aging Study, Veterans
+Affairs Boston Healthcare System, Boston, Massachusetts, United States
+of America, 5 The Channing Laboratory, Brigham and Women's Hospital,
+Harvard Medical School, Boston, Massachusetts, United States of America,
+6 Department of Medicine, Boston University School of Medicine, Boston,
+Massachusetts, United States of America
+
+Abstract Background: The underlying mechanisms of the association
+between ambient temperature and cardiovascular morbidity and mortality
+are not well understood, particularly for daily temperature variability.
+We evaluated if daily mean temperature and standard deviation of
+temperature was associated with heart rate-corrected QT interval (QTc)
+duration, a marker of ventricular repolarization in a prospective cohort
+of older men. Methods: This longitudinal analysis included 487 older men
+participating in the VA Normative Aging Study with up to three visits
+between 2000--2008 (n = 743). We analyzed associations between QTc and
+moving averages (1--7, 14, 21, and 28 days) of the 24-hour mean and
+standard deviation of temperature as measured from a local weather
+monitor, and the 24-hour mean temperature estimated from a
+spatiotemporal prediction model, in time-varying linear mixed-effect
+regression. Effect modification by season, diabetes, coronary heart
+disease, obesity, and age was also evaluated. Results: Higher mean
+temperature as measured from the local monitor, and estimated from the
+prediction model, was associated with longer QTc at moving averages of
+21 and 28 days. Increased 24-hr standard deviation of temperature was
+associated with longer QTc at moving averages from 4 and up to 28 days;
+a 1.9uC interquartile range increase in 4-day moving average standard
+deviation of temperature was associated with a 2.8 msec (95%CI: 0.4,
+5.2) longer QTc. Associations between 24-hr standard deviation of
+temperature and QTc were stronger in colder months, and in participants
+with diabetes and coronary heart disease. Conclusion/Significance: In
+this sample of older men, elevated mean temperature was associated with
+longer QTc, and increased variability of temperature was associated with
+longer QTc, particularly during colder months and among individuals with
+diabetes and coronary heart disease. These findings may offer insight of
+an important underlying mechanism of temperature-related cardiovascular
+morbidity and mortality in an older population. Citation: Mehta AJ,
+Kloog I, Zanobetti A, Coull BA, Sparrow D, et al. (2014) Associations
+between Changes in City and Address Specific Temperature and QT Interval
+- The VA Normative Aging Study. PLoS ONE 9(9): e106258.
+doi:10.1371/journal.pone.0106258 Editor: Mathias Baumert, University of
+Adelaide, Australia Received November 27, 2013; Accepted August 4, 2014;
+Published September 19, 2014 Copyright: ß 2014 Mehta et al. This is an
+open-access article distributed under the terms of the Creative Commons
+Attribution License, which permits unrestricted use, distribution, and
+reproduction in any medium, provided the original author and source are
+credited. Funding: This work was supported by grants from the National
+Institute of Environmental Health Sciences (ES014663-01A2,
+2RO1-ES015172, ES014663, ES00002, and EPA Clean Air Research Center
+grant RD83479701/). The Veterans Affairs (VA) Normative Aging Study is
+supported by the Cooperative Studies Program/ Epidemiology Research and
+Information Center of the US Department of Veterans Affairs and is a
+component of the Massachusetts Veterans Epidemiology Research and
+Information Center, Boston, Massachusetts. Support was also provided by
+a VA Research Career Scientist award (to AS) and by National Institutes
+of Health grants R01-AG002287, R01-AG018436, and R29-AG007465. This
+research was also supported by a VA Research Career Scientist award to
+David Sparrow. The funders had no role in study design, data collection
+and analysis, decision to publish, or preparation of the manuscript. /
+This publication's contents are solely the responsibility of the grantee
+and do not necessarily represent the official views of the US EPA.
+Further, US EPA does not endorse the purchase of any commercial products
+or services mentioned in the publication. Competing Interests: The
+authors have declared that no competing interests exist. * Email:
+amehta@hsph.harvard.edu
+
+related mortality [3--6]. While the highest risk of heat-related
+mortality is for mean temperature measured within 24-hours and up to 3
+days before event [1,3,7], cold effects on mortality continue longer. In
+general there is limited evidence demonstrating risk of mortality
+associated with changes in daily mean temperature averaged over longer
+intervals (e.g. between 7 and 40 days) [1,8]. Recent studies also
+demonstrate that variability of and large
+
+Introduction It is well established that increases and decreases in
+ambient mean temperatures are associated with mortality [1,2], and that
+elderly age, chronic disease including cardiovascular disease and
+diabetes mellitus, mental illness, sociodemographic characteristics, and
+social isolation may heighten susceptibility to temperature-
+
+PLOS ONE | www.plosone.org
+
+1
+
+September 2014 | Volume 9 | Issue 9 | e106258
+
+Outdoor Temperature and QT Interval
+
+changes in the daily mean temperature averaged over shorter and longer
+intervals are also associated with mortality [9--12]. Finally, most
+epidemiologic studies to date have used a single value for a city to
+characterize exposure, which ignore important differences that may
+influence temperature at individual residences including urban heat
+islands, distance from water, and amount of impermeable surface [13].
+There are clear physiological mechanisms for the association of extreme
+heat or cold with mortality, particularly the reduced ability to
+regulate core temperature [3]. However, the underlying biological
+mechanisms behind the associations observed between mean temperature and
+mortality under more moderate conditions, and over longer intervals, are
+not well understood, and may be distinct from those associated with mean
+temperature and mortality under more severe conditions and shorter
+intervals. Understanding these mechanisms, especially in vulnerable
+populations, may lead to more focused intervention measures and improved
+risk assessment. Previous research has demonstrated associations between
+mean temperature, averaged over shorter and longer intervals, and
+markers of inflammation [14--16], hemodynamics [17--18], and cardiac
+autonomic function [19--23], which suggests that these pathways may be
+potential mechanisms of mean temperature-related cardiovascular
+morbidity and mortality. It also hypothesized by Hampel and colleagues
+[24] that ambient mean temperature may affect repolarization, including
+QT interval and T-wave abnormalities, which are associated with
+arrhythmic events and cardiovascular mortality [25--28]. A previous
+study conducted within a subset of myocardial infarction survivors of
+the KORA cohort in Augsburg, Germany observed a U-shape association
+between ambient mean temperature and Twave amplitude, at all lags
+between 0 and 5 days, with the highest T-wave amplitude at 5uC [24]. In
+the same study, investigators did not identify any association between
+mean temperature and QTc. Whether changes in mean temperature averaged
+over longer time periods affects QTc is not known. Additionally, very
+little is known of the underlying mechanisms that may explain the
+association between morbidity and mortality associated with temperature
+variability. It is hypothesized that increased temperature variability
+may stress the ability of the thermoregulation system to adapt to sudden
+and extreme temperature changes, and that adaptive ability is reduced in
+individuals who are immunocompromised or present with chronic illness
+[29]. For this study, we evaluated if changes in the daily mean
+temperature, and the daily standard deviation of temperature, were
+associated with heart-rate corrected QT interval (QTc) in a cohort of
+elderly males in the Boston Metropolitan Area. Additionally, we applied
+a validated spatially and temporally resolved prediction model utilizing
+satellite surface temperature data [13] to estimate daily air
+temperature at the participant's home address, and compared associations
+for daily mean temperature measured from a local weather monitor and
+estimated from the predicted model.
+
+Study population and design Participants included in this analysis were
+enrolled in the Veteran Affairs Normative Aging Study (NAS), an ongoing
+longitudinal study of aging established in 1963, details of which have
+been published previously [30]. Briefly, the NAS is a closed cohort of
+2,280 male volunteers from the Greater Boston area aged 21--80 years at
+entry, who were enrolled after an initial health screening determined
+that they were free of known chronic medical conditions. The men have
+been reevaluated every 3 to 5 years by using detailed on-site physical
+examinations and questionnaires. Dropout has been less than 1% per year
+in this cohort and predominantly occurs when participants move out of
+the study area. The other major reason for loss to follow-up has been
+mortality. From November 2000 to December 2008, there were 694
+participants who underwent electrocardiogram (ECG) monitoring, from whom
+580 individuals have valid QT measurements at one or more visits to give
+a total of 926 QT measurements. We excluded 14 participants with
+incomplete information on relevant covariates, 42 participants with
+incomplete address history for estimating temperature from the
+spatiotemporal model, and 37 participants with pacemakers or ECGs
+indicating atrial fibrillation, leaving a total of 743 measurements from
+487 participants. For the purpose of this analysis, the term ‘baseline
+visit' refers to the first visit when QT was measured.
+
+ECG measurement and analysis The ECG was recorded at the exam site (VA
+Boston Healthcare System, Boston, MA) for 5 to 10 min between 0530 and
+1400 hours with a two-channel (five lead) ECG monitor (Trillium 3000;
+Forest Medical, Inc., East Syracuse, NY) using a sampling rate of 256 Hz
+per channel. A detailed description of the protocol is provided
+elsewhere [31,32]. The electrocardiogram digital recordings were
+processed using personal computer-based software (Trillium Platinum
+Holter Analysis Software for MS Windows; Forest Medical) to create a
+Mathcad (Parametric Technology Corporation, Needham, Massachusetts) file
+containing QT interval measurements. A Win32 console application
+(Microsoft Corporation, Redmond, Washington) was used to obtain QT and
+QTc values from the data. This application measured the QT interval from
+the beat onset to the end of the T wave only on normal or
+supraventricular beats and calculated the QTc value in milliseconds
+(msec) using Bazett's formula as described by Bednar et al. [33]. The QT
+interval was not calculated if the T wave did not have sufficient
+amplitude, as determined by the program algorithm. The Intraclass
+correlation coefficient for mean QTc across all visits was 0.65,
+indicating moderate agreement.
+
+Meterology, pollution, and spatiotemporal assessment of temperature
+Hourly temperature and humidity data were obtained from a stationary
+monitor located at the Boston Logan airport weather station (12 km from
+the exam site), and we calculated the 24-hour mean and standard
+deviation of temperature for each calendar day in the study period. For
+this analysis, we evaluated moving average windows of 24-hr mean
+temperature and 24-hr standard deviation of temperature of 1 and up to 7
+days prior to visit, as well as 14, 21, and 28 days prior to visit.
+Ambient particulate pollutant concentrations were monitored at our
+Harvard Air Pollution Supersite located near downtown Boston 1 km from
+the exam site, and for the present analysis we considered evaluation of
+4-hour lag black carbon (BC) exposure
+
+Materials and Methods Ethics Statement The present study was approved by
+the Human Research Committees of the Harvard School of Public Health and
+the Department of Veterans Affairs Boston Healthcare System, and written
+informed consent was obtained from participants prior to participation.
+
+PLOS ONE | www.plosone.org
+
+2
+
+September 2014 | Volume 9 | Issue 9 | e106258
+
+Outdoor Temperature and QT Interval
+
+race (black, white as reference), and years of education, and of
+time-varying characteristics that were ascertained at each visit
+including years since baseline visit, body mass index (bmi) (kg/m2),
+total cholesterol (mg/dL), mean arterial pressure (mmHg), diabetes
+status (physician's diagnosed diabetes or fasting blood glucose.126
+mg/dL [yes, no as reference]), QT prolonging medication including
+beta-blockers (yes, no as reference), percent of census tract $25 years
+of age without high school diploma, percent of census tract that is
+non-white, alcohol consumption ($2 drinks/day, ,2 drinks/day as
+reference), smoking status (current, former, never as reference), day of
+week, seasonality (using sine and cosine), 24-hour mean relative
+humidity, and 4-hour lag BC concentration (mg/m3). To identify
+QT-prolonging medications, we considered drugs grouped by risk of
+torsades and possible risk of torsades from the Arizona Center for
+Education and Research on Therapeutics [36]. The above covariates were
+chosen a priori as potential confounders or important determinants of
+QTc. We investigated possible effect modification by season (warm:
+April-- September; cold: October-March), obesity (bmi$30 kg/m2), age,
+diabetes, and coronary heart disease, by adding an interaction term for
+the temperature and modifier variables to the models. Two-sided
+p-values#0.05 were interpreted as statistically significant for main and
+interaction terms. In a preliminary analysis, we evaluated whether the
+association between the moving average of each temperature variable and
+QTc was non-linear. We fit generalized additive mixed models with
+penalized splines for each of the temperature variables. The generalized
+cross validation criterion of the model was used to determine the
+degrees of freedom of the spline for the nonlinear term, and we compared
+the Akaike information criterion to assess model fit between models with
+the linear and non-linear term. For all models, the linear term for each
+of the temperature variables was the better fit. Similarly, we fit
+penalized splines for years since baseline visit, age at baseline visit,
+body mass index, mean arterial pressure and total cholesterol one at a
+time in generalized additive mixed models to evaluate whether the
+association between these covariates and QTc were non-linear. The linear
+term for each of these covariates was the better fit.
+
+prior to visit, which was identified as a significant predictor of QTc
+in a previous analysis [34]. Hourly BC concentrations were measured
+using an Aethalometer (Magee Scientific Company, Model AE-16, Berkeley,
+CA). BC is associated with traffic emissions especially those related to
+diesel fuel combustion. Predicted air temperature exposure data were
+generated by using a novel air temperature spatiotemporal prediction
+model [13]. Our air temperature predictions are generated by a series of
+statistical models. In brief, we start by using a mixed model approach
+to calibrate daily MODIS surface temperature in each grid cell where
+both air temperature and surface temperature values within 1 km are
+available on that day. This model is fit by regressing monitored air
+temperature against surface temperature with additional air temperature
+predictors (percent urban, elevation, normalized difference vegetation
+index) as well as a random intercept and a random slope for surface
+temperature for each day. Since surface temperature values are often
+missing due to cloud cover or retrieval errors, the base model often
+fails to provide predictions for many grid cell-day combinations. To
+estimate air temperature when no surface temperature data are available,
+we fit an additional model that takes advantage of the association of
+grid cells surface temperature values with air temperature monitoring
+located elsewhere and the association with surface temperature values in
+neighboring grid cells. Importantly, since daily air temperature varies
+considerably between different geographical regions, we built a 60 km
+buffer around each monitor and used its daily temperature as a predictor
+of temperature in all cells that fell within the buffer. Out-of-sample
+‘‘ten-fold'' cross-validation was used to quantify the accuracy of our
+predictions. Our model performance was excellent for both days with
+available satellite data and days without satellite observations (mean
+out-of-sample R2 = 0.947 and R2 = 0.940, respectively). To estimate air
+temperature exposure at each participant's residence, we linked each
+participant's residence to the corresponding model 161 km grid cell in
+which it fell. When we regressed monitored temperature as a function of
+predicted temperature for the monitors within 150 km of Boston that were
+left out from the analysis, the calculated root mean square predicted
+error (RMSPE) was 1.48. In contrast when we calculated the RMSPE by
+using the Logan weather station (i.e. local monitor) readings, the RMSPE
+was 2.3, almost a full degree difference. This contrast demonstrates the
+improved accuracy of spatially resolved temperature estimates from our
+models for NAS participants living further from central Boston. Similar
+to 24-hr mean temperature measured from the local monitor, we evaluated
+moving average windows of the 24-hr mean temperature estimated from the
+prediction model at 1 and up to 7 days prior to visit, as well as 14,
+21, and 28 days prior to visit.
+
+Secondary analysis Of the 487 participants included in this analysis,
+290 (59.7%) did not participate in a subsequent follow-up visit. Because
+healthier men may be more likely to participate in subsequent follow-up
+visits, we applied inverse probability weights to correct for this
+potential survival bias as a sensitivity analysis [37]. Similar to
+methods described by Zanobetti et al. [38], we used logistic regression
+to calculate the probability of having a second and third subsequent
+follow-up visit given the following factors at the previous visit: age,
+body mass index, smoking status and packyears, hypertension, cholesterol
+and diabetes. We then used the inverse of these predicted probabilities
+as the weights for those person-visits in the linear mixed-effect
+models. The inverse probability weight for all participants at the
+baseline visit was ‘1'.
+
+Statistical analysis All statistical analyses were carried out using SAS
+Version 9.2 (SAS Institute, Cary, NC) and R (R Foundation for
+Statistical Computing, Vienna, Austria). We used linear mixed-effects
+regression (PROC MIXED) with random participant-specific intercepts,
+accounting for the correlation of repeated QTc measures across time
+points [35], to model mean QTc as a continuous function of moving
+average of 24-hr mean temperature measured from the local monitor, 24-hr
+mean temperature estimated from the predictive model, and 24-hr standard
+deviation of temperature. Estimates are given per interquartile range of
+the temperature variable for the specific moving average. In separate
+models, we fit each moving average window of each temperature variable
+one at a time in an established confounder model consisting of fixed
+characteristics including age at baseline visit, PLOS ONE |
+www.plosone.org
+
+Results The 487 participants included in this analysis had a total of
+one (n = 290), two (n = 138), or three (n = 59) separate visits with
+valid QTc measurements (Table 1). The mean age at baseline visit when
+QTc was measured was approximately 74 years. The mean QTc measured at
+the baseline visit approximated 392 msec. The distributions of QTc
+measured in all visits during warm (Mean (SD): 390.7 msec (24.6)) and
+cold (Mean (SD): 391.4 msec (26.0))
+
+3
+
+September 2014 | Volume 9 | Issue 9 | e106258
+
+Outdoor Temperature and QT Interval
+
+Table 1. Characteristics of study participants at first visit, the VA
+Normative Aging Study, November 2000 to December 2008.
+
+Characteristics
+
+n (%)
+
+Physician diagnosed Diabetes Mellitus or fasting blood glucose.126 mg/dL
+
+92 (18.9)
+
+Coronary heart disease
+
+133 (27.3)
+
+Hypertension
+
+342 (70.2)
+
+Use of QT prolonging medication
+
+180 (36.9)
+
+Obesity BMI$30 kg/m2
+
+118 (24.2)
+
+BMI,30 kg/m2
+
+369 (75.8)
+
+Race Black
+
+13 (2.7)
+
+White
+
+474 (97.3)
+
+Alcohol consumption (drinks/day) $2
+
+93 (19.1)
+
+,2
+
+393 (80.9)
+
+Smoking status Former
+
+329 (67.6)
+
+Current
+
+23 (4.7)
+
+Never
+
+135 (27.7)
+
+Number of visits with QTc measured
+
+75 (20.3)
+
+One
+
+290 (59.7)
+
+Two
+
+138 (28.3)
+
+Three
+
+59 (12.1) Mean (SD)
+
+QTc, msec
+
+391.7 (26.2)
+
+Age, years
+
+73.6 (6.7)
+
+Body mass index, kg/m2
+
+27.9 (4.0)
+
+Total cholesterol, mg/dL
+
+191.2 (36.9)
+
+Mean arterial pressure, mmHg
+
+92.4 (11.0)
+
+Maximum years of education
+
+15.0 (3.0)
+
+doi:10.1371/journal.pone.0106258.t001
+
+28-day moving average of 24-hr mean temperature were associated with a
+10.4 msec (95%CI: 0.9, 19.8) and 12.6 msec (95%CI: 2.4, 22.9) longer
+QTc, respectively. Across all moving averages, the standard errors for
+the associations between 24-hr mean temperature and QTc were smaller
+when utilizing the spatiotemporal predictive model rather than
+measurements from the local monitor. While marginally statistically
+significant associations (p,0.10) were observed between higher 14-day
+moving average of 24-hr mean temperature and longer QTc utilizing both
+approaches for estimating mean temperature, no associations were
+observed for 24-hr mean temperature at shorter moving average windows
+between 1 and 7 days. Statistically significant associations were also
+observed between 24-hr standard deviation of temperature and QTc from
+moving averages of 4 days up to 28 days (Figure 1b). A 1.9uC IQR
+increase in the 4-day moving average 24-hr standard deviation of
+temperature was associated with a 2.8 msec (95%CI: 0.4, 5.2) longer QTc.
+The strongest associations between higher 24-hr standard deviation of
+temperature and longer QTc was observed at the 28-day moving average; a
+0.5uC IQR increase in the 28-day moving average of 24-hr standard
+deviation of temperature was associated with a 4.7 msec (95%CI: 2.2,
+7.3) longer QTc.
+
+months closely approximated each other. Participants were predominantly
+white, former smokers, and hypertensive. Table 2 summarizes the
+distribution of the meteorology and pollution parameters and
+correlations between them in all personvisits included in this analysis.
+24-hr mean temperature as measured from the local monitor and as
+estimated from the spatiotemporal predictive model closely approximated
+each other, and as expected, a very strong positive correlation was also
+observed. Weaker correlations were observed between both 24hour mean
+temperature variables with 24-hour mean relative humidity, 4-hour lag
+BC, and 24-hr standard deviation of temperature. Higher 24-hr mean
+temperature, as measured from the local monitor, was significantly
+associated with longer QTc at moving averages of 21 and 28 days (Figure
+1a). Specifically, interquartile range (IQR) increases in 21-day
+(15.1uC) and 28-day (15.2uC) moving average of 24-hr mean temperature
+measured from the local monitor was associated with a 17.0 msec (95%CI:
+4.5--29.4) and 23.1 msec (95%CI: 9.0--37.2) longer QTc, respectively.
+While significant associations were present at the same moving averages
+for 24-hr mean temperature estimated from the spatiotemporal predictive
+model, the effect sizes were moderately smaller in comparison (Figure
+1a); 8.4uC and 8.5uC IQR increases in 21 and
+
+PLOS ONE | www.plosone.org
+
+4
+
+September 2014 | Volume 9 | Issue 9 | e106258
+
+0.5 (0.3, 0.9)
+
+11.4 (5.4)
+
+0.7 (0.5) 4-hr lag BC, mg/m3
+
+2.3 (1.5, 3.0)
+
+11.5 (7.3, 15.8)
+
+2.4 (1.2)
+
+24-hr TP, uC
+
+24-hr TSDL, uC
+
+66.5 (54.3, 77.9) 66.5 (15.2) 24-hr RH,%
+
+PLOS ONE | www.plosone.org
+
+Abbreviations: SD -- standard deviation; IQR -- interquartile range;
+24-hr TL -- 24-hour mean temperature measured from local weather
+monitor; 24-hr RH -- 24-hour mean relative humidity measured from local
+weather monitor; 24hr TSDL -- 24-hr standard deviation of temperature
+measured from local weather monitor; 24-hr TP -- 24-hour mean
+temperature measured from prediction model; BC -- 4-hour lag black
+carbon measured from central monitoring site.
+doi:10.1371/journal.pone.0106258.t002
+
+0.23
+
+20.05
+
+1.00
+
+1.00
+
+0.11 1.00
+
+0.12 0.20 20.34 1.00
+
+4-hr lag BC
+
+0.19 0.94
+
+24-hr TP 24-hr TSDS
+
+0.24 0.12
+
+24-hr RH 24-hr TS Median (IQR)
+
+11.6 (4.0, 18.8) 11.5 (9.0) 24-hr TL, uC
+
+Mean (SD)
+
+1.00
+
+r Summary Statistics
+
+Table 2. Summary statistics and Pearson Correlation Coefficients of
+meteorologic and black carbon measurements at all visits (n = 743), the
+VA Normative Aging Study, November 2000 to December 2008.
+
+Outdoor Temperature and QT Interval
+
+As part of a sensitivity analysis, no considerable changes in the
+associations between 24-hr mean temperature and 24-hr standard deviation
+of temperature and QTc, as shown in Figures 1a and 1b, were observed
+after inverse probability weights were applied (data not shown).
+Additionally, there were no appreciable changes in the effect estimates
+or standard errors for moving average 24-hr mean temperature in
+minimally adjusted linear mixed-effect models that retained a reduced
+set of covariates including age at baseline visit, seasonality, 24-hr
+mean relative humidity, and 4-hr lag black carbon concentration in the
+models (Table S1). However, marginally stronger positive associations
+with wider standard errors were observed for 24-hr standard deviation of
+temperature at moving averages of 14, 21, and 28 days, in the minimally
+adjusted model in comparison with the effect estimates shown in Figure
+1b (Table S1). At moving averages of 14, 21, and 28 days, the
+associations between 24-hr mean temperature, as measured from the local
+monitor, and QTc as shown in Figure 1a were slightly stronger during
+warm than cold months (Figure 2a). However, the confidence intervals for
+the estimated associations for warm and cold months widely overlapped,
+and effect modification by season was not statistically significant. A
+similar pattern in comparing estimated associations between warm and
+cold months was observed for 24-hr mean temperature predicted from the
+spatiotemporal model (Figures S1a in File S1). In contrast, stronger
+associations were observed between 24-hr standard deviation of
+temperature and QTc in cold than warm months (Figure 2b). The
+statistically significant associations between elevated 24-hr standard
+deviation of temperature and longer QTc at moving average windows
+between 4 and 7 days, as shown in Figure 1b, were observed only in cold
+months. Effect modification by season on the association between 24-hr
+standard deviation of temperature and QTc was statistically significant
+at moving averages of 6 (pinteraction = 0.05) and 7 days (pinteraction =
+0.04). Estimated associations between 24-hr mean temperature and 24-hr
+standard deviation of temperature, as measured from the local monitor,
+and QTc by subgroup according to individual-level characteristics,
+including age $74 years, obesity, coronary heart disease, and diabetes,
+are presented in Figures 3 and 4. Significant effect modification by age
+$74 years, obesity, coronary heart disease, and diabetes, on the
+associations between 24-hr mean temperature and QTc at moving averages
+of 14, 21, and 28 days, was not observed. A similar pattern in comparing
+estimated associations between subgroup categories was observed for
+24-hr mean temperature predicted from the spatiotemporal model (S1bS1e
+in File S1). Across moving averages of 4 and up to 28 days, the positive
+associations between higher 24-hr standard deviation of temperature and
+longer QTc were more pronounced among participants with diabetes and
+coronary heart disease, and there was significant effect modification
+observed by diabetes at a moving average of 21 days (pinteraction =
+0.02, Figure 4a) and by coronary heart disease at moving averages of 21
+(pinteraction = 0.05, Figure 4b) and 28 days (pinteraction = 0.02,
+Figure 4b).
+
+Discussion In this sample of predominantly older white men, we observed
+that higher daily mean temperature was associated with longer QTc,
+specifically at longer moving average windows of 21 and 28 days while no
+associations were observed at shorter moving averages. In contrast,
+increased daily standard deviation of temperature was associated with
+longer QTc at both shorter and longer averaging moving averages,
+spanning from 4 and up to 28 5
+
+September 2014 | Volume 9 | Issue 9 | e106258
+
+Outdoor Temperature and QT Interval
+
+Figure 1. Associations between QTc and 1 interquartile range increase of
+moving average 24-hr mean temperature measured from local monitor or
+estimated from predictive model (1a) and 24-hr standard deviation of
+temperature measured from local monitor (1b). Associations were
+estimated in linear mixed-effect regression models with random intercept
+for study participant and adjusted for years since baseline visit, age
+at baseline visit, race, body mass index, total cholesterol, mean
+arterial pressure, diabetes, QT prolonging medication, years of
+education, percent of census tract $25 years of age without high school
+diploma, percent of census tract that is non-white, alcohol consumption,
+smoking status, day of week, seasonality, 24-hour mean relative
+humidity, and 4-hour lag black carbon concentration.
+doi:10.1371/journal.pone.0106258.g001
+
+days, particularly in the colder months for shorter moving averages and
+in individuals with diabetes and coronary heart disease at longer moving
+averages. Consistent with the previous study in the subset of myocardial
+infarction survivors of the KORA cohort [24], we did not observe any
+association between mean temperature and QT interval at moving averages
+of 1 to 7 days. Previous studies to date have not examined daily
+temperature variability in association with QTc. The associations
+between higher 24-hr standard deviation of temperature and longer QTc at
+moving averages of 4 to 7 days, as shown in Figure 1b, were similar in
+magnitude even after adjustment for corresponding moving average of
+24-hr mean
+
+temperature (data not shown), suggesting that the variability of
+temperature, rather than the mean temperature, averaged over shorter
+time periods may be more relevant for changes in QTc. An alternative
+explanation for absence of association between QTc and 24-hr mean
+temperature averaged over a shorter time period is that there may be
+less exposure measurement error of mean temperature with longer
+averaging times than with shorter averaging times. Non-linear
+associations including J-, V-, or U-shaped associations between
+temperature and mortality have also been observed previously [1,39,40],
+and in our preliminary analysis of the present study we did not observe
+non-linear associations between
+
+Figure 2. Associations between QTc and 1 interquartile range increase of
+moving average 24-hr mean temperature (2a) and 24-hr standard deviation
+of temperature (2b) measured from local monitor by season. Associations
+were estimated in linear mixed-effect regression models with random
+intercept for study participant and adjusted for years since baseline
+visit, age at baseline visit, race, body mass index, total cholesterol,
+mean arterial pressure, diabetes, QT prolonging medication, years of
+education, percent of census tract $25 years of age without high school
+diploma, percent of census tract that is non-white, alcohol consumption,
+smoking status, day of week, seasonality, 24-hour mean relative
+humidity, and 4-hour lag black carbon concentration; associations
+between moving average temperature variable and QTc for warmer months
+and colder months were estimated from interaction models.
+doi:10.1371/journal.pone.0106258.g002
+
+PLOS ONE | www.plosone.org
+
+6
+
+September 2014 | Volume 9 | Issue 9 | e106258
+
+Outdoor Temperature and QT Interval
+
+Figure 3. Associations between QTc and 1 interquartile range increase of
+moving average 24-hr mean temperature measured from local monitor
+estimated in subgroups defined by diabetes (3a), coronary heart disease
+(3b), obesity (3c), and age (3d). Associations were estimated in linear
+mixed-effect regression models with random intercept for study
+participant and adjusted for years since baseline visit, age at baseline
+visit, race, body mass index, total cholesterol, mean arterial pressure,
+diabetes, QT prolonging medication, years of education, percent of
+census tract $25 years of age without high school diploma, percent of
+census tract that is non-white, alcohol consumption, smoking status, day
+of week, seasonality, 24-hour mean relative humidity, and 4-hour lag
+black carbon concentration; associations between moving average 24-hr
+mean temperature and QTc in each subgroup were estimated from
+interaction models. doi:10.1371/journal.pone.0106258.g003
+
+temperature and QTc. Additionally, a previous analysis in the VA
+Normative Aging Study did not identify any evidence of a nonlinear
+association between apparent temperature and heart rate variability
+[21]. Similarly, the previous study conducted within the KORA cohort did
+not find evidence for a deviation of linearity of the association
+between temperature and QTc [24]. The underlying biological mechanism(s)
+that may explain the association between temperature and QTc is not
+known. A previous analysis of the Normative Aging Study showed that
+14day moving averages of daily mean apparent temperature were associated
+with reduced heart rate variability, a marker of cardiac autonomic
+dysfunction, during warm months [21]. There is also observational
+evidence to support the association between reduced heart rate
+variability and autonomic dysfunction with prolonged QT interval
+[41--44]. Taking these findings together, we hypothesize that the
+association between mean temperature and QTc may be mediated by
+autonomic dysfunction. A main advantage of the present study was the
+ability to compare associations between moving average of 24-hr mean
+temperature and QTc utilizing the local monitor and the spatiotemporal
+predictive model using satellite data. However, PLOS ONE |
+www.plosone.org
+
+very little difference was observed between the two methods at the
+shorter moving averages, suggesting that geographical differences do not
+explain much of the variation in QTc in response to daily mean
+temperature. While more divergence in the estimated associations between
+the two methods was observed at the longer moving average windows, this
+may be an artifact of larger variation in mean temperature measured from
+the fixed monitor compared with the spatiotemporal predictive model.
+Additionally, the standard errors of the estimated associations for
+moving average of 24-hr mean temperature were reduced when utilizing the
+spatiotemporal predictive model, suggesting that utilizing measurements
+of daily mean temperature from a single site may result in Berkson
+measurement error, which has been observed more commonly with air
+pollution [45], rather than classical exposure measurement error. This
+study has a number of strengths including prospective design,
+spatiotemporal assessment of mean temperature, methods to address
+selection bias, and adjustment for multiple confounders, but there are
+several limitations that should be considered. The 24-hour mean
+temperature as predicted from the model is based on daily MODIS surface
+temperature rather than hourly estimates 7
+
+September 2014 | Volume 9 | Issue 9 | e106258
+
+Outdoor Temperature and QT Interval
+
+Figure 4. Associations between QTc and 1 interquartile range increase of
+moving average 24-hr standard deviation of temperature measured from
+local monitor estimated in subgroups defined by diabetes (3a), coronary
+heart disease (3b), obesity (3c), and age (3d). Associations were
+estimated in linear mixed-effect regression models with random intercept
+for study participant and adjusted for years since baseline visit, age
+at baseline visit, race, body mass index, total cholesterol, mean
+arterial pressure, diabetes, QT prolonging medication, years of
+education, percent of census tract $25 years of age without high school
+diploma, percent of census tract that is non-white, alcohol consumption,
+smoking status, day of week, seasonality, 24-hour mean relative
+humidity, and 4-hour lag black carbon concentration; associations
+between moving average 24-hr standard deviation of temperature and QTc
+in each subgroup were estimated from interaction models.
+doi:10.1371/journal.pone.0106258.g004
+
+not be generalizable to women, younger individuals, or to other racial
+and ethnic groups. In conclusion, we observed that increases in the
+daily mean temperature averaged over 3 to 4 weeks were associated with
+longer QTc, while increases in the daily variability of mean temperature
+averaged over 4 days and up to 4 weeks were associated with longer QTc,
+particularly in colder months and in individuals with diabetes and
+coronary heart disease. These novel findings may offer insight of an
+important underlying mechanism by which temperature affects
+cardiovascular events and mortality in an older population.
+
+of surface temperature. To predict the 24-hour standard deviation of
+temperature based on hourly estimates of surface temperatures would be
+computationally intensive and not feasible for this study. Assuming the
+estimation for daily standard deviation of temperature from a
+spatiotemporal predictive model is more valid than measured from a local
+monitor, we hypothesize that the observed associations between moving
+averages of 24-hr standard deviation of temperature and QTc would have
+reduced standard errors, as observed for the associations between moving
+averages of 24-hr mean temperature and QTc. Our study also used a
+predefined computer algorithm that automatically detected beat labels
+and QT intervals, rather than use manual detection, to analyze the ECG
+recordings. Thus, the outcome assessment of QTc is less susceptible to
+differential measurement errors and inter-technician variability. We
+hypothesize that any measurement error is likely independent of outdoor
+temperature, and that the observed associations between outdoor
+temperature and QTc underestimate the true associations. Finally, this
+study also consists of older men who are predominantly white, thus the
+observed findings may
+
+PLOS ONE | www.plosone.org
+
+Supporting Information File S1 Figures S1a-S1e: Associations between QTc
+and 1 interquartile range increase of moving average 24-hr mean
+temperature measured from spatiotemporal predictive model by season
+(S1a) and by subgroups defined by diabetes (S1b), coronary heart disease
+(S1c), obesity (S1d), and age (S1e). Associations were estimated in
+linear mixed-effect regression models with random intercept for study
+participant and adjusted for years since baseline 8
+
+September 2014 | Volume 9 | Issue 9 | e106258
+
+Outdoor Temperature and QT Interval
+
+visit, age at baseline visit, race, body mass index, total cholesterol,
+mean arterial pressure, diabetes, QT prolonging medication, years of
+education, percent of census tract $25 years of age without high school
+diploma, percent of census tract that is non-white, alcohol consumption,
+smoking status, day of week, seasonality, 24-hour mean relative
+humidity, and 4-hour lag black carbon concentration; associations
+between moving average 24-hr mean temperature and QTc in each subgroup
+were estimated from interaction models. (TIF)
+
+deviation of temperature in fully and minimally adjusted models. (DOC)
+
+Author Contributions Conceived and designed the experiments: AJM DS PSV
+JS. Analyzed the data: AJM. Contributed reagents/materials/analysis
+tools: AJM IK AZ BC. Wrote the paper: AJM IK. Interpretation of data
+analysis: AJM IK AZ BC DS PSV JS. Critical revision of manuscript: AJM
+IK AZ BC DS PSV JS. Supervised and obtained funding for the study: JS.
+
+Table S1 Difference in QTc per unit increase in moving average 24-hr
+mean temperature and 24-hr standard
+
+References 24. Hampel R, Schneider A, Brüske I, Zareba W, Cyrys J, et
+al. (2010) Altered cardiac repolarization in association with air
+pollution and air temperature among myocardial infarction survivors.
+Environ Health Perspect 118: 1755--61. 25. Dekker JM, Schouten EG,
+Klootwijk P, Pool J, Kromhout D (1994) Association between QT interval
+and coronary heart disease in middle-aged and elderly men. The Zutphen
+Study. Circulation 90: 779--85. 26. Schouten EG, Dekker JM, Meppelink P,
+Kok FJ, Vandenbroucke JP, et al. (1991) QT interval prolongation
+predicts cardiovascular mortality in an apparently healthy population.
+Circulation 8: 1516--23. 27. Greenland P, Xie X, Liu K, Colangelo L,
+Liao Y, et al. (2003) Impact of minor electrocardiographic ST-segment
+and/or T-wave abnormalities on cardiovascular mortality during long-term
+follow-up. Am J Cardiol 91: 1068--1074. 28. Roden DM (2008) Keep the QT
+interval: it is a reliable predictor of ventricular arrhythmias. Heart
+Rhythm 5:1213--1215. 29. Xu Z, Hu W, Wang X, Huang C, Tong S (2014) The
+impact of temperature variability on years of life lost. Epidemiology
+25: 313--4. 30. Bell B, Rose C, Damon A (1972) The Normative Aging
+Study: an interdisciplinary and longitudinal study of health and aging.
+Aging Hum Dev 3: 5--17. 31. Park SK, O'Neill MS, Vokonas PS, Sparrow D,
+Schwartz J (2005) Effects of air pollution on heart rate variability:
+the VA normative aging study. Environ Health Perspect 113: 304--9. 32.
+Pope CA 3rd, Eatough DJ, Gold DR, Pang Y, Nielsen KR, et al. (2001)
+Acute exposure to environmental tobacco smoke and heart rate
+variability. Environ Health Perspect 109: 711--6. 33. Bednar MM,
+Harrigan EP, Anziano RJ, Camm AJ, Ruskin JN (2001) The QT interval. Prog
+Cardiovasc Dis 43(5 suppl 1):1--45. 34. Baja ES, Schwartz JD, Wellenius
+GA, Coull BA, Zanobetti A, et al. (2010) Traffic-related air pollution
+and QT interval: modification by diabetes, obesity, and oxidative stress
+gene polymorphisms in the normative aging study. Environ Health Perspect
+118: 840--6. 35. Fitzmaurice GM, Laird NM, Ware JH (2004) Applied
+Longitudinal Analysis. Hoboken, NJ:Wiley-Interscience. 36. Arizona
+Center for Education and Research on Therapeutics (2010) Torsades List:
+Drugs with a Risk of Torsades de Pointes and Possible Torsades List:
+Drugs with a Possible Risk of Torsades de Pointes. Available:
+http://crediblemeds.org/ everyone/composite-list-all-qtdrugs/?rf=US
+Accessed 2013 November 27. 37. Hernán MA, Lanoy E, Costagliola D, Robins
+JM (2006) Comparison of dynamic treatment regimes via inverse
+probability weighting. Basic Clin Pharmacol Toxicol 98: 237--42. 38.
+Zanobetti A, Coull BA, Gryparis A, Kloog I, Sparrow D, et al. (2014)
+Associations between arrhythmia episodes and temporally and spatially
+resolved black carbon and particulate matter in elderly patients. Occup
+Environ Med 71: 201--7. 39. Braga AL, Zanobetti A, Schwartz J (2002) The
+effect of weather on respiratory and cardiovascular deaths in 12 U.S.
+cities. Environ Health Perspect 110: 859-- 863. 40. Curriero FC, Heiner
+KS, Samet JM, Zeger SL, Strug L, et al. (2002) Temperature and mortality
+in 11 cities of the eastern United States. Am J Epidemiol 155: 80--87.
+41. Bellavere F, Ferri M, Guarini L, Bax G, Piccoli A, et al. (1988)
+Prolonged QT period in diabetic autonomic neuropathy: a possible role in
+sudden cardiac death? Br Heart J 59: 379--383. 42. Choy AM, Lang CC,
+Roden DM, Robertson D, Wood AJ, et al. (1998) Abnormalities of the QT
+interval in primary disorders of autonomic failure. Am Heart J 136:
+664--71. 43. Maule S, Rabbia F, Perni V, Tosello F, Bisbocci D, et al.
+(2008) Prolonged QT interval and reduced heart rate variability in
+patients with uncomplicated essential hypertension. Hypertens Res 31:
+2003--10. 44. Bexton RS, Vallin HO, Camm AJ (1986) Diurnal variation of
+the QT interval--- influence of the autonomic nervous system. Br Heart J
+55: 253--8. 45. Zeger SL, Thomas D, Dominici F, Samet JM, Schwartz J, et
+al. (2000) Exposure measurement error in time-series studies of air
+pollution: concepts and consequences. Environ Health Perspect 108:
+419--26.
+
+1.  Basu R, Samet JM (2002) Relation between elevated ambient
+    temperature and mortality: a review of the epidemiologic evidence.
+    Epidemiol Rev 24: 190--202.
+2.  Yu W, Mengersen K, Wang X, Ye X, Guo Y, et al. (2012) Daily average
+    temperature and mortality among the elderly: a meta-analysis and
+    systematic review of epidemiological evidence. Int J Biometeorol 56:
+    569--81.
+3.  Basu R (2009) High ambient temperature and mortality: a review of
+    epidemiologic studies from 2001 to 2008. Environ Health 8: 40.
+4.  Semenza JC, Rubin CH, Falter KH, Selanikio JD, Flanders WD, et al.
+    (1996) Heat-related deaths during the July 1995 heat wave in
+    Chicago. N Engl J Med 335: 84--90.
+5.  Schwartz J (2005) Who is sensitive to extremes of temperature? A
+    case-only analysis. Epidemiology 16: 67--72.
+6.  O'Neill MS, Zanobetti A, Schwartz J (2003) Modifiers of the
+    temperature and mortality association in seven US cities. Am J
+    Epidemiol 157: 1074--82.
+7.  Braga AL, Zanobetti A, Schwartz J (2001) The time course of
+    weather-related deaths. Epidemiology. 2001 12: 662--7.
+8.  Goodman PG, Dockery DW, Clancy L (2004) Cause-specific mortality and
+    the extended effects of particulate pollution and temperature
+    exposure. Environ Health Perspect 112: 179--85.
+9.  Guo Y, Barnett AG, Yu W, Pan X, Ye X, et al. (2011) A large change
+    in temperature between neighbouring days increases the risk of
+    mortality. PLoS One 6: e16511.
+10. Lin H, Zhang Y, Xu Y, Xu X, Liu T, et al. (2013) Temperature changes
+    between neighboring days and mortality in summer: a distributed lag
+    non-linear time series analysis. PLoS One 8: e66403.
+11. Plavcová E, Kyselý J (2010) Relationships between sudden weather
+    changes in summer and mortality in the Czech Republic, 1986--2005.
+    Int J Biometeorol 54: 539--51.
+12. Zanobetti A, O'Neill MS, Gronlund CJ, Schwartz JD (2012) Summer
+    temperature variability and long-term survival among elderly people
+    with chronic diseases. Proc Natl Acad Sci U S A 109: 6608--13.
+13. Kloog I, Chudnovsky A, Koutrakis P, Schwartz J (2012) Temporal and
+    spatial assessments of minimum air temperature using satellite
+    surface temperature measurements in Massachusetts, USA. Sci Total
+    Environ 432: 85--92.
+14. Halonen JI, Zanobetti A, Sparrow D, Vokonas PS, Schwartz J (2010)
+    Associations between outdoor temperature and markers of
+    inflammation: a cohort study. Environ Health 9: 42.
+15. Schäuble CL, Hampel R, Breitner S, Rückerl R, Phipps R, et al.
+    (2012) Shortterm effects of air temperature on blood markers of
+    coagulation and inflammation in potentially susceptible individuals.
+    Occup Environ Med 69: 670--8.
+16. Wilker EH, Yeh G, Wellenius GA, Davis RB, Phillips RS, et al. (2012)
+    Ambient temperature and biomarkers of heart failure: a repeated
+    measures analysis. Environ Health Perspect 120: 1083--7.
+17. Halonen JI, Zanobetti A, Sparrow D, Vokonas PS, Schwartz J (2011)
+    Relationship between outdoor temperature and blood pressure. Occup
+    Environ Med 68: 296--301.
+18. Hoffmann B, Luttmann-Gibson H, Cohen A, Zanobetti A, de Souza C, et
+    al.
+
+2012) Opposing effects of particle pollution, ozone, and ambient
+      temperature on arterial blood pressure. Environ Health Perspect
+      120: 241--6.
+
+19. Bruce-Low SS, Cotterrell D, Jones GE (2006) Heart rate variability
+    during high ambient heat exposure. Aviat Space Environ Med 77:
+    915--20.
+20. Okamoto-Mizuno K, Tsuzuki K, Mizuno K, Ohshiro Y (2009) Effects of
+    low ambient temperature on heart rate variability during sleep in
+    humans. Eur J Appl Physiol 105: 191--7.
+21. Ren C, O'Neill MS, Park SK, Sparrow D, Vokonas P, et al. (2011)
+    Ambient temperature, air pollution, and heart rate variability in an
+    aging population. Am J Epidemiol 173: 1013--21.
+22. Wu S, Deng F, Liu Y, Shima M, Niu J, et al. (2013) Temperature,
+    traffic-related air pollution, and heart rate variability in a panel
+    of healthy adults. Environ Res 120: 82--9.
+23. Yamamoto S, Iwamoto M, Inoue M, Harada N (2007) Evaluation of the
+    effect of heat exposure on the autonomic nervous system by heart
+    rate variability and urinary catecholamines. J Occup Health 49:
+    199--204.
+
+PLOS ONE | www.plosone.org
+
+9
+
+September 2014 | Volume 9 | Issue 9 | e106258
+
+

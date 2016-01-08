@@ -2676,3 +2676,180 @@ M-x diredful-add
 #+BEGIN_SRC emacs-lisp :results none
 (setq dired-dwim-target t)
 #+END_SRC
+
+* begin/end
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-07 Thu 17:58
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages/`dired plugins`
+  :ARCHIVE_CATEGORY: settings
+  :END:
+https://github.com/DamienCassou/beginend
+
+in dired mode, M-< (resp. M->) go to first (resp. last) file line.
+
+#+BEGIN_SRC emacs-lisp :results none
+(use-package beginend
+ :ensure t
+ :config
+ (beginend-setup-all)
+ )
+#+END_SRC
+
+* unify-opening 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-07 Thu 17:58
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages/`dired plugins`
+  :ARCHIVE_CATEGORY: settings
+  :END:
+https://github.com/DamienCassou/unify-opening/blob/master/unify-opening.el
+#+BEGIN_SRC emacs-lisp :results none
+(use-package unify-opening 
+ :ensure t
+ :config
+ 
+ )
+#+END_SRC
+
+* runner
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-07 Thu 18:00
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages/`dired plugins`
+  :ARCHIVE_CATEGORY: settings
+  :END:
+https://github.com/thamer/runner
+#+BEGIN_SRC emacs-lisp :results none
+(use-package runner 
+ :ensure t
+ :config
+(require 'runner)
+
+ )
+#+END_SRC 
+
+While in dired mode, position point on any file or directory you wish to add a shell command to, then do:
+M-x runner-add-file (for file or directory names)
+M-x runner-add-extension (for file extension)
+A new buffer will be created allowing you to specify what commands to run
+
+You can also add, edit, or delete any specific pattern by doing:
+M-x runner-add-empty
+M-x runner-edit
+M-x runner-delete
+
+The command database will be saved to the file runner-init-file file:~/.emacs.d/runner-conf.el
+
+* bf-mode
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-07 Thu 18:02
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages/`dired plugins`
+  :ARCHIVE_CATEGORY: settings
+  :END:
+
+#+BEGIN_SRC emacs-lisp :results none
+(use-package bf-mode
+ :ensure t
+ :config
+
+     ;; list up file extensions excluded from previes 
+     (setq bf-mode-except-exts
+           (append '("\\.dump$" "\\.data$" "\\.mp3$" "\\.lnk$")
+                   bf-mode-except-exts))
+
+     ;; list up file extensions which should be forced browsing
+      (setq bf-mode-force-browse-exts
+           (append '("\\.txt$" "\\.and.more...")
+                   bf-mode-force-browse-exts))
+
+     ;; browsable file size maximum
+     (setq bf-mode-browsing-size 4000) ;; 100 killo bytes
+
+     ;; browsing htmls with w3m (needs emacs-w3m.el and w3m)
+     (setq bf-mode-html-with-w3m t)
+
+     ;; browsing archive file (contents listing) verbosely
+     (setq bf-mode-archive-list-verbose t)
+
+     ;; browing directory (file listing) verbosely
+     (setq bf-mode-directory-list-verbose t)
+
+     ;; start bf-mode immediately after starting dired
+     (setq bf-mode-enable-at-starting-dired t)
+
+     ;; quitting dired directly from bf-mode
+     (setq bf-mode-directly-quit t)
+
+ )
+#+END_SRC
+
+* old SR
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-07 Thu 19:10
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Dired/functions
+  :ARCHIVE_CATEGORY: settings
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+  ;; (defun z/dired-fb-upload ()
+  ;;   (interactive)
+  ;;   (sr-term)
+  ;;   (let* ((fmt "fb %s\n")
+  ;;          (file (sr-clex-file sr-selected-window))
+  ;;          (command (format fmt file)))
+  ;;     (if (not (equal sr-terminal-program "eshell"))
+  ;;         (term-send-raw-string command)
+  ;;       (insert command)
+  ;;       (eshell-send-input)
+  ;;       (shell-command "notify-send fb uploaded")
+  ;; )))
+#+END_SRC
+
+
+* old SR fb
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-07 Thu 19:10
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Dired/functions
+  :ARCHIVE_CATEGORY: settings
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+  ;; (defun z/dired-fb-upload ()
+  ;;   (interactive)
+  ;;   (sr-term)
+  ;;   (let* ((fmt "fb %s\n")
+  ;;          (file (sr-clex-file sr-selected-window))
+  ;;          (command (format fmt file)))
+  ;;     (if (not (equal sr-terminal-program "eshell"))
+  ;;         (term-send-raw-string command)
+  ;;       (insert command)
+  ;;       (eshell-send-input)
+  ;;       (shell-command "notify-send fb uploaded")
+  ;; )))
+#+END_SRC
+
+* dired-details/+
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-08 Fri 09:58
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages/`dired plugins`
+  :ARCHIVE_CATEGORY: settings
+  :END:
+disabled since I didn't like the extra verbosity
+
+#+BEGIN_SRC emacs-lisp :results none
+  ;; (use-package dired-details
+  ;;  :ensure t
+  ;;  :config
+  ;; (setq dired-details-hide-link-targets nil)
+  ;;  )
+#+END_SRC 
+
+#+BEGIN_SRC emacs-lisp :results none
+  ;; (use-package dired-details+
+  ;;  :ensure t
+  ;;  :config
+  ;;  )
+#+END_SRC 

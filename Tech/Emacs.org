@@ -8,7 +8,7 @@
   :END:
 ** 0.BASICS
 *** help
-****  general 
+**** general 
 Built-in help system
 
 I will describe some most useful commands based on my experience. I will not list all, so you have to rely on Emacs to get your information:
@@ -282,7 +282,7 @@ then enter y or ! (!no return!) to clear place/all
 close all emacs session and delete the .el file (including # and links) corresponding to your conf.org
 In example in my case its econf.el which corresponds to my org config file econf.org
 restart emacs and things should be back to normal
-*** How to startup emacs without loading any customization
+*** How to startup emacs without loading any customization (vanilla Emacs)
 
 How to startup emacs without loading any customization?
 To run emacs without loading your personal init file, start emacs like this:
@@ -10002,6 +10002,26 @@ bibliographystyle:unsrt
 #+BEGIN_SRC sh
 egrep '(http)' wbookmarks.org|sed "s#^.*\[\[##"|sed 's#\]\].*$##' | sed 's#\]\[.*$##'|sed 's#^.*http#http#' | sed 's# .*$##'|sort|uniq -c|sort -n|grep -v " 1 "
 #+END_SRC
+** covert word/pdf to org for better cross academic search 
+*** for pdf files
+we use the ◀pdftotext▶ (part of poppler-utils) function to convert the file to a txt file
+then simply issue
+#+BEGIN_SRC sh  :results none
+pdftotext /home/lori/Documents/Sample.pdf /home/lori/Documents/Sample.txt
+#+END_SRC
+then follow up with pandoc
+*** doc files 
+load them to libreoffice and convert manually to docx
+#+BEGIN_SRC sh  :results none
+libreoffice --headless --convert-to docx /PATH/FILE.doc
+#+END_SRC
+
+#+END_SRC
+*** finalize by converting to org
+#+BEGIN_SRC sh  :results none
+find . -name \* -type f -exec pandoc -o {}.org {} \;  
+#+END_SRC
+
 * EOF settings
 Local variables:
 buffer-read-only: t

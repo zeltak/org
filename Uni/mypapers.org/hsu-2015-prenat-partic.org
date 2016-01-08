@@ -1,0 +1,812 @@
+*Prenatal Particulate Air Pollution and Asthma Onset in Urban Children:
+*
+
+*Identifying Sensitive Windows and Sex Difference*
+
+Hsiao-Hsien Leon Hsu, ScD^{1}; Yueh-Hsiu Mathilda Chiu, ScD^{2}; Brent
+A. Coull, PhD^{3,4};
+
+Itai Kloog, PhD^{5}; Joel Schwartz, PhD^{4,6}; Alison Lee, MD^{7};
+Robert O. Wright, MD, MPH^{1,8};
+
+Rosalind J. Wright, MD, MPH^{2,8}
+
+^{1} Department of Preventive Medicine, Icahn School of Medicine at
+Mount Sinai, New York, NY, USA
+
+^{2} Kravis Children's Hospital, Department of Pediatrics, Icahn School
+of Medicine at Mount Sinai, New York, NY, USA
+
+^{3} Department of Biostatistics, Harvard School of Public Health,
+Boston, MA, USA
+
+^{4} Department of Environmental Health, Harvard School of Public
+Health, Boston, MA, USA
+
+^{5} Department of Geography and Environmental Development, Ben-Gurion
+University of the Negev
+
+^{6} Department of Epidemiology, Harvard School of Public Health,
+Boston, MA, USA
+
+^{7} Department of Medicine, Division of Pulmonary, Critical Care and
+Sleep Medicine, Icahn School of Medicine at Mount Sinai, New York, NY,
+USA
+
+^{8} The Mindich Child Health & Development Institute, Icahn School of
+Medicine at Mount Sinai, New York, NY, USA
+
+*Address correspondence to* Rosalind J. Wright, Kravis Children's
+Hospital, Department of Pediatrics, Icahn School of Medicine at Mount
+Sinai, One Gustave L. Levy Place, Box 1198, New York, NY 10029, USA.
+Telephone +1 (212) 241-5287; E-mail:
+[[mailto:rosalind.wright@mssm.edu][rosalind.wright@mssm.edu]]
+
+*Acknowledgements:* The Asthma Coalition on Community, Environment, and
+Social Stress (ACCESS) project has been funded by grants R01 ES010932,
+U01 HL072494, and R01 HL080674 (Wright RJ, PI). CLEAN Air Center
+dedicated to air pollution estimates was funded by EPA RD 83479801, and
+phenotyping and biostatistical support was funded by P30 ES023515
+(Wright RO, PI) and P30 ES000002 (Coull BA, PI). The authors declare
+they have no competing financial interests.
+
+*Short Running Title:* Prenatal PM_{2.5} and urban childhood asthma
+
+*Title Page*
+
+*ABSTRACT *
+
+*Background:* The influence of particulate air pollution on respiratory
+health starts /in utero/. Fetal lung growth and structural development
+occurs in stages, thus effects on postnatal respiratory disorders may
+differ based on timing of exposure. We implemented an innovative method
+to identify sensitive windows for effects of prenatal exposure to
+particulate matter with a diameter≤2.5μm (PM_{2.5}) on children's asthma
+development in an urban pregnancy cohort.
+
+*Methods:* Analyses included 736 full-term (≥37 weeks) children. Each
+mother's daily PM_{2.5} exposure was estimated over gestation using a
+validated hybrid satellite-based spatio-temporal resolved model. Using
+distributed lag models (DLMs), we examined associations between weekly
+averaged PM_{2.5} levels over pregnancy and physician diagnosed asthma
+in children by age 6 years. Effect modification by sex was also
+examined.
+
+*Results:* The majority of mothers were ethnic minority (54% Hispanic,
+30% black), had ≤12 years of education (66%) and did not smoke in
+pregnancy (80%). In the sample as a whole, DLMs adjusting for child age,
+sex, and maternal factors (education, race/ethnicity, smoking, stress,
+atopy, pre-pregnancy obesity) showed that increased PM_{2.5} exposure
+levels at 16-25 weeks gestation was significantly associated with early
+childhood asthma development. An interaction between PM_{2.5} and sex
+was significant (p=0.01) with sex-stratified analyses showing that the
+association was only evident in boys. *Conclusions:* Higher prenatal
+PM_{2.5} exposure mid-gestation was associated with asthma development
+by age 6 years, particularly in boys. Methods to better characterize
+vulnerable windows may provide insight into underlying mechanisms.
+
+*INTRODUCTION *
+
+Toxic exposures in critical developmental windows may result in
+permanently altered changes in respiratory and interrelated systems
+(e.g., immune, autonomic, neuroendocrine) at the cellular, structural
+and/or functional level that manifest in childhood disorders (e.g.,
+asthma) ([[#_ENREF_1][1]], [[#_ENREF_2][2]]). The fetus is particularly
+vulnerable due to immature immune, neuroendocrine and xenobiotic
+detoxification systems as well as antioxidant defenses
+([[#_ENREF_3][3-6]]). Prenatal development of the respiratory system is
+a multi-event process progressing sequentially from early gestation
+([[#_ENREF_7][7]]), thus toxins may have variable impact depending on
+timing of exposure ([[#_ENREF_1][1]]).
+
+Air pollution exposure impacts the developing respiratory system, with
+evidence particularly implicating pro-oxidants such as particulate
+matter with an aerodynamic diameter ≤2.5 µm (PM_{2.5}). Epidemiological
+studies link prenatal particulate air pollution with childhood wheeze,
+asthma, and altered lung function ([[#_ENREF_4][4]],
+[[#_ENREF_8][8-10]]). Animal studies link prenatal PM with cytokine
+disruption, increased immunoglobulin E (IgE), impaired lung growth, and
+airway hyperresponsiveness in offspring ([[#_ENREF_11][11-14]]).
+Gestational exposure to PM may enhance maternal systemic oxidative
+stress and pro-inflammatory cytokine production ([[#_ENREF_15][15]])
+resulting in placental and endothelial dysfunction, and increased fetal
+oxidative stress with consequent effects on fetal immune and lung
+development ([[#_ENREF_7][7]], [[#_ENREF_14][14]],
+[[#_ENREF_16][16-18]]).
+
+Human studies have not extensively elucidated sensitive windows, largely
+due to variable methods for exposure assignment and lack of temporal
+resolution. Epidemiological studies have historically used more crude
+indices (e.g., "high polluted" vs. "low polluted" areas, levels at
+closest monitor, proximity to roads, traffic density), as it is cost
+prohibitive to collect repeated exposure data over pregnancy using
+personal monitoring ([[#_ENREF_19][19-21]]). Thus studies have
+considered relatively arbitrary assignment of exposure windows (e.g.,
+averaged over pregnancy, within clinically defined trimesters, personal
+monitoring at discrete time points) rather than being grounded in an
+understanding of developmental processes relevant to the respiratory
+system/./ As the processes involved in programming respiratory outcomes
+do not necessarily occur within clinically defined trimesters and
+sensitive periods remain largely unknown ([[#_ENREF_7][7]]), research
+that allows flexibility in identifying sensitive windows may be
+particularly informative. More recently developed approaches (e.g.,
+spatio-temporal land-use regression [LUR], multi-scale air quality
+deterministic chemistry models, etc.) for deriving spatio-temporally
+resolved exposure profiles ([[#_ENREF_22][22-24]]) allow researchers to
+estimate exposure patterns at a higher temporal resolution.
+
+Overlapping animal and human research suggest that prenatal air
+pollution exposure may have sex-specific effects. Animal studies
+demonstrate sex difference in lung growth and airway development
+([[#_ENREF_25][25]], [[#_ENREF_26][26]]). In humans, females display
+earlier fetal breathing and surfactant production, that may in part be
+the basis for the reduction in forced expiratory flow rates that
+predispose males to airway diseases in early childhood
+([[#_ENREF_27][27]], [[#_ENREF_28][28]]). Prenatal air pollution induces
+fetal oxidative stress ([[#_ENREF_29][29]]), and in turn influences gene
+expression and physiologic events crucial for lung maturation
+([[#_ENREF_30][30]]). Boys may be more vulnerable to prenatal oxidant
+injury ([[#_ENREF_31][31]]) and thus may have an exaggerated response to
+/in utero/ air pollution exposure.
+
+In order to address these research gaps, we leveraged daily prenatal
+PM_{2.5} measures available over pregnancy and applied advanced
+statistical methods [e.g., distributed lag models (DLMs)] to more
+precisely identify sensitive windows in relation to childhood asthma
+onset by age 6 years in an ethnically mixed lower-SES urban pregnancy
+cohort. Effect modification by sex was also examined. Findings from
+these analyses were presented at the 2014 American Thoracic Society
+International Conference ([[#_ENREF_32][32]]).
+
+*METHODS*
+
+Participants were from the Asthma Coalition on Community, Environment
+and Social Stress (ACCESS) project, a pregnancy cohort designed to
+examine the effects of perinatal exposure to physical toxins and
+psychosocial stress on urban childhood respiratory health
+([[#_ENREF_33][33]]). In brief, English- or Spanish-speaking pregnant
+women (≥18 years old) receiving care at Brigham & Women's Hospital
+(BWH), Boston Medical Center (BMC), and affiliated community health
+centers were enrolled at 28.4±7.9 weeks gestation between August 2002
+and July 2009. Among pregnant women approached who were eligible, 989
+(78.1%) agreed to enroll. Based on screening data, there were no
+significant differences for race/ethnicity, education, and income
+between participants who enrolled and those who declined. Of those
+enrolled, 915 gave birth to a singleton live born infant and continued
+follow-up. Procedures were approved by human studies committees at the
+Brigham and Women's Hospital and Boston Medical Center; written consent
+was obtained in the subject's primary language.
+
+/*Daily Prenatal PM_{2.5} Levels* /
+
+Mothers' prenatal exposure to PM_{2.5}, an index of ambient pollution
+from traffic and other sources, was estimated based on residence over
+the pregnancy (i.e., at enrollment and updated if they moved) using a
+novel hybrid spatio-temporal model incorporating Moderate Resolution
+Imaging Spectroradiometer (MODIS) satellite-derived Aerosol Optical
+Depth (AOD) measurements at a 10 x 10 km spatial resolution and
+traditional LUR predictors to yield residence-specific estimates of
+daily PM_{2.5} as detailed previously ([[#_ENREF_22][22]]). The model
+was run using day-specific calibrations of AOD data using ground
+PM_{2.5} measurements from 78 monitoring stations across New England and
+LUR and meteorological variables (temperature, wind speed, visibility,
+elevation, distance to major roads, percent open space, point emissions
+and area emissions). This approach incorporates highly resolved spatial
+information from the LUR data and important spatio-temporal data from
+the remote sensing satellite data. The AOD-PM_{2.5} relationship was
+calibrated for each day using data from grid cells with both monitor and
+AOD values using mixed models with random slopes for day, nested within
+region. For days without AOD data (due to cloud coverage, snow, etc.),
+the model was fit with a smooth function of latitude and longitude and a
+random intercept for each cell (similar to universal kriging). The “out
+of sample” ten-fold cross validation R^{2} for daily values were 0.83
+and 0.81 for days with and without available AOD data, respectively. To
+reduce potential noise caused by day-to-day PM_{2.5} variation, daily
+levels were averaged into weekly exposure profiles. Predicted overall
+prenatal PM_{2.5} levels at participant's residence in relation to the
+10x10 km grids for which AOD data were available are shown in Figure 1.
+While levels were higher around major roadways as anticipated, there was
+reasonable heterogeneity.
+
+/*Asthma*/
+
+Maternal-reported clinician-diagnosed asthma was ascertained from birth
+up to age 6 years through telephone and face-to-face interviews at
+approximately 3-month intervals for the first 24 months then annually
+thereafter. Mothers were asked, “Has a doctor or nurse ever said that
+your child had asthma?”.
+
+/*Covariates* /
+
+Maternal age, race, education and pre-pregnancy height and weight, and
+child's sex were ascertained by questionnaire; date of birth,
+gestational age, and birth weight were obtained by medical record
+review. A validation analysis on a subset of 121 ACCESS women showed no
+difference in the level of agreement/disagreement for height and weight
+when comparing values measured early in pregnancy (<10 weeks) to
+self-report ([[#_ENREF_34][34]]). Women were asked about smoking at
+enrollment and in the third trimester and classified as prenatal smokers
+if smoking at either visit. Mothers reported postnatal smoking and
+whether others smoked in the home at each postpartum interview. Maternal
+atopy was defined by self-reported doctor-diagnosed asthma, eczema,
+and/or hay fever. Body mass index (BMI) was calculated by dividing
+weight by height squared (kg/m^{2}); obesity was defined as BMI≥30
+kg/m^{2} ([[#_ENREF_35][35]]). As prenatal stress may co-vary with
+pollution and has been associated with asthma ([[#_ENREF_36][36]]), this
+was also considered as a confounder. We measured stress using the Crisis
+in Family Systems-Revised survey (CRYSIS-R) administered prenatally
+within two weeks of enrollment ([[#_ENREF_37][37]], [[#_ENREF_38][38]]).
+This survey assesses life events experienced across 11 domains (e.g.,
+financial, relationships, violence, housing, discrimination/prejudice).
+Mothers endorsed events experienced in the past six months and rated
+each as positive, negative, or neutral. The number of domains with one
+or more negative event was summed to create a continuous negative life
+events (NLEs) domain score, with higher scores indicating greater
+stress. Because birth weight and gestational age may be on the pathway
+between prenatal PM and asthma risk, the birth weight for gestational
+age z-score ([[#_ENREF_39][39]]) was considered in sensitivity analyses.
+
+/*Statistical Analysis */
+
+Analyses included 736 singleton full-term (gestational age ≥37 weeks)
+children with two or more postnatal interviews followed up to age 6
+years and air pollution exposure data. In order to explore sensitive
+windows, we constructed an exposure lag space ([[#_ENREF_40][40]])
+incorporating weekly averages of daily PM_{2.5} predictions at each
+subject's residence throughout the gestational period. We fit
+distributed lag models (DLMs) to estimate the time-varying association
+between the probability of child's asthma onset and the estimated
+PM_{2.5} level during a given week in pregnancy. Specifically, we fit
+the logistic regression DLM:
+
+$\text{\ logit}\left( \pi_{i} \right) = \beta_{0} + \sum_{j = 1}^{n}{\lbrack\alpha_{j}\text{AP}_{\text{ij}}\rbrack}{+ \beta}_{1}x_{1i} + \ldots + \beta_{p}x_{pi}$,
+where $\pi_{i}$ is the probability of a report of clinician diagnosed
+asthma, $AP_{\text{ij}}$ is the estimated PM_{2.5} level for week j of
+pregnancy, and $x_{1i}$, ..., $x_{\text{pi}}$ confounders for subject i.
+Models included maternal age, race/ethnicity, education, pre-pregnancy
+obesity, pre/postnatal tobacco smoke exposure, prenatal NLEs, and
+child's sex. Without additional structure on the $\alpha_{j}$
+coefficients, the estimates of the week-specific effects are typically
+unstable due to collinearity among the weekly pollution averages.
+Therefore, we fit constrained DLMs that assumes these effects
+$\alpha_{j}$ are a smooth function of j (week), such $\alpha_{j}$ =
+h(j). We modeled this smooth function using b-splines. A sensitive
+window was identified when the pointwise 95% confidence bands did not
+contain zero. Next, to assess whether the sensitive window of prenatal
+PM_{2.5} exposure on childhood asthma onset was different between boys
+and girls, sex-stratified DLMs were performed, adjusting for maternal
+age, race/ethnicity, education, pre-pregnancy obesity, pre/postnatal
+smoking status, and prenatal NLEs. We then constructed a difference
+curve by subtracting the effect estimates of the DLM curve for the girls
+from the effect estimates of the DLM curve for the boys [(log odds of
+boys) -- (log odds of girls)], and calculated the associated pooled
+standard error to derive the 95% CI of the difference curve. For
+additional sensitivity analyses, we also examined sex-specific
+associations between prenatal PM_{2.5} levels averaged across the
+DLM-identified sensitive windows using multivariable-adjusted linear
+regression models, as well as fitting the interaction model using the
+following equation: logit(asthma) = intercept + β_{1} (female ×
+PM_{2.5}) + β_{2} (male) + β_{3} (male × PM_{2.5}) + β_{4} /x_{1i}/ +
+β_{5} /x_{2i}/ + ... + /ε_{i}/, where /x_{1i}/, /x_{2i}/... are
+covariates. Finally, because prenatal and postnatal PM_{2.5} levels were
+correlated (Spearman's /r/=0.82), we performed sensitivity analyses by
+including postnatal PM_{2.5} levels in the models. We also fit models
+including birth weight adjusted for gestational age. DLMs were
+implemented using the /dlnm/ package in /R/ (version 3.0.1, Vienna,
+Austria) ([[#_ENREF_40][40]]), and other analyses were performed in SAS
+(version 9.1.3, SAS Institute Inc., Cary, NC).
+
+*RESULTS*
+
+Most mothers were ethnic minority (54% Hispanic, 30% African American),
+had ≤ 12 years of education (66%), and did not smoke in pregnancy (80%);
+the distribution of these covariates did not differ by sex (Table 1).
+There were also no significant sex difference in terms of gestational
+age at birth, maternal age, atopy, obesity, prenatal stress and PM_{2.5}
+exposure. Boys were more likely to be diagnosed with asthma compared to
+girls (18% versus 12%; χ^{2} test /p/=0.02). Birth weight for
+gestational age z-score was significantly lower in girls than boys
+(Wilcoxon rank-sum test /p/=0.003).
+
+/*Distributed Lag Models (DLMs) */
+
+Figure 2 shows the association between prenatal PM_{2.5} and children's
+asthma onset using DLMs, adjusting for maternal age, race/ethnicity,
+education, pre-pregnancy obesity, pre/postnatal tobacco smoke exposure,
+prenatal NLEs, and child's sex. We observed a significant sensitive
+window of PM_{2.5} exposure around mid-pregnancy on asthma onset by age
+6 years; specifically, during 16-25 weeks gestation (Figure 2).
+Sensitivity analyses additionally including averaged postnatal PM_{2.5}
+levels and birth weight adjusted for gestational age did not materially
+change these results (data not shown).
+
+Figure 3 demonstrates the sex-specific association between prenatal
+PM_{2.5} and children's asthma onset using DLMs, adjusting for maternal
+age, race/ethnicity, education, pre-pregnancy obesity, pre/postnatal
+tobacco smoke exposure, and prenatal NLEs. When stratified by sex, we
+observed a significant sensitive exposure window between 12-26 weeks
+gestation among boys but not girls (Figure 3). In order to examine the
+interaction between prenatal PM_{2.5} and sex, we also constructed a DLM
+demonstrating the difference between boys and girls; the difference
+curve showed that associations were significantly stronger in boys from
+14-20 weeks gestation compared to girls (Figure 4). Finally, we fit a
+multivariable logistic regression model including a PM_{2.5} × sex
+interaction term using PM_{2.5} level averaged over this identified
+sensitive window, and found a significant interaction between PM_{2.5}
+and sex (p-value=0.01).
+
+*DISCUSSION *
+
+These data add to a growing literature linking prenatal particulate air
+pollution exposure to children's respiratory health. This is the first
+study to leverage weekly PM_{2.5} exposure estimates over gestation
+combined with data driven statistics to characterize susceptibility
+windows, removing the subjectivity that currently guides the decision of
+when to assess exposure effects. These data demonstrate that increased
+prenatal PM_{2.5} exposure in mid-gestation (16-25 weeks gestation) was
+associated with development of childhood asthma in these urban children,
+particularly among boys. More refined estimation of the time window in
+which air pollution has the greatest impact may provide insights into
+underlying mechanisms as well as the etiology of sex-specific effects.
+
+While previous studies link higher prenatal exposure to PM with adverse
+pulmonary outcomes such as asthma ([[#_ENREF_41][41-43]]), the sensitive
+window with the greatest impact has not been well elucidated. A more
+definitive understanding of the temporal effects of toxins on outcomes
+in the offspring may provide clues as to the underlying mechanisms being
+perturbed based on our current understanding of the cellular
+differentiation, proliferation, or physiological function changes
+occurring progressively over pregnancy. This study demonstrates the
+applicability of advanced statistical modeling to illustrate the pattern
+of associations throughout the pregnancy based on the data /per se/
+rather than assigning /a priori/ exposure time points relevant to our
+exposure of interest. The identified sensitive window coincides with the
+late pseudoglandular and canalicular phases of fetal lung development
+([[#_ENREF_7][7]]). A number of essential tissues and their functions
+are shaped during these lung development phases. During the
+pseudoglandular stage (5-17 weeks), the conducting airways develop,
+smooth muscle and mucous glands form, and acinar outlines appear
+([[#_ENREF_44][44]]). The airways continue to develop during the
+canalicular stage (17-26 weeks) and capillaries, thin-walled terminal
+saccules, and alveolar epithelium begin to appear. Type II cells may
+undergo differentiation to Type I cells in this period, with subsequent
+surfactant production ([[#_ENREF_7][7]], [[#_ENREF_42][42]],
+[[#_ENREF_45][45]]). For example, the airway epithelium, formed during
+the canalicular phase, can secrete an array of innate immune molecules
+implicated in reactive airway disorders such as asthma
+([[#_ENREF_46][46]]). Specifically, the airway epithelium may be a major
+source of IL-25, which regulates immune-mediated inflammatory airway
+diseases and the response to infections, as well as IL-33 and thymic
+stromal lymphopoietin (TSLP), which also influence asthma development
+([[#_ENREF_47][47]]). Moreover, recent studies have found that
+epithelial barrier, epithelial mesenchymal transition, and mesenchymal
+phenotype are associated with lung function and allergic pulmonary
+diseases over the life course ([[#_ENREF_47][47-50]]). Factors involved
+in airway epithelial function and migration have been increasingly
+implicated in the links between PM, impaired lung growth and asthma risk
+([[#_ENREF_51][51]], [[#_ENREF_52][52]]).
+
+Previous human studies have suggested that sex differences in lung
+development may be related to differential maturation in males relative
+to females in terms of surfactant synthesis, airway size, and airway
+resistance, which also begin during the late pseudoglandular and
+canalicular phases ([[#_ENREF_28][28]], [[#_ENREF_53][53]]). Fetal
+breathing, a critical determinant of lung development, and surfactant
+production occur earlier in females as compared to males
+([[#_ENREF_54][54]], [[#_ENREF_55][55]]). Sex-differences result in
+lower specific airway resistance and higher size-corrected flow rates
+and specific airway conductance in female infants
+([[#_ENREF_56][56-59]]) and predispose male infants to childhood
+respiratory diseases including asthma ([[#_ENREF_60][60]],
+[[#_ENREF_61][61]]). Infant males, therefore, may have a pulmonary
+phenotype more susceptible to the deleterious effects of prenatal air
+pollution exposure. Moreover, a leading mechanism underlying the link
+between prenatal PM_{2.5} exposure and childhood asthma is thought to
+involve oxidative stress pathways and pro-inflammatory cytokine
+production ([[#_ENREF_15][15]], [[#_ENREF_62][62]]). The developing
+fetus is particularly vulnerable to oxidative stress as fetal
+antioxidant capabilities do not increase until the third trimester.
+Murine models of oxidative stress at embryonic day 16, equivalent to the
+canalicular phase in human lung development, demonstrate reductions in
+peripheral airway number, branching complexity and alveolarization
+([[#_ENREF_63][63]]). This coupled with evidence to support an increased
+susceptibility of the male fetus to maternal oxidative stress
+([[#_ENREF_31][31]]) may contribute to the observed greater risk in
+males. It is also possible that the anti-oxidant properties of female
+sex hormones ([[#_ENREF_64][64]], [[#_ENREF_65][65]]) may mitigate
+damaging effects of prenatal ambient PM exposure. Future studies are
+needed to corroborate our findings and further examine these mechanisms
+to better understand observed sex differences.
+
+We note several strengths of this study. We assessed prenatal maternal
+daily particulate air pollution using a validated state-of-the-art
+hybrid spatio-temporal LUR model incorporating satellite-derived Aerosol
+Optical Depth measures based on mothers' residence during pregnancy. We
+then leveraged these exposure estimates to implement a data driven,
+advanced statistical method to objectively identify susceptibility
+windows for PM. Also, our study population consists of a lower-SES
+ethnically mixed inner-city cohort that may be more highly exposed to
+ambient pollution as well as being at greater risk for asthma. Finally,
+this is the first study to examine sex-specific effects of prenatal
+particulate air pollution on childhood asthma development. We also
+acknowledge some limitations. While we were able to control for several
+factors known to be important in children's asthma development, we did
+not have data on dietary and other environmental factors that may
+co-vary with air pollution such as temperature. In addition, children's
+doctor-diagnosed asthma was reported by mothers using questionnaires.
+Further studies may therefore consider sex-specific joint or interactive
+associations among additional environmental factors. As we follow this
+cohort it will be informative to see if similar associations hold for
+other measures of respiratory function (e.g., spirometry, airway
+reactivity). Finally, while we focused on a higher-risk sample, our
+results may not be generalizable to the overall U.S. population.
+
+In summary, we demonstrate that advanced statistical methods when
+combined with highly temporally resolved exposure data can identify
+susceptibility windows to environmental exposures that may enhance our
+ability to find effects and identify vulnerable groups. Increased PM
+exposure around mid-gestation may be particularly relevant to childhood
+asthma development, especially among boys. A more definitive
+characterization of vulnerable windows may provide insight into
+underlying mechanisms when coupled with our understanding of lung
+growth, airway structural and functional development, and asthma
+pathophysiology.
+
+| *Table 1*. ACCESS participant characteristics (n=736)                                                                                                                    |
+|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------+-------------+------------------+---------+-------------------+------+---------+-------------|
+| *　*                                                                                                                                                                     | *All children (n=736)*   | *　*        | *Boys (n=374)*   | *　*    | *Girls (n=362)*   |
+| *Ever had asthma up to 6 years old* (n, %)                                                                                                                               |                          |             |                  |         |                   |      |         |             |
+| No                                                                                                                                                                       | 626                      | 85.1        |                  | 307     | 82.1              |      | 319     | 88.1        |
+| Yes                                                                                                                                                                      | 110                      | 15.0        |                  | 67      | 17.9              |      | 43      | 11.9        |
+| *Race/Ethnicity* (n, %)                                                                                                                                                  |                          |             |                  |         |                   |      |         |             |
+| Black                                                                                                                                                                    | 218                      | 29.6        |                  | 119     | 31.8              |      | 99      | 27.4        |
+| Hispanic                                                                                                                                                                 | 395                      | 53.7        |                  | 191     | 51.1              |      | 204     | 56.4        |
+| White/Other                                                                                                                                                              | 123                      | 16.7        |                  | 64      | 17.1              |      | 59      | 16.3        |
+| *Maternal education* (n, %)                                                                                                                                              |                          |             |                  |         |                   |      |         |             |
+| >12 yrs                                                                                                                                                                  | 251                      | 34.1        |                  | 128     | 34.2              |      | 123     | 34          |
+| ≤12 yrs                                                                                                                                                                  | 485                      | 65.9        |                  | 246     | 65.8              |      | 239     | 66.0        |
+| *Maternal smoking status* (n, %)                                                                                                                                         |                          |             |                  |         |                   |      |         |             |
+| Never smoked                                                                                                                                                             | 590                      | 80.2        |                  | 303     | 81                |      | 287     | 79.0        |
+| Smoked prenatally, but not postnatally                                                                                                                                   | 36                       | 4.9         |                  | 19      | 5.1               |      | 17      | 4.7         |
+| Did not smoke prenatally, but smoked postnatally                                                                                                                         | 42                       | 5.7         |                  | 19      | 5.1               |      | 23      | 6.4         |
+| Smoked both pre- and postnatally                                                                                                                                         | 68                       | 9.2         |                  | 33      | 8.8               |      | 13      | 9.7         |
+| *Maternal atopy^{a}* (n,%)                                                                                                                                               | 262                      | 35.6        |                  | 131     | 35.0              |      | 131     | 36.2        |
+| *Maternal obese^{b}* (n,%)                                                                                                                                               | 205                      | 27.9        |                  | 97      | 26.0              |      | 108     | 30.0        |
+| *Maternal age at enrollment* (years; median, IQR)                                                                                                                        | 25.5                     | 22.3-30.7   | 　               | 25.6    | 22.4-31.3         | 　   | 25.4    | 22.2-30.3   |
+| *Birth weight for gestational age z-score* (mean, SD)                                                                                                                    | -0.16                    | 1.06        |                  | -0.07   | 1.09              |      | -0.26   | 1.03        |
+| *Averaged prenatal PM_{2.5} level* (µg/m^{3}; median, IQR)                                                                                                               | 11.2                     | 10.2-11.8   |                  | 11.2    | 10.2-11.9         |      | 11.0    | 10.2-11.7   |
+| *Prenatal negative life events score^{c}* (mean, SD)                                                                                                                     | 2.40                     | 2.00        |                  | 2.37    | 1.99              |      | 2.43    | 2.03        |
+| ^{a} Ever self-reported doctor-diagnosed asthma, eczema, and/or hay fever                                                                                                |
+|                                                                                                                                                                          |
+| ^{b} Pre-pregnancy obesity: ≥30 kg/m^{2}.                                                                                                                                |
+|                                                                                                                                                                          |
+| ^{c} Assessed using Crisis in Family Systems-Revised (CRISYS-R) survey ([[#_ENREF_37][37]], [[#_ENREF_38][38]]); multi-item survey summarized into a continuous score.   |
+
+[[media/image1.jpeg]]
+
+*Figure 1. Predicted PM_{2.5} levels for ACCESS participants during
+pregnancy *
+
+This figure demonstrates predicted PM_{2.5} levels for study
+participants based on residence during the gestation period. The 10km x
+10km AOD grid used to predict daily PM_{2.5} levels is also depicted.
+
+[[media/image2.jpeg]]
+
+*Figure 2.* *Association between weekly PM_{2.5} levels over gestation
+and asthma onset *
+
+This figure demonstrates the association between PM_{2.5} over gestation
+and asthma onset by age 6 years using a distributed lag model (DLM)
+assuming week-specific effects, adjusting for child's sex, maternal age
+at enrollment, race/ethnicity, education, pre-pregnancy obesity,
+prenatal and postnatal smoking, and prenatal stress. The Y Axis shows
+the odds ratio (OR) of asthma in relation to a 10 μg/m^{3} increase in
+prenatal PM_{2.5} exposure; the X axis depicts gestational age in weeks.
+The solid line shows the predicted OR and the gray area indicates the
+95% confidence intervals (CIs). A sensitive window is identified when
+the estimated pointwise 95% CI does not include zero.
+
+[[media/image3.jpeg]]
+
+*Figure 3.* *Association between weekly PM_{2.5} levels over gestation
+and asthma onset *
+
+This figure demonstrates the association between PM_{2.5} over gestation
+and asthma onset by age 6 years using distributed lag models (DLMs)
+assuming week-specific effects, stratified by sex. The models adjusted
+for maternal age at enrollment, race/ethnicity, education, pre-pregnancy
+obesity, prenatal and postnatal smoking status, and prenatal stress. The
+Y Axis shows the odds ratio (OR) of asthma in relation to a 10 μg/m^{3}
+increase in prenatal PM_{2.5} exposure; the X axis depicts gestational
+age in weeks. The solid line shows the predicted OR and the gray area
+indicates the 95% confidence intervals (CIs). A sensitive window is
+identified when the estimated pointwise 95% CI does not include zero.
+
+[[media/image4.jpeg]]
+
+*Figure 4.* *Association between weekly PM_{2.5} levels over gestation
+and the difference in asthma onset between boys and girls *
+
+This figure demonstrates the association between PM_{2.5} over gestation
+and the difference in asthma onset between sex using a distributed lag
+model (DLM) assuming week-specific effects, adjusting for maternal age
+at enrollment, race/ethnicity, education, pre-pregnancy obesity,
+prenatal and postnatal smoking status, and prenatal stress. The Y Axis
+shows the differences in log odds of asthma between boys and girls [(log
+odds of boys) -- (log odds of girls)] in relation to a 10 μg/m^{3}
+increase in prenatal PM_{2.5} exposure; the X axis is gestational age in
+weeks. The solid line shows the predicted odds ratio and the gray area
+indicates the 95% CIs.
+
+*REFERENCES*
+
+1. Dietert RR, Etzel RA, Chen D, Halonen M, Holladay SD, Jarabek AM,
+Landreth K, Peden DB, Pinkerton K, Smialowicz RJ, Zoetis T. Workshop to
+identify critical windows of exposure for children's health: Immune and
+respiratory systems work group summary. /Environmental Health
+Perspectives/ 2000;108 Suppl 3:483-490.
+
+2. Wright RJ. Perinatal stress and early life programming of lung
+structure and function. /Biological Psychology/ 2010;84:46-56.
+
+3. McElroy MC, Postle AD, Kelly FJ. Catalase, superoxide dismutase and
+glutathione peroxidase activities of lung and liver during human
+development. /Biochim Biophys Acta/ 1992;1117:153-158.
+
+4. Kelly FJ, Fussell JC. Air pollution and airway disease. /Clin Exp
+Allergy/ 2011;41:1059-1071.
+
+5. Dietert RR. Maternal and childhood asthma: Risk factors,
+interactions, and ramifications. /Reprod Toxicol/ 2011;32:198-204.
+
+6. Sly PD, Holt PG. Role of innate immunity in the development of
+allergy and asthma. /Curr Opin Allergy Clin Immunol/ 2011;11:127-131.
+
+7. Kajekar R. Environmental factors and developmental outcomes in the
+lung. /Pharmacol Ther/ 2007;114:129-145.
+
+8. Jedrychowski WA, Perera FP, Maugeri U, Mroz E, Klimaszewska-Rembiasz
+M, Flak E, Edwards S, Spengler JD. Effect of prenatal exposure to fine
+particulate matter on ventilatory lung function of preschool children of
+non-smoking mothers. /Paediatr Perinat Epidemiol/ 2010;24:492-501.
+
+9. Jedrychowski WA, Perera FP, Spengler JD, Mroz E, Stigter L, Flak E,
+Majewska R, Klimaszewska-Rembiasz M, Jacek R. Intrauterine exposure to
+fine particulate matter as a risk factor for increased susceptibility to
+acute broncho-pulmonary infections in early childhood. /Int J Hyg
+Environ Health/ 2013;216:395-401.
+
+10. Chiu YH, Coull BA, Sternthal MJ, Kloog I, Schwartz J, Cohen S,
+Wright RJ. Effects of prenatal community violence and ambient air
+pollution on childhood wheeze in an urban population. /J Allergy Clin
+Immunol/ 2014;133:713-722 e714.
+
+11. Fedulov AV, Leme A, Yang Z, Dahl M, Lim R, Mariani TJ, Kobzik L.
+Pulmonary exposure to particles during pregnancy causes increased
+neonatal asthma susceptibility. /Am J Respir Cell Mol Biol/
+2008;38:57-67.
+
+12. Hamada K, Suzaki Y, Leme A, Ito T, Miyamoto K, Kobzik L, Kimura H.
+Exposure of pregnant mice to an air pollutant aerosol increases asthma
+susceptibility in offspring. /Journal of Toxicology and Environmental
+Health Part A/ 2007;70:688-695.
+
+13. Mauad T, Rivero DH, de Oliveira RC, Lichtenfels AJ, Guimaraes ET, de
+Andre PA, Kasahara DI, Bueno HM, Saldiva PH. Chronic exposure to ambient
+levels of urban particles affects mouse lung development. /Am J Respir
+Crit Care Med/ 2008;178:721-728.
+
+14. Yoshida S, Takano H, Nishikawa M, Miao H, Ichinose T. Effects of
+fetal exposure to urban particulate matter on the immune system of male
+mouse offspring. /Biol Pharm Bull/ 2012;35:1238-1243.
+
+15. Xu X, Deng F, Guo X, Lv P, Zhong M, Liu C, Wang A, Tzan K, Jiang SY,
+Lippmann M, Rajagopalan S, Qu Q, Chen LC, Sun Q. Association of systemic
+inflammation with marked changes in particulate air pollution in Beijing
+in 2008. /Toxicol Lett/ 2012;212:147-156.
+
+16. Backes CH, Nelin T, Gorr MW, Wold LE. Early life exposure to air
+pollution: How bad is it? /Toxicol Lett/ 2013;216:47-53.
+
+17. Prescott SL. The development of respiratory inflammation in
+children. /Paediatr Respir Rev/ 2006;7:89-96.
+
+18. Verhein KC, Fryer AD, Jacoby DB. Neural control of airway
+inflammation. /Curr Allergy Asthma Rep/ 2009;9:484-490.
+
+19. Morgenstern V, Zutavern A, Cyrys J, Brockow I, Gehring U, Koletzko
+S, Bauer CP, Reinhardt D, Wichmann HE, Heinrich J. Respiratory health
+and individual estimated exposure to traffic-related air pollutants in a
+cohort of young children. /Occup Environ Med/ 2007;64:8-16.
+
+20. Morgenstern V, Zutavern A, Cyrys J, Brockow I, Koletzko S, Kramer U,
+Behrendt H, Herbarth O, von Berg A, Bauer CP, Wichmann HE, Heinrich J.
+Atopic diseases, allergic sensitization, and exposure to traffic-related
+air pollution in children. /Am J Respir Crit Care Med/
+2008;177:1331-1337.
+
+21. Patel MM, Quinn JW, Jung KH, Hoepner L, Diaz D, Perzanowski M,
+Rundle A, Kinney PL, Perera FP, Miller RL. Traffic density and
+stationary sources of air pollution associated with wheeze, asthma, and
+immunoglobulin e from birth to age 5 years among new york city children.
+/Environ Res/ 2011;111:1222-1229.
+
+22. Kloog I, Koutrakis P, Coull BA, Lee HJ, Schwartz J. Assessing
+temporally and spatially resolved pm_{2.5} exposures for epidemiological
+studies using satellite aerosol optical depth measurements. /Atmos
+Environ/ 2011;45:6267-6275.
+
+23. Ma Z, Hu X, Huang L, Bi J, Liu Y. Estimating ground-level pm2.5 in
+china using satellite remote sensing. /Environ Sci Technol/
+2014;48:7436-7444.
+
+24. Warren J, Fuentes M, Herring A, Langlois P. Spatial-temporal
+modeling of the association between air pollution exposure and preterm
+birth: Identifying critical windows of exposure. /Biometrics/
+2012;68:1157-1167.
+
+25. Carey MA, Card JW, Voltz JW, Germolec DR, Korach KS, Zeldin DC. The
+impact of sex and sex hormones on lung physiology and disease: Lessons
+from animal studies. /Am J Physiol Lung Cell Mol Physiol/
+2007;293:L272-278.
+
+26. Chang HY, Mitzner W. Sex differences in mouse models of asthma. /Can
+J Physiol Pharmacol/ 2007;85:1226-1235.
+
+27. Becklake MR, Kauffmann F. Gender differences in airway behaviour
+over the human life span. /Thorax/ 1999;54:1119-1138.
+
+28. Carey MA, Card JW, Voltz JW, Arbes SJ, Jr., Germolec DR, Korach KS,
+Zeldin DC. It's all about sex: Gender, lung development and lung
+disease. /Trends Endocrinol Metab/ 2007;18:308-313.
+
+29. Jedrychowski W, Spengler JD, Maugeri U, Miller RL, Budzyn-Mrozek D,
+Perzanowski M, Flak E, Mroz E, Majewska R, Kaim I, Perera F. Effect of
+prenatal exposure to fine particulate matter and intake of paracetamol
+(acetaminophen) in pregnancy on eczema occurrence in early childhood.
+/The Science of the Total Environment/ 2011;409:5205-5209.
+
+30. Land SC, Wilson SM. Redox regulation of lung development and
+perinatal lung epithelial function. /Antioxidants & Redox Signaling/
+2005;7:92-107.
+
+31. Minghetti L, Greco A, Zanardo V, Suppiej A. Early-life sex-dependent
+vulnerability to oxidative stress: The natural twining model. /J Matern
+Fetal Neonatal Med/ 2013;26:259-262.
+
+32. Chiu YH, Coull BA, Kloog I, Schwartz J, Hsu HH, Wright RO, Wright
+RJ. Identifying prenatal windows of susceptibility to particulate air
+pollution on childhood asthma onset in a prospective urban birth cohort.
+Meeting abstract, the american thoracic society 2014 international
+conference. May 16-21, 2014, san diego. /Am J Respir Crit Care Med/
+2014;189:A2441.
+
+33. Wright RJ, Suglia SF, Levy J, Fortun K, Shields A, Subramanian S,
+Wright R. Transdisciplinary research strategies for understanding
+socially patterned disease: The Asthma Coalition on Community,
+Environment, and Social Stress (ACCESS) project as a case study. /Cien
+Saude Colet/ 2008;13:1729-1742.
+
+34. Wright RJ, Fisher K, Chiu YH, Wright RO, Fein R, Cohen S, Coull BA.
+Disrupted prenatal maternal cortisol, maternal obesity, and childhood
+wheeze: Insights into prenatal programming. /Am J Respir Crit Care Med/
+2013;187:1186-1193.
+
+35. CDC. Overweight and obesity.
+Http://www.Cdc.Gov/obesity/adult/defining.Html. 2012.
+
+36. Chiu YH, Coull BA, Cohen S, Wooley A, Wright RJ. Prenatal and
+postnatal maternal stress and wheeze in urban children: Effect of
+maternal sensitization. /Am J Respir Crit Care Med/ 2012;186:147-154.
+
+37. Berry C, Shalowitz M, Quinn K, Wolf R. Validation of the crisis in
+family systems-revised, a contemporary measure of life stressors.
+/Psychol Rep/ 2001;88:713-724.
+
+38. Shalowitz MU, Berry CA, Rasinski KA, Dannhausen-Brun CA. A new
+measure of contemporary life stress: Development, validation, and
+reliability of the CRISYS. /Health Serv Res/ 1998;33:1381-1402.
+
+39. Oken E, Kleinman KP, Rich-Edwards J, Gillman MW. A nearly continuous
+measure of birth weight for gestational age using a United States
+national reference. /BMC Pediatr/ 2003;3:6.
+
+40. Gasparrini A, Armstrong B, Kenward MG. Distributed lag non-linear
+models. /Stat Med/ 2010;29:2224-2234.
+
+41. Wright RJ, Brunst KJ. Programming of respiratory health in
+childhood: Influence of outdoor air pollution. /Curr Opin Pediatr/
+2013;25:232-239.
+
+42. Miller MD, Marty MA. Impact of environmental chemicals on lung
+development. /Environmental Health Perspectives/ 2010;118:1155-1164.
+
+43. Stelmach I, Bobrowska-Korzeniowska M, Smejda K, Majak P, Jerzynska
+J, Stelmach W, Polanska K, Sobala W, Krysicka J, Hanke W. Risk factors
+for the development of atopic dermatitis and early wheeze. /Allergy
+Asthma Proc/ 2014;35:382-389.
+
+44. Boyden EA. Development and growth of the airways. Lung biology in
+health and disease development of the lung. New York: M Dekker; 1977. p.
+3-35.
+
+45. Burri PH. Fetal and postnatal development of the lung. /Annual
+Review of Physiology/ 1984;46:617-628.
+
+46. Kato A, Favoreto S, Jr., Avila PC, Schleimer RP. Tlr3- and th2
+cytokine-dependent production of thymic stromal lymphopoietin in human
+airway epithelial cells. /J Immunol/ 2007;179:1080-1087.
+
+47. Moffatt MF, Gut IG, Demenais F, Strachan DP, Bouzigon E, Heath S,
+von Mutius E, Farrall M, Lathrop M, Cookson WO. A large-scale,
+consortium-based genomewide association study of asthma. /N Engl J Med/
+2010;363:1211-1221.
+
+48. Roos AB, Mori M, Gronneberg R, Osterlund C, Claesson HE, Wahlstrom
+J, Grunewald J, Eklund A, Erjefalt JS, Lundberg JO, Nord M. Elevated
+exhaled nitric oxide in allergen-provoked asthma is associated with
+airway epithelial inos. /PLoS One/ 2014;9:e90018.
+
+49. Sohal SS, Ward C, Walters EH. Importance of epithelial mesenchymal
+transition (emt) in copd and asthma. /Thorax/ 2014;69:768.
+
+50. Georas SN, Rezaee F. Epithelial barrier function: At the front line
+of asthma immunology and allergic airway inflammation. /J Allergy Clin
+Immunol/ 2014;134:509-520.
+
+51. Holgate ST. The sentinel role of the airway epithelium in asthma
+pathogenesis. /Immunological Reviews/ 2011;242:205-219.
+
+52. Iwanaga K, Elliott MS, Vedal S, Debley JS. Urban particulate matter
+induces pro-remodeling factors by airway epithelial cells from healthy
+and asthmatic children. /Inhalation Toxicology/ 2013;25:653-660.
+
+53. Ishak N, Sozo F, Harding R, De Matteo R. Does lung development
+differ in male and female fetuses? /Experimental Lung Research/
+2014;40:30-39.
+
+54. Torday JS, Nielsen HC. The sex difference in fetal lung surfactant
+production. /Experimental Lung Research/ 1987;12:1-19.
+
+55. Boddy K, Dawes GS. Fetal breathing. /British Medical Bulletin/
+1975;31:3-7.
+
+56. Quanjer PH, Borsboom GJ, Brunekreef B, Zach M, Forche G, Cotes JE,
+Sanchis J, Paoletti P. Spirometric reference values for white european
+children and adolescents: Polgar revisited. /Pediatric Pulmonology/
+1995;19:135-142.
+
+57. Clausen JL, Coates AL, Quanjer PH. Measurement of lung volumes in
+humans: Review and recommendations from an ATS/ERS workshop. /The
+European Respiratory Journal/ 1997;10:1205-1206.
+
+58. Stocks J, Quanjer PH. Reference values for residual volume,
+functional residual capacity and total lung capacity. Ats workshop on
+lung volume measurements. Official statement of the European Respiratory
+Society. /The European Respiratory Journal/ 1995;8:492-506.
+
+59. Lung function testing: Selection of reference values and
+interpretative strategies. American Thoracic Society. /The American
+review of Respiratory Disease/ 1991;144:1202-1218.
+
+60. Demissie K, Marcella SW, Breckenridge MB, Rhoads GG. Maternal asthma
+and transient tachypnea of the newborn. /Pediatrics/ 1998;102:84-90.
+
+61. Air Pollution and Chronic Respiratory Disease. I. Methods and
+Material (author's transl). /Bulletin Europeen de Physiopathologie
+Respiratoire/ 1982;18:87-99.
+
+62. Lodovici M, Bigagli E. Oxidative stress and air pollution exposure.
+/J Toxicol/ 2011;2011:487074.
+
+63. Dieperink HI, Blackwell TS, Prince LS. Hyperoxia and apoptosis in
+developing mouse lung mesenchyme. /Pediatric Research/ 2006;59:185-190.
+
+64. Bellanti F, Matteo M, Rollo T, De Rosario F, Greco P, Vendemiale G,
+Serviddio G. Sex hormones modulate circulating antioxidant enzymes:
+Impact of estrogen therapy. /Redox Biology/ 2013;1:340-346.
+
+65. Massafra C, Gioia D, De Felice C, Muscettola M, Longini M, Buonocore
+G. Gender-related differences in erythrocyte glutathione peroxidase
+activity in healthy subjects. /Clinical Endocrinology/ 2002;57:663-667.

@@ -1,0 +1,574 @@
+Detecting the Association between Children Health and Lead Exposure
+Using Voronoi Polygon Rezoning Itai Klooga,b and Boris A. Portnova,1 a
+
+Department of Natural Resources & Environmental Management, University
+of Haifa, Mount Carmel 31905, Haifa, Israel; b Department of
+Environmental Health - Exposure, Epidemiology and Risk Program, Harvard
+School of Public Health, Landmark Center 401 Park Dr West, Boston MA USA
+02215
+
+Abstract Townships or small census-designated statistical areas (SCA)
+are often used in public health studies for the estimation of
+residential exposure to environmental pollutants, which levels are
+measured by air quality monitoring stations (AQMS) or estimated by soil
+tests. However, since SCA's and actual exposure zones often mismatch
+geographically, this exposure estimation approach is likely to lead to
+exposure misclassification, known as “ecological bias” or “ecological
+fallacy.” In this paper we used Voronoi polygons (VP) to rezone the
+study area (based on soil test points) to test weather more homogenous
+pollution exposure areas could be generated. A systematic sample of
+3,922 schoolchildren including demographic and health data were then
+retrieved from the Clalit Health Services (CHS) database for the years
+2007-2009. Soil contamination data by Lead (Pb) were obtained from the
+Israel Geological Survey, carried out between 1998 and 2007. Soil sample
+points were superimposed upon the layer of Small Census Areas (SCAs) and
+the average lead exposure for each SCA was calculated. Next, VPs were
+formed around soil test points, with each polygon containing exactly one
+lead soil measurement. Krigging and Inverse Distance Weighted (IDW)
+interpolations were run, to compare their results with the results
+obtained by SCA averaging and VP rezoning. The percent of children with
+asthma, and their socio-demographic attributes were calculated. Both
+Ordinary Least Square and Spatial Lag regressions were run to link
+between lead exposure and the children's health status, controlled for
+age, medical diagnosis of obesity (overweight), and welfare support to
+the child's family. Model fits were consistently higher in the Voronoi
+tessellation models compared to the SCA and interpolation models,
+indicating that the VP method appeared to improve the models'
+explanatory power. As we suggest, the proposed technique of VP rezoning
+may be applicable to a wide range of empirical studies which use SCA's
+that do not fit the “real” exposure zones and may thus cause exposure
+misclassification biases and erroneous causeeffect estimates. Keywords:
+Voronoi polygons; soil contamination; lead; GIS; exposure
+misclassification; ecological bias; rezoning. 1. Introduction 1
+
+Address for correspondence: Prof. Boris A. Portnov, Department of
+Natural Resources & Environmental Management, Faculty of Social
+Sciences, University of Haifa, Mount Carmel, Haifa, Israel 31905; tel:
+972-4-8288532, fax: 972-4-8249971; email: portnov@nrem.haifa.ac.il.
+
+Environmental studies often use census-designated statistical areas or
+townships to estimate the average exposure levels of local residents to
+various sources of air pollution and soil contamination . In most cases,
+the ambient levels of environmental pollutants are recorded by air
+quality monitoring stations
+
+or measured by soil
+
+contamination tests (Walling and He, 1999). However, census-designated
+areas, in which study population resides, and networks of air quality
+monitoring stations (AQMS) or/and soil test sites most often mismatch
+geographically, with some small census areas (SCA) hosting several
+environmental quality monitors, while others having none of them. This
+situation may lead to exposure misclassification bias, due to the fact
+that the same pollution exposure levels are effectively assigned to all
+residents of relatively large territorial units, within which actual
+exposure levels may vary considerably . Several empirical studies
+attempted to address exposure misclassification bias by using various
+interpolation techniques, such as splines, inverse distance weighted
+method (IDW), kernel smoothing, or kriging . According to these
+interpolation-based approaches, discrete observations are transformed
+into continuous pollution surfaces, upon which residential locations of
+the study subjects are superimposed, thus enabling to obtain individual
+exposure estimates . However, these interpolation techniques have
+several drawbacks, such as the mismatch of results obtained by different
+interpolation tools and “error propagation” . The major cause of the
+latter bias is attributed to the fact that any error (e.g., due to
+faulty measurements), potentially occurring at original observation
+points, propagates into all of the output layers of data created by
+interpolation distorting them . Spatial tessellation, or a division of a
+geographic plain into non-overlapping polygons, is another important
+mapping technique, commonly used in geography.
+
+2
+
+There are various types of spatial tessellations, such as
+administrative divisions, school districts, electoral districts, census
+tracts, vegetation patterns, land uses, and land covers. Artificial
+tessellations (i.e., tessellations based on regular nonoverlapping
+shapes, not associated with any particular geographic features) are also
+used in geography. Such tessellations include Voronoi diagrams (or
+Voronoi polygons), Delaunay tessellations, lattices, and grids, and are
+used to approximate catchment areas of urban facilities or to aggregate
+a set of spatial features based on a common zonal system (Okabe et al.
+2000). In the presented paper, we hypothesize that because small census
+areas, used to assemble socio-economic attributes of subject
+populations, and actual exposure zones often
+
+mismatch
+
+geographically,
+
+this
+
+''misalliance'
+
+may
+
+lead
+
+to
+
+exposure
+
+misclassification. As we further hypothesize, using Voronoi polygons
+(VPs) to rezone the study area can help to generate more homogenous
+pollution exposure areas, thus minimizing exposure misclassification.
+Voronoi (or sometimes called Thiessen) polygons (VP) are regions, which
+interior consists of all points in the plane which are closer to a
+particular point in space than to any other one (Voronoi et al. 1908;
+Thiessen 1911; Weisstein 2009). As an illustration of the proposed
+approach, we use results of soil tests for lead contamination, carried
+out in the Greater Haifa Metropolitan Area (GHMA) by Israel Geological
+Survey in 1998-2007 (unpublished data). Lead poisoning as a health issue
+has been described as the “silent epidemic” (Nriagu 1988). According to
+several epidemiological studies, young children are the most sensitive
+group to lead exposure (Bellinger et al. 1987, Mushak et al. 1989,
+Thornton et al. 1990). 2. Voronoi polygons (VPs) and their use in
+empirical studies
+
+3
+
+VPs are created around a set of “reference” points on the plane, so
+that all locations within a given region are closer to one of the
+“reference” points than to any other point in the distribution . Thus,
+for a set of points (a 1, a2,..., an) located on an Euclidian plane,
+locations x belong to the polygon formed around point ai, if their
+distances to point ai are equal or smaller than their distances to any
+other reference point aj: (x - ai) ≤ (x - aj), where differences in the
+parentheses stand for Euclidian distances between pairs of points. If
+location x is equidistant from a pair of points, the location will lie
+on the boundary of two adjacent polygons. Similarly, if x is equidistant
+from three or more points, it will form a common vertex of three or more
+adjacent polygons. The resulting set of polygons, defined in the above
+manner, forms a contiguous, nonoverlapping tessellation which is unique
+for any given set of input points . In previous empirical studies, VPs
+were primarily used in computer graphics and computer simulations, in
+geophysics, and meteorology . Thus, Benenson and Omer (2003) used the
+Voronoi diagram (VD) approach for constructing continuous building
+coverage, in which VP were formed around individual buildings and
+included the buildings themselves and surrounding areas, forming a net
+visually similar to residential parcellation. In a separate study used
+VP to create a continuous residential parcellation so as to simulate the
+dynamics of ethnic distribution in the Jaffa area of the city of Tel
+Aviv during the period 1955 -1995, using the “agent-based” modeling
+approach. Hwang and colleagues
+
+conducted a health survey to assess the impact of
+
+different pathways of human exposure resulting from the off-site
+migration of polychlorinated biphenyl (PCB) contamination in the Mohawk
+Indian reservation in
+
+4
+
+the U.S.A. Seven methods were examined to map surface soil PCB
+concentrations, including the VP method. The results indicated that all
+methods performed well in deriving a surface soil PCB concentration
+estimate, although the inverse nearest neighbor approach resulted in the
+smallest average estimated error. In another study investigated the
+degree of uncertainty associated with the use of spatial exposure models
+for air pollution assessment. They presented a modeling framework for
+assessing the exposure model performance and investigated the role of
+spatial autocorrelation for the estimation of health effects. The study
+used data from the Southern California Children's Health Survey. The
+adjacency based weight matrices were created using VPs, in which each
+polygon contained exactly one individual. The analysis suggested that
+the inclusion of residual spatial error terms improved the prediction of
+adverse health effects and that residual spatial errors might be used as
+a diagnostic for comparing models' performances. Okabe et al. (2000)
+published a comprehensive review of approaches to the computation of
+Voronoi diagrams and their empirical applications in different fields of
+science, including astronomy, metallurgy, ecology, economy and physical
+planning. One of potential VD applications discussed in the book was a
+co-investigation of spatial patterns of two layers of point-like objects
+(such as e.g., railway stations and bookstores), aimed at determining
+whether their spatial patterns are mutually dependent or independent of
+each other. The proposed algorithm involved a two-stage analysis: first,
+VPs were formed around one group of objects (e.g., railway stations)
+and, next, nearest neighbor distances for the second group of features
+(e.g., book stores), falling into individual VPs, were formed around the
+first group of objects and analyzed.
+
+5
+
+Although several empirical studies carried out to date were based on
+the VP technique, it should be noted, however, that in most of these
+studies, VPs were mainly used for mapping, visualization of spatial
+patterns, and for the formation of nonoverlapping ‘trade areas' or so
+called ‘subsistence zones.' There have also been several attempts to use
+the VP technique for the locational optimization of public facilities
+and for the comparison of bivariate distributions of different
+geographically referenced objects (Hwang et al, 1999; Bohm et al, 2000;
+Okabe et al. 2000). However, to the best of our knowledge, no studies
+have been conducted yet using VPs in multivariate analysis studies. In
+such studies there is often a need to use a multivariate statistical
+tools, to investigate the association between several factors while
+taking into account potential confounders that may affect it. Hence, in
+the following analysis, we shall attempt to illustrate the use of VPs
+for redefining population exposure estimates for a subsequent
+multivariate analysis, in which the association between air pollution
+exposure estimates and asthma morbidity will be controlled by the
+socio-economic status of the study population and its health attributes.
+3. Research method 3.1 Study population The study population consisted
+of a systematic sample of 3,922 schoolchildren of the 1st through 8th
+grade (6-14 years old) residing in different residential communities of
+the Greater Haifa Metropolitan Area (GHMA) carried out in 2008-2009 by
+the Clalit Health Services (CHS). GHMA is the main industrial region of
+Israel, formed by seven cities, including the city of Haifa (266,000
+residents), Qiryat Tivon (13,100 residents), Nesher (21,300 residents),
+Qiryat Ata (49,600 residents), Qiryat Motzkin (39,600 residents), Qiryat
+Bialik (36,400 residents) and Qiryat Yam (37,000 6
+
+residents). Demographic data (the date of birth, and gender) and data
+on the children's health status (viz., the latest measurement of weight
+and height; the presence of acute and chronic diseases including Asthma)
+were retrieved from the CHS computerized database. [CHS is the largest
+health care provider in Israel. Health care coverage in Israel is
+mandatory and all study participants had similar health insurance
+coverage and similar access to health services]. The locations of the
+children's homes were geo-coded and mapped using the ArcGIS 9.xTM
+software. Geocoding is the process of generating geographic coordinates
+(latitude and longitude) from street addresses, which enables individual
+locations to be mapped as GIS layers (ESRI 2007). The residential
+locations of children covered by the survey are shown as small black
+dots on Fig. 1. <<< Figure 1 about here >> 3.2 Soil contamination data
+Soil contamination data by lead (Pb) were obtained from the Israel
+Geological Survey, carried out in 1998-2007 (unpublished data). There
+were 45 soil sample points spread fairly evenly across the entire area
+of GHMA (see Fig. 2) with lead contamination ranging from 0 (i.e., below
+detection limits) to 960 mg/kg. Although the number of soil test sites
+used in the analysis (45) was relatively small, this number is generally
+considered to be sufficient for robust spatial interpolation (Anderson
+2001). [In the analysis default kriging settings (such as sill/nugget
+ratios) of the ArcGIS 9.x TM software were used]. 3.3 Study phases The
+study was carried out in several phases. During the first phase of the
+analysis, soil sample points were superimposed upon the layer of SCAs,
+into which the entire study
+
+7
+
+are is divided (see Fig. 1), and the average lead exposure for each SCA
+was calculated. The task was performed by averaging the lead exposure
+values of all lead measurements falling into a given SCA. Next, VPs were
+formed around soil test points, with each polygon containing exactly one
+lead soil measurement point (see Fig. 2). At the next stage of the
+analysis, krigging and Inverse Distance Weighted (IDW) interpolations
+were run, to compare their results with the results obtained by SCA
+averaging and VP rezoning. Interpolations was performed according to the
+individual exposure estimation approach developed in previous studies .
+During the next phase of the analysis, individual values of lead tests
+were transformed in continuous surfaces using krigging and IDW
+interpolation approaches. Next, the locations of homes of children
+covered by the survey were superimposed upon these surfaces and
+individual exposure of each child in the study cohort to lead
+contamination was estimated. The analysis was performed using the
+“spatial loin” tool in the ArcGIS 9.xTM software . The obtained values
+of lead exposure were then averaged for each SCA based on individual
+exposure estimates of all the children residing in each particular SCA.
+During the last phase of the analysis, the percent of children with
+asthma, and their socio-demographic attributes were calculated, first,
+for the SCAs (Fig. 1), and then for the VPs (Fig. 2). Both tasks were
+also performed using the “spatial join” tool of the ArcGIS 9.xTM
+software (ibid.). Descriptive statistics of the research variables, for
+SCAs and Voronoi grids, are reported in Appendices 1&2, respectively.
+<<< Figure 2 about here >>> 3.5 Statistical analysis To identify and
+measure the significance of factors affecting the development of the 8
+
+children's asthma, Ordinary Least Squares (OLS) models were initially
+used. During the analysis multicollinearity, and normality, were tested
+and their results were found satisfactory (Tolerance>0.85). The percent
+of children with asthma, for either SCA or VPs, was used in the analysis
+as the dependent variable. In addition to lead exposure, the following
+factors were included into the multivariate regression analysis as
+explanatory variables for asthma prevalence: age, medical diagnosis of
+obesity (overweight), and welfare support to the child's family
+(presence of support for a poor family or lack thereof). The confounding
+role of these variables has been outlined by several previous studies
+(Kosti and Panagiotakos 2006; Smith et al. 2002; Wang and Lobstein
+2006). The values of the variables were calculated for either SCAs or
+Voronoi divisions as percent of children with a given attribute (e.g.,
+welfare support or obesity), apart from lead exposure and age which were
+calculated as averages. During the initial stage, the analysis was
+performed using the following linear model: Percent of children with
+asthma = B0 (constant) + B1* (lead exposure) + B2/(age) +B3/(obesity) +
+B4*(low income status) +ε (random error term), where B0,..., B4 are
+regression coefficients. At the second stage of the analysis, Spatial
+Lag (SL) regressions were run, to account for spatial dependency of
+regression residuals. The analysis was performed using the GeoDA 0.9©
+software . 4. Results Tables 1-3 report factors affecting the percent of
+children diagnosed with asthma and calculated using SCA averaging (Table
+1), IDW and krigging interpolations (Table 2), and VP rezoning (Table
+3). For SCA averaging and VP rezoning, two types of 9
+
+regression models - OLS and SL regressions -- are also reported. [Since
+SL models obtained for interpolation-based estimates are nearly
+identical to the results of OLS models, SL models are not reported in
+Table 2, for brevity's sake]. << Tables 1-3 about here >> As Table 1
+shows models, obtained by simple averaging of lead tests for SCAs (Table
+1) and by interpolation (Table 2) provide rather poor fits (R2 =0.079
+-0.081, see Table 1 and R2 =0.066 - 0.077; Table 2). Notably, model fits
+are higher in VP models (R2=0.251-0.270; Table 3), indicating that the
+latter models appear to improve the models' explanatory power, at least
+compared to the former model runs (see Table 12). Characteristically, in
+the VP-based models, the lead exposure variable emerged as statistically
+significant and exhibits the expected sign, that is, it is positively
+associated with the percent of asthmatic children (B=0.061, P<0.05; see
+Table 3), while in both SCA averaged and interpolation-based models
+(Tables 1-2), the sign of this association is unreasonably negative,
+implying that lead exposure may have a protective effect on children. 5.
+Discussion Although the use of VP in environmental and geographic
+research is not new , in previous studies this technique was used mainly
+for visualization purposes, data comparison, and nearest neighbor
+queries. However, in empirical studies, there is often a need to analyze
+the association between several geographically referenced objects while
+taking into account potential confounders which may affect it. Hence, in
+the present analysis, we attempted to illustrate the use of VPs for a
+multivariate analysis, in which the association between soil pollution
+exposure estimates and asthma morbidity was controlled for
+socio-economic status of the study population 10
+
+and its health attributes. To the best of our knowledge, the proposed
+empirical approach of using VPs for generating relatively homogeneous
+exposure areas for a multivariate statistical analysis is novel, and
+helps to minimize potential biases arising from exposure
+misclassification. The potential usefulness of the proposed approach may
+be attributed to the fact that in empirical environmental research,
+there is often a need to combine and analyze data obtained for different
+resolution levels: group-level data derived from surveys, data obtained
+from individuals, mixed data from both surveys and individuals, and data
+for statistical areas which boundaries are established for purposes
+other than health investigations . While population level data obtained
+from e.g., census designated statistical areas, are most readily
+available, they have several disadvantages. Thus, for instance, these
+population level data normally provide the researcher with a limited
+number of variables which rarely go beyond basic demographic attributes
+and aggregated income counts. Census data do not also include exposure
+estimates, which normally come from soil tests, measurements provided by
+air quality monitoring stations (AQMS) or estimated by air dispersion
+modeling. Since census designated areas, on the one hand, and networks
+of soil samples and monitoring stations do not overlap, the same
+pollution levels are effectively assigned to all residents of relatively
+large territorial divisions, within which actual exposure levels may
+vary considerably. This is likely to lead to an exposure
+misclassification bias and erroneous estimates of exposure-health effect
+associations. The use of various interpolation techniques, such as
+splines, inverse distance weighted method (IDW), kernel smoothing, or
+kriging is one possibility to address this potential bias . However,
+these interpolation techniques have several drawbacks,
+
+11
+
+such as a mismatch of results obtained by different interpolation tools
+and “error propagation” . The analytical approach proposed and tested in
+the present study is relatively simple. In the first step of the
+analysis, VPs is created around soil sample points. Next, population
+data are superimposed upon the VPs and averages are computed for each
+VPs, thus enabling a subsequent multivariate analysis of potential
+association between lead contamination and population health attributes.
+While a commonly used analytical approach based on census designated
+areas for exposure assessment VPs polygons, formed around a relatively
+dense net of soil sample points, are less likely to cause such an
+exposure misclassification bias thus leading to more accurate
+assessments of environmental health effects, as compared to SCA-based
+exposure estimation or interpolation based methods. The present analysis
+confirms this assumption. While the SCA and interpolation based models
+did not detect a correct association between lead contamination and
+children health, such an association was detected in the VP models. This
+outcome highlights the advantages of using the Voronoi rezoning
+technique, as opposed to traditional SCA zoning tools. It is also to be
+noted, however, that the use of the VPs technique requires a large
+amount of observation points (e.g. soil sample points or a dense net of
+AQMS), around which VPs can be formed. An alternative may be using air
+pollution grids generated by air dispersion modeling (LAKES 2005; Wang
+et al. 2006), which may serve as proxies for environmental pollutants
+dispersed with the air and accumulated in soil around the study cohort's
+residences.
+
+6. Conclusion
+
+12
+
+As the present study demonstrates, model fits were consistently higher
+in the Voronoi tessellation models than in the SCA and interpolation
+models, indicating that, in line with our initial research hypothesis,
+the VP method does appears to improve the multivariate models'
+explanatory power. As we suggest, the proposed technique of VP rezoning
+may be applicable to a wide range of empirical studies which use SCA's
+that do not fit the “real” exposure zones and may thus cause exposure
+mis-classification biases and erroneous cause-effect estimates.
+Acknowledgments The authors are grateful to Dr. Moshe Shirav-Schwartz of
+the Geological Survey of Israel and to Dr. Orit Cohen-Kastel of the
+Clalit Health Services for providing data for this research.
+
+6. References Aherns, W. and I. Pigeot (2004). Handbook of Epidemiology.
+   Springer. Anderson, S. (2001). An evaluation of spatial interpolation
+   methods on air temperature in Phoenix, AZ. Dep. of geography, Arizona
+   State University. Anselin, L., I. Syabri and Y. Kho (2005). " GeoDa :
+   An Introduction to Spatial Data Analysis." Geographical Analysis
+   38(1): 5-22. Benenson, I. and I. Omer (2003). "High-resolution Census
+   data: a simple way to make them useful." Data Science Journal 2(0):
+   117-127. Benenson, I., I. Omer and E. Hatna (2002). "Entity-based
+   modeling of urban residential dynamics: the case of Yaffo, Tel Aviv."
+   Environment and Planning B 29(4): 491-512.
+
+13
+
+Bohm, G., P. Galuppo and A. Vesnaver (2000). "3D adaptive tomography
+using Delaunay triangles and Voronoi polygons." Geophysical Prospecting
+48(4): 723-744. Boots, B. (1980). "Weighting thiessen polygons."
+Economic Geography 56(3): 248259. Braun, J. and M. Sambridge (1995). "A
+numerical method for solving partial differential equations on highly
+irregular evolving grids." Nature 376(6542): 655-660. Dubnov, J., M.
+Barchana, S. Rishpon, A. Leventhal, I. Segal, R. Carel and B. A. Portnov
+(2007). "Estimating the effect of air pollution from a coal-fired power
+station on the development of children's pulmonary function." Environ
+Res 103(1): 87-98. ESRI (2007). ARCGIS, ESRI. Gotway, C. and L. J. Young
+(2002). " Combining incompatible spatial data." Journal of the American
+Statistical Association 97 (48): 632-647. Greenland, S. and H.
+Morgenstern (1989). "Ecological bias, confounding, and effect
+modification." Int J Epidemiol 18 (1): 269- 274. Heuvelink, G. (1998).
+Error propagation in environmental modelling with GIS, CRC Press. Hwang,
+S., E. Fitzgerald, M. Cayo, B. Yang, A. Tarbell and A. Jacobs (1999).
+"Assessing Environmental Exposure to PCBs among Mohawks at Akwesasne
+through the Use of Geostatistical Methods* 1." Environmental research
+80(2): S189-S199. Kloog, I., A. Haim and B. A. Portnov (2009). "Using
+kernel density function as an urban analysis tool: Investigating the
+association between nightlight exposure
+
+14
+
+and the incidence of breast cancer in Haifa, Israel." Computers,
+Environment and Urban Systems 33(1): 55-63. Ledoux, H. and C. Gold
+(2007). "Simultaneous storage of primal and dual threedimensional
+subdivisions." Computers, Environment and Urban Systems 31(4): 393-408.
+Minami, M. and ESRI (2000). Using ArcMap: GIS. Redlands, California,
+ESRI. Molitor, J., M. Jerrett, C. Chang, N. Molitor, J. Gauderman, K.
+Berhane, R. McConnell, F. Lurmann, J. Wu and A. Winer (2007). "Assessing
+uncertainty in spatial exposure models for air pollution health effects
+assessment." Environmental Health Perspectives 115(8): 1147. Mostafavi,
+M., C. Gold and M. Dakowicz (2003). "Delete and insert operations in
+Voronoi/Delaunay methods and applications* 1." Computers & Geosciences
+29(4): 523-530. Portnov, B., J. Dubnov and M. Barchana (2009). "Studying
+the association between air pollution and lung cancer incidence in a
+large metropolitan area using a kernel density function." Socio-Economic
+Planning Sciences 43(3): 141-150. Portnov, B. A., J. Dubnov and M.
+Barchana (2007). "On ecological fallacy, assessment errors stemming from
+misguided variable selection, and the effect of aggregation on the
+outcome of epidemiological study." Journal of Exposure Science and
+Environmental Epidemiology 17(1): 106-121. Ritz, B., F. Yu, S. Fruin, G.
+Chapa, G. Shaw and J. Harris (2002). "Ambient air pollution and risk of
+birth defects in Southern California." American journal of epidemiology
+155(1): 17. Thiessen, A. (1911). "Precipitation averages for large
+areas." Monthly weather review 39(7): 1082-1089.
+
+15
+
+Voronoi, G. and Z. Reine (1908). "For the origin of the concept of
+Voronoi polyhedra." Angew Math 134: 198. Wakefield, J. and G. Shaddick
+(2006). "Health-exposure modeling and the ecological fallacy."
+Biostatistics 7(3): 438. Weisstein, W. E., Ed. (2009). Voronoi Polygon
+MathWorld--A Wolfram Web Resource. Yogev-Baggio, T., H. Bibi, J. Dubnov,
+K. Or-Hen, R. Carel and B. Portnov (2010). "Who is affected more by air
+pollution--Sick or healthy? Some evidence from a health survey of
+schoolchildren living in the vicinity of a coal-fired power plant in
+Northern Israel." Health & Place 16(2): 399-408.
+
+16
+
+TABLE 1 Factors affecting the percent of children with asthma
+(geographic resolution - Small Census Areas (SCA); methods: Ordinary
+Least Squares (OLS) and Spatial Lag (SL) regressions) Variable
+(Constant) Lead exposure Obesity Income status Age Number of obs. b R2 F
+Log likelihood Moran's I c Rhod
+
+Model 1-OLSa Ba -10.085 (-0.565) -0.008 (-1.402) 0.067 (0.405) 0.127
+(1.578) 2.370 (1.347) 72 0.079 1.430
+
+Model 2-SLa Ba -11.057 (-0.642) -0.007 (-1.338) 0.064 (0.405) 0.122
+(1.567) 2.360 (1.388) 72 0.081 -233.21
+
+1.110 0.075
+
+Note: a Regression coefficient and t-statistics in the parentheses; b
+number of valid observations listwise; c Moran's I spatial lag
+coefficient. d spatial lag coefficient. /indicates a 0.1 significance
+level; *indicates a 0.05 significance level; */ indicates a 0.01
+significance level.
+
+17
+
+TABLE 2 Factors affecting the percent of children with asthma
+calculated using interpolation based techniques - IDW and Krigging
+(geographic resolution - SCAs; method -OLS) Variable (Constant) Lead
+exposure Obesity Income status Age Number of obs. b R2 F
+
+Model 3- Krigginga Ba -12.474 (-0.695) -0.021 (-1.111) 0.045 (0.254)
+0.082 (1.061) 2.700 (1.527) 72 0.077 1.222
+
+Model 4- IDWa Ba -11.082 (-0.618) -0.012 (-1.027) 0.045 (0.267) 0.110
+(1.392) 2.485 (1.405) 72 0.066 1.190
+
+Note: a Regression coefficient and t-statistics in the parentheses; b
+number of valid observations list-wise; c Moran's I spatial lag
+coefficient. d spatial lag coefficient. /indicates a 0.1 significance
+level; *indicates a 0.05 significance level; */ indicates a 0.01
+significance level. .
+
+TABLE 3 Factors affecting the percent of children with asthma
+(geographic resolution -- Voronoi polygons; methods: Ordinary Least
+Squares (OLS) and Spatial Lag (SL) regressions) Variable (Constant) Lead
+exposure Obesity Income status Age Number of obs. b R2 F Log likelihood
+Moran's I c Rhod
+
+Model 1-OLSa Ba -49.756* (-2.626) 0.061 * (2.367) 0.233 (0. 785) -0.121
+(-0.903) 5.783** (3.135) 45 0.268 3.655*
+
+Model 2-SLa Ba -49.694 */ (-2.783) 0.063/* (2.543) 0.220 (0.790) -0.110
+(-0.873) 5.836*** (3.358) 45 0.270 -147.93
+
+0.461 -0.071
+
+a
+
+Note: Regression coefficient and t-statistics in the parentheses; b
+number of valid observations list-wise; c Moran's I spatial lag
+coefficient. d spatial lag coefficient. /indicates a 0.1 significance
+level; *indicates a 0.05 significance level; */ indicates a 0.01
+significance level.
+
+19
+
+APPENDIX 1 Descriptive statistics of the research variables for the SCA
+resolution level * Variable
+
+Measurement unit Minimum Maximum Mean Std. Deviation Dependent variable
+Asthmatic children % 0.000 28.070 14.572 6.483 Explanatory variables
+Lead contamination ppm 10 493 109.430 144.693 Obesity diagnosis % 0.000
+23.810 4.249 4.672 Low income status % 0.000 50.000 10.429 10.017
+Average age years 8.833 11.333 10.082 0.435 *Total number of cases --
+72.
+
+20
+
+APPENDIX 2 Descriptive statistics of the research variables for the
+Voronoi resolution level Variable
+
+-  
+
+Measurement unit Minimum Maximum Mean Std. Deviation Dependent variable
+Asthmatic children % 0.00 37.500 13.056 7.667 Explanatory variables Lead
+contamination ppm 16.166 173.400 70.318 41.656 Obesity diagnosis % 0.000
+16.670 3.380 4.125 Low income status % 0.000 50.000 8.471 9.397 Average
+age years 8.444 11.538 10.165 0.592 *Total number of cases -- 45.
+
+21
+
+Figure 1: Map of the study area showing the location of homes of
+children covered by the urvey, lead sampling points, and SCA divisions.
+
+Figure 2: Voronoi polygon rezoning of the study area into exposure zones
+formed around soil measurement points
+
+22
+
+

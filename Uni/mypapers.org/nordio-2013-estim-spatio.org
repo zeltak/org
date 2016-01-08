@@ -1,0 +1,865 @@
+Atmospheric Environment 74 (2013) 227e236
+
+Contents lists available at SciVerse ScienceDirect
+
+Atmospheric Environment journal homepage:
+www.elsevier.com/locate/atmosenv
+
+Estimating spatio-temporal resolved PM10 aerosol mass concentrations
+using MODIS satellite data and land use regression over Lombardy, Italy
+Francesco Nordio a, *, Itai Kloog a, Brent A. Coull b, Alexandra
+Chudnovsky a, Paolo Grillo c, Pier Alberto Bertazzi c, Andrea A.
+Baccarelli a, Joel Schwartz a a
+
+Department of Environmental Health e Exposure, Epidemiology and Risk
+Program, Harvard School of Public Health, Landmark Center 401 Park Dr
+West, Boston, MA 02215, USA Department of Biostatistics, Harvard School
+of Public Health, Boston, MA, USA c Epidemiology Unit, Department of
+Preventive Medicine, IRCCS Ca' Granda Foundation, Maggiore Policlinico
+Hospital, Milan, Italy b
+
+h i g h l i g h t s  We show PM10 can be reliably predicted in areas
+with complex geographic and weather patterns.  We found high
+out-of-sample R2 (R2 ¼ 0.787, year to year variation 0.738e0.818).  For
+days without AOD values, we also found high R2 (R2 ¼ 0.787, year to year
+variation 0.736e0.841).  Importantly, these R2 are for daily, rather
+than monthly or yearly, values.  We estimated local, trafﬁc related
+pollution allowing to be used in an epidemiological study.
+
+a r t i c l e i n f o
+
+a b s t r a c t
+
+Article history: Received 30 July 2012 Received in revised form 14
+January 2013 Accepted 21 March 2013
+
+Traditional air pollution epidemiology studies being conducted in large
+cities can be limited by the availability of monitoring. Satellite
+Aerosol Optical Depth (AOD) measurements offer the possibility of
+exposure estimates for the entire population. We previously demonstrated
+that daily calibration substantially increased the predictive power of
+satellite AOD measurements for ﬁne particles (PM2.5) in New England,
+allowing estimation of exposure in locations without monitors. Similar
+results have not been reported for larger particles (PM10), which are
+often the only measures that can be used in locations worldwide that do
+not have comprehensive PM2.5 monitoring; this also applies to PM
+estimation of historical exposures. Here we extend this methodology by
+applying it to 2000e2009 PM10 data from Lombardy, Northern Italy a
+region with high altitude differences, frequent temperature inversions
+and stationary fronts. Speciﬁcally, by 1) incorporating a model for
+missing AOD data to deal with nonrandomness in the missing data; and 2)
+modeling interactions between land use and meteorological parameters to
+better capture spaceetime interactions. We calibrated AOD data through
+mixed-effect models regressing PM10 measurements using day-speciﬁc
+random intercepts, and ﬁxed and random AOD and temperature slopes. We
+used inverse-probability weighting to account for nonrandom AOD
+missingness, while reducing the dimensionality of spatial and temporal
+predictors and avoiding selecting different predictors in different
+locations, as common in land-use regression. We take advantage of
+associations of grid-cell AOD values with PM10 monitoring located
+elsewhere and with AOD values in neighboring grid cells to develop
+grid-cell predictions when AOD is missing. By using ten-fold
+crossvalidation to test the accuracy of our predictions, we found high
+out-of-sample R2 (R2 ¼ 0.787, year to year variation 0.738e0.818) for
+days with available AOD data. Even in days with no available AOD, our
+model performance was comparable (R2 ¼ 0.787, year to year variation
+0.736e0.841). Our results demonstrate that PM10 can be reliably
+predicted using this AOD-based prediction model, even in a geographical
+area with complex geographic and weather patterns. Ó 2013 Elsevier Ltd.
+All rights reserved.
+
+Keywords: Air pollution Aerosol Optical Depth (AOD) Epidemiology PM10
+Exposure error
+
+-  Corresponding author. Department of Environmental Health e Exposure,
+   Epidemiology and Risk Program, Harvard School of Public Health, 401
+   Park Drive, Landmark Center West Room 412-J, Boston, MA 02215, USA.
+   Tel.: þ1 781 530 0662. E-mail address: fnordio@hsph.harvard.edu (F.
+   Nordio). 1352-2310/$ e see front matter Ó 2013 Elsevier Ltd. All
+   rights reserved. http://dx.doi.org/10.1016/j.atmosenv.2013.03.043
+
+228
+
+F. Nordio et al. / Atmospheric Environment 74 (2013) 227e236
+
+1. Introduction A substantial epidemiologic literature has demonstrated
+   that exposure to ambient particulate matter (PM) is associated with
+   increased morbidity and mortality, particularly associated with
+   cardiopulmonary disease (Baccarelli et al., 2008; Brook et al., 2004;
+   Lepeule et al., 2012; Miller et al., 2007), and lung cancer (Lepeule
+   et al., 2012; Pope III et al., 2002). A recent study in Lombardy,
+   Northern Italy showed that annual average PM10 levels exceeded the
+   World Health Organization threshold of 20 mg m3 and the European
+   Union limit of 40 mg m3, resulting in an increased mortality rate
+   (Baccini et al., 2011). In recent years, several methods have been
+   presented to assess spatial and temporal variability of the
+   concentration of ambient ﬁne particulate matter over a speciﬁc region
+   of interest. Many of these methods have the potential to generate
+   much more accurate estimates of individual exposures compared to
+   using measurements from PM monitoring stations, which are not
+   necessarily representative of regional concentrations and
+   spatiotemporal patterns. Although geospatial models allow researchers
+   to obtain a higher spatial resolution, they are often not sufﬁciently
+   validated and have been shown to be affected by a nonnegligible
+   measurement error (Paciorek and Liu, 2009). Furthermore, the
+   computational time for the development of these methodologies,
+   coupled with a lack of consistent monitoring in several countries
+   worldwide, precludes the estimation of exposure over long periods of
+   time. To reduce computational load, data are often processed as
+   monthly or yearly averages, thus discounting day-to-day variation and
+   limiting the possibility to study acute effects. A popular method to
+   assess long-term exposure is Land Use Regression, which uses spatial
+   patterns of land use, such as population density, distance to roads,
+   etc. to predict PM measurements at monitoring stations and apply the
+   predictions elsewhere. This approach gained considerable interest and
+   has been utilized to characterize air pollution exposure and health
+   effects for individuals residing within urban areas (Brauer et al.,
+   2003; David et al., 1997; Ross et al., 2005). In a recent review,
+   Ryan and LeMasters reported that the R2 for published LUR models
+   range from 0.54 to 0.81. Because the R2 reported was within the
+   dataset used to estimate the model, one would expect the out of
+   sample R2 to be lower. The out of sample R2 is the appropriate
+   comparison when one is using the model to estimate exposure at
+   locations without monitoring data. The authors reported that number
+   of monitors generating the exposure estimates were not correlated
+   with the model R2, suggesting that the locations of the monitors may
+   be of greater importance than the total number of monitors (Ryan and
+   LeMasters, 2007). However, because monitors are generally located in
+   or near cities, the accuracy of model predictions in less densely
+   populated areas may be less, and may show greater dependency on the
+   number of monitors. Importantly, PM2.5 monitoring is still limited in
+   Europe and PM10 is the standard measure of particles in many
+   locations in Europe and worldwide. An alternative approach to LUR
+   modeling is the use of satellite observations, which provide radiance
+   measurements and retrieve for aerosol properties worldwide for
+   cloud-free conditions. The MODIS (Moderate Resolution Imaging
+   Spectroradiometer) instrument onboard the National Aeronautics and
+   Space Administration's (NASA) Terra satellite has provided global
+   observations of Aerosol Optical Depth (AOD), a measure of light
+   extinction by aerosol in the atmospheric column above the earth's
+   surface. Terra's sunsynchronous orbit encircles the earth
+   approximately 15 times each day, with each pass crossing the equator
+   at approximately 10:30 h local solar time. AOD observations from
+   Terra provide daily insight into the global distribution of
+   column-integrated aerosol
+
+(Hoff and Christopher, 2009). However, the AOD retrieval accuracy
+depends on several factors, including the vertical structure,
+composition, size distribution, and water content of atmospheric aerosol
+and these factors change over space and time (Levy et al., 2007; Remer
+et al., 2005). Furthermore, applying this technology to air quality
+monitoring and health effects studies requires AOD to be converted to PM
+concentrations. The simple linear relationship between AOD and PM,
+although strong in certain geographical areas and under speciﬁc climatic
+conditions, is not sufﬁcient to predict the levels of PM at each
+location with reasonable accuracy. Studies conducted in Europe have
+conﬁrmed that AOD could be a proxy for pollution monitoring: Koelmeijer
+et al. reported just a weak spatial correlation of 0.6 e equivalent to
+an R2 of 0.36 e between yearly average PM10 and AOD for rural background
+stations across Europe (Koelemeijer et al., 2006) after controlling for
+meteorological factors such as mixing layer and relative humidity. Dinoi
+et al., 2010 assessed the regression relationship between daily averaged
+PM10 mass concentrations and MODIS-derived AOD, and found much lower
+linear correlation coefﬁcients, varying between 0.20 and 0.35, over
+Southeastern Italy, in the central Mediterranean area (Dinoi et al.,
+2010). Using a new ﬁltering condition and linear regression approach,
+Luminita et al. (Filip and Stefan, 2011) have shown a signiﬁcant
+correlation coefﬁcient around 0.70 for two neighboring areas in
+Bucharest city and a station located in Leicester, UK. Emili et al. also
+presented results of satellite-derived PM10 predicted under the
+assumption that aerosols are vertically homogeneously distributed below
+the planetary Boundary Layer Height (BLH) in Europe highlighting a
+serious limitation to the applicability of satellites for ground PM
+mapping, especially in mountainous areas. Speciﬁcally, Emili et al.
+showed that day-to-day variations in BLH are likely to affect the
+accuracy of the predictions for ground level particles (Emili et al.,
+2010). Recently, Lee et al. assessed PM2.5 using satellite data with
+dayspeciﬁc calibration (Lee et al., 2011), and reported much stronger
+associations. Kloog et al. (2011) expanded the day-speciﬁc calibration
+approach and presented a novel model for predicting daily PM2.5 between
+2000 and 2008 at 10  10 km resolution and at local addresses (100 m)
+for the New England region, United States. For days with available AOD
+data, mean out-of-sample R2 was equal to 0.830 with this model. For days
+without AOD values, the model performance was also excellent (mean
+out-of-sample R2 ¼ 0.810). These R2, which are out-of-sample and not
+model R2, were generally higher than those from models using LUR alone.
+Importantly, the model by Kloog et al. allows prediction of exposures on
+shorter timescales (e.g., daily) which may be relevant studies of acute
+PM effects. Because larger particles scatter light less efﬁciently than
+smaller particles, whether PM10 can be predicted using satellite AOD
+data is undetermined. Also, it is unclear how well the approach of Kloog
+et al. may perform in regions with greater morphological diversity. We
+have applied this modeling structure to construct a hybrid model to
+estimate PM10 concentration of the Lombardy region in Italy, a territory
+with morphological and weather characteristics that are different from
+New England. All previous studies looking at predicating PM10 using
+MODIS AOD satellite data lacked high resolution spatial and temporal
+predictions. The aim of this study was to predict PM10 over a complex
+topographic terrain. By further developing the approach described in
+Kloog et al. (2011), we generated daily prediction across large scale
+areas at high resolution across the entire Lombardy region, Italy for
+the years 2000e2009. We built a three-stage modeling approach to obtain
+daily PM10 prediction at 10  10 km resolution, with an additional
+fourth stage estimating PM10 at the address level.
+
+F. Nordio et al. / Atmospheric Environment 74 (2013) 227e236
+
+2. Material and methods 2.1. Study domain Lombardy, an administrative
+   region in Northern Italy, with 9,973,386 inhabitants distributed
+   across 12 provinces and 1546 municipalities, is the most populous
+   region of Italy; its capital is the city of Milan. The Lombardy
+   territory is divided almost equally into plain (about 47% of the
+   territory) and mountainous areas (40.6% of the territory). Located in
+   the Alps, the Pizzo Bernina, at 4049 m above sea level, is the
+   highest elevation in the Lombardy region. The remaining 12.4% of the
+   region is hilly. The geography of the region is divided into four
+   parts extending across the entire region from East to West: 1) a
+   Northern alpine territory; 2) a pre-alpine territory of lower
+   altitude descending southwards from the Alps; 3) the Po River Valley,
+   a large ﬂat area further sub-divided into high and low plains; and 4)
+   the area south of the Po River that progressively increases in
+   altitude to reach the Apennine mountains south of the Lombardy
+   regional boundaries. The Po basin is enclosed by mountains on three
+   sides, resulting in weather conditions characterized by stagnation
+   that are unfavorable to air quality. The mean wind velocity is among
+   the lowest in Europe (ARPA, 2012). The Alps restrict entry of air
+   currents associated disturbances into the plains; frequently e more
+   often in the winter months e air currents are established under high
+   pressure, causing long periods of temperature inversion that trap
+   pollutants only a few meters in height above the ground. Because of
+   air trapping, the proportion of inorganic and organic particulate of
+   secondary origin (which requires time to be formed into the
+   atmosphere) exceeds 50% of the overall mass in the Po Valley, which
+   is the most populated part of the region. 2.2. AOD data The Moderate
+   Resolution Imaging Spectroradiometer (MODIS) contains 36 spectral
+   bands between 0.41 and 14 mm. The MODIS sensors are located on polar
+   orbiting Terra and sun-synchronous Aqua satellites. The Terra
+   satellite crosses Europe at around 10:30 local solar time (morning
+   orbit) while Aqua crosses Europe at around 13:30 local solar time
+   (afternoon orbit). MODIS AOD Collection 5 (Levy et al., 2007)
+   overland retrievals use four channels centered at 0.47, 0.66, 1.24
+   and 2.1 mm with a nominal resolution of 500 or 250 m at nadir. Over
+   land the infrared channels (1.24, 2.1 mm) are used to estimate the
+   surface reﬂectance at visible wavelengths via a linear regression
+   model. To enhance the accuracy and reduce noise, the AOD at 0.55 mm
+   is calculated in grids of 10  10 km, averaging the 20 to 50
+   percentile of surface reﬂectance in each grid prior to the inversion.
+   Daily data are freely available online through the NASA website.
+   Daily MODIS level 2 ﬁles from the Terra satellite for the years
+   2000e2009 were used to prepare the analysis presented in this paper.
+   For West Europe, AERONET sites show good correspondence with
+   MODIS-retrieved AOD (Hyer et al., 2011). Negative AOD values, caused
+   by errors in surface reﬂectivity estimation, up to 0.10 were
+   included because they provide useful information on low AOD
+   situations (Levy et al., 2007). We used in this work only AOD data
+   ﬂagged as “Very Good” (ﬂag ¼ 3), which according to the Data Quality
+   Statement for the MODIS Collection 5 Aerosol product, are the only
+   type of data amenable to use in scientiﬁc analysis (Remer et al.,
+   2006). Because MODIS AOD pixel centroids shift slightly from day to
+   day between orbits, we created a ﬁxed 10  10 km grid. Daily values
+   of AOD were assigned to the grid cell where the AOD reading
+   presented. Aqua satellite readings were not used due to missing data
+   for the years 2000e2002. Although there are other satellites that
+   measure AOD, the MODIS satellite was used for the purposes of this
+   study because it is the most validated (using AERONET), accessible,
+   and accurate dataset available today
+
+229
+
+(Remer et al., 2005) and/or resulting from elevated aerosol particle
+concentrations in the vicinity of clouds (Koren et al., 2007) or
+pollution transport at high altitudes (Hoff and Christopher, 2009). 2.3.
+Spatial predictor of PM10 2.3.1. Percent of open space Percent of open
+space data were obtained through the Corine Land Cover (CLC) project
+(Bossard et al., 2000). This project provides consistent localized
+geographical information on the land cover of the 12 Member States of
+the European Community. CLC is a map of the European environmental
+landscape based on interpretation of satellite images. It provides
+comparable digital maps of land cover for each country for large parts
+of Europe. The spatial resolution is 200  200 m. 2.3.2. Elevation
+Elevation data were obtained from ESRI Data & Maps (ESRI, 2012). These
+data include global imagery captured at 150-m resolution as well as
+shaded relief derived from the SRTM global digital elevation model
+(Rabus et al., 2003). 2.3.3. Major roads Road data were obtained from
+the geoportal of the Lombardy Region e We calculated primary and
+secondary road lengths. The roads were intersected with the 10  10 grid
+cell and the resulting attribute tables contained the sum all roads
+segment lengths in the 10 km grid. 2.3.4. Population density Population
+density was obtained from the European Environment Agency (EEA, 2012).
+Data are available at 100 m resolution based on the 2001 Census provided
+by Eurostat. The data included the commune boundaries and geographic
+boundaries of the communes of the SABE GIS layer, CORINE Land Cover
+(CLC-2000), version 9. 2.3.5. Area-source PM10 emission Area-source PM10
+was obtained from the INEMAR Project (INEMAR, 2012) (Air Emissions
+Inventory), a database designed to estimate emissions at the municipal
+level for SNAP (Selected Nomenclature for sources of Air Pollution)
+polluting activities and type of fuel. The system collects the variables
+used to estimate emissions, such as activity indicators, emission
+factors and other statistical data which serve to break down spatial and
+temporal emissions. INEMAR also contains the values of estimated
+emissions, procedures, and algorithms used to estimate emissions
+according to different methodologies. The system (currently at version
+6.0), is based on 17 calculation modules, each performing the estimation
+of a different type of emission, such as fugitive emissions, both
+punctual and trafﬁc. 2.3.6. Meteorological data The meteorological
+variables are major determinants of PM levels as they determine the
+speed at which pollutants are transported and dispersed in the
+atmosphere. We obtained temperature, wind speed, relative humidity,
+visibility and sea level pressure from “Servizio Metereologico Regionale
+e ARPA Lombardia”. Only continuous operating stations with daily data
+running from 2000 to 2009 were used. Grid cells were matched to the
+closest weather station. 2.4. Statistical methods We designed the model
+to provide predictions both for population health data collected at the
+level of (1) small area (census
+
+230
+
+F. Nordio et al. / Atmospheric Environment 74 (2013) 227e236
+
+areas, postal code areas etc.) geocoded units (SAGD) and (2)
+residence-speciﬁc latitude and longitude geocoded data (RGD). For SAGD
+data, we generate a base-grid cell model with 10  10 km resolution. For
+RGD data, to improve local predictions, we incorporate local land use
+variables. The prediction process consists of four stages. Stage 1 model
+calibrates the AOD grid-level observations to the PM10 monitoring data
+collected within 10 km of an AOD reading. In stage 2, we predict PM10
+concentrations in grid cells without monitors but with available AOD
+measurements using the stage 1 ﬁt. In stage 3, we estimate PM10
+concentrations in cells where no AOD data is missing by building a model
+that takes advantage of the association of grid-cell AOD values with
+PM10 monitoring located in the speciﬁc region it falls into, and the
+association with available AOD values in neighboring grid cells.
+Finally, to calculate the local PM10 concentrations in studies using
+RGD, we take the residuals of the stage 3 model in each monitoring site
+and regress them against local (50 m buffer) LU terms at each monitor.
+The base model (stage 1) consists of a mixed model for observed PM10
+monitoring data that contains both ﬁxed and day-speciﬁc random effects
+for the intercept, AOD slopes, and temperature slopes. This stage 1
+model was ﬁt to data from each year (2000e 2009) separately. The model
+has several additional features. First, a moderately large number of
+additional spatial, temporal (daily), and spatio-temporal predictors are
+included as predictors in the PM10 model. However, because use of many
+predictors can lead to overﬁtting and lack of precision of the resulting
+estimates, we allow the effect of each variable to be unique but shrink
+groups of these predictors back to a common mean, which represents a
+form of regularization, or penalization, of the resulting coefﬁcients
+that can stabilize estimation and avoid overﬁtting. We grouped these
+coefﬁcients into the spatial terms, the temporal terms, and the
+spatiotemporal terms, and shrink each set of coefﬁcients back towards a
+mean for each of these three groups of variables. Second, to accommodate
+the fact that daily AOD data missingness is not random, these ﬁrst stage
+model incorporated inverse probability weighting (IPW) to potentially
+avoid bias in the regression coefﬁcient estimates and thus in the
+resulting predictions. This approach effectively up-weights dates which
+are under-represented due to a large degree of missing data due to cloud
+coverage, snow etc. Speciﬁcally, the ﬁrst stage of the model can be
+written as:
+
+      PMij ¼ a þ uj þ b1 þ vj AODij þ b2 þ kj Temperatureij X4 X3
+X12 g X þ m¼1 g2m X2mj þ m g3m X3mij þ εij þ m¼1 1m 1mi h Xi   uj vj
+kj wN ð000Þ; i h   g11 ; .g1;4 wN g1 ; s21 i h   g21 ; .g2;3 wN g2 ;
+s22 h i   g31 ; .g3;12 wN g3 ; s23 where PMij is the measured PM10
+concentration at a spatial site i on a day j; a and uj are the ﬁxed and
+random (day speciﬁc) intercepts, respectively, AODij is the AOD value in
+the grid cell corresponding to site i on a day j; b1 and vj are the ﬁxed
+and random slopes, respectively. Temperatureij is the temperature value
+in the grid the cell corresponding to site i on a day j (b2 and kj are
+the ﬁxed and random slopes for temperature). X1mi is the value of the
+mth spatial predictor at site j, X2mj is the value of the mth temporal
+predictor on day j, and X3mij is the value of the mth spatial-temporal
+predictor at site i on day j. Here, we assume sis a 3  3 diagonal
+matrix with diagonal elements s2u , s2v , s2k . To obtain the weights
+that account for
+
+the non-random missingness in AOD values, we ﬁt the following model for
+the probability (p) of observing a given AOD value:
+
+  b p ¼ b0 þ b1 Elevation þ b2 SLP þ b3 Temperature ln 1b p þ Month;
+where (p) is the probability for availability of AOD in each day in each
+grid cell in each year and SLP is sea level pressure. We then use the
+inverse probability weights in the above mixed model.
+
+IPW ¼
+
+  1 b p
+
+To validate this ﬁrst stage of the model, the dataset was repeatedly
+randomly divided into 90% and 10% splits. Outliers were excluded from
+regression analysis by dropping observations with studentized residuals
+that exceeded þ3 or 3 (Fox, 2008). Predictions for the held-out 10% of
+the data were made from the model ﬁt of the remaining 90% of the data.
+This “out-of-sample” process was repeated ten times and cross-validated
+(CV) R2 values were computed. To check for bias we regressed the
+measured PM10 values in the held out data against the predicted values
+in each site on each day. Overall temporal R2 and overall spatial R2
+were calculated as well. The second stage uses the ﬁt from the stage 1
+model to predict a PM10 concentration for each day and grid at which we
+have an observed AOD value. In stage 3, we estimated daily PM10
+concentration levels for all grid cells in the study domain for days
+when AOD data were unavailable by using the stage 2 data. Speciﬁcally,
+we regress the PM10 predictions obtained in stage 2 on the daily mean
+measured PM10, and a nonparametric spatial term that is a smooth
+nonparametric function of longitude and latitude. This stage ﬁts the
+following semiparametric regression model:
+
+    PredPMij ¼ a þ uj þ b1 þ vj MPMj þ SmoothðX; YÞkðjÞ þ 3 ij ; i h
+  uj vj w ð0 0Þ; Ub where PredPMij is the predicted PM10 concentration
+at a spatial site i on a day j from the 2nd stage model; MPMj is the
+mean PM across the Lombardy region on a day j; a and ui are the ﬁxed and
+random intercepts, respectively; b1 and vi are the ﬁxed and random
+slopes, respectively. The smooth (X,Y) is a thin plate spline ﬁt to the
+latitude and longitude, k(j) denotes the two-month period in which day j
+falls (that is, a separate spatial smooth was ﬁt for each two-month
+period). Using this ﬁnal model, we again performed crossvalidation ten
+times to estimate the predictive ability of the model. To provide better
+estimates in cases in which health outcomes are resolved to the speciﬁc
+longitude and latitude for a given study subject residence, we ﬁt a
+local PM stage (stage 4) that takes the residuals constructed by taking
+the difference between a given monitored PM10 concentration and the 10
+km  10 km grid prediction from stage 3 for the grid in which that
+monitor is located, and regresses these residuals on location-speciﬁc
+predictors of pollution. Speciﬁcally, we ﬁt the following model:
+
+ResidPMij ¼ f1 ðTraffic Densityi ; Population Densityi Þ þ f2
+ðElevationi Þ þ f3 ðPercent Urbani Þ þ f4 ðDistance to Major roadsi Þ þ
+3 ij where ResidPMij is the residual at a spatial monitor site i on day
+j; f1 denotes a penalized spline for an interaction between trafﬁc
+density and population density; f2ef4 denote (potentially nonlinear)
+effects of elevation, percent urban and distance to major road,
+
+F. Nordio et al. / Atmospheric Environment 74 (2013) 227e236
+
+respectively, on these residuals, and 3 ij is the error. In contrast to
+stage 1, where land use terms were grid cell averages, for this model
+land use terms were all computed for a 50 m radius about the monitor, to
+capture local effects. 3. Results Fig. 1A shows the relationship between
+MOD04 AOD values and the corresponding PM10 concentrations measured at
+the monitoring stations during 2008. As shown in Fig. 1A, the near
+surface PM10 concentrations are not well predicted by the total AOD
+column values. While in general, low AOD values correspond to low
+measured PM10 concentrations at the ground, occasionally low AOD values
+correspond to high measures of PM10 concentrations. Furthermore, our
+initial data included days with high AOD but relatively low measured
+ground concentrations. In most cases these days were characterized by
+high residuals in the stage 1 regression. To improve the accuracy of our
+prediction model these high residuals (resulted presumably due to lower
+AOD retrieval accuracy over bright urban areas, snow condition or
+cloud-contamination as well as errors in PM10 measurements) were
+excluded from our analyses and the model was re-run. Fig. 1B shows the
+signiﬁcant ﬁt improvement gained by calibrating with our stage 1 model.
+However, some days were not well explained by the model. The ﬁrst stage
+models all had high out-of-sample ﬁts for each year and the entire study
+period, with a mean out-of-sample R2 ¼ 0.787 (year to year variation
+0.738e0.818), and as expected a highly signiﬁcant association between
+PM10 and the main explanatory variable-AOD (Table 1). We found no bias
+in our crossvalidation results (slope of observed versus predicted ¼
+0.98e1.00). The spatial and temporal out-of-sample results also
+presented high ﬁts (Table 1) with low RMSPE values ranging from 3.2 to
+5.9 mg m3 across all years. For the temporal model the mean
+out-of-sample R2 was 0.788 (year to year variation 0.740e0.827). The
+stage 3 models also performed well, as shown in Table 2.
+
+231
+
+As can be seen, models showed a mean out-of-sample R2 of 0.787
+(year-to-year variation 0.736e0.841), which is relatively high
+considering that these were days with neither ground PM data nor
+satellite AOD data in the grid cells being predicted. Fig. 2A and B
+compares the model-predicted and the actual measured PM10 from the
+monitor stations located in Milano and Tirano, a small city located in
+mountain, respectively. As expected, Milano is characterized by much
+higher pollution levels than Tirano capturing the high range in PM10
+variability. As can be see, the temporal variability pattern of the
+predicted by the model concentrations follows the temporal variability
+of the measured PM10 concentrations for both urban Milano and sub-urban
+mountain Tirano sites. Also the range between the 10th and the 90th
+percentiles for both predicted and measured values distributions was
+good. Speciﬁcally, in Milan the range varies from 19.00 to 74.00 mg m3
+in the measured values vs. 15.74 to 81.54 mg m3 in the predicted
+values. In Tirano the variability ranges from 6.00 to 52.00 mg m3 in
+the measured values vs. 5.10 to 50.17 mg m3 the in predicted values.
+However, in Milan a few days were underestimated in February and
+overestimated in May, whereas in Tirano on certain winter days we might
+overestimate the PM10 concentrations. This result is not surprising and
+might be related to the retrieval AOD accuracy in the mountain region.
+Fig. 3 shows the spatial pattern at 10 km  10 km resolution of
+predicted PM10 concentration from the AOD models, averaged over the
+entire study period. Mean predicted PM10 range from 31.9 mg m3 to 52.2
+mg m3. As expected, predicted PM10 concentration are higher in urban
+areas such as Milan, Bergamo and Brescia compared to smaller cities
+placed in hilly areas such as Varese, Como and Lecco, or in the
+mountainous area such as Sondrio. In Fig. 4, we present a ﬁne resolution
+map at 200 m  200 m showing the difference of the estimated local
+pollution (stage 4) from the average PM10 concentrations at a very ﬁne
+resolution aimed to estimate local, trafﬁc related pollution. This was
+done by taking our estimates at the 10 km grid level as the local
+meso-scale
+
+Fig. 1. Scatter plot of the AOD-PM relationship before and after the
+calibration.
+
+232
+
+F. Nordio et al. / Atmospheric Environment 74 (2013) 227e236
+
+Table 1 Prediction accuracy in stage 1: Ten-fold cross-validated (CV) R2
+for yearly PM10 models (2000e2009). Yearly dataset
+
+CV R2
+
+Intercepta
+
+Slopea
+
+CV R2Spatial
+
+CV R2Temporal
+
+RMSPEb
+
+2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 Mean 2000e2009
+
+0.738 0.784 0.818 0.808 0.806 0.796 0.760 0.768 0.810 0.786 0.787
+
+0.59  0.59 1.13  0.44 0.14  0.46 0.10  0.39 0.94  0.37 0.55  0.33
+0.63  0.28 0.11  0.26 0.18  0.22 0.61  0.21
+
+0.99  0.01 0.97  0.01 1.00  0.01 1.00  0.01 0.98  0.01 0.99  0.01
+0.98  0.01 1.00  0.01 0.99  0.01 0.98  0.01
+
+0.737 0.852 0.721 0.802 0.822 0.739 0.758 0.833 0.812 0.728 0.780
+
+0.740 0.774 0.827 0.808 0.805 0.802 0.760 0.760 0.811 0.792 0.788
+
+5.886 3.395 4.086 3.632 3.384 3.823 3.501 3.167 3.294 3.299 3.747
+
+a b
+
+Presented as parameter estimate  SE from linear regression of held-out
+observations versus predictions. Root of the mean squared prediction
+errors.
+
+concentration, and looking at the residuals between that and the actual
+measured PM10 at monitoring stations. Those differences are due to very
+local emissions, and noise in the data. We model them against land use
+terms within 50 m of the monitor to develop a land use regression that
+predicts not absolute values, but differences from the grid cell value.
+We found no evidence of bias in our modeled PM10. The slope of the
+linear regression of measured PM10 (in the held out monitoring data)
+with predicted PM10 ranged from 0.98 to 1.00. 4. Discussion Most
+particle epidemiology studies in the literature have relied on central
+site monitoring to assess exposure to particles. This results in
+exposure measurement error, which can lead to biased estimates of the
+effects of particles, and hence biased estimates of risk. It also
+increases the risk of not ﬁnding a signiﬁcant association. While some
+recent studies have used modeled estimates of longterm exposure, such
+approaches have been hampered by limited model performance, with poorer
+accuracy in regions with fewer monitors. In this paper we examined the
+relationship between PM10 ground measurements and MODIS AOD data in
+Lombardy during the period 2000e2009. Our model is based on the
+methodology recently proposed to estimate the PM2.5 by Kloog et al.
+(2011) and previously applied for New England. We presented some key
+ﬁndings in our results. First, we had no bias in our cross-validation
+results (average slope of 0.99), which is a critical consideration in
+producing estimates for risk assessment and epidemiology. In addition,
+our model performs quite well with a mean out-ofsample R2 of 0.787 which
+is much higher compared to other
+
+Table 2 Prediction accuracy in stage 3: Ten-fold cross-validated (CV) R2
+for yearly PM10 models (2000e2009). Yearly dataset
+
+CV R2
+
+CV R2Spatial
+
+CV R2Temporal
+
+RMSPEa
+
+2000 2001 2002 2003 2004 2005 2006 2007 2008 2009 Mean 2000e2009
+
+0.736 0.790 0.841 0.821 0.806 0.790 0.753 0.753 0.798 0.783 0.787
+
+0.558 0.735 0.790 0.725 0.672 0.633 0.548 0.694 0.673 0.658 0.669
+
+0.805 0.800 0.846 0.831 0.822 0.804 0.780 0.763 0.816 0.798 0.806
+
+7.632 4.538 3.551 4.282 4.596 4.532 4.784 4.288 4.345 3.700 4.625
+
+Presented as parameter estimate  SE from linear regression of held-out
+observations versus predictions. a Root of the mean squared prediction
+errors.
+
+available PM10 models. For instance Paciorek et al. designed a
+sophisticated spatio-temporal model for the Nurses' Health study in the
+US (Paciorek et al., 2008) to predict monthly PM10 levels. This model
+obtained good accuracy, although its root mean squared prediction error
+(RMSPE) was greater than in our prediction model (6.38 mg m3 vs. 4.62
+mg m3 in the validation dataset). Another key feature of our model is
+our method for estimating local, trafﬁc related pollution. This gives us
+an estimated local trafﬁc particle term that is independent of the area
+level exposure, allowing both to be used simultaneously in an
+epidemiology study. In this study we show that our statistical approach
+is suitable to estimate PM10 also in a substantially different region
+like Lombardy, characterized by very high mountains and extensive
+valleys. Furthermore, the use of covariates constructed as standardized
+interactions between spatial and weather variables, and the addition of
+IPW weights to take account of the selection bias for days with missing
+AOD values signiﬁcantly contribute to the goodness of ﬁt and lack of
+bias in our estimates. The weather conditions in the Po Valley,
+surrounded from all directions by the Alps and the Apennines, place the
+region at disadvantage for air pollution conditions. Lombardy is located
+in the central part of the Po Valley, and its climatology is largely
+determined by the orography of the area. A vast plain bordered to the
+north, west, and south by mountain ranges extending up to high
+altitudes, Lombardy's climatological characteristics are determined by
+its surroundings. The primary physical characteristics of the region are
+the strong continentally of the area, the weak wind regime, and the
+persistence of atmospheric stability conditions. The presence of the
+Alpine-range barrier decisively inﬂuences the evolution of perturbations
+from the Atlantic; this dynamic determines the prevalence of situations
+of occlusion, as well as promoting a general decoupling between the
+circulations in the lower layers and those of the upper layers. The
+central-western Po Valley, especially near the foothills, is affected by
+the presence of a particular wind, the foehn, a stream of dry air that
+comes down from the mountains. The frequency of this phenomenon is high
+in the period between December and May, usually reaching a maximum in
+March. All these factors predispose to the accumulation of pollutants,
+especially in the winter, but also in the presence of photochemical
+phenomena during the summer months. Several methods that use the MODIS
+satellite have been proposed for studying air quality in Europe for
+short time periods often suffering from either a signiﬁcant bias
+(Matthias, 2008) or limited to small regions (Timmermans et al., 2007).
+In the QUITSTAT project for air quality monitoring, Nicolantonio et al.
+generated daily maps of satellite-based PM2.5 concentrations over
+Northern Italy for the years 2004e2008 obtaining moderately good
+predictions (Di Nicolantonio and Cacciari, 2011). Comparison with daily
+PM2.5 sampled on the ground during the QUITSAT
+
+F. Nordio et al. / Atmospheric Environment 74 (2013) 227e236
+
+233
+
+Fig. 2. Temporal variation of Measured PM10 and Predicted PM10 in Milan
+and Tirano areas.
+
+project over six validation sites in the Po valley, showed moderately
+good agreement (in sample R2 ¼ 0.68 and R2 ¼ 0.59 for MODIS/Terra and
+MODIS/Aqua, respectively) and slopes demonstrating only modest bias
+(slope ¼ 0.85 and slope ¼ 0.77). Our model provides a daily estimate for
+10 years of exposure to PM10 with better agreement and no bias, and will
+be particularly suitable in conducting epidemiologic studies to evaluate
+both longand short-term effects. We plan on carrying out several studies
+in the near future making use of our generated predictions for
+
+studies on the health effects of PM10 exposure (such as mortality,
+hospital admissions etc.) in the Lombardy Region. Furthermore, the
+overall statistical performance of our model was adequate and consistent
+with other epidemiological studies that use predictive models to assign
+exposure to the study subjects (Puett et al., 2009; Yanosky et al.,
+2008). In addition these predictions could be of use in other areas such
+as for regulating regional air pollution standards, assessing regional
+differences in exposure, looking for socioeconomic gradients, etc.
+
+234
+
+F. Nordio et al. / Atmospheric Environment 74 (2013) 227e236
+
+Fig. 3. Mean PM10 concentration in each 10  10 km grid during the
+entire modeling period (2000e2009) predicted by the AOD models.
+
+Despite the high overall accuracy of our model prediction, we
+acknowledge several limitations. The differences between measured and
+predicted PM10 can be attributed to errors in PM10 measurements, as well
+as random and systematic errors of satellite AOD retrieval. Potential
+sources of uncertainty in the AOD retrieval are snow coverage,
+unresolved cloud residuals, and other cloudrelated factors such as
+remnants of decaying clouds and stray
+
+light from 3-D effect (Levy et al., 2010) that can result in bias in the
+retrieved AOD. Although we excluded outliers and allowed slopes and
+intercepts to change by day, some inaccuracies undoubtedly remained.
+Furthermore, errors in the AOD measurements due to clear and low
+pollution days directly propagate into the precision with which PM can
+be estimated. In spite of those limitations, our out of sample R2 is
+among the highest reported for PM10 models.
+
+Fig. 4. The difference of the estimated local pollution from the average
+PM10 concentrations at a very ﬁne resolution (200  200 m) in the
+Lombardy region.
+
+F. Nordio et al. / Atmospheric Environment 74 (2013) 227e236
+
+AOD retrievals could be improved in two main areas. The ﬁrst relates to
+spatial resolution of currently existing AOD products, which is too
+coarse. Chudnovsky et al. (2013) have recently shown that that a high
+spatial resolution is essential to improving PM2.5 e AOD agreement and
+to detect spatial variability in aerosol loadings at regional and at a
+sub-10 km scale (e.g. intra-urban domain). Future releases of higher
+spatial resolution AOD retrievals will test the proposed methodology at
+the intra-urban domain. Secondly, improvements can be achieved by
+increasing the retrieval accuracy. For example, the upcoming MODIS-Terra
+Collection 6 reprocessing will combine the MOD04 dark-target approach
+and the Deep Blue AOD retrieval above the bright/snow surfaces (Hsu et
+al., 2004). Thus, this release could provide more valid AOD readings
+above mountain region during snowing conditions. Although during winter
+months we have fewer AOD readings available for mountainous regions, the
+stage 3 of the model was able to predict the PM10 levels using regional
+monitoring, as well the neighboring cells using spatial smoothing. We
+acknowledge a margin of error when collecting data from cells derived
+from elevated areas, where the spatial smoothing uses cells at lower
+altitudes. However, as shown in Fig. 2, our model performed well even in
+locations such as Tirano, which is in the mountainous north. Although
+the model is expected to have poorer performance higher up the mountain
+slopes, we note that because higher mountains have much lower population
+density, estimates in those areas are of limited relevance for
+epidemiology studies. Further, the fourth stage of our model partially
+solves this limitation by providing a more appropriate estimate of the
+residuals of the stage 3 and capturing a local effect using LU
+time-invariant variables, including elevation. 5. Conclusion We showed
+that AOD can be used to predict PM10 mass concentrations in a complex
+terrain such as Lombardy region and provide determination of PM10
+spatial and temporal variability. Our model allows for assessing short-
+and long-term human exposures that can be used to investigate both acute
+and chronic effects of ambient particles. Conﬂict of interest The
+authors declare that they have no actual or potential conﬂict of
+interest. Acknowledgments This work was supported by INAIL Foundation
+and Lombardy Region Research Contracts UniMi 8614/2006 and UniMi
+9167/2007. Dr. Baccarelli received support from the NIEHS-HSPH Center
+for Environmental Health (ES000002). Dr. Schwartz received support from
+EPA RD 83479801 and NIEHS R21 ES020695. The authors want to thank Steven
+J. Melly, Harvard School of Public Health, for GIS processing and
+Emanuele Emili, Centre Européen de Recherche et de Formation Avancée en
+Calcul Scientiﬁque, for his valuable contribution with retrieval
+algorithm for aerosol optical depth. We thank Matthew O'Brien for his
+help in revising this manuscript. References ARPA, 2012. Agenzia
+Regionale per la Protezione dell'Ambiente della Lombardia. Baccarelli,
+A., Martinelli, I., Zanobetti, A., Grillo, P., Hou, L.F., Bertazzi,
+P.A., Mannucci, P.M., Schwartz, J., 2008. Exposure to particulate air
+pollution and risk of deep vein thrombosis. Archives of Internal
+Medicine 168, 920. Baccini, M., Biggeri, A., Grillo, P., Consonni, D.,
+Bertazzi, P.A., 2011. Health impact assessment of ﬁne particle pollution
+at the regional level. American Journal of Epidemiology 174, 1396e1405.
+
+235
+
+Bossard, M., Feranec, J., Otahel, J., Agency, E.E., 2000. CORINE Land
+Cover Technical Guide: Addendum 2000. European Environment Agency,
+Copenhagen Denmark. Brauer, M., Hoek, G., Van Vliet, P., Meliefste, K.,
+Fischer, P., Gehring, U., Heinrich, J., Cyrys, J., Bellander, T., Lewne,
+M., 2003. Estimating long-term average particulate air pollution
+concentrations: application of trafﬁc indicators and geographic
+information systems. Epidemiology 14, 228. Brook, R.D., Franklin, B.,
+Cascio, W., Hong, Y., Howard, G., Lipsett, M., Luepker, R., Mittleman,
+M., Samet, J., Smith Jr., S.C., 2004. Air pollution and cardiovascular
+disease A statement for healthcare professionals from the expert panel
+on population and prevention science of the American Heart Association.
+Circulation 109, 2655e2671. Chudnovsky, A.A., Kostinski, A., Lyapustin,
+A., Koutrakis, P., 2013. Spatial scales of pollution from variable
+resolution satellite imaging. Environmental Pollution 172, 131e138.
+David, J.B., Collins, S., Elliott, P., Fischer, P., Kingham, S., Lebret,
+E., Pryl, K., Van Reeuwijk, H., Smallbone, K., ANDRE, V.A.N.D.E.R.V.,
+1997. Mapping urban air pollution using GIS: a regression-based
+approach. International Journal of Geographical Information Science 11,
+699e718. Di Nicolantonio, W., Cacciari, A., 2011. MODIS multiannual
+observations in support of air quality monitoring in Northern Italy.
+Italian Journal of Remote Sensing 4, 97e109. Dinoi, A., Perrone, M.R.,
+Burlizzi, P., 2010. Application of MODIS products for air quality
+studies over Southeastern Italy. Remote Sensing 2, 1767e1796. EEA, 2012.
+European Environment Agency Population Data. Emili, E., Popp, C.,
+Petitta, M., Rifﬂer, M., Wunderle, S., Zebisch, M., 2010. PM10 remote
+sensing from geostationary SEVIRI and polar-orbiting MODIS sensors over
+the complex terrain of the European Alpine region. Remote Sensing of
+Environment 114, 2485e2499. ESRI, 2012. ArcGIS 9.3, 9.3 ed.
+Environmental Systems Research Institute. Filip, L., Stefan, S., 2011.
+Study of the correlation between the near-ground PM10 mass concentration
+and the aerosol optical depth. Journal of Atmospheric and
+Solar-Terrestrial Physics 73, 1883e1889. Fox, J., 2008. Applied
+Regression Analysis and Generalized Linear Models. Sage Publications.
+Incorporated. Hoff, R.M., Christopher, S.A., 2009. Remote sensing of
+particulate pollution from space: have we reached the promised land?
+Journal of the Air & Waste Management Association 59, 645e675. Hsu,
+N.C., Tsay, S.-C., King, M.D., Herman, J.R., 2004. Aerosol properties
+over brightreﬂecting source regions. Geoscience and Remote Sensing, IEEE
+Transactions on 42, 557e569. Hyer, E., Reid, J., Zhang, J., 2011. An
+over-land aerosol optical depth data set for data assimilation by
+ﬁltering, correction, and aggregation of MODIS Collection 5 optical
+depth retrievals. Atmospheric Measurement Techniques 4, 379e408. INEMAR,
+2012. INEMAR (INventario di EMissioni in ARia e Air Emission Inventory)
+Database. Kloog, I., Koutrakis, P., Coull, B.A., Lee, H.J., Schwartz,
+J., 2011. Assessing temporally and spatially resolved PM2.5 exposures
+for epidemiological studies using satellite aerosol optical depth
+measurements. Atmospheric Environment 45 (35), 6267e6275. Koelemeijer,
+R., Homan, C., Matthijsen, J., 2006. Comparison of spatial and temporal
+variations of aerosol optical thickness and particulate matter over
+Europe. Atmospheric Environment 40, 5304e5315. Koren, I., Remer, L.A.,
+Kaufman, Y.J., Rudich, Y., Martins, J.V., 2007. On the twilight zone
+between clouds and aerosols. Geophysical Research Letters 34, L08805.
+Lee, H.J., Liu, Y., Coull, B., Schwartz, J., Koutrakis, P., 2011. PM2.5
+prediction modeling using MODIS AOD and its implications for health
+effect studies. Epidemiology 22, S215. Lepeule, J., Laden, F., Dockery,
+D., Schwartz, J., 2012. Chronic exposure to ﬁne particles and mortality:
+an extended follow-up of the Harvard six cities study from 1974 to 2009.
+Environmental Health Perspectives 120 (7), 965e970. Levy, R.C., Remer,
+L.A., Mattoo, S., Vermote, E.F., Kaufman, Y.J., 2007. Second-generation
+operational algorithm: retrieval of aerosol properties over land from
+inversion of Moderate Resolution Imaging Spectroradiometer spectral
+reﬂectance. Journal of Geophysical Research: Atmospheres (1984e2012)
+112. Levy, R.C., Remer, L.A., Kleidman, R.G., Mattoo, S., Ichoku, C.,
+Kahn, R., Eck, T.F., 2010. Global evaluation of the Collection 5 MODIS
+dark-target aerosol products over Land. Atmospheric Chemistry and
+Physics Discussions 10, 14815e14873. Matthias, V., 2008. The aerosol
+distribution in Europe derived with the Community Multiscale Air Quality
+(CMAQ) model: comparison to near surface in situ and sunphotometer
+measurements. Atmospheric Chemistry and Physics Discussions 8,
+1457e1503. Miller, K.A., Siscovick, D.S., Sheppard, L., Shepherd, K.,
+Sullivan, J.H., Anderson, G.L., Kaufman, J.D., 2007. Long-term exposure
+to air pollution and incidence of cardiovascular events in women. New
+England Journal of Medicine 356, 447e458. Paciorek, C.J., Liu, Y., 2009.
+Limitations of remotely sensed aerosol as a spatial proxy for ﬁne
+particulate matter. Environmental Health Perspectives 117, 904.
+Paciorek, C.J., Yanosky, J.D., Puett, R.C., Laden, F., Suh, H.H., 2008.
+Practical Largescale Spatio-temporal Modeling of Particulate Matter
+Concentrations. Harvard University Biostatistics Working Paper Series.
+Working Paper 76. http://biostats. bepress.com/harvardbiostat/paper76.
+Pope III, C.A., Burnett, R.T., Thun, M.J., Calle, E.E., Krewski, D.,
+Ito, K., Thurston, G.D., 2002. Lung cancer, cardiopulmonary mortality,
+and long-term exposure to ﬁne
+
+236
+
+F. Nordio et al. / Atmospheric Environment 74 (2013) 227e236
+
+particulate air pollution. JAMA: The Journal of the American Medical
+Association 287, 1132e1141. Puett, R.C., Hart, J.E., Yanosky, J.D.,
+Paciorek, C., Schwartz, J., Suh, H., Speizer, F.E., Laden, F., 2009.
+Chronic ﬁne and coarse particulate exposure, mortality, and coronary
+heart disease in the Nurses' Health Study. Environmental Health
+Perspectives 117, 1702. Rabus, B., Eineder, M., Roth, A., Bamler, R.,
+2003. The shuttle radar topography missionda new class of digital
+elevation models acquired by spaceborne radar. ISPRS Journal of
+Photogrammetry and Remote Sensing 57, 241e262. Remer, L.A., Kaufman, Y.,
+Tanré, D., Mattoo, S., Chu, D., Martins, J.V., Li, R.R., Ichoku, C.,
+Levy, R., Kleidman, R., 2005. The MODIS aerosol algorithm, products, and
+validation. Journal of the Atmospheric Sciences 62, 947e973. Remer, L.,
+Kaufman, Y., Tanré, D., Matoo, S., Li, R.R., Martins, J.V., Levy, R.,
+Chu, D.A., Kleidman, R., Ichoku, C., 2006. Collection 005 Change Summary
+for MODIS Aerosol (04\_L2) Algorithms.
+
+Ross, Z., English, P.B., Scalf, R., Gunier, R., Smorodinsky, S., Wall,
+S., Jerrett, M., 2005. Nitrogen dioxide prediction in Southern
+California using land use regression modeling: potential for
+environmental health analyses. Journal of Exposure Science and
+Environmental Epidemiology 16, 106e114. Ryan, P.H., LeMasters, G.K.,
+2007. A review of land-use regression models for characterizing
+intraurban air pollution exposure. Inhalation Toxicology 19, 127e133.
+Timmermans, R., Schaap, M., Elbern, H., Apituley, A., Koelemeijer, R.,
+Siddans, R., Tjemkes, S., Vautard, R., de Leeuw, G., Builtjes, P., 2007.
+The use of satellitebased measurements of AOD for the analysis and
+forecasts of PM2.5 concentrations at ground level. Observing
+Tropospheric Trace Constituents from Space 192. Yanosky, J.D., Paciorek,
+C.J., Schwartz, J., Laden, F., Puett, R., Suh, H.H., 2008.
+Spatiotemporal modeling of chronic PM10 exposure for the Nurses' Health
+Study. Atmospheric Environment 42, 4047e4062.
+
+
