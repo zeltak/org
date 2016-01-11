@@ -33799,7 +33799,11 @@ $Note$ the &> command
 #+BEGIN_EXAMPLE
 &>filename # Redirect both stdout and stderr to file "filename."
 #+END_EXAMPLE
-
+** keyboard
+*** turn off capsock in keyboard 
+#+BEGIN_SRC sh  :results none
+xdotool key Caps_Lock
+#+END_SRC
 
 ** hardware
 *** xset

@@ -2853,3 +2853,112 @@ disabled since I didn't like the extra verbosity
   ;;  :config
   ;;  )
 #+END_SRC 
+
+* Key binds
+  :PROPERTIES:
+  :ID:       d4e38ca1-43ac-4fb5-a31f-5b432a4c0418
+  :ARCHIVE_TIME: 2016-01-09 Sat 07:28
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_CATEGORY: settings
+  :END:
+** 1-unbind keys
+#+BEGIN_SRC emacs-lisp :results none
+(global-unset-key (kbd "<f1>"))
+(global-unset-key (kbd "<f2>"))
+(global-unset-key (kbd "<f3>"))
+(global-unset-key (kbd "<f4>"))
+(global-unset-key (kbd "<f5>"))
+(global-unset-key (kbd "<f6>"))
+(global-unset-key (kbd "<f7>"))
+(global-unset-key (kbd "<f8>"))
+(global-unset-key (kbd "<f9>"))
+(global-unset-key (kbd "<f10>"))
+(global-unset-key (kbd "<f11>"))
+(global-unset-key (kbd "<f12>"))
+(global-unset-key (kbd "C-v"))
+(global-unset-key (kbd "C-M-p"))
+(global-unset-key (kbd "C-M-e"))
+(global-unset-key (kbd "C-M-b"))
+(global-unset-key (kbd "C-M-b"))
+(global-unset-key (kbd "C-M-t"))
+(global-unset-key (kbd "\\"))
+#+END_SRC
+** global
+NOTE: Starting helm-find-files with C-u will show you a little history of the last visited directories.
+#+BEGIN_SRC emacs-lisp :results none
+(global-set-key (kbd "M-x") 'counsel-M-x)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+#+END_SRC
+*** switch keybind between transpose char and lines
+#+BEGIN_SRC emacs-lisp :results none
+(global-set-key "\C-t" #'transpose-lines)
+(define-key ctl-x-map "\C-t" #'transpose-chars)
+#+END_SRC
+** editing 
+#+BEGIN_SRC emacs-lisp :results none
+(key-chord-define-global "yy"     'z/copy-line)
+(global-set-key (kbd "C-+") 'z/copy-line)
+(key-chord-define-global "jj"     'avy-goto-word-or-subword-1)
+(global-set-key (kbd "C-0") 'backward-kill-line)
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :results none
+;;(global-set-key (kbd "C-<tab>") 'dabbrev-expand)
+;;(define-key minibuffer-local-map (kbd "C-<tab>") 'dabbrev-expand)
+#+END_SRC
+** movment
+#+BEGIN_SRC emacs-lisp :results none
+(global-unset-key (kbd "M-`"))
+;(global-set-key (kbd "M-`") 'avy-goto-line)
+(global-set-key (kbd "C-<up>") 'windmove-up)
+(global-set-key (kbd "C-<down>") 'windmove-down)
+(global-set-key (kbd "C-<right>") 'windmove-right)
+(global-set-key (kbd "C-<left>") 'windmove-left)
+#+END_SRC
+
+quick switch other windw 
+#+BEGIN_SRC emacs-lisp :results none
+;;(global-set-key (kbd "M-1") 'other-window)
+(global-set-key (kbd "M-1") 'ace-window)
+#+END_SRC
+
+
+** org
+*** base binds 
+#+BEGIN_SRC emacs-lisp :results none
+;Create an ID for the entry at point if it does not yet have one.
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key (kbd "C-c c") 'org-capture)
+(global-set-key "\C-cs" 'org-babel-execute-subtree)
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-cb" 'org-iswitchb)
+
+#+END_SRC
+*** swap C and M RETURN
+#+BEGIN_SRC emacs-lisp :results none
+(with-eval-after-load "org" 
+(define-key org-mode-map (kbd "<C-return>") 'org-insert-heading)
+(define-key org-mode-map (kbd "<M-return>")  'org-insert-heading-respect-content)
+) 
+#+END_SRC
+
+** isearch
+#+BEGIN_SRC emacs-lisp :results none
+(progn
+  ;; set arrow keys in isearch. left/right is backward/forward, up/down is history. press Return to exit
+  (define-key isearch-mode-map (kbd "<up>") 'isearch-ring-retreat )
+  (define-key isearch-mode-map (kbd "<down>") 'isearch-ring-advance )
+  (define-key isearch-mode-map (kbd "<left>") 'isearch-repeat-backward) ; single key, useful
+  (define-key isearch-mode-map (kbd "<right>") 'isearch-repeat-forward) ; single key, useful
+ )
+#+END_SRC
+** key-chord
+
+#+BEGIN_SRC emacs-lisp :results none
+(key-chord-define-global "3e" 'hydra-editing/body)
+(key-chord-define-global "9o" 'hydra-org-edit/body)
+#+END_SRC
+** Ess/org tangle
+#+BEGIN_SRC emacs-lisp :results none
+(global-set-key (kbd "C-c x") 'org-babel-execute-subtree)
+#+END_SRC

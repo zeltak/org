@@ -1790,20 +1790,18 @@ spline on aod- fit a gamm on aod
 
 fhat calibrated aod into the svm 
 ** Tal/michael grant meeting
-*** grant ideas: "environmental factors” in the built environment and property values
-**** lit review
-What are literature known “environmental factors” as they pertain to property values
-
-**** aims
-***** develop a holistic view on environmental factors pertaining to property values in Tel-Aviv, more specifically:
-
- - What is the scope of positive or negative environmental factors and their impact on property values?
- - the effect of proximity to the source of environmental
+*** grant: "environmental factors” in the built environment and property values
+**** literature review
+-What are literature-known “environmental factors” and how these factors pertain to property values
+-Key studies in Israel and globally looking environment and property values, what methods have they used? spatio-temporal resolution, data sources?
+**** aim draft
+***** develop a holistic view on all known environmental factors pertaining to property values in Tel-Aviv:
+    more specifically: What is the scope of positive or negative environmental factors and their impact on property values?
+***** develop discrete indexes/scores per factor and overall index/score?
 ***** develop open source/create common tools to approximate environmental "exposures" and provide a viable data dissemination structure
 we will use R, python, Qgis, GRASS to develop these tools
 **** Geo-statistical exposure Models
 ***** walkability
-
 We aim at developing a consolidated walkability index, which will be based on Z-scores of individual built environment components described below.
 
 Based on data from the ICBS and MAPI We will create address-level measures of population density, business counts (as a proxy for accessibility),intersection counts (as a proxy for street connectivity), Traffic direction, walking obstacles, traffic lanes and parks. 
@@ -1818,15 +1816,13 @@ Because all measures of the built environment are correlated, we will create a s
 
 Z- scores will be created to standardize each individual component of the built environment. These scores will have a mean of 0 and a standard deviation of 1. We will then summarize these scores to create a walkability index that combines all components of the built environment measured in this analysis. The final walkability index will have a mean of 0  with higher values indicating higher levels of walkability. 
 
-*****  Greenness
-
+***** Greenness
 Exposure to green, natural areas around at each address will be estimated using satellite-image based vegetation index. Chlorophyll in plants strongly absorbs visible light (0.4-0.7 µm) for use in photosynthesis, while leaves strongly reflect near-infrared light (0.7-1.1 µm). The Normalized Difference Vegetation Index (NDVI) calculates the ratio of the difference between the near-infrared region and red reflectance to the sum of these two measures, and ranges from -1.0 to 1.0, with larger values indicating higher levels of vegetative density 
 
 For this proposed study index, we will use data from the Moderate-resolution Imaging Spectroradiometer (MODIS) from NASA’s Terra satellite. MODIS provides images every 16 days at a 250m resolution (Carroll et al. 2004). We will use GIS based  software to link the  NDVI data to each address as a measure of greenness directly accessible outside the address
 
 ***** Noise exposure 
 We will map and predict spatially resolved noise pollution at high resolutions per year 
-
 We will develop novel noise exposure modeling, based on land use regression modeling, allowing robust and validated long term noise estimation at a high spatial resolution. 
 We will check for seasonal and diurnal differences (looking at different aspects such as rush hours vs non rush hours)
 

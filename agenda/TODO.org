@@ -6,18 +6,12 @@
 #+LaTeX_CLASS_OPTIONS: [garamond]
 
 * `TODO`							 
-** better search of org files and org files
-   :PROPERTIES:
-   :ID:       9c49a294-2116-42c2-afd7-99b2bb2cc590
-   :END:
-*** projectile?
 ** explore dired root
 Yes, just type /sudo:root@localhost/... when C-x C-f asks you for file name. This will open a trampified dired where dired-do-chown and other dired commands work just fine.
 
 (Note that you can press TAB after /sudo:, and minibuffer completion will insert the @localhost boilerplate.)
 
 http://tuhdo.github.io/helm-intro.html#sec-7
-
 
 
 No key binding. We should give it one:
