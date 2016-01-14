@@ -6,6 +6,7 @@
 #+LaTeX_CLASS_OPTIONS: [garamond]
 
 * `TODO`							 
+** TODO same dired jump menu for orgmode - switch to current file
 ** explore dired root
 Yes, just type /sudo:root@localhost/... when C-x C-f asks you for file name. This will open a trampified dired where dired-do-chown and other dired commands work just fine.
 
@@ -72,6 +73,134 @@ FWIW, I don't tell Dired+ to automatically reuse Dired buffers when I hit RET. I
 IOW, this comes under the heading of "If it hurts, don't do it." If you purposely kill a Dired buffer, which is what "reusing" means here, then, well, the buffer no longer exists. If it no longer exists then its markings etc. are gone too.
 
 In sum, reuse when you want, and don't reuse when you want. Both behaviors are available at all times. If you start marking things, then think before you use RET to change directories - use C-x d or C-x 4 d instead. It's probably just a question of habit. And don't forget that you have i too.
+** @org revison@
+*** main Emacs server 
+I have a computer always running an emacs server, and I connect to it from my android phone using JuiceSSH. To see the org agenda in my google calendar I export every now and then the agenda to an ics file in the cloud using org-icalendar-combined-agenda-file. In google I have the address to that file as one of the calendars (from the calendar "Other calendars", "Add by URL").
+*** TODO org todo
+**** context?
+To make the choosing easier, I mark TODOs with a "context", indicating where I can do them. Mine are @HOME for things I need to be in the house for, @COMPUTER for things I just need to be at a computer for, @BUY for things to buy (when I have spare money), @TRIP for things I need to make a trip outdoors for (buying things I can't buy online, for instance, or visiting people), and @MEETING for stuff I can only do at a meeting (I have meetings with my Scout group leadership, and the Cheltenham Hackspace committee). - See more at: http://www.snell-pym.org.uk/archives/2015/01/20/how-im-managing-my-life-with-emacs-org-mode/#sthash.Gka0xles.dpuf
+**** TODO gen 
+bind keys for specific todo/spare functions (₆In example₆ allan) 
+general- small letter todo list , CAPITAL sparse tree
+**** WORK files
+located at 2 files: research and bgu
+research for all Sci stuff
+BGU for all admin/student/etc
+**** misc
+create todos based on tags and TODO
+for example todo with allan (tag)
+**** TODO Tasks in multiple projects?
+Tasks can live in multiple projects, so there’s no need to duplicate work. This is especially useful for cross-functional Teams.
+**** Merge Duplicate Tasks?
+**** check orgmode
+*** calendar
+The +1w implies that this event will repeat every week at the same time & date, ad infinitum. The number can be changed, and the usual codes can replace w (e.g. d for days, etc) (See below for more advanced repeating events.) 
+*** email
+*** refrence library
+**** change and clean lib
+change key to exclude ()
+clean umicode
+**** helm-bibtex
+***** exclude search items
+ ₆In example₆ 
+ xebar - in progress 
+ (I want to exclude in progress articles not published yet)
+
+***** define default enter command
+***** open in Emacs PDF viwer
+
+***** TODO create filed for projects? maybe use the tag field?
+**** org-ref- to insert citations
+https://github.com/jkitchin/org-ref/blob/master/org-ref.org
+check out:
+***** jmax-bibtex-hydra/body
+***** TODO org-ref-clean-bibtex-entry
+
+figure this out 
+***** COMMENT workflow
+C-] 
+org-ref-helm-insert-cite-link
+to insert ref into orgmode buffer 
+
+clicking/C-c o on a link will give you a helm buffer with options 
+
+for multiple cites just use C-space in the helm buffer to choose
+
+shift-arrows move around
+
+org-ref-sort-citation-link will sort by year
+
+org-ref-extract-bibtex-entries to create a list of all cites used in document
+
+org-ref
+to check buffer for ref issues and a menu of org-ref options 
+
+**** reftex?
+http://tex.stackexchange.com/questions/18848/workflow-for-managing-references/18855#18855
+**** biber?
+look into how to convert to biber
+**** biblatex							  :CANCELLED:
+**** bib2bib
+http://www.cse.msu.edu/~cse914/F02/Public/Papers/Bibtex/bibtex2html-doc.htm
+**** cb2Bib
+**** bibtool
+http://www.gerd-neugebauer.de/software/TeX/BibTool/index.en.html
+generate keys?
+*** revise leuven for better agenda/TODO color scheme
+*** R
+**** update template to use codeblock name
+also see:
+On top of the line starting with #+RESULTS:, we shall add two more lines, to give the table a title and a name. Note that both the code block and the result of the code block have separate names.
+#+NAME: bmi-table-output
+#+CAPTION: Average BMI, by country
+#+RESULTS: bmi-table-code
+**** Code blocks that produce a graph to be included in the document
+
+These code blocks can have a series of commands. The last command produces a graph that we would like to be included in the document.
+
+The following code shows an example of a code block that produces a graph.
+
+#+NAME: mygraph-code
+#+BEGIN_SRC R :results output graphics :file bmi2.png :width 825 :height 1050 :fonts serif
+
+#+END_SRC
+As before, for creating your graph, you first write the #+NAME, BEGIN_SRC and the END_SRC lines, and then go into a temporary ESS buffer by using C-c ‘.
+
+Once in this temporary ESS buffer, you can write the R commands for making your graph.
+As you write, you can evaluate the commands using C-j, C-r and C-b and see what your output looks like.
+The output is displayed on your screen using the default graphic device used by R (X11, quartz or windows graphic device depending upon your operating system).
+Once you have finalised your graph, you press C-c ’ and come back to the Org buffer.
+Note that creation of the image file is left to appropriate switches in the #+BEGIN_SRC line. Org automatically chooses appropriate graphic device to produce the file. When you evaluate this code using C-c C-c, the results are displayed below the code block as follows.
+
+#+RESULTS: mygraph-code
+[[bmi2.png]]
+Note that, taking the file name from our #+BEGIN_SRC line, a file called bmi2.png was automatically created and linked, so that the graph would be inserted in the document when you produce the formatted output.[fn:5] Every time you evaluate the code using C-c C-c, the underlying image file containing the graph is overwritten by a new file.
+
+As with the tables, we shall add a caption and a name to it as follows
+
+#+NAME: my-bmi-graph
+#+CAPTION: Average BMI, by Country
+#+RESULTS: mygraph-code
+[[gini.png]]
+You can now refer to this graph in the text using [[my-bmi-graph]].
+
+*** org capture
+*** TODO mobile (using orglzy)
+**** for all read only notes
+create a folder sync repo for each subfolder under the `git`root folder. then sync and you will see the org files  appearing in your book lists as books
+**** from phone to org
+Workflow: create a $Note$ (I called it n6) from orgzy and link it to a dropbox folder
+this will sync that $Note$ to your laptop
+once every X days make sure to refile that note
+*** From Web browsers
+*** org agenda
+ use multi occur hotkeys?
+*** create a daily agenda in orgmode somwhow
+will show me things to do today rankedb
+** Ref library 2.0
+*** personal (ikloog library)
+when a new paper is finally published and has a DOI:
+use the DOI import util from org-ref to add it to my personal bib fil
 ** open shell in right split window
 ** picard import music
 ** quick navigate inside helm (use bookmearks in helm)
@@ -110,7 +239,6 @@ For Dired+
 
 ** functions to add to Emacs
 #+BEGIN_SRC emacs-lisp
-
 (defun shell-command-on-buffer-file ()
   "Run a shell command, using the file of current buffer as input.
 Return an error if no buffer file."
@@ -567,127 +695,6 @@ I don't understand the question. You use file+headline in this example which doe
 find a way to get rid of ' and ? 
 ** qgis grayscale
 http://nextgis.ru/en/blog/quickmapservices-in-gray/
-** @org revison@
-*** main Emacs server 
-I have a computer always running an emacs server, and I connect to it from my android phone using JuiceSSH. To see the org agenda in my google calendar I export every now and then the agenda to an ics file in the cloud using org-icalendar-combined-agenda-file. In google I have the address to that file as one of the calendars (from the calendar "Other calendars", "Add by URL").
-*** TODO org todo
-**** TODO gen 
-bind keys for specific todo/spare functions (₆In example₆ allan) 
-general- small letter todo list , CAPITAL sparse tree
-**** WORK files
-located at 2 files: research and bgu
-research for all Sci stuff
-BGU for all admin/student/etc
-**** misc
-create todos based on tags and TODO
-for example todo with allan (tag)
-**** TODO Tasks in multiple projects?
-Tasks can live in multiple projects, so there’s no need to duplicate work. This is especially useful for cross-functional Teams.
-**** Merge Duplicate Tasks?
-**** check orgmode
-*** calander
-*** email
-*** refrence library
-**** change and clean lib
-change key to exclude ()
-clean umicode
-**** helm-bibtex
-***** exclude search items
- ₆In example₆ 
- xebar - in progress 
- (I want to exclude in progress articles not published yet)
-
-***** define default enter command
-***** open in Emacs PDF viwer
-
-***** TODO create filed for projects? maybe use the tag field?
-**** org-ref- to insert citations
-https://github.com/jkitchin/org-ref/blob/master/org-ref.org
-check out:
-***** jmax-bibtex-hydra/body
-***** TODO org-ref-clean-bibtex-entry
-
-figure this out 
-***** COMMENT workflow
-C-] 
-org-ref-helm-insert-cite-link
-to insert ref into orgmode buffer 
-
-clicking/C-c o on a link will give you a helm buffer with options 
-
-for multiple cites just use C-space in the helm buffer to choose
-
-shift-arrows move around
-
-org-ref-sort-citation-link will sort by year
-
-org-ref-extract-bibtex-entries to create a list of all cites used in document
-
-org-ref
-to check buffer for ref issues and a menu of org-ref options 
-
-**** reftex?
-http://tex.stackexchange.com/questions/18848/workflow-for-managing-references/18855#18855
-**** biber?
-look into how to convert to biber
-**** biblatex							  :CANCELLED:
-**** bib2bib
-http://www.cse.msu.edu/~cse914/F02/Public/Papers/Bibtex/bibtex2html-doc.htm
-**** cb2Bib
-**** bibtool
-http://www.gerd-neugebauer.de/software/TeX/BibTool/index.en.html
-generate keys?
-*** revise leuven for better agenda/TODO color scheme
-*** R
-**** update template to use codeblock name
-also see:
-On top of the line starting with #+RESULTS:, we shall add two more lines, to give the table a title and a name. Note that both the code block and the result of the code block have separate names.
-#+NAME: bmi-table-output
-#+CAPTION: Average BMI, by country
-#+RESULTS: bmi-table-code
-**** Code blocks that produce a graph to be included in the document
-
-These code blocks can have a series of commands. The last command produces a graph that we would like to be included in the document.
-
-The following code shows an example of a code block that produces a graph.
-
-#+NAME: mygraph-code
-#+BEGIN_SRC R :results output graphics :file bmi2.png :width 825 :height 1050 :fonts serif
-
-#+END_SRC
-As before, for creating your graph, you first write the #+NAME, BEGIN_SRC and the END_SRC lines, and then go into a temporary ESS buffer by using C-c ‘.
-
-Once in this temporary ESS buffer, you can write the R commands for making your graph.
-As you write, you can evaluate the commands using C-j, C-r and C-b and see what your output looks like.
-The output is displayed on your screen using the default graphic device used by R (X11, quartz or windows graphic device depending upon your operating system).
-Once you have finalised your graph, you press C-c ’ and come back to the Org buffer.
-Note that creation of the image file is left to appropriate switches in the #+BEGIN_SRC line. Org automatically chooses appropriate graphic device to produce the file. When you evaluate this code using C-c C-c, the results are displayed below the code block as follows.
-
-#+RESULTS: mygraph-code
-[[bmi2.png]]
-Note that, taking the file name from our #+BEGIN_SRC line, a file called bmi2.png was automatically created and linked, so that the graph would be inserted in the document when you produce the formatted output.[fn:5] Every time you evaluate the code using C-c C-c, the underlying image file containing the graph is overwritten by a new file.
-
-As with the tables, we shall add a caption and a name to it as follows
-
-#+NAME: my-bmi-graph
-#+CAPTION: Average BMI, by Country
-#+RESULTS: mygraph-code
-[[gini.png]]
-You can now refer to this graph in the text using [[my-bmi-graph]].
-
-*** org capture
-*** TODO mobile (using orglzy)
-**** for all read only notes
-create a folder sync repo for each subfolder under the `git`root folder. then sync and you will see the org files  appearing in your book lists as books
-**** from phone to org
-Workflow: create a $Note$ (I called it n6) from orgzy and link it to a dropbox folder
-this will sync that $Note$ to your laptop
-once every X days make sure to refile that note
-*** From Web browsers
-*** org agenda
- use multi occur hotkeys?
-*** create a daily agenda in orgmode somwhow
-will show me things to do today ranked
 ** gwene
 http://onethingwell.org/post/46254462393/gwene
 ** R links to explore
@@ -846,10 +853,18 @@ Multiple note files (one for each publication):
 - The template for notes is used to populate new note
   files.  (Previously it was only used in the case with one big notes
   file.)
+- 
 
 ** look at org sh links
 [[shell:sudo%20pacman%20-Syu][http://orgmode.org/manual/External-links.html#External-links
-shell:sudo pacman]] 
+shell:sudo pacman]]
+** R package GGally
+require(GGally)
+
+ggpairs(data=dataset, # data with variables
+        columns=1:3, # columns to plot, default = all.
+        title="title of the plot", # title of the plot
+        colour = "stn") # aesthetics, ggplot2 style
 ** screen blanking 
 loQok at 
 xset dpms 600

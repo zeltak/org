@@ -1269,7 +1269,7 @@ R package by lauren hunn
 -geoschem combine with aod qian 
 **** sattelite humidity
 lowest level
-*** TODO [#A] Joels ideas
+*** Joels ideas
 **** Idea for modeling PM2.5
 Let’s think about variations in air pollution concentrations. Some are spatial, some temporal, and some are spatio-temporal. Spatial variations are driven by variations in emissions, in topography, and in prevailing weather patterns. Land use attempts to capture these. Most land use terms capture emissions. Topography is an area that could be improved, as can prevailing weather. Can we classify places as in a valley? A plain? Downwind of prevailing weather patterns or upwind?  Near the sea or lakes? These are variables that may need some attention.
 Temporal variation can be conceptualized by thinking about a simple box model of the air above a location. The mixing height is the lid on the box. Wind speed moves emissions out of the box, but brings pollution from upwind. Hence it’s influence depends on the back trajectory of the air. That is, where the air over a city now was two days ago is an important predictor of its level. Importantly, it seems to me that what drives temporal variations is spatially homogeneous on a larger scale than what drives local spatial variation. That is why time series analyses work for large cities. The pollution is different, but goes up and down together. We need to capture this to improve our models.
