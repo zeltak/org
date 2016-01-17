@@ -6018,7 +6018,43 @@ Finally, enter the disk free (df) command to confirm you have successfully mount
 Can't Mount the Shared Folder? The user account you enter here must have access privileges for the shared folder that you wish to map.
 **** To fix the "remote host has disconnected" in sshfs
 I had to use admin instead of root login
+**** Enabling ssh services for non root/admin logins
+http://techanic.net/2014/04/12/configuring_ssh_and_scp_sftp_on_dsm_5.0_for_synology_diskstations.html
 
+DSM 5.0 includes two independent groups of service settings for SSH and SCP/SFTP.
+
+Enable the SSH service by checking the Control Panel → "Terminal & SNMP" menu → "Terminal" tab → "Enable SSH service" checkbox.
+
+Enable the SFTP service (not to be confused with FTPS!) by checking the Control Panel → "File Services" menu → "FTP" tab → "SFTP" group → "Enable SFTP service" checkbox.
+Enabling SSH Users
+
+At this point, you should be able to successfully SSH to your NAS when authenticating as root or admin. Both users will have the password you chose for admin during setup. By default, those are the only two users that will be able to log in via SSH.
+
+If you'd like to enable SSH for other users, SSH in as root, and edit the file /etc/passwd with vi. Each user has a corresponding line in this file, and a user's shell setting appears at the end of a given line, after the last colon. Any user that has the the default shell setting /sbin/nologin won't be able to log in via SSH. To enable SSH for a given user, change their shell setting to match the shell setting for the root and admin users, which should be /bin/sh. Be careful when editing the /etc/passwd file; for our purposes here, you should only change the shell setting that appears after the last colon on a given line.
+Enabling the User Home Service
+
+Upon SSHing in as any user besides root, you might see a warning message (this example is for the "admin" user):
+
+Could not chdir to home directory /var/services/homes/admin: No such file or directory
+
+This warning happens because home directories are controlled by DSM's "user home service", which is disabled by default. To prevent the error, enable the user home service by checking the Control Panel → "User" menu → "Advanced" tab → "User Home" group → "Enable user home service" checkbox.
+
+I recommend enabling the user home service even if you don't plan on using home directories, since leaving it disabled may cause some programs that rely on SCP/SFTP (rsync, etc) to abort with errors, regardless of which directory you're trying to manipulate.
+
+By default, a given user's home directory is located at /volume1/homes/username.
+Fixing Home Directory Permissions for SSH Public Key Authentication
+
+If you plan to use SSH public key authentication for a given user, the default permissions on user's home directories will prevent that. Making the permissions more restrictive (doing a chmod 755 on a user's home directory as root) will allow SSH public key authentication to work properly. Of course, the user's ~/.ssh folder and ~/.ssh/authorized_keys file also need to have the correct permissions (chmod 700 and chmod 644, respectively.)
+The Finish Line
+
+After performing all of the aforementioned configuration tweaks, you should now have a painless SSH and SCP/SFTP experience with your Synology DiskStation NAS.
+
+One final tip: I've determined through experimentation that shared folders are served relative to the filesystem root (/shared_folder) when accessing the NAS via SFTP, but are served relative to the volume folder (/volume1/shared_folder) when using SCP. If specifying paths one way doesn't work, try the other way.
+**** sshfs for synology
+use something like this:
+#+BEGIN_SRC sh  :results none
+sshfs zeltak@132.72.152.204:/home /home/zeltak/mounts/org  -o idmap=user  
+#+END_SRC
 *** ipkg
 Getting a list of programs
 you haven't yet, run ipkg update to get a current list of applications.

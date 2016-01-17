@@ -1,0 +1,13 @@
+library(dplyr)
+library(data.table)
+library(reshape2)
+library(Hmisc)
+library(mgcv)
+library(gdata)
+library(readr)
+mod2004<-read_rds("/media/NAS/Uni/Projects/P020_Temprature_NE_MIA/3.Work/3.Analysis/AN010_bestpred_csv/Fintmpc_2004.rds")
+mod2004x<-filter(mod2004, glong > -73.5 & glong < -69.6 & glat < 43 & glat > 41)
+mod2004x<-mutate(mod2004x, day=as.Date(strptime(date, "%d%b%Y")))
+mod2004x<-mutate(mod2004x,guid = paste( glong,glat,sep="") )
+mod2004x$date<-NULL
+write_rds(mod2004x,"/media/NAS/Uni/Projects/P020_Temprature_NE_MIA/3.Work/3.Analysis/AN010_bestpred_csv/MAtempc2004.rds")

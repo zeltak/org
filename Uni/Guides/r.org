@@ -8332,7 +8332,7 @@ Temp[, Temp.im := na.locf(Temp, na.rm = F)]
 describe(Temp[, list(Temp, Temp.im)])
 #+END_SRC
 
-** library(DataCombine)- lags
+** DataCombine- lags
 *** slide- create prev and next day lags
 @this will not work with data.table@
 #+BEGIN_SRC R
@@ -10094,6 +10094,11 @@ flights %>%
 flights <- flights %>% mutate(Speed = Distance/AirTime*60)
 #+END_SRC
 
+*** create a date and guid 
+#+BEGIN_SRC R :session Rorg  :results none
+mod2000x<-mutate(mod2000x, day=as.Date(strptime(date, "%d%b%Y")))
+mod2000x<-mutate(mod2000x,guid = paste( glong,glat,sep="") )
+#+END_SRC
 *** create a new variable based in conditions
 **** using dplyr extra
 $Note$ you need to install the package first:

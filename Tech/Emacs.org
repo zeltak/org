@@ -1856,7 +1856,11 @@ It opens a new window like this.
 Go to Utilities -> File manager, select Other and select emacsfm from it.
 
 Now if you go to browser downloads and click on show in folder, it will emacs dired.
+** Help
+*** find out color face your currently on
+Place the cursor over a given element in an org file and use the command 〖customize-face〗, and Emacs will present the face of the current text you’re on as the default argument. That makes it easy to visually identify what you want to change and quickly jump to its customization page.
 
+another option is to use 〖describe-face〗
 ** copy,cut,paste
 
 *** kill-rectangle  replace-rectangle
@@ -9730,6 +9734,37 @@ use this format with the elisp function
 #+BEGIN_SRC emacs-lisp :results none
 [[elisp:(org-agenda%20nil%20"w")][TO-COOK]]
 #+END_SRC
+*** link-abbrev
+
+you can define the variable org-link-abbrev-alist by doing the following:
+
+#+BEGIN_SRC emacs-lisp  :results none
+(setq org-link-abbrev-alist
+   '(("directory1"  . "c:/Path/") ;; Windows
+     ("directory2"  . "~/Path/"))) ;; Linux/OSX
+#+END_SRC
+Alternatively, if you don't want these settings to apply to all your org-mode files, you can just put the following in the header of the org-mode files you DO want the settings to apply to:
+
+#+BEGIN_EXAMPLE
+#+LINK: directory1 c:/Path/
+#+LINK: directory 2 ~/Path/
+#+END_EXAMPLE
+
+To then link to these files from within your org-mode file(s), use the following:
+
+#+BEGIN_EXAMPLE
+[[directory1:file1.txt][file1.txt]]
+#+END_EXAMPLE
+
+for example to have a link to the ~/bin folder
+
+#+BEGIN_EXAMPLE
+(setq org-link-abbrev-alist
+   '(("directory1"  . "c:/Path/") ;; Windows
+     ("bin"  . "~/bin/"))) ;; Linux/OSX
+
+[[bin:urs.sh]]
+#+END_EXAMPLE
 
 ** attach
 *** set default dir
