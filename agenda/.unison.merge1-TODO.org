@@ -6,15 +6,59 @@
 #+LaTeX_CLASS_OPTIONS: [garamond]
 
 * `TODO`							 
-** install ttf-noto at home
-** ask rasi about infinality setup
-** investigate marks, global marks and pop marks 
+** explore dired root
+Yes, just type /sudo:root@localhost/... when C-x C-f asks you for file name. This will open a trampified dired where dired-do-chown and other dired commands work just fine.
+
+(Note that you can press TAB after /sudo:, and minibuffer completion will insert the @localhost boilerplate.)
+
+http://tuhdo.github.io/helm-intro.html#sec-7
+
+
+No key binding. We should give it one:
+
+(global-set-key (kbd "C-x b") 'helm-mini)
+
+To enable fuzzy matching, add the following settings:
+
+(setq helm-buffers-fuzzy-matching t
+      helm-recentf-fuzzy-match    t)
+
+helm-mini comprises of multiple sources:
+
+    Current opening buffers, under the header Buffers.
+    Recently opened files, under the header Recentf.
+    Allow you to create a new buffer by pressing RET, under the header Create Buffer.
+
+You can move back and forth between the groups by using <left> and <right> arrow keys. Or you can just scroll down/up with C-v and M-v.
+
+You can filter out buffers by major mode using the pattern *<major-mode>. For example, *dired narrows to only Dired buffers. You can also filter out buffers that belong to a major mode by adding ! to the pattern. For example, *!dired select all buffers that are not in Dired mode.
+
+You can also select buffers in a specific directory by using the pattern /directory. For example, /.emacs.d/ narrows to buffers that are only inside .emacs.d. Add ! before the pattern for reverse version. For example, !/.emacs.d/ narrows to buffers not in .emacs.d.
+
+You can even use helm-mini to narrow to buffers that contains a regexp in their contents, by appending @ before the search pattern. For example, you can select buffers that only contain the string "test": @test. If you want to see the locations of the string in the buffers, mark all the buffer with M-a and C-s while in helm-mini session, to switch to helm-moccur. You can mark buffers to search by C-SPC. When you switch to helm-moccur, matches that are in selected buffers are displayed. You can also perform occur only on the current buffer with prefix argument: C-u C-s; this is useful when you already marked buffers but don't want to unmark just to view only in a buffer. However, in general, you won't need C-u C-s.
+
+Meaning of colors and prefixes for buffers:
+
+    Remote buffers are prefixed with '@'.
+    Red => Buffer have its file modified on disk by an external process.
+    Indianred2 => Buffer exists but its file have been deleted.
+    Orange => Buffer is modified and its file not saved to disk.
+    Italic => A non-file buffer.
+
+Some Emacs themes change the colors. You should check the corresponding colour in your color themes.
+
+Example:
+
+    If I enter in pattern prompt: *lisp ^helm @moc, Helm will narrow down the list by selecting only buffers that are in lisp mode, start by helm and match "moc" in their contents.
+    If I want to specify more than one major-mode, separate them with ,, e.g *!lisp,!sh,!fun will list all buffers but the ones in lisp-mode, sh-mode and fundamental-mode.
+    If I enter in pattern prompt: *lisp ^helm moc. Notice there is no @ this time helm will look for lisp mode buffers starting by "helm" and have "moc" in their name.
+    If I enter in pattern prompt: *!lisp !helm Helm will narrow down to buffers that are not in "lisp" mode and that do not match "helm".
+    If I enter in pattern prompt: /helm/ w3 Helm will narrow down buffers that are in any "helm" sub-directory and matching w3.
+
+    helm-mini is like an interactive version of ibuffer.
 ** abbrv mode for quick ssh and change dirs in FF
 ** dired buffer cleanup
-   :PROPERTIES:
-   :ID:       6d487755-ec3d-4d34-ada8-92dfc213e956
-   :END:
-  http://emacs.stackexchange.com/questions/13552/how-to-make-dired-mode-copy-and-move-all-marked-file-in-all-dired-buffer-includi
+http://emacs.stackexchange.com/questions/13552/how-to-make-dired-mode-copy-and-move-all-marked-file-in-all-dired-buffer-includi
 
     diredp-toggle-find-file-reuse-dir does not prevent you from opening multiple Dired buffers for different directories (e.g. subdirs). It should be irrelevant here, but you might want to describe just what you are doing, step by step.
 
@@ -50,9 +94,6 @@ Tasks can live in multiple projects, so there’s no need to duplicate work. Thi
 **** Merge Duplicate Tasks?
 **** check orgmode
 *** calendar
-    :PROPERTIES:
-    :ID:       1f6787e0-4137-410f-a490-22d188189289
-    :END:
 The +1w implies that this event will repeat every week at the same time & date, ad infinitum. The number can be changed, and the usual codes can replace w (e.g. d for days, etc) (See below for more advanced repeating events.) 
 
 The other two kinds go on TODOs, and often go together. If I have to renew my SSL certificate before the 11th of January 2016, I might write it like so: 
@@ -1232,9 +1273,3 @@ http://poignant.guide/
 ** flip belt
 https://flipbelt.com/flipbelt
 ** [[http://ftfl.ca/blog/2015-12-28-emacs-clipboard-manager.html][Emacs as an X Clipboard Manager]]
-
-
-
-
-
-

@@ -2995,3 +2995,50 @@ quick switch other windw
   ;;          bef aft))))
 #+END_SRC
 
+
+* org-caldav-sync
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-15 Fri 09:47
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages
+  :ARCHIVE_CATEGORY: settings
+  :END:
+
+#+BEGIN_SRC emacs-lisp :results none
+(use-package  org-caldav
+ :ensure t
+ :config
+ (require 'org-caldav)
+
+(setq org-caldav-url "https://www.google.com/calendar/dav")
+(setq org-caldav-calendar-id "ikloog@gmail.com")
+(setq org-caldav-inbox (expand-file-name "/home/zeltak/org/files/PIM/org-caldev.org"))
+(setq org-caldav-files '("/home/zeltak/org/files/agenda/gcal.org"))
+ )
+#+END_SRC
+
+* org-gcal
+  :PROPERTIES:
+  :ID:       c93bd6d4-28e3-44ca-a492-6a36a1c74ad9
+  :ARCHIVE_TIME: 2016-01-15 Fri 10:01
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages
+  :ARCHIVE_CATEGORY: settings
+  :END:
+
+see [[id:c93bd6d4-28e3-44ca-a492-6a36a1c74ad9][org-gcal]] for how to set this up again in case you get errors 
+
+#+BEGIN_SRC emacs-lisp :results none
+(use-package org-gcal 
+ :ensure t
+ :config
+(require 'org-gcal)
+(setq org-gcal-client-id "915933520493-ppckdh9b038tb5u039c0b8s06bdkio98.apps.googleusercontent.com "
+      org-gcal-client-secret "1hy--1nQE-xUjVyR8MLYt5WJ"
+      org-gcal-file-alist '(
+("ikloog@gmail.com" .  "/home/zeltak/org/files/PIM/gcal.org")
+))
+;for closing use package
+)
+#+END_SRC 
+

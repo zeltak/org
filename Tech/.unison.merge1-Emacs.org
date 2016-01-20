@@ -1626,12 +1626,6 @@ add a shell command like
       (shell-command "notify-send fb uploaded")
 )))
 #+end_src
-*** launch a command with a prefix argument
-**** In hydra
-#+BEGIN_SRC emacs-lisp  :results none
-("N"  set-mark-command 4 "mark prev" )
-#+END_SRC
-$Note$ the 4 prefix 
 
 ** Functions
 *** basic info
@@ -4075,13 +4069,6 @@ if you downloaded a simple emacs package on the web named xyz.el: To use the pac
 use |M-x| load-file then give the file path.
 
 Now, emacs is aware of the package. To activate, call the command in the package. For example, if the file name is 'xyz.el', then the command to activate it is typically xyz or xyz-mode.
-
-to use load-file in your initial
-#+BEGIN_SRC emacs-lisp  :results none
-(add-to-list 'load-path "/home/zeltak/.emacs.g/tmtxt-async-tasks")
-(require 'tmtxt-async-tasks)
-#+END_SRC
-
 *** El-get
 **** install it
 just add this in your config:

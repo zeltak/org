@@ -498,8 +498,10 @@ systemctl enable cronie
 ***** pacman 
 
 #+BEGIN_SRC sh
-pacman -S emacs rsync ttf-liberation tree ncdus nfs-utils rpcbind terminator r mc  flac lame abiword keepassx dzen2 zip unzip unrar mtpaint krename gmrun aspell aspell-en findutils inkscape python-lxml gcolor2 easytag kdiff3  htop p7zip vlc smb4k screen tmux speedcrunch mlocate vim gvim mpd mpc atool lynx profont fb-client feh keychain picard  gdb mp3gain pacgraph sqliteman grep awk leafpad less lxappearance pavucontrol net-tools sshfs xterm zsh samba xclip lxtask pydf xorg-xkill nmap acpi audacity nmon  powertop ttf-inconsolata sxhkd git zsh firefox chromium ncmpcpp gmpc gcc filezilla gimp jre7-openjdk kdegraphics-okular
+pacman -S emacs rsync tree ncdus nfs-utils rpcbind terminator r mc  flac lame abiword keepassx dzen2 zip unzip unrar mtpaint krename gmrun aspell aspell-en findutils inkscape python-lxml gcolor2 easytag kdiff3  htop p7zip vlc smb4k screen tmux speedcrunch mlocate vim gvim mpd mpc atool lynx profont fb-client feh keychain picard  gdb mp3gain pacgraph sqliteman grep awk leafpad less lxappearance pavucontrol net-tools sshfs xterm zsh samba xclip lxtask pydf xorg-xkill nmap acpi audacity nmon  powertop  sxhkd git zsh firefox chromium ncmpcpp gmpc gcc filezilla gimp jre7-openjdk kdegraphics-okular
 meld offlineimap remmina skype texlive-bin texlive-core texlive-most thunar wine wget curl xournal xsel  mosh w3m imagemagick graphicsmagick thunar pinta dconf-editor icedtea-web remmina tigervnc  android-tools mediainfo tk pinta  the_silver_searcher 
+#fonts
+ttf-bitstream-vera ttf-inconsolata ttf-ubuntu-font-family ttf-dejavu ttf-freefont ttf-linux-libertine ttf-liberation
 #for R
 gcc-fortan
 # for usb mounting
@@ -521,7 +523,7 @@ pip python-requests
 #show keyboard layouts
 xkblayout-state
 #fonts
-minionpro 
+minionpro ttf-noto
 #+END_SRC
 
 ***** unoffical repos
