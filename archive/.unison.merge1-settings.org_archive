@@ -3042,3 +3042,25 @@ see [[id:c93bd6d4-28e3-44ca-a492-6a36a1c74ad9][org-gcal]] for how to set this up
 )
 #+END_SRC 
 
+
+* ols sr
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-18 Mon 12:59
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Dired/functions
+  :ARCHIVE_CATEGORY: settings
+  :END:
+old SR
+ #+BEGIN_SRC emacs-lisp
+   ;; (defun z/dired-beet-import ()
+   ;;   (interactive)
+   ;;   (sr-term)
+   ;;   (let* ((fmt "beet import %s\n")
+   ;;          (file (sr-clex-file sr-selected-window))
+   ;;          (command (format fmt file)))
+   ;;     (if (not (equal sr-terminal-program "eshell"))
+   ;;         (term-send-raw-string command)
+   ;;       (insert command)
+   ;;       (eshell-send-input))))
+ #+END_SRC 
+

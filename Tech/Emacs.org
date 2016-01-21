@@ -2721,6 +2721,25 @@ The add-hook line will make emacs call “highlite-it” whenever a file is open
 
 find-file is the function that open files. find-file-hook is a variable containing list of functions that will run when find-file is run.
 ** ELISP library 
+*** file at point 
+
+for full path+name use: 
+
+#+BEGIN_SRC emacs-lisp  :results none
+(dired-file-name-at-point)
+#+END_SRC
+
+to exclude the path use: 
+
+#+BEGIN_SRC emacs-lisp  :results none
+(file-relative-name (dired-file-name-at-point)) 
+#+END_SRC
+
+finally to take out the trailing '/' when on a directory
+
+#+BEGIN_SRC emacs-lisp  :results none
+(directory-file-name (file-relative-name (dired-file-name-at-point)))
+#+END_SRC
 *** send message to echo area 
 #+BEGIN_SRC emacs-lisp
 (message (propertize "changed mode to executable" 'face 'font-lock-warning-face))
@@ -4000,6 +4019,20 @@ Where the fset line was added by using M-x insert-kbd-macro and then selecting t
 You can use M-x edit-named-kbd-macro to see a nicer view of your macro and tweak it if needed.
 
 Finally, note that macros are not limited to simple editing commands. You can e.g. create, edit and save new files or do other more complex procedures within a macro. 
+**** execute a keyboard macro in elisp (like a function)
+
+When you use ‘name-last-kbd-macro’, the string that defines the keyboard macro becomes the function definition of the macro name you provide. You cannot call such a macro by name in Emacs Lisp as if it were a function. For example, if you named the keyboard macro “foo”, then you cannot simply write (foo) in Lisp to execute the macro. Instead, you must use the function ‘execute-kbd-macro’ as follows:
+(execute-kbd-macro (symbol-function 'foo))
+
+₆In example₆ 
+
+define the macro first
+#+BEGIN_SRC emacs-lisp  :results none
+(fset 'z/dired-macro-beetimp
+   [?& ?b ?e ?e ?t ?  ?i ?m ?p ?o ?r ?t ])
+;;then to execute the macro from a keybind or in lisp
+(execute-kbd-macro (symbol-function 'z/dired-macro-beetimp))
+#+END_SRC
 
 **** edit a macro while its running
 when your recored a macro press ~c-x q~ while its running to specify a stop in the macro
