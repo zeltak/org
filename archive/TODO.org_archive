@@ -3242,3 +3242,113 @@ Example:
     If I enter in pattern prompt: *!lisp !helm Helm will narrow down to buffers that are not in "lisp" mode and that do not match "helm".
     If I enter in pattern prompt: /helm/ w3 Helm will narrow down buffers that are in any "helm" sub-directory and matching w3.
 
+
+* ask rasi about infinality setup
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-22 Fri 01:58
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`
+  :ARCHIVE_CATEGORY: tasks
+  :END:
+
+* TODO dired-file-name-at-point >> find out the eq command without path just the name at point
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-22 Fri 01:58
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`
+  :ARCHIVE_CATEGORY: tasks
+  :ARCHIVE_TODO: TODO
+  :END:
+
+* TODO rebuild org-agenda
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-22 Fri 02:09
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`
+  :ARCHIVE_CATEGORY: tasks
+  :ARCHIVE_TODO: TODO
+  :END:
+(run-with-idle-timer 30 t #'org-agenda-redo) ;; to rebuild it every 30 seconds
+
+* main Emacs server 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-23 Sat 21:54
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`/@org revison@
+  :ARCHIVE_CATEGORY: tasks
+  :END:
+I have a computer always running an emacs server, and I connect to it from my android phone using JuiceSSH. To see the org agenda in my google calendar I export every now and then the agenda to an ics file in the cloud using org-icalendar-combined-agenda-file. In google I have the address to that file as one of the calendars (from the calendar "Other calendars", "Add by URL").
+
+* calendar
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-23 Sat 21:57
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`/@org revison@
+  :ARCHIVE_CATEGORY: tasks
+  :END:
+This means that the TODO will appear on today's entry in the calender from the 11th of December onwards (until I mark it DONE), and the deadline on the 11th of January will also come up on that day (in red). - See more at: http://www.snell-pym.org.uk/archives/2015/01/20/how-im-managing-my-life-with-emacs-org-mode/#sthash.Gka0xles.dpuf
+
+* revise leuven for better agenda/TODO color scheme
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-23 Sat 21:58
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`/@org revison@
+  :ARCHIVE_CATEGORY: tasks
+  :END:
+
+* create a daily agenda in orgmode somwhow
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-23 Sat 22:02
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`/@org revison@
+  :ARCHIVE_CATEGORY: tasks
+  :END:
+will show me things to do today rankedb
+
+* TODO gen 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-23 Sat 23:03
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`/@org revison@/org todo
+  :ARCHIVE_CATEGORY: tasks
+  :ARCHIVE_TODO: TODO
+  :END:
+bind keys for specific todo/spare functions (₆In example₆ allan) 
+general- small letter todo list , CAPITAL sparse tree
+
+* WORK files
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-23 Sat 23:04
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`/@org revison@/org todo
+  :ARCHIVE_CATEGORY: tasks
+  :END:
+located at 2 files: research and bgu
+research for all Sci stuff
+BGU for all admin/student/etc
+
+* TODO Tasks in multiple projects?
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-23 Sat 23:04
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`/@org revison@/org todo
+  :ARCHIVE_CATEGORY: tasks
+  :ARCHIVE_TODO: TODO
+  :END:
+Tasks can live in multiple projects, so there’s no need to duplicate work. This is especially useful for cross-functional Teams.
+
+* Merge Duplicate Tasks?
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-23 Sat 23:04
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`/@org revison@/org todo
+  :ARCHIVE_CATEGORY: tasks
+  :END:
+
+* check orgmode
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-23 Sat 23:04
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`/@org revison@/org todo
+  :ARCHIVE_CATEGORY: tasks
+  :END:

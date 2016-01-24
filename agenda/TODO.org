@@ -7,15 +7,10 @@
 
 * `TODO`							 
 ** install ttf-noto at home
-** ask rasi about infinality setup
 ** investigate marks, global marks and pop marks 
 ** abbrv mode for quick ssh and change dirs in FF
 ** dired todos 
 using workgroups2 to create dired workgroups?
-
-** TODO dired-file-name-at-point >> find out the eq command without path just the name at point
-** TODO rebuild org-agenda
-(run-with-idle-timer 30 t #'org-agenda-redo) to rebuild it every 30 seconds
 ** attach from dired to email message
 explore mu4e and or gnus
 http://emacs.stackexchange.com/questions/14652/attach-multiple-files-from-the-same-directory-to-an-email-message
@@ -39,34 +34,21 @@ IOW, this comes under the heading of "If it hurts, don't do it." If you purposel
 
 In sum, reuse when you want, and don't reuse when you want. Both behaviors are available at all times. If you start marking things, then think before you use RET to change directories - use C-x d or C-x 4 d instead. It's probably just a question of habit. And don't forget that you have i too.
 ** @org revison@
-*** main Emacs server 
-I have a computer always running an emacs server, and I connect to it from my android phone using JuiceSSH. To see the org agenda in my google calendar I export every now and then the agenda to an ics file in the cloud using org-icalendar-combined-agenda-file. In google I have the address to that file as one of the calendars (from the calendar "Other calendars", "Add by URL").
 *** TODO org todo
+**** http://juanreyero.com/article/emacs/org-teams.html
 **** context?
 To make the choosing easier, I mark TODOs with a "context", indicating where I can do them. Mine are @HOME for things I need to be in the house for, @COMPUTER for things I just need to be at a computer for, @BUY for things to buy (when I have spare money), @TRIP for things I need to make a trip outdoors for (buying things I can't buy online, for instance, or visiting people), and @MEETING for stuff I can only do at a meeting (I have meetings with my Scout group leadership, and the Cheltenham Hackspace committee). - See more at: http://www.snell-pym.org.uk/archives/2015/01/20/how-im-managing-my-life-with-emacs-org-mode/#sthash.Gka0xles.dpuf
-**** TODO gen 
-bind keys for specific todo/spare functions (₆In example₆ allan) 
-general- small letter todo list , CAPITAL sparse tree
-**** WORK files
-located at 2 files: research and bgu
-research for all Sci stuff
-BGU for all admin/student/etc
 **** misc
 create todos based on tags and TODO
 for example todo with allan (tag)
-**** TODO Tasks in multiple projects?
-Tasks can live in multiple projects, so there’s no need to duplicate work. This is especially useful for cross-functional Teams.
-**** Merge Duplicate Tasks?
-**** check orgmode
-*** calendar
-    :PROPERTIES:
-    :ID:       1f6787e0-4137-410f-a490-22d188189289
-    :END:
-The +1w implies that this event will repeat every week at the same time & date, ad infinitum. The number can be changed, and the usual codes can replace w (e.g. d for days, etc) (See below for more advanced repeating events.) 
+*** infastuctre
+main repo-laptop
+at work- connect via ssh to a tmux session with Emacs client (capture agenda etc)
+and if editing needed use tramp to connect to laptop via gui Emacs
 
-The other two kinds go on TODOs, and often go together. If I have to renew my SSL certificate before the 11th of January 2016, I might write it like so: 
+then daily push the org repo to zuni to act as a central repo
 
-This means that the TODO will appear on today's entry in the calender from the 11th of December onwards (until I mark it DONE), and the deadline on the 11th of January will also come up on that day (in red). - See more at: http://www.snell-pym.org.uk/archives/2015/01/20/how-im-managing-my-life-with-emacs-org-mode/#sthash.Gka0xles.dpuf
+backup- laptop>git>rsync>zuni
 *** explore category
 #+CATEGORY: tasks
 
@@ -121,7 +103,6 @@ http://www.cse.msu.edu/~cse914/F02/Public/Papers/Bibtex/bibtex2html-doc.htm
 **** bibtool
 http://www.gerd-neugebauer.de/software/TeX/BibTool/index.en.html
 generate keys?
-*** revise leuven for better agenda/TODO color scheme
 *** R
 **** update template to use codeblock name
 also see:
@@ -169,9 +150,7 @@ this will sync that $Note$ to your laptop
 once every X days make sure to refile that note
 *** From Web browsers
 *** org agenda
- use multi occur hotkeys?
-*** create a daily agenda in orgmode somwhow
-will show me things to do today rankedb
+ use multi occur hotkeys in the dispatcher?
 ** Ref library 2.0
 *** personal (ikloog library)
 when a new paper is finally published and has a DOI:

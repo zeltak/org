@@ -4,7 +4,7 @@
 * LEARN
 ** TODO ask allan
 *** how to add x1-50 columns in a regression 
-*** the take first date in a sorted list 
+*** TODO the take first date in a sorted list
 proc sort data=mod1y1; by sitecode date dist2mon;
 data mod1y2; set mod1y1; by sitecode date dist2mon;
 if first.date;
