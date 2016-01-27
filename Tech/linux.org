@@ -12081,11 +12081,114 @@ You need to press ctrl+a then TYPE resize and define line numbers
  
 **** tmux
 ***** Intro
+***** tmux cheatsheet
+    start new:
 
-#+DOWNLOADED: /tmp/screenshot.png @ 2015-01-03 21:26:37
-#+attr_html: :width 700px
+    #+BEGIN_EXAMPLE
+     tmux
+    #+END_EXAMPLE
 
- [[/home/zeltak/org/attach/images_2014/screenshot_2015-01-03_21:26:37.png]]
+    start new with session name:
+
+    #+BEGIN_EXAMPLE
+	tmux new -s myname
+    #+END_EXAMPLE
+
+    attach:
+
+    #+BEGIN_EXAMPLE
+	tmux a  #  (or at, or attach)
+    #+END_EXAMPLE
+
+    attach to named:
+
+    #+BEGIN_EXAMPLE
+	tmux a -t myname
+    #+END_EXAMPLE
+
+    list sessions:
+
+    #+BEGIN_EXAMPLE
+	tmux ls
+    #+END_EXAMPLE
+
+    kill session:
+
+    #+BEGIN_EXAMPLE
+	tmux kill-session -t myname
+    #+END_EXAMPLE
+
+    In tmux, hit the prefix =ctrl+b= and then:
+
+****** Sessions
+
+    #+BEGIN_EXAMPLE
+	:new<CR>  new session
+	s  list sessions
+	$  name session
+    #+END_EXAMPLE
+
+****** Windows (tabs)
+
+    #+BEGIN_EXAMPLE
+	c           new window
+	,           name window
+	w           list windows
+	f           find window
+	&           kill window
+	.           move window - prompted for a new number
+	:movew<CR>  move window to the next unused number
+    #+END_EXAMPLE
+
+****** Panes (splits)
+
+    #+BEGIN_EXAMPLE
+	%  horizontal split
+	"  vertical split
+
+	o  swap panes
+	q  show pane numbers
+	x  kill pane
+	⍽  space - toggle between layouts
+    #+END_EXAMPLE
+
+****** Window/pane surgery
+
+    #+BEGIN_EXAMPLE
+	:joinp -s :2<CR>  move window 2 into a new pane in the current window
+	:joinp -t :1<CR>  move the current pane into a new pane in window 1
+    #+END_EXAMPLE
+
+    -  [[http://unix.stackexchange.com/questions/14300/tmux-move-window-to-pane][Move
+       window to pane]]
+    -  [[http://superuser.com/questions/343572/tmux-how-do-i-reorder-my-windows][How
+       to reorder windows]]
+
+****** Misc
+
+    #+BEGIN_EXAMPLE
+	d  detach
+	t  big clock
+	?  list shortcuts
+	:  prompt
+    #+END_EXAMPLE
+
+    Resources:
+
+    -  [[http://cheat.errtheblog.com/s/tmux/][cheat sheet]]
+
+    Notes:
+
+    -  You can cmd+click URLs to open in iTerm.
+
+    TODO:
+
+    -  Conf copy mode to use system clipboard. See PragProg book.
+
+    #+DOWNLOADED: /tmp/screenshot.png @ 2015-01-03 21:26:37
+    #+attr_html: :width 700px
+
+     [[/home/zeltak/org/attach/images_2014/screenshot_2015-01-03_21:26:37.png]]
 
 ***** Windows/panes
 ****** switching windows

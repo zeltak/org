@@ -7527,7 +7527,6 @@ use this
 "M-m"s will toggle back and forth between marked and unmarked. Hit "U"to unmark all.
 
 Then hit "B" to get a little dispatcher asking you what to do with the marked headings.
-
 ** Todo
 *** PULL TODO from a set of files/ALL
 you can define where to pull TODO to the agenda view
@@ -7582,6 +7581,38 @@ the +1m is a repeater; the intended interpretation is that the task has a deadli
 #+BEGIN_EXAMPLE
 DEADLINE: <2005-10-01 Sat +1m -3d>.  
 #+END_EXAMPLE
+
+** Tags
+*** filetags
+Filetags
+
+Filetags are a convenient way to apply one or more tags to all of the headings in a file.
+
+Filetags look like this:
+
+#+BEGIN_SRC emacs-lisp  :results none
+#+FILETAGS: NORANG @office
+#+END_SRC
+
+*** mutually exclusive
+tags that when selecting one will overwrite the other:
+You can also group together tags that are mutually exclusive by using braces, as in:
+
+#+BEGIN_EXAMPLE
+#+TAGS: { @work(w)  @home(h)  @tennisclub(t) }  laptop(l)  pc(p)
+#+END_EXAMPLE
+
+you indicate that at most one of ‘@work’, ‘@home’, and ‘@tennisclub’ should be selected. Multiple such groups are allowed. 
+
+To set these mutually exclusive groups in the variable org-tag-alist, you must use the dummy tags :startgroup and :endgroup instead of the braces. Similarly, you can use :newline to indicate a line break. The previous example would be set globally by the following configuration:
+
+#+BEGIN_SRC emacs-lisp  :results none
+     (setq org-tag-alist '((:startgroup . nil)
+                           ("@work" . ?w) ("@home" . ?h)
+                           ("@tennisclub" . ?t)
+                           (:endgroup . nil)
+                           ("laptop" . ?l) ("pc" . ?p)))
+#+END_SRC
 
 ** archiving
 *** base
@@ -7936,6 +7967,18 @@ to fix this disable linium mode in org with the following hook
 
 
 #+END_SRC
+** Categories
+The category is a broad label assigned to each agenda item. By default, the category is simply derived from the file name, but you can also specify it with a special line in the buffer, like this:
+
+#+BEGIN_EXAMPLE
+#+CATEGORY: Thesis
+#+END_EXAMPLE
+
+If you would like to have a special CATEGORY for a single entry or a (sub)tree, give the entry a :CATEGORY: property with the special category you want to apply as the value.
+
+The display in the agenda buffer looks best if the category is not longer than 10 characters.
+
+You can set up icons for category by customizing the org-agenda-category-icon-alist variable. 
 ** capture
 *** org setup
 make sure you have 
@@ -10418,8 +10461,11 @@ Student	Maths	Physics	Mean
 Bertrand	13	09	11
 Henri	15	14	14.5
 Arnold	17	13	15
-Means	15	12	 
-
+Means	15	12
+** org-secratery
+http://juanreyero.com/article/emacs/org-teams.html
+*** binds 
+I always start a meeting telling emacs who I am with, using 【C-c w】. If I am with more than one person I enter all the names separated by spaces. I sometimes also say where I am, using【 C-c W】. Then I do【 C-c a j】 for specific agenda view. 
 * EOF settings
 Local variables:
 buffer-read-only: t
