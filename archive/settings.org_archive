@@ -3064,3 +3064,35 @@ old SR
    ;;       (eshell-send-input))))
  #+END_SRC 
 
+
+* old load theme
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-27 Wed 14:04
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Emacs startup
+  :ARCHIVE_CATEGORY: settings
+  :END:
+#+BEGIN_SRC emacs-lisp  :results none
+;;;; below works but changes GUI apps theme when launching term..not good..maybe look into this in future  
+
+;; ;; last t is for NO-ENABLE
+  ;;   (load-theme 'zprime t t)
+  ;;   (load-theme 'tango-dark t t)
+  
+  ;;   (defun mb/pick-color-theme (frame)
+  ;;     (select-frame frame)
+  ;;     (if (window-system frame)
+  ;;         (progn  
+  ;;           (disable-theme 'tango-dark) ; in case it was active
+  ;;           (enable-theme 'zprime))
+  ;;       (progn  
+  ;;         (disable-theme 'zprime) ; in case it was active
+  ;;         (enable-theme 'tango-dark))))
+  ;;   (add-hook 'after-make-frame-functions 'mb/pick-color-theme)
+  
+  ;;   ;; For when started with emacs or emacs -nw rather than emacs --daemon
+  ;;   (if window-system
+  ;;       (enable-theme 'zprime)
+  ;;     (enable-theme 'tango-dark))
+
+#+END_SRC

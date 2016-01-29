@@ -2695,6 +2695,21 @@ online)
  sudo apt-get install -y tmux=2.0-1~ppa1~t
  #+END_SRC
  now if you do tmux -V it should show tmux 2.0 which is a good version for tmux plugins
+*** install fira font
+Install the Fira 3.1 Fonts system wide:
+#+BEGIN_SRC sh  :results none
+sudo mkdir -p /usr/share/fonts/truetype/FiraSans
+sudo mkdir -p /usr/share/fonts/opentype/FiraSans
+cd ~
+wget dev.carrois.com/wordpress/wp-content/uploads/downloads/fira_3_1/FiraMono3106.zip
+wget dev.carrois.com/wordpress/wp-content/uploads/downloads/fira_3_1/FiraSans3106.zip
+unzip FiraSans3106.zip
+unzip FiraMono3106.zip
+sudo cp ~/Fira*/WEB/*.ttf /usr/share/fonts/truetype/FiraSans/
+sudo cp ~/Fira*/OTF/Fira* /usr/share/fonts/opentype/FiraSans/
+dsudo fc-cache -f -v
+#+END_SRC
+
 *** fix language and date settings in Ubuntu family
 open a file in text editor: /etc/default/locale.
 

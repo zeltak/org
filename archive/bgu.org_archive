@@ -939,3 +939,20 @@ also generate 1km for the entire 2009
   :ARCHIVE_TODO: TODO
   :END:
 look at multi spectral lan data
+
+* TODO לגבי ה-IDW, לא חובה לעבוד עם אובייקטים מרחביים (SpatialPointsDataFrame), אפשר לעבוד עם data.frame.
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-01-27 Wed 14:23
+  :ARCHIVE_FILE: ~/org/files/agenda/bgu.org
+  :ARCHIVE_OLPATH: TD
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: TODO
+  :END:
+https://mail.google.com/mail/u/0/#search/%3Cmichael.dorman%40mail.huji.ac.il%3E+Re%3A+Link/14e07836f0d509d7
+
+אם יש לך data.frame עם תצפיות (למשל rainfall) עם עמודות קואורדינטות (x ו-y) ועמודה של משתנה תלוי (annual) ו-data.frame של הנקודות עבורן אתה רוצה לבצע את החיזוי (למשל towns), גם כן עם עמודות קואורדינטות (x ו-y), מדובר בשתי שורות קוד -
+
+model = gstat(formula = annual ~ 1, locations = ~ x + y, data = rainfall)
+predict(object = model, newdata = towns)
+
+האובייקט model בדוגמה הנ"ל, מהמחלקה gstat, מכיל את כל המידע הנחוץ לביצוע חיזוי או cross-validation בשיטה שנבחרה (IDW) עם נתוני הכיול הרלוונטיים. בחירת השיטה, דרך אגב, מתבצעת אוטומטית עפ"י סט הארגומנטים של הפונקציה (אתה יכול לראות את זה בשקף 20 של המצגת המצורפת). הסט הנ"ל קובע שהמודל יהיה IDW, עם סט שונה של ארגומנטים ייבחר kriging וכו'. רצוי שהקואורדינטות יהיו ב-projection ולא קווי אורך ורוחב כי עובדים עם מרחקים, אבל באזור קטן כמו ישראל זה לא כל כך משנה. מצ"ב קוד עם דוגמה שאפשר לשחזר.

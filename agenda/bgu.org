@@ -115,15 +115,6 @@ you get the bonus in salary for this in Oct/Janurary/April/July
 ** TODO close all budget 01.03.2016
    DEADLINE: <2016-02-28 Sun>
 ** TODO explore the use of SSD swap for R RAM demands
-** TODO לגבי ה-IDW, לא חובה לעבוד עם אובייקטים מרחביים (SpatialPointsDataFrame), אפשר לעבוד עם data.frame.
-https://mail.google.com/mail/u/0/#search/%3Cmichael.dorman%40mail.huji.ac.il%3E+Re%3A+Link/14e07836f0d509d7
-
-אם יש לך data.frame עם תצפיות (למשל rainfall) עם עמודות קואורדינטות (x ו-y) ועמודה של משתנה תלוי (annual) ו-data.frame של הנקודות עבורן אתה רוצה לבצע את החיזוי (למשל towns), גם כן עם עמודות קואורדינטות (x ו-y), מדובר בשתי שורות קוד -
-
-model = gstat(formula = annual ~ 1, locations = ~ x + y, data = rainfall)
-predict(object = model, newdata = towns)
-
-האובייקט model בדוגמה הנ"ל, מהמחלקה gstat, מכיל את כל המידע הנחוץ לביצוע חיזוי או cross-validation בשיטה שנבחרה (IDW) עם נתוני הכיול הרלוונטיים. בחירת השיטה, דרך אגב, מתבצעת אוטומטית עפ"י סט הארגומנטים של הפונקציה (אתה יכול לראות את זה בשקף 20 של המצגת המצורפת). הסט הנ"ל קובע שהמודל יהיה IDW, עם סט שונה של ארגומנטים ייבחר kriging וכו'. רצוי שהקואורדינטות יהיו ב-projection ולא קווי אורך ורוחב כי עובדים עם מרחקים, אבל באזור קטן כמו ישראל זה לא כל כך משנה. מצ"ב קוד עם דוגמה שאפשר לשחזר.
 ** TODO Return for 9500 Data layer
 -Talk to rachel and then RA about billing the haifa grant
 -also check about geocoding buy if not succesful

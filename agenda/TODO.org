@@ -7,6 +7,10 @@
   :ID:       a203c0fe-e98d-408b-8863-388de9dc8d6b
   :END:
 ** install ttf-noto at home
+   :PROPERTIES:
+   :ID:       909205ca-a1de-4234-afae-14954672068d
+   :END:
+** C-u C-u C-c c -go to where capture was filed
 ** investigate marks, global marks and pop marks 
 ** abbrv mode for quick ssh and change dirs in FF
 ** dired todos 
@@ -158,8 +162,27 @@ once every X days make sure to refile that note
 ** Colored text in org-mode with export to HTML
 
  http://jkitchin.github.io/blog/2016/01/16/Colored-text-in-org-mode-with-export-to-HTML
+** Fixing SSH agent settings
+http://writequit.org/org/#65778226-87e5-40f9-a0a2-e5e319b4118c
 
+This is for correctly finding the SSH agent:
 
+(defun find-agent ()
+  (first (split-string
+          (shell-command-to-string
+           (concat
+            "ls -t1 "
+            "$(find /tmp/ -uid $UID -path \\*ssh\\* -type s 2> /dev/null)"
+            "|"
+            "head -1")))))
+
+(defun fix-agent ()
+  (interactive)
+  (let ((agent (find-agent)))
+    (setenv "SSH_AUTH_SOCK" agent)
+    (message agent)))
+
+Format JSON more beautifully
 ** Ref library 2.0
 *** personal (ikloog library)
 when a new paper is finally published and has a DOI:
@@ -1213,8 +1236,6 @@ So the :results output is the way to go. This works also for the :dir remote cod
 ** How to make org-protocol work?
 http://stackoverflow.com/questions/7464951/how-to-make-org-protocol-work/32851154#32851154
 ** https://github.com/alphapapa/org-protocol-capture-html/tree/9ddb2a8e548eb8461acde5a3bc56ccb1414c2173#org-protocol-capture-html
-** intersting orgmode configuration
-http://writequit.org/org/#b07ea95e-d7cb-4714-ae83-9bd624e1c19d
 ** read BMS and ots
 http://www.bluemilkspecial.com/
 http://www.giantitp.com/comics/oots.html

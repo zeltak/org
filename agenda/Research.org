@@ -520,7 +520,7 @@ file:
 *** meetings
 *** TD Haifa Monitoring project
 **** check with tal money transfer autorization from haifa
-**** TODO compare to other regions
+**** compare to other regions
 get napa level stats on head circumference and birth weight in TA, Hadera, Haifa
 compare to Haifa using simple t-tests or other methods 
 *** explore
@@ -758,7 +758,6 @@ look into svm model with mixed effect and if that doesn't help look into taking 
 *** code
 *** meetings
 *** TD Ratio global project
-**** TODO slowly start organize data to publishable state 	     :meytar:
 *** explore
 **** results
 lower ratio means more pm10
@@ -1725,8 +1724,6 @@ USA. (each grid contained length of roads and other data..)
 commercial GIS data, and replace it with OSM data - see if there is a
 difference. 
 ** indian meeting [2015-10-22 Thu]
-*** TODO [#A] send joel indian contact--remind about recommendation letters
-
 ** joel talk [2015-11-19 Thu]
 *** new qian mode 
 -will this replace aod based models? it seems like it preforms almost as well in NE
@@ -1771,7 +1768,7 @@ place of aerosols in the vertical profile.
 use yuval model with local prioritization since the dust properties are very different (suspended dust from roads, different dust storms, biomass fuel)
 *** send David land use terms we can use. 
 ** Jaime [2015-12-15 Tue]
-** TODO Brent [2015-12-18 Fri]
+** Brent [2015-12-18 Fri]
 Points for Discussion:
 
 (1) Why is there such a difference between the use of date (actual date; date format) and doy (factor of dd/mm) when using a linear model and then a completly different pattern when using a mixed model? (When using a numeric index in model 2.1 instead of date it gives an r^2 of 0.358 and rmspe of 5.67. How does the use of date format affect the model?) 
@@ -1834,4 +1831,30 @@ We will check for seasonal and diurnal differences (looking at different aspects
 ***** web data social/location based services
   mapping access to health, healthy food, business counts
 ***** crime-data availability
+** skype joel [2016-01-27 Wed]
+*** ask about noise estiation mode use of svm
+cant get and coef and or summary, how does one evaluate and report the model
+joel: include all interactions and all squres and cubes..takes a hugh dimensonal vector space - it uses a kernel that takes for every 2 values of that and computes a single nubmer that goes into the model.:
 
+you can say to the extent that there are 3 way interactions they wont get shrunk that much
+the kernel process hides the dimensional space
+you cant say which one contribites to to the model 
+you care about predictions and not over fitting (that's why you use cv)
+you can run svm and delete one at a time to see which one contributes most 
+
+*** Vertical profile
+helena krasnov is working on calipso and looking at vertical profiles across USA, europe and israeli
+we saw that in the usa as compared to israel most particles (especially during the winter months) are higher up in the vertical profile compared to israel. this maybe can explain some of the differences when calibrating on ground moistens?
+**** joel
+secondary particles higher up in the atmosphere
+2006-proportion higher up should go down.
+take a look at vertical profiles across urban areas 
+Euro-satellite-UV data investigate
+*** domichi grant
+HEI lady at ISEE told me the grant was approved but Francesca domichi Secretary told our research authority the sub contract has been cancelled..is that right?
+*** dealing with contribution of AOD- talked to brent 
+Is a mixed model approach the best method to use for predicting PM2.5? we see that the contribution of AOD is minor on top of the main date predictor (not so much the case when using doy where aod adds ~ 10%). what are your thoughts on this? is there 
+another approach that will allow us to evaluate the contribution of AOD in the model driven by date.
+
+(3) Since the date clearly has the strongest effect, any other variables we add are marginly contributing to the model. are there alternative modeling approaches we should explore? we were thinking about SVM, PLS and maybe a SVM+random component?  adding spatial auto correlation?
+*** TODO send xian pm monitor data 
