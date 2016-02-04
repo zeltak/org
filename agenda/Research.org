@@ -1,6 +1,6 @@
 #+TITLE: Research 
 #+TODO: TODO(t) TASK(f) EXP(e) | PAUSED(p) DONE(d) 
-#+CATEGORY: work@
+#+CATEGORY: work
 #+TAGS:  allan(a) joel(j) meytar(t) boris(b) BGU(u) maayan(m) adar(d) omer(o) lara(l) hila(h) students(s) itai (i) alexandra (x)
 #+STARTUP: overview  inlineimages eval: (org-columns)
 #+OPTIONS: toc:nil 
@@ -8,6 +8,9 @@
 
 * 'Projects'
 ** [#A] MODEL.Ta.FRANCE
+   :PROPERTIES:
+   :ID:       2d4d3a04-4d97-484c-8008-345304ba2572
+   :END:
 *** info file
 **** variables used
 Hi,
@@ -71,8 +74,8 @@ seasoanlity
 -Submit to a Euro journal
 -compare the model to avilable models in europe.
 - epi people still using monitors
-I think the emphasis should be 1) existing health studies of temperature effect only capture temporal variation and not spatial variation, and a model for every day and km sq can help address this; 2) while modeled temperature data does exist, it mostly has not taken advantage of the rich satellite remote sensing resource; 3) While we were successful in developing such a model in the Northeast, performance in Europe is unknown where land use patterns are different, and where there are sharp climate gradients such as mountainous areas, cold Atlantic shores Mediterranean climate, etc such as in France. I would also point out that the model has shown its advantages over nearby temperature monitors in health effect studies already.  I would try Atmospheric Environment. 
-
+I think the emphasis should be 1) existing health studies of temperature effect only capture temporal variation and not spatial variation, and a model for every day and km sq can help address this; 2) while modeled temperature data does exist, it mostly has not taken advantage of the rich satellite remote sensing resource; 3) While we were successful in developing such a model in the Northeast, performance in Europe is unknown where land use patterns are different, and where there are sharp climate gradients such as mountainous areas, cold Atlantic shores Mediterranean climate, etc such as in France. I would also point out that the model has shown its advantages over nearby temperature monitors in health effect studies already.  I would try Atmospheric Environment.
+*** ACTIONS
 ** PAUSED MODEL.PM.NE
 *** info file
 *** code
@@ -192,6 +195,9 @@ id:23371787-acbe-41fa-8bab-5a2e91c1e61e
 *** code
 file:/home/zeltak/org/files/Uni/Projects/code/P031.MAIAC.France
 *** meetings
+**** johanna [2016-02-02 Tue]
+weight the predicted pm2.5 as lower weights opposed to true PM10
+
 *** TD MODEL.PM.France
 **** TASK Use sqrt transforms instead of log transform for skewed variables (after first checking the variable distribution etc.). :meytar:
 **** check data completeness
@@ -890,7 +896,7 @@ Another is wood smoke, which produces primary organic aerosols, which AOD is not
 Another is secondary  aerosols. Our GEOS-Chem modeling shows bands of OC outlining roads (but wider than the EC bands). So I think that NOx emissions may help capture this. 
 Finally, when Qian gets a chance, I will have him run GEOS-Chem for Italy. We have the preliminary run done, but we need to calibrate it with the monitors. I know he got monitors from Kees, and Itai said there were more, but I forget if you sent them to him.
 
-**** [#A] predict pm25 from 10 					     :meytar:
+**** [#A] predict pm25 from 10					     :meytar:
 weight the predicted pm2.5 as lower weights opposed to true PM10
 **** [#C] Compare results between correlation to MAIAC/MODIS C06 AOD data with overpass data (i.e. mixed effect model). :alexandra:
 **** [#A] Use SVM with random statement				      :allan:
@@ -1839,7 +1845,7 @@ joel: include all interactions and all squres and cubes..takes a hugh dimensonal
 you can say to the extent that there are 3 way interactions they wont get shrunk that much
 the kernel process hides the dimensional space
 you cant say which one contribites to to the model 
-you care about predictions and not over fitting (that's why you use cv)
+nyou care about predictions and not over fitting (that's why you use cv)
 you can run svm and delete one at a time to see which one contributes most 
 
 *** Vertical profile

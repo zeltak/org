@@ -956,3 +956,26 @@ model = gstat(formula = annual ~ 1, locations = ~ x + y, data = rainfall)
 predict(object = model, newdata = towns)
 
 האובייקט model בדוגמה הנ"ל, מהמחלקה gstat, מכיל את כל המידע הנחוץ לביצוע חיזוי או cross-validation בשיטה שנבחרה (IDW) עם נתוני הכיול הרלוונטיים. בחירת השיטה, דרך אגב, מתבצעת אוטומטית עפ"י סט הארגומנטים של הפונקציה (אתה יכול לראות את זה בשקף 20 של המצגת המצורפת). הסט הנ"ל קובע שהמודל יהיה IDW, עם סט שונה של ארגומנטים ייבחר kriging וכו'. רצוי שהקואורדינטות יהיו ב-projection ולא קווי אורך ורוחב כי עובדים עם מרחקים, אבל באזור קטן כמו ישראל זה לא כל כך משנה. מצ"ב קוד עם דוגמה שאפשר לשחזר.
+
+* TODO talk to meytar about cara from france and skype meeting in 2 weeks
+  :PROPERTIES:
+  :ID:       804888e8-0575-4453-8839-e42626e9e527
+  :ARCHIVE_TIME: 2016-02-03 Wed 08:54
+  :ARCHIVE_FILE: ~/org/files/agenda/bgu.org
+  :ARCHIVE_OLPATH: TD
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: TODO
+  :END:
+<2016-02-03 Wed 10:00>
+
+* TODO send maya guid grid
+  :PROPERTIES:
+  :ID:       0180cadb-fb6e-48f9-a15e-19a7250ba68d
+  :ARCHIVE_TIME: 2016-02-03 Wed 10:59
+  :ARCHIVE_FILE: ~/org/files/agenda/bgu.org
+  :ARCHIVE_OLPATH: TD
+  :ARCHIVE_CATEGORY: work
+  :ARCHIVE_TODO: TODO
+  :END:
+<2016-02-03 Wed 09:00>
+send the static guid/x/y csv for israel

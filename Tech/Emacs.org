@@ -7593,6 +7593,12 @@ Filetags look like this:
 #+BEGIN_SRC emacs-lisp  :results none
 #+FILETAGS: NORANG @office
 #+END_SRC
+*** have tags across all files even if local tags are defined (org-tag-persistent-alist)
+
+If you have a preferred set of tags that you would like to use in every file, in addition to those defined on a per-file basis by TAGS option lines, then you may specify a list of tags with the variable org-tag-persistent-alist. You may turn this off on a per-file basis by adding a STARTUP option line to that file:
+#+BEGIN_EXAMPLE
+#+STARTUP: noptag
+#+END_EXAMPLE
 
 *** mutually exclusive
 tags that when selecting one will overwrite the other:
@@ -8905,6 +8911,16 @@ Therefore, the weekly meeting entries can look like:
  *** Friday afternoon team meeting
  <2007-10-26 Fri 15:00-16:00 +1w>
 #+END_EXAMPLE
+***** complex dates
+You can use diary sexp entries to do more complicated scheduling. 
+
+#+BEGIN_EXAMPLE
+ORG HEADER 
+<%%(org-class 2013 9 3 2013 12 11 1)>
+<%%(org-class 2013 9 3 2013 12 11 3)>
+#+END_EXAMPLE
+
+This says this event is scheduled from 9/3/2013 to 12/11/2013, on every Monday (the final 1 in the first time-stamp) and Wednesday (the final 3 in the second time-stamp). Note that the time is under the HEADER
 *** From org manual
 **** Timestamps, deadlines, and scheduling             
 
