@@ -39262,6 +39262,26 @@ workaround=rename -o password stdin
 ***** !bug! sshfs cant mountm dir us busy and ghost files are there
 unmount the drives if needed, delete the folder and recreate it
 then mounts
+***** fast sshfs
+
+I’ve been using SSHFS for a while now as my “Swiss army knife” tool for quickly transferring a collection of files between two computers. I’m usually too lazy to bother with setting up an NFS export or SMB share and SSHFS does the trick nicely (as does rsync but it’s less interactive). This tool allows you to mount a directory on a remote system using only an SSH connection.
+
+However, on my LAN the overhead of SSH encryption and compression gets in the way of transfer speeds. So on a trusted network, you can mount SSHFS like this:
+
+sshfs -o Ciphers=arcfour -o Compression=no server://some/folder /mnt/some_local_folder
+
+This will:
+
+    Use the ‘arcfour’ cipher which is the fastest encryption method (and not very safe but we don’t care since it’s a trusted network)
+    Disable the built-in compression SSH uses by default
+
+The difference in transfer speed is very big, copying files from my Sheevaplug ARM server (which doesn’t has a very fast CPU) went from about 1.1 megabyte/s to 10 megabyte/s (wire speed on my 100mbit network basically).
+
+By the way, if you still want to use rsync run it like this for the same setup:
+
+rsync -e"ssh -c arcfour -o Compression=no" ...rest of rsync cmd...
+
+
 **** login to ssh session and execute a command
 
 there are two ways to do that:
