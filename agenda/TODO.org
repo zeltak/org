@@ -11,6 +11,26 @@ TASK
 ACTION
 
 tag everyone you work on the task-When I create actions, I also tag them with the names of people who are responsible, so that it later becomes easy to track progress and to send reminders. 
+** auto commit
+
+I commit every change to my org files and my emacs config (which is in org) automatically.
+
+(defun org-auto-commit-init ()
+  (if (buffer-file-name)
+      (cond
+       ((equal (buffer-file-name)
+               (expand-file-name (concat user-emacs-directory "init.org")))
+        (git-auto-commit-mode))
+       ((equal (file-name-directory buffer-file-name)
+               (file-name-as-directory (expand-file-name org-directory)))
+        (git-auto-commit-mode)))))
+
+(add-hook 'org-mode-hook
+          (lambda ()
+            (org-auto-commit-init)
+            (org-indent-mode t)
+            (auto-fill-mode)))    
+
 
 ** install ttf-noto at home
 ** C-u C-u C-c c -go to where capture was filed
@@ -1264,4 +1284,6 @@ https://flipbelt.com/flipbelt
 ** https://www.reddit.com/r/emacs/comments/421vt3/how_to_automatically_execute_commands_when/
 ** http://emacsredux.com/blog/2016/01/30/super-save/
 ** https://www.kickstarter.com/projects/1644407908/beep-beep-yarr
+
+
 

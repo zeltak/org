@@ -16,7 +16,7 @@ library(stargazer)
 library(splines)
 library(sjPlot)
 
-#ind <-read.csv("/home/zeltak/ZH_tmp/dat/indiv1415.csv")
+ind <-read.csv("/home/zeltak/ZH_tmp/dat/indiv1415av.csv")
 str(ind)
 head(ind)
 ind$BDX <- gsub(" 0:00:00", "",ind$Birth_Date)
@@ -27,7 +27,7 @@ names(ind)
 #write.dbf(ind,"/media/NAS/Uni/Projects/P050_Haifa/2.work/Individual/indiv1415.dbf")
 
 #subset data
-ind<-ind[,c("Head1_Valu","Gender","Weight1_Va","Mother_Nat","PregnancyW","month","TotalSibli","Education_","ApgarOneMi","ApgarFiveM","POPULATION","HOUSEHOLDS","AVERAGE_HH","DENSITY","OWNERSHIP","RENTALS","BAGRUT","BA","INCOME","N_AIRPORT","N_BAZAN","N_POWERSTA","N_OIL_L","N_OIL_S","N_ROAD","nox","day","Postal","Mother_Bir","pm25","so2"),with=FALSE]
+ind<-ind[,c("Head1_Valu","X","Y","Gender","Weight1_Va","Mother_Nat","PregnancyW","month","TotalSibli","Education_","ApgarOneMi","ApgarFiveM","POPULATION","HOUSEHOLDS","AVERAGE_HH","DENSITY","OWNERSHIP","RENTALS","BAGRUT","BA","INCOME","N_AIRPORT","N_BAZAN","N_POWERSTA","N_OIL_L","N_OIL_S","N_ROAD","nox","day","Postal","Mother_Bir","pm25","so2","nox2014","Elevation","People_est","Pop_arnona"),with=FALSE]
 
 #rename
 setnames(ind,old=c("Weight1_Va", "Head1_Valu","PregnancyW"),new=c("birthw", "headc","ges"))
@@ -60,9 +60,9 @@ ind<- ind[Gender  == "נקבה" , sex  := 0] #female
 
 
 #write.dbf(ind,"/home/zeltak/ZH_tmp/dat/indiv1415.dbf")
-ind<-read.dbf("/home/zeltak/ZH_tmp/dat/indiv1415.dbf")
-summary(ind)
-setnames(ind,"mrn_n","mrn.n")
+#ind<-read.dbf("/home/zeltak/ZH_tmp/dat/indiv1415.dbf")
+#summary(ind)
+#setnames(ind,"mrn_n","mrn.n")
 #only nox liner, dist linear, #nox was most significance
 ind$N_BAZAN<-ind$N_BAZAN/1000
 ind$N_AIRPORT<-ind$N_AIRPORT/1000
@@ -238,13 +238,24 @@ headc<-sjt.lm(h1.pre,h1.full,b1.pre,b1.full,
 #spatial auto correlation
 
 library(nlme)
-fit = gls(m1.formula, data=ind, correlation = corSpher(form = ~ lon + lat, nugget = TRUE))
+m1.formula <- as.formula(headc ~ges)
+fit = gls(m1.formula, data=ind, correlation = corSpher(form = ~ X + Y|day, nugget = TRUE))
+
+
+summary(ind)
 
 
 
-m1.formula <- as.formula(headc ~ges+as.factor(month)+as.factor(sex)+as.factor(mrn.n)+TotalSibli+Education_+ApgarOneMi+AVERAGE_HH+DENSITY+OWNERSHIP+RENTALS+BAGRUT+N_AIRPORT+N_BAZAN+I(N_BAZAN^2)+N_ROAD+nox)
+#BORIS MODELS
+##Headc regression nox
+m1.formula <- as.formula(headc ~ges+as.factor(month)+as.factor(sex)+TotalSibli+Education_+DENSITY+nox2014+birthw+N_OIL_L+Elevation+People_est)
 h1 <- lm(m1.formula,data=ind)
+summary(h1)
 
+##birth weight regression nox
+r1.formula <- as.formula(birthw ~ges+as.factor(month)+as.factor(sex)+TotalSibli+Education_+DENSITY+nox+N_OIL_L)
+b1 <- lm(r1.formula,data=ind)
+summary(b1)
 
 
 

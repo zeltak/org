@@ -189,11 +189,6 @@ saveRDS(Temp,"/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/met/fin.met.rds")
 #PM25
 #calculate meanPM per grid per day to each station (excluding first station)
 
-
-
-
-
-
 #PM25.2003
 PM25.2003 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM25_ 2003 .csv")
 str(PM25.2003)                                                                       
