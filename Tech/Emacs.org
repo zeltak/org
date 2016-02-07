@@ -8917,10 +8917,13 @@ You can use diary sexp entries to do more complicated scheduling.
 #+BEGIN_EXAMPLE
 ORG HEADER 
 <%%(org-class 2013 9 3 2013 12 11 1)>
-<%%(org-class 2013 9 3 2013 12 11 3)>
+;;or
+%%(org-class 2016 3 6 2016 7 1 0) 09:00-11:00 3D GIS class
 #+END_EXAMPLE
 
-This says this event is scheduled from 9/3/2013 to 12/11/2013, on every Monday (the final 1 in the first time-stamp) and Wednesday (the final 3 in the second time-stamp). Note that the time is under the HEADER
+This first one saya this event is scheduled from 9/3/2013 to 12/11/2013, on every Monday (the final 1 in the first time-stamp) and Wednesday (the final 3 in the second time-stamp). Note that the time is under the HEADER
+
+the second example shows a class between 6th of march 2016 until 1st of july 2016 repeating every Sunday. then the time range and finally the name for the meeting/slot that will appear in the org agenda.
 *** From org manual
 **** Timestamps, deadlines, and scheduling             
 
