@@ -4,104 +4,10 @@
   :PROPERTIES:
   :ID:       a203c0fe-e98d-408b-8863-388de9dc8d6b
   :END:
-** ACTION REVISION
-use 3 tiers
-TODO
-TASK
-ACTION
-
-tag everyone you work on the task-When I create actions, I also tag them with the names of people who are responsible, so that it later becomes easy to track progress and to send reminders.
-** auto publish on save
-https://www.reddit.com/r/emacs/comments/42sle2/how_to_autopublish_orgmode_publish_projects/
-** complex dates
-
-This works for me but you need to put the time in the headline, as in:
-
-,----
-| 2pm-3pm my lecture on really interesting stuff
-| <%%(org-class 2016 6 3 2016 7 1 0)>
-`----
-
-It may be that the <%% line needs to be flush to the left, i.e. no
-leading spaces, but I'm not sure.
-
-Note that 0 is a Sunday...
-
-
-Eric S Fraga <e.fraga@ucl.ac.uk>
-Feb 4 (2 days ago)
-
-to me, Jorge, org 
-On Wednesday,  3 Feb 2016 at 17:42, Xebar Saram wrote:
-> thx so much Jorge
->
-> i added this to my meet.org file :
->
-> ** 3D class
-> %%(org-class 2016 6 3 2016 7 1 0) 9:00-11:00 You should be  sleeping
->
-> yet in my agenda on 3/6/2016 there is no meeting present. what am i missing
-> here?
-
-But 3 June is *not* a Sunday.  You've asked for a slot on Sundays in the
-date range specified.  If you change the 0 to a 5, it will probably
-work.  Alternatively, have a look at the 5th of June to see if the item
-appeared there.
-** key chords
-use vim like yy and dd pp
-** auto commit
-
-I commit every change to my org files and my emacs config (which is in org) automatically.
-
-(defun org-auto-commit-init ()
-  (if (buffer-file-name)
-      (cond
-       ((equal (buffer-file-name)
-               (expand-file-name (concat user-emacs-directory "init.org")))
-        (git-auto-commit-mode))
-       ((equal (file-name-directory buffer-file-name)
-               (file-name-as-directory (expand-file-name org-directory)))
-        (git-auto-commit-mode)))))
-
-(add-hook 'org-mode-hook
-          (lambda ()
-            (org-auto-commit-init)
-            (org-indent-mode t)
-            (auto-fill-mode)))    
-
-
-** install ttf-noto at home
-** C-u C-u C-c c -go to where capture was filed
-** investigate marks, global marks and pop marks 
-** abbrv mode for quick ssh and change dirs in FF
-** use beets to change all albums dates to 
-** dired todos
-using workgroups2 to create dired workgroups?
-** org-notify
-https://github.com/jbranso/.emacs.d/blob/00b6d62c00abab21aa2eb020e41d736b7b2b845d/lisp/init-org.org#org-notify-lets-you-know-when-you-have-upcoming-appointments
-
-** attach from dired to email message
-explore mu4e and or gnus
-http://emacs.stackexchange.com/questions/14652/attach-multiple-files-from-the-same-directory-to-an-email-message
-** dired buffer cleanup
-   :PROPERTIES:
-   :ID:       6d487755-ec3d-4d34-ada8-92dfc213e956
-   :END:
-  http://emacs.stackexchange.com/questions/13552/how-to-make-dired-mode-copy-and-move-all-marked-file-in-all-dired-buffer-includi
-
-    diredp-toggle-find-file-reuse-dir does not prevent you from opening multiple Dired buffers for different directories (e.g. subdirs). It should be irrelevant here, but you might want to describe just what you are doing, step by step.
-
-    With multiple Dired buffers open, you can mark files (and subdirs) in any of them. with Dired+ (which you are apparently using), you can use M-+ C in a parent directory's Dired buffer to copy all of the files that are marked in that buffer and all of the files that are marked in any of its marked subdirs, with this rule applying recursively.
-
-    As an alternative to #2, you can of course also include subdirs in the same Dired buffer, using i. Then act on (e.g. C to copy) all files marked in the buffer.
-
-Your problem of losing marks happens because you are using RET or C-x C-f to move to another directory. Use C-x d instead, and you do not lose the previous Dired buffer. Or just use C-M-S-r to toggle diredp-toggle-find-file-reuse-dir and turn off reusing temporarily.
-
-FWIW, I don't tell Dired+ to automatically reuse Dired buffers when I hit RET. Instead, I use C-x C-v whenever I want to change to a different directory and I don't care to save the current Dired buffer. My fingers decide whether to keep or toss the current Dired buffer when I visit another one: RET to keep, C-x C-v to toss. (And I don't worry about having lots of buffers, in general.)
-
-IOW, this comes under the heading of "If it hurts, don't do it." If you purposely kill a Dired buffer, which is what "reusing" means here, then, well, the buffer no longer exists. If it no longer exists then its markings etc. are gone too.
-
-In sum, reuse when you want, and don't reuse when you want. Both behaviors are available at all times. If you start marking things, then think before you use RET to change directories - use C-x d or C-x 4 d instead. It's probably just a question of habit. And don't forget that you have i too.
+** 4018
+** eyebrow
+investigate why it doesn't allow refile in org capture
+generally check if useful
 ** @org revison@
 *** TODO org todo
 **** http://juanreyero.com/article/emacs/org-teams.html
@@ -138,9 +44,6 @@ backup- laptop>git>rsync>zuni
 
 *** email
 *** refrence library
-**** change and clean lib
-change key to exclude ()
-clean umicode
 **** helm-bibtex
 ***** exclude search items
  ₆In example₆ 
@@ -235,8 +138,69 @@ once every X days make sure to refile that note
 *** From Web browsers
 *** org agenda
  use multi occur hotkeys in the dispatcher?
-** Colored text in org-mode with export to HTML
+** ACTION REVISION
+use 3 tiers
+TODO
+TASK
+ACTION
 
+tag everyone you work on the task-When I create actions, I also tag them with the names of people who are responsible, so that it later becomes easy to track progress and to send reminders.
+** auto publish on save
+https://www.reddit.com/r/emacs/comments/42sle2/how_to_autopublish_orgmode_publish_projects/
+** key chords
+use vim like yy and dd pp
+** auto commit
+
+I commit every change to my org files and my emacs config (which is in org) automatically.
+
+(defun org-auto-commit-init ()
+  (if (buffer-file-name)
+      (cond
+       ((equal (buffer-file-name)
+               (expand-file-name (concat user-emacs-directory "init.org")))
+        (git-auto-commit-mode))
+       ((equal (file-name-directory buffer-file-name)
+               (file-name-as-directory (expand-file-name org-directory)))
+        (git-auto-commit-mode)))))
+
+(add-hook 'org-mode-hook
+          (lambda ()
+            (org-auto-commit-init)
+            (org-indent-mode t)
+            (auto-fill-mode)))    
+
+
+** investigate marks, global marks and pop marks 
+** abbrv mode for quick ssh and change dirs in FF
+** use beets to change all albums dates to 
+** dired todos
+using workgroups2 to create dired workgroups?
+** org-notify
+https://github.com/jbranso/.emacs.d/blob/00b6d62c00abab21aa2eb020e41d736b7b2b845d/lisp/init-org.org#org-notify-lets-you-know-when-you-have-upcoming-appointments
+
+** attach from dired to email message
+explore mu4e and or gnus
+http://emacs.stackexchange.com/questions/14652/attach-multiple-files-from-the-same-directory-to-an-email-message
+** dired buffer cleanup
+   :PROPERTIES:
+   :ID:       6d487755-ec3d-4d34-ada8-92dfc213e956
+   :END:
+  http://emacs.stackexchange.com/questions/13552/how-to-make-dired-mode-copy-and-move-all-marked-file-in-all-dired-buffer-includi
+
+    diredp-toggle-find-file-reuse-dir does not prevent you from opening multiple Dired buffers for different directories (e.g. subdirs). It should be irrelevant here, but you might want to describe just what you are doing, step by step.
+
+    With multiple Dired buffers open, you can mark files (and subdirs) in any of them. with Dired+ (which you are apparently using), you can use M-+ C in a parent directory's Dired buffer to copy all of the files that are marked in that buffer and all of the files that are marked in any of its marked subdirs, with this rule applying recursively.
+
+    As an alternative to #2, you can of course also include subdirs in the same Dired buffer, using i. Then act on (e.g. C to copy) all files marked in the buffer.
+
+Your problem of losing marks happens because you are using RET or C-x C-f to move to another directory. Use C-x d instead, and you do not lose the previous Dired buffer. Or just use C-M-S-r to toggle diredp-toggle-find-file-reuse-dir and turn off reusing temporarily.
+
+FWIW, I don't tell Dired+ to automatically reuse Dired buffers when I hit RET. Instead, I use C-x C-v whenever I want to change to a different directory and I don't care to save the current Dired buffer. My fingers decide whether to keep or toss the current Dired buffer when I visit another one: RET to keep, C-x C-v to toss. (And I don't worry about having lots of buffers, in general.)
+
+IOW, this comes under the heading of "If it hurts, don't do it." If you purposely kill a Dired buffer, which is what "reusing" means here, then, well, the buffer no longer exists. If it no longer exists then its markings etc. are gone too.
+
+In sum, reuse when you want, and don't reuse when you want. Both behaviors are available at all times. If you start marking things, then think before you use RET to change directories - use C-x d or C-x 4 d instead. It's probably just a question of habit. And don't forget that you have i too.
+** Colored text in org-mode with export to HTML
  http://jkitchin.github.io/blog/2016/01/16/Colored-text-in-org-mode-with-export-to-HTML
 ** Fixing SSH agent settings
 http://writequit.org/org/#65778226-87e5-40f9-a0a2-e5e319b4118c
@@ -259,11 +223,8 @@ This is for correctly finding the SSH agent:
     (message agent)))
 
 Format JSON more beautifully
-** Ref library 2.0
-*** personal (ikloog library)
-when a new paper is finally published and has a DOI:
-use the DOI import util from org-ref to add it to my personal bib fil
 ** open shell in right split window
+** install ttf-noto at home
 ** picard import music
 ** quick navigate inside helm (use bookmearks in helm)
 ** move latest albums to freeze 

@@ -3361,3 +3361,61 @@ Tasks can live in multiple projects, so there’s no need to duplicate work. Thi
   :ARCHIVE_CATEGORY: tasks
   :END:
 http://writequit.org/org/#b07ea95e-d7cb-4714-ae83-9bd624e1c19d
+
+* complex dates
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-02-07 Sun 08:17
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`
+  :ARCHIVE_CATEGORY: tasks
+  :END:
+
+This works for me but you need to put the time in the headline, as in:
+,----
+| 2pm-3pm my lecture on really interesting stuff
+| <%%(org-class 2016 6 3 2016 7 1 0)>
+`----
+
+It may be that the <%% line needs to be flush to the left, i.e. no
+leading spaces, but I'm not sure.
+
+Note that 0 is a Sunday...
+
+
+Eric S Fraga <e.fraga@ucl.ac.uk>
+Feb 4 (2 days ago)
+
+to me, Jorge, org 
+On Wednesday,  3 Feb 2016 at 17:42, Xebar Saram wrote:
+> thx so much Jorge
+>
+> i added this to my meet.org file :
+>
+> ** 3D class
+> %%(org-class 2016 6 3 2016 7 1 0) 9:00-11:00 You should be  sleeping
+>
+> yet in my agenda on 3/6/2016 there is no meeting present. what am i missing
+> here?
+
+But 3 June is *not* a Sunday.  You've asked for a slot on Sundays in the
+date range specified.  If you change the 0 to a 5, it will probably
+work.  Alternatively, have a look at the 5th of June to see if the item
+appeared there.
+
+* C-u C-u C-c c -go to where capture was filed
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-02-07 Sun 08:19
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`
+  :ARCHIVE_CATEGORY: tasks
+  :END:
+
+* change and clean lib
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-02-07 Sun 08:36
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`/@org revison@/refrence library
+  :ARCHIVE_CATEGORY: tasks
+  :END:
+change key to exclude ()
+clean umicode
