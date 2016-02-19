@@ -8476,7 +8476,15 @@ intercept.bottom = FALSE,
 omit.stat = c("rsq", "f","adj.rsq","ser"),
 out="/media/NAS/Uni/Projects/P050_Haifa/3.results/report_2015/models_HC.txt")
 #+END_SRC
+*** what to report in main cells
 
+report: a  character  string  containing  only  elements  of
+
+#+BEGIN_EXAMPLE
+"v" , "c" , "s" , "t" , "p" , "*" 
+#+END_EXAMPLE
+
+that determines whether, and in which order, variable names ("v"), coefficients ("c"),  standard  errors/confidence  intervals  ("s"),  test  statistics  ("t")  and  p- values ("p") should be reported in regression tables.  If one of the aforementioned letters is followed by an asterisk ("*"), significance stars will be reported next to the corresponding sta
 ** pryr- size of objects 
 #+BEGIN_SRC R :results none
 library(pryr)
