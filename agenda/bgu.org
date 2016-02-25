@@ -154,11 +154,13 @@ add the kids in getis org hotspots (for HC) where Z>1.96 (sig) and run analysis 
 look at asthame model table for to see change in R2 for each group of variables: individual, pollution and industrial areas to see relative contribution for each one
 
 ** TODO check with heather and jackie form BIMC about money status
+   DEADLINE: <2016-02-28 Sun>
 <2016-02-22 Mon>
+
 ** TODO kees visit
 explore ctm use in our sat models (supplument sat data via data fusion methods)
 ** talk to oron about Eudoram
-** JOEL skype topics for next call
+** TODO REFILE JOEL skype topics for next call
 the aod contribution project- david is pushing
 aod will be a much stronger predictor long term rather than daily where the random intercept per day has a very strong effect
 they want to contact brent, are you OK with that?
@@ -176,8 +178,30 @@ NOAA automated high splits. look at back trajectories and see where the come fro
 
 we can interact aod and fractions from ctm models on the ground level , perhaps use a nueral netwrok 
 
-use nueral netwroks in mexico city 
+use nueral netwroks in mexico city
+** REFILES allan meeting
+I’ll try to review some of our old code to be somewhat up to speed perhaps.
 
+
+Mexico model task list:
+
+    Implement IDW
+    SVM for stage 1 (exploring random components)
+        Or fit random effects without covariates and then use the “calibrated aod” as a predictor in SVM
+    Ask Meytar’s help on identifying aeronet station at UNAM
+    Can we estimate a mod1 coefficient for days without any mod1 (monitor coverage) based on AOD average and monitor average
+    Local smoothing of AOD weighted by surface reflectance
+    Anything we can borrow from Aaron Van Donkelaar (sp?) approach?
+
+
+
+Technical reminders for Alexei: 
+
+    can we use colocated PM2.5 and aeronet to improve MAIAC.
+    Can he add a processing path indicator
+    Dynamic particle size model (we can send summary of seasons)
+    MAIAC NDVI
+** TODO order priner ink for student room
 
 * Department/faculty duties
 ** TODO arrange co operations with other geography departments internationally

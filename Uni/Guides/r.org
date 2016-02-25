@@ -8973,7 +8973,7 @@ pm10all[is.na(Dust), Dust:= 0]
 x<- mod3[predicted.m3  < 0 , predicted.m3  := 0.01]
 #+END_SRC
 
-*** choose based on best avilable				  :CANCELLED:
+*** choose based on best avilable				
 #+begin_src R
 # store the best available
 mod3best <- mod3[, list(aodid, elev, x_aod_utm, y_aod_utm, day, pm_mod3)]
