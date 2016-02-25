@@ -146,26 +146,39 @@ create 100m baltimore yearly mod4
 temperature
 eLAN?
 ** TODO send tal EHF annual report
-<2016-02-21 Sun>z
+<2016-02-23 Sun>z
 ** TODO report DATA
-talk to sahar about this:
-say we got data in the report from MOH
-we got 6XXX kids
-we managed to put on the map 5XXXX (8X.00%)
-
-add descriptive.
-state how we cleaned the data (removed outliers, kids that have implasubile head circumference etc)
-
 3 models- HC pre and full term 
+add the kids in getis org hotspots (for HC) where Z>1.96 (sig) and run analysis for them only (should be around 400 kids with Z>1.96)
 
-add the kids in getis org hotspots (for HC) where Z>1.96 (sig) 
- and run analysis for them only (should be around 400 kids with Z>1.96)
+look at asthame model table for to see change in R2 for each group of variables: individual, pollution and industrial areas to see relative contribution for each one
 
-take out of report previos models
+** TODO check with heather and jackie form BIMC about money status
+<2016-02-22 Mon>
+** TODO kees visit
+explore ctm use in our sat models (supplument sat data via data fusion methods)
+** talk to oron about Eudoram
+** JOEL skype topics for next call
+the aod contribution project- david is pushing
+aod will be a much stronger predictor long term rather than daily where the random intercept per day has a very strong effect
+they want to contact brent, are you OK with that?
 
-look at asthame model table for to see change in R2 for each group of variables: individual, pollution and industrial areas to see relative contribution for each one 
+haifa project -clusterfuck..
+working on swiss data
+maayan grant- june cycle
+doug??
+*** refile meetings
+ run cmaq for svoc for the haifa region?
 
- 
+for the morning/afternoon terrr/aqua alex project we can use a nueral network perhaps to fill in aod points so we can also have a third overall aqua-teraa exposure (we don't need to deal with the issues of missingenss)
+
+NOAA automated high splits. look at back trajectories and see where the come from. if from africa etc it could be a good dust indicator
+
+we can interact aod and fractions from ctm models on the ground level , perhaps use a nueral netwrok 
+
+use nueral netwroks in mexico city 
+
+
 * Department/faculty duties
 ** TODO arrange co operations with other geography departments internationally
 *** proposed departments:
@@ -239,6 +252,51 @@ Below are tables for both the new BA and MA GIT programs as we discussed I our p
 - every MA student that will submit to a international journal will get 1750 NIS (within the 2 offical MA years)
 - among students that got the paper published within the 2 years there will be a comitee which will award the best paper another 1750 NIS
 * Travel 
+** MS visit 2016 February
+dates of travel:  7.2- 14.2
+
+|  date | name                           |  local total | USD total (currency as of 2/20) |
+|-------+--------------------------------+--------------+---------------------------------|
+|       | Israel                         | 1 NIS=  3.91 |                                 |
+|-------+--------------------------------+--------------+---------------------------------|
+|   6.2 | train to airport               |       50 NIS |                           12.80 |
+|  15.2 | train from airport             |       50 NIS |                           12.80 |
+|-------+--------------------------------+--------------+---------------------------------|
+|       | NYC                            |          USD |                                 |
+|-------+--------------------------------+--------------+---------------------------------|
+|   7.2 | MTA transit weekly pass itai   |           32 |                              32 |
+|   7.2 | MTA transit weekly pass michal |           32 |                              32 |
+|   8.2 | metro north railroad north X2  |        17.50 |                           17.50 |
+|   8.2 | metro north railroad south X2  |           21 |                              21 |
+|  10.2 | Thai Wok                       |        13.56 |                           13.56 |
+|  10.2 | Thai Wok                       |         4.36 |                            4.36 |
+|  14.2 | breakfeast                     |         7.16 |                            7.16 |
+|  13.2 | Marea lunch                    |       148.01 |                          148.01 |
+|  14.2 | breakfeast                     |         2.50 |                            2.50 |
+|  14.2 | taxi in city                   |         6.80 |                            6.80 |
+|  12.2 | breakfeast baltazhar           |        33.20 |                           33.20 |
+|   9.2 | breakfast la pan quotidian     |           45 |                              45 |
+|   8.2 | lunch ross and daughters       |        78.86 |                           78.86 |
+|   7.2 | dinner Vietnam                 |        50.09 |                           50.09 |
+|   7.2 | breakfast Lafayette            |        36.66 |                           36.66 |
+|  10.2 | breakfast bagel express        |        26.48 |                           26.48 |
+|  11.2 | wing cafe (lunch)              |         7.25 |                            7.25 |
+|  12.2 | lunch peter luger              |       151.05 |                          151.05 |
+|  10.2 | smith and wollensky dinner     |       122.60 |                          122.60 |
+|  11.2 | arties dellicatesesn lunch     |        47.11 |                           47.11 |
+|  11.2 | ippudo dinner                  |        56.17 |                           56.17 |
+|   7.2 | jfk to Manhattan               |        58.34 |                           58.34 |
+|  12.2 | dinner                         |         7.54 |                            7.54 |
+|  14.2 | dinner                         |        42.11 |                           42.11 |
+|  13.2 | dinner                         |         6.75 |                            6.75 |
+|  14.2 | mta day transit itai           |           10 |                              10 |
+|  14.2 | mta day transit michal         |           10 |                              10 |
+|  14.2 | taxi to jfk                    |        65.34 |                           65.34 |
+|-------+--------------------------------+--------------+---------------------------------|
+| TOTAL | in USD                         |              |                         1165.04 |
+|       |                                |              |                                 |
+#+TBLFM: @34$4=vsum(@33$4..@3$4)
+
 * Tenure proccess
 **** letter of recommendations from non related people 
  dani felsinstien
@@ -249,7 +307,6 @@ Below are tables for both the new BA and MA GIT programs as we discussed I our p
  doug dockery
 **** what is considered a student?
  The function of each author of an article should be indicated by means of the addition of a letter in superscript (or in parentheses) after the name, as follows: Principal Investigator PI, student S, post-doctoral fellow PD, co-researcher C, technician/laboratory assistant T. More than one author may serve in a particular category, including Principal Investigator in multi-disciplinary works.
-* meetings
 * mount sinai
   :PROPERTIES:
   :ID:       479df69d-ee92-42bb-aa2d-1f85bec40d70

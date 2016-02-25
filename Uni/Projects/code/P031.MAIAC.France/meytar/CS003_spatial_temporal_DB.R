@@ -17,6 +17,7 @@ library(broom)
 library(FNN)
 library(zoo)
 library(DataCombine)
+library(lubridate)
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/geomerge_alpha_ex-1.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/geomerge_alpha.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/lsR.r")
@@ -97,6 +98,7 @@ ndvi$V6<-NULL
 ndvi$ndviid<-paste(ndvi$long_ndvi,ndvi$lat_ndvi,sep="-")
 #-0.3 is missing in MODIS NDVI. these are points over the ocean
 ndvi<- ndvi[ndvi == -0.3 , ndvi  := NA]
+ndvi<-na.omit(ndvi)
 saveRDS(ndvi,"/media/NAS/Uni/Data/Europe/france/ndvi_france/out/fin.ndvi.rds")
 #create grid
 ngrid <- unique(ndvi, by="ndviid")
@@ -189,189 +191,22 @@ saveRDS(Temp,"/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/met/fin.met.rds")
 #PM25
 #calculate meanPM per grid per day to each station (excluding first station)
 
-#PM25.2003
-PM25.2003 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM25_ 2003 .csv")
-str(PM25.2003)                                                                       
-PM25.2003[, day:=as.Date(strptime(Date, "%Y-%m-%d"))]
-PM25.2003[, c := as.numeric(format(day, "%Y")) ]
-setnames(PM25.2003,"CODESTATION","stn")
-setnames(PM25.2003,"lat","lat_pm25")
-setnames(PM25.2003,"long","long_pm25")
-setnames(PM25.2003,"ALTITUDE","stn.elev")
-setnames(PM25.2003,"PMconc","pm25")
-PM25.2003<-select(PM25.2003,stn,day,c,lat_pm25,long_pm25,stn.elev,pm25)
-PM25.2003 <- PM25.2003[pm25 != 'NaN']
-PM25.2003 <- PM25.2003[lat_pm25 != 'NaN']
-PM25.2003 <- PM25.2003[long_pm25 != 'NaN']
-summary(PM25.2003$pm25)
-PM25.2003 <- PM25.2003[PM25.2003$pm25 >= 0]
-#create single aod point per aodid per day (this addresses cartesean error below)
-PM25.2003 <-PM25.2003 %>%
-    group_by(c,stn,day) %>%
-    summarise_each(funs(mean),long_pm25,lat_pm25,stn.elev,pm25)
-PM25.2003 <- PM25.2003[PM25.2003$pm25 >= 0]
-PM25.2003 <- PM25.2003[PM25.2003$pm25 <= 300]
 
-#PM25.2004
-PM25.2004 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM25_ 2004 .csv")
-str(PM25.2004)                                                                       
-PM25.2004[, day:=as.Date(strptime(Date, "%Y-%m-%d"))]
-PM25.2004[, c := as.numeric(format(day, "%Y")) ]
-setnames(PM25.2004,"CODESTATION","stn")
-setnames(PM25.2004,"lat","lat_pm25")
-setnames(PM25.2004,"long","long_pm25")
-setnames(PM25.2004,"ALTITUDE","stn.elev")
-setnames(PM25.2004,"PMconc","pm25")
-PM25.2004<-select(PM25.2004,stn,day,c,lat_pm25,long_pm25,stn.elev,pm25)
-PM25.2004 <- PM25.2004[pm25 != 'NaN']
-PM25.2004 <- PM25.2004[lat_pm25 != 'NaN']
-PM25.2004 <- PM25.2004[long_pm25 != 'NaN']
-summary(PM25.2004$pm25)
-PM25.2004 <- PM25.2004[PM25.2004$pm25 >= 0]
-#create single aod point per aodid per day (this addresses cartesean error below)
-PM25.2004 <-PM25.2004 %>%
-    group_by(c,stn,day) %>%
-    summarise_each(funs(mean),long_pm25,lat_pm25,stn.elev,pm25)
-PM25.2004 <- PM25.2004[PM25.2004$pm25 >= 0]
-PM25.2004 <- PM25.2004[PM25.2004$pm25 <= 300]
+#read file with all PM25 observations for 2000-2010 (including daily mean calculated from hourly data in days with at least #18 hourly obs.)
+PM25 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/PM25.all.csv")
+str(PM25)                                                                       
+PM25$day<-as.Date(PM25$day,format="%Y-%m-%d")
+PM25$year<-year(PM25$day)
+summary(PM25)
 
-#PM25.2005
-PM25.2005 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM25_ 2005 .csv")
-str(PM25.2005)                                                                       
-PM25.2005[, day:=as.Date(strptime(Date, "%Y-%m-%d"))]
-PM25.2005[, c := as.numeric(format(day, "%Y")) ]
-setnames(PM25.2005,"CODESTATION","stn")
-setnames(PM25.2005,"lat","lat_pm25")
-setnames(PM25.2005,"long","long_pm25")
-setnames(PM25.2005,"ALTITUDE","stn.elev")
-setnames(PM25.2005,"PMconc","pm25")
-PM25.2005<-select(PM25.2005,stn,day,c,lat_pm25,long_pm25,stn.elev,pm25)
-PM25.2005 <- PM25.2005[pm25 != 'NaN']
-PM25.2005 <- PM25.2005[lat_pm25 != 'NaN']
-PM25.2005 <- PM25.2005[long_pm25 != 'NaN']
-summary(PM25.2005$pm25)
-PM25.2005 <- PM25.2005[PM25.2005$pm25 >= 0]
 #create single aod point per aodid per day (this addresses cartesean error below)
-PM25.2005 <-PM25.2005 %>%
-    group_by(c,stn,day) %>%
-    summarise_each(funs(mean),long_pm25,lat_pm25,stn.elev,pm25)
-PM25.2005 <- PM25.2005[PM25.2005$pm25 >= 0]
-PM25.2005 <- PM25.2005[PM25.2005$pm25 <= 300]
-
-#PM25.2006
-PM25.2006 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM25_ 2006 .csv")
-str(PM25.2006)                                                                       
-PM25.2006[, day:=as.Date(strptime(Date, "%Y-%m-%d"))]
-PM25.2006[, c := as.numeric(format(day, "%Y")) ]
-setnames(PM25.2006,"CODESTATION","stn")
-setnames(PM25.2006,"lat","lat_pm25")
-setnames(PM25.2006,"long","long_pm25")
-setnames(PM25.2006,"ALTITUDE","stn.elev")
-setnames(PM25.2006,"PMconc","pm25")
-PM25.2006<-select(PM25.2006,stn,day,c,lat_pm25,long_pm25,stn.elev,pm25)
-PM25.2006 <- PM25.2006[pm25 != 'NaN']
-PM25.2006 <- PM25.2006[lat_pm25 != 'NaN']
-PM25.2006 <- PM25.2006[long_pm25 != 'NaN']
-summary(PM25.2006$pm25)
-PM25.2006 <- PM25.2006[PM25.2006$pm25 >= 0]
-#create single aod point per aodid per day (this addresses cartesean error below)
-PM25.2006 <-PM25.2006 %>%
-    group_by(c,stn,day) %>%
-    summarise_each(funs(mean),long_pm25,lat_pm25,stn.elev,pm25)
-PM25.2006 <- PM25.2006[PM25.2006$pm25 >= 0]
-PM25.2006 <- PM25.2006[PM25.2006$pm25 <= 300]
-
-#PM25.2007
-PM25.2007 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM25_ 2007 .csv")
-str(PM25.2007)                                                                       
-PM25.2007[, day:=as.Date(strptime(Date, "%Y-%m-%d"))]
-PM25.2007[, c := as.numeric(format(day, "%Y")) ]
-setnames(PM25.2007,"CODESTATION","stn")
-setnames(PM25.2007,"lat","lat_pm25")
-setnames(PM25.2007,"long","long_pm25")
-setnames(PM25.2007,"ALTITUDE","stn.elev")
-setnames(PM25.2007,"PMconc","pm25")
-PM25.2007<-select(PM25.2007,stn,day,c,lat_pm25,long_pm25,stn.elev,pm25)
-PM25.2007 <- PM25.2007[pm25 != 'NaN']
-PM25.2007 <- PM25.2007[lat_pm25 != 'NaN']
-PM25.2007 <- PM25.2007[long_pm25 != 'NaN']
-summary(PM25.2007$pm25)
-PM25.2007 <- PM25.2007[PM25.2007$pm25 >= 0]
-#create single aod point per aodid per day (this addresses cartesean error below)
-PM25.2007 <-PM25.2007 %>%
-    group_by(c,stn,day) %>%
-    summarise_each(funs(mean),long_pm25,lat_pm25,stn.elev,pm25)
-PM25.2007 <- PM25.2007[PM25.2007$pm25 >= 0]
-PM25.2007 <- PM25.2007[PM25.2007$pm25 <= 300]
-
-#PM25.2008
-PM25.2008 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM25_ 2008 .csv")
-str(PM25.2008)                                                                       
-PM25.2008[, day:=as.Date(strptime(Date, "%Y-%m-%d"))]
-PM25.2008[, c := as.numeric(format(day, "%Y")) ]
-setnames(PM25.2008,"CODESTATION","stn")
-setnames(PM25.2008,"lat","lat_pm25")
-setnames(PM25.2008,"long","long_pm25")
-setnames(PM25.2008,"ALTITUDE","stn.elev")
-setnames(PM25.2008,"PMconc","pm25")
-PM25.2008<-select(PM25.2008,stn,day,c,lat_pm25,long_pm25,stn.elev,pm25)
-PM25.2008 <- PM25.2008[pm25 != 'NaN']
-PM25.2008 <- PM25.2008[lat_pm25 != 'NaN']
-PM25.2008 <- PM25.2008[long_pm25 != 'NaN']
-summary(PM25.2008$pm25)
-PM25.2008 <- PM25.2008[PM25.2008$pm25 >= 0]
-#create single aod point per aodid per day (this addresses cartesean error below)
-PM25.2008 <-PM25.2008 %>%
-    group_by(c,stn,day) %>%
-    summarise_each(funs(mean),long_pm25,lat_pm25,stn.elev,pm25)
-PM25.2008 <- PM25.2008[PM25.2008$pm25 >= 0]
-PM25.2008 <- PM25.2008[PM25.2008$pm25 <= 300]
-
-#PM25.2009
-PM25.2009 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM25_ 2009 .csv")
-str(PM25.2009)                                                                       
-PM25.2009[, day:=as.Date(strptime(Date, "%Y-%m-%d"))]
-PM25.2009[, c := as.numeric(format(day, "%Y")) ]
-setnames(PM25.2009,"CODESTATION","stn")
-setnames(PM25.2009,"lat","lat_pm25")
-setnames(PM25.2009,"long","long_pm25")
-setnames(PM25.2009,"ALTITUDE","stn.elev")
-setnames(PM25.2009,"PMconc","pm25")
-PM25.2009<-select(PM25.2009,stn,day,c,lat_pm25,long_pm25,stn.elev,pm25)
-PM25.2009 <- PM25.2009[pm25 != 'NaN']
-PM25.2009 <- PM25.2009[lat_pm25 != 'NaN']
-PM25.2009 <- PM25.2009[long_pm25 != 'NaN']
-summary(PM25.2009$pm25)
-PM25.2009 <- PM25.2009[PM25.2009$pm25 >= 0]
-#create single aod point per aodid per day (this addresses cartesean error below)
-PM25.2009 <-PM25.2009 %>%
-    group_by(c,stn,day) %>%
-    summarise_each(funs(mean),long_pm25,lat_pm25,stn.elev,pm25)
-PM25.2009 <- PM25.2009[PM25.2009$pm25 >= 0]
-PM25.2009 <- PM25.2009[PM25.2009$pm25 <= 300]
-
-#PM25.2010
-PM25.2010 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM25_ 2010 .csv")
-str(PM25.2010)                                                                       
-PM25.2010[, day:=as.Date(strptime(Date, "%Y-%m-%d"))]
-PM25.2010[, c := as.numeric(format(day, "%Y")) ]
-setnames(PM25.2010,"CODESTATION","stn")
-setnames(PM25.2010,"lat","lat_pm25")
-setnames(PM25.2010,"long","long_pm25")
-setnames(PM25.2010,"ALTITUDE","stn.elev")
-setnames(PM25.2010,"PMconc","pm25")
-PM25.2010<-select(PM25.2010,stn,day,c,lat_pm25,long_pm25,stn.elev,pm25)
-PM25.2010 <- PM25.2010[pm25 != 'NaN']
-PM25.2010 <- PM25.2010[lat_pm25 != 'NaN']
-PM25.2010 <- PM25.2010[long_pm25 != 'NaN']
-summary(PM25.2010$pm25)
-PM25.2010 <- PM25.2010[PM25.2010$pm25 >= 0]
-#create single aod point per aodid per day (this addresses cartesean error below)
-PM25.2010 <-PM25.2010 %>%
-    group_by(c,stn,day) %>%
-    summarise_each(funs(mean),long_pm25,lat_pm25,stn.elev,pm25)
-PM25.2010 <- PM25.2010[PM25.2010$pm25 >= 0]
-PM25.2010 <- PM25.2010[PM25.2010$pm25 <= 300]
+PM25.gr <-PM25 %>%
+    group_by(stn,day,year) %>%
+    summarise_each(funs(mean),Long,Lat,PM25)
+setnames(PM25.gr,"Lat","lat_pm25")
+setnames(PM25.gr,"Long","long_pm25")
+setnames(PM25.gr,"PM25","pm25")
+setnames(PM25.gr,"year","c")
 
 #PM25.2011
 PM25.2011 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM25_ 2011 .csv")
@@ -420,7 +255,7 @@ PM25.2012 <- PM25.2012[PM25.2012$pm25 >= 0]
 PM25.2012 <- PM25.2012[PM25.2012$pm25 <= 300]
 
 #PM25.2013
-PM25.2013 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM25_ 2013 .csv")
+PM25.2013 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/PM25_2013.csv")
 str(PM25.2013)                                                                       
 PM25.2013$lat<-as.numeric(PM25.2013$lat)
 PM25.2013$long<-as.numeric(PM25.2013$long)
@@ -446,199 +281,31 @@ PM25.2013 <- PM25.2013[PM25.2013$pm25 >= 0]
 PM25.2013 <- PM25.2013[PM25.2013$pm25 <= 300]
 
 
-PM25<-rbindlist(list(PM25.2003,PM25.2004,PM25.2005,PM25.2006,PM25.2007,PM25.2008,PM25.2009,PM25.2010,PM25.2011,PM25.2012,PM25.2013))
-saveRDS(PM25,"/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
+PM25.n<-rbindlist(list(PM25.gr,PM25.2011[,!6,with=FALSE],PM25.2012[,!6,with=FALSE],PM25.2013[,!6,with=FALSE]))
+saveRDS(PM25.n,"/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm25.rds")
 #describe(PM25$pm25)
 
 
 
 #----------------------------------> PM Data
-#PM10
+#PM10 
 #calculate meanPM per grid per day to each station (excluding first station)
 
-#PM10.2003
-PM10.2003 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM10_ 2003 .csv")
-str(PM10.2003)                                                                       
-PM10.2003[, day:=as.Date(strptime(Date, "%Y-%m-%d"))]
-PM10.2003[, c := as.numeric(format(day, "%Y")) ]
-setnames(PM10.2003,"CODESTATION","stn")
-setnames(PM10.2003,"lat","lat_pm10")
-setnames(PM10.2003,"long","long_pm10")
-setnames(PM10.2003,"ALTITUDE","stn.elev")
-setnames(PM10.2003,"PMconc","pm10")
-PM10.2003<-select(PM10.2003,stn,day,c,lat_pm10,long_pm10,stn.elev,pm10)
-PM10.2003 <- PM10.2003[pm10 != 'NaN']
-PM10.2003 <- PM10.2003[lat_pm10 != 'NaN']
-PM10.2003 <- PM10.2003[long_pm10 != 'NaN']
-summary(PM10.2003$pm10)
-PM10.2003 <- PM10.2003[PM10.2003$pm10 >= 0]
-#create single aod point per aodid per day (this addresses cartesean error below)
-PM10.2003 <-PM10.2003 %>%
-    group_by(c,stn,day) %>%
-    summarise_each(funs(mean),long_pm10,lat_pm10,stn.elev,pm10)
-PM10.2003 <- PM10.2003[PM10.2003$pm10 >= 0]
-PM10.2003 <- PM10.2003[PM10.2003$pm10 <= 300]
+#read file with all PM10 observations for 2000-2010 (including daily mean calculated from hourly data in days with at least #18 hourly obs.)
+PM10 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/PM10.all.csv")
+str(PM10)                                                                       
+PM10$day<-as.Date(PM10$day,format="%Y-%m-%d")
+PM10$year<-year(PM10$day)
+summary(PM10)
 
-#PM10.2004
-PM10.2004 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM10_ 2004 .csv")
-str(PM10.2004)                                                                       
-PM10.2004[, day:=as.Date(strptime(Date, "%Y-%m-%d"))]
-PM10.2004[, c := as.numeric(format(day, "%Y")) ]
-setnames(PM10.2004,"CODESTATION","stn")
-setnames(PM10.2004,"lat","lat_pm10")
-setnames(PM10.2004,"long","long_pm10")
-setnames(PM10.2004,"ALTITUDE","stn.elev")
-setnames(PM10.2004,"PMconc","pm10")
-PM10.2004<-select(PM10.2004,stn,day,c,lat_pm10,long_pm10,stn.elev,pm10)
-PM10.2004 <- PM10.2004[pm10 != 'NaN']
-PM10.2004 <- PM10.2004[lat_pm10 != 'NaN']
-PM10.2004 <- PM10.2004[long_pm10 != 'NaN']
-summary(PM10.2004$pm10)
-PM10.2004 <- PM10.2004[PM10.2004$pm10 >= 0]
 #create single aod point per aodid per day (this addresses cartesean error below)
-PM10.2004 <-PM10.2004 %>%
-    group_by(c,stn,day) %>%
-    summarise_each(funs(mean),long_pm10,lat_pm10,stn.elev,pm10)
-PM10.2004 <- PM10.2004[PM10.2004$pm10 >= 0]
-PM10.2004 <- PM10.2004[PM10.2004$pm10 <= 300]
-
-#PM10.2005
-PM10.2005 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM10_ 2005 .csv")
-str(PM10.2005)                                                                       
-PM10.2005[, day:=as.Date(strptime(Date, "%Y-%m-%d"))]
-PM10.2005[, c := as.numeric(format(day, "%Y")) ]
-setnames(PM10.2005,"CODESTATION","stn")
-setnames(PM10.2005,"lat","lat_pm10")
-setnames(PM10.2005,"long","long_pm10")
-setnames(PM10.2005,"ALTITUDE","stn.elev")
-setnames(PM10.2005,"PMconc","pm10")
-PM10.2005<-select(PM10.2005,stn,day,c,lat_pm10,long_pm10,stn.elev,pm10)
-PM10.2005 <- PM10.2005[pm10 != 'NaN']
-PM10.2005 <- PM10.2005[lat_pm10 != 'NaN']
-PM10.2005 <- PM10.2005[long_pm10 != 'NaN']
-summary(PM10.2005$pm10)
-PM10.2005 <- PM10.2005[PM10.2005$pm10 >= 0]
-#create single aod point per aodid per day (this addresses cartesean error below)
-PM10.2005 <-PM10.2005 %>%
-    group_by(c,stn,day) %>%
-    summarise_each(funs(mean),long_pm10,lat_pm10,stn.elev,pm10)
-PM10.2005 <- PM10.2005[PM10.2005$pm10 >= 0]
-PM10.2005 <- PM10.2005[PM10.2005$pm10 <= 300]
-
-#PM10.2006
-PM10.2006 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM10_ 2006 .csv")
-str(PM10.2006)                                                                       
-PM10.2006[, day:=as.Date(strptime(Date, "%Y-%m-%d"))]
-PM10.2006[, c := as.numeric(format(day, "%Y")) ]
-setnames(PM10.2006,"CODESTATION","stn")
-setnames(PM10.2006,"lat","lat_pm10")
-setnames(PM10.2006,"long","long_pm10")
-setnames(PM10.2006,"ALTITUDE","stn.elev")
-setnames(PM10.2006,"PMconc","pm10")
-PM10.2006<-select(PM10.2006,stn,day,c,lat_pm10,long_pm10,stn.elev,pm10)
-PM10.2006 <- PM10.2006[pm10 != 'NaN']
-PM10.2006 <- PM10.2006[lat_pm10 != 'NaN']
-PM10.2006 <- PM10.2006[long_pm10 != 'NaN']
-summary(PM10.2006$pm10)
-PM10.2006 <- PM10.2006[PM10.2006$pm10 >= 0]
-#create single aod point per aodid per day (this addresses cartesean error below)
-PM10.2006 <-PM10.2006 %>%
-    group_by(c,stn,day) %>%
-    summarise_each(funs(mean),long_pm10,lat_pm10,stn.elev,pm10)
-PM10.2006 <- PM10.2006[PM10.2006$pm10 >= 0]
-PM10.2006 <- PM10.2006[PM10.2006$pm10 <= 300]
-
-#PM10.2007
-PM10.2007 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM10_ 2007 .csv")
-str(PM10.2007)                                                                       
-PM10.2007[, day:=as.Date(strptime(Date, "%Y-%m-%d"))]
-PM10.2007[, c := as.numeric(format(day, "%Y")) ]
-setnames(PM10.2007,"CODESTATION","stn")
-setnames(PM10.2007,"lat","lat_pm10")
-setnames(PM10.2007,"long","long_pm10")
-setnames(PM10.2007,"ALTITUDE","stn.elev")
-setnames(PM10.2007,"PMconc","pm10")
-PM10.2007<-select(PM10.2007,stn,day,c,lat_pm10,long_pm10,stn.elev,pm10)
-PM10.2007 <- PM10.2007[pm10 != 'NaN']
-PM10.2007 <- PM10.2007[lat_pm10 != 'NaN']
-PM10.2007 <- PM10.2007[long_pm10 != 'NaN']
-summary(PM10.2007$pm10)
-PM10.2007 <- PM10.2007[PM10.2007$pm10 >= 0]
-#create single aod point per aodid per day (this addresses cartesean error below)
-PM10.2007 <-PM10.2007 %>%
-    group_by(c,stn,day) %>%
-    summarise_each(funs(mean),long_pm10,lat_pm10,stn.elev,pm10)
-PM10.2007 <- PM10.2007[PM10.2007$pm10 >= 0]
-PM10.2007 <- PM10.2007[PM10.2007$pm10 <= 300]
-
-#PM10.2008
-PM10.2008 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM10_ 2008 .csv")
-str(PM10.2008)                                                                       
-PM10.2008[, day:=as.Date(strptime(Date, "%Y-%m-%d"))]
-PM10.2008[, c := as.numeric(format(day, "%Y")) ]
-setnames(PM10.2008,"CODESTATION","stn")
-setnames(PM10.2008,"lat","lat_pm10")
-setnames(PM10.2008,"long","long_pm10")
-setnames(PM10.2008,"ALTITUDE","stn.elev")
-setnames(PM10.2008,"PMconc","pm10")
-PM10.2008<-select(PM10.2008,stn,day,c,lat_pm10,long_pm10,stn.elev,pm10)
-PM10.2008 <- PM10.2008[pm10 != 'NaN']
-PM10.2008 <- PM10.2008[lat_pm10 != 'NaN']
-PM10.2008 <- PM10.2008[long_pm10 != 'NaN']
-summary(PM10.2008$pm10)
-PM10.2008 <- PM10.2008[PM10.2008$pm10 >= 0]
-#create single aod point per aodid per day (this addresses cartesean error below)
-PM10.2008 <-PM10.2008 %>%
-    group_by(c,stn,day) %>%
-    summarise_each(funs(mean),long_pm10,lat_pm10,stn.elev,pm10)
-PM10.2008 <- PM10.2008[PM10.2008$pm10 >= 0]
-PM10.2008 <- PM10.2008[PM10.2008$pm10 <= 300]
-
-#PM10.2009
-PM10.2009 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM10_ 2009 .csv")
-str(PM10.2009)                                                                       
-PM10.2009[, day:=as.Date(strptime(Date, "%Y-%m-%d"))]
-PM10.2009[, c := as.numeric(format(day, "%Y")) ]
-setnames(PM10.2009,"CODESTATION","stn")
-setnames(PM10.2009,"lat","lat_pm10")
-setnames(PM10.2009,"long","long_pm10")
-setnames(PM10.2009,"ALTITUDE","stn.elev")
-setnames(PM10.2009,"PMconc","pm10")
-PM10.2009<-select(PM10.2009,stn,day,c,lat_pm10,long_pm10,stn.elev,pm10)
-PM10.2009 <- PM10.2009[pm10 != 'NaN']
-PM10.2009 <- PM10.2009[lat_pm10 != 'NaN']
-PM10.2009 <- PM10.2009[long_pm10 != 'NaN']
-summary(PM10.2009$pm10)
-PM10.2009 <- PM10.2009[PM10.2009$pm10 >= 0]
-#create single aod point per aodid per day (this addresses cartesean error below)
-PM10.2009 <-PM10.2009 %>%
-    group_by(c,stn,day) %>%
-    summarise_each(funs(mean),long_pm10,lat_pm10,stn.elev,pm10)
-PM10.2009 <- PM10.2009[PM10.2009$pm10 >= 0]
-PM10.2009 <- PM10.2009[PM10.2009$pm10 <= 300]
-
-#PM10.2010
-PM10.2010 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM10_ 2010 .csv")
-str(PM10.2010)                                                                       
-PM10.2010[, day:=as.Date(strptime(Date, "%Y-%m-%d"))]
-PM10.2010[, c := as.numeric(format(day, "%Y")) ]
-setnames(PM10.2010,"CODESTATION","stn")
-setnames(PM10.2010,"lat","lat_pm10")
-setnames(PM10.2010,"long","long_pm10")
-setnames(PM10.2010,"ALTITUDE","stn.elev")
-setnames(PM10.2010,"PMconc","pm10")
-PM10.2010<-select(PM10.2010,stn,day,c,lat_pm10,long_pm10,stn.elev,pm10)
-PM10.2010 <- PM10.2010[pm10 != 'NaN']
-PM10.2010 <- PM10.2010[lat_pm10 != 'NaN']
-PM10.2010 <- PM10.2010[long_pm10 != 'NaN']
-summary(PM10.2010$pm10)
-PM10.2010 <- PM10.2010[PM10.2010$pm10 >= 0]
-#create single aod point per aodid per day (this addresses cartesean error below)
-PM10.2010 <-PM10.2010 %>%
-    group_by(c,stn,day) %>%
-    summarise_each(funs(mean),long_pm10,lat_pm10,stn.elev,pm10)
-PM10.2010 <- PM10.2010[PM10.2010$pm10 >= 0]
-PM10.2010 <- PM10.2010[PM10.2010$pm10 <= 300]
+PM10.gr <-PM10 %>%
+    group_by(stn,day,year) %>%
+    summarise_each(funs(mean),Long,Lat,PM10)
+setnames(PM10.gr,"Lat","lat_pm10")
+setnames(PM10.gr,"Long","long_pm10")
+setnames(PM10.gr,"PM10","pm10")
+setnames(PM10.gr,"year","c")
 
 #PM10.2011
 PM10.2011 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM10_ 2011 .csv")
@@ -688,7 +355,7 @@ PM10.2012 <- PM10.2012[PM10.2012$pm10 <= 300]
 
 #PM10.2013
 
-PM10.2013 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/ PM10_ 2013 .csv")
+PM10.2013 <- fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/PM10_2013.csv")
 str(PM10.2013)                                                                       
 PM10.2013$lat<-as.numeric(PM10.2013$lat)
 PM10.2013$long<-as.numeric(PM10.2013$long)
@@ -715,6 +382,6 @@ PM10.2013 <- PM10.2013[PM10.2013$pm10 <= 300]
 
 
 
-PM10<-rbindlist(list(PM10.2003,PM10.2004,PM10.2005,PM10.2006,PM10.2007,PM10.2008,PM10.2009,PM10.2010,PM10.2011,PM10.2012,PM10.2013))
+PM10<-rbindlist(list(PM10,PM10.2011,PM10.2012,PM10.2013))
 saveRDS(PM10,"/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/pm10.rds")
 #describe(PM10$pm10)

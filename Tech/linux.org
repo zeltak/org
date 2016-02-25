@@ -4657,7 +4657,13 @@ Also “You can use mutliple tray_output directives in your config to specify a 
 #+BEGIN_EXAMPLE
 bar {\ntray_output O1\ntray_output O2\n}
 #+END_EXAMPLE
+*** fix caps lock (CAPSLOCK) always on 
 
+issue on CLI
+
+#+BEGIN_SRC sh  :results none
+xdotool key Caps_Lock 
+#+END_SRC
 
 ** xfce
 *** how to get desktop icons on xubuntu
