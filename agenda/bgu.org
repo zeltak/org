@@ -159,6 +159,17 @@ look at asthame model table for to see change in R2 for each group of variables:
 
 ** TODO kees visit
 explore ctm use in our sat models (supplument sat data via data fusion methods)
+*** callibration pm25 and pm10
+first regress in the co located sites pm10 vs pm25 and look at the correlation (R2)
+in swiss the correlations ranged from 0.80 to 0.90
+take the nearest pm10/pm25 calibration monitor to each pm10 monitor without a pm25 station and predict from that calibration 
+you can create a neartable so that each p10 monitor gets the closest pm10/25 calibrated station to it and then this is used to predict these pm10 data
+ as extra validation you can check the R2 in the closest stations to the 10/25 ones and see how this prefroms
+*** TODO action items
+**** TODO talk to meytar to investigate 2011 aod data availability
+**** talk to arnon karenli about grant funding for the use of euro AOD data
+**** check VIIRS data avilablity for LAN for swiss
+**** take a look at swiss israeli grant opportunities 
 ** talk to oron about Eudoram
 ** TODO REFILE JOEL skype topics for next call
 the aod contribution project- david is pushing
