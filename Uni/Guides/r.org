@@ -9326,6 +9326,10 @@ This would produce the following result:
 |  2 | Khilan   |   1560 | 2009-11-20 00:00:00 |
 |  4 | Chaitali |   2060 | 2008-05-20 00:00:00 |
 +----+----------+--------+---------------------+
+**** sqldf example
+#+BEGIN_SRC R :session Rorg  :results none
+sqldf("select * from df1 join df2 on df1.id=df2.id")
+#+END_SRC
 * ggplot
 *** basic
 The simplest approach for creating graphs in ggplot2 is through the

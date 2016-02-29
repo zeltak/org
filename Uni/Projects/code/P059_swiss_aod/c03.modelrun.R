@@ -277,7 +277,7 @@ head(mod1)
 #xplore svm
 library(e1071)
  mod1.cv$res.m1<- mod1.cv$PM25new-mod1.cv$pred.m1.cv
-tryx <-svm(res.m1~ agfo2010+hoco2010+indu2010+traf2010+wood2010+MAJRDS_EU+ROADS_EU+ndviloc+elevloc+BLH+temp ,type="nu-regression",cross=10,data=mod1.cv)
+tryx <-svm(res.m1~ agfo2010+hoco2010+indu2010+traf2010+wood2010+MAJRDS_EU+ROADS_EU+ndviloc+elevloc+BLH+temp+ws+TP ,type="nu-regression",cross=10,data=mod1.cv)
 mod1.cv$predsvmloc <- predict(object=tryx) #morning
 
 
@@ -309,37 +309,28 @@ res[res$type=="PM25", 'm1cv.R2.time'] <-  print(summary(lm(delpm ~ delpred, data
 
 
 
+
+
+
+
 ### mod 2 (around 2-4 h)
 
 mod2 <- readRDS("/media/NAS/Uni/Projects/P059_SWISS_AOD/work/mod2.AQ.2013.rds")
-
+mod2<-filter(mod2,ndvi > 0)
 mod2[, pred.m2 := predict(object=m1_sc,newdata=mod2,allow.new.levels=TRUE,re.form=NULL)]
 gc()
 setkey(mod2,day, aodid)
 mod2<-mod2[!is.na(meanPM25)]
+mod2[, m := as.numeric(format(day, "%m")) ]
 mod2[, bimon := (m + 1) %/% 2]
 summary(mod2$pred.m2)
 gc()
 mod2 <- select(mod2,day,aodid,m,meanPM25,long_aod,lat_aod,bimon,pred.m2,aod)
-saveRDS(mod2,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.PM25.predm2.rds")
-keep(mod2,res,rmse,splitdf, sure=TRUE) 
-gc()
+saveRDS(mod2,"/media/NAS/Uni/Projects/P059_SWISS_AOD/work/mod2.AQ.2013.PM.predm2.rds")
+#keep(mod2,res,rmse,splitdf, sure=TRUE) 
 
-#check spatial patterns by plotting a map in mod2
-out <-mod2 %>%
-group_by(aodid) %>%
-summarise(x=mean(long_aod, na.rm=TRUE), y =mean(lat_aod, na.rm=TRUE), predm2=mean(pred.m2, na.rm=TRUE), aodm=mean(aod)  )
-out<-na.omit(out)
-write.csv(out,"~/ZH_tmp/Rout1.csv")
 
-# prepare for mod3 (10-18 h)
-setkey(mod2,day, aodid)
-mod2<-mod2[!is.na(meanPM25)]
-mod2[, bimon := (m + 1) %/% 2]
-gc()
-mod2 <- select(mod2,day,aodid,m,meanPM25,long_aod,lat_aod,bimon,pred.m2,aod)
-keep(mod2,res,rmse,splitdf, sure=TRUE) 
-gc()
+
 
 #run lme regression, this *should* include the thin plate spline yet will not run (computational limitations) thus we break it down into 2 components  
 m2.smooth = lme(pred.m2 ~ meanPM25,random = list(aodid= ~1 + meanPM25),control=lmeControl(opt = "optim"), data= mod2 )
@@ -385,11 +376,11 @@ mod2[, pred.t33 := predict(Final_pred_all)]
 #check correlations
 res[res$type=="PM25", 'm3.t33'] <- print(summary(lm(pred.m2 ~ pred.t33,data=mod2))$r.squared) 
 
-saveRDS(Final_pred_all,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/Final_pred.AQ.PM25.2003.rds")
 
 
 #mod 3 (5-8 h)
-mod3 <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2003.rds")
+mod3 <- readRDS("/media/NAS/Uni/Projects/P059_SWISS_AOD/work/mod3.AQ.2013.rds")
+mod3[, m := as.numeric(format(day, "%m")) ]
 mod3 <- select(mod3,day,aodid,m,meanPM25,long_aod,lat_aod)
 mod3[, bimon := (m + 1) %/% 2]
 setkey(mod3,day, aodid)
@@ -454,20 +445,21 @@ mod3 <- rbind(mod3_bimon1,mod3_bimon2,mod3_bimon3,mod3_bimon4,mod3_bimon5,mod3_b
 # create pred.m3
 mod3$pred.m3 <-mod3$pred.m3.mix+mod3$gpred
 hist(mod3$pred.m3)
-describe(mod3$pred.m3)
-saveRDS(mod3,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.pred.AQ.2003.rds")
+summary(mod3$pred.m3)
+saveRDS(mod3,"/media/NAS/Uni/Projects/P059_SWISS_AOD/work/mod3.pred.AQ.2003.rds")
 keep(data.m3,mod3,res,rmse, sure=TRUE) 
 gc()
 
 #calculate stage 3 R2- CV ten folds approach will take 6 weeks...we don't currently do CV for stage 3.
 
-mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2003.PM25.predm1.rds")
-mod1<-mod1[,c("aodid","day","pm25","pred.m1","SiteName"),with=FALSE]
+mod1 <-readRDS("/media/NAS/Uni/Projects/P059_SWISS_AOD/work/mod1.AQ.2003.PM25.predm1.rds")
+mod1$aodid<-paste(mod1$long_aod,mod1$lat_aod,sep="-")
+mod1<-mod1[,c("aodid","day","PM25new","pred.m1","SiteName"),with=FALSE]
 #R2.m3
 setkey(mod3,day,aodid)
 setkey(mod1,day,aodid)
 mod1 <- merge(mod1,mod3[, list(day,aodid,pred.m3)], all.x = T)
-m3.fit.all<- summary(lm(pm25~pred.m3,data=mod1))
+m3.fit.all<- summary(lm(PM25new~pred.m3,data=mod1))
 res[res$type=="pm25", 'm3.R2'] <- print(summary(lm(pm25~pred.m3,data=mod1))$r.squared)    
 res[res$type=="pm25", 'm3.I'] <-print(summary(lm(pm25~pred.m3,data=mod1))$coef[1,1])
 res[res$type=="pm25", 'm3.Ise'] <-print(summary(lm(pm25~pred.m3,data=mod1))$coef[1,2])
@@ -492,14 +484,14 @@ tempoall$delpm <-tempoall$pm25-tempoall$barpm
 tempoall$delpred <-tempoall$pred.m3-tempoall$barpred
 mod_temporal <- lm(delpm ~ delpred, data=tempoall)
 res[res$type=="pm25", 'm3.R2.time'] <-  print(summary(lm(delpm ~ delpred, data=tempoall))$r.squared)
-saveRDS(res, "/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/resALL.AQ.2003.PM25.rds")
+saveRDS(res, "/media/NAS/Uni/Projects/P059_SWISS_AOD/work/resALL.AQ.2003.PM25.rds")
 
 
 
 #create final prediction data set for use in health outcome studies
 
 #import mod2
-mod2<- readRDS( "/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2003.PM25.predm2.rds")
+mod2<- readRDS( "/media/NAS/Uni/Projects/P059_SWISS_AOD/work/mod2.AQ.2013.PM.predm2.rds")
 mod2<-mod2[,c("aodid","day","pred.m2"),with=FALSE]
 
 #----------------> store the best available
@@ -508,7 +500,7 @@ setkey(mod3best, day, aodid)
 setkey(mod2, day, aodid)
 mod3best <- merge(mod3best, mod2[,list(aodid, day, pred.m2)], all.x = T)
 setkey(mod1,day,aodid)
-mod3best <- merge(mod3best, mod1[,list(aodid,day,pred.m1,pm25)], all.x = T,allow.cartesian = T)
+mod3best <- merge(mod3best, mod1[,list(aodid,day,pred.m1,PM25new)], all.x = T,allow.cartesian = T)
 mod3best[,bestpred := pred.m3]
 mod3best[!is.na(pred.m2),bestpred := pred.m2]
 mod3best[!is.na(pred.m1),bestpred := pred.m1]
@@ -516,16 +508,16 @@ summary(mod3best$bestpred)
 mod3best[bestpred < 0 , bestpred  := 0.5]
 mod3best<-select(mod3best,day,aodid,long_aod,lat_aod,bestpred)
 #save
-saveRDS(mod3best,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/bestpred.AQ.2003.PM25.rds")
+saveRDS(mod3best,"/media/NAS/Uni/Projects/P059_SWISS_AOD/work/bestpred.AQ.2003.PM25.rds")
 mod3best<-filter(mod3best,!is.na(bestpred))
 
 #save for plotting in QGIS
 out <- mod3best %>% group_by(aodid) %>%
 summarise(x=mean(long_aod, na.rm=TRUE), y =mean(lat_aod, na.rm=TRUE), bestpred=mean(bestpred, na.rm=TRUE))
 out<-na.omit(out)
-write.csv(out,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/map.bestpred.AQ.2003.PM25.csv")
+write.csv(out,"/media/NAS/Uni/Projects/P059_SWISS_AOD/work/map.bestpred.AQ.2003.PM25.csv")
 #save res
-saveRDS(res,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/results.AQ.2003.rds")
+saveRDS(res,"/media/NAS/Uni/Projects/P059_SWISS_AOD/work/results.AQ.2003.rds")
 
 keep(rmse,splitdf, sure=TRUE) 
 gc()
