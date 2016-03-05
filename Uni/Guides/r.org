@@ -10036,6 +10036,7 @@ $Note$ dplyr generally does not preserve row names
  #+END_SRC
 
 **** filter NA (missing) 
+take out missing:
 #+BEGIN_SRC R
 ppb<-filter(pb,!is.na(V4))
 #+END_SRC

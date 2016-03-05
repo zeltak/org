@@ -61,7 +61,9 @@ filenames <- list.files( pattern="AOD.AQ.*.rds", full.names=TRUE)
     #fix LAT/LONG
   db$long_aod<- NULL
   db$lat_aod<- NULL
-  gc()
+rm(aq)
+rm(days.y)
+gc()
 
   #Fix LAT/LONG
   setkey(db,aodid)
@@ -75,8 +77,8 @@ filenames <- list.files( pattern="AOD.AQ.*.rds", full.names=TRUE)
   
   #load met
   Temp1<-filter(Temp,c==y)
-  
-  #begin "spatio-temporal joins" using GeoMerge
+
+#begin "spatio-temporal joins" using GeoMerge
   
   met.m <- makepointsmatrix(Temp1, "long_met", "lat_met", "stn")
   setkey(db, aodid)
@@ -120,7 +122,6 @@ filenames <- list.files( pattern="AOD.AQ.*.rds", full.names=TRUE)
   
   #cleanup
   keep(y,Temp,lu,filenames,fgrid,db,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
-  db$LUaodid<-NULL
   gc()
   
   #Join PBL
@@ -165,6 +166,10 @@ filenames <- list.files( pattern="AOD.AQ.*.rds", full.names=TRUE)
   keep(y,filenames,Temp,lu,fgrid,db,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
   gc()
   
+
+saveRDS(db,paste("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/tmpdb.",y,".rds",sep=""))
+
+
   #PM
   PM25<-fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/PM25.all.csv")
   PM25$day<-as.Date(PM25$day)
@@ -205,10 +210,15 @@ filenames <- list.files( pattern="AOD.AQ.*.rds", full.names=TRUE)
   pmj1<- nearestbyday(aod.m  ,pm.m , 
                               db, PM10 [, list(day,pm10,stn)], 
                               "aodid", "stn", "closest","pm10",knearest = 10, maxdistance = 120000, nearestmean = T)
+  
+  keep(fgrid,db,Temp, lu, filenames,y,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+  
   gc()
-  
-  #join to DB
-  
+
+ saveRDS(db,paste("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/tmpdb.",y,".rds",sep=""))
+
+#join to DB
+
   setkey(pmj1,aodid,day)
   setkey(db,aodid,day)
   db <- merge(db,pmj1[,list(day,aodid,closestmean)],all.x = T)

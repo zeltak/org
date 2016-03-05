@@ -4927,7 +4927,26 @@ Moving an email to the trash will fail to remove the Inbox label[1]. The solutio
 
 *** authinfo
 simple either save a new file with pass in file:~/.authinfo.gpg 
-or if you already have a file:~/.authinfo encrypt it to a .gpg file 
+or if you already have a file:~/.authinfo encrypt it to a .gpg file
+*** base setup to read news groups
+http://irreal.org/blog/?p=5027
+
+First configure an nntp server in your init.el like so
+
+(setq gnus-select-method '(nntp "ger.gmane.org"))
+
+Specify whatever nntp server you use but if, like many, your ISP no longer offers news, you can use ger.gmane.org as I did above.
+
+Then fire up Gnus with 【Meta+x】 gnus and type
+
+#+BEGIN_EXAMPLE
+B
+nntp
+news.gmane.org
+#+END_EXAMPLE
+
+At this point you should have a list of all the mailing lists on Gmane. If you're interested in, say, the Emacs Development list, search for emacs.devel and select it. From there, you can select individual threads to read. 
+
 ** Help
 *** find out color face your currently on
 Place the cursor over a given element in an org file and use the command 〖customize-face〗, and Emacs will present the face of the current text you’re on as the default argument. That makes it easy to visually identify what you want to change and quickly jump to its customization page.

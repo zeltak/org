@@ -51,7 +51,7 @@ write.csv (x <-cfintemp  %>%
     dplyr::summarise(long_lst = mean(long_lst, na.rm=TRUE),  lat_lst = mean(lat_lst, na.rm=TRUE)) , "/media/NAS/Uni/Projects/P000_TMP_PROJECTS/Veronica_temprature/magrid.csv")
 
 #import back cases_guid layer
-case.guid<-read_csv("/media/NAS/Uni/Projects/P000_TMP_PROJECTS/Veronica_temprature/cases_guid0011.csv")
+case.guid<-read_csv("/media/NAS/Uni/Projects/P000_TMP_PROJECTS/Veronica_temprature/final/add_guid.cases.csv")
 
 #merge temp reading
 
@@ -63,6 +63,6 @@ tst.tc<-temp.cases %>%
 
 
 #for veronica
-write.csv(temp.cases,"/media/NAS/Uni/Projects/P000_TMP_PROJECTS/Veronica_temprature/final/temp.cases0011.csv")
-case.guid.clean<-select(case.guid,X,Y,KIDUID, Latitude, Longitude ,maiac_x ,maiac_y ,guid)
-write.csv(case.guid.clean,"/media/NAS/Uni/Projects/P000_TMP_PROJECTS/Veronica_temprature/final/guid.cases011.csv")
+write.csv(temp.cases,"/media/NAS/Uni/Projects/P000_TMP_PROJECTS/Veronica_temprature/final/add.temp.cases0011.csv")
+case.guid.clean<-select(case.guid,X,Y,rowid, lat1, long1 ,long_lst ,lat_lst ,guid)
+write.csv(case.guid.clean,"/media/NAS/Uni/Projects/P000_TMP_PROJECTS/Veronica_temprature/final/add.guid.cases011.csv")
