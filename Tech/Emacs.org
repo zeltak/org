@@ -6773,6 +6773,13 @@ zeltak@zuni:~$ touch  /home/zeltak/.cache/emacs/hist/hist.txt
 ** Terminals
 *** ansi term 
 refixing actions that aren’t recognized by their standard key commands with ‘C-x’. For example, ‘M-x’ becomes ‘C-x M-x’.
+** use-package
+*** base 
+The :config keyword executes the code after a package is loaded;
+the :init keyword executes the code before the package is loaded;
+and the :preface keyword is there so the Emacs byte compiler and the lisp evaluator know about things like function and symbol declarations.
+
+My personal view is to put most things into :config (as you probably want to initialize your own settings after the package has loaded its own defaults) and only toy with :init and :preface if you have a good reason to
 ** text tricks
 *** How to add a prefix to every line? (such as # or //
 

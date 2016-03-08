@@ -35,8 +35,8 @@ lu <- readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/lu/france.grid.a
 setwd("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR")
 filenames <- list.files( pattern="AOD.AQ.*.rds", full.names=TRUE)
 
-#for (I in 1:11) {
-  I=2
+for (I in 3:4) {
+  #I=2
   y<-substr(filenames[I],10,13)
   aq<-readRDS(filenames[I])
   
@@ -167,7 +167,7 @@ gc()
   gc()
   
 
-saveRDS(db,paste("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/tmpdb.",y,".rds",sep=""))
+#saveRDS(db,paste("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/tmpdb.",y,".rds",sep=""))
 
 
   #PM
@@ -211,11 +211,10 @@ saveRDS(db,paste("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/tmpdb
                               db, PM10 [, list(day,pm10,stn)], 
                               "aodid", "stn", "closest","pm10",knearest = 10, maxdistance = 120000, nearestmean = T)
   
-  keep(fgrid,db,Temp, lu, filenames,y,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
-  
-  gc()
+  keep(pmj1,fgrid,db,Temp, lu, filenames,y,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
+    gc()
 
- saveRDS(db,paste("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/tmpdb.",y,".rds",sep=""))
+ #saveRDS(db,paste("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/tmpdb.",y,".rds",sep=""))
 
 #join to DB
 
@@ -233,64 +232,7 @@ saveRDS(db,paste("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/tmpdb
   #gc()
   saveRDS(db,paste("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.",y,".rds",sep=""))
   gc()
-  
-  ## db<-db[,obs:=1]
-  ## db[is.na(aod), obs:= 0]
-  ## ws.2003<-select(db,obs,elev_m,PBL,m,tempavg,aodid,day)
-  ## #ws.2003<-filter(ws.2003,!(is.na(tempavg)))
-  ## rm(db)
-  ## gc()
-  
-  ## #splits
-  ## ws.2003.s1<-ws.2003[1:50000000,]
-  ## w1.s1<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2003.s1)
-  ## ws.2003.s1$prob <- predict(w1.s1,type = c("response"))  
-  ## ws.2003.s1$wt <- 1/ws.2003.s1$prob
-  ## ws.2003.s1$normwt <- ws.2003.s1$wt/mean(ws.2003.s1$wt)
-  ## ws.2003.s1[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
-  ## rm(w1.s1)
-  ## gc()
-  
-  
-  ## #splits
-  ## ws.2003.s2<-ws.2003[50000001:100000000,]
-  ## w1.s2<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2003.s2)
-  ## ws.2003.s2$prob <- predict(w1.s2,type = c("response"))  
-  ## ws.2003.s2$wt <- 1/ws.2003.s2$prob
-  ## ws.2003.s2$normwt <- ws.2003.s2$wt/mean(ws.2003.s2$wt)
-  ## ws.2003.s2[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
-  ## rm(w1.s2)
-  ## gc()
-  
-  ## #splits
-  ## ws.2003.s3<-ws.2003[100000001:150000000,]
-  ## w1.s3<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2003.s3)
-  ## ws.2003.s3$prob <- predict(w1.s3,type = c("response"))  
-  ## ws.2003.s3$wt <- 1/ws.2003.s3$prob
-  ## ws.2003.s3$normwt <- ws.2003.s3$wt/mean(ws.2003.s3$wt)
-  ## ws.2003.s3[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
-  ## rm(w1.s3)
-  ## gc()
-  
-  
-  ## #splits
-  ## x<-dim(ws.2003)
-  ## ws.2003.s4<-ws.2003[150000001:x[1],]
-  ## w1.s4<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2003.s4)
-  ## ws.2003.s4$prob <- predict(w1.s4,type = c("response"))  
-  ## ws.2003.s4$wt <- 1/ws.2003.s4$prob
-  ## ws.2003.s4$normwt <- ws.2003.s4$wt/mean(ws.2003.s4$wt)
-  ## ws.2003.s4[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
-  ## rm(w1.s4)
-  ## gc()
-  
-  ## wf<-rbindlist(list(ws.2003.s1,ws.2003.s2,ws.2003.s3,ws.2003.s4))
-  
-  ## #reread m3
-  ## db<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2003.rds")
-  ## setkey(db,aodid,day)
-  ## setkey(wf,aodid,day)
-  ## db <- merge(db,wf,all.x = T)
+ 
   
   db.m2 <- db[!is.na(aod)]
   #rm m3
@@ -565,70 +507,11 @@ I=3
   #cleanup
   keep(fgrid,db,Temp, lu, filenames,y,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
   gc()
-  
-  #take out uneeded
+
   #save
-  #gc()
+
   saveRDS(db,paste("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.",y,".rds",sep=""))
   gc()
-  
-  ## db<-db[,obs:=1]
-  ## db[is.na(aod), obs:= 0]
-  ## ws.2003<-select(db,obs,elev_m,PBL,m,tempavg,aodid,day)
-  ## #ws.2003<-filter(ws.2003,!(is.na(tempavg)))
-  ## rm(db)
-  ## gc()
-  
-  ## #splits
-  ## ws.2003.s1<-ws.2003[1:50000000,]
-  ## w1.s1<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2003.s1)
-  ## ws.2003.s1$prob <- predict(w1.s1,type = c("response"))  
-  ## ws.2003.s1$wt <- 1/ws.2003.s1$prob
-  ## ws.2003.s1$normwt <- ws.2003.s1$wt/mean(ws.2003.s1$wt)
-  ## ws.2003.s1[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
-  ## rm(w1.s1)
-  ## gc()
-  
-  
-  ## #splits
-  ## ws.2003.s2<-ws.2003[50000001:100000000,]
-  ## w1.s2<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2003.s2)
-  ## ws.2003.s2$prob <- predict(w1.s2,type = c("response"))  
-  ## ws.2003.s2$wt <- 1/ws.2003.s2$prob
-  ## ws.2003.s2$normwt <- ws.2003.s2$wt/mean(ws.2003.s2$wt)
-  ## ws.2003.s2[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
-  ## rm(w1.s2)
-  ## gc()
-  
-  ## #splits
-  ## ws.2003.s3<-ws.2003[100000001:150000000,]
-  ## w1.s3<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2003.s3)
-  ## ws.2003.s3$prob <- predict(w1.s3,type = c("response"))  
-  ## ws.2003.s3$wt <- 1/ws.2003.s3$prob
-  ## ws.2003.s3$normwt <- ws.2003.s3$wt/mean(ws.2003.s3$wt)
-  ## ws.2003.s3[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
-  ## rm(w1.s3)
-  ## gc()
-  
-  
-  ## #splits
-  ## x<-dim(ws.2003)
-  ## ws.2003.s4<-ws.2003[150000001:x[1],]
-  ## w1.s4<- glm(obs ~ elev_m+PBL+as.factor(m),family=binomial,data=ws.2003.s4)
-  ## ws.2003.s4$prob <- predict(w1.s4,type = c("response"))  
-  ## ws.2003.s4$wt <- 1/ws.2003.s4$prob
-  ## ws.2003.s4$normwt <- ws.2003.s4$wt/mean(ws.2003.s4$wt)
-  ## ws.2003.s4[, c("prob", "wt","obs","elev_m", "PBL" , "m","tempavg"  ) := NULL]
-  ## rm(w1.s4)
-  ## gc()
-  
-  ## wf<-rbindlist(list(ws.2003.s1,ws.2003.s2,ws.2003.s3,ws.2003.s4))
-  
-  ## #reread m3
-  ## db<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod3.AQ.2003.rds")
-  ## setkey(db,aodid,day)
-  ## setkey(wf,aodid,day)
-  ## db <- merge(db,wf,all.x = T)
   
   db.m2 <- db[!is.na(aod)]
   #rm m3
@@ -681,8 +564,10 @@ I=3
   
   setkey(PM25,stn,day)
   setkey(closestaod,stn,day)
-  PM25.m1 <- merge(PM25, closestaod, all.x = T)
+  PM25.m1 <- merge(closestaod,PM25, by=c("stn","day"))
   PM25.m1<-PM25.m1[!is.na(aod)]
+  #PM25.m1 <- merge(PM25, closestaod, all.x = T)
+ # PM25.m1<-PM25.m1[!is.na(aod)]
   
   #save mod 1
   saveRDS(PM25.m1,paste("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.",y,".PM25.rds",sep=""))
@@ -718,3 +603,4 @@ I=3
   #cleanup
   keep(lu,Temp,filenames,fgrid,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
   gc()
+}
