@@ -49,13 +49,96 @@
 -Submit to a Euro journal
 -compare the model to avilable models in europe.
 - While we were successful in developing such a model in the Northeast, performance in Europe is unknown where land use patterns are different, and where there are sharp climate gradients such as mountainous areas, cold Atlantic shores Mediterranean climate, etc such as in France. I would also point out that the model has shown its advantages over nearby temperature monitors in health effect studies already.  I would try Atmospheric Environment.
-**** related papers 
+**** related papers
 ** P046.Israel_MAIAC
+*** TASK check in Israel for next iteration
+ composition of PM in israel
+ teom at 50 celsius  may over measure and introduce noise to pm25.
+ look at average residual in monitors 
+ put that in the paper teom is limited
+ -why do we correlate 24h and not by overpass
+ -better regions
+ -a mean 20km mpm excluding the actual monitoring data. works very well as predictor but we have mod 2 problem. Also David dosent like it.
+
+*** Meetings
+**** ILAN YUVAL meeting [2015-09-01]
+****** base for meeting
+ no real need for 3 competing models
+ combine all into 1 model
+****** SPACE TIME DATASET
+******* data available
+******** monitor data
+ data base by yuval
+ half hourley data based on MOE monitoring network
+ most pollutants in israel and meteorological variables
+ Itai's student is working on met data from all stations in Israel (not only MOE) - will contact yuval
+ check if he has data from-MISRAD HAHAKLAUT AND MACHON METEOROLOGY
+ also met data
+ ozone
+ toluene/benzene
+ etc
+ traffic data from "decell"-traffic velocity and density (Ako to BSV including Jerusalem)
+ David's student Shimi is working on a model based on the "decell" data with weekends/holidays/seasons
+ POPULATION DENSITY-2012
+ point emission inventory (shimi has been working with it), nox,sox,pm2.5,pm10,nvoc
+ VOC from populTION-population density*factor; how much does it affect the model??
+ Hourly wind direction/speed field 3km resolution
+ PM and dust
+ street map
+
+ Itai 
+ NDVI-1km
+ surface reflectance-create land use map based on the sr data (future project)
+ Roads map
+ LU
+
+ MOE
+ country predictive model  - emission rate from traffic - 4 metropolins (from 2002)
+ annual data based on working days and private cars
+
+ LANDSAT
+ PBL- Beit dagan and davis studetn
+ elev-from aster
+ analyze raw satellite radiance data and relation to pm
+
+
+ ****Ideas****
+ diurnal cycle of pm data
+ analyze raw satellite radiance data and relation to pm
+ speciciation of particles - jeremy data from 2007, get samples  data from MOE (ilan)
+ Yael Etzion and David are working on number concentrations DYLOS technology
+ we are creating a database - who will be in charge ? david/itai
+
+ next meeting - october 2015
+ meytar send raw aod data to ilan~
+
+****** state strength and weakness of all models
+******* aod data
+ we don't expect a good liear corr between aod and pm
+****** see which spatial/temporal data each group has and combine them into a joint pool for all future exposre studies
+****** check spciaction from MOEP to see which componenets (traffic vs secondary ) are in each city and vs rural areas
+ will be also good for goescehm model
+ ask david about that
+ borrow a haravrd based filter- talk to petros
+
+
+
 ** P047.BW_MAIAC
 ** P050.Haifa.Mon
 ** P051.PAD_NEMIA
 ** P052.noise_expo
 ** P057_helena_Vertprofile
+** P065_Aqua_Tera_calibrations
+*** use of aqua and terra as 2 separate exposures
+instead of calibrating: one would be a peak level exposure and one a "background" exposure
+ calibrate with hourly 
+ terra > 9:30
+ aqua > 14:30 
+ talk to petros
+we want to show that one picks up traffic well while the other picks up transported PM mainly
+
+** P067_Yom_kipuer_lagbaomer_MLR
+
 * Future Project Ideas
 ** Model.PM 
 *** Ideas (NEED TO QUEUE BY PRIORITY)
