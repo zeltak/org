@@ -86,6 +86,9 @@ ndvidh17v04<-fread("/media/NAS/Uni/Data/Europe/france/ndvi_france/out/NDVI_h17v0
 ndvidh18v03<-fread("/media/NAS/Uni/Data/Europe/france/ndvi_france/out/NDVI_h18v03.csv")
 ndvidh18v04<-fread("/media/NAS/Uni/Data/Europe/france/ndvi_france/out/NDVI_h18v04.csv")
 ndvi<-rbindlist(list(ndvidh17v04,ndvidh18v04,ndvidh18v03))
+rm(ndvidh17v04)
+rm(ndvidh18v04)
+rm(ndvidh18v03)
 #tail(ndvi)
 setnames(ndvi,"V4","lat_ndvi")
 setnames(ndvi,"V5","long_ndvi")
@@ -120,27 +123,17 @@ saveRDS(key.ndvi,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/keys/key.ndvi
 
 
 ########### import pbl
-pbl1<-fread("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/PBL_France._0_250.csv")
-pbl2<-fread("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/PBL_France._0_250.csv")
-pbl3<-fread("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/PBL_France._251_500.csv")
-pbl4<-fread("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/PBL_France._501_750.csv")
-pbl5<-fread("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/PBL_France._1001_1250.csv")
-pbl6<-fread("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/PBL_France._1251_1500.csv")
-pbl7<-fread("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/PBL_France._1751_2000.csv")
-pbl8<-fread("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/PBL_France._2001_2250.csv")
-pbl9<-fread("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/pbl_france._2501_2750.csv")
-pbl11<-fread("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/PBL_France._2751_3000.csv")
-pbl12<-fread("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/PBL_France._3251_3500.csv")
-pbl13<-fread("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/PBL_France._3501_3750.csv")
-pbl14<-fread("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/PBL_France._3751_4000.csv")
-pbl15<-fread("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/PBL_France._4001_4250.csv")
-pbl16<-fread("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/PBL_France._4251_4500.csv")
-pbl17<-fread("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/PBL_France._4501_4750.csv")
-pbl18<-fread("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/PBL_France._4751_5000.csv")
-pbl19<-fread("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/PBL_France._5001_5250.csv")
-pbl20<-fread("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/PBL_France._5251_5479.csv")
+setwd("/media/NAS/Uni/Data/Europe/france/pbl/final_csv/")
+filenames <- list.files( pattern="*.csv", full.names=TRUE)
+for (I in 1:length(filenames)) {
+    
+  tmp<-fread(filenames[I])
+  name=paste("PBL.",I,sep="")
+  assign(name,tmp)
+}
 
-pbl<-rbindlist(list(pbl1,pbl2,pbl3,pbl4,pbl5,pbl6,pbl7,pbl8,pbl9,pbl11,pbl12,pbl13,pbl14,pbl15,pbl16,pbl17,pbl18,pbl19,pbl20))
+
+pbl<-rbindlist(list(PBL.1,PBL.2,PBL.3,PBL.4,PBL.5,PBL.6,PBL.7,PBL.8,PBL.9,PBL.10,PBL.11,PBL.12,PBL.13,PBL.14,PBL.15,PBL.16,PBL.17,PBL.18,PBL.19,PBL.20,PBL.21,PBL.22))
 
 #createPBL ID 
 pbl$pblid<-paste(pbl$X,pbl$Y,sep="-")

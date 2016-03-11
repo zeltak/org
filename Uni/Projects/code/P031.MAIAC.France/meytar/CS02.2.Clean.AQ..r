@@ -21,8 +21,8 @@ library(DataCombine)
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
-mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.rds")
-mod2 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod2.AQ.2004.rds")
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2006.PM25.rds")
+head(mod1)
 
 library(ggmap)
 map <- get_map(location = 'France',zoom=6)
@@ -31,10 +31,10 @@ mapPoints <- ggmap(map) +
    geom_point(data = x,aes(x = long_aod, y = lat_aod,size=5),  alpha = .5)
 mapPoints
 
-summary(mod1)
+describe(mod1$wflag)
 #delete water flags
-mod1<-filter(mod1,ndvi > 0)
-
+#mod1<-filter(mod1,ndvi > 0)
+mod1<-filter(mod1, wflag < 1)
 #filter nasa
 mod1<-filter(mod1,UN >0  & UN  <0.04)
 
@@ -57,6 +57,39 @@ mod1<-mod1[saod < 30 , exobs := 5]
 
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
+
+
+#pm10
+mod1.pm10 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2006.PM10.rds")
+head(mod1)
+
+
+describe(mod1.pm10$wflag)
+#delete water flags
+#mod1.pm10<-filter(mod1.pm10,ndvi > 0)
+mod1.pm10<-filter(mod1.pm10, wflag < 1)
+#filter nasa
+mod1.pm10<-filter(mod1.pm10,UN >0  & UN  <0.04)
+
+#massimos thresholds
+x<-select(mod1.pm10,aod,stn)
+x$c<-1
+x <- x %>%
+    group_by (stn) %>%
+        summarise(saod=sum(c))
+#merge back count
+setkey(x,stn)
+setkey(mod1.pm10,stn)
+mod1.pm10 <- merge(mod1.pm10,x, all.x = T)
+
+mod1.pm10$exobs<-0
+mod1.pm10<-mod1.pm10[aod < quantile(aod, c(.50)) & pm10 >  quantile(pm10, c(.90)), exobs := 2]
+mod1.pm10<-mod1.pm10[aod > quantile(aod, c(.90)) & pm10 <  quantile(pm10, c(.50)), exobs := 3]
+mod1.pm10<-mod1.pm10[aod > 1.2 , exobs := 4]
+mod1.pm10<-mod1.pm10[saod < 30 , exobs := 5]
+
+#take out bad exobs
+mod1.pm10<-filter(mod1.pm10,exobs==0)
 
 
 
@@ -153,7 +186,6 @@ mod1<-filter(mod1,exobs==0)
 ### add local LU data
 #add met regions 
 ems<-as.data.table(read.dbf("/media/NAS/Uni/Projects/P059_SWISS_AOD/Satellite air pollution/data/lpm_lanuds/Emissions_per_stn.dbf"))
-
 road<-as.data.table(read.dbf("/media/NAS/Uni/Projects/P059_SWISS_AOD/Satellite air pollution/data/lpm_lanuds/RoadDensity_local.dbf"))
 ndvi<-as.data.table(read.dbf("/media/NAS/Uni/Projects/P059_SWISS_AOD/Satellite air pollution/data/lpm_lanuds/Localndvi.dbf"))
 elev<-as.data.table(read.dbf("/media/NAS/Uni/Projects/P059_SWISS_AOD/Satellite air pollution/data/lpm_lanuds/LocalAlt.dbf"))
