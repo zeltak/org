@@ -23,7 +23,7 @@ mod2008<-readRDS("/media/NAS/Uni/Projects/P020_Temprature_NE_MIA/3.Work/3.Analys
 mod2009<-readRDS("/media/NAS/Uni/Projects/P020_Temprature_NE_MIA/3.Work/3.Analysis/AN010_bestpred_csv/Fintmpc_2009.rds")
 mod2010<-readRDS("/media/NAS/Uni/Projects/P020_Temprature_NE_MIA/3.Work/3.Analysis/AN010_bestpred_csv/Fintmpc_2010.rds")
 mod2011<-readRDS("/media/NAS/Uni/Projects/P020_Temprature_NE_MIA/3.Work/3.Analysis/AN010_bestpred_csv/Fintmpc_2011.rds")
-
+mod2x<-fread("/media/NAS/Uni/Projects/P020_Temprature_NE_MIA/3.Work/3.Analysis/Temperature_NE/tempnd_2004.csv")
 ugrid <-mod2004 %>%
     group_by(aodid) %>%
     summarise(lat_aod = mean(lat_aod, na.rm=TRUE),  long_aod = mean(long_aod, na.rm=TRUE),x_aod_ITM = mean(x_aod_ITM, na.rm=TRUE),  y_aod_ITM = mean(y_aod_ITM, na.rm=TRUE))

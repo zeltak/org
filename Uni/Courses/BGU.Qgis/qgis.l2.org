@@ -1,0 +1,1123 @@
+# -*- mode: Org; org-download-image-dir: "/home/zeltak/org/attach/bgu/courses/BGU.Qgis/images/"; org-download-heading-lvl: nil; -*-
+#+Title:Qgis
+#+Author: Dr. Itai Kloog 
+#+Email: ikloog@bgu.ac.il
+#+REVEAL_TITLE_SLIDE_BACKGROUND: /home/zeltak/org/attach/bgu/courses/BGU.Qgis/images/floss_course_header.png
+
+#+OPTIONS: reveal_center:t reveal_progress:t reveal_history:nil reveal_control:t
+# #+OPTIONS: reveal_center:t 
+#+OPTIONS: reveal_rolling_links:t reveal_keyboard:t reveal_overview:t num:nil
+#+OPTIONS: reveal_width:1200 reveal_height:800
+#+OPTIONS: toc:nil
+# #+REVEAL: split
+#+REVEAL_MARGIN: 0.1
+#+REVEAL_MIN_SCALE: 0.5
+#+REVEAL_MAX_SCALE: 2.5
+#+REVEAL_TRANS: linear
+#+REVEAL_SPEED: default
+#+REVEAL_THEME: white
+#+REVEAL_HLEVEL: 2
+#+REVEAL_HEAD_PREAMBLE: <meta name="description" content="Org-Reveal Introduction.">
+#+REVEAL_POSTAMBLE: <p> Created by itai Kloog. </p>
+# REVEAL_PLUGINS: (highlight markdown notes)
+#+REVEAL_EXTRA_CSS: ./local.css
+#+REVEAL_SLIDE_NUMBER: t
+#+OPTIONS: ^:nil
+#+EXCLUDE_TAGS: noexport
+#+TAGS: noexport(n)
+
+
+
+* Week 2-Introduction to FLOSS GIS and Quantum GIS
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2015-10-19 09:45:28
+#+attr_html: :width 300px
+ [[~/Sync/attach/images_2015/screenshot_2015-10-19_09-45-28.png]]
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 10:24:11
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_10:24:11.png]]
+
+
+** Open Source GIS
+*** FLOSS GIS
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 10:43:08
+ #+attr_html: :width 800px
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_10:43:07.png]]
+
+*** What's Out There?
+  *A whole lot!!!*
+
+  Over 500 project entries on
+  [[http://opensourcegis.org/][http://freegis.org]]
+
+ Today we will overview  a small selection of some of the leading packages
+
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 10:44:56
+ #+attr_html: :width 500px
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_10:44:56.png]]
+*** What is GIS
+
+ Wikipedia definition: A system designed to capture, store, manipulate, analyze, manage, and present all types of geographically referenced data.
+
+ It is used in many applications: Small municipalities, forestry, military, commercial businesses, etc., etc.
+
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 10:28:08
+ #+attr_html: :width 600px
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_10:28:08.png]]
+
+
+*** why GIS?
+
+ Easily measure distances
+
+ Easily measure areas
+
+ Find overlap between features
+
+ Proximity
+
+ Everything is related by location (Tobler's Law-The *first law of geography*):
+
+ "Everything is related to everything else, but near things are more  related than distant things."
+
+
+*** USGS Earthquake Zones
+ GIS Example:  Where do you not want to live based on this map...
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 10:31:31
+ #+attr_html: :width 600px
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_10:31:31.png]]
+
+
+*** Outputs from a GIS
+
+  *Maps*
+   -  Printed
+   -  Digital (PDF, JPEG)
+
+  *Spreadsheets*
+
+  *Databases*
+
+  *Files*
+  -  Shapefiles
+  -  KML
+*** Base file types
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 20:54:54
+#+attr_html: :width 700px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_20:54:54.png]]
+*** FreeGIS Project
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 10:45:43
+ #+attr_html: :width 800px
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_10:45:43.png]]
+
+ http://freegis.org/
+
+ Aims and Services:
+
+ -  The FreeGIS Project aims to promote the freedom in the scope of
+    Geographic Information Systems (GIS)
+
+ It seeks to reach its aim through: 
+ promoting the use, development and support of Free GIS Software,
+
+ promoting the use and release of publicly available geographic data in the same sense of freedom as for Free Software,
+*** OSGeo
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 11:52:55
+ #+attr_html: :width 400px
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_11:52:55.png]]
+
+  -  Non-profit formed in 2006
+
+  -  Goal of supporting and building the best open source geospatial
+     tools possible including data
+
+  -  Provides financial, organizational and legal support to the broader
+     Free and Open Source geospatial community
+
+  -  Serves as an independent legal entity to which community members can
+     contribute code, funding and other resources, secure in the knowledge
+     that their contributions will be maintained for public benefit.
+
+  -  Provides a common forum and shared infrastructure for improving
+     cross-project collaboration
+
+*** Projects under the OSGeo umbrella
+
+ *Desktop Applications*
+
+ GRASS GIS,Quantum GIS,gvSIG
+
+ *Geospatial Libraries*
+
+ FDO,GDAL/OGR,GeoTools,GEOS,MetaCRS,OSSIM,PostGIS
+
+ *Web Mapping-server*
+
+ MapServer,deegree,Geomajas,GeoServer
+
+ *Web Mapping-Client*
+
+ Mapbender,MapFish,MapGuide Open ,OpenLayers
+
+ *Metadata Catalog*
+
+ GeoNetwork opensource
+
+*** FOSS4G
+  *Free and Open Source Software GeoSpatial Annual Conference*
+
+  Hosted yearly by OSGeo
+
+  #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 10:55:09
+  #+attr_html: :width 500px
+   [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_10:55:09.png]]
+
+  #+REVEAL: split 
+
+  #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 10:56:12
+  #+attr_html: :width 400px
+   [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_10:56:12.png]]
+
+*** Different Realms of FLOSS GIS
+
+  Desktop
+
+  Geoprocessing/Analysis
+
+  Spatial Databases
+
+  Web Mapping Servers
+
+  Web Mapping Clients
+
+  *Today we'll just cover some of the leading Desktop packages*
+
+*** Some Foundations of FLOSS GIS
+
+GDAL/OGR : Frank Warmerdam (FWTools)
+Tools for reading, writing, and processing 
+
+GDAL - Geospatial Data Abstraction Library (Raster )
+
+OGR - OpenGIS Simple Features Reference (Vector)
+
+Proj4-Tools for working with projections
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 10:59:37
+#+attr_html: :width 150px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_10:59:37.png]]  
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 11:00:03
+#+attr_html: :width 150px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_11:00:03.png]]
+
+*** OGR
+
+ Tools for manipulating vector data
+
+ Over 40 vector data formats supported
+
+  *ogrinfo* - Lists information about an OGR supported data source
+
+  *ogr2ogr* - Converts simple features data between file formats
+
+  *ogrtindex* - Creates a tileindex
+
+#+REVEAL: split 
+
+  | *Format Name*                  | *Code*         | *Creation* |
+  |--------------------------------+----------------+------------|
+  | Arc/Info .E00 (ASCII) Coverage | AVCE00         | No         |
+  | AutoCAD DXF                    | DXF            | Yes        |
+  | Comma Separated Value (.csv)   | CSV            | Yes        |
+  | ESRI Personal GeoDatabase      | PGeo           | No         |
+  | ESRI ArcSDE                    | SDE            | No         |
+  | ESRI Shapefile                 | ESRI Shapefile | Yes        |
+  | GeoRSS                         | GeoRSS         | Yes        |
+  | GML                            | GML            | Yes        |
+  | GPX                            | GPX            | Yes        |
+
+#+REVEAL: split 
+
+  | GRASS                          | GRASS          | No         |
+  | KML                            | KML            | Yes        |
+  | Mapinfo File                   | MapInfo File   | Yes        |
+  | Microstation DGN               | DGN            | Yes        |
+  | MySQL                          | MySQL          | No         |
+  | Oracle Spatial                 | OCI            | Yes        |
+  | EPIInfo .REC                   | REC            | No         |
+  | SDTS                           | SDTS           | No         |
+  | U.S. Census TIGER/Line         | TIGER          | No         |
+
+*** GDAL
+
+  Tools for manipulating raster data
+
+  Over 100 raster data formats supported
+
+ Over 100 raster data formats supported!
+ #+REVEAL: split 
+
+  | GDAL Raster Formats                                |           |          |                |
+  |----------------------------------------------------+-----------+----------+----------------|
+  | Long Format Name                                   | Code      | Creation | Georeferencing |
+  | Arc/Info ASCII Grid                                | AAIGrid   | Yes      | Yes            |
+  | Microsoft Windows Device Independent Bitmap (.bmp) | BMP       | Yes      | Yes            |
+  | ERMapper Compressed Wavelets (.ecw)                | ECW       | Yes      | Yes            |
+  | Erdas Imagine Raw                                  | EIR       | No       | Yes            |
+  | ENVI .hdr Labelled Raster                          | ENVI      | Yes      | Yes            |
+  | Graphics Interchange Format (.gif)                 | GIF       | Yes      | No             |
+  | GRASS Rasters                                      | GRASS     | No       | Yes            |
+  | Erdas Imagine (.img)                               | HFA       | Yes      | Yes            |
+#+REVEAL: split 
+  | JPEG JFIF (.jpg)                                   | JPEG      | Yes      | Yes            |
+  | JPEG2000 (.jp2, .j2k)                              | JPEG2000  | Yes      | Yes            |
+  | JPEG2000 (.jp2, .j2k)                              | JP2MrSID  | Yes      | Yes            |
+  | Portable Network Graphics (.png)                   | PNG       | Yes      | No             |
+  | ArcSDE Raster                                      | SDE       | No       | Yes            |
+  | USGS ASCII DEM (.dem)                              | USGSDEM   | Yes      | Yes            |
+  | GDAL Virtual (.vrt)                                | VRT       | Yes      | Yes            |
+  | OGC Web Coverage Server                            | WCS       | No       | Yes            |
+  | WKTRaster                                          | WKTRaster | No       | Yes            |
+  | OGC Web Map Server                                 | WMS       | No       | Yes            |
+
+*** GDAL Command line utilities
+
+  gdalinfo - report information about a file.
+
+  gdal translate - Copy a raster file, with control of output format.
+
+  gdaladdo - Add overviews to a file...pyramids
+
+  gdalwarp - Warp an image into a new coordinate system.
+
+  gdal contour - Contours from DEM.
+
+  gdaldem - Tools to analyze and visualize DEMs.
+
+  rgb2pct.py - Convert a 24bit RGB image to 8bit paletted.
+
+  pct2rgb.py - Convert an 8bit paletted image to 24bit RGB.
+
+ #+REVEAL: split 
+
+  gdal merge.py - Build a quick mosaic from a set of images.
+
+  gdal rasterize - Rasterize vectors into raster file.
+
+  gdaltransform - Transform coordinates.
+
+  nearblack - Convert nearly black/white borders to exact value.
+
+  gdal grid - Create raster from the scattered data.
+
+  gdal polygonize.py - Generate polygons from raster.
+
+  gdal sieve.py - Raster Sieve filter.
+
+  gdal fillnodata.py - Interpolate in nodata regions.
+
+  gdal-config - Get options required to build software using GDAL.
+
+*** PROJ4
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 15:04:32
+ #+attr_html: :width 200px
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_15:04:32.png]]
+
+ Engine for re-projecting and transforming geospatial datasets from one SRS to another
+
+  *Integrated into many FOSS and proprietary packages*
+
+  -  *QGIS*
+  -  *GRASS GIS*
+  -  *MapServer*
+  -  *gvSIG*
+  -  *PostGIS*
+  -  *Google Earth*
+ #+REVEAL: split 
+  *Desktop Packages*
+
+  -  *GRASS GIS (C)*
+  -  *Quantum GIS (aka QGIS) (C)*
+  -  *MapWindow (.Net)*
+  -  *uDig (Java)*
+  -  *GvSig (Java)*
+
+*** GRASS GIS
+
+Geographic Resources Analysis Support System (Grass) 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 15:09:00
+#+attr_html: :width 100px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_15:09:00.png]]
+
+
+Oldest active GIS package, has been under continuous development since 1982!
+
+ *Development History*
+
+ -  U.S. Army - Construction Engineering Research Laboratory (USA-CERL) originally directed its development
+
+ -  1995 -2001 - revived by Baylor University
+
+ -  2001 - current - ITC a research center in Italy
+
+#+REVEAL: split 
+
+ -  Has a different vocabulary and workflow which takes getting used to
+ -  Originally raster based but now includes vector
+ -  Extremely powerful
+ -  Historically had no GUI and was Linux based.
+ -  Recently true windows versions are available with a nice GUI
+
+*** Cartography
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 15:11:26
+ #+attr_html: :width 600px
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_15:11:26.png]]
+
+*** 3D Visualization
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 15:12:49
+ #+attr_html: :width 700px
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_15:12:49.png]]
+
+
+*** Image Processing
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 15:13:22
+ #+attr_html: :width 600px
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_15:13:22.png]]
+
+*** Vector Analysis
+GRASS isn't just for rasters anymore
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 15:14:32
+ #+attr_html: :width 300px
+
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_15:14:32.png]]
+
+*** Quantum GIS (Qgis)
+
+Available for Windows, Linux & Mac
+
+  -  User Plugins
+  -  Active listserv
+  -  Lots of new functionality
+
+  Easy intuitive interface
+
+Can be used as a front end to GRASS GIS
+
+we will talk about this in depth in a bit...
+
+*** MapWindow GIS
+
+  [[http://www.mapwindow.org/]]
+
+  -  Similar to QGIS in many ways but part of the .net family
+  -  Only available for Windows
+  -  Developed by Daniel Armes at Univ Utah
+  -  Active Development community
+  -  Not too hard to guess how ArcGIS features are implemented
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 15:15:58
+ #+attr_html: :width 300px
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_15:15:58.png]]
+
+ #+REVEAL: split 
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 15:16:17
+ #+attr_html: :width 600px
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_15:16:17.png]]
+
+
+*** MapWindow GIS
+
+  -  Plugins similar to QGIS
+  -  Built-in access to Google geocoder
+  -  Watershed tools
+  -  Built-in GPS functions
+  -  Basic Raster tools
+  -  Basic Vector
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 15:17:09
+ #+attr_html: :width 500px
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_15:17:09.png]]
+
+
+*** uDIG
+  *User-Friendly Desktop Internet GIS*
+
+  http://udig.refractions.net
+
+  -  Part of the Java tribe
+  -  Mostly a viewer...but can be much more
+  -  Available on Windows/Mac/Linux
+  -  Internet oriented -- designed to consume geospatial services: OGC
+     standards (WMS, WFS, WCS) and GeoRSS & KML
+  -  Can be used as a front end to JGRASS (Java GRASS)
+  -  Developed by Refractions Research
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 15:17:49
+ #+attr_html: :width 100px
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_15:17:48.png]]
+*** gvSIG
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 15:18:26
+ #+attr_html: :width 100px
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_15:18:26.png]]
+ http://www.gvsig.org/web/
+
+  -  Part of the Java tribe
+  -  Available for Windows, Linux, Mac
+  -  Multi-lingual...very popular in Europe
+  -  Spanish, Valencian, English, Basque, Gallego, Czech, Chinese, French,
+     German, Greek, Italian, Polish, Portuguese, Portuguese-Brazilian,
+     Romanian, Russian, Serbian, Swahili and Turkish
+  -  Not all dialogs/tools are completely in English
+  -  Not a wide English speaking user base
+  -  Unique workflow
+ #+REVEAL: split 
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 15:19:09
+ #+attr_html: :width 600px
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_15:19:09.png]]
+
+*** GvSIG Oxford Edition
+ http://oadigital.net/
+ -  The better version for english speakers
+ -  Flexible, multi-document workspace with side-by-side data views, map
+    layouts etc.
+ -  Rich vector data functionality, including thematic maps, symbology
+    and CAD-like editing capabilities
+ -  Topological and network data analysis
+ -  Rich raster data tools, including remote sensing, georeferencing and
+    transformations
+ -  Map layout and PDF/PS production facilities
+ -  Easy-to-use and flexible geoprocessing tools for typical raster and
+    vector processing tasks
+ -  More than 500 additional geoprocessing tools via the SEXTANTE
+    extension and GRASS GIS interface
+    supported operating systems
+
+*** Conclusion(s)
+
+  -  You can fill today all your GIT needs with FOSS GIS
+  -  It is fun and a rising force
+  -  Strengths: ability to read/write different formats, open standards
+     strictly followed, allows for interoperability
+  -  There is an economic gain by not having to pay huge license fees
+  -  You can reduce your dependence on proprietary vendors & become
+     involved in a collaborative GIS community
+
+** Introduction to Quantum GIS
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 10:25:33
+#+attr_html: :width 500px
+
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_10:25:33.png]]
+
+
+ - http://www.qgis.org
+ - http://www.osgeo.org
+
+*** Quantum GIS
+
+  *Open Source*- It comes with the right to download, run, copy, alter,
+  and redistribute the software.
+
+  With source code users have the option
+
+  -  Suggest improvements
+  -  Make improvements themselves
+  -  Hire a professional to make the changes
+  -  Save software from abandonment
+*** FLOSS benefit example- GRASS
+  *GRASS* was developed at the US Army Corp of Engineers Construction
+  Engineering Research Laboratory from 1980 to 1995. 
+
+ It was abandoned in 1995 and was saved because it was Open Sourced. 
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 10:34:41
+ #+attr_html: :width 300px
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_10:34:41.png]]
+
+*** QGIS
+
+ The QGIS project began in February, 2002
+
+ Produced by a Development team:
+
+  -  Gary Sherman, Founder and project manager
+
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 10:35:15
+ #+attr_html: :width 300px
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_10:35:15.png]]
+
+  The first release was in July of that year
+
+ QGIS started out as a simple data viewer. It grew and became an
+ incubator project of the Open Source Geospatial Foundation.
+
+#+REVEAL: split 
+The first version supported only PostGIS and had very minimal functionality
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 15:36:42
+#+attr_html: :width 600px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_15:36:42.png]]
+
+#+REVEAL: split
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 15:36:59
+#+attr_html: :width 700px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_15:36:59.png]]
+
+*** QGIS is GPL
+
+Qgis is released under the Gnu GPL license
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 15:38:26
+#+attr_html: :width 200px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_15:38:26.png]]
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 15:42:03
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_15:42:03.png]]
+
+*** Installing Qgis
+
+  [[http://www.qgis.org/][http://www.qgis.org]]
+
+QGIS installs on all the major operating systems: Unix, Linux, OSX, and  Windows. 
+
+easy to install, try it..
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 15:39:27
+#+attr_html: :width 400px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_15:39:27.png]]
+
+*** QGIS Interface
+If you've worked with commercial GIS applications the interface is pretty standard. 
+
+Menus, toolbars, and windows that display data or display the layers with their names.
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 15:40:23
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_15:40:23.png]]
+#+REVEAL: split 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-12 08:29:59
+#+attr_html: :width 400px
+
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-12_08:29:59.png]]
+
+(1)Layers List / Browser Panel (2) Toolbars (3) Map canvas (4)  Status bar (5) Side Toolbar
+
+*** Layer Window
+The layer window allows you to re-arrange and symbolize your data.
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:23:12
+#+attr_html: :width 700px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:23:12.png]]
+
+
+*** Map Canvas
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:23:41
+#+attr_html: :width 700px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:23:41.png]]
+
+When you add data to the layers window or Legend Window it Displays on  the Map Canvas. 
+
+The map canvas has a projection and allows you to symbolize the data.
+
+*** Menus and Toolbars
+There's a certain amount of customization that can occur with QGIS in the form of Toolbars and Menus. 
+
+Most of the menus have a button/toolbar and most of the buttons have a corresponding menu item.
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:24:49
+#+attr_html: :width 700px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:24:49.png]]
+  
+*** Toolbars and Panels
+  -  Right Click in menu Area>Add Panels/Add Toolbars.
+
+Panels are typically for information display or to expose more functionality. 
+
+Toolbars can be turned on or off and can be added with plugins via the plugin repository.
+
+The GPS panel, for instance, allows you to connect and display data from a GPS unit.
+
+#+REVEAL: split 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:26:02
+#+attr_html: :width 900px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:26:02.png]]
+
+*** Status Bar
+ As with any good software you've got a status area that displays coordinates, projection, and scale. 
+
+Scale can be set by typing in the appropriate value. Projections are EPSG - numeric. 
+
+Find your favorite projection here: http://www.epsg-registry.org/
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:27:00
+#+attr_html: :width 700px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:27:00.png]]
+*** Basic Buttons
+  -  Hover mouse over them they will pop up a text message telling the user their purpose.
+
+  -  Add Layers
+  -  Zoom In/Out
+  -  Zoom to Extent
+  -  Refresh
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:28:23
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:28:23.png]]
+*** Attribution, Selection, Measurements
+
+  -  Identify, Select, Deselect, Attribute Table, Measure
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:29:29
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:29:29.png]]
+*** Saving a Project
+  -  As you are working with QGIS periodically save your datasets.
+  -  QGIS creates a .gqs file
+  -  XML based
+  -  Can be edited in your favorite text editor.
+#+REVEAL: split 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:30:16
+#+attr_html: :width 800px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:30:16.png]]
+*** Adding Vector Data
+
+  Supports OGR vector Formats
+
+  -  Shapefiles (Arcgis .shp etc)
+  -  KML (google maps..)
+  -  CSV (any stat program..R..SAS etc)
+  -  Microstation (rare..)
+  -  MapINFO (even less common...)
+
+  QGIS supports all the OGR vector formats - anywhere from DGN to CAD to Shapefiles. 
+
+Using OGR also gives QGIS the ability to translate between several different data formats. 
+
+You can easily save data from shapefile to GPX. Vector data in QGIS is very flexible.
+
+*** Adding Vector Data
+In some commercial GIS Programs one button adds raster and vector data.
+
+In QGIS there are separate buttons for each data layer that is added.
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:31:29
+#+attr_html: :width 400px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:31:29.png]]
+
+*** Properties
+
+  Once Data is added -- Right Click and Select Properties
+
+  There are different Tabs to help with Vector Data
+
+  -  Style, Label, Fields, General, Metadata, Action Joins, Digrams,
+     Overlay
+  -  Style sets the symbology of the Layer.
+  -  Symbology can be saved as a qml file
+
+*** Style
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:32:45
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:32:45.png]]
+
+Vector layers can have their symbology changed any number of ways.
+
+Polygon data can have different fills. vector data can have different symbols.
+
+QGIS is very flexible in what can be done symbology wise with vector data. Vector data can also be symbolized by data attributes.
+
+*** Styles
+
+*Set by Fields*
+
+*Symbolized*
+
+  -  Single, Categorized, Graduated
+
+*Graduated*
+
+  -  Equal Interval, Quantile, Natural Breaks, Standard Deviation, Pretty Breaks
+#+REVEAL: split 
+Styles control the way that your data layers are displayed. 
+
+They can be  a single symbol and are just displayed regardless of attribution.
+Categorical attribution does what is implied and breaks up symbology into categories.
+
+Categories can be numeric or text. 
+
+Graduated symbology  is typically based on attributes that are numeric.
+
+*** Equal Interval
+
+  -  Equal Interval groups values into equal sized ranges.
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:34:51
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:34:51.png]]
+
+*** Quantile (חמישון)
+
+  -  Each class contains an equal number of features
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:35:07
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:35:07.png]]
+
+*** Natural Breaks
+
+  -  Natural Breaks (jenks..) classes are based on natural groupings of the data.
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:35:25
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:35:25.png]]
+
+*** Standard Deviation
+  -  Show Variation from the average value
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:35:41
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:35:41.png]]
+*** Pretty Breaks
+  -  Data symbolized for non-statisticians
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:35:53
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:35:53.png]]
+*** Labels
+Labeling is an art. QGIS has one tab devoted to labeling under the layer properties menu. 
+
+Label placement, scale dependence, font, and color. Any style that is made can be saved and reused.
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:36:55
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:36:55.png]]
+*** manual Selecting Vector Data
+
+  -  Selections can be manual
+
+ QGIS allows for 5 methods: single click, polygon, rectangle, freehand, and radius. 
+
+Selected data can be saved to a new  dataset.
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:37:55
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:37:55.png]]
+
+*** Selecting Vector Data
+  When you select data there are three ways to select data: by mouse  clicks, by attribution, and by location of other data.
+
+  -  Selections can be by Attributes
+  -  Selections can also be by location (Under Vector Menu - Research)
+
+ Selecting data by location is one of the most fundamental ways to work with a Geographic Information System. Data is all tied together by location (Tobler's Law).
+
+#+REVEAL: split 
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:40:09
+#+attr_html: :width 600px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:40:09.png]]
+*** Adding Raster Data
+
+Supports all OGR Raster Formats:  Geotiff, ESRi Grid, Jpeg etc...
+
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:41:48
+#+attr_html: :width 600px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:41:48.png]]
+
+
+*** Geospatial Data Abstraction Library
+
+  Approximately 128 Formats supported
+
+  -  http://www.gdal.org
+
+  Many command line tools
+
+  -  Convert
+  -  Reproject
+  -  Warp
+  -  Mosaic
+
+  QGIS uses (as do many other commercial packages) GDAL. It allows users
+  to convert data from different formats and project data to different
+  coordinate systems. It ever support lunar image formats.
+
+*** WMS -- WFS Standards
+
+  -  Web mapping service - The OpenGIS Web Map Service Interface Standard
+     (WMS) provides a simple HTTP interface for requesting geo-registered
+     map images from one or more distributed geospatial databases.
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:43:19
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:43:19.png]]
+
+*** WMS Example
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:43:51
+#+attr_html: :width 600px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:43:51.png]]
+
+*** Plugins
+
+  QGIS has a standard list of things that it does
+
+  -  Buffers
+  -  Projections
+  -  Clips
+  -  Unions
+
+  Can be greatly expanded
+
+Software needs to be extendable. You need to be able to add functionality as you want.
+#+REVEAL: split 
+People write plugins to extend the functionality of QGIS.
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:44:42
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:44:42.png]]
+*** Plugin Interface
+ The interface does four things: It gives you a short description of
+  that plugin, it allows you to install a plugin, allows you to uninstall
+  a plugin, and notifies you of a plugin's status (not installed,
+  installed, upgradeable).
+*** Attributes
+
+  -  GIS is more than just Geometry -- there are attributes built into the
+     data.
+  - Attrributes - it's what separates us from those people - you know CAD
+  users
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 21:46:31
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_21:46:31.png]]
+
+*** Attribution depends on the database
+
+  -  We are using Shapefiles
+  -  It also reads PostGIS, SQL Server, ESRI's SDE, Spatialite, etc, etc.
+
+
+*** SpatiaLite
+
+#+REVEAL_EXTRA_CSS: /home/zeltak/org/files/Uni/Courses/css/left.aligned.css
+  an *open source* library intended to extend the [[http://www.sqlite.org/][SQLite]] core to support fully fledged Spatial SQL capabilities.
+
+  SQLite is intrinsically simple and lightweight: 
+
+a single lightweight library implementing the full SQL engine, standard SQL implementation:
+
+  almost complete SQL-92, no complex client/server architecture, a whole
+  database simply corresponds to a single monolithic file (no size
+  limits), any DB-file can be safely exchanged across different platforms,
+  because the internal architecture is universally portable, no
+  installation, no configuration
+
+*** Search for Attributes
+ Searches are wildcard (to a point) by default. They can be case sensitive or not. You have to search on a field.
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-12 07:47:55
+#+attr_html: :width 600px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-12_07:47:55.png]]
+
+*** Selecting based on Attribute
+
+  -  Selection set can be saved to a new shapefile file
+  -  Selection set can be saved to the clipboard/csv/notepad
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-12 07:48:30
+#+attr_html: :width 600px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-12_07:48:30.png]]
+
+*** Selections are reflected in the Display
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-12 07:49:02
+#+attr_html: :width 600px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-12_07:49:02.png]]
+
+
+*** Advanced Search
+  -  SQL Query- use standard SQL queries
+  -  for more SQL check out Ronni SQL course
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-12 07:50:21
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-12_07:50:21.png]]
+
+*** Add and Columns
+  -  Data layer must be editable
+  -  Right click on a data layer and Toggle Editing
+  -  Toggle editing under the Layer Menu
+  -  Toggle Editing from Attribute Menu
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-12 07:50:52
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-12_07:50:52.png]]
+
+
+*** Deleting Columns
+  -  Toggle Editing
+  -  Click Delete Columns Icon
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-12 07:51:48
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-12_07:51:48.png]]
+
+*** Map Projections
+
+  Geographic Coordinate Systems
+
+  -  Defines locations on spherical model of the earth
+
+  Projected Coordinate System
+
+  -  Defines locations on flat model of the earth
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-12 07:52:29
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-12_07:52:29.png]]
+
+*** Geographic Coordinate System (GCS)
+
+  Defines Locations with Latitude Longitude Values
+
+  -  Latitude -- north and south of the equator
+  -  Longitude - east and west of prime meridian
+  -  Prime meridian is Greenwich
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-12 07:53:10
+#+attr_html: :width 400px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-12_07:53:10.png]]
+
+
+*** Projected Coordinate System
+
+  Define Locations with map units
+
+  -  X and Y measured from a Origin
+  -  Projected Coordinate system includes:
+  -  Units in feet or meters
+  -  A Map Projection
+  -  Underlying Geographic Coordinate System
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-12 08:11:23
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-12_08:11:23.png]]
+
+
+*** EPSG Geodetic Parameter Registry
+
+  -  Gatekeepers of Projections
+  -  Also knows as SRIDS (Spatial Reference System Identifier)
+  -  http://www.epsg-registry.org/
+  - QGIS (as well as ArcGIS 10.1) uses epsg codes to assign projections. It's the same projection parameters you've always used. Now you can refer to them as 4326 or 2274 and search for them.
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-12 07:54:41
+#+attr_html: :width 600px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-12_07:54:41.png]]
+
+*** Default Projection: WGS 84
+
+  -  QGIS has a Default Projection: WGS 84 (EPSG:4326)
+  -  It can be changed
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-12 08:12:12
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-12_08:12:12.png]]
+*** Editing Data
+  -  Once data is created or added to the Map View it can be edited two
+     different ways
+  -  Right click on the layer and Toggle Editing
+  -  Go to layer menu and Toggle Editing
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-12 07:55:57
+#+attr_html: :width 300px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-12_07:55:57.png]]
+*** Snapping
+
+  -  Added features can be snapped to vertex or segment (edge)
+  -  Located under Settings → Snapping Options
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-12 07:56:41
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-12_07:56:41.png]]
+
+*** 8. Map Layout
+
+  The Map view can be exported with Map Composer.
+
+  Composer Manager
+
+  -  Multiple Map compositions can be stored.
+
+  Map compositions can be exported to several different file formats
+
+  -  PDF
+  -  JPG
+  -  TIFF
+*** New Composition
+
+  -  File → New Print Composer
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-12 07:57:24
+#+attr_html: :width 500px
+ [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-12_07:57:24.png]]
+
+
+*** Map Composer
+
+  -  Map Compositions can be saved (as a Template)
+  -  Templates can be applied to new Map Compositions
+  -  Compositions can have legend, Pictures, Scale bar.
+
+  Maps are basic in QGIS. You can also save templates if you want to
+  create a standard one to use for work.
+
+*** Conclusion
+
+  It is possible to use Freely available GIS Tools to complete small or big projects
+
+  -  It's an active community -- Join in
+  -  http://www.qgis.org
+  -  User Manual - http://qgis.org/en/documentation/manuals.html
+  -  Wiki - http://qgis.org/en/community.html
+
+** Thank you
+
+ #+DOWNLOADED: /tmp/screenshot.png @ 2016-03-11 15:26:00
+ #+attr_html: :width 800px
+  [[~/org/attach/bgu/courses/BGU.Qgis/images/screenshot_2016-03-11_15:26:00.png]]
+* Homework-Week 2

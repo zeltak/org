@@ -3096,3 +3096,56 @@ old SR
   ;;     (enable-theme 'tango-dark))
 
 #+END_SRC
+
+* open with
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-03-13 Sun 20:49
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages
+  :ARCHIVE_CATEGORY: settings
+  :END:
+!this kills sending email from mu4e so for now its off..need to seek alternatives?!
+
+#+BEGIN_SRC emacs-lisp :results none
+  ;;   ;; (use-package openwith 
+  ;;   ;; :ensure t
+  ;;   ;; :config
+
+  ;; ; Openwith
+  ;; (openwith-mode t)
+  ;; (setq openwith-associations
+  ;;       (list (list (openwith-make-extension-regexp '("pdf"))
+  ;;                   "evince" '(file))
+  ;;             (list (openwith-make-extension-regexp '("flac" "mp3" "wav"))
+  ;;                   "vlc" '(file))
+  ;;             (list (openwith-make-extension-regexp '("avi" "flv" "mov" "mp4"
+  ;;                                                     "mpeg" "mpg" "ogg" "wmv"))
+  ;;                   "vlc" '(file))
+  ;;             (list (openwith-make-extension-regexp '("bmp" "jpeg" "jpg" "png"))
+  ;;                   "ristretto" '(file))
+  ;;             (list (openwith-make-extension-regexp '("doc" "docx" "odt"))
+  ;;                   "libreoffice" '("--writer" file))
+  ;;             (list (openwith-make-extension-regexp '("ods" "xls" "xlsx"))
+  ;;                   "libreoffice" '("--calc" file))
+  ;;             (list (openwith-make-extension-regexp '("odp" "pps" "ppt" "pptx"))
+  ;;                   "libreoffice" '("--impress" file))
+  ;;             ))
+
+
+  ;;   ;; (require 'openwith)
+  ;;   ;; (setq openwith-associations '(("\\.pdf\\'" "okular" (file))))
+  ;;   ;; (setq openwith-associations '(("\\.mkv\\'" "mplayer" (file))))
+  ;;   ;; (setq openwith-associations '(("\\.html\\'" "chromium" (file))))
+  ;;   ;; (setq openwith-associations '(("\\.html\\'" "eww" (file))))
+  ;;   ;; (setq openwith-associations '(("\\.mp4\\'" "vlc" (file))))
+  ;;   ;; (setq openwith-associations '(("\\.ogm\\'" "vlc" (file))))
+  ;;   ;; (setq openwith-associations '(("\\.avi\\'" "vlc" (file))))
+  ;;   ;; (setq openwith-associations '(("\\.mpeg\\'" "vlc" (file))))
+  ;;   ;; (setq openwith-associations '(("\\.mkv\\'" "vlc" (file))))
+  ;;   ;; (openwith-mode t)
+
+
+
+  ;;   ;; )
+#+END_SRC
+
