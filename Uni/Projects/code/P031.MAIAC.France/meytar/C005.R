@@ -36,7 +36,7 @@ setwd("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR")
 filenames <- list.files( pattern="AOD.AQ.*.rds", full.names=TRUE)
 
 #for (I in 3:4) {
- I=4
+ I=9
   y<-substr(filenames[I],10,13)
   aq<-readRDS(filenames[I])
   
@@ -322,5 +322,5 @@ gc()
   #cleanup
   keep(lu,Temp,filenames,fgrid,nearestbyday,nearestbydayM1,makepointsmatrix, sure=TRUE) 
   gc()
-
+print("Done I=9 year=2011")
 #}

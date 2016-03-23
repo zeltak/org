@@ -651,6 +651,9 @@ file:
  -We should also look at  deriving slopes for each grid cell
  -This can be done with using ArcGis and mihye already has experience of doing that
 ***** Meris satellite
+      :PROPERTIES:
+      :ID:       da4e2c39-a9c4-45cb-b919-cd4b63a84b35
+      :END:
  Data from european sattelite - We here in my Lab are looking into this and possible future applications
 
 ** Storke and PM10 in israel					     :maayan:
@@ -1453,7 +1456,6 @@ ask about southern campign
 aeronet campign
 vertical profile
 *** TASK explore with alexei sun photometer
-*** TODO write brent about mixed model meeting
 *** talk to allan about the intercept vs day
 *** TODO dylos monitor-check google 
 total count not mass
@@ -1537,7 +1539,7 @@ kees coming In Janurary, we want to explore the pm25/10
 *** TASK new PM israel model 
 Run svm with multiple data (10,3,1,geoschem) and add temporal interactions such as month to have a "random" effects where parameters vary by period
 Qians nurel network- trains it with LU and geoschem in aod points to predict AOD and then uses another nueral network with multiple data such as maiac, omi, geoschem etc to predict daily
-*** TODO check kernel machine of xihong
+*** check kernel machine of xihong
 http://www.hsph.harvard.edu/xlin/software.html
 
 we can use the additonal random statement to run a daily calibration
@@ -1654,4 +1656,3 @@ Is a mixed model approach the best method to use for predicting PM2.5? we see th
 another approach that will allow us to evaluate the contribution of AOD in the model driven by date.
 
 (3) Since the date clearly has the strongest effect, any other variables we add are marginly contributing to the model. are there alternative modeling approaches we should explore? we were thinking about SVM, PLS and maybe a SVM+random component?  adding spatial auto correlation?
-*** TODO send xian pm monitor data

@@ -6,6 +6,17 @@
   :PROPERTIES:
   :ID:       38a15adf-f505-4a54-b1d9-f76b22ce1147
   :END:
+** BASE WINDOW TERMINOLOGY
+In brief:
+
+    "Frames" are to Emacs what "windows" are to everything else
+    "Windows" are subdivisions of frames (think "window panes")
+    "Buffers" hold the contents you display/edit in windows
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-14 15:18:00
+#+attr_html: :width 900px
+ [[~/Sync/attach/images_2015/screenshot_2016-03-14_15:18:00.png]]
+
 ** !Debuging Emacs for Bugs/errors!
 *** create backtrace
 simply do M-: (setq debug-on-error t) to try for the current emacs session only

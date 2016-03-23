@@ -4,39 +4,12 @@
   :PROPERTIES:
   :ID:       a203c0fe-e98d-408b-8863-388de9dc8d6b
   :END:
-** org-download idea
-open an image in editor of choice, edit and then update the edited image in orgmode with edits
 ** dired issues 
 *** dired equel left pane to right
 *** auto refresh (g) after operations or every 2 seconds?
 *** dired linkes explore
  http://emacs.stackexchange.com/questions/17095/how-supress-dired-confirmation-of-large-file-for-specific-extensions
 https://github.com/abo-abo/make-it-so
-*** explore SR change dir in other window
- https://github.com/escherdragon/sunrise-commander/blob/dd94d3da75fcef0ac11d1d008ab9081c6f80f013/sunrise-commander.el
-
- #+BEGIN_SRC emacs-lisp  :results none
- (defun sr-synchronize-panes (&optional reverse)
-   "Change the directory in the other pane to that in the current one.
- If the optional parameter REVERSE is non-nil, performs the
- opposite operation, ie. changes the directory in the current pane
- to that in the other one."
-   (interactive "P")
-   (let ((target (current-buffer)) (sr-inhibit-highlight t))
-     (sr-change-window)
-     (if reverse
-         (setq target (current-buffer))
-       (sr-alternate-buffer (switch-to-buffer target))
-       (sr-history-push default-directory))
-     (sr-change-window)
-     (when reverse
-       (sr-alternate-buffer (switch-to-buffer target))
-       (sr-history-push default-directory)
-       (revert-buffer)))
-   (sr-highlight))
-
- #+END_SRC
-
 ** explore where Emacs pops up Windows
 
 http://emacs.stackexchange.com/questions/6075/prevent-buffer-from-being-displayed/6076#6076
@@ -1305,6 +1278,38 @@ Preventing tag inheritance stops you having encrypted text inside encrypted text
 To decrypt the text just call "M-x org-decrypt-entry" and the encrypted text where the point is will be replaced with the plain text. If you use this feature a lot, you will probably want to bind "M-x org-decrypt-entry" to a key.
 
 Entries with a :crypt: tag will be automatically be encrypted when you save the file.
+** !Emacs 25!-to check
+   :PROPERTIES:
+   :ID:       1886477a-9fda-4c58-bc56-b8a09748cf2d
+   :END:
+*** zip 
+http://emacs.stackexchange.com/questions/20833/how-to-deal-with-zip-archives-in-dired
+
+emacs 25.x
+
+The emacs 25.1 release will have in-built support for handling different kinds of archives from within dired. Below is the relevant excerpt from the NEWS file (C-h C-n).
+
++++
+The command `dired-do-compress' bound to `Z' now can compress
+directories and decompress zip files.
+
++++
+New command `dired-do-compress-to' bound to `c' can be used to
+compress many marked files into a single named archive.  The
+compression command is determined from the new
+`dired-compress-files-alist' variable.
+
+dired-do-compress | Z
+
+Check out the dired-compress-file-suffixes variable to get a list of supported compressed file formats. The correct program will be used to uncompress a file (or files) when using the Z binding (dired-do-compress).
+
+While the above will uncompress a wide range of formats, it will always compress using gzip.
+dired-do-compress-to | c
+
+Check out the dired-compress-files-alist variable to get a list of supported file formats that can be compressed to using the c binding (dired-do-compress-to).
+
+As of emacs 25.1, it supports compressing using tar + (gzip/bzip2/xz) or zip.
+
 * Web 
 ** R code for ssh server with tramp 
 http://stackoverflow.com/questions/18470240/org-mode-remote-r-not-working-with-org-8-0-7
@@ -1348,5 +1353,4 @@ https://flipbelt.com/flipbelt
 ** https://www.reddit.com/r/emacs/comments/421vt3/how_to_automatically_execute_commands_when/
 ** http://emacsredux.com/blog/2016/01/30/super-save/
 ** https://www.kickstarter.com/projects/1644407908/beep-beep-yarr
-
 

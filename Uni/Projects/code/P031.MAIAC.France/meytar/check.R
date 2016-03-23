@@ -1,5 +1,5 @@
 # read and check
-m1<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2004.PM25.rds")
+m1<-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2006.PM25.rds")
 m1<-as.data.table(m1)
 summary(m1)
 describe(m1$day)
@@ -13,6 +13,8 @@ unique(ndvi.na$stn)
 
 pbl.na<-filter(m1,is.na(PBL))
 pbl.na<-pbl.na[,c("day","stn","long_pm25","lat_pm25"),with=FALSE]  
+
+ndvi.n<-ndvi%>%group_by(ndviid)%>%summarise_each(funs(mean),ndvi,long_ndvi,lat_ndvi)
 
 library(ggmap)
 map <- get_map(location = 'France',zoom=5)

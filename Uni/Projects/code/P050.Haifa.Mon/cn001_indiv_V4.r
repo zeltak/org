@@ -22,11 +22,15 @@ ind <-read.dbf("/home/zeltak/ZH_tmp/dat/tipot_all_SPSS_6.02.16.dbf")
 names(ind)
 ind$month = as.numeric(format(ind$BIRTH_DATE,"%m")) 
 
-# #subset data
-# ind<-ind[,c("Head1_Valu","X","Y","Gender","Weight1_Va","Mother_Nat","PregnancyW","month","TotalSibli","Education_","ApgarOneMi","ApgarFiveM","POPULATION","HOUSEHOLDS","AVERAGE_HH","DENSITY","OWNERSHIP","RENTALS","BAGRUT","BA","INCOME","N_AIRPORT","N_BAZAN","N_POWERSTA","N_OIL_L","N_OIL_S","N_ROAD","nox","day","Postal","Mother_Bir","pm25","so2","nox2014","Elevation","People_est","Pop_arnona"),with=FALSE]
-
 #rename
-setnames(ind,old=c("WEIGHT1_VA", "HEAD1_VA_A","PREGNANCYW","WEIGHT1__A"),new=c("birthw", "headc.bc","ges","birthw.bc"))
+setnames(ind,old=c("WEIGHT1_VA", "HEAD1_VALU","PREGNANCYW"),new=c("birthw", "headc","ges"))
+
+# #subset data
+#ind<-ind[,c("Head1_Valu","X","Y","Gender","Weight1_Va","Mother_Nat","PregnancyW","month","TotalSibli","Education_","ApgarOneMi","ApgarFiveM","POPULATION","HOUSEHOLDS","AVERAGE_HH","DENSITY","OWNERSHIP","RENTALS","BAGRUT","BA","INCOME","N_AIRPORT","N_BAZAN","N_POWERSTA","N_OIL_L","N_OIL_S","N_ROAD","nox","day","Postal","Mother_Bir","pm25","so2","nox2014","Elevation","People_est","Pop_arnona"),with=FALSE]
+
+ind<-select (ind,birthw,headc,ges,X,Y,SEX,POPULATION,HOUSEHOLDS,AVERAGE_HH)
+#save for GIS
+
 
 
 # #clean data

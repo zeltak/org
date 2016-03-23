@@ -3372,8 +3372,8 @@ http://writequit.org/org/#b07ea95e-d7cb-4714-ae83-9bd624e1c19d
 
 This works for me but you need to put the time in the headline, as in:
 ,----
-| 2pm-3pm my lecture on really interesting stuff
-| <%%(org-class 2016 6 3 2016 7 1 0)>
+| 2pm-3pm my lecture on really interesting stuff |
+| <%%(org-class 2016 6 3 2016 7 1 0)>            |
 `----
 
 It may be that the <%% line needs to be flush to the left, i.e. no
@@ -3419,3 +3419,55 @@ appeared there.
   :END:
 change key to exclude ()
 clean umicode
+
+* org-download idea
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-03-14 Mon 18:05
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`
+  :ARCHIVE_CATEGORY: tasks
+  :END:
+open an image in editor of choice, edit and then update the edited image in orgmode with edits
+
+* explore SR change dir in other window
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-03-14 Mon 18:05
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_OLPATH: `TODO`/dired issues
+  :ARCHIVE_CATEGORY: tasks
+  :END:
+https://github.com/escherdragon/sunrise-commander/blob/dd94d3da75fcef0ac11d1d008ab9081c6f80f013/sunrise-commander.el
+
+#+BEGIN_SRC emacs-lisp  :results none
+(defun sr-synchronize-panes (&optional reverse)
+  "Change the directory in the other pane to that in the current one.
+If the optional parameter REVERSE is non-nil, performs the
+opposite operation, ie. changes the directory in the current pane
+to that in the other one."
+  (interactive "P")
+  (let ((target (current-buffer)) (sr-inhibit-highlight t))
+    (sr-change-window)
+    (if reverse
+        (setq target (current-buffer))
+      (sr-alternate-buffer (switch-to-buffer target))
+      (sr-history-push default-directory))
+    (sr-change-window)
+    (when reverse
+      (sr-alternate-buffer (switch-to-buffer target))
+      (sr-history-push default-directory)
+      (revert-buffer)))
+  (sr-highlight))
+
+#+END_SRC
+
+
+* x
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-03-22 Tue 13:58
+  :ARCHIVE_FILE: ~/org/files/agenda/TODO.org
+  :ARCHIVE_CATEGORY: tasks
+  :END:
+
+#+DOWNLOADED: /tmp/screenshot.png @ 2016-03-22 13:55:23
+#+attr_html: :width 300px
+ [[~/Sync/attach/images_2015/screenshot_2016-03-22_13:55:23.png]]

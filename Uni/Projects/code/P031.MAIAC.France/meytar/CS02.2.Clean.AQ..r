@@ -21,7 +21,7 @@ library(DataCombine)
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
-mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2006.PM25.rds")
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2008.PM25.rds")
 head(mod1)
 
 library(ggmap)
@@ -50,8 +50,8 @@ setkey(mod1,stn)
 mod1 <- merge(mod1,x, all.x = T)
 
 mod1$exobs<-0
-mod1<-mod1[aod < quantile(aod, c(.50)) & PM25new >  quantile(PM25new, c(.90)), exobs := 2]
-mod1<-mod1[aod > quantile(aod, c(.90)) & PM25new <  quantile(PM25new, c(.50)), exobs := 3]
+mod1<-mod1[aod < quantile(aod, c(.50)) & pm25 >  quantile(pm25, c(.90)), exobs := 2]
+mod1<-mod1[aod > quantile(aod, c(.90)) & pm25 <  quantile(pm25, c(.50)), exobs := 3]
 mod1<-mod1[aod > 1.2 , exobs := 4]
 mod1<-mod1[saod < 30 , exobs := 5]
 
