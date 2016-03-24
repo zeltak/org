@@ -9911,11 +9911,6 @@ org-gcal-sync
 
 Sync between Org and Gcal. before syncing, execute org-gcal-fetch .
 ** managing refernces 
-*** zletak Ref library methodology 
-**** personal (ikloog library)
- when a new paper is finally published and has a DOI:
- use the DOI import util from org-ref to add it to my personal bib fil
-
 *** org-ref
 **** clean (org-ref-clean-bibtex-entry)
  You can fix formatting problems by putting your cursor on the bibtex entry, and typing M-x org-ref-clean-bibtex-entry. This will fix the bibtex key to a standard form, align and indent the entry, escape the & so it is legal syntax, prompt you for a year, and show you the non-ascii characters so you can replace them
@@ -9964,7 +9959,6 @@ Sync between Org and Gcal. before syncing, execute org-gcal-fetch .
 
 **** Using org-ref to keep your bibtex files in order
  Maintaining an accurate, useful bibliography of references is critical for scientific writing. It is also not trivial. While it is easy to download and copy bibliographic entries to your database, these entries are often incomplete, not consistently formatted, and can contain invalid characters. org-ref provides several utility functions to help with this.
-
 ***** "cleaning" a bibtex entry
 
  Consider this bibtex entry from http://pubs.acs.org/action/showCitFormats?doi=10.1021%2Fie500588j.

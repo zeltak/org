@@ -1,12 +1,23 @@
 #+Title: Workflows
+w
+* managing references 
+in general its good to work with both the meta file and bib file split when working on managing reference.
+open both with the function zrefwork
 
-* managing refernces 
 ** ADD new PUBLISHED paper
 when a new paper is finally published and has a DOI:
 use the DOI import util from org-ref to add it to my personal bib file:
 file:/home/zeltak/org/files/Uni/papers/kloog.papers.bib
 
-** ADD new UNPUBLISHED paper 
+Also: make sure to archive it from 'accepted' on the file:/home/zeltak/org/files/Uni/papers/paper.meta.org file.
 
+** ADD new UNPUBLISHED paper 
+   :PROPERTIES:
+   :ID:       3d84f260-32a6-43e6-a60d-87c4b0134f4d
+   :END:
+use the capture template for adding a new working paper 【C-c p p】
+it will ask for title and lead author 
+it will add it to this file
 file:/home/zeltak/org/files/Uni/papers/paper.meta.org
+** ADD new ABSTRACT
 
