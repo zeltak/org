@@ -1,15 +1,17 @@
 #+Title: Workflows
-w
+
 * managing references 
 in general its good to work with both the meta file and bib file split when working on managing reference.
-open both with the function zrefwork
+open both with the function zrefwork 【\ b w 】
 
-** ADD new PUBLISHED paper
+** ADD new PUBLISHED paper (3 steps)
 when a new paper is finally published and has a DOI:
-use the DOI import util from org-ref to add it to my personal bib file:
+1) use the DOI import util from org-ref to add it to my personal bib file:
 file:/home/zeltak/org/files/Uni/papers/kloog.papers.bib
 
-Also: make sure to archive it from 'accepted' on the file:/home/zeltak/org/files/Uni/papers/paper.meta.org file.
+2) Make sure to archive it from 'accepted' on the file:/home/zeltak/org/files/Uni/papers/paper.meta.org file.
+
+3) Add to UNI CV and format accordingly
 
 ** ADD new UNPUBLISHED paper 
    :PROPERTIES:
@@ -20,4 +22,16 @@ it will ask for title and lead author
 it will add it to this file
 file:/home/zeltak/org/files/Uni/papers/paper.meta.org
 ** ADD new ABSTRACT
+** ADD papers to read
+with org-ref installed you can drag the pdf to you bib file (usually the file:/home/zeltak/org/files/Uni/papers/library.bib) or just add them with the normal DOI/cross ref methods.
 
+once you've added the paper add a tag of rtodo to them
+
+then with helm-bibtex you can generate a helm toread list
+** inserting papers to orgmode buffer
+use (org-ref-helm-insert-cite-link) which is bound to C-c ] to insert citation(s) via a nice helm GUI
+you can also define your specific bib file in the bottom of the buffer like this year
+>bibliography:/home/zeltak/org/files/Uni/papers/library.bib,/home/zeltak/org/files/Uni/papers/kloog.papers.bib
+
+
+* EOF
