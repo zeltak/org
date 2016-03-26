@@ -3149,3 +3149,21 @@ old SR
   ;;   ;; )
 #+END_SRC
 
+
+* TODO Allow running multiple async commands simultaneously
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-03-25 Fri 08:41
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Dired/main options
+  :ARCHIVE_CATEGORY: settings
+  :ARCHIVE_TODO: TODO
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+  ;; ;; Allow running multiple async commands simultaneously
+  ;; (defadvice shell-command (after shell-in-new-buffer (command &optional output-buffer error-buffer))
+  ;;   (when (get-buffer "*Async Shell Command*")
+  ;;     (with-current-buffer "*Async Shell Command*"
+  ;;       (rename-uniquely))))
+  ;; (ad-activate 'shell-command)
+#+END_SRC
+

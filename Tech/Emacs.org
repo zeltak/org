@@ -5803,6 +5803,71 @@ One way to determine PATH is to use C-h k and click on a menu item close to wher
 <menu-bar> <tools> <games> <tetris> runs the command tetris
 which is an interactive autoloaded Lisp function in `tetris'.
 #+END_SRC
+*** tab bar
+**** Split buffers in groups
+http://emacs.stackexchange.com/questions/10081/browser-style-tabs-for-emacs
+It is possible with tabbar. You can add rules to group buffers in groups. Here's a basic snippet:
+
+(defun tabbar-buffer-groups ()
+  "Returns the list of group names the current buffer belongs to."
+  (list
+   (cond
+
+    ;; ADD RULES TO SPLIT BUFFERS IN GROUPS HERE!
+
+    ;; if buffer is not grouped by the rules you would add above 
+    ;; put it in the "General" group:
+    (t
+       "General"
+     ))))
+
+Example rules:
+
+    List buffer names:
+
+    ((member (buffer-name)
+             '("*scratch*" "*Messages*" "*Help*"))
+     "Common" ;; this is a group name
+     )
+
+    Regarding common buffers I prefer to put in "Common" each buffer which name starts with a star. This gives an example of making a buffer for this rule:
+
+    ((string-equal "*" (substring (buffer-name) 0 1))
+     "Common"
+     )
+
+    Here's an example of grouping buffers by major-mode:
+
+    ((memq major-mode
+           '(org-mode text-mode rst-mode))
+     "Text"
+     )
+
+    Here's an example of grouping buffers based on mode they are derived from:
+
+    ((or (get-buffer-process (current-buffer))
+         ;; Check if the major mode derives from `comint-mode' or
+         ;; `compilation-mode'.
+         (tabbar-buffer-mode-derived-p
+          major-mode '(comint-mode compilation-mode)))
+     "Process"
+     )
+
+    Here's an example of grouping tabs by regexp:
+
+    ((string-match "^__" (buffer-name))
+     "Templates"
+     )
+
+    Group buffers by major mode:
+
+    (if (and (stringp mode-name)
+                  ;; Take care of preserving the match-data because this
+                  ;; function is called when updating the header line.
+                  (save-match-data (string-match "[^ ]" mode-name)))
+             mode-name
+           (symbol-name major-mode))
+
 
 *** modline 
 **** change the modeline to highlight the active bar
@@ -8846,6 +8911,7 @@ Org-mode:
 [[http://johnmacfarlane.net/pandoc/demo/example27.org][http://johnmacfarlane.net/pandoc/demo/example27.org]]
  Warning if you get an error open the html file in an editor and
 save it with utf-8 encoding
+*** convert org headers to numbers
 
 ** covert word/pdf to org for better cross academic search 
 *** for pdf files

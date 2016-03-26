@@ -10,6 +10,64 @@
 *** dired linkes explore
  http://emacs.stackexchange.com/questions/17095/how-supress-dired-confirmation-of-large-file-for-specific-extensions
 https://github.com/abo-abo/make-it-so
+** dired add TODAY
+*** dired bookmark+ combo- very powerful 
+bmkp-dired-jump
+https://www.emacswiki.org/emacs/BookmarkPlus
+
+Whenever you create a bookmark in a Dired buffer (e.g. ‘C-x r m’), the current state is saved as part of the bookmark: point, the current ‘ls’ listing switches, the set of inserted subdirectories, the set of hidden directories, and the set of marked files. Whenever you jump to a Dired bookmark (e.g. ‘C-x r b’), all of these are restored.
+
+And because you might have many, many bookmarks, Bookmark+ has jump commands that are specialized for Dired bookmarks:
+
+‘bmkp-dired-jump’ (‘J’ in Dired)
+‘bmkp-dired-jump-current’ (‘C-j’ in Dired)
+The former presents all Dired bookmarks (and only Dired bookmarks) as completion candidates. The latter presents only Dired bookmarks for the current directory (‘default-directory’).
+
+to bound:
+
+#+BEGIN_SRC emacs-lisp  :results none
+
+(bmkp-dired-jump BOOKMARK-NAME &optional FLIP-USE-REGION-P)
+
+#+END_SRC
+
+‘C-j’ is particularly useful to switch among various “views” of the same project. The directory doesn’t change; only its state changes: markings, switches, which subdirs are expanded, and which are hidden.
+
+You can use these commands from any buffer, not just Dired. ‘bmkp-dired-jump’ is in fact bound globally to ‘C-x j d’, and an other-window version of it is bound globally to ‘C-x 4 j d’.
+*** bmkp-dired-jump-other-window
+*** create virtual dirs 
+http://emacs.stackexchange.com/questions/7790/programmatically-add-files-to-existing-dired-buffer
+
+add files/folders from different locations to one virtual dir. you can also  bookmark that dir perhaps?
+
+another option is to create it in lisp
+http://emacs.stackexchange.com/questions/2567/programmatically-insert-files-into-dired-buffer
+
+#+BEGIN_SRC emacs-lisp  :results none
+(dired (list "My Dired Buffer Name*"     ; The Dired buffer name
+             "/home/zeltak/ZH_tmp/$Ikloog_CV_GEOG_BGU_MAR_11v2_2016.pdf"         ; First file
+             "/home/zeltak/ZH_tmp/Lahav/"      ; Third is a directory
+             "/home/zeltak/ZH_tmp/emily/"))   ; Fourth
+#+END_SRC
+*** setting value for big file warnings
+
+	
+Thank you very much! It works. BTW, when I open a mp4 file, emacs always ask me to confirm: File abc.mp4 is large (330.2M), really open? (y or n) y Can we get ride of this? – Nick Dec 29 '14 at 6:35
+   	 
+	
+You can set the value that will trigger the warning. Here, 500MB (setq large-file-warning-threshold 500000000)
+*** quick kill all dired buffer
+http://emacs.stackexchange.com/questions/202/close-all-dired-buffers
+
+You could do the following:
+
+M-x ibuffer
+
+* / to mark buffers in dired mode.
+
+D to delete them.
+
+** https://github.com/ryuslash/mode-icons
 ** explore where Emacs pops up Windows
 
 http://emacs.stackexchange.com/questions/6075/prevent-buffer-from-being-displayed/6076#6076
