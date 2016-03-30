@@ -4,6 +4,12 @@
   :PROPERTIES:
   :ID:       a203c0fe-e98d-408b-8863-388de9dc8d6b
   :END:
+** explore C-tab for tabs
+#+BEGIN_SRC emacs-lisp  :results none
+(global-set-key (kbd "<C-tab>") 'tabbar-forward-tab)
+#+END_SRC
+** sort helm mini by date
+** why Emacs pass doesn't see all passes?
 ** dired issues 
 *** dired equel left pane to right
 *** auto refresh (g) after operations or every 2 seconds?
@@ -63,7 +69,7 @@ You could do the following:
 
 M-x ibuffer
 
-* / to mark buffers in dired mode.
+*Async to mark buffers in dired mode.
 
 D to delete them.
 
