@@ -9738,14 +9738,12 @@ grep("precip", names(mod1))
 **** create a google map with data points
 #+BEGIN_SRC R
 library(ggmap)
-MxC_Map_df <- get_map(location = 'massachusetts', maptype = "hybrid", zoom = 9)
-str(MxC_Map_df)
-P4 <- ggmap(MxC_Map_df, darken = c(0.5, "white"))
-P4 + 
-  geom_point(data = bw.o1 ,
-             aes(-longdd, latdd, color = pmpreg, size = pmpreg)) + 
-  theme_bw(10) + 
-  ggtitle("Predictions over pregnancy"
+
+map <- get_map(location = 'israel', maptype = "roadmap", zoom = 7)
+#map <- get_map(location = 'israel', source="stamen", maptype = "watercolor" ,zoom = 7)
+#str(MxC_Map_df) #get info on data
+P4 <- ggmap(map, darken = c(0.5, "white"))
+P4 + geom_point(data = out ,aes(x, y,  color = pred.m2))+ ggtitle("predmod2")+scale_colour_gradient2( low = "green", mid = "yellow", high = "red",midpoint = 15, space = "rgb", na.value = "white", guide = "colourbar")
 #+END_SRC
 
 * ESS
@@ -10148,6 +10146,12 @@ then issues this
 mutate_if(bwfull.ptvl,birthyear==2003|birthyear==2004,yearb=2004)
 #+END_SRC
 where for DT bwfull.ptvl, for years 2003 and 2004 rows the variable yearb will get 2004
+** dates
+*** extract dates
+#+BEGIN_SRC R :session Rorg  :results none
+imp$day<-as.Date(strptime(imp$day, "%Y-%m-%d"))
+#+END_SRC
+
 ** rename
 #+BEGIN_SRC R :session Rorg  :results none
 mod2010<-dplyr::rename(mod2010,long_lst=glong,lat_lst=glat)
@@ -10414,6 +10418,11 @@ flights %>%
 ##   ANC  125  0
 ##   ASE  120  5
 #+END_EXAMPLE
+*** aggregate and rename
+#+BEGIN_SRC R :session Rorg  :results none
+bwfull<-select(bfull,ID,gestation,birth_weig,X,Y,dob,guid,GUID_1) %>% dplyr::rename (aodid=GUID_1)
+
+#+END_SRC
 ** Window Functions
 *** intro
 Aggregation function (like mean) takes n inputs and returns 1 value
