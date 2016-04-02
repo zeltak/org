@@ -6856,6 +6856,14 @@ the :init keyword executes the code before the package is loaded;
 and the :preface keyword is there so the Emacs byte compiler and the lisp evaluator know about things like function and symbol declarations.
 
 My personal view is to put most things into :config (as you probably want to initialize your own settings after the package has loaded its own defaults) and only toy with :init and :preface if you have a good reason to
+** Tramp
+*** how can I use sudo when I want to edit files on the server
+
+#+BEGIN_SRC emacs-lisp  :results none
+/ssh:user@machine|sudo:machine:/path/to/file 
+#+END_SRC
+
+let you edit files with root credentials on the other machine, after first login as user
 ** text tricks
 *** How to add a prefix to every line? (such as # or //
 

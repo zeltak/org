@@ -21866,6 +21866,24 @@ Prepending ! to a pattern makes it an exclusion. Multiple patterns can be specif
 Note that INBOX is not matched by wildcards, unless it lives under Path. 
 The mailbox list selected by Patterns can be overridden by a mailbox list in a channel reference (a Group specification or the command line). 
 Example: "Patterns % !Trash"
+**** Get rid of UID error (Maildir error: duplicate UID )
+http://tiborsimko.org/mbsync-duplicate-uid.html
+
+this can be done by renaming the file with the duplicate UID to cut off the UID part which will force mu4e to re-assign a UID
+
+#+BEGIN_SRC sh  :results none
+$ cd ~/Maildir/INBOX # where my INBOX lives
+$ find . -name "*U=2:*" -exec ls -l {} \;
+-rw------- 1 simko simko  1523 Dec 20 21:20 ./cur/1419106858.5661_2.pcuds06,U=2:2,S
+-rw------- 1 simko simko 39500 Feb 13 10:20 ./cur/1423819205.29514_1.pcuds06,U=2:2,S
+#+END_SRC
+
+then 
+
+#+BEGIN_SRC sh  :results none
+mv ./cur/1423819205.29514_1.pcuds06,U=2:2,S ./cur/1423819205.29514_1.pcuds06
+#+END_SRC
+
 ** System
 *** java
 
