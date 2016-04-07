@@ -254,20 +254,24 @@ saveRDS(db.m2,paste("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mo
   #PM import again
   PM25<-fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/PM25.all.csv")
   PM25$day<-as.Date(PM25$day)
-  PM25$c<-year(PM25$day)
-  PM25<-filter(PM25,c==y)
+  #PM25$c<-year(PM25$day)
+  PM25<-filter(PM25,year==y)
   setnames(PM25,"Long","long_pm25")
   setnames(PM25,"Lat","lat_pm25")
   setnames(PM25,"PM25","pm25")
+PM25$lat_pm25<-as.numeric(PM25$lat_pm25)
+PM25$long_pm25<-as.numeric(PM25$long_pm25)
 
   PM10<-fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/PM10.all.csv")
-  setnames(PM10,"year","c")
-  PM10<-filter(PM10,c==y)
-  PM10$day<-as.Date(PM10$day)
-  setnames(PM10,"Long","long_pm10")
+  #setnames(PM10,"year","c")
+  PM10<-filter(PM10,year==y)
+  PM10$day<-as.Date(PM10$day)  
+setnames(PM10,"Long","long_pm10")
   setnames(PM10,"Lat","lat_pm10")
   setnames(PM10,"PM10","pm10")
-  
+PM10$lat_pm10<-as.numeric(PM10$lat_pm10)
+PM10$long_pm10<-as.numeric(PM10$long_pm10)
+
   ########### join aod to PM25
   #create PM matrix
   pm.m <- makepointsmatrix(PM25, "long_pm25", "lat_pm25", "stn")
@@ -331,13 +335,17 @@ saveRDS(db.m2,paste("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mo
 
   
   ########### join aod to imp
-imp<-fread("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/imputed/2006.csv")
-imp<-na.omit(imp)
+imp<-read.csv("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/imputed/imp25.all.csv")
+imp<-as.data.table(imp)
 imp$day<-as.Date(strptime(imp$day, "%Y-%m-%d"))
+imp$year<-year(imp$day)
+imp<-filter(imp,year==2006)
+setnames(imp,"PM25","pm25imp")
+imp$stn<-as.character(imp$stn)
 
 
 #create PM matrix
-  pm.m <- makepointsmatrix(imp, "long", "lat", "stn")
+  pm.m <- makepointsmatrix(imp, "Long", "Lat", "stn")
   #create aod terra matrix
   db.m2$aodid<-as.character(db.m2$aodid)
   setkey(db.m2,aodid)
@@ -355,7 +363,6 @@ imp$day<-as.Date(strptime(imp$day, "%Y-%m-%d"))
   
   setkey(imp,stn,day)
   setkey(closestaod,stn,day)
-  imp$V1<-NULL
   imp.m1 <- merge(imp, closestaod, all.x = T,allow.cartesian=TRUE)
   imp.m1<-imp.m1[!is.na(aod)]
 
