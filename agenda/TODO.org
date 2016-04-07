@@ -4,8 +4,19 @@
   :PROPERTIES:
   :ID:       a203c0fe-e98d-408b-8863-388de9dc8d6b
   :END:
-** disable tab in org mode headers to expand more * 
+** disable tab in org mode headers to expand more *
+** academic log book?
 
+it's not entirely clear what you want but I can suggest what I do.  I
+use the following capture rule to add entries to my journal (equivalent
+to your lab book):
+
+#+begin_src emacs-lisp
+  ("j" "journal" entry
+   (file+datetree+prompt "~/s/notes/journal.org")
+   "* %(format-time-string \"%H:%M\") %^{Entry} %^G\n%i%?")
+#+end_src
+** DIRED- Extract here 
  
 ** explore worf
 http://oremacs.com/worf/README.html
