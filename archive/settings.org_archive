@@ -3167,3 +3167,18 @@ old SR
   ;; (ad-activate 'shell-command)
 #+END_SRC
 
+
+* change header order/size
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-04-07 Thu 16:53
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: mu4e
+  :ARCHIVE_CATEGORY: settings
+  :END:
+#+BEGIN_SRC emacs-lisp  :results none
+  ;; (setq mu4e-headers-fields
+  ;;     '( (:date          .  25)
+  ;;        (:flags         .   6)
+  ;;        (:from          .  22)
+  ;;        (:subject       .  nil)))
+#+END_SRC

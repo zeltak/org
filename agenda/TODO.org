@@ -4,7 +4,7 @@
   :PROPERTIES:
   :ID:       a203c0fe-e98d-408b-8863-388de9dc8d6b
   :END:
-** disable tab in org mode headers to expand more *
+** disable tab in org mode headers to expand more 
 ** academic log book?
 
 it's not entirely clear what you want but I can suggest what I do.  I
@@ -16,24 +16,19 @@ to your lab book):
    (file+datetree+prompt "~/s/notes/journal.org")
    "* %(format-time-string \"%H:%M\") %^{Entry} %^G\n%i%?")
 #+end_src
-** DIRED- Extract here 
- 
 ** explore worf
 http://oremacs.com/worf/README.html
 ** explore C-tab for tabs
 #+BEGIN_SRC emacs-lisp  :results none
 (global-set-key (kbd "<C-tab>") 'tabbar-forward-tab)
 #+END_SRC
-** sort helm mini by date
+** sort helm-dired-recent-dirs mini by date
 ** why Emacs pass doesn't see all passes?
 ** dired issues 
 *** dired equel left pane to right
-*** auto refresh (g) after operations or every 2 seconds?
 *** dired linkes explore
  http://emacs.stackexchange.com/questions/17095/how-supress-dired-confirmation-of-large-file-for-specific-extensions
 https://github.com/abo-abo/make-it-so
-** try MB
-
 ** dired add TODAY
 *** dired bookmark+ combo- very powerful 
 bmkp-dired-jump
@@ -283,7 +278,7 @@ FWIW, I don't tell Dired+ to automatically reuse Dired buffers when I hit RET. I
 IOW, this comes under the heading of "If it hurts, don't do it." If you purposely kill a Dired buffer, which is what "reusing" means here, then, well, the buffer no longer exists. If it no longer exists then its markings etc. are gone too.
 
 In sum, reuse when you want, and don't reuse when you want. Both behaviors are available at all times. If you start marking things, then think before you use RET to change directories - use C-x d or C-x 4 d instead. It's probably just a question of habit. And don't forget that you have i too.
-** Colored text in org-mode with export to HTML
+** TODO Colored text in org-mode with export to HTML
  http://jkitchin.github.io/blog/2016/01/16/Colored-text-in-org-mode-with-export-to-HTML
 ** Fixing SSH agent settings
 http://writequit.org/org/#65778226-87e5-40f9-a0a2-e5e319b4118c
@@ -1389,6 +1384,7 @@ So the :results output is the way to go. This works also for the :dir remote cod
 #+BEGIN_SRC R :exports both :results output :session *ssh xxx*
   system( "hostname" )
 #+END_SRC
+** http://getchip.com/pages/pocketchip
 ** How to make org-protocol work?
 http://stackoverflow.com/questions/7464951/how-to-make-org-protocol-work/32851154#32851154
 ** https://github.com/alphapapa/org-protocol-capture-html/tree/9ddb2a8e548eb8461acde5a3bc56ccb1414c2173#org-protocol-capture-html
@@ -1405,6 +1401,7 @@ http://amsantac.co/blog/en/2015/10/31/qgis-r.html
 http://poignant.guide/
 ** flip belt
 https://flipbelt.com/flipbelt
+** http://emacs.stackexchange.com/questions/12814/extending-org-mode-with-more-markups
 ** [[http://ftfl.ca/blog/2015-12-28-emacs-clipboard-manager.html][Emacs as an X Clipboard Manager]]
 ** http://pragmaticemacs.com/emacs/speed-up-pdf-export-from-org-mode-with-latexmk/
 ** https://www.reddit.com/r/emacs/comments/421vt3/how_to_automatically_execute_commands_when/
@@ -1414,3 +1411,6 @@ https://flipbelt.com/flipbelt
 ** http://blog.binchen.org/posts/how-to-use-gnus-group-topics-efficiently.html
 ** http://pragmaticemacs.com/emacs/tweaking-email-contact-completion-in-mu4e/
 ** [[http://emacs.stackexchange.com/questions/21301/async-execution-in-org-babel][matlab - Async execution in org babel - Emacs Stack Exchange]]
+** http://ergoemacs.org/emacs/emacs_regex.html
+** http://emacs.stackexchange.com/questions/6075/prevent-buffer-from-being-displayed/6076#6076
+** http://www.fromhot.com/
