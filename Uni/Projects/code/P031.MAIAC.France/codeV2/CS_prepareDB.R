@@ -339,7 +339,7 @@ imp<-read.csv("/media/NAS/Uni/Projects/P031_MAIAC_France/1.RAW/PM/imputed/imp25.
 imp<-as.data.table(imp)
 imp$day<-as.Date(strptime(imp$day, "%Y-%m-%d"))
 imp$year<-year(imp$day)
-imp<-filter(imp,year==2006)
+imp<-filter(imp,year==2010)
 setnames(imp,"PM25","pm25imp")
 imp$stn<-as.character(imp$stn)
 

@@ -22,7 +22,7 @@ source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/CV_splits.r")
 source("/media/NAS/Uni/org/files/Uni/Projects/code/$Rsnips/rmspe.r")
 
 
-mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2006.PM25.rds")
+mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2010.PM25.rds")
 head(mod1)
 
 
@@ -54,7 +54,7 @@ mod1<-mod1[saod < 30 , exobs := 5]
 #take out bad exobs
 mod1<-filter(mod1,exobs==0)
 
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2006.PM25.clean.rds")
+saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2010.PM25.clean.rds")
 
 
 #pm10
@@ -93,38 +93,38 @@ saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2
 
 
 #imputed PM
-mod1 <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2006.imp.rds")
-head(mod1)
-
-describe(mod1$wflag)
+mod1i <-readRDS("/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2010.imp.rds")
+head(mod1i)
+setnames(mod1i,"pm25imp","PM25")
+describe(mod1i$wflag)
 #delete water flags
-#mod1<-filter(mod1,ndvi > 0)
-mod1<-filter(mod1, wflag < 1)
+#mod1i<-filter(mod1i,ndvi > 0)
+mod1i<-filter(mod1i, wflag < 1)
 #filter nasa
-mod1<-filter(mod1,UN >0  & UN  <0.04)
+mod1i<-filter(mod1i,UN >0  & UN  <0.04)
 
 #massimos thresholds
-x<-select(mod1,aod,stn)
+x<-select(mod1i,aod,stn)
 x$c<-1
 x <- x %>%
     group_by (stn) %>%
         dplyr:: summarise(saod=sum(c))
 #merge back count
 setkey(x,stn)
-setkey(mod1,stn)
-mod1 <- merge(mod1,x, all.x = T)
+setkey(mod1i,stn)
+mod1i <- merge(mod1i,x, all.x = T)
 
-mod1$exobs<-0
-mod1<-mod1[aod < quantile(aod, c(.50)) & PM25 >  quantile(PM25, c(.90)), exobs := 2]
-mod1<-mod1[aod > quantile(aod, c(.90)) & PM25 <  quantile(PM25, c(.50)), exobs := 3]
-mod1<-mod1[aod > 1.2 , exobs := 4]
-mod1<-mod1[saod < 30 , exobs := 5]
+mod1i$exobs<-0
+mod1i<-mod1i[aod < quantile(aod, c(.50)) & PM25 >  quantile(PM25, c(.90)), exobs := 2]
+mod1i<-mod1i[aod > quantile(aod, c(.90)) & PM25 <  quantile(PM25, c(.50)), exobs := 3]
+mod1i<-mod1i[aod > 1.2 , exobs := 4]
+mod1i<-mod1i[saod < 30 , exobs := 5]
 
 #take out bad exobs
-mod1<-filter(mod1,exobs==0)
+mod1i<-filter(mod1i,exobs==0)
 
 
-saveRDS(mod1,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2006.PM25imp.clean.rds")
+saveRDS(mod1i,"/media/NAS/Uni/Projects/P031_MAIAC_France/2.work/WORKDIR/mod1.AQ.2010.PM25imp.clean.rds")
 
 
 

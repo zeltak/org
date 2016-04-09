@@ -75,8 +75,11 @@ m1_sc <- lmer(m1.formula,data=mod1i)
 summary(m1_sc)
 mod1i$pred.m1 <- predict(m1_sc)
 print(summary(lm(PM25~pred.m1,data=mod1i))$r.squared)
-#0.65 real PM
+#0.65 real PM 
 #0.53 imputed only
+
+#for 2006: real PM R2=0.6 ; PM+imputed R2=0.56  
+#for 2010: real PM R2=0.568 ; PM+imputed R2=0.52  
 
 
 

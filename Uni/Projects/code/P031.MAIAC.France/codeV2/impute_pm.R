@@ -86,7 +86,7 @@ both.1.rid<-both.1[id==Y]
   OLD<-pm10.m.imp
 }
 regres<-pm10.m.imp%>%group_by(id,stn)%>%summarise(rsq=mean(rsq))
-print(min(regres$rsq))
+#print(min(regres$rsq))
 #add true pm25 monitored at that year as a separate column
 pm10.m.imp<-pm10.m.imp[,c("stn_pm10","day","Lat.x","Long.x","year","PM25imp","rsq"),with=FALSE]
 setnames(pm10.m.imp,"stn_pm10","stn")
@@ -100,6 +100,9 @@ setkey(pm10.m.imp,stn,day)
 pm10.imp<-merge(pm10.m.imp,pm25.j,all=TRUE,allow.cartesian=TRUE)
 pm10.imp<-pm10.imp[!duplicated(pm10.imp), ]
 
+#exclude imputing obs when r square between pm2.5 an pm10 is below 0.6
+pm10.imp$PM25imp[pm10.imp$rsq<0.65]<-NA
+
 #create combined pm column: flag=0 if monitored, 1 if imputed
 pm10.imp$flag<-0
 pm10.imp$flag[is.na(pm10.imp$PM25)]<- 1
@@ -109,25 +112,22 @@ pm10.imp$PM25[is.na(pm10.imp$PM25)] <- pm10.imp$PM25imp[is.na(pm10.imp$PM25)]
 
 #exclude observations with negative PM2.5 imputed values
 pm10.imp<-pm10.imp[PM25>0]
-#exclude imputing obs when r square between pm2.5 an pm10 is below 0.6
-pm10.imp.r<-pm10.imp[rsq>0.65]
 
 #check results
-pm25.j<-pm25[year==J]
 tab1<-summary(pm25.j$PM25)
-tab2<-summary(pm10.imp.r$PM25) #combined PM25
+tab2<-summary(pm10.imp$PM25) #combined PM25
 tab<-rbind(tab1,tab2)
-row.names(tab)<-c(paste("mon.",I,sep=""),paste("imp.",I,sep=""))
-imp.n<-na.omit(pm10.imp.r)
+row.names(tab)<-c(paste("mon.",J,sep=""),paste("imp.",J,sep=""))
+imp.n<-na.omit(pm10.imp)
 cor<-round(cor(imp.n$PM25,imp.n$PM25imp),3) #for observations with only both monitored and imputed PM25
 tab<-cbind(tab,cor)
 fin<-rbind(old,tab)
 old<-fin
 
-pm10.imp.r<-pm10.imp.r[,c("stn","day","PM25","Lat","Long","flag"),with=FALSE]
-
+pm10.imp.r<-pm10.imp[,c("stn","day","PM25","Lat","Long","flag"),with=FALSE]
+setnames(pm10.imp.r,"PM25","PM25imp")
 #save
-#write.csv(pm10.imp.r,paste("C:\\Users\\MEYTAR\\Documents\\POSTDOC\\DATA\\France\\pm25monitors\\Daily\\imputed\\",J,".csv",sep=""))
+write.csv(pm10.imp.r,paste("C:\\Users\\MEYTAR\\Documents\\POSTDOC\\DATA\\France\\pm25monitors\\Daily\\imputed\\",J,".csv",sep=""))
 }
 
 #View final table of summary stat and cor between monitored and imputed PM2.5
