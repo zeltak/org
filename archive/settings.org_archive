@@ -3182,3 +3182,29 @@ old SR
   ;;        (:from          .  22)
   ;;        (:subject       .  nil)))
 #+END_SRC
+
+* load ess
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-04-09 Sat 11:48
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: R/ESS
+  :ARCHIVE_CATEGORY: settings
+  :END:
+#+BEGIN_SRC emacs-lisp :results none
+(add-to-list 'load-path "/home/zeltak/.emacs.g/ESS/lisp/")
+(load "ess-site")
+#+END_SRC
+
+* org-reveal 
+  :PROPERTIES:
+  :ARCHIVE_TIME: 2016-04-09 Sat 11:53
+  :ARCHIVE_FILE: ~/.emacs.d/settings.org
+  :ARCHIVE_OLPATH: Packages
+  :ARCHIVE_CATEGORY: settings
+  :END:
+https://github.com/yjwen/org-reveal
+#+BEGIN_SRC emacs-lisp :results none
+(add-to-list 'load-path "/home/zeltak/.emacs.g/org-reveal")
+(load  "/home/zeltak/.emacs.g/org-reveal/ox-reveal.el")
+
+#+END_SRC
