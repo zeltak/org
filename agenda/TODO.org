@@ -23,13 +23,12 @@ http://oremacs.com/worf/README.html
 #+BEGIN_SRC emacs-lisp  :results none
 (global-set-key (kbd "<C-tab>") 'tabbar-forward-tab)
 #+END_SRC
-** why Emacs pass doesn't see all passes?
 ** dired issues 
 *** dired equel left pane to right
 *** dired linkes explore
  http://emacs.stackexchange.com/questions/17095/how-supress-dired-confirmation-of-large-file-for-specific-extensions
 https://github.com/abo-abo/make-it-so
-** dired add TODAY
+** dired addon TODAY
 *** dired bookmark+ combo- very powerful 
 bmkp-dired-jump
 https://www.emacswiki.org/emacs/BookmarkPlus
@@ -75,17 +74,6 @@ Thank you very much! It works. BTW, when I open a mp4 file, emacs always ask me 
    	 
 	
 You can set the value that will trigger the warning. Here, 500MB (setq large-file-warning-threshold 500000000)
-*** quick kill all dired buffer
-http://emacs.stackexchange.com/questions/202/close-all-dired-buffers
-
-You could do the following:
-
-M-x ibuffer
-
-*Async to mark buffers in dired mode.
-
-D to delete them.
-
 ** https://github.com/ryuslash/mode-icons
 ** explore where Emacs pops up Windows
 
@@ -97,9 +85,6 @@ and
 ** open with
 this kills sending email from mu4e so for now its off..need to seek alternatives?
 WRITE DEV
-
-** build agenda in background don't popup in main window 
-Rebuilding agenda buffer...done
 
 ** eyebrow
 investigate why it doesn't allow refile in org capture
@@ -210,13 +195,6 @@ once every X days make sure to refile that note
 *** org agenda
  use multi occur hotkeys in the dispatcher?
 ** !WORKFLOW!
-*** Uni
-**** adding papers 
-Launch the capture template (p p ) and add the title and lead author
-
-you can then open the meta papers file  [[file+emacs+dired:/home/zeltak/org/files/Uni/papers/paper.meta.org][/home/zeltak/org/files/Uni/papers/paper.meta.org (dired)]] and see its been added 
-
-
 ** ACTION REVISION
 use 3 tiers
 TODO
