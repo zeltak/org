@@ -3887,6 +3887,11 @@ Comment Region :
 **** comment/uncomment SECTION
 use
 M-; (comment-dwim)
+**** set the type of comment manually
+use 
+#+BEGIN_SRC emacs-lisp  :results none
+(setq comment-start "#")
+#+END_SRC
 *** Copy Filename to the Clipboard
 Sometimes I need to copy the name of the currently visited file to the clipboard. Emacs does not have a built-in command for that, but cooking one is pretty straightforward:
 
