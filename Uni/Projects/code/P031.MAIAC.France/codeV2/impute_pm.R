@@ -125,7 +125,7 @@ fin<-rbind(old,tab)
 old<-fin
 
 pm10.imp.r<-pm10.imp[,c("stn","day","PM25","Lat","Long","flag"),with=FALSE]
-setnames(pm10.imp.r,"PM25","PM25imp")
+setnames(pm10.imp,"PM25","PM25imp")
 #save
 write.csv(pm10.imp.r,paste("C:\\Users\\MEYTAR\\Documents\\POSTDOC\\DATA\\France\\pm25monitors\\Daily\\imputed\\",J,".csv",sep=""))
 }

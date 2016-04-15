@@ -75,6 +75,22 @@ Thank you very much! It works. BTW, when I open a mp4 file, emacs always ask me 
 	
 You can set the value that will trigger the warning. Here, 500MB (setq large-file-warning-threshold 500000000)
 ** https://github.com/ryuslash/mode-icons
+** git hydra
+http://emacs.stackexchange.com/questions/21597/using-magit-for-the-most-basic-add-commit-push
+#+BEGIN_SRC emacs-lisp  :results none
+(defhydra yt-hydra/help (:color blue :hint nil)
+  "
+_mp_ magit-push #_mc_ magit-commit #_md_ magit diff #_mla_ magit diff #_mla_ magit status
+"
+  ;;Magit part
+  ("mp" magit-push)
+  ("mc" magit-commit)
+  ("md" magit-diff)
+  ("mla" magit-log-all)
+  ("ms" magit-status)
+  )
+(global-set-key (kbd "<f1>") 'yt-hydra/help/body)
+#+END_SRC
 ** explore where Emacs pops up Windows
 
 http://emacs.stackexchange.com/questions/6075/prevent-buffer-from-being-displayed/6076#6076
@@ -1398,4 +1414,5 @@ https://flipbelt.com/flipbelt
 ** TODO http://endlessparentheses.com/running-emacs-on-android.html
 *** https://termux.com/storage.html
 ** TODO https://plusnoise.wordpress.com/2016/04/10/emacs-on-android/
-
+** https://oliverse.ch/tech/2016/02/16/display-output-of-a-bash-script-on-a-widget.html
+** https://github.com/noctuid/general.el

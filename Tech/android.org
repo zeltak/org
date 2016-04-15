@@ -1105,6 +1105,205 @@ XBMC will still go through the "first run" screen the first time it is launched 
 ** !issues!
 *** phone keeps turning on at night
 make sure daydream is OFF (find it under display)
+** Termux
+*** folder sturcture
+The user folder $HOME is inside the private file area exposed to Termux as an ordinary Android app. Uninstalling Termux will cause this file area to be wiped - so save important files outside this area such as in /sdcard or use a version control system such as git.
+*** termux-fix-shebang
+The normal #!/usr/bin/... she-bangs will not work. Use the termux-fix-shebang script to modify these files before executing.
+*** ports
+Running as non-root implies that ports below 1024 cannot be bound to. Many packages have been configured to have compatible default values - the ftpd, httpd, and sshd servers default to 8021, 8080 and 8022, respectively.
+*** Internal and external storage
+
+There are three main types of storage in Termux:
+
+    App-private storage: Files put in $HOME, available from inside Termux (or when explictly picked, when e.g. attaching a file to a mail).
+    Shared internal storage: Storage in the device available to all apps. On Android 6.0 this requires the user to explicitly grant access to for Termux to access it.
+    External storage: Storage on external SD cards. Each app has a private folder on the external SD card, and interchange between them needs to use a special API not yet available in Termux.
+
+Executing termux-setup-storage (run apt update && apt upgrade to ensure that this tool is available) ensures:
+
+    That permission to shared storage is granted to Termux when running on Android 6.0 or later.
+    That an app-private folder on external storage is created (if external storage exists).
+    That a folder $HOME/storage is created.
+
+The contents of the created $HOME/storage folder are symlinks to different storage folders:
+
+~/storage/shared
+    The root of the shared storage between all apps.
+~/storage/downloads
+    The standard directory for downloads from e.g. the system browser.
+~/storage/dcim
+    The traditional location for pictures and videos when mounting the device as a camera.
+~/storage/pictures
+    Standard directory in which to place pictures that are available to the user.
+~/storage/music
+    Standard directory in which to place any audio files that should be in the regular list of music for the user.
+~/storage/movies
+    Standard directory in which to place movies that are available to the user.
+~/storage/external
+    Symlink to a Termux-private folder on external storage (only if external storage is available).
+*** User interface
+
+At launch Termux shows a terminal interface, whose text size can be adjusted by pinch zooming or double tapping and pulling the content towards or from you.
+
+Besides the terminal (with keyboard shortcuts explained below) there are three additional interface elements available: A context menu, navigation drawer and notification.
+
+The context menu can be shown by long pressing anywhere on the terminal. It provides menu entries for:
+
+    Selecting and pasting text.
+    Sharing text from the terminal to other apps (e.g. email or SMS)
+    Resetting the terminal if it gets stuck.
+    Switching the terminal to full-screen.
+    Hangup (exiting the current terminal session).
+    Styling the terminal by selecting a font and a color scheme.
+    Showing this help page.
+
+The navigation drawer is revealed by swiping from the left part of the screen. It has three elements:
+
+    A list of sessions. Clicking on a session shows it in the terminal while long pressing allows you to specify a session title.
+    A button to toggle visibility of the touch keyboard.
+    A button to create new terminal sessions (long press for creating a named session or a fail-safe one).
+
+The notification, available when a terminal session is running, is available by pulling down the notification menu. Pressing the notification leads to the most current terminal session. The notification may also be expanded (by pinch-zooming or performing a single-finger glide) to expose three actions:
+
+    Exiting all running terminal sessions.
+    Use a wake lock to avoid entering sleep mode.
+    Use a high performance wifi lock to maximize wifi performance.
+
+With a wake or wifi lock held the notification and Termux background processes will be available even if no terminal session is running, which allows server and other background processes to run more reliably.
+*** Using a touch keyboard
+
+Using the Ctrl key is necessary for working with a terminal - but most touch keyboards does not include one. For that purpose Termux uses the Volume down button to emulate the Ctrl key. For example, pressing Volume down+L on a touch keyboard sends the same input as pressing Ctrl+L on a hardware keyboard.
+
+The result of using Ctrl in combination with a key depends on which program is used, but for many command line tools the following shortcuts works:
+
+    Ctrl+A → Move cursor to the beginning of line
+    Ctrl+C → Abort (send SIGINT to) current process
+    Ctrl+D → Logout of a terminal session
+    Ctrl+E → Move cursor to the end of line
+    Ctrl+K → Delete from cursor to the end of line
+    Ctrl+L → Clear the terminal
+    Ctrl+Z → Suspend (send SIGTSTP to) current process
+
+The Volume up key also serves as a special key to produce certain input:
+
+    Volume Up+L → | (the pipe character)
+    Volume Up+E → Escape key
+    Volume Up+T → Tab key
+    Volume Up+1 → F1 (and Volume Up+2 → F2, etc)
+    Volume Up+B → Alt+B, back a word when using readline
+    Volume Up+F → Alt+F, forward a word when using readline
+    Volume Up+W → Up arrow key
+    Volume Up+A → Left arrow key
+    Volume Up+S → Down arrow key
+    Volume Up+D → Right arrow key
+    Volume Up+. → Ctrl+\ (SIGQUIT)
+    Volume Up+U → _ (underscore)
+    Volume Up+X → Delete
+    Volume Up+P → Page Up
+    Volume Up+N → Page Down
+*** Package management
+
+https://oliverse.ch/tech/2015/11/06/run-an-ssh-server-on-your-android-with-termux.html
+
+A minimal base system consisting of the Apt package manager and the busybox collection of system utilities is installed when first starting Termux. Additional packages are available using the apt command:
+
+apt update
+    Updates the list of available packages. This commands needs to be run initially directly after installation and regularly afterwards to receive updates.
+apt search <query>
+    Search among available packages.
+apt install <package>
+    Install a new package.
+apt upgrade
+    Upgrade outdated packages. For Apt to know about newer packages you will need to update the package index, so you will normally want to run apt update before upgrading.
+apt show <package>
+    Show information about a package.
+apt list
+    List all available packages.
+apt list --installed
+    List all installed packages.
+apt remove <package>
+    Remove an installed package.
+
+Apt as a package manager uses a package format named dpkg. Normally direct use of dpkg is not necessary, but the following two commands may be of use:
+
+dpkg -L <package>
+    List installed files of a package.
+dpkg --verify
+    Verify the integrity of installed packages.
+
+View the apt manual page (execute apt install man to install a man page viewer first) for more information.
+*** setup ssh 
+
+Run an SSH server on your Android with Termux
+
+Nov 6, 2015 • Oliver Schmidhauser • 1 Comment
+
+With the brilliant Termux  terminal emulator app you can run an SSH server on your Android.
+
+Perviously I used SSHDroid to achieve this, but with Termux is much nicer because you have access to a working package manager.
+Run the service
+
+You neet to install the OpenSSH package
+
+    apt install openssh
+
+and use following command to start the ssh server.
+
+    sshd
+
+And there you go. Your ssh service is now running on port 8022.
+
+    ssh localhost -p 8022
+
+Adding your Private Key
+
+I have not found a way to do password login, therefore you need to put your OpenSSH public key into the ~/.ssh/authorized_keys file.
+
+This file will need to be created and permissions set to 600.
+
+    touch ~/.ssh/authorized_keys
+    # Set Permissions to the file
+    chmod 600 ~/.ssh/authorized_keys
+    # Make sure the folder .ssh folder has the correct permissions
+    chmod 700 ~/.ssh
+
+If you do not have a OpenSSH key pair yet, you can generate one with the following command:
+
+    ssh-keygen
+
+You may or may not enter a passphrase and if you don’t specify otherwise, your key pair will have been saved under ~/.ssh/id_rsa and ~/.ssh/id_rsa.pub. You can then add it to the ~/.ssh/authorized_keys with
+
+    cat /sdcard/id_rsa.pub >> ~/.ssh/authorized_keys
+    chmod 600 ~/.ssh/authorized_keys
+
+Then you can test it by connecting to your ssh service
+
+    # -i $PATH_TO_FILE/filename is only required if the id_rsa file is not ~/.ssh/id_rsa
+    ssh localhost -p 8022 -i %PATH_TO_KEY-FILE%/%NAME_OF_KEY%
+
+You can now use your private key (~/.ssh/id_rsa) to login to your Termux SSH Server. Simply copy it to your computer (by copying it to internal storage first [cp ~/.ssh/id_rsa /sdcard]) and use it in your ssh client.
+If it still doesn’t work
+
+    killall sshd
+    sshd -d
+
+If it is still prompts you for a password you can enter sshd’s debug mode with the above command and see exactly why your key has been rejected. The reason usually are bad permission on either your home directory, your .ssh folder or your authorized_keys file.
+
+The correct permissions are:
+
+    chmod 700 ~
+    chmod 700 ~/.ssh
+    chmod 600 ~/.ssh/*
+
+OpenSSH
+
+If you’re using OpenSSH (on Linux or Cygwin) you can use it directly:
+
+    # -i $PATH_TO_FILE/filename is only required if the id_rsa file is not ~/.ssh/id_rsa
+    ssh $IP -p 8022 -i %PATH_TO_KEY-FILE%/%NAME_OF_KEY%
+
+
 ** taking photos in cell phone cameras
 *** tips
 **** light 
